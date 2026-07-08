@@ -1,0 +1,172 @@
+[
+    {
+        "id":  4,
+        "fetched_value":  4,
+        "unit":  "",
+        "fetched_value2":  4,
+        "label":  "industry-researcher · 评分",
+        "reported_value":  4,
+        "fetched_source2":  "team-lead汇总表",
+        "fetched_source":  "industry-researcher团队报告"
+    },
+    {
+        "id":  5,
+        "fetched_value":  3.2,
+        "unit":  "",
+        "fetched_value2":  3.2,
+        "label":  "risk-assessor · 评分",
+        "reported_value":  3.2,
+        "fetched_source2":  "team-lead汇总表",
+        "fetched_source":  "risk-assessor团队报告"
+    },
+    {
+        "id":  12,
+        "fetched_value":  2936.4034,
+        "unit":  "亿港元",
+        "fetched_value2":  2936.4,
+        "label":  "港股 · 市值口径",
+        "reported_value":  2936.4,
+        "fetched_source2":  "financial_rigor验算",
+        "fetched_source":  "腾讯行情 hk06160"
+    },
+    {
+        "id":  15,
+        "fetched_value":  365.03176,
+        "unit":  "亿美元",
+        "fetched_value2":  365.03,
+        "label":  "美股 · 市值口径",
+        "reported_value":  365.03,
+        "fetched_source2":  "financial_rigor: 307.86*118.5707m",
+        "fetched_source":  "行情市值字段/financial-analyst"
+    },
+    {
+        "id":  14,
+        "fetched_value":  307.86,
+        "unit":  "美元/ADS",
+        "fetched_value2":  307.86,
+        "label":  "美股 · 2026-07-06 价格",
+        "reported_value":  307.86,
+        "fetched_source2":  "financial_rigor输入",
+        "fetched_source":  "Yahoo Finance chart ONC"
+    },
+    {
+        "id":  18,
+        "fetched_value":  74.37,
+        "unit":  "%",
+        "fetched_value2":  74.4,
+        "label":  "BRUKINSA / 泽布替尼 · 占产品收入",
+        "reported_value":  74.4,
+        "fetched_source2":  "business-analyst复核",
+        "fetched_source":  "SEC 10-K XBRL 3928.489/5282.061"
+    },
+    {
+        "id":  28,
+        "fetched_value":  0.897,
+        "unit":  "%",
+        "fetched_value2":  0.9,
+        "label":  "POBEVCY · 占产品收入",
+        "reported_value":  0.9,
+        "fetched_source2":  "team-lead四舍五入",
+        "fetched_source":  "SEC 10-K XBRL 47.400/5282.061"
+    },
+    {
+        "id":  29,
+        "fetched_value":  83.691,
+        "unit":  "百万美元",
+        "fetched_value2":  83.69,
+        "label":  "其他 · 2025 收入",
+        "reported_value":  83.69,
+        "fetched_source2":  "本地product_facts.txt",
+        "fetched_source":  "SEC 10-K XBRL product facts"
+    },
+    {
+        "id":  30,
+        "fetched_value":  1.584,
+        "unit":  "%",
+        "fetched_value2":  1.58,
+        "label":  "其他 · 占产品收入",
+        "reported_value":  1.58,
+        "fetched_source2":  "报告修正为精确占比四舍五入",
+        "fetched_source":  "SEC 10-K XBRL 83.691/5282.061"
+    },
+    {
+        "id":  32,
+        "fetched_value":  100,
+        "unit":  "%",
+        "fetched_value2":  100,
+        "label":  "净产品收入合计 · 占产品收入",
+        "reported_value":  100,
+        "fetched_source2":  "SEC产品收入合计",
+        "fetched_source":  "表内定义"
+    },
+    {
+        "id":  36,
+        "fetched_value":  4,
+        "unit":  "",
+        "fetched_value2":  4,
+        "label":  "临床差异化 · 评分",
+        "reported_value":  4,
+        "fetched_source2":  "business/industry角色判断",
+        "fetched_source":  "team-lead护城河表"
+    },
+    {
+        "id":  55,
+        "fetched_value":  123.355,
+        "unit":  "百万美元",
+        "fetched_value2":  123.36,
+        "label":  "SBC · 2026Q1",
+        "reported_value":  123.36,
+        "fetched_source2":  "financial-analyst表",
+        "fetched_source":  "2026Q1 8-K Exhibit 99.1 non-GAAP reconciliation"
+    },
+    {
+        "id":  70,
+        "fetched_value":  134.218,
+        "unit":  "亿美元",
+        "fetched_value2":  134.22,
+        "label":  "牛市 · 2029E收入",
+        "reported_value":  134.22,
+        "fetched_source2":  "financial-analyst情景表",
+        "fetched_source":  "financial_rigor/场景计算 64*(1.28^3)"
+    },
+    {
+        "id":  76,
+        "fetched_value":  196,
+        "unit":  "%",
+        "fetched_value2":  196,
+        "label":  "牛市 · 对当前涨跌",
+        "reported_value":  196,
+        "fetched_source2":  "financial-analyst情景表",
+        "fetched_source":  "情景计算 911.23/307.86-1"
+    },
+    {
+        "id":  82,
+        "fetched_value":  28,
+        "unit":  "x",
+        "fetched_value2":  28,
+        "label":  "基准 · 目标P/E",
+        "reported_value":  28,
+        "fetched_source2":  "financial-analyst情景表",
+        "fetched_source":  "情景假设表"
+    },
+    {
+        "id":  95,
+        "fetched_value":  16.1,
+        "unit":  "%",
+        "fetched_value2":  16.1,
+        "label":  "熊市 · 三年CAGR",
+        "reported_value":  16.1,
+        "fetched_source2":  "financial-analyst情景表",
+        "fetched_source":  "情景表绝对值，原文为-16.1%"
+    },
+    {
+        "id":  87,
+        "fetched_value":  12,
+        "unit":  "%",
+        "fetched_value2":  12,
+        "label":  "熊市 · 2026-2029收入CAGR",
+        "reported_value":  12,
+        "fetched_source2":  "financial-analyst情景表",
+        "fetched_source":  "情景假设表"
+    }
+]

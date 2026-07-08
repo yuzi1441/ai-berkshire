@@ -1,4 +1,4 @@
-# AI Berkshire Codex Guide
+﻿# AI Berkshire Codex Guide
 
 This repository contains investment research workflows, reports, and shared
 validation tools. Keep compatibility with both Claude Code and Codex users.
@@ -54,6 +54,25 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   `python3 tools/report_audit.py ...`
 - Clearly label low-confidence conclusions, incomplete data, and source gaps.
 - This project is for learning and research, not investment advice.
+## Report Output Rules
+
+- Company-specific reports must be saved under `reports/<company-name>/`.
+- Industry, theme, comparison, portfolio, or article-style reports must be saved
+  under `reports/<topic-name>/` rather than directly in the `reports/` root.
+- Do not write new research outputs directly into the `reports/` root. If the
+  target folder does not exist, create it before writing the report.
+- Use stable Markdown filenames in this format when possible:
+  `<company-or-topic>-<skill-or-report-type>-<YYYYMMDD>.md`.
+- Keep final human-readable reports in `reports/<company-or-topic>/`. Raw PDFs,
+  filings, scraped pages, extracted text, and evidence bundles should go under
+  `research/source_docs/<company-or-topic>/` or `research/sources/<company-or-topic>/`.
+- Structured data, calculations, CSVs, JSON exports, and audit extracts should go
+  under `data/<company-code-or-topic>/` unless a skill explicitly requires a
+  different project-local path.
+- Logs, migration manifests, and temporary execution records should go under
+  `logs/`. Scratch scripts should not be left in the repository root.
+- When reorganizing existing reports, never overwrite a different existing file;
+  create a suffixed conflict copy and record the move in `logs/`.
 
 ## Editing Rules
 
@@ -67,3 +86,4 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   `python3 scripts/sync-codex-skills.py --check`
   and, when slash prompts are relevant:
   `python3 scripts/sync-codex-prompts.py --check`
+

@@ -1,0 +1,253 @@
+﻿======================================================================
+报告数据抽检清单
+文件：reports/四方股份/巴菲特Checklist-四方股份.md
+总提取数据点：87  |  抽样比例：20%  |  抽检数量：18
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     25  总股本 · 来源与时间                               2025.00  
+  5     26  计算市值 · 数值                                  507.85  亿元
+ 12     28  2025 归母净利润 · 判断                             15.84  %
+ 15     29  2025 扣非归母净利润 · 判断                           14.64  %
+ 14     29  2025 扣非归母净利润 · 来源与时间                      2025.00  
+ 18     31  2025 EPS · 数值                                1.00  
+ 29     36  2026Q1 归母净利润 · 来源与时间                      2026.00  
+ 28     36  2026Q1 归母净利润 · 数值                            2.71  亿元
+ 30     36  2026Q1 归母净利润 · 判断                           12.08  %
+ 32     37  2026Q1 经营现金流 · 来源与时间                      2026.00  
+ 36     38  2025 分红 · 判断                                72.37  %
+ 55    102  项目履历 · 证据                                 1000.00  
+ 65    143  PB · 历史/行业参照                              2026.00  
+ 70    158  乐观 · 目标 PE                                  45.00  x
+ 76    159  中性 · 第 5 年 EPS                               1.47  
+ 78    159  中性 · 相对当前                                   27.70  %
+ 82    160  悲观 · 目标股价                                   15.50  
+ 87    195  通过数                                          4.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "总股本 · 来源与时间",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 25,
+    "raw_text": "| 总股本 | 833,105,500 股 | 腾讯行情字段；2025 权益分派实施公告基数 833,105,500 股可交叉验证 | 可用 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "计算市值 · 数值",
+    "reported_value": 507.85,
+    "unit": "亿元",
+    "line_number": 26,
+    "raw_text": "| 计算市值 | 507.85 亿元 | `financial_rigor.py verify-market-cap`，60.96 × 833,105,500 | 与行情市值约 507.86 亿元吻合 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "2025 归母净利润 · 判断",
+    "reported_value": 15.84,
+    "unit": "%",
+    "line_number": 28,
+    "raw_text": "| 2025 归母净利润 | 8.290 亿元 | 2025 年报；AkShare 财务摘要交叉核验 | 同比 +15.84% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "2025 扣非归母净利润 · 判断",
+    "reported_value": 14.64,
+    "unit": "%",
+    "line_number": 29,
+    "raw_text": "| 2025 扣非归母净利润 | 8.002 亿元 | 2025 年报；AkShare 财务摘要交叉核验 | 同比 +14.64% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "2025 扣非归母净利润 · 来源与时间",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 29,
+    "raw_text": "| 2025 扣非归母净利润 | 8.002 亿元 | 2025 年报；AkShare 财务摘要交叉核验 | 同比 +14.64% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2025 EPS · 数值",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 31,
+    "raw_text": "| 2025 EPS | 1.00 元/股 | 2025 年报 | 估值基准 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "2026Q1 归母净利润 · 来源与时间",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 36,
+    "raw_text": "| 2026Q1 归母净利润 | 2.707 亿元 | 2026 一季报；AkShare 财务摘要交叉核验 | 同比 +12.08% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 28,
+    "label": "2026Q1 归母净利润 · 数值",
+    "reported_value": 2.707,
+    "unit": "亿元",
+    "line_number": 36,
+    "raw_text": "| 2026Q1 归母净利润 | 2.707 亿元 | 2026 一季报；AkShare 财务摘要交叉核验 | 同比 +12.08% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 30,
+    "label": "2026Q1 归母净利润 · 判断",
+    "reported_value": 12.08,
+    "unit": "%",
+    "line_number": 36,
+    "raw_text": "| 2026Q1 归母净利润 | 2.707 亿元 | 2026 一季报；AkShare 财务摘要交叉核验 | 同比 +12.08% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "2026Q1 经营现金流 · 来源与时间",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 2026Q1 经营现金流 | 0.141 亿元 | 2026 一季报 | 同比 -92.43%，季节性/采购支出压力需跟踪 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "2025 分红 · 判断",
+    "reported_value": 72.37,
+    "unit": "%",
+    "line_number": 38,
+    "raw_text": "| 2025 分红 | 每 10 股派 7.2 元，合计约 5.998 亿元 | 2025 年报、2025 权益分派实施公告 | 分红率 72.37%，股东回报强 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "项目履历 · 证据",
+    "reported_value": 1000.0,
+    "unit": "",
+    "line_number": 102,
+    "raw_text": "| 项目履历 | 参与 1000kV 特高压、三峡工程、西电东送、白鹤滩等重大工程。 | 较强 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 65,
+    "label": "PB · 历史/行业参照",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 143,
+    "raw_text": "| PB | 工具按 Q1 BVPS 6.205654 算 9.82x；腾讯字段约 11.11x | 公司 2026-05-14 风险提示称 5/12 公司 PB 11.94，高于行业 3.79 | 显著偏贵 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "乐观 · 目标 PE",
+    "reported_value": 45.0,
+    "unit": "x",
+    "line_number": 158,
+    "raw_text": "| 乐观 | 15% | 45x | 2.01 | 90.5 元 | +48.5% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "中性 · 第 5 年 EPS",
+    "reported_value": 1.47,
+    "unit": "",
+    "line_number": 159,
+    "raw_text": "| 中性 | 8% | 30x | 1.47 | 44.1 元 | -27.7% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 78,
+    "label": "中性 · 相对当前",
+    "reported_value": 27.7,
+    "unit": "%",
+    "line_number": 159,
+    "raw_text": "| 中性 | 8% | 30x | 1.47 | 44.1 元 | -27.7% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "悲观 · 目标股价",
+    "reported_value": 15.5,
+    "unit": "",
+    "line_number": 160,
+    "raw_text": "| 悲观 | -5% | 20x | 0.77 | 15.5 元 | -74.6% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "通过数",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 195,
+    "raw_text": "**通过数：4/6。结论：未通过买入 Checklist。**",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

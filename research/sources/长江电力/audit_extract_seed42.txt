@@ -1,0 +1,292 @@
+﻿======================================================================
+报告数据抽检清单
+文件：reports\长江电力\长江电力投资研究报告.md
+总提取数据点：135  |  抽样比例：15%  |  抽检数量：21
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2     35  可控水电装机 · 当前判断                             7179.50  
+  7     40  2025 经营现金流 · 当前判断                          605.63  亿元
+  8     41  2025 估算自由现金流 · 当前判断                        420.74  亿元
+  9     42  当前估值 · 当前判断                                 27.19  
+ 23     66  市值 · 公司公告                                 6652.91  亿元
+ 24     66  市值 · 东方财富/AKShare                         6652.91  亿元
+ 29     78  境内水电 · 成本同比                                  7.30  %
+ 27     78  境内水电 · 毛利率                                  65.79  %
+ 36     80  合计/主营近似 · 营业成本                             329.49  亿元
+ 51    176  成本优势 · 证据与判断                              2025.00  
+ 56    245  大型水电资产整合后现金流提升 · 结果/信号                    2023.00  
+ 57    245  大型水电资产整合后现金流提升 · 评分                          8.00  
+ 58    246  分红纪律 · 结果/信号                              2026.00  
+ 60    247  降财务费用 · 结果/信号                             2025.00  
+ 63    249  控股股东增持 · 结果/信号                              44.99  亿元
+ 71    288  华能水电 · 股价                                    9.23  
+ 72    288  华能水电 · 市值                                 1719.65  亿
+109    315  2025 利润归属期现金回报 · 计算/来源                    2025.00  
+108    315  2025 利润归属期现金回报 · 数值                          1.21  
+115    332  乐观 · 目标股价                                   37.70  
+130    345  29-34 元 · 对应逻辑                              20.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "可控水电装机 · 当前判断",
+    "reported_value": 7179.5,
+    "unit": "",
+    "line_number": 35,
+    "raw_text": "| 可控水电装机 | 7,179.5 万千瓦，其中境内 7,169.5 万千瓦 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "2025 经营现金流 · 当前判断",
+    "reported_value": 605.63,
+    "unit": "亿元",
+    "line_number": 40,
+    "raw_text": "| 2025 经营现金流 | 605.63 亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "2025 估算自由现金流 · 当前判断",
+    "reported_value": 420.74,
+    "unit": "亿元",
+    "line_number": 41,
+    "raw_text": "| 2025 估算自由现金流 | 420.74 亿元（经营现金流 - 购建长期资产现金流出） |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "当前估值 · 当前判断",
+    "reported_value": 27.19,
+    "unit": "",
+    "line_number": 42,
+    "raw_text": "| 当前估值 | 27.19 元；TTM PE 18.44x；股息收益率约 4.45%（按 2025 利润归属期 1.21 元/股现金回报测算） |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "市值 · 公司公告",
+    "reported_value": 6652.91,
+    "unit": "亿元",
+    "line_number": 66,
+    "raw_text": "| 市值 | 腾讯行情 6,652.91 亿元 | 股价 × 总股本 = 6,652.91 亿元 | — | 0.00% 偏差 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "市值 · 东方财富/AKShare",
+    "reported_value": 6652.91,
+    "unit": "亿元",
+    "line_number": 66,
+    "raw_text": "| 市值 | 腾讯行情 6,652.91 亿元 | 股价 × 总股本 = 6,652.91 亿元 | — | 0.00% 偏差 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "境内水电 · 成本同比",
+    "reported_value": 7.3,
+    "unit": "%",
+    "line_number": 78,
+    "raw_text": "| 境内水电 | 756.62 亿元 | 258.82 亿元 | 65.79% | +1.59% | -7.30% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "境内水电 · 毛利率",
+    "reported_value": 65.79,
+    "unit": "%",
+    "line_number": 78,
+    "raw_text": "| 境内水电 | 756.62 亿元 | 258.82 亿元 | 65.79% | +1.59% | -7.30% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "合计/主营近似 · 营业成本",
+    "reported_value": 329.49,
+    "unit": "亿元",
+    "line_number": 80,
+    "raw_text": "| 合计/主营近似 | 859.85 亿元 | 329.49 亿元 | 约 61.68% | — | — |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "成本优势 · 证据与判断",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 176,
+    "raw_text": "| 成本优势 | 强 | 水电边际成本低，2025 境内水电毛利率 65.79% | 取决于折旧、规费、检修和财务成本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "大型水电资产整合后现金流提升 · 结果/信号",
+    "reported_value": 2023.0,
+    "unit": "",
+    "line_number": 245,
+    "raw_text": "| 大型水电资产整合后现金流提升 | 2023-2025 经营现金流维持 596-647 亿元区间 | 8/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "大型水电资产整合后现金流提升 · 评分",
+    "reported_value": 8.0,
+    "unit": "",
+    "line_number": 245,
+    "raw_text": "| 大型水电资产整合后现金流提升 | 2023-2025 经营现金流维持 596-647 亿元区间 | 8/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "分红纪律 · 结果/信号",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 246,
+    "raw_text": "| 分红纪律 | 2026-2030 年承诺不低于归母净利润 70% | 9/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "降财务费用 · 结果/信号",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 247,
+    "raw_text": "| 降财务费用 | 2025 财务费用 93.71 亿元，同比下降 | 8/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "控股股东增持 · 结果/信号",
+    "reported_value": 44.99,
+    "unit": "亿元",
+    "line_number": 249,
+    "raw_text": "| 控股股东增持 | 44.99 亿元已实施，增强信号意义 | 8/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "华能水电 · 股价",
+    "reported_value": 9.23,
+    "unit": "",
+    "line_number": 288,
+    "raw_text": "| 华能水电 | 600025 | 9.23 | 1,719.65 亿 | 20.14x | 2.56x | 水电资产 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 72,
+    "label": "华能水电 · 市值",
+    "reported_value": 1719.65,
+    "unit": "亿",
+    "line_number": 288,
+    "raw_text": "| 华能水电 | 600025 | 9.23 | 1,719.65 亿 | 20.14x | 2.56x | 水电资产 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "2025 利润归属期现金回报 · 计算/来源",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 315,
+    "raw_text": "| 2025 利润归属期现金回报 | 1.21 元/股 | 2025 三季报 0.21 + 2025 年度预案 1.00 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 108,
+    "label": "2025 利润归属期现金回报 · 数值",
+    "reported_value": 1.21,
+    "unit": "",
+    "line_number": 315,
+    "raw_text": "| 2025 利润归属期现金回报 | 1.21 元/股 | 2025 三季报 0.21 + 2025 年度预案 1.00 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "乐观 · 目标股价",
+    "reported_value": 37.7,
+    "unit": "",
+    "line_number": 332,
+    "raw_text": "| 乐观 | 4% | 21x | 1.79 | 37.7 元 | +38.6% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 130,
+    "label": "29-34 元 · 对应逻辑",
+    "reported_value": 20.0,
+    "unit": "",
+    "line_number": 345,
+    "raw_text": "| 29-34 元 | PE 约 20-23x；股息率降至约 3.6%-4.2% | 需要更高增长兑现，否则谨慎 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

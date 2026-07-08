@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-07-06T15:00:19",
+  "source_urls": {
+    "eastmoney_boards": "https://push2.eastmoney.com/api/qt/clist/get?fs=m:90+t:2",
+    "eastmoney_board_constituents": "https://push2.eastmoney.com/api/qt/clist/get?fs=b:{board_code}",
+    "eastmoney_search": "https://searchadapter.eastmoney.com/api/suggest/get",
+    "tencent_quote": "https://qt.gtimg.cn/q={symbols}",
+    "local_quality_file": "筛选公司\\A股召回池\\去劣筛选结果-20260517.md"
+  },
+  "counts": {
+    "quality_companies": 70,
+    "quality_codes_found": 65,
+    "boards": 496,
+    "positive_large_boards": 349,
+    "board_hits": 46
+  },
+  "outputs": {
+    "boards_csv": "data\\ashare_undervalued_industry_boards_20260706.csv",
+    "quality_quotes_csv": "data\\ashare_undervalued_quality_quotes_20260706.csv",
+    "board_hits_csv": "data\\ashare_undervalued_board_quality_hits_20260706.csv"
+  }
+}

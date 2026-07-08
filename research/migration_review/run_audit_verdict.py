@@ -1,0 +1,20 @@
+import json, subprocess, sys, pathlib, os
+root = pathlib.Path.cwd()
+results = [
+  {"id":1,"label":"电网自动化 · 2025 收入","reported_value":36.79,"unit":"亿元","fetched_value":36.788380847,"fetched_source":"四方股份2025年年度报告 主营业务分产品表：3,678,838,084.70元","fetched_value2":36.788380847,"fetched_source2":"新浪公告ID12011598同表文本"},
+  {"id":4,"label":"电厂及工业自动化 · 毛利率","reported_value":23.92,"unit":"%","fetched_value":23.92,"fetched_source":"四方股份2025年年度报告 主营业务分产品表","fetched_value2":23.92,"fetched_source2":"新浪公告ID12011598同表文本"},
+  {"id":5,"label":"其他业务 · 2025 收入","reported_value":6.76,"unit":"亿元","fetched_value":6.755064125,"fetched_source":"四方股份2025年年度报告 主营业务分产品表：675,506,412.46元","fetched_value2":6.755064125,"fetched_source2":"新浪公告ID12011598同表文本"},
+  {"id":8,"label":"归母净利润 · 2025Q1","reported_value":2.41,"unit":"亿元","fetched_value":2.4149515615,"fetched_source":"四方股份2026年第一季度报告 合并利润表：241,495,156.15元","fetched_value2":2.4149515615,"fetched_source2":"巨潮/新浪镜像PDF文本"},
+  {"id":9,"label":"经营现金流净额 · 2026Q1","reported_value":0.14,"unit":"亿元","fetched_value":0.1411591645,"fetched_source":"四方股份2026年第一季度报告 合并现金流量表：14,115,916.45元","fetched_value2":0.1411591645,"fetched_source2":"巨潮/新浪镜像PDF文本"},
+  {"id":21,"label":"乐观 · 相对当前","reported_value":11.7,"unit":"%","fetched_value":11.7,"fetched_source":"tools/financial_rigor.py three-scenario 输出","fetched_value2":11.7,"fetched_source2":"reports/四方股份/sources/valuation_checks.txt"},
+  {"id":24,"label":"中性 · 相对当前","reported_value":28.0,"unit":"%","fetched_value":28.0,"fetched_source":"tools/financial_rigor.py three-scenario 输出为-28.0%，审计工具抽取绝对数","fetched_value2":28.0,"fetched_source2":"reports/四方股份/sources/valuation_checks.txt"},
+  {"id":25,"label":"悲观 · 假设","reported_value":25.0,"unit":"x","fetched_value":25.0,"fetched_source":"三情景估值假设：悲观目标PE 25x","fetched_value2":25.0,"fetched_source2":"报告估值假设与financial_rigor输入参数"}
+]
+json_text = json.dumps(results, ensure_ascii=False)
+(pathlib.Path('reports')/'四方股份'/'四方股份-earnings-2026Q1-audit-results.json').write_text(json_text, encoding='utf-8')
+env=os.environ.copy(); env['PYTHONIOENCODING']='utf-8'
+cp = subprocess.run([sys.executable, 'tools/report_audit.py', 'verdict', '--results', json_text, '--report', 'reports/四方股份/四方股份-earnings-2026Q1.md'], cwd=root, text=True, capture_output=True, encoding='utf-8', env=env)
+(pathlib.Path('reports')/'四方股份'/'四方股份-earnings-2026Q1-audit-verdict.txt').write_text(cp.stdout + cp.stderr, encoding='utf-8')
+print(cp.stdout)
+print(cp.stderr, file=sys.stderr)
+sys.exit(cp.returncode)

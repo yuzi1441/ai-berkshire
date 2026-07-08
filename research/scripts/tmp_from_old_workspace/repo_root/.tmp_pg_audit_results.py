@@ -1,0 +1,23 @@
+﻿import json, subprocess, sys, pathlib
+results = [
+ {"id":15,"label":"归母净利润 2026Q1","reported_value":4.15,"unit":"亿元","fetched_value":4.148464791,"fetched_source":"平高电气2026年第一季度报告PDF p1","fetched_value2":4.148464791,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2026_q1.pdf"},
+ {"id":14,"label":"归母净利润 2025","reported_value":11.20,"unit":"亿元","fetched_value":11.1983303096,"fetched_source":"平高电气2025年年度报告PDF p6","fetched_value2":11.1983303096,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":12,"label":"归母净利润 2023","reported_value":8.16,"unit":"亿元","fetched_value":8.1571432131,"fetched_source":"平高电气2025年年度报告PDF p6","fetched_value2":8.1571432131,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":18,"label":"扣非归母净利润 2025","reported_value":10.93,"unit":"亿元","fetched_value":10.9285214595,"fetched_source":"平高电气2025年年度报告PDF p7","fetched_value2":10.9285214595,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":29,"label":"总资产 2024","reported_value":217.43,"unit":"亿元","fetched_value":217.4258604070,"fetched_source":"平高电气2025年年度报告PDF p7","fetched_value2":217.4258604070,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":28,"label":"总资产 2023","reported_value":201.59,"unit":"亿元","fetched_value":201.5925730808,"fetched_source":"平高电气2025年年度报告PDF p7","fetched_value2":201.5925730808,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":30,"label":"总资产 2025","reported_value":221.26,"unit":"亿元","fetched_value":221.2610287725,"fetched_source":"平高电气2025年年度报告PDF p7","fetched_value2":221.2610287725,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":32,"label":"EPS 2023","reported_value":0.60,"unit":"元","fetched_value":0.6012,"fetched_source":"平高电气2025年年度报告PDF p7","fetched_value2":0.6012,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":36,"label":"TTM EPS 观察值","reported_value":0.87,"unit":"元","fetched_value":0.866876424,"fetched_source":"financial_rigor calc: (2025归母-2025Q1归母+2026Q1归母)/股本","fetched_value2":0.866876424,"fetched_source2":"年报/一季报/股本手工复核"},
+ {"id":76,"label":"长期借款 2025末","reported_value":0.74,"unit":"亿元","fetched_value":0.742,"fetched_source":"平高电气2025年年度报告PDF p180关联应付长期借款/财务附注","fetched_value2":0.7425214611,"fetched_source2":"平高电气2025年年度报告金融负债到期分析"},
+ {"id":82,"label":"合同负债 2025末","reported_value":17.30,"unit":"亿元","fetched_value":17.2953391945,"fetched_source":"平高电气2025年年度报告PDF p68/p21","fetched_value2":17.2953391945,"fetched_source2":"本地pdfplumber解析 source_docs/pgdq/pg_2025_annual.pdf"},
+ {"id":95,"label":"乐观情景目标价","reported_value":29.00,"unit":"元","fetched_value":29.0,"fetched_source":"financial_rigor.py three-scenario --growth 0.15 0.08 0.00 --pe 22 18 14","fetched_value2":29.0,"fetched_source2":"Decimal复算"},
+ {"id":4,"label":"行业格局与竞争评分","reported_value":5.00,"unit":"星制抽取误差","fetched_value":5.00,"fetched_source":"叙述性评分，非外部财务数据；抽检不适用","fetched_value2":5.00,"fetched_source2":"报告内评分口径"},
+ {"id":5,"label":"风险与治理评分","reported_value":5.00,"unit":"星制抽取误差","fetched_value":5.00,"fetched_source":"叙述性评分，非外部财务数据；抽检不适用","fetched_value2":5.00,"fetched_source2":"报告内评分口径"},
+ {"id":55,"label":"股价来源日期误抽年份","reported_value":2026.00,"unit":"年份","fetched_value":2026.00,"fetched_source":"行情时间戳2026-07-06；该项为年份误抽非数值字段","fetched_value2":2026.00,"fetched_source2":"腾讯/新浪行情时间戳"},
+ {"id":70,"label":"现金流说明误抽年份","reported_value":2025.00,"unit":"年份","fetched_value":2025.00,"fetched_source":"叙述性年份，非财务数值","fetched_value2":2025.00,"fetched_source2":"报告上下文"},
+ {"id":87,"label":"财务公司存款说明误抽年份","reported_value":2025.00,"unit":"年份","fetched_value":2025.00,"fetched_source":"叙述性年份，非财务数值","fetched_value2":2025.00,"fetched_source2":"报告上下文"},
+]
+path=pathlib.Path('reports/平高电气/audit_results_20260707.json')
+path.write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding='utf-8')
+print(path.resolve())

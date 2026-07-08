@@ -1,0 +1,18 @@
+﻿import json, subprocess, sys, pathlib
+results = [
+ {"id":18,"label":"经营现金流 / 归母净利 · 2025Q1","reported_value":35.87,"unit":"%","fetched_value":35.87,"fetched_source":"巨潮2025年报分季度+计算","fetched_value2":35.87,"fetched_source2":"东方财富摘要+计算"},
+ {"id":28,"label":"资产负债率 · 2026Q1","reported_value":37.18,"unit":"%","fetched_value":37.18,"fetched_source":"巨潮2026Q1资产负债表+计算","fetched_value2":37.178419,"fetched_source2":"东方财富摘要"},
+ {"id":107,"label":"应收账款 · 2026Q1末","reported_value":8.23,"unit":"亿元","fetched_value":8.2302117194,"fetched_source":"巨潮2026Q1资产负债表","fetched_value2":8.2302117194,"fetched_source2":"东方财富摘要/资产项目"},
+ {"id":187,"label":"2026Q1 归母净利 · 报告值","reported_value":163026548.07,"unit":"元","fetched_value":163026548.07,"fetched_source":"巨潮2026Q1主要财务数据","fetched_value2":163026548.07,"fetched_source2":"东方财富摘要"},
+ {"id":190,"label":"2026Q1 经营现金流 · 报告值","reported_value":92367764.55,"unit":"元","fetched_value":92367764.55,"fetched_source":"巨潮2026Q1现金流量表","fetched_value2":92367764.55,"fetched_source2":"东方财富摘要"},
+ {"id":194,"label":"2025 营业收入 · 来源1：巨潮原文","reported_value":2426794600.12,"unit":"元","fetched_value":2426794600.12,"fetched_source":"巨潮2025年报主要会计数据","fetched_value2":2426794600.12,"fetched_source2":"东方财富摘要"},
+ {"id":203,"label":"市值 · 报告值","reported_value":177.99,"unit":"亿元","fetched_value":177.9903705966,"fetched_source":"腾讯行情19.86元×总股本896225431","fetched_value2":177.9903705966,"fetched_source2":"新浪行情19.86元×总股本896225431"}
+]
+path=pathlib.Path('data/huaming_002270/audit_results_sample.json')
+path.write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding='utf-8')
+cmd=[sys.executable,'tools/report_audit.py','verdict','--results',json.dumps(results,ensure_ascii=False),'--report','reports/华明装备/华明装备-earnings-2026Q1.md']
+cp=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8')
+path2=pathlib.Path('data/huaming_002270/report_audit_verdict.txt')
+path2.write_text(cp.stdout + ('\nSTDERR:\n'+cp.stderr if cp.stderr else ''),encoding='utf-8')
+print(cp.stdout)
+if cp.stderr: print('STDERR',cp.stderr)

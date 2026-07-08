@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 stock_screener.py — 动量发现 + 价值验证 选股筛
 用法：
@@ -24,6 +24,16 @@ import sys
 from datetime import datetime, timedelta
 from collections import OrderedDict
 
+
+def configure_console_encoding():
+    """Prefer UTF-8 console output on Windows without changing tool logic."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
+configure_console_encoding()
 # ============================================================
 # 配置
 # ============================================================
@@ -56,7 +66,7 @@ def fetch_prices_curl(ticker, days=120):
     try:
         result = subprocess.run(
             ["curl", "-s", "-H", "User-Agent: Mozilla/5.0", url],
-            capture_output=True, text=True, timeout=15
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15
         )
         if result.returncode != 0:
             return None
@@ -399,3 +409,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

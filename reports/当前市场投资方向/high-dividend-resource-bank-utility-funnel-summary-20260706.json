@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-07-06 22:14 Asia/Shanghai",
+  "data_cutoff": "2026-07-06 quote/board data; 2025A and 2026Q1 financial abstract where available",
+  "candidate_count": 19,
+  "outputs": {
+    "candidates_csv": "C:\\Users\\whatn\\Desktop\\vibecoding\\codex\\投资分析\\ai-berkshire\\reports\\当前市场投资方向\\high-dividend-resource-bank-utility-funnel-candidates-20260706.csv"
+  },
+  "finals": [
+    "601088 China Shenhua",
+    "600900 CYPC",
+    "601398 ICBC"
+  ],
+  "watch_count": 11,
+  "eliminate_count": 5,
+  "calc": {
+    "icbc_earnings_yield_pct": 14.66,
+    "ccb_earnings_yield_pct": 13.51,
+    "cmb_earnings_yield_pct": 15.85,
+    "cib_earnings_yield_pct": 21.37,
+    "shenhua_earnings_yield_pct": 5.67,
+    "cypc_earnings_yield_pct": 5.42
+  },
+  "sources": {
+    "local_board_csv": "data/ashare_undervalued_industry_boards_20260706.csv",
+    "local_quality_csv": "data/ashare_undervalued_quality_quotes_20260706.csv",
+    "local_power_resource_csv": "data/power_resource_funnel_candidates_20260706.csv",
+    "tencent_quote": "https://qt.gtimg.cn/q={symbols}",
+    "eastmoney_board_api": "https://push2.eastmoney.com/api/qt/clist/get",
+    "akshare_financial_abstract": "akshare.stock_financial_abstract / Sina-EM wrapper",
+    "sse_announcements": "https://www.sse.com.cn/disclosure/listedinfo/announcement/"
+  }
+}

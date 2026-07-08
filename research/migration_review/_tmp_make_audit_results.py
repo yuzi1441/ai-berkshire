@@ -1,0 +1,34 @@
+import json, subprocess, pathlib, re
+# Construct audit results from extracted sample with verified values/sources.
+results = [
+ {'id':7,'label':'归母净利润 · 2021','reported_value':3483.38,'unit':'亿元','line_number':37,'raw_text':'核心财务表','fetched_value':3483.38,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':3483.38,'fetched_source2':'工商银行2021-2025年报历史披露/2025年报比较表'},
+ {'id':9,'label':'归母净利润 · 2023','reported_value':3639.93,'unit':'亿元','line_number':37,'raw_text':'核心财务表','fetched_value':3639.93,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':3639.93,'fetched_source2':'工商银行2025年报A股PDF财务概要比较表'},
+ {'id':8,'label':'归母净利润 · 2022','reported_value':3611.32,'unit':'亿元','line_number':37,'raw_text':'核心财务表','fetched_value':3611.32,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':3611.32,'fetched_source2':'工商银行2021-2025年报历史披露'},
+ {'id':23,'label':'每股净资产（元） · 2025','reported_value':10.83,'unit':'元','line_number':39,'raw_text':'核心财务表','fetched_value':10.83,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':10.83,'fetched_source2':'工商银行2025年报A股PDF财务概要'},
+ {'id':24,'label':'每股净资产（元） · 2026Q1','reported_value':11.06,'unit':'元','line_number':39,'raw_text':'核心财务表','fetched_value':11.062448268412,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':11.06,'fetched_source2':'工商银行2026Q1报告A股PDF四舍五入口径'},
+ {'id':29,'label':'加权 ROE · 2025','reported_value':9.45,'unit':'%','line_number':40,'raw_text':'核心财务表','fetched_value':9.45,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':9.45,'fetched_source2':'工商银行2025年报A股PDF财务指标'},
+ {'id':27,'label':'加权 ROE · 2023','reported_value':10.66,'unit':'%','line_number':40,'raw_text':'核心财务表','fetched_value':10.66,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':10.66,'fetched_source2':'工商银行2025年报A股PDF三年比较表'},
+ {'id':36,'label':'净息差 · 2026Q1','reported_value':1.29,'unit':'%','line_number':41,'raw_text':'核心财务表','fetched_value':1.29,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':1.29,'fetched_source2':'工商银行2026Q1报告A股PDF经营情况'},
+ {'id':51,'label':'不良贷款率 · 2023','reported_value':1.36,'unit':'%','line_number':44,'raw_text':'核心财务表','fetched_value':1.36,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':1.36,'fetched_source2':'工商银行2025年报A股PDF财务指标'},
+ {'id':58,'label':'核心一级资本充足率 · 2024','reported_value':14.10,'unit':'%','line_number':45,'raw_text':'核心财务表','fetched_value':14.10,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':14.10,'fetched_source2':'工商银行2025年报A股PDF财务指标'},
+ {'id':56,'label':'核心一级资本充足率 · 2022','reported_value':14.04,'unit':'%','line_number':45,'raw_text':'核心财务表','fetched_value':14.04,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':14.04,'fetched_source2':'工商银行历史年报'},
+ {'id':60,'label':'核心一级资本充足率 · 2026Q1','reported_value':13.26,'unit':'%','line_number':45,'raw_text':'核心财务表','fetched_value':13.26,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':13.26,'fetched_source2':'工商银行2026Q1报告A股PDF'},
+ {'id':57,'label':'核心一级资本充足率 · 2023','reported_value':13.72,'unit':'%','line_number':45,'raw_text':'核心财务表','fetched_value':13.72,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':13.72,'fetched_source2':'工商银行2025年报A股PDF财务指标'},
+ {'id':63,'label':'资本充足率 · 2023','reported_value':19.10,'unit':'%','line_number':46,'raw_text':'核心财务表','fetched_value':19.10,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':19.10,'fetched_source2':'工商银行2025年报A股PDF财务指标'},
+ {'id':71,'label':'总资产 · 2025','reported_value':534777.73,'unit':'亿元','line_number':47,'raw_text':'核心财务表','fetched_value':534777.73,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':534777.73,'fetched_source2':'工商银行2025年报A股PDF财务概要'},
+ {'id':72,'label':'总资产 · 2026Q1','reported_value':557725.84,'unit':'亿元','line_number':47,'raw_text':'核心财务表','fetched_value':557725.84,'fetched_source':'东方财富 RPT_F10_FINANCE_MAINFINADATA','fetched_value2':557725.84,'fetched_source2':'工商银行2026Q1报告A股PDF'},
+ {'id':108,'label':'HKSCC Nominees · 角色','reported_value':24.18,'unit':'%','line_number':176,'raw_text':'股东表','fetched_value':24.18,'fetched_source':'工商银行2025年报A股PDF前10名普通股股东持股情况','fetched_value2':24.18,'fetched_source2':'PDF文本抽取页91'},
+ {'id':109,'label':'2021-2025 · 评分','reported_value':7.0,'unit':'分','line_number':186,'raw_text':'管理层评分','fetched_value':7.0,'fetched_source':'报告作者主观评分参数，不是外部财务数据','fetched_value2':7.0,'fetched_source2':'报告原文复核'},
+ {'id':115,'label':'建设银行 · 代码','reported_value':601939.0,'unit':'代码','line_number':235,'raw_text':'同业估值表','fetched_value':601939.0,'fetched_source':'腾讯行情同业抓取 _tmp_peer_quotes.json','fetched_value2':601939.0,'fetched_source2':'交易所公开证券代码'},
+ {'id':130,'label':'交通银行 · 代码','reported_value':601328.0,'unit':'代码','line_number':238,'raw_text':'同业估值表','fetched_value':601328.0,'fetched_source':'腾讯行情同业抓取 _tmp_peer_quotes.json','fetched_value2':601328.0,'fetched_source2':'交易所公开证券代码'},
+ {'id':140,'label':'乐观 · EPS 年增速','reported_value':3.0,'unit':'%','line_number':249,'raw_text':'三情景估值表','fetched_value':3.0,'fetched_source':'情景估值输入假设 financial_rigor.py three-scenario','fetched_value2':3.0,'fetched_source2':'报告原文复核'},
+ {'id':144,'label':'乐观 · 相对当前涨跌幅','reported_value':15.1,'unit':'%','line_number':249,'raw_text':'三情景估值表','fetched_value':15.1,'fetched_source':'financial_rigor.py three-scenario 输出','fetched_value2':15.1,'fetched_source2':'以7.12元现价、EPS 1.00、3%增长、7.5x PE复算'},
+ {'id':152,'label':'悲观 · 目标价','reported_value':4.4,'unit':'元','line_number':251,'raw_text':'三情景估值表','fetched_value':4.4,'fetched_source':'financial_rigor.py three-scenario 输出','fetched_value2':4.4,'fetched_source2':'以7.12元现价、EPS 1.00、-3%增长、4.8x PE复算'},
+ {'id':162,'label':'净息差 · 触发阈值','reported_value':1.25,'unit':'%','line_number':313,'raw_text':'跟踪阈值表','fetched_value':1.25,'fetched_source':'报告作者设定的风险跟踪阈值，不是外部财务数据','fetched_value2':1.25,'fetched_source2':'低于2025净息差1.28%和2026Q1 1.29%的压力阈值'},
+ {'id':164,'label':'不良贷款率 · 触发阈值','reported_value':1.40,'unit':'%','line_number':315,'raw_text':'跟踪阈值表','fetched_value':1.40,'fetched_source':'报告作者设定的风险跟踪阈值，不是外部财务数据','fetched_value2':1.40,'fetched_source2':'高于2025/2026Q1不良贷款率1.31%的风险阈值'},
+ {'id':168,'label':'A 股价格 · 触发阈值','reported_value':6.5,'unit':'元','line_number':319,'raw_text':'跟踪阈值表','fetched_value':6.5,'fetched_source':'报告作者设定的买入观察阈值，来自PB=0.60x估值框架','fetched_value2':6.498,'fetched_source2':'financial_rigor.py calc: 10.83*0.60=6.498'},
+]
+path=pathlib.Path('reports/工商银行/audit_results_20260707.json')
+path.write_text(json.dumps(results,ensure_ascii=False,indent=2),encoding='utf-8')
+print(path.resolve())
+print(len(results))

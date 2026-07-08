@@ -1,0 +1,620 @@
+!function() {
+	var noticeDetail = new Vue({
+		el: '#noticeDetail',
+		data: function() {
+			return {
+				bulletinStatus: '',
+				stockCode: stockCode,
+				stockName: '',
+				askMsgLength: 148,
+				askPlaceHolder: '针对公告《' + fundtitle + '》提问',
+				askMsg: '',
+				yzmCode: '',
+				yzmImgSrc: '',
+				secrethide: '',
+				isYzmTrue: false,
+
+				askPopVisible: false,
+				pdfDisplay: true,
+				isCollect: false,
+				fundList: [],
+				fundtitle: fundtitle,
+				isIE: !!window.ActiveXObject || "ActiveXObject" in window,
+				orgId: '',
+				announcementType: '',
+				announcementTitle: '',
+				announcementTime: '',
+				announcementId: '',
+				pdfUrl: '',
+				qcodeUrl: '',
+				price: '',
+				time: '',
+				change: '',
+				isRise: '',
+				viewNum: '',
+				isVisualFlag: false,
+				kwSearchSky: '',
+				kwSearchModel: '',
+				DEFAULT_URL: '',
+				hlightSpansArray: [],
+				hlightPage: 1,
+				divSpansArray: [],
+      			isDownloading: false,
+				percent: 5,
+				isFullScreen: false
+			}
+		},
+		computed: {
+			month: function() {
+				var dateArr = this.time.split(':')[0].split('-');
+				return dateArr[0] && dateArr[1] ? dateArr[0] + '.' + dateArr[1] : '';
+			},
+			date: function() {
+				var dateArr = this.time.split(' ')[0].split('-');
+				return dateArr[2] ? dateArr[2] : ''
+			},
+			hourSecond: function() {
+				return this.time.split(' ')[1] ? this.time.split(' ')[1] : '';
+			}
+		},
+		methods: {
+			//百分比
+			toPercent: function(value) {
+				if (value === 0 || value === '0' || value == '0.00') {
+					return '0.00%'
+				}
+				if (!value || value == '-') {
+					return '-'
+				}
+				return Number(value).toFixed(2) + "%";
+			},
+			noticeDownload: function() {
+			//ie11不能使用后面的方法下载
+            var userAgent = window.navigator.userAgent;
+            if(userAgent.indexOf("MSIE ") > -1 || userAgent.indexOf("Trident/") > -1){
+            	 window.open(this.pdfUrl);
+            	 return;
+            }
+				var title = this.announcementTitle;
+				if (this.stockName != null && this.stockName != '') {
+					title = this.stockName + "：" + this.announcementTitle;
+				}
+				var _this = this;
+				_this.isDownloading = true;
+
+
+//				async function  () {
+					try {
+				        // 使用 XMLHttpRequest 实现进度监控
+				        const xhr = new XMLHttpRequest();
+				        xhr.open('GET', this.pdfUrl, true);
+				        xhr.responseType = 'blob';
+
+				        // 进度监控
+				        xhr.addEventListener('progress', function(event) {
+							const percent = Math.floor((event.loaded / event.total)*100);
+							if(percent > 5){
+								_this.percent = percent
+							}
+				        	if(event.total == event.loaded){
+								setTimeout(function()  {
+									_this.isDownloading = false;
+									_this.percent = 5
+								}, 1000);
+							}
+				        });
+
+				        // 完成处理
+				        xhr.addEventListener('load',function (event){
+				          if (xhr.status === 200) {
+				            // 创建 Blob 对象
+				            var blob = new Blob([xhr.response]);
+
+				            // 创建临时链接
+				            var link = document.createElement('a');
+				            link.href = window.URL.createObjectURL(blob);
+				            link.download = title+".pdf"; // 设置下载文件名
+
+				            // 触发下载
+				            document.body.appendChild(link);
+				            var clickEvent = document.createEvent('MouseEvents');
+                            clickEvent.initEvent('click', true, true);
+                            link.dispatchEvent(clickEvent);
+				            document.body.removeChild(link);
+				          }
+				        });
+
+				        // 错误处理
+				        xhr.addEventListener('error', function() {
+				          this.$message.error('下载失败');
+				          _this.isDownloading = false;
+				          _this.percent = 5
+				        });
+
+				        xhr.send();
+				      } catch (error) {
+						this.$message.error('下载失败');
+						_this.isDownloading = false;
+						_this.percent = 5
+				      }
+//				};
+
+			},
+			getCodeListByAid: function(id) {
+
+				axios({
+					url: path + '/hisAnnouncement/getSecnameByAnnouncementId',
+					method: 'post',
+					params: {
+						announcementId: id
+					}
+				}).then(function(res) {
+					if (res) {
+						this.fundList = res;
+					}
+				}.bind(this))
+			},
+			getNoticeInfo: function() {
+				axios({
+					url: path + '/announcement/bulletin_detail',
+					method: 'post',
+					params: {
+						announceId: announcementId,
+						flag: plate == 'szse' ? true : false,
+						announceTime: announcementTime
+					}
+				}).then(function(res) {
+
+					if (res && res.announcement) {
+						this.qcodeUrl = web_chat + "/pdf/?obj=" + encodeURIComponent(JSON.stringify({
+							docUrl: res.announcement.adjunctUrl
+						}));
+						this.pdfUrl = v3_cninfo+"/"+res.announcement.adjunctUrl;
+						this.orgId = res.announcement.orgId;
+						this.announcementType = res.announcement.announcementType;
+						this.announcementTitle = res.announcement.announcementTitle;
+						this.announcementTime = res.announcement.announcementTime;
+						this.announcementId = res.announcement.announcementId;
+						this.isVisualClick(res.announcement)
+						this.bulletinStatus = {
+							M: '午间公告',
+							B: '早间公告',
+							A: '盘后公告'
+						}[res.bulletinStatus];
+						if (plate == 'fund' && res.announcement.secName) {
+							this.stockName = res.announcement.secName.split(',')[0];
+						} else {
+							this.stockName = res.announcement.secName;
+						}
+						this.time = fomatDate(res.announcement.announcementTime, 'yyyy-MM-dd HH:mm');
+						if (stockCode && orgId) {
+							setTimeout(function() {
+								window.snowplow('trackStructEvent', 'hot', 'click', plate, stockCode + 'ivvvi' + orgId, announcementId);
+							}, 2000);
+						}
+						this.renderQcode(this.qcodeUrl);
+						this.renderPdf(this.pdfUrl);
+
+					}
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			renderPdf: function(pdfUrl) {
+				var options = {
+					height: "100%",
+					pdfOpenParams: {
+						navpanes: 0,
+						toolbar: 0,
+						statusbar: 0,
+						// view: "FitH",
+						pagemode: "thumbs",
+						page: 1
+					}
+				};
+				var myPDF = PDFObject.embed(pdfUrl, "#pdfviewer", options);
+			},
+			renderQcode: function(fileUrl) {
+				var qrcode = new QRCode(document.getElementById("notice-qrcode"), {
+					width: 70,
+					height: 70,
+					correctLevel: 0
+				})
+				qrcode.makeCode(fileUrl)
+				document.getElementById("notice-qrcode").title = ""
+			},
+			getViewNum: function() {
+				axios({
+					url: path + '/announcement/getCount',
+					method: 'get',
+					params: {
+						announceId: announcementId
+					}
+				}).then(function(res) {
+					if (res) {
+						this.viewNum = res.clickTotalTimes
+					}
+				}.bind(this)).catch(function(err) {
+					this.viewNum = '';
+				}.bind(this))
+			},
+			getStockPrice: function() {
+				JSONP.getJSON(apiServer + '/v5/hq/dataItem', {
+					jsonpCallback: '',
+					codelist: { szse: 'sz', sse: 'sh' }[plate] + stockCode
+
+				}, function(res) {
+					if (res && res[0]) {
+						var val = res[0]
+						this.price = val[10] ? val[10] : '-';
+						this.isRise = val[264648] > 0 ? true : false;
+						this.change = (val[264648] ? parseFloat(val[264648]).toFixed(2) : '-') + (val[199112] ? ' (' + parseFloat(val[199112]).toFixed(2) + '%)' : '-')
+					}
+				}.bind(this))
+			},
+			query: function() {
+				var _this = this
+				var stocklist = { stockCode: _this.stockCode, stockName: _this.stockName }
+				$.ajax({
+					url: path + '/singleDisclosure/getStockPlateNew',
+					type: 'get',
+					data: stocklist,
+					success: function(data) {
+						if (data.msg != "fail") {
+							var prefix = data.content.market;
+							if (prefix.indexOf("bj") != -1) {
+								// 可转债暂无北交所
+							} else {
+								var code = stockCode + '.' + (prefix === "sz" ? "SZ" : "SH");
+								// this.sendCode = code;
+								_this.$nextTick(function() {
+									// 获取行情订阅数据
+									_this.getSubscribeData(code);
+								});
+							}
+						}
+					}
+				});
+			},
+			// 获取行情订阅数据
+			getSubscribeData: function(code) {
+				this.subscribe = NSDK.createRequestItem(SDK_REQUEST_QUOTESUBSCRIBE);
+				this.subscribe.setDataCallback(this.setSubscribeData);
+				this.subscribe.setCodes(code);
+				this.subscribe.setFields(
+					"Last,Change,PercentChange"
+				);
+				this.subscribe.request();
+			},
+			// 写入行情订阅数据
+			setSubscribeData: function(res) {
+				var _this = this
+				var data = res.data;
+				var rowArray = data.getRowValues(0);
+				_this.price = rowArray[1] ? rowArray[1] : '-';
+				_this.isRise = rowArray[2] > 0 ? true : false;
+				_this.change = (rowArray[2] ? rowArray[2] : '-') + (rowArray[3] && rowArray[3] != '-' ? '(' + _this.toPercent(rowArray[3]) + ')' : '-');
+				NSDK.disconnect();
+			},
+			checkLogin: function(type) {
+				if ((/msie [6|7|8|9]/i.test(navigator.userAgent))) {
+					this.pdfDisplay = false;
+					this.$msgbox({
+						type: 'warning',
+						title: '提示',
+						message: '系统检测到您正在使用IE9内核浏览器，不能实现完美体验，建议及时更新浏览器版本！',
+						callback: function() {
+							this.pdfDisplay = true;
+						}.bind(this)
+					})
+					return;
+				}
+                getCommonUserInfo();
+
+                    if (JC_USER.getLoginStatus()) {
+                        if (type == 'ask') {
+
+                        } else if (type == 'collect') {
+                            if (myBrowser() == 'IE') {
+                                this.pdfDisplay = false;
+                            }
+                            if (this.isCollect) {
+                                this.cancelCollect();
+                            } else {
+                                this.collectAnnounce();
+                            }
+                        }
+
+                    } else {
+                        if (myBrowser() == 'IE') {
+                            this.pdfDisplay = false;
+                        }
+                        //先登出清除旧的登录token
+                        var html = window.$('<iframe src="' + cninfo_user_url_https + '/logout?param=' + location.origin + '" style="height: 0; width: 0;" frameborder="0"></iframe>')
+                        window.$('body').append(html);
+
+                        var loginurl=cninfo_user_url_https + '/login?locale=zh&service='+cninfo_user_url+encodeURIComponent('/api/callback?client_name=CasClient')
+                        window.open(loginurl);
+
+                        //$('#loginWrapper').show();
+                        //$('#login_iframe').attr('src', cninfo_user_url_https + '/login?locale=zh&service=http://uc.cninfo.com.cn' + encodeURIComponent('/api/callback?client_name=CasClient&url=' + window.location.origin + '/new/transition'));
+                    }
+
+			},
+			collectAnnounce: function() {
+				var params = new URLSearchParams();
+				params.append('announceId', announcementId);
+				axios({
+					url: cninfo_user_url + '/api/announce/collectAnnounce',
+					method: 'post',
+					data: params
+				}).then(function(res) {
+					if (res && (res.data || res.code == 200)) {
+						this.isCollect = true;
+						this.$msgbox({
+							type: 'success',
+							title: '提示',
+							message: '收藏成功',
+							callback: function() {
+								this.pdfDisplay = true;
+							}.bind(this)
+						})
+					} else {
+						this.$msgbox({
+							type: 'error',
+							title: '提示',
+							message: res.msg
+						})
+                        if("该公告已经收藏！"==res.msg){
+                        	smartReload();
+                        }
+					}
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			cancelCollect: function() {
+				var params = new URLSearchParams();
+				params.append('announceId', announcementId);
+				axios({
+					url: cninfo_user_url + '/api/announce/cancelCollectAnnounce',
+					method: 'post',
+					data: params
+				}).then(function(res) {
+					if (res && res.code == 200 && res.data) {
+						this.isCollect = false;
+						this.$msgbox({
+							type: 'success',
+							title: '提示',
+							message: '取消收藏成功',
+							callback: function() {
+								this.pdfDisplay = true;
+							}.bind(this)
+						})
+					} else {
+						this.isCollect = true;
+						this.$msgbox({
+							type: 'error',
+							title: '提示',
+							message: '取消收藏失败',
+							callback: function() {
+								this.pdfDisplay = true;
+							}.bind(this)
+						})
+					}
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			isCollectAnnounce: function() {
+
+				var params = new URLSearchParams();
+				params.append('announceId', announcementId);
+				axios({
+					url: cninfo_user_url + '/api/announce/announceCollectedOrNot',
+					method: 'get',
+					params: params
+				}).then(function(res) {
+					if (res && res.code == 200 && res.data) {
+						this.isCollect = true;
+					}
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			askShow: function() {
+				if (myBrowser() == 'IE') {
+					this.pdfDisplay = false;
+				}
+			},
+			listenCloseModal: function() {
+				document.addEventListener('loginCloseModal', function(e) {
+					var evt = e || window.event;
+					evt.cancelBubble = true;
+					this.pdfDisplay = true;
+				}.bind(this))
+
+			},
+			verifyYzmCode: function() {
+				if (this.yzmCode && this.secrethide) {
+					var params = new URLSearchParams();
+					params.append('j_code', this.yzmCode);
+					params.append('secrethide', this.secrethide)
+					axios({
+						url: path + "/data/kaptcha",
+						method: 'post',
+						data: params
+					}).then(function(res) {
+						this.isYzmTrue = res && res == "Y" ? true : false;
+					}.bind(this)).catch(function(err) {
+						this.isYzmTrue = false;
+					}.bind(this));
+				}
+			},
+			refreshYzm: function() {
+				this.yzmCode = '';
+				this.getYzm();
+			},
+			getYzm: function() {
+				axios({
+					url: path + "/Kaptcha2.do?Math.floor(Math.random() * 100)",
+					method: 'get'
+				}).then(function(res) {
+					if (res) {
+						this.yzmImgSrc = res.img;
+						this.secrethide = res.sid;
+					}
+				}.bind(this))
+			},
+			sendAskMsg: function() {
+				eventTracker('巨潮提问', "公告最终页", '埋点提问按钮');
+				if (myBrowser() == "IE") {
+					this.pdfDisplay = false;
+				}
+				if (!this.askMsg && this.askMsg == '') {
+					this.$msgbox({
+						type: 'error',
+						title: '提示',
+						message: '请输入您的提问！',
+						callback: function() {
+							this.pdfDisplay = true;
+						}.bind(this)
+					})
+					return;
+				}
+				if (!this.isYzmTrue) {
+					this.$msgbox({
+						type: 'error',
+						title: '提示',
+						message: '请输入正确的验证码！',
+						callback: function() {
+							this.pdfDisplay = true;
+						}.bind(this)
+					})
+					this.getYzm();
+					return;
+				}
+				var params = new URLSearchParams();
+				params.append('stockCode', stockCode);
+				params.append('content', '##' + this.askPlaceHolder + '##' + this.askMsg);
+				params.append('questionPort', 'b');
+				params.append('username', JC_USER.getInfo('username'));
+				params.append('uid', JC_USER.getInfo('uid'));
+				params.append('mobile', JC_USER.getInfo('mobile'));
+				params.append('email', JC_USER.getInfo('email'));
+				axios({
+					url: cninfo_user_url + '/api/companyReplies/jvchaoQuestion',
+					method: 'post',
+					data: params
+				}).then(function(res) {
+					if (res && res.code == '200' && res.data) {
+						this.$msgbox({
+							type: 'success',
+							title: '提示',
+							message: '提交成功，请到互动易查看！',
+							callback: function() {
+								this.pdfDisplay = true;
+							}.bind(this)
+						})
+					} else {
+						this.$msgbox({
+							type: 'error',
+							title: '提示',
+							message: res.msg ? res.msg : '提交失败',
+							callback: function() {
+								this.pdfDisplay = true;
+							}.bind(this)
+						})
+					}
+					this.askMsg = '';
+					this.refreshYzm();
+				}.bind(this)).catch(function(err) {
+
+				})
+			},
+			isVisualClick: function(announcement) {
+				var re = announcement.announcementType.split('||')
+				var type = re.join(',')
+				axios({
+					url: path + '/disclosure/isVisual',
+					method: 'get',
+					params: {
+						announcementType: type,
+						announcementTitle: announcement.announcementTitle,
+						announcementId: announcement.announcementId,
+						scode: announcement.secCode,
+						declaredate: announcement.announcementTime,
+						orgid: announcement.orgId,
+					}
+				}).then(function(res) {
+					this.isVisualFlag = Boolean(res)
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			tableLink: function() {
+				var re = this.announcementType.split('||')
+				var type = re.join(',')
+				axios({
+					url: path + '/disclosure/disclosureVisual',
+					method: 'post',
+					params: {
+						scode: this.stockCode,
+						orgid: this.orgId,
+						declaredate: this.announcementTime,
+						announcementId: this.announcementId,
+						announcementType: type
+					}
+				}).then(function(res) {
+					if (res.payload.shareUrl) {
+						window.open(res.payload.shareUrl, '_blank')
+					}
+				}.bind(this)).catch(function(err) {
+				}.bind(this))
+			},
+			openFullScreen: function() {
+				this.isFullScreen = true
+			},
+			closeFullScreen: function () {
+				this.isFullScreen = false
+			}
+		},
+		created: function() {
+			var self = this
+			this.getViewNum();
+			this.listenCloseModal();
+			this.isCollectAnnounce();
+			this.getYzm();
+			if (plate == 'szse' || plate == 'sse') {
+				if (hq_api_enable === 'true') {
+					this.getStockPrice()
+				} else {
+					if (myBrowser() != 'IE') {
+						self.$nextTick(function() {
+							if (window.NSDK && window.GUI) {
+								//GUI初始化
+								if (!NSDK.VUE_CONNECT_SUCCESS) {
+									sdkConnect(self.query); //SDK连接
+								} else {
+									self.query()
+								}
+							} else {
+								if (!NSDK.VUE_CONNECT_SUCCESS) {
+									sdkConnect(self.query); //SDK连接
+								}
+							}
+						})
+					}
+				}
+			}
+			if (plate == 'fund') {
+				this.getCodeListByAid(announcementId)
+			}
+		},
+		mounted: function() {
+			var _this = this
+			this.getNoticeInfo();
+		},
+		beforeDestroy: function() {
+			var _this = this
+			if (hq_api_enable !== 'true' && myBrowser() != 'IE') {
+				NSDK.destroyRequestItem(_this.subscribe);
+			}
+		},
+	})
+}()

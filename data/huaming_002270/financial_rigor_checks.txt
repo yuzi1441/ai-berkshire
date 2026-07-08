@@ -1,0 +1,83 @@
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field revenue_2026Q1 --values {"cninfo_pdf": 530271786.47, "eastmoney": 530271786.47} --unit 元
+============================================================
+交叉验证: revenue_2026Q1 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 530.27M 元
+
+  ✅ cninfo_pdf          : 530.27M 元  (偏差 0.00%)
+  ✅ eastmoney           : 530.27M 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 530.27M 元
+
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field net_profit_attr_2026Q1 --values {"cninfo_pdf": 163026548.07, "eastmoney": 163026548.07} --unit 元
+============================================================
+交叉验证: net_profit_attr_2026Q1 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 163.03M 元
+
+  ✅ cninfo_pdf          : 163.03M 元  (偏差 0.00%)
+  ✅ eastmoney           : 163.03M 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 163.03M 元
+
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field ocf_2026Q1 --values {"cninfo_pdf": 92367764.55, "eastmoney": 92367764.55} --unit 元
+============================================================
+交叉验证: ocf_2026Q1 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 92.37M 元
+
+  ✅ cninfo_pdf          : 92.37M 元  (偏差 0.00%)
+  ✅ eastmoney           : 92.37M 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 92.37M 元
+
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field revenue_2025 --values {"cninfo_pdf": 2426794600.12, "eastmoney": 2426794600.12} --unit 元
+============================================================
+交叉验证: revenue_2025 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 2.43B 元
+
+  ✅ cninfo_pdf          : 2.43B 元  (偏差 0.00%)
+  ✅ eastmoney           : 2.43B 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 2.43B 元
+
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field net_profit_attr_2025 --values {"cninfo_pdf": 709737360.27, "eastmoney": 709737360.27} --unit 元
+============================================================
+交叉验证: net_profit_attr_2025 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 709.74M 元
+
+  ✅ cninfo_pdf          : 709.74M 元  (偏差 0.00%)
+  ✅ eastmoney           : 709.74M 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 709.74M 元
+
+$ C:\Users\whatn\AppData\Local\Programs\Python\Python314\python.exe tools/financial_rigor.py cross-validate --field ocf_2025 --values {"cninfo_pdf": 604031442.9, "eastmoney": 604031442.9} --unit 元
+============================================================
+交叉验证: ocf_2025 (Cross-Validation)
+============================================================
+  数据来源数: 2
+  参考中位数: 604.03M 元
+
+  ✅ cninfo_pdf          : 604.03M 元  (偏差 0.00%)
+  ✅ eastmoney           : 604.03M 元  (偏差 0.00%)
+
+  ✅ 所有来源偏差 ≤ 2.0%, 数据一致
+
+  共识值 (加权中位数): 604.03M 元

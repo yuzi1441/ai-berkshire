@@ -1,0 +1,1370 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="yes" name="apple-touch-fullscreen" />
+<meta content="telephone=no,email=no" name="format-detection" />
+<meta content="0" name="isLogin" id="isLogin" />
+<meta content="0" name="isApp" id="isApp" />
+<title>东方电子（000682）投资者关系互动平台-投资者关系管理</title>
+<link rel="stylesheet" type="text/css" href="/static/css/mui.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/mui.picker.min.css"/>
+<link rel="stylesheet" type="text/css" href="/static/css/iconfont.css?20190704"/>
+<link rel="stylesheet" type="text/css" href="/static/css/public.css?20190704"/>
+<link rel="stylesheet" type="text/css" href="/static/css/index.css?20190704"/>
+
+<script src="/static/js/flexible.debug.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/flexible_css.debug.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--<script src="/static/js/zepto.min.js" type="text/javascript" charset="utf-8"></script>-->
+<script src="/static/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/static/js/sensorsdata.min.js" charset="utf-8"></script>
+<script src="/static/js/sensors.config.js" charset="utf-8"></script>
+<script src="/static/js/app.js?t=202102190950" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/jsencrypt.js"></script>
+<script src="/static/js/jquery.serializejson.js"></script>
+<script type="text/javascript">
+    var appType = "0";
+    var appToken = "";
+    var appVersion ="1";
+    var appGetTokenCount = 0;
+
+    var PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuSE6NzAZ19f2rWewyBL1tEzmO/pVxrnsS45rMhsKarCoRe2KjP7R+D+VJCkCRThuK5dWFlx3QNrk4Mx3kmxEnyCt/W3zW3eBlaBZ1bZg1s+/dP+W/JGTEK6kHk8PY37onGdiHI1V5yMW2kIuAb6qtC2tYWj9Z/IsTqGn0l9jxsMKlttPnFROu+78hWzTf/YAfOS/koq7wVmk7j90kbiR1EUAT+BIzq7kL47jHnrpf1mZlX//oRUcuAZe2D3bZ3kkYbo6/6WM2H4X94htqPKfaToi5malXEfbEMv3OWGtjRR2E/RmXMXZzTNvUDlJS5q40YzfeQtBQMaJ7mMOdDGhrQIDAQAB-----END PUBLIC KEY-----";
+    var encrypt = new JSEncrypt();
+    encrypt.setPublicKey(PUBLIC_KEY);
+
+    //埋点初始化
+    var maidianConfig = {
+        showLog: "",
+        project: "qjly",
+        objectName: '微信IR',
+        sensors_server_url: 'https://analysisup.p5w.net/sa?project='
+    }
+    var maidianEnable = '';
+    if(!!maidianEnable){
+        buryingPoint(maidianConfig)
+    }
+    if(appType==='2'){
+        //andiro进入页面重新获取token
+        if(appVersion >=320){
+            if(!appToken) {
+                appToken = window.prompt("getToken", "");
+                appGetTokenCount++;
+            }
+        }
+    }
+</script>
+
+	<link rel="stylesheet" type="text/css" href="/static/css/ly.css?v=202403251">
+
+
+
+	<link rel="stylesheet" href="/static/css/swiper-3.4.2.min.css">
+	<link rel="stylesheet" href="/static/css/company.css">
+	<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/static/js/swiper-3.4.2.jquery.min.js"></script>
+</head>
+<body class="index_main company_info eHome bFooter">
+<script>
+	 var c_code = "000682";
+</script>
+<div class="index_company_info p_com">
+	<div class="company_logo oh">
+				<img src="https://image.p5w.net/lytx/company/logo/f30dc0aa37c747de955f536882c69378.jpg?x-oss-process=image/resize,w_200,limit_1" alt="">
+			</div>
+
+	<div class="company_detail">
+		<p class="company_allName ft28">东方电子股份有限公司</p>
+		<p class="company_shortName ft24">东方电子（000682）</p>
+
+		<div class="company_hq" >
+			<div style="display: none" class="company_hq_div">
+			<span class="company_hq_price ft32 index_stock_status3" id="dqjg">--</span>
+			<span class="company_hq_increase ft24 index_stock_status3" id="dqzf">--</span>
+			<a href="/stock/000682.html" class="ft24 col49">个股数据></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="company_focus fr oh">
+					<span class="index_company_focus index_company_notfocus ft24" data-pid="B4054F985B1611E6AC91D89D67297B20" data-code="000682" data-name="东方电子">+关注</span>
+					<!--<span class="company_focus_count ft24">&#45;&#45;人关注</span>-->
+	</div>
+</div>
+<div class="company_senior">
+	<div class="company_senior_tip">
+		<p class="ft32 col25">团队介绍</p>
+				<a href="/senior/000682.html" class="ft24 col49">查看全部></a>
+			</div>
+	<ul class="company_senior_list">
+				<li>
+			<i class="company_senior_tx oh">
+								<img src="/static/images/imgs-roadshow/profile2.png" alt="">
+							</i>
+			<span class="ft24 company_senior_name">方正基</span>
+		</li>
+				<li>
+			<i class="company_senior_tx oh">
+								<img src="/static/images/imgs-roadshow/profile2.png" alt="">
+							</i>
+			<span class="ft24 company_senior_name">吴晓亮</span>
+		</li>
+				<li>
+			<i class="company_senior_tx oh">
+								<img src="/static/images/imgs-roadshow/profile2.png" alt="">
+							</i>
+			<span class="ft24 company_senior_name">邓发</span>
+		</li>
+			</ul>
+</div>
+<div class="company_tab  b_t_3">
+	<div class="swiper-container b_b_1"  id="topNav" style="padding: 0 .2rem">
+	<div class="company_tab_list swiper-wrapper ft30 col90">
+
+		<span class="company_tab_item swiper-slide active" id="showroadshow" data-act="showroadshow">活动</span>
+		<span class="company_tab_item swiper-slide"  id="showquestion" data-act="showquestion">互动</span>
+		<span class="company_tab_item swiper-slide" id="shownews" data-act="shownews">新闻</span>
+		<span class="company_tab_item swiper-slide" id="showgonggao" data-act="showgonggao">公告</span>
+		<span class="company_tab_item swiper-slide" id="showReport" data-act="showreport">财报</span>
+	</div>
+	</div>
+
+	<div class="company_tab_content">
+		<div class="company_tab_type luyan_list_tab">
+			<div class="index_company_act index_act_list company_news">
+				<style>
+	#company_news_list .Newsslide	{    width: 100%;
+		height: auto;
+		border-bottom: 1px solid #F7F7F7;}
+	.skip{    display: block;
+		padding: 0.3rem 0.5rem;}
+	.Newsslide .skip .Newsslidenav {
+		line-height: 0.6rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		color: #252A2E;
+	}
+	.Newsslide .skip .icontent {
+		line-height: 0.5rem;
+		color: #909090;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		margin-top: 0.15rem;
+	}
+	.Newsslide .skip .inewsdata {
+		color: #909090;
+		text-align: right;
+		line-height: 0.346666rem;
+		margin-top: 0.373333rem;
+		margin-bottom: -0.133333rem;
+	}
+</style>
+<ul class=" " id="company_news_list" data-page="1">
+
+</ul>
+<div class="index_load_more">
+	<a href="javascript:void(0);" class=" ft28 col49 load_more_news" style=" display: none;">点击加载更多></a>
+</div>
+<script>
+
+    function getNews(is_one) {
+        $(".company_tab_item").removeClass("active");
+        $("#shownews").addClass("active");
+        $(".company_qa,.company_gonggao,.company_roadshow").hide();
+        $(".company_news").show();
+        $.cookie('company_tab_type', 'shownews');
+        var itemcount=$("#company_news_list .Newsslide").length;
+        if(is_one==1){
+            $("#company_news_list").html('');
+            $("#company_news_list").data('page','1');
+        }
+        var code = '000682';
+        var page = $("#company_news_list").data("page");
+        //var page = Math.ceil(itemcount/5)+1;
+        var pagesize = 5;
+        $(".reload").show();
+        $.ajax({
+            dataType:'json',
+            type : "get",
+            url:"/info/weyt.html",
+            data:{page:page,stock_code:code,size:pagesize},
+            success:function(data){
+                if (page == 1 )
+                {
+                    $("#company_news_list").empty();
+                }
+                if (data.data.length > 0 ) {
+                    var html = "";
+                    $(data.data).each(function(){
+                        html += '<dl class="Newsslide">\
+									<a class="skip" href="/info/qjkx_info.html?id=' + this.DOCID + '">\
+										<dt class="Newsslidenav ft30">' + this.DOCTITLE + '</dt>\
+										<dd class="icontent ft28">' + this.DOCABSTRACT + '</dd>\
+										<p class="inewsdata ft24">' + this.DOCRELTIME + '</p>\
+									</a>\
+								</dl>';
+                    });
+                    $(html).appendTo("#company_news_list");
+                    $(".load_more_news").html('点击加载更多').css('display','block');
+                    $("#company_news_list").data('page',parseInt($("#company_news_list").data("page")) + 1);
+                }else{
+                    $('<dl class="Newsslide">\
+									<span class="skip">\
+										<span class="icontent ft28">' + (all ? "暂无内容" : "暂无内容，请设置更多自选股") + '</span>\
+									</span>\
+								</dl>').appendTo("#company_news_list");
+                }
+            },
+            error:function(){
+                mui.toast('数据交互失败');
+            },
+            complete:function(){
+                $(".reload").hide();
+                $(".reload").css('position','fixed');
+                //mui(".company_news").on("tap",".load_more_news",loadMoreNews);
+            }
+        });
+
+    }
+
+    mui(".company_news").on("tap",".load_more_news",function (e) {
+        $(".load_more_news").html('加载中...');
+        getNews(2);
+    });
+
+    /*function  loadMoreNews() {
+        mui(".company_news").off("tap",".load_more_news",loadMoreNews);
+        $(".load_more_news").html('加载中...');
+        getNews(2);
+    }*/
+
+</script>
+			</div>
+
+			<div class=" hide index_company_act index_act_list company_roadshow">
+				<link rel="stylesheet" type="text/css" href="/static/css/ly-index.css"/>
+<div class="b_b_3 luyan_list_tab ">
+<ul id="company_roadshow_list" class="luyan_list_show luyan_list p_com">
+
+</ul>
+</div>
+<div class="index_load_more">
+    <a href="javascript:void(0);" class=" ft28 col49 load_more_roadshow " style="display: none;">点击加载更多</a>
+</div>
+<script>
+
+	function getRoadshow(is_one) {
+        $(".company_tab_item").removeClass("active");
+        $("#showroadshow").addClass("active");
+        $(".company_qa,.company_gonggao,.company_news").hide();
+        //$(".company_qa,.company_xingqujg,.company_fenxi").hide();
+        $(".company_roadshow").show();
+        $.cookie('company_tab_type', 'roadshow');
+	    if(is_one==1){
+            $("#company_roadshow_list").html('');
+        }
+        var companyRoadshowID = 'B4054F985B1611E6AC91D89D67297B20';
+        var itemcount=$("#company_roadshow_list .roadli").length;
+        $(".reload").show();
+        $.ajax({
+            type: 'POST',
+            url:"/company/getRoadshowByCid.html",
+            data: {"companypid":companyRoadshowID,'rows':itemcount},
+            dataType:'json',
+            success:function(data){
+                if(data.code == 1){
+                    var rows = data.data;
+                    if(rows){
+                        $(rows).each(function(){
+                            if(this.roadshowCoverOssUrl && this.roadshowCoverOssUrl!='' && this.roadshowCoverOssUrl != null){
+                                var roadshow_img =  this.roadshowCoverOssUrl + '?x-oss-process=image/resize,w_640,limit_1';
+                            }else {
+                                var roadshow_img = "/static/images/imgs-roadshow/list_fm.png";
+                            }
+                            if(this.roadshowActiveHis!='' && this.roadshowActiveHis!=null){
+                                var roadshow_url = this.roadshowActiveHis;
+                            }else {
+                                if(this.urlNo!='' && this.urlNo!=null){
+                                    var roadshow_url = "/roadshow/"+this.urlNo+".html";
+                                }else {
+                                    var roadshow_url = "/roadshow/"+this.pid+".html";
+                                }
+
+                            }
+                            var suo_class = "";
+                            var suo_html = "";
+                            if(this.roadForm==1){
+                                //封闭类型
+                                if(this.isChecked==1 || this.isChecked==2 || this.isChecked==11){
+                                    //允许访问的状态
+                                    suo_html = '<i class="suokai"></i>';
+                                    suo_status = 1;
+                                }else if(this.isChecked==0){
+                                    //报名未审核
+                                    suo_html = '<i class="suoguan"></i>';
+                                    suo_class = ' suobmwsh';
+                                    //this.url = "#";
+                                }else if(this.isChecked==10){
+                                    //报名不通过
+                                    suo_html = '<i class="suoguan"></i>';
+                                    suo_class = ' suobmwtg';
+                                    //this.url = "#";
+                                }else{
+                                    suo_html = '<i class="suoguan"></i>';
+                                    suo_class = ' suobmf';
+                                    //this.url = "#";
+                                }
+                            }
+
+                            var is_focus_roadshow = this.isFocus || 0;
+                            if(is_focus_roadshow == 1){
+                                fl_class = 'is-focus';
+                            }else{
+                                fl_class = 'focus';
+                            }
+
+                            var isVideo = this.isVideoLive || 0;
+                            if(isVideo ==1){
+                                var is_video_img = '<img src="/static/images/imgs-roadshow/video.png" class="video-ico" style="width: 16px;"> ';
+                            }else {
+                                var is_video_img = '';
+                            }
+
+                            $(' <li class="roadli">\
+                                <a href="'+roadshow_url+'" class="luyan_list_item dis_fl w_ b_b_1 '+suo_class+'"   data-pid="'+this.pid+'" data-cid="'+this.companyBaseinfoId+'">\
+                                <div class="luyan_content mr02 h_ dis_fl fl_c">\
+                                    <p class="luyan_detail oh dis_fl">\
+                                        <span class="luyan_status luyan_status'+this.roadshowStatus+' fl ft18 mr02">'+this.roadshowStatusText+'</span>\
+                                        <span class="luyan_time ft24 fl">'+this.roadshowDates.substr(0,16)+'</span>\
+                                    </p>\
+                                    <p class="luyan_title ft28 col25 vc_m show_two_line lh_n">' + is_video_img +this.roadshowTitle+'</p>\
+                                    <p class="luyan_label col_4 ft20 oh lh_n">'+this.roadshowLabelName+'</p>\
+                                </div>\
+                                <div class="luyan_img rel">\
+                                    <img src="'+roadshow_img+'" alt="'+this.roadshowTitle+'" class="h_ w_">'+suo_html+'\
+                                </div>\
+                                </a>\
+                                </li>').appendTo("#company_roadshow_list");
+
+                        });
+                        if(rows.length<5){
+                            $(".load_more_roadshow").html('没有更多数据了~').show();
+                        }else {
+                            $(".load_more_roadshow").html('点击加载更多').show();
+                        }
+                    }else {
+                        $(".load_more_roadshow").html(data.message).show();
+                    }
+
+                }else{
+                    $(".load_more_roadshow").html(data.message).show();
+                }
+            },
+            error:function(){
+                mui.toast('数据交互失败');
+            },
+            complete:function(){
+                $(".reload").hide();
+                $(".reload").css('position','fixed');
+                //mui(".index_act_list").on("tap",".load_more_roadshow",loadMoreRoadshow);
+               // share_want();
+            }
+        });
+    }
+
+
+    mui(".index_act_list").on("tap",".load_more_roadshow",function (e) {
+        $(".load_more_roadshow").html('加载中...');
+        getRoadshow(2);
+    });
+    //mui(".index_act_list").on('tap','.load_more_roadshow',loadMoreRoadshow());
+    /*function  loadMoreRoadshow() {
+     mui(".index_act_list").off("tap",".load_more_roadshow",loadMoreRoadshow);
+     $(".load_more_roadshow").html('加载中...');
+     getRoadshow(2);
+     }*/
+
+
+    //点击关注
+    mui(".index_act_list").on('tap','.follow-click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var uid = "";
+        if(uid!=''){
+            var pid = $(this).data("pid");
+            var is_focus = $(this).data("focus")?$(this).data("focus"):0;
+            console.log(is_focus)
+            //传值给详情页面，通知加载新数据
+            follow($(this),pid,is_focus);
+            var tmp_focus = 0;
+            if(is_focus==1){
+                tmp_focus =0;
+            }else{
+                tmp_focus =1;
+            }
+            $(this).data("focus",tmp_focus);
+        }else{
+            var btnArray = ['否', '是'];
+            mui.confirm('关注需要登录，是否马上登录', '登录跳转确认', btnArray, function(e) {
+                if (e.index == 1) {
+                    window.location.href="/login/index.html";
+                } else {
+
+                }
+            })
+        }
+    });
+
+    function follow(obj,id,is_focus){
+        var type = is_focus == 1 ? 0 : 1;
+        $(obj).removeAttr("onclick");
+        var followUrl = "/Roadshow/follow.html";
+        $.ajax({
+            dataType:'json',
+            type : "post",
+            url:followUrl,
+            data:{id:id,type:type},
+            success:function(data){
+                if (data.code == 1) {
+                    if(type == 1){
+                        $(obj).removeClass('focus');
+                        $(obj).addClass('is-focus');
+                    }else{
+                        $(obj).removeClass('is-focus');
+                        $(obj).addClass('focus');
+                    }
+                    $(obj).attr("onclick","follow(this,'" + id + "'," + type +")");
+                }else{
+                    mui.alert(data.message, '提示消息', function() {
+                    });
+                }
+            }
+        });
+    }
+
+
+</script>
+			</div>
+
+			<div class="company_qa hide">
+				<div id="company_question_list">
+
+</div>
+<div class="index_load_more">
+	<a href="javascript:void(0);" class=" ft28 col49 load_more_question" style="display: none;">点击加载更多</a>
+</div>
+<script>
+
+    function getQuestion(is_one) {
+        $(".company_tab_item").removeClass("active");
+        $("#showquestion").addClass("active");
+        $(".company_roadshow,.company_gonggao,.company_news").hide();
+        $(".company_qa").show();
+        $.cookie('company_tab_type', 'question');
+        if(is_one==1){
+            $("#company_question_list").html('');
+        }
+        var companyRoadshowID = 'B4054F985B1611E6AC91D89D67297B20';
+        var itemcount=$("#company_question_list .questionli").length;
+        $(".reload").show();
+        $.ajax({
+            type: 'POST',
+            url:"/company/getQuestionByCid.html",
+            data: {"companypid":companyRoadshowID,'rows':itemcount},
+            dataType:'json',
+            success:function(data){
+                if(data.code == 1){
+                    var rows = data.data;
+                    if(rows){
+                        $(rows).each(function(){
+                            if(this.userPictureOssIdUrl!='' && this.userPictureOssIdUrl!=null){
+                                var userPictureUrl =   this.userPictureOssIdUrl + '?x-oss-process=image/resize,w_100,limit_1';
+                            }else{
+                                var userPictureUrl = "/static/images/imgs-roadshow/profile2.png";
+                            }
+
+                            if(this.companyLogoOssIdUrl!='' && this.companyLogoOssIdUrl!=null){
+                                var companyLogoUrl =  this.companyLogoOssIdUrl + '?x-oss-process=image/resize,w_100,limit_1';
+                            }else{
+                                var companyLogoUrl = "/static/images/imgs-roadshow/jiesha.png";
+                            }
+                            var userico = '';
+                            if (this.userTypeIcon && this.userTypeIcon != '') {
+                                userico = this.userTypeIcon.replace(/.png/, "");
+                            }
+
+                            var question_url = "/question/"+this.questionId+".html";
+                            if(this.replyContent){
+                                $('<a href="'+question_url+'"><div class="ly_qa_detail pl05 pr05 pb05 b_b_1"><div class="ly_q_info questionli">\
+                                <p class="col90">\
+                                <span class="ly_q_tx b_01"><img src="'+userPictureUrl+'" alt="" id="userPictureUrl"><i class="'+userico+'"></i></span>\
+                                <span class="ly_q_name ft26" id="nickname">'+this.userName+'</span>\
+                                <i class="ly_interaction_icon question_icon">问</i>\
+                                <span class="ly_q_time ft24 fr" id="questionerTimeStr">'+this.questionDate+'</span>\
+                            </p>\
+                            <p class="ly_q_text ft28 col25 ly_qa_text show_two_line" id="content">'+this.content+'</p>\
+                            </div>\
+                            <div class="ly_a_info rel" id="answer">\
+                                <div class="col90">\
+                                <span class="ly_a_tx  oh"><img src="'+companyLogoUrl+'" alt=""></span>\
+                                <span class="ly_q_name ft26">'+this.companyShortname+'</span>\
+                                <i class="ly_interaction_icon answer_icon">答</i>\
+                                </div>\
+                                <div class="ly_a_text ft28 col25 ly_qa_text ly_short">'+this.replyContent+'</div>\
+                            <p class="ly_a_time ft24 pt05" style="padding-top: .2rem"><span>'+this.replyDate+'</span>\
+                                </p>\
+                                </div></div></a> ').appendTo("#company_question_list");
+                            }else {
+                                $('<a href="'+question_url+'"><div class="ly_qa_detail pl05 pr05 pb05 b_b_1"  style="margin-bottom: 25px;"><div class="ly_q_info questionli">\
+                                <p class="col90">\
+                                <span class="ly_q_tx b_01"><img src="'+userPictureUrl+'" alt="" id="userPictureUrl"><i class="'+userico+'"></i></span>\
+                                <span class="ly_q_name ft26" id="nickname">'+this.userName+'</span>\
+                                <i class="ly_interaction_icon question_icon">问</i>\
+                                <span class="ly_q_time ft24 fr" id="questionerTimeStr">'+this.questionDate+'</span>\
+                            </p>\
+                            <p class="ly_q_text ft28 col25 ly_qa_text show_two_line" id="content">'+this.content+'</p>\
+                            </div>\
+                                  </p>  </div></a> ').appendTo("#company_question_list");
+                            }
+
+                        });
+
+                        $(".load_more_question").html('点击加载更多').show();
+                    }else {
+                        $(".load_more_question").html(data.message).show();
+                    }
+                }else{
+                    $(".load_more_question").html(data.message).show();
+                }
+            },
+            error:function(){
+                mui.toast('数据交互失败');
+            },
+            complete:function(){
+                $(".reload").hide();
+                $(".reload").css('position','fixed');
+                //mui(".company_qa").on("tap",".load_more_question",loadMoreQuestion);
+                //share_want();
+            }
+        });
+    }
+
+
+    mui(".company_qa").on("tap",".load_more_question",function (e) {
+        $(".load_more_question").html('加载中...');
+        getQuestion(2);
+    });
+
+    /*function  loadMoreQuestion() {
+     mui(".company_qa").off("tap",".load_more_question",loadMoreQuestion);
+     $(".load_more_question").html('加载中...');
+     getQuestion(2);
+     }*/
+
+    </script>
+			</div>
+
+			<div class="company_cover company_gonggao hide">
+				<style>
+	.Tabs3 .Mydeal {
+		border-bottom: 1px solid #eee;
+	}
+	.Tabs3 .Mydeal:first-child {
+		background: #fafafa;
+	}
+
+	.Tabs3 .Mydeal .A_nav {
+		display: flex;
+		padding: 0.2rem 0.5rem;
+		align-items: center;
+	}
+	.Tabs3 .Mydeal .A_nav .S_deal:first-child {
+		line-height: 0.5rem;
+		text-align: left;
+		flex: 2.5;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+	.Tabs3 .Mydeal .A_nav .S_deal {
+		text-align: right;
+		line-height: 1.0rem;
+		word-wrap: break-word;
+		color: #252A2E;
+		flex: 1;
+	}
+</style>
+<ul class="Tabs3" id="company_gonggao_list" data-page="1">
+
+</ul>
+<div class="index_load_more">
+	<a href="javascript:void(0);" class=" ft28 col49 load_more_gonggao" style=" display: none;">点击加载更多></a>
+</div>
+<script>
+
+    function getGonggao(is_one) {
+        $(".company_tab_item").removeClass("active");
+        $("#showgonggao").addClass("active");
+        $(".company_qa,.company_news,.company_roadshow").hide();
+        $(".company_gonggao").show();
+        $.cookie('company_tab_type', 'showgonggao');
+        if(is_one==1){
+            $("#company_gonggao_list").html('');
+            $("#company_gonggao_list").data('page','1');
+        }
+        var code = '000682';
+        var page = $("#company_gonggao_list").data("page");
+        var pagesize = 5;
+        $(".reload").show();
+        $.ajax({
+            dataType:'json',
+            type : "get",
+            url:"/api/data/getinterimannouncementlist.html",
+            data:{page:page,code:code,pagesize:pagesize,type:'ggzy'},
+            success:function(data){
+                if (page == 1 )
+                {
+                    $("#company_gonggao_list").empty();
+                }
+
+                if (data.rows.length > 0 ) {
+                    var html = '<li class="Mydeal ft30 rel">\
+										<a href="javascript:void(0);" class="A_nav">\
+										<span class="S_deal">公告主题</span>\
+										<span class="S_deal">时间</span>\
+										</a>\
+										</li>'
+                    var html1 = '';
+                    $(data.rows).each(function(){
+                        html1 += '<li class="Mydeal ft30 mui-navigate-right rel">\
+										<a class="A_nav" href="/info/ggzy_info.html?id=' + this.s1 + '">\
+										<span class="S_deal">' + this.s3 + '</span>\
+										<span class="S_deal pr05">' + this.s4 + '</span></a>\
+									</li>';
+                    });
+                    if($("#company_gonggao_list").data('page')=='1'){
+                        $(html).appendTo("#company_gonggao_list");
+                    }
+                    $(html1).appendTo("#company_gonggao_list");
+                    $(".load_more_gonggao").html('点击加载更多').css('display','block');
+                    $("#company_gonggao_list").data('page',parseInt($("#company_gonggao_list").data('page')) + 1);
+                }else{
+                    $('<li class="Mydeal ft30 rel">\
+									<a class="A_nav">\
+										<span class="S_deal ft30" style="text-align:center;">' + ( "暂无内容") + '</span>\
+									</a>\
+								</li>').appendTo("#company_gonggao_list");
+                }
+            },
+            error:function(){
+                mui.toast('数据交互失败');
+            },
+            complete:function(){
+                $(".reload").hide();
+                $(".reload").css('position','fixed');
+                //mui(".company_gonggao").on("tap",".load_more_gonggao",loadMoreGonggao);
+            }
+        });
+
+    }
+
+    mui(".company_gonggao").on("tap",".load_more_gonggao",function (e) {
+        $(".load_more_gonggao").html('加载中...');
+        getGonggao(2);
+    });
+    /*function  loadMoreGonggao() {
+        mui(".company_gonggao").off("tap",".load_more_gonggao",loadMoreGonggao);
+        $(".load_more_gonggao").html('加载中...');
+        getGonggao(2);
+    }*/
+
+</script>
+			</div>
+
+			<div class="company_cover company_report hide">
+				<style>
+    .Tabs3 .Mydeal {
+        border-bottom: 1px solid #eee;
+    }
+
+    .Tabs3 .Mydeal:first-child {
+        background: #fafafa;
+    }
+
+    .Tabs3 .Mydeal .A_nav {
+        display: flex;
+        padding: 0.2rem 0.5rem;
+        align-items: center;
+    }
+
+    .Tabs3 .Mydeal .A_nav .S_deal:first-child {
+        line-height: 0.5rem;
+        text-align: left;
+        flex: 2.5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .Tabs3 .Mydeal .A_nav .S_deal {
+        text-align: right;
+        line-height: 1.0rem;
+        word-wrap: break-word;
+        color: #252A2E;
+        flex: 1;
+    }
+</style>
+<ul class="Tabs3" id="company_report_list" data-page="1">
+
+</ul>
+<div class="index_load_more">
+    <a href="javascript:void(0);" class=" ft28 col49 load_more_report" style=" display: none;">点击加载更多></a>
+</div>
+<script>
+    
+    function getReports(is_one) {
+        console.log('调用getReports方法');
+        $(".company_tab_item").removeClass("active");
+        $("#showReport").addClass("active");
+        $(".company_qa,.company_news,.company_roadshow,.company_gonggao").hide();
+        $(".company_report").show();
+        $.cookie('company_tab_type', 'showreport');
+        if (is_one === 1) {
+            $("#company_report_list").html('');
+            $("#company_report_list").data('page', '1');
+        }
+        var page = $("#company_report_list").data("page");
+        var pagesize = 5;
+        $(".reload").show();
+        var companyId = "000682";
+        $.ajax({
+            dataType: 'json',
+            type: "get",
+            url: "/report/createdapi/" + companyId + ".html",
+            data: {
+                page: page,
+                limit: pagesize
+            },
+            success: function (data) {
+                if (page === 1) {
+                    $("#company_report_list").empty();
+                }
+
+                if (data.code === 1) {
+                    data_length = data.data.data.length !== undefined ? data.data.data.length : 0;
+                    if (data_length > 0) {
+                        var html = '<li class="Mydeal ft30 rel">\
+										<a href="javascript:void(0);" class="A_nav">\
+										<span class="S_deal">财报名称</span>\
+										<span class="S_deal">创建时间</span>\
+										</a>\
+										</li>';
+                        var html1 = '';
+                        $(data.data.data).each(function () {
+                            html1 += '<li class="Mydeal ft30 mui-navigate-right rel">';
+                            html1 += '<a class="A_nav" href="' + this.url + '">';
+                            html1 += '<span class="S_deal">' + this.name + '</span>';
+                            html1 += '<span class="S_deal pr05">' + ((this.created_at).split(/[ ]+/))[0] + '</span></a>';
+                            html1 += '</li>';
+                        });
+                        if ($("#company_report_list").data('page') === '1') {
+                            $(html).appendTo("#company_report_list");
+                        }
+                        $(html1).appendTo("#company_report_list");
+                        $(".load_more_report").html('点击加载更多').css('display', 'block');
+                        $("#company_report_list").data('page', parseInt(data.data.current_page) + 1);
+                    } else {
+                        $(".load_more_report").html('没有更多内容了~').show();
+                    }
+                }
+            },
+            error: function () {
+                mui.toast('数据交互失败');
+            },
+            complete: function () {
+                $(".reload").hide();
+                $(".reload").css('position', 'fixed');
+                $('.company_report').removeClass('hide');
+            }
+        });
+
+    }
+
+    mui(".company_report").on("tap", ".load_more_report", function (e) {
+        $(".load_more_gonggao").html('加载中...');
+        getReports(2);
+    });
+
+</script>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div class="ly_shortcut">
+	<a class="ly_post_question" href="/question/ask.html?code=000682">
+		<i></i>
+	</a>
+</div>
+<div class="index_share_tip abs ShareFriend">
+	<p class="wx_Share"></p>
+	<p class="wx_know"></p>
+</div>
+<style>
+    .handle_tip{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.8);
+        z-index: 999999;
+    }
+    .handle_tip img{
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<script type="text/javascript">
+    if($(".handle_tip").is(":hidden")){
+       // $("html,body").removeClass("oh");
+       // $('.handle_tip').on('touchmove', function (e) { e.preventDefault(); }, false);
+    }else{
+        //$("html,body").addClass("oh");
+        $(document).on('touchmove', function (e) { e.preventDefault(); }, true);
+        $(document).on("tap",function(){
+            $(".handle_tip").hide();
+            $(document).on('touchmove', function (e) { e.preventDefault(); }, false);
+        });
+    }
+</script>
+<div class="reload abs">
+    <div class="reloadImg"></div>
+    <p class="ft24">加载中...</p>
+</div>
+<div class="ir_footer" id="footer">
+    <a href="/company/000682.html"  class="ir_active" >
+    <span class="ir_index_icon"></span>
+    <p>IR首页</p>
+    </a>
+    <a href="/index/ir.html" >
+    <span class="ir_manage_icon"></span>
+    <p>IR管理</p>
+    </a>
+    <a href="/user/index.html" >
+    <span class="ir_person_icon"></span>
+    <p>个人中心</p>
+    </a>
+</div>
+<script>
+    $(document).ready(function () {
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        var h=$(window).height();
+        $(window).resize(function() {
+            if($(window).height()<h){
+                $('#footer').hide();
+            }
+            if($(window).height()>=h){
+                if(isAndroid){
+                    $('#footer').show();
+                    $("input").blur();
+                }else if(isiOS){
+                    $('#footer').show();
+                }
+            }
+
+        });
+    });
+</script>
+<script src="https://hm.baidu.com/hm.js?ed9dac8a2b525df95dc69c97bbcda470"></script>
+
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    //朋友分享
+        var share_t = "东方电子（000682）投资者关系互动平台";
+    if(share_t!='' && share_t !=null){
+        var share_title = share_t;
+    }else {
+        var share_title = "东方电子（000682）投资者关系互动平台";
+    }
+    var share_d = "";
+    if(share_d!='' && share_d !=null){
+        var share_desc = share_d;
+    }else {
+        var share_desc = "东方电子（000682）路演厅提供最新路演活动信息、投资者关系互动问答及公司介绍、公司之声、公司公告、团队介绍、公司商品等。";
+    }
+
+    var share_url = "";
+
+    //朋友圈分享
+    var shart_title_quan_dy = "东方电子（000682）投资者关系互动平台";
+    if(shart_title_quan_dy!='' && shart_title_quan_dy !=null){
+        var share_title_quan = shart_title_quan_dy;
+    }else {
+        var share_title_quan = share_title;
+    }
+
+
+
+    if(share_url!='' && share_url !=null){
+        var share_link =share_url;
+    }else {
+        var share_link = location.href;
+    }
+    var  share_img_set = "";
+    if(share_img_set!='' && share_img_set !=null){
+        var share_img=share_img_set;
+    }else {
+        var share_img="https://wxly.p5w.net/static/images/logo.jpg";
+    }
+
+
+    function shareFriend(shareTitle,descContent,lineLink) {
+        wx.onMenuShareAppMessage({
+            title: shareTitle,
+            desc: descContent,
+            link: lineLink,
+            imgUrl: share_img,
+            trigger: function (res) {
+                $('#mcover').hide();
+            },
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+    }
+
+    function shareTimeline(shareTitle,descContent,lineLink) {
+        wx.onMenuShareTimeline({
+            title: shareTitle,
+            link: lineLink,
+            imgUrl: share_img,
+            trigger: function (res) {
+                $('#mcover').hide();
+            },
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+    }
+
+    function shareQQ(shareTitle,descContent,lineLink){
+        wx.onMenuShareQQ({
+            title: shareTitle,
+            desc: descContent,
+            link: lineLink,
+            imgUrl: share_img,
+            trigger: function (res) {
+                $('#mcover').hide();
+            },
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+    };
+
+    function shareWeibo(shareTitle,descContent,lineLink){
+        wx.onMenuShareWeibo({
+            title: shareTitle,
+            desc: descContent,
+            link: lineLink,
+            imgUrl: share_img,
+            trigger: function (res) {
+                $('#mcover').hide();
+            },
+            fail: function (res) {
+                alert(JSON.stringify(res));
+            }
+        });
+    };
+    $(document).ready(function() {
+        var url=encodeURIComponent(location.href.split('#')[0]);
+         $.ajax({
+            url: "/user/share.html",
+            type: 'post',
+            dataType: 'json',
+            data:{'url':url},
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+
+            },
+            success:function(signPackage){
+                if(signPackage)	{
+                    var share_appid = signPackage.appId;
+                    var share_nonceStr = signPackage.nonceStr;
+                    var share_signature = signPackage.signature;
+                    var share_timestamp = signPackage.timestamp;
+
+                    wx.config({
+                        debug: false,
+                        appId: share_appid,
+                        timestamp: share_timestamp,
+                        nonceStr: share_nonceStr,
+                        signature: share_signature,
+                        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo']
+                    });
+
+                    wx.ready(function(){
+
+                        //发送给好友
+                        shareFriend(share_title,share_desc,share_link);
+
+                        //分享到朋友圈
+                        shareTimeline(share_title_quan,share_desc,share_link);
+
+                        //分享给QQ好友
+                        shareQQ(share_title,share_desc,share_link);
+
+                        //分享到微博
+                        shareWeibo(share_title,share_desc,share_link);
+                    });
+
+                }
+            }
+        })
+    });
+</script>
+<script>
+function share_json() {
+    var share_json = {
+        "share_title":share_title,
+        "share_desc":share_desc,
+        "share_title_quan":share_title_quan,
+        "share_link":share_link,
+        "share_img":share_img
+    };
+    return share_json;
+}
+</script>
+<script type="text/javascript">
+	var mySwiper = new Swiper('#topNav', {
+		freeMode: true,
+		freeModeMomentumRatio: 0.5,
+		slidesPerView: 'auto',
+
+	});
+
+	swiperWidth = mySwiper.container[0].clientWidth;
+	maxTranslate = mySwiper.maxTranslate();
+	maxWidth = -maxTranslate + swiperWidth / 2;
+
+	$(".swiper-container").on('touchstart', function(e) {
+		e.preventDefault()
+	});
+
+	mySwiper.on('tap', function(swiper, e) {
+
+//    e.preventDefault()
+
+		slide = swiper.slides[swiper.clickedIndex];
+		slideLeft = slide.offsetLeft;
+		slideWidth = slide.clientWidth;
+		slideCenter = slideLeft + slideWidth / 2;
+		// 被点击slide的中心点
+		mySwiper.setWrapperTransition(300)
+
+		if (slideCenter < swiperWidth / 2) {
+
+			mySwiper.setWrapperTranslate(0)
+
+		} else if (slideCenter > maxWidth) {
+
+			mySwiper.setWrapperTranslate(maxTranslate)
+
+		} else {
+
+			nowTlanslate = slideCenter - swiperWidth / 2;
+
+			mySwiper.setWrapperTranslate(-nowTlanslate)
+
+		}
+
+		$("#topNav  .active").removeClass('active');
+
+		$("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active');
+		$(".company_tab_type>div").eq(swiper.clickedIndex).siblings().hide();
+		$(".company_tab_type>div").eq(swiper.clickedIndex).show();
+		console.log($(".company_tab_type>div").eq(swiper.clickedIndex));
+		var act = $("#topNav .swiper-slide").eq(swiper.clickedIndex).data('act');
+
+		switch (act){
+			case 'showroadshow':
+				getRoadshow(1);
+				break;
+			case 'showquestion':
+				getQuestion(1);
+				break;
+			case 'showgonggao':
+            	getGonggao(1);
+            	break;
+           case 'shownews':
+		        getNews(1);
+				break;
+		   case 'showreport':
+		        getReports(1);
+				break;
+        	default:
+            	getRoadshow(1);	
+		}
+
+	});
+
+
+    mui.init({
+        preloadPages:[
+        ],
+        pullRefresh: {
+            container: '#pullrefresh',
+            down: {
+                height:100,
+                callback: pulldownRefresh
+            }
+        },
+
+    });
+    //获取#号值
+    function GetRequest() {
+        var str = location.href
+        var num = str.indexOf("#");
+        str = str.substr(num + 1);
+        return str;
+    }
+
+    var  arr = ['roadshow','question','showgonggao','shownews','showreport'];
+	var show_ir_type = GetRequest();
+
+	if(arr.indexOf(show_ir_type)>-1){
+        var company_tab_type = show_ir_type;
+	}else {
+        var company_tab_type = $.cookie('company_tab_type');
+	}
+
+
+    console.log('cookie:'+company_tab_type);
+
+    switch(company_tab_type)
+    {
+        case 'roadshow':
+            getRoadshow();
+            break;
+        case 'question':
+            getQuestion();
+            break;
+        case 'showgonggao':
+            getGonggao();
+            break;
+        case 'shownews':
+            getNews();
+            break;
+        case 'showreport':
+	        getReports(1);
+            break;
+        default:
+            getRoadshow(1);
+    }
+
+    //下拉刷新业务
+    function pulldownRefresh() {
+        setTimeout(function() {
+            window.location.reload();
+            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+        }, 1500);
+    }
+
+    //点击a跳转
+    mui(".index_main").on('tap','a',function(){
+        //获取url
+        var url = this.getAttribute("href");
+        //传值给详情页面，通知加载新数据
+        mui.openWindow({
+            url: url,
+            id:'company_rs',
+            createNew:true,
+        });
+    });
+
+function  share_want() {
+        $(".index_share").on("tap",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $(".ShareFriend").show();
+            $(".ShareFriend").height($(window).height())
+            $("#footer").hide();
+
+            var title = $(this).data('title');
+            var desc = $(this).data('desc');
+            var img_fid = $(this).data('img');
+            var url ='https://'+"mir.p5w.net"+$(this).data('url');
+            console.log(url)
+            if(img_fid){
+                var img =  img_fid+"?x-oss-process=image/resize,w_320,limit_1";
+            }else {
+                var img = 'https://wxly.p5w.net/static/images/imgs-roadshow/list_fm.png';
+            }
+
+            wx.onMenuShareTimeline({
+                title: title,
+                desc:desc,
+                link: url,
+                imgUrl: img,
+                success: function (res) {
+                    $(".ShareFriend").hide();
+                    $("#footer").show();
+                },
+                cancel: function (res) {
+                    $(".ShareFriend").hide();
+                    $("#footer").show();
+                }
+            });
+            wx.onMenuShareAppMessage({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:url, // 分享链接
+                imgUrl: img, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    $(".ShareFriend").hide();
+                    $("#footer").show();
+                },
+                cancel: function () {
+                    $(".ShareFriend").hide();
+                    $("#footer").show();
+                }
+            });
+        });
+    }
+
+    /*$(".company_tab_list .company_tab_item").on("tap",function (e) {
+        e.preventDefault();
+        $(".company_tab_list .company_tab_item.active").removeClass("active");
+        $(this).addClass("active");
+
+        $(".company_tab_type").children().siblings().hide();
+        console.log()
+        $(".company_tab_type").children("div").eq($(".company_tab_item.active").index()).show();
+        var act = $(this).data('act');
+        switch (act){
+            case 'showroadshow':
+				getRoadshow(1);
+                break;
+            case 'showquestion':
+                getQuestion(1);
+                break;
+            case 'showgonggao':
+                getGonggao(1);
+                break;
+            case 'shownews':
+                getNews(1);
+                break;
+            case 'showreport':
+                getReports(1);
+                break;
+        }
+    })*/
+</script>
+<script>
+    //加自选股
+    mui(".index_company_info").on('tap','.index_company_notfocus',function(){
+        //传值给详情页面，通知加载新数据
+        var _this = $(this);
+        var is_login = "";
+        if(is_login) {
+            $.ajax({
+                url: "/user/add_mystock_ajax.html",
+                type: 'POST',
+                cache: false,
+                data: {pid:_this.data('pid'),code: _this.data('code'), name: _this.data('name')},
+                dataType: "json",
+                success: function (data) {
+                    console.log(data)
+                    //if (data.code == '1') {
+                    mui.toast('关注成功', '提示消息', function () {
+                    });
+                    _this.removeClass("index_company_notfocus").addClass("index_company_isfocus");
+                    _this.html('已关注');
+                }
+            });
+        }else {
+            var btnArray = ['否', '是'];
+            mui.confirm('关注需要登录，是否马上登录', '登录跳转确认', btnArray, function(e) {
+                if (e.index == 1) {
+                    window.location.href="/login/index.html";
+                } else {
+
+                }
+            })
+        }
+        return false;
+    });
+
+
+    //加载行情数据
+    function getStockData(){
+        var stock_code = "000682";
+        $.ajax({
+            url: "/company/getHq.html",
+            type: 'POST',
+            cache: false,
+            data: {code:stock_code},
+            dataType:"json",
+            success : function(data) {
+                if(data.code ==1){
+                    if(data.data.trade_status =='TRADE' || data.data.trade_status =='ENDTR'){
+                        $("#dqjg").html(data.data.last_px);
+                    }else {
+                        $("#dqjg").html(data.data.preclose_px);
+                    }
+
+                    $("#dqjg").removeClass('index_stock_status1').removeClass('index_stock_status2').removeClass('index_stock_status3');
+                    //$("#dqzf").html(data.data.zdbfb);
+                    $("#dqzf").removeClass('index_stock_status_back_1').removeClass('index_stock_status_back_2').removeClass('index_stock_status_back_3');
+                    var style_back = '';
+                    var style_jg ='';
+                    var px_change_rate='0';
+                    if(data.data.px_change_rate >0){
+                        style_back = 'index_stock_status_back_1';
+                        style_jg = 'index_stock_status1';
+                        px_change_rate = '+'+data.data.px_change_rate.toFixed(2)+'%'
+                    }else if(data.data.px_change_rate <0){
+                        style_back = 'index_stock_status_back_2';
+                        style_jg = 'index_stock_status2';
+                        px_change_rate = data.data.px_change_rate.toFixed(2)+'%'
+                    }else {
+                        style_back = 'index_stock_status_back_3';
+                        style_jg = 'index_stock_status3';
+                        px_change_rate = data.data.px_change_rate.toFixed(2)+'%'
+                    }
+                    $("#dqzf").html(px_change_rate);
+                    $("#dqzf").addClass(style_back);
+                    $("#dqjg").addClass(style_jg);
+
+                    $(".company_hq_div").show();
+                }
+            }
+        });
+    }
+</script>
+<script>
+	//加载行情数据
+    getStockData();
+	var gssiv=0;
+    gssiv = setInterval('getStockData()',600000);
+
+</script>
+</body>
+</html>

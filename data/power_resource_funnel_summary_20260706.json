@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-07-06T17:32:18",
+  "data_cutoff": "2026-07-06 Tencent quote time per row; AkShare financial abstract latest 2025A/2026Q1 where available",
+  "count_a": 40,
+  "count_global": 9,
+  "output": "data\\power_resource_funnel_candidates_20260706.csv",
+  "sources": {
+    "tencent_quote": "https://qt.gtimg.cn/q={symbols}",
+    "akshare_financial_abstract": "akshare.stock_financial_abstract (Sina/EM financial abstract wrapper)",
+    "akshare_hist_tx": "akshare.stock_zh_a_hist_tx (Tencent historical quotes)",
+    "local_prior_report": "reports/A股低估行业漏斗-funnel-20260706.md"
+  }
+}

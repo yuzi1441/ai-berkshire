@@ -1,0 +1,12 @@
+﻿from decimal import Decimal
+# Parsed Tencent snapshot fields: price, market_cap_yi, pb, pe_dyn, total_shares, eps_ttm estimate from pe? plus source date
+peers={
+'东方电子': {'code':'000682.SZ','price':'12.37','mcap':'165.83','pb':'2.70','pe_dyn':'16.15'},
+'许继电气': {'code':'000400.SZ','price':'21.11','mcap':'213.57','pb':'1.78','pe_dyn':'20.08'},
+'国电南瑞': {'code':'600406.SH','price':'23.16','mcap':'1854.69','pb':'3.74','pe_dyn':'22.36'},
+'国网信通': {'code':'600131.SH','price':'14.31','mcap':'171.13','pb':'2.65','pe_dyn':'26.14'},
+'三星电气': {'code':'601567.SH','price':'14.42','mcap':'202.63','pb':'1.76','pe_dyn':'21.29'},
+'积成电子': {'code':'002339.SZ','price':'6.81','mcap':'32.60','pb':'1.98','pe_dyn':'421.50'},
+}
+for k,v in peers.items():
+    print(k,v)

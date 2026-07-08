@@ -1,0 +1,110 @@
+﻿======================================================================
+报告数据抽检清单
+文件：reports\许继电气\许继电气-earnings-2026Q1.md
+总提取数据点：7  |  抽样比例：100%  |  抽检数量：7
+随机种子：400（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  1     30  智能变配电系统 · 2025年收入                           41.07  亿元
+  2     30  智能变配电系统 · 收入占比                              27.39  %
+  3     31  智能电表 · 2025年收入                              39.46  亿元
+  4     31  智能电表 · 收入占比                                 26.32  %
+  5     32  智能中压供用电设备 · 2025年收入                         31.50  亿元
+  6     32  智能中压供用电设备 · 收入占比                            21.01  %
+  7     64  企业的交付、验收、采购付款和回款都有季节性。但Q1至少提醒我们           2025.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 1,
+    "label": "智能变配电系统 · 2025年收入",
+    "reported_value": 41.07,
+    "unit": "亿元",
+    "line_number": 30,
+    "raw_text": "| 智能变配电系统 | 41.07亿元 | 27.39% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 2,
+    "label": "智能变配电系统 · 收入占比",
+    "reported_value": 27.39,
+    "unit": "%",
+    "line_number": 30,
+    "raw_text": "| 智能变配电系统 | 41.07亿元 | 27.39% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 3,
+    "label": "智能电表 · 2025年收入",
+    "reported_value": 39.46,
+    "unit": "亿元",
+    "line_number": 31,
+    "raw_text": "| 智能电表 | 39.46亿元 | 26.32% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 4,
+    "label": "智能电表 · 收入占比",
+    "reported_value": 26.32,
+    "unit": "%",
+    "line_number": 31,
+    "raw_text": "| 智能电表 | 39.46亿元 | 26.32% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "智能中压供用电设备 · 2025年收入",
+    "reported_value": 31.5,
+    "unit": "亿元",
+    "line_number": 32,
+    "raw_text": "| 智能中压供用电设备 | 31.50亿元 | 21.01% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 6,
+    "label": "智能中压供用电设备 · 收入占比",
+    "reported_value": 21.01,
+    "unit": "%",
+    "line_number": 32,
+    "raw_text": "| 智能中压供用电设备 | 31.50亿元 | 21.01% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "企业的交付、验收、采购付款和回款都有季节性。但Q1至少提醒我们",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 64,
+    "raw_text": "当然，单季数据不能直接外推全年。装备企业的交付、验收、采购付款和回款都有季节性。但Q1至少提醒我们：2025年的好现金流和高毛利状态，并不是自动延续的。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

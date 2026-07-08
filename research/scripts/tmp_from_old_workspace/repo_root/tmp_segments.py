@@ -1,0 +1,10 @@
+from pathlib import Path
+text=Path('tmp_annual.txt').read_text(encoding='utf-8',errors='ignore')
+idx=text.find('（1）营业收入构成')
+print(text[idx:idx+2500].replace('\n',' | '))
+idx=text.find('公司前5大客户资料')
+print('\n---CUSTOMERS---')
+print(text[idx:idx+1200].replace('\n',' | '))
+idx=text.find('公司前5名供应商资料')
+print('\n---SUPPLIERS---')
+print(text[idx:idx+1200].replace('\n',' | '))

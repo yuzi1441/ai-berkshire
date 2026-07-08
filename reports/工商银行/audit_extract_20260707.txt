@@ -1,0 +1,357 @@
+﻿======================================================================
+报告数据抽检清单
+文件：reports\工商银行\工商银行投资研究报告-20260707.md
+总提取数据点：170  |  抽样比例：15%  |  抽检数量：26
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  7     37  归母净利润 · 2021                              3483.38  
+  9     37  归母净利润 · 2023                              3639.93  
+  8     37  归母净利润 · 2022                              3611.32  
+ 23     39  每股净资产（元） · 2025                             10.83  
+ 24     39  每股净资产（元） · 2026Q1                           11.06  
+ 29     40  加权 ROE · 2025                                9.45  %
+ 27     40  加权 ROE · 2023                               10.66  %
+ 36     41  净息差 · 2026Q1                                 1.29  %
+ 51     44  不良贷款率 · 2023                                 1.36  %
+ 58     45  核心一级资本充足率 · 2024                            14.10  %
+ 56     45  核心一级资本充足率 · 2022                            14.04  %
+ 60     45  核心一级资本充足率 · 2026Q1                          13.26  %
+ 57     45  核心一级资本充足率 · 2023                            13.72  %
+ 63     46  资本充足率 · 2023                                19.10  %
+ 71     47  总资产 · 2025                              534777.73  
+ 72     47  总资产 · 2026Q1                            557725.84  
+108    176  HKSCC Nominees · 角色                         24.18  %
+109    186  2021-2025 · 评分                               7.00  
+115    235  建设银行 · 代码                               601939.00  
+130    238  交通银行 · 代码                               601328.00  
+140    249  乐观 · EPS 年增速                                 3.00  %
+144    249  乐观 · 相对当前涨跌幅                                15.10  %
+152    251  悲观 · 目标价                                     4.40  
+162    313  净息差 · 触发阈值                                   1.25  %
+164    315  不良贷款率 · 触发阈值                                 1.40  %
+168    319  A 股价格 · 触发阈值                                 6.50  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 7,
+    "label": "归母净利润 · 2021",
+    "reported_value": 3483.38,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 归母净利润 | 3,483.38 | 3,611.32 | 3,639.93 | 3,658.63 | 3,685.62 | 869.41 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "归母净利润 · 2023",
+    "reported_value": 3639.93,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 归母净利润 | 3,483.38 | 3,611.32 | 3,639.93 | 3,658.63 | 3,685.62 | 869.41 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "归母净利润 · 2022",
+    "reported_value": 3611.32,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 归母净利润 | 3,483.38 | 3,611.32 | 3,639.93 | 3,658.63 | 3,685.62 | 869.41 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "每股净资产（元） · 2025",
+    "reported_value": 10.83,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "| 每股净资产（元） | 8.15 | 8.81 | 9.55 | 10.23 | 10.83 | 11.06 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "每股净资产（元） · 2026Q1",
+    "reported_value": 11.06,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "| 每股净资产（元） | 8.15 | 8.81 | 9.55 | 10.23 | 10.83 | 11.06 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "加权 ROE · 2025",
+    "reported_value": 9.45,
+    "unit": "%",
+    "line_number": 40,
+    "raw_text": "| 加权 ROE | 12.15% | 11.45% | 10.66% | 9.88% | 9.45% | 8.83%（年化） | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "加权 ROE · 2023",
+    "reported_value": 10.66,
+    "unit": "%",
+    "line_number": 40,
+    "raw_text": "| 加权 ROE | 12.15% | 11.45% | 10.66% | 9.88% | 9.45% | 8.83%（年化） | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "净息差 · 2026Q1",
+    "reported_value": 1.29,
+    "unit": "%",
+    "line_number": 41,
+    "raw_text": "| 净息差 | 2.11% | 1.92% | 1.61% | 1.42% | 1.28% | 1.29% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "不良贷款率 · 2023",
+    "reported_value": 1.36,
+    "unit": "%",
+    "line_number": 44,
+    "raw_text": "| 不良贷款率 | 1.42% | 1.38% | 1.36% | 1.34% | 1.31% | 1.31% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "核心一级资本充足率 · 2024",
+    "reported_value": 14.1,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "| 核心一级资本充足率 | 13.31% | 14.04% | 13.72% | 14.10% | 13.57% | 13.26% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "核心一级资本充足率 · 2022",
+    "reported_value": 14.04,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "| 核心一级资本充足率 | 13.31% | 14.04% | 13.72% | 14.10% | 13.57% | 13.26% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "核心一级资本充足率 · 2026Q1",
+    "reported_value": 13.26,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "| 核心一级资本充足率 | 13.31% | 14.04% | 13.72% | 14.10% | 13.57% | 13.26% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "核心一级资本充足率 · 2023",
+    "reported_value": 13.72,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "| 核心一级资本充足率 | 13.31% | 14.04% | 13.72% | 14.10% | 13.57% | 13.26% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "资本充足率 · 2023",
+    "reported_value": 19.1,
+    "unit": "%",
+    "line_number": 46,
+    "raw_text": "| 资本充足率 | 18.02% | 19.26% | 19.10% | 19.39% | 18.76% | 18.21% | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "总资产 · 2025",
+    "reported_value": 534777.73,
+    "unit": "",
+    "line_number": 47,
+    "raw_text": "| 总资产 | 351,713.83 | 396,101.46 | 446,970.79 | 488,217.46 | 534,777.73 | 557,725.84 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 72,
+    "label": "总资产 · 2026Q1",
+    "reported_value": 557725.84,
+    "unit": "",
+    "line_number": 47,
+    "raw_text": "| 总资产 | 351,713.83 | 396,101.46 | 446,970.79 | 488,217.46 | 534,777.73 | 557,725.84 | 年报/季报、东方财富 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 108,
+    "label": "HKSCC Nominees · 角色",
+    "reported_value": 24.18,
+    "unit": "%",
+    "line_number": 176,
+    "raw_text": "| HKSCC Nominees | H 股名义持有人，24.18% | 反映 H 股公众与机构持股集合 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "2021-2025 · 评分",
+    "reported_value": 7.0,
+    "unit": "",
+    "line_number": 186,
+    "raw_text": "| 2021-2025 | 推进“五化”转型、数字工行、科技强行 | 资产规模扩大，客户基础稳固，但 ROE 下行 | 7/10 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "建设银行 · 代码",
+    "reported_value": 601939.0,
+    "unit": "",
+    "line_number": 235,
+    "raw_text": "| 建设银行 | 601939 | 9.67 | 7.40x | 0.71x | 25,296.76 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 130,
+    "label": "交通银行 · 代码",
+    "reported_value": 601328.0,
+    "unit": "",
+    "line_number": 238,
+    "raw_text": "| 交通银行 | 601328 | 6.64 | 6.09x | 0.50x | 5,867.36 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 140,
+    "label": "乐观 · EPS 年增速",
+    "reported_value": 3.0,
+    "unit": "%",
+    "line_number": 249,
+    "raw_text": "| 乐观 | +3% | 1.09 | 7.5x | 8.2 元 | +15.1% | 息差企稳、资产质量稳定、估值小幅抬升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 144,
+    "label": "乐观 · 相对当前涨跌幅",
+    "reported_value": 15.1,
+    "unit": "%",
+    "line_number": 249,
+    "raw_text": "| 乐观 | +3% | 1.09 | 7.5x | 8.2 元 | +15.1% | 息差企稳、资产质量稳定、估值小幅抬升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 152,
+    "label": "悲观 · 目标价",
+    "reported_value": 4.4,
+    "unit": "",
+    "line_number": 251,
+    "raw_text": "| 悲观 | -3% | 0.91 | 4.8x | 4.4 元 | -38.5% | 息差继续下行、信用成本抬升、PB 下修 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 162,
+    "label": "净息差 · 触发阈值",
+    "reported_value": 1.25,
+    "unit": "%",
+    "line_number": 313,
+    "raw_text": "| 净息差 | 连续两个季度低于 1.25% | 息差压力未缓解 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 164,
+    "label": "不良贷款率 · 触发阈值",
+    "reported_value": 1.4,
+    "unit": "%",
+    "line_number": 315,
+    "raw_text": "| 不良贷款率 | 明显升破 1.40% | 信用周期可能恶化 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 168,
+    "label": "A 股价格 · 触发阈值",
+    "reported_value": 6.5,
+    "unit": "",
+    "line_number": 319,
+    "raw_text": "| A 股价格 | ≤6.5 元 | 进入更有吸引力区间 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]
