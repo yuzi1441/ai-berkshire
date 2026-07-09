@@ -1,0 +1,409 @@
+﻿======================================================================
+报告数据抽检清单
+文件：reports\电力设备六赛道二次筛选\电力设备六赛道二次筛选-funnel-20260708.md
+总提取数据点：297  |  抽样比例：15%  |  抽检数量：30
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     46  特变电工 · ROE                                   8.80  %
+ 13     48  金盘科技 · 代码                               688676.00  
+ 17     48  金盘科技 · OCF/净利                                0.92  
+ 16     48  金盘科技 · ROE                                  14.10  %
+ 14     48  金盘科技 · 市值                                  355.60  亿
+ 45     53  科林电气 · PE(TTM)                              34.00  
+ 48     53  科林电气 · 负债率                                  62.00  %
+ 53     54  顺钠股份 · OCF/净利                                2.47  
+ 58     55  保变电气 · ROE                                  27.40  %
+ 72     57  三变科技 · 负债率                                  66.10  %
+ 82     59  江苏华辰 · ROE                                   6.60  %
+ 80     59  江苏华辰 · 市值                                   38.70  亿
+102     77  平高电气 · 负债率                                  46.80  %
+112     80  神马电力 · ROE                                  24.30  %
+113     80  神马电力 · OCF/净利                                0.27  
+111     80  神马电力 · PE(TTM)                              45.90  
+115     81  许继电气 · 代码                                  400.00  
+120     81  许继电气 · 负债率                                  49.00  %
+126     82  安靠智电 · 负债率                                  25.70  %
+141     98  洛凯股份 · PE(TTM)                              51.10  
+143     98  洛凯股份 · OCF/净利                                1.94  
+173    111  四方股份 · OCF/净利                                1.48  
+175    114  南网科技 · 代码                               688248.00  
+195    129  炬华科技 · PE(TTM)                              12.10  
+215    136  金智科技 · OCF/净利                                1.99  
+217    137  良信股份 · 代码                                 2706.00  
+230    141  积成电子 · 市值                                   33.10  亿
+259    164  长高电新 · PE                                   20.60  
+280    171  四方股份 · PE                                   52.40  
+288    257  华明装备 · 权重                                   20.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "特变电工 · ROE",
+    "reported_value": 8.8,
+    "unit": "%",
+    "line_number": 46,
+    "raw_text": "| 特变电工 | 600089 | 1013.1亿 | 16.4 | 8.8% | 1.55 | 55.6% | 胜出 | 变压器/换流变正宗、便宜，但新能源硅料拖累和ROE低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 13,
+    "label": "金盘科技 · 代码",
+    "reported_value": 688676.0,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 金盘科技 | 688676 | 355.6亿 | 53.5 | 14.1% | 0.92 | 57.9% | 胜出 | 干变/数据中心弹性高，但PE高、Q1增速不够 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 17,
+    "label": "金盘科技 · OCF/净利",
+    "reported_value": 0.92,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 金盘科技 | 688676 | 355.6亿 | 53.5 | 14.1% | 0.92 | 57.9% | 胜出 | 干变/数据中心弹性高，但PE高、Q1增速不够 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "金盘科技 · ROE",
+    "reported_value": 14.1,
+    "unit": "%",
+    "line_number": 48,
+    "raw_text": "| 金盘科技 | 688676 | 355.6亿 | 53.5 | 14.1% | 0.92 | 57.9% | 胜出 | 干变/数据中心弹性高，但PE高、Q1增速不够 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "金盘科技 · 市值",
+    "reported_value": 355.6,
+    "unit": "亿",
+    "line_number": 48,
+    "raw_text": "| 金盘科技 | 688676 | 355.6亿 | 53.5 | 14.1% | 0.92 | 57.9% | 胜出 | 干变/数据中心弹性高，但PE高、Q1增速不够 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 45,
+    "label": "科林电气 · PE(TTM)",
+    "reported_value": 34.0,
+    "unit": "",
+    "line_number": 53,
+    "raw_text": "| 科林电气 | 603050 | 77.4亿 | 34.0 | 14.5% | 2.43 | 62.0% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "科林电气 · 负债率",
+    "reported_value": 62.0,
+    "unit": "%",
+    "line_number": 53,
+    "raw_text": "| 科林电气 | 603050 | 77.4亿 | 34.0 | 14.5% | 2.43 | 62.0% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 53,
+    "label": "顺钠股份 · OCF/净利",
+    "reported_value": 2.47,
+    "unit": "",
+    "line_number": 54,
+    "raw_text": "| 顺钠股份 | 000533 | 59.5亿 | 59.9 | 11.1% | 2.47 | 60.9% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "保变电气 · ROE",
+    "reported_value": 27.4,
+    "unit": "%",
+    "line_number": 55,
+    "raw_text": "| 保变电气 | 600550 | 197.0亿 | 86.3 | 27.4% | 0.98 | 88.5% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 72,
+    "label": "三变科技 · 负债率",
+    "reported_value": 66.1,
+    "unit": "%",
+    "line_number": 57,
+    "raw_text": "| 三变科技 | 002112 | 44.5亿 | 273.9 | 1.9% | 4.13 | 66.1% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "江苏华辰 · ROE",
+    "reported_value": 6.6,
+    "unit": "%",
+    "line_number": 59,
+    "raw_text": "| 江苏华辰 | 603097 | 38.7亿 | 77.7 | 6.6% | 0.40 | 65.1% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 80,
+    "label": "江苏华辰 · 市值",
+    "reported_value": 38.7,
+    "unit": "亿",
+    "line_number": 59,
+    "raw_text": "| 江苏华辰 | 603097 | 38.7亿 | 77.7 | 6.6% | 0.40 | 65.1% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 102,
+    "label": "平高电气 · 负债率",
+    "reported_value": 46.8,
+    "unit": "%",
+    "line_number": 77,
+    "raw_text": "| 平高电气 | 600312 | 224.6亿 | 19.1 | 10.3% | 0.66 | 46.8% | 胜出 | GIS/高压开关正宗，估值低，ROE中等 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 112,
+    "label": "神马电力 · ROE",
+    "reported_value": 24.3,
+    "unit": "%",
+    "line_number": 80,
+    "raw_text": "| 神马电力 | 603530 | 212.1亿 | 45.9 | 24.3% | 0.27 | 31.8% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 113,
+    "label": "神马电力 · OCF/净利",
+    "reported_value": 0.27,
+    "unit": "",
+    "line_number": 80,
+    "raw_text": "| 神马电力 | 603530 | 212.1亿 | 45.9 | 24.3% | 0.27 | 31.8% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 111,
+    "label": "神马电力 · PE(TTM)",
+    "reported_value": 45.9,
+    "unit": "",
+    "line_number": 80,
+    "raw_text": "| 神马电力 | 603530 | 212.1亿 | 45.9 | 24.3% | 0.27 | 31.8% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "许继电气 · 代码",
+    "reported_value": 400.0,
+    "unit": "",
+    "line_number": 81,
+    "raw_text": "| 许继电气 | 000400 | 205.8亿 | 19.2 | 9.9% | 2.04 | 49.0% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 120,
+    "label": "许继电气 · 负债率",
+    "reported_value": 49.0,
+    "unit": "%",
+    "line_number": 81,
+    "raw_text": "| 许继电气 | 000400 | 205.8亿 | 19.2 | 9.9% | 2.04 | 49.0% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 126,
+    "label": "安靠智电 · 负债率",
+    "reported_value": 25.7,
+    "unit": "%",
+    "line_number": 82,
+    "raw_text": "| 安靠智电 | 300617 | 78.2亿 | 99.3 | 2.5% | 3.40 | 25.7% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 141,
+    "label": "洛凯股份 · PE(TTM)",
+    "reported_value": 51.1,
+    "unit": "",
+    "line_number": 98,
+    "raw_text": "| 洛凯股份 | 603829 | 28.1亿 | 51.1 | 5.4% | 1.94 | 47.7% | 淘汰/观察 | ROE不足，价值投资硬指标不过 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 143,
+    "label": "洛凯股份 · OCF/净利",
+    "reported_value": 1.94,
+    "unit": "",
+    "line_number": 98,
+    "raw_text": "| 洛凯股份 | 603829 | 28.1亿 | 51.1 | 5.4% | 1.94 | 47.7% | 淘汰/观察 | ROE不足，价值投资硬指标不过 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 173,
+    "label": "四方股份 · OCF/净利",
+    "reported_value": 1.48,
+    "unit": "",
+    "line_number": 111,
+    "raw_text": "| 四方股份 | 601126 | 449.9亿 | 52.4 | 17.8% | 1.48 | 61.5% | 胜出 | 继保和柔性输电控制有壁垒，但PE高、负债率略高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 175,
+    "label": "南网科技 · 代码",
+    "reported_value": 688248.0,
+    "unit": "",
+    "line_number": 114,
+    "raw_text": "| 南网科技 | 688248 | 336.0亿 | 81.3 | 13.3% | 1.13 | 35.5% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 195,
+    "label": "炬华科技 · PE(TTM)",
+    "reported_value": 12.1,
+    "unit": "",
+    "line_number": 129,
+    "raw_text": "| 炬华科技 | 300360 | 59.0亿 | 12.1 | 13.6% | 0.88 | 15.3% | 淘汰/观察 | 不如胜出者：规模/护城河/财务弹性不足 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 215,
+    "label": "金智科技 · OCF/净利",
+    "reported_value": 1.99,
+    "unit": "",
+    "line_number": 136,
+    "raw_text": "| 金智科技 | 002090 | 36.4亿 | 50.2 | 4.3% | 1.99 | 51.3% | 淘汰/观察 | ROE不足，价值投资硬指标不过 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 217,
+    "label": "良信股份 · 代码",
+    "reported_value": 2706.0,
+    "unit": "",
+    "line_number": 137,
+    "raw_text": "| 良信股份 | 002706 | 109.4亿 | 50.0 | 6.3% | 0.84 | 27.7% | 淘汰/观察 | ROE不足，价值投资硬指标不过 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 230,
+    "label": "积成电子 · 市值",
+    "reported_value": 33.1,
+    "unit": "亿",
+    "line_number": 141,
+    "raw_text": "| 积成电子 | 002339 | 33.1亿 | 406.0 | 1.1% | 1.99 | 50.4% | 淘汰/观察 | 估值过高或利润基数太低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 259,
+    "label": "长高电新 · PE",
+    "reported_value": 20.6,
+    "unit": "",
+    "line_number": 164,
+    "raw_text": "| 长高电新 | 002452 | GIS、高压开关 | 75.2亿 | 20.6 | 13.7% | 69.3% | 9.84 | 赛道观察 | 长高电新财务/估值不错，高压开关/GIS相关，但规模和护城河弱于平高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 280,
+    "label": "四方股份 · PE",
+    "reported_value": 52.4,
+    "unit": "",
+    "line_number": 171,
+    "raw_text": "| 四方股份 | 601126 | 柔直、配电 | 449.9亿 | 52.4 | 17.8% | 12.1% | 8.20 | 总筛观察 | 继保和柔性输电控制有壁垒，但PE高、负债率略高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 288,
+    "label": "华明装备 · 权重",
+    "reported_value": 20.0,
+    "unit": "%",
+    "line_number": 257,
+    "raw_text": "| 华明装备 | 20% | 分接开关单点冠军，提高组合毛利与ROE |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]
