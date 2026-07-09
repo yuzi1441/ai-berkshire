@@ -1,0 +1,44 @@
+PS> python tools/financial_rigor.py verify-market-cap --price 296.70 --shares 982784813 --reported 291592000000 --currency CNY
+============================================================
+市值验算 (Market Cap Verification)
+============================================================
+  股价 (Price):       296.7 CNY
+  总股本 (Shares):    982.78M
+  计算市值:           291.59B CNY
+  报告市值:           291.59B CNY
+  偏差:               0.00%
+
+  ✅ 验证通过, 偏差仅 0.00%
+PS> python tools/financial_rigor.py verify-market-cap --price 137.30 --shares 1924363537 --reported 264215000000 --currency CNY
+============================================================
+市值验算 (Market Cap Verification)
+============================================================
+  股价 (Price):       137.3 CNY
+  总股本 (Shares):    1.92B
+  计算市值:           264.22B CNY
+  报告市值:           264.21B CNY
+  偏差:               0.00%
+
+  ✅ 验证通过, 偏差仅 0.00%
+PS> python tools/financial_rigor.py verify-market-cap --price 157.40 --shares 2429119230 --reported 382343000000 --currency CNY
+============================================================
+市值验算 (Market Cap Verification)
+============================================================
+  股价 (Price):       157.4 CNY
+  总股本 (Shares):    2.43B
+  计算市值:           382.34B CNY
+  报告市值:           382.34B CNY
+  偏差:               0.00%
+
+  ✅ 验证通过, 偏差仅 0.00%
+PS> python tools/financial_rigor.py verify-market-cap --price 442.56 --shares 681166595 --reported 301457000000 --currency CNY
+============================================================
+市值验算 (Market Cap Verification)
+============================================================
+  股价 (Price):       442.56 CNY
+  总股本 (Shares):    681.17M
+  计算市值:           301.46B CNY
+  报告市值:           301.46B CNY
+  偏差:               0.00%
+
+  ✅ 验证通过, 偏差仅 0.00%

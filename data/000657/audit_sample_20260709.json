@@ -1,0 +1,201 @@
+======================================================================
+报告数据抽检清单
+文件：reports\中钨高新\中钨高新-investment-team-20260709.md
+总提取数据点：93  |  抽样比例：15%  |  抽检数量：14
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     24  行业格局与竞争 · 评分                                 4.00  
+  5     25  风险、治理与长期确定性 · 评分                             3.20  
+ 12     43  PB · 来源/说明                                  10.00  B
+ 15     52  2021A · 归母净利润                                5.28  
+ 18     52  2021A · 净利率                                  5.28  %
+ 14     52  2021A · 营业收入                               120.94  
+ 32     54  2023A · 净利率                                  6.65  %
+ 29     54  2023A · 归母净利润                                8.00  
+ 36     55  2024A · 归母净利润                                9.91  
+ 55     70  切削刀具及工具 · 2025 收入                           36.11  亿元
+ 70    213  中性 · 3 年目标 EPS                               0.93  
+ 76    214  悲观 · 目标股价                                   15.60  
+ 82    225  已持有者 · 价格/触发区间                              75.00  
+ 87    267  东方财富全部报告期财务 JSON · 路径                      657.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "行业格局与竞争 · 评分",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 24,
+    "raw_text": "| 行业格局与竞争 | 芒格 | ★★★★☆ 4.0 | 钨是战略金属，中国供给地位强；中钨全产业链位置稀缺，但刀具端仍受国内外强竞争。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "风险、治理与长期确定性 · 评分",
+    "reported_value": 3.2,
+    "unit": "",
+    "line_number": 25,
+    "raw_text": "| 风险、治理与长期确定性 | 李录 | ★★★☆☆ 3.2 | 五矿平台可信，但关联交易、资产注入定价、库存周期、出口管制和现金流压力需打折。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "PB · 来源/说明",
+    "reported_value": 10.0,
+    "unit": "B",
+    "line_number": 43,
+    "raw_text": "| PB | 17.04x（行情口径）；17.81x（按 2025 BPS） | 腾讯行情 / 东方财富 F10 BPS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "2021A · 归母净利润",
+    "reported_value": 5.28,
+    "unit": "",
+    "line_number": 52,
+    "raw_text": "| 2021A | 120.94 | +21.92% | 5.28 | +138.60% | 4.90 | 19.38% | 5.28% | 11.47% | 0.827 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2021A · 净利率",
+    "reported_value": 5.28,
+    "unit": "%",
+    "line_number": 52,
+    "raw_text": "| 2021A | 120.94 | +21.92% | 5.28 | +138.60% | 4.90 | 19.38% | 5.28% | 11.47% | 0.827 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "2021A · 营业收入",
+    "reported_value": 120.94,
+    "unit": "",
+    "line_number": 52,
+    "raw_text": "| 2021A | 120.94 | +21.92% | 5.28 | +138.60% | 4.90 | 19.38% | 5.28% | 11.47% | 0.827 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "2023A · 净利率",
+    "reported_value": 6.65,
+    "unit": "%",
+    "line_number": 54,
+    "raw_text": "| 2023A | 136.75 | +4.55% | 8.00 | +49.60% | 3.34 | 21.22% | 6.65% | 11.98% | 0.470 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "2023A · 归母净利润",
+    "reported_value": 8.0,
+    "unit": "",
+    "line_number": 54,
+    "raw_text": "| 2023A | 136.75 | +4.55% | 8.00 | +49.60% | 3.34 | 21.22% | 6.65% | 11.98% | 0.470 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "2024A · 归母净利润",
+    "reported_value": 9.91,
+    "unit": "",
+    "line_number": 55,
+    "raw_text": "| 2024A | 147.79 | +8.07% | 9.91 | +23.94% | 1.62 | 23.08% | 7.34% | 12.84% | 0.702 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "切削刀具及工具 · 2025 收入",
+    "reported_value": 36.11,
+    "unit": "亿元",
+    "line_number": 70,
+    "raw_text": "| 切削刀具及工具 | 36.11 亿元 | 20.47% | 35.05% | 毛利率最高，最接近“好生意”的环节。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "中性 · 3 年目标 EPS",
+    "reported_value": 0.93,
+    "unit": "",
+    "line_number": 213,
+    "raw_text": "| 中性 | 3% | 35x | 0.93 元 | 32.7 元 | -57.0% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "悲观 · 目标股价",
+    "reported_value": 15.6,
+    "unit": "",
+    "line_number": 214,
+    "raw_text": "| 悲观 | -10% | 25x | 0.62 元 | 15.6 元 | -79.5% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "已持有者 · 价格/触发区间",
+    "reported_value": 75.0,
+    "unit": "",
+    "line_number": 225,
+    "raw_text": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "东方财富全部报告期财务 JSON · 路径",
+    "reported_value": 657.0,
+    "unit": "",
+    "line_number": 267,
+    "raw_text": "| 东方财富全部报告期财务 JSON | `data/000657/eastmoney_financials_all_20260709.json` |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

@@ -1,0 +1,175 @@
+======================================================================
+报告数据抽检清单
+文件：reports/国电南瑞/国电南瑞研究报告-20260709.md
+总提取数据点：77  |  抽样比例：15%  |  抽检数量：12
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     58  电网智能 · 占主营收入                                50.50  %
+  5     58  电网智能 · 毛利率                                  30.12  %
+ 14     61  工业互联 · 毛利率                                  21.56  %
+ 12     61  工业互联 · 2025 主营收入                            30.14  
+ 15     62  集成及其他 · 2025 主营收入                            6.87  
+ 18     70  2025 营收 · 公司年报 / 巨潮                        662.29  亿元
+ 29    142  用电量持续增长 · 最新证据                            2025.00  
+ 32    145  电力市场化 · 最新证据                              2025.00  
+ 36    191  加权ROE · 2025                                16.26  %
+ 55    218  PE/PB · 输出                                  20.85  x
+ 70    229  乐观 · 目标PE                                   24.00  x
+ 76    340  已持有者 · 更优买入区间                               20.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "电网智能 · 占主营收入",
+    "reported_value": 50.5,
+    "unit": "%",
+    "line_number": 58,
+    "raw_text": "| **电网智能** | **334.22** | **50.5%** | +15.73% | **30.12%** | 核心利润池，调度/继保/变电/配网/柔直控制 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "电网智能 · 毛利率",
+    "reported_value": 30.12,
+    "unit": "%",
+    "line_number": 58,
+    "raw_text": "| **电网智能** | **334.22** | **50.5%** | +15.73% | **30.12%** | 核心利润池，调度/继保/变电/配网/柔直控制 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "工业互联 · 毛利率",
+    "reported_value": 21.56,
+    "unit": "%",
+    "line_number": 61,
+    "raw_text": "| 工业互联 | 30.14 | 4.6% | +5.10% | 21.56% | 外延市场，竞争更开放 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "工业互联 · 2025 主营收入",
+    "reported_value": 30.14,
+    "unit": "",
+    "line_number": 61,
+    "raw_text": "| 工业互联 | 30.14 | 4.6% | +5.10% | 21.56% | 外延市场，竞争更开放 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "集成及其他 · 2025 主营收入",
+    "reported_value": 6.87,
+    "unit": "",
+    "line_number": 62,
+    "raw_text": "| 集成及其他 | 6.87 | 1.0% | -52.21% | 26.64% | 非核心 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2025 营收 · 公司年报 / 巨潮",
+    "reported_value": 662.29,
+    "unit": "亿元",
+    "line_number": 70,
+    "raw_text": "| 2025 营收 | 662.29 亿元 | 662.29 亿元（东方财富/子报告核对） | 0.00% | 一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "用电量持续增长 · 最新证据",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 142,
+    "raw_text": "| 用电量持续增长 | 2025 年全社会用电量 103,682 亿千瓦时，同比增长 5.0% | 负荷复杂度提升，调度和自动化刚需增强 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "电力市场化 · 最新证据",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 145,
+    "raw_text": "| 电力市场化 | 2025 年市场交易电量 6.64 万亿千瓦时，占用电量 64.0% | 交易、计量、结算、调度平台需求提升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "加权ROE · 2025",
+    "reported_value": 16.26,
+    "unit": "%",
+    "line_number": 191,
+    "raw_text": "| 加权ROE | 16.26% | 稳定优秀 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "PE/PB · 输出",
+    "reported_value": 20.85,
+    "unit": "x",
+    "line_number": 218,
+    "raw_text": "| PE/PB | 股价 21.68 元，EPS 1.04 元，BVPS 约 6.55 元 | PE 约 **20.85x**，PB 约 **3.31x** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "乐观 · 目标PE",
+    "reported_value": 24.0,
+    "unit": "x",
+    "line_number": 229,
+    "raw_text": "| 乐观 | +12% | 1.83 | 24x | 44.0 元 | +102.9% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "已持有者 · 更优买入区间",
+    "reported_value": 20.0,
+    "unit": "",
+    "line_number": 340,
+    "raw_text": "| 已持有者 | 继续持有并跟踪 | 低于 20 元可考虑加仓 | 若毛利率和现金流未恶化，没必要因短期波动卖出 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

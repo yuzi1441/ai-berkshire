@@ -1,0 +1,102 @@
+[
+  {
+    "id": 4,
+    "label": "TTM估值 EPS",
+    "reported_value": 1.91,
+    "unit": "元/股",
+    "fetched_value": 1.905,
+    "fetched_source": "中财网PE口径+年报/一季报TTM复算",
+    "fetched_value2": 1.905,
+    "fetched_source2": "financial_rigor.py"
+  },
+  {
+    "id": 7,
+    "label": "财务与估值评分",
+    "reported_value": 3.1,
+    "unit": "分/5",
+    "fetched_value": 3.1,
+    "fetched_source": "investment-team财务Agent评分折算",
+    "fetched_value2": 3.1,
+    "fetched_source2": "team-lead汇总模型"
+  },
+  {
+    "id": 9,
+    "label": "行业与竞争评分",
+    "reported_value": 3.6,
+    "unit": "分/5",
+    "fetched_value": 3.6,
+    "fetched_source": "industry-researcher评分",
+    "fetched_value2": 3.6,
+    "fetched_source2": "team-lead汇总模型"
+  },
+  {
+    "id": 15,
+    "label": "钨钼业务2026Q1利润总额",
+    "reported_value": 17.63,
+    "unit": "亿元",
+    "fetched_value": 17.63,
+    "fetched_source": "厦门钨业2026Q1报告",
+    "fetched_value2": 17.63,
+    "fetched_source2": "东方财富/公告镜像"
+  },
+  {
+    "id": 16,
+    "label": "钨钼业务判断中年份",
+    "reported_value": 2026.0,
+    "unit": "年",
+    "fetched_value": 2026.0,
+    "fetched_source": "厦门钨业2026Q1报告",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "报告运行日期"
+  },
+  {
+    "id": 18,
+    "label": "能源新材料2025利润总额",
+    "reported_value": 8.58,
+    "unit": "亿元",
+    "fetched_value": 8.58,
+    "fetched_source": "厦门钨业2025年报",
+    "fetched_value2": 8.58,
+    "fetched_source2": "东方财富PDF公告镜像"
+  },
+  {
+    "id": 44,
+    "label": "合并权益口径PB算式股价",
+    "reported_value": 64.71,
+    "unit": "元",
+    "fetched_value": 64.71,
+    "fetched_source": "中财网2026-07-09行情",
+    "fetched_value2": 64.71,
+    "fetched_source2": "financial_rigor.py输入复核"
+  },
+  {
+    "id": 48,
+    "label": "乐观情景目标EPS",
+    "reported_value": 2.68,
+    "unit": "元/股",
+    "fetched_value": 2.68,
+    "fetched_source": "financial_rigor.py三情景估值",
+    "fetched_value2": 2.68,
+    "fetched_source2": "team-lead估值假设"
+  },
+  {
+    "id": 63,
+    "label": "已持有者减仓观察价",
+    "reported_value": 80.0,
+    "unit": "元",
+    "fetched_value": 80.3,
+    "fetched_source": "financial_rigor.py乐观目标价",
+    "fetched_value2": 80.0,
+    "fetched_source2": "报告动作阈值取整"
+  },
+  {
+    "id": 65,
+    "label": "归母权益口径PB",
+    "reported_value": 5.98,
+    "unit": "x",
+    "fetched_value": 5.98,
+    "fetched_source": "financial_rigor.py归母BVPS口径",
+    "fetched_value2": 5.97,
+    "fetched_source2": "中财网行情+年报归母净资产自算"
+  }
+]
