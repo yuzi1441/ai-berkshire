@@ -1,0 +1,85 @@
+Data cutoff: 2026-07-10
+
+COMMAND
+python tools/financial_rigor.py verify-market-cap --price 22.04 --shares 8031756156 --reported 177020000000 --currency CNY
+
+============================================================
+Market Cap Verification / 市值验算
+============================================================
+  Price:              22.04 CNY
+  Shares:             8.03B
+  Calculated cap:     177.02B CNY
+  Reported cap:       177.02B CNY
+  Deviation:          0.00%
+  PASS: deviation 0.00%
+
+Exact unrounded market cap: 177,019,905,678.24 CNY
+
+COMMAND
+python tools/financial_rigor.py verify-valuation --price 22.04 --eps 1.035896956304 --bvps 6.660230406923 --fcf-per-share 1.160010679373 --dividend 0.622 --revenue-per-share 8.245888188940
+
+============================================================
+估值指标验算 (Valuation Verification)
+============================================================
+  当前股价: 22.04
+
+  PE (TTM):  22.04 / 1.035896956304 = 21.28x
+  盈利收益率: 4.70%
+  PB:        22.04 / 6.660230406923 = 3.31x
+  ROE:       1.035896956304 / 6.660230406923 = 15.55%
+  P/FCF:     22.04 / 1.160010679373 = 19.00x
+  FCF Yield: 5.26%
+  股息率:    0.622 / 22.04 = 2.82%
+  PS:        22.04 / 8.24588818894 = 2.67x
+
+  PASS: all calculations use precise decimal arithmetic.
+
+COMMAND
+python tools/financial_rigor.py three-scenario --price 22.04 --eps 1.04 --shares 80.31756156 --growth 0.12 0.08 0.03 --pe 24 20 15 --years 3 --currency CNY
+
+============================================================
+三情景估值模型 (Three-Scenario Valuation)
+============================================================
+  当前股价: 22.04 CNY
+  当前EPS:  1.04
+  预测期:   3年
+
+  情景                年增速     目标PE      目标EPS       目标股价      涨跌幅
+  ------------ -------- -------- ---------- ---------- --------
+  乐观 (Bull)         12%      24x       1.46      35.1   +59.1%
+  中性 (Base)          8%      20x       1.31      26.2   +18.9%
+  悲观 (Bear)          3%      15x       1.14      17.0   -22.7%
+
+  PASS: precise decimal arithmetic.
+
+COMMAND
+python tools/financial_rigor.py three-scenario --price 22.04 --eps 1.04 --shares 80.31756156 --growth 0.12 0.08 0.03 --pe 24 20 15 --years 5 --currency CNY
+
+============================================================
+三情景估值模型 (Three-Scenario Valuation)
+============================================================
+  当前股价: 22.04 CNY
+  当前EPS:  1.04
+  预测期:   5年
+
+  情景                年增速     目标PE      目标EPS       目标股价      涨跌幅
+  ------------ -------- -------- ---------- ---------- --------
+  乐观 (Bull)         12%      24x       1.83      44.0   +99.6%
+  中性 (Base)          8%      20x       1.53      30.6   +38.7%
+  悲观 (Bear)          3%      15x       1.21      18.1   -17.9%
+
+  PASS: precise decimal arithmetic.
+
+DIRECT FUNCTION CALL
+python -c "from tools.financial_rigor import cross_validate; cross_validate('2023 revenue', {'2025 annual restated': 51961306701.63, 'Eastmoney current series': 51655248318.66}, 'CNY', 1.0)"
+
+  2025 annual restated:       51.96B CNY (0.30% from median)
+  Eastmoney current series:  51.66B CNY (0.30% from median)
+  PASS: all sources within 1.0% of median.
+
+DIRECT FUNCTION CALL
+python -c "from tools.financial_rigor import cross_validate; cross_validate('2026-07-10 close', {'Tencent': 22.04, 'Sina': 22.04}, 'CNY/share', 1.0)"
+
+  Tencent: 22.04 CNY/share (0.00%)
+  Sina:    22.04 CNY/share (0.00%)
+  PASS: all sources within 1.0% of median.

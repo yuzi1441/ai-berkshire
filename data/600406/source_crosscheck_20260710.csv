@@ -1,0 +1,29 @@
+period,field,primary_source,primary_value,secondary_source,secondary_value,deviation_pct,status,note
+2021,revenue,2021 annual p9,42411007392.46,Eastmoney via AkShare,42411007392.46,0.0000,OK,
+2021,parent_net_profit,2021 annual p9,5642448311.81,Eastmoney via AkShare,5642448311.81,0.0000,OK,
+2021,cfo,2021 annual p9/p116,4670773603.37,Eastmoney via AkShare,4670773603.37,0.0000,OK,
+2021,total_liabilities,2021 annual p105,32190506543.66,Eastmoney via AkShare,32190506543.66,0.0000,OK,
+2022,total_assets,2022 annual p10,76665557522.15,Eastmoney current series,76701231995.18,0.0465,OK,"Eastmoney uses later same-control restatement"
+2022,total_liabilities,2022 annual p114,31307197464.91,Eastmoney current series,31342871937.94,0.1139,OK,"Eastmoney uses later same-control restatement"
+2023,revenue,2025 annual p13 restated,51961306701.63,Eastmoney current indicator series,51655248318.66,0.5890,OK,"Eastmoney still reflects 2024-report restatement scope"
+2023,parent_net_profit,2025 annual p13 restated,7178970492.47,Eastmoney current indicator series,7175185980.94,0.0527,OK,"Different same-control restatement vintage"
+2023,cfo,2025 annual p13 restated,11317186613.54,Eastmoney current cash-flow series,11278310677.65,0.3435,OK,"Different same-control restatement vintage"
+2024,contract_asset,2025 annual p121 restated,1525355100.49,2024 annual p122 original,1504932108.85,1.3389,FLAG,"Greater than 1%; scope/version difference from 2025 same-control acquisition, not extraction error"
+2024,capex,2025 annual p134 restated,1850169755.99,2024 annual p135 original,1831751443.78,0.9955,OK,"Restatement vintage difference"
+2024,total_liabilities,2025 annual p123 restated,40234898199.50,2024 annual p124 original,39969420238.24,0.6598,OK,"Restatement vintage difference"
+2025,revenue,2025 annual p13,66228963223.21,Eastmoney via AkShare,66228963223.21,0.0000,OK,
+2025,parent_net_profit,2025 annual p13,8278971723.32,Eastmoney via AkShare,8278971723.32,0.0000,OK,
+2025,cfo,2025 annual p134,12768702125.04,Eastmoney via AkShare,12768702125.04,0.0000,OK,
+2025,capex,2025 annual p134,2110354922.10,Eastmoney via AkShare,2110354922.10,0.0000,OK,
+2025,accounts_receivable,2025 annual p121,31249864276.02,Eastmoney via AkShare,31249864276.02,0.0000,OK,
+2025,contract_asset,2025 annual p121,1494607220.30,Eastmoney via AkShare,1494607220.30,0.0000,OK,
+2025,inventory,2025 annual p121,13058218914.99,Eastmoney via AkShare,13058218914.99,0.0000,OK,
+2025,total_liabilities,2025 annual p123,42126213104.12,Eastmoney via AkShare,42126213104.12,0.0000,OK,
+2025,cash,2025 annual p121,7323259338.52,Eastmoney via AkShare,7323259338.52,0.0000,OK,
+2026Q1,revenue,2026 Q1 p1,9564242921.53,Eastmoney via AkShare,9564242921.53,0.0000,OK,
+2026Q1,parent_net_profit,2026 Q1 p1,721291973.43,Eastmoney via AkShare,721291973.43,0.0000,OK,
+2026Q1,cfo,2026 Q1 p13, -1514283397.01,Eastmoney via AkShare,-1514283397.01,0.0000,OK,
+2026Q1,capex,2026 Q1 p14,451693205.88,Eastmoney via AkShare,451693205.88,0.0000,OK,
+2026Q1,inventory,2026 Q1 p6,16590949099.58,Eastmoney via AkShare,16590949099.58,0.0000,OK,
+2026-07-10,close_price,Tencent 15:29:20,22.04,Sina 15:20:28,22.04,0.0000,OK,
+2026-07-10,pb_mrq,Audited Q1 BVPS calculation,3.31,Tencent display field,3.56,7.5529,FLAG,"Vendor PB appears to use a stale book-value period; use audited calculation"

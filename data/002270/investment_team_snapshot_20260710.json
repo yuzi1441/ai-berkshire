@@ -1,0 +1,54 @@
+{
+  "company": "华明装备",
+  "ticker": "002270.SZ",
+  "research_date": "2026-07-10",
+  "quote_cutoff": "2026-07-10 13:03:57 +08:00",
+  "quote": {
+    "price_cny": 18.66,
+    "tencent_price_cny": 18.66,
+    "sina_price_cny": 18.66,
+    "price_cross_source_deviation_pct": 0.0,
+    "previous_close_cny": 18.02,
+    "intraday_high_cny": 18.72,
+    "intraday_low_cny": 17.71,
+    "total_shares": 896225431,
+    "calculated_market_cap_cny": 16723566542.46,
+    "tencent_market_cap_yi_cny": 167.23,
+    "tencent_pe_ttm": 23.84,
+    "tencent_pb": 5.36
+  },
+  "valuation_inputs": {
+    "ttm_eps_cny": 0.7826411886877152,
+    "bvps_2026q1_cny": 3.482850669097,
+    "fcf_per_share_2025_cny": 0.548851788764,
+    "dividend_per_share_2025_cny": 0.61,
+    "revenue_per_share_2025_cny": 2.70779484288
+  },
+  "valuation_outputs": {
+    "pe_ttm": 23.84,
+    "pb": 5.36,
+    "p_fcf": 34.0,
+    "fcf_yield_pct": 2.94,
+    "dividend_yield_pct": 3.27,
+    "ps": 6.89
+  },
+  "scenario_3y": {
+    "bull": {"eps_growth": 0.15, "exit_pe": 24, "target_price_cny": 28.6, "price_return_pct": 53.1, "total_return_with_flat_dividend_pct": 63.1},
+    "base": {"eps_growth": 0.08, "exit_pe": 18, "target_price_cny": 17.7, "price_return_pct": -4.9, "total_return_with_flat_dividend_pct": 4.7},
+    "bear": {"eps_growth": 0.0, "exit_pe": 12, "target_price_cny": 9.4, "price_return_pct": -49.7, "total_return_with_flat_dividend_pct": -39.8}
+  },
+  "base_case_entry_thresholds": {
+    "annualized_total_return_10pct_price_cny": 14.67317806160781,
+    "annualized_total_return_12pct_price_cny": 13.901068239795915
+  },
+  "financial_cross_validation": {
+    "2025_revenue_yi_cny": {"cninfo": 24.2679460012, "eastmoney": 24.2679460012, "deviation_pct": 0.0},
+    "2025_parent_net_profit_yi_cny": {"cninfo": 7.0973736027, "eastmoney": 7.0973736027, "deviation_pct": 0.0},
+    "2025_operating_cash_flow_yi_cny": {"cninfo": 6.040314429, "eastmoney": 6.040314429, "deviation_pct": 0.0}
+  },
+  "source_notes": [
+    "Tencent and Sina prices match at 13:03 on 2026-07-10.",
+    "Google Finance was cached at an earlier intraday time and was not mixed with the 13:03 valuation.",
+    "Frost & Sullivan market share data is company-commissioned and appears in a draft HKEX application proof."
+  ]
+}
