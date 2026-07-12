@@ -1,0 +1,45 @@
+China Shenhua (601088.SH) financial rigor record
+Cutoff: 2026-07-12; quote date: 2026-07-10
+
+1. Market-cap verification
+Price: CNY 42.04
+Total shares: 21,689,434,304
+Calculated market cap: CNY 911.82 billion
+Tencent reported market cap: CNY 911.82 billion
+Deviation: 0.00% (PASS)
+
+2. Valuation verification
+Diluted 2025 EPS: 528.49 / 216.89434304 = CNY 2.436624 per share
+2026Q1 BVPS: 4,809.02 / 216.89434304 = CNY 22.172178 per share
+PE: 42.04 / 2.436 = 17.26x
+PB: 42.04 / 22.17 = 1.90x
+Trailing dividend yield: 2.01 / 42.04 = 4.78%
+Simplified FCF proxy: CNY 75.059 billion OCF - CNY 48.398 billion cash paid for long-term assets = CNY 26.661 billion
+Simplified FCF per share: about CNY 1.229; P/FCF proxy 34.21x; FCF yield 2.92%
+Note: the FCF proxy excludes working definitions and should not be treated as normalized owner earnings.
+
+3. Cross-source validation
+2025 revenue: CNY 294.916 billion
+- China Shenhua 2025 annual report: 294.916
+- Eastmoney API: 294.916
+- Deviation: 0.00% (PASS)
+
+2025 attributable net profit: CNY 52.849 billion
+- China Shenhua 2025 annual report: 52.849
+- 2025 profit distribution announcement: 52.849
+- Eastmoney API: 52.849
+- Deviation: 0.00% (PASS)
+- Resolution: the CNY 52.771 billion value in an older audit input was an extraction/manual-entry error, not a valid reporting basis.
+
+2026-07-10 A-share close: CNY 42.04
+- Tencent quote: 42.04
+- Sina quote: 42.04
+- Deviation: 0.00% (PASS)
+
+4. Three-scenario valuation, 3 years
+Input EPS: CNY 2.436; current price CNY 42.04
+- Bull: +2% annual EPS growth, 17x PE -> EPS 2.59, target CNY 43.9, price change +4.5%
+- Base: -2% annual EPS growth, 14x PE -> EPS 2.29, target CNY 32.1, price change -23.6%
+- Bear: -6% annual EPS growth, 11x PE -> EPS 2.02, target CNY 22.3, price change -47.1%
+
+All calculations above were run with tools/financial_rigor.py. Price changes exclude dividends.
