@@ -1,0 +1,227 @@
+======================================================================
+报告数据抽检清单
+文件：reports/长江电力/长江电力-investment-team-20260713.md
+总提取数据点：104  |  抽样比例：15%  |  抽检数量：16
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     36  行业格局与竞争 · 评分（1-5）                            4.30  
+  5     37  风险、治理与管理层 · 评分（1-5）                          3.60  
+ 12     47  归母净利润 · 2026Q1 / H1                         67.61  亿元
+ 14     48  扣非归母净利润增速 · 2026Q1 / H1                     19.20  %
+ 15     49  经营现金流 · 2024A                              596.48  亿元
+ 18     49  经营现金流 · 判断                                2025.00  
+ 29     53  资产负债率 · 2025A                               58.27  %
+ 28     53  资产负债率 · 2024A                               60.79  %
+ 32     54  六站发电量 · 2025A                             3071.94  亿
+ 36     55  全年每股现金分红 · 2025A                             1.00  
+ 55     97  融资能力 · 评分                                    4.20  
+ 70    144  长江电力 · TTM PE                               19.27  x
+ 76    146  国投电力 · TTM PE                               15.05  x
+ 82    157  乐观 · 五年目标 PE                                21.00  x
+ 87    158  中性 · 五年目标价                                  29.30  
+ 95    278  稳健型 · 观察价格                                  23.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "行业格局与竞争 · 评分（1-5）",
+    "reported_value": 4.3,
+    "unit": "",
+    "line_number": 36,
+    "raw_text": "| 行业格局与竞争 | 芒格 | 4.3 | 高质量慢变量行业；长期风险来自规则与资本配置而非价格战 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "风险、治理与管理层 · 评分（1-5）",
+    "reported_value": 3.6,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 风险、治理与管理层 | 李录 | 3.6 | 主业运营专业，分红可信；集团边界、董事会投入和新增项目需折价 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "归母净利润 · 2026Q1 / H1",
+    "reported_value": 67.61,
+    "unit": "亿元",
+    "line_number": 47,
+    "raw_text": "| 归母净利润 | 324.96 亿元 | 345.03 亿元（+6.17%） | 67.61 亿元（Q1，+30.50%） | Q1 含金融资产浮盈，不能线性年化 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "扣非归母净利润增速 · 2026Q1 / H1",
+    "reported_value": 19.2,
+    "unit": "%",
+    "line_number": 48,
+    "raw_text": "| 扣非归母净利润增速 | - | - | +19.20%（Q1） | 仍强，但低于表观归母增速 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "经营现金流 · 2024A",
+    "reported_value": 596.48,
+    "unit": "亿元",
+    "line_number": 49,
+    "raw_text": "| 经营现金流 | 596.48 亿元 | 605.63 亿元 | 117.11 亿元（Q1） | 2025 为归母净利的 1.76 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "经营现金流 · 判断",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 49,
+    "raw_text": "| 经营现金流 | 596.48 亿元 | 605.63 亿元 | 117.11 亿元（Q1） | 2025 为归母净利的 1.76 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "资产负债率 · 2025A",
+    "reported_value": 58.27,
+    "unit": "%",
+    "line_number": 53,
+    "raw_text": "| 资产负债率 | 60.79% | 58.27% | 57.33% | 重组后持续下降 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 28,
+    "label": "资产负债率 · 2024A",
+    "reported_value": 60.79,
+    "unit": "%",
+    "line_number": 53,
+    "raw_text": "| 资产负债率 | 60.79% | 58.27% | 57.33% | 重组后持续下降 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "六站发电量 · 2025A",
+    "reported_value": 3071.94,
+    "unit": "亿",
+    "line_number": 54,
+    "raw_text": "| 六站发电量 | 约 2,959.0 亿千瓦时 | 3,071.94 亿千瓦时（+3.82%） | 1,327.44 亿千瓦时（H1，+4.81%） | H1 上下游水文分化明显 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "全年每股现金分红 · 2025A",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 55,
+    "raw_text": "| 全年每股现金分红 | 0.943 元 | 1.00 元 | 末期 0.79 元将于 7 月 17 日发放 | 2025 中期 0.21 元已包含在全年 1.00 元内 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "融资能力 · 评分",
+    "reported_value": 4.2,
+    "unit": "",
+    "line_number": 97,
+    "raw_text": "| 融资能力 | 4.2 | 央企信用、评级和稳定现金流降低资金成本 | 债务绝对额仍大，利率反转会侵蚀利润 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "长江电力 · TTM PE",
+    "reported_value": 19.27,
+    "unit": "x",
+    "line_number": 144,
+    "raw_text": "| 长江电力 | 28.42 | 19.27x | 3.05x | 六库全资/控股运营平台 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "国投电力 · TTM PE",
+    "reported_value": 15.05,
+    "unit": "x",
+    "line_number": 146,
+    "raw_text": "| 国投电力 | 13.98 | 15.05x | 1.62x | 雅砻江控股但含火电、新能源 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "乐观 · 五年目标 PE",
+    "reported_value": 21.0,
+    "unit": "x",
+    "line_number": 157,
+    "raw_text": "| 乐观 | +4% | 21x | 37.7 元 | +32.6% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "中性 · 五年目标价",
+    "reported_value": 29.3,
+    "unit": "",
+    "line_number": 158,
+    "raw_text": "| 中性 | +2% | 18x | 29.3 元 | +3.1% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 95,
+    "label": "稳健型 · 观察价格",
+    "reported_value": 23.0,
+    "unit": "",
+    "line_number": 278,
+    "raw_text": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

@@ -19,10 +19,11 @@
 | F-08 | FACT | 煤炭产品 | 2025收入169.66亿元，毛利率22.39%，毛利率同比-10.03pct | 公司2025年年报 | 公司年报摘要 | 高 |
 | F-09 | FACT | 发电业务 | 2025收入71.83亿元，毛利率54.75% | 公司2025年年报 | 公司年报摘要 | 高；高毛利不等于高自由现金流 |
 | F-10 | FACT | 存货 | 2025年末约213.88亿元，同比+31.86% | 公司2025年年报 | 公司资产负债表/附注 | 高；需跟踪收入与存货增速背离 |
+| F-11 | FACT | 归母净资产与每股净资产 | 2026Q1归属于上市公司股东的所有者权益766.5617655367亿元；总股本50.52792571亿股；归母BVPS 15.1711元 | 公司2026Q1报告：https://money.finance.sina.com.cn/corp/view/vCB_AllBulletinDetail.php?id=12275257&stockid=600089 | 基于官方归母净资产与股本精确复算 | 高；普通股PB必须使用归母权益，不含少数股东权益 |
 | M-01 | FACT | 最新行情 | 20.06元，2026-07-10 17:24附近页面截面 | StockAnalysis：https://stockanalysis.com/quote/sha/600089/statistics/ | Investing：https://www.investing.com/equities/teba | 高；两源同价 |
-| M-02 | FACT | 聚合市场数据 | 市值1006.1亿元；TTM PE 16.65x；PB 0.96x；TTM EPS 1.20元 | StockAnalysis statistics | Investing价格页 | 中高；市值口径可能扣除库存股 |
+| M-02 | FACT | 聚合市场数据 | 市值1006.1亿元；TTM PE 16.65x；聚合PB 0.96x；TTM EPS 1.20元 | StockAnalysis statistics | Investing价格页 | 中；聚合PB大概率使用含少数股东权益的合并总权益，与A股普通股归母口径不匹配，不用于本报告普通股PB |
 | C-01 | CALC | 市值验算 | 20.06×50.52792571亿股=1013.6亿元；与聚合市值偏差0.74% | tools/financial_rigor.py | 股本来自2026年分红公告：https://stockmc.xueqiu.com/202606/600089_20260630_AY5R.pdf | 高；差异可能为库存股/流通口径 |
-| C-02 | CALC | 估值验算 | PE 16.72x、PB 0.96x、盈利收益率5.98%、隐含ROE约5.74% | tools/financial_rigor.py | StockAnalysis PE/PB | 高；EPS/BVPS为TTM/聚合口径 |
+| C-02 | CALC | 估值验算 | PE 16.72x、归母口径PB 1.32x、盈利收益率5.98%、TTM EPS/期末归母BVPS约7.91% | tools/financial_rigor.py | F-11归母净资产与M-01股价 | 高；7.91%仅为期末权益代理值，不是正式加权平均ROE |
 | C-03 | CALC | 三情景估值 | 3年后：乐观21.2元、中性14.4元、悲观8.2元 | tools/financial_rigor.py | 假设见下文 | 模型结果，不是事实 |
 | I-01 | FACT | 国家电网“十五五”投资 | 约4万亿元，较“十四五”增长约40% | 国资委/国家电网：https://en.sasac.gov.cn/2026/01/22/c_20333.htm | 中国西电年报引用规划：https://static.cninfo.com.cn/finalpage/2026-04-11/1225094842.PDF | 中高；规划并非逐年订单保证 |
 | I-02 | FACT | 输变电订单 | 2025国内签约约560亿元、同比超14%；国际约16亿美元、同比约80%；2026Q1国内约160亿元、国际约6.2亿美元 | 公司投资者交流：https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260617/4dd1e1c41c65f745866271dbca5987c3.pdf | 公司2025年报 | 高；订单不等于收入/现金流 |

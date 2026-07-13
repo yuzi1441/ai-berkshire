@@ -1,0 +1,142 @@
+[
+  {
+    "id": 4,
+    "label": "财务与估值 · 核心判断",
+    "reported_value": 55.75,
+    "unit": "倍",
+    "fetched_value": 55.76,
+    "fetched_source": "financial_rigor.py verify-valuation 精确输出",
+    "fetched_value2": 55.75,
+    "fetched_source2": "124.66元除以TTM EPS 2.2355元"
+  },
+  {
+    "id": 5,
+    "label": "行业与竞争 · 评分（5分制）",
+    "reported_value": 4.3,
+    "unit": "",
+    "fetched_value": 4.3,
+    "fetched_source": "industry-researcher维度结论",
+    "fetched_value2": 4.3,
+    "fetched_source2": "team-lead评分汇总"
+  },
+  {
+    "id": 12,
+    "label": "归母净利润 · 变化 / 解释",
+    "reported_value": 2025,
+    "unit": "",
+    "fetched_value": 2025,
+    "fetched_source": "表格期间列2025A",
+    "fetched_value2": 2025,
+    "fetched_source2": "巨潮2025年年度报告期间口径"
+  },
+  {
+    "id": 14,
+    "label": "毛利率 · 2026Q1",
+    "reported_value": 35.63,
+    "unit": "%",
+    "fetched_value": 35.6296,
+    "fetched_source": "巨潮2026Q1营收62.14156406亿元减成本39.99902225亿元重算",
+    "fetched_value2": 35.63,
+    "fetched_source2": "财务分析Agent一季报复核"
+  },
+  {
+    "id": 15,
+    "label": "加权 ROE · 2025A",
+    "reported_value": 28.57,
+    "unit": "%",
+    "fetched_value": 28.57,
+    "fetched_source": "巨潮2025年年度报告主要会计数据",
+    "fetched_value2": 28.57,
+    "fetched_source2": "东方财富2025年报镜像"
+  },
+  {
+    "id": 18,
+    "label": "经营活动现金流 · 2025A",
+    "reported_value": 38.72,
+    "unit": "",
+    "fetched_value": 38.71967792,
+    "fetched_source": "巨潮2025年年度报告现金流量表",
+    "fetched_value2": 38.72,
+    "fetched_source2": "东方财富2025年报镜像"
+  },
+  {
+    "id": 29,
+    "label": "存货 · 2025A",
+    "reported_value": 42.46,
+    "unit": "",
+    "fetched_value": 42.45940570,
+    "fetched_source": "巨潮2025年年度报告资产负债表",
+    "fetched_value2": 42.46,
+    "fetched_source2": "财务分析Agent年报复核"
+  },
+  {
+    "id": 32,
+    "label": "货币资金 · 2025A",
+    "reported_value": 25.79,
+    "unit": "",
+    "fetched_value": 25.79107305,
+    "fetched_source": "巨潮2025年年度报告资产负债表",
+    "fetched_value2": 25.79,
+    "fetched_source2": "东方财富2025年报镜像"
+  },
+  {
+    "id": 36,
+    "label": "资产负债率 · 2026Q1",
+    "reported_value": 48.64,
+    "unit": "%",
+    "fetched_value": 48.64311885,
+    "fetched_source": "巨潮2026Q1负债159.16037828亿元除以资产327.20019199亿元",
+    "fetched_value2": 48.64,
+    "fetched_source2": "financial_rigor.py calc精确重算"
+  },
+  {
+    "id": 55,
+    "label": "智能汽车 PCB · 2025 收入",
+    "reported_value": 30.45,
+    "unit": "亿元",
+    "fetched_value": 30.45,
+    "fetched_source": "巨潮2025年年度报告业务分部",
+    "fetched_value2": 30.45,
+    "fetched_source2": "2026-07-06机构调研纪要复述"
+  },
+  {
+    "id": 70,
+    "label": "中性 · 退出 PE",
+    "reported_value": 32,
+    "unit": "倍",
+    "fetched_value": 32,
+    "fetched_source": "financial_rigor.py three-scenario输入参数",
+    "fetched_value2": 32,
+    "fetched_source2": "结构化快照base情景参数"
+  },
+  {
+    "id": 76,
+    "label": "悲观 · 退出 PE",
+    "reported_value": 20,
+    "unit": "倍",
+    "fetched_value": 20,
+    "fetched_source": "financial_rigor.py three-scenario输入参数",
+    "fetched_value2": 20,
+    "fetched_source2": "结构化快照bear情景参数"
+  },
+  {
+    "id": 82,
+    "label": "激进型 · 成立条件",
+    "reported_value": 2026,
+    "unit": "",
+    "fetched_value": 2026,
+    "fetched_source": "操作表明确的2026H1/H2验证期",
+    "fetched_value2": 2026,
+    "fetched_source2": "IR披露43亿元项目2026H2试产"
+  },
+  {
+    "id": 87,
+    "label": "当前区域 · 价格区间",
+    "reported_value": 105,
+    "unit": "",
+    "fetched_value": 105,
+    "fetched_source": "财务分析Agent合理价值带上沿",
+    "fetched_value2": 105,
+    "fetched_source2": "team-lead分层操作阈值"
+  }
+]

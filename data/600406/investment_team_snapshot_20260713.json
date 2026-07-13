@@ -1,0 +1,81 @@
+{
+  "company": "国电南瑞科技股份有限公司",
+  "ticker": "600406.SH",
+  "as_of_date": "2026-07-13",
+  "financial_cutoff": "2026-03-31",
+  "quote": {
+    "close_cny": 21.70,
+    "previous_close_cny": 22.04,
+    "open_cny": 22.04,
+    "high_cny": 22.08,
+    "low_cny": 21.61,
+    "volume_shares": 53045986,
+    "turnover_cny": 1154198253.00,
+    "tencent_timestamp": "2026-07-13 16:14:46",
+    "sina_timestamp": "2026-07-13 15:34:59",
+    "tencent_close_cny": 21.70,
+    "sina_close_cny": 21.70,
+    "cross_source_deviation_pct": 0.0
+  },
+  "capitalization": {
+    "total_shares": 8031756156,
+    "market_cap_cny": 174289108585.20,
+    "market_cap_100m_cny": 1742.891085852
+  },
+  "valuation": {
+    "fy2025_eps_cny": 1.04,
+    "ttm_eps_cny": 1.035896956304,
+    "q1_2026_bvps_cny": 6.6602304069,
+    "static_pe": 20.87,
+    "ttm_pe": 20.95,
+    "q1_2026_pb": 3.26,
+    "fy2025_ps": 2.63,
+    "fy2025_fcf_yield_pct": 6.12,
+    "ttm_fcf_yield_pct": 5.35,
+    "fy2025_dividend_per_share_cny": 0.622,
+    "trailing_dividend_yield_pct": 2.87
+  },
+  "scenario_valuation": {
+    "inputs": {
+      "price_cny": 21.70,
+      "eps_cny": 1.04,
+      "growth_rates": [0.12, 0.08, 0.03],
+      "terminal_pe": [24, 20, 15]
+    },
+    "year_2028": {
+      "bull_price_cny": 35.1,
+      "base_price_cny": 26.2,
+      "bear_price_cny": 17.0
+    },
+    "year_2030": {
+      "bull_price_cny": 44.0,
+      "base_price_cny": 30.6,
+      "bear_price_cny": 18.1
+    },
+    "discounted_present_value_at_10pct": {
+      "bull_cny": 30.49,
+      "base_cny": 21.85,
+      "bear_cny": 13.75
+    }
+  },
+  "announcement_check": {
+    "source": "Shanghai Stock Exchange company bulletin API",
+    "checked_on": "2026-07-13",
+    "latest_announcement_date": "2026-06-24",
+    "latest_announcement_title": "国电南瑞2025年年度权益分派实施公告",
+    "new_company_announcement_since_2026_07_10": false
+  },
+  "sources": {
+    "annual_report": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257886.PDF",
+    "q1_report": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225257868.PDF",
+    "investor_relations_20260515": "https://pdf.dfcfw.com/pdf/H22_AN202605191822441887_1.pdf",
+    "tencent_quote": "https://qt.gtimg.cn/q=sh600406",
+    "sina_quote": "https://hq.sinajs.cn/list=sh600406",
+    "sse_bulletins": "https://query.sse.com.cn/security/stock/queryCompanyBulletin.do?productId=600406"
+  },
+  "notes": [
+    "Unchanged historical financial data reuse the cross-checked 2026-07-10 evidence pack.",
+    "Scenario assumptions are analyst judgments, not externally reported facts.",
+    "The Exa search backend returned HTTP 429; the incremental check therefore emphasized primary filings, exchange bulletins and direct quote feeds."
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "company": "沪士电子股份有限公司",
+  "short_name": "沪电股份",
+  "ticker": "002463.SZ",
+  "cutoff_date": "2026-07-13",
+  "quote": {
+    "close_cny": 124.66,
+    "quote_time": "2026-07-13 16:14:54+08:00",
+    "total_shares": 1924363537,
+    "market_cap_cny": 239891158522.42,
+    "sources": {
+      "tencent": 124.66,
+      "sina": 124.66,
+      "eastmoney": 124.66
+    }
+  },
+  "financials": {
+    "2025": {
+      "revenue_cny_100m": 189.45220585,
+      "parent_net_profit_cny_100m": 38.22306272,
+      "operating_cash_flow_cny_100m": 38.71967792,
+      "capital_expenditure_cny_100m": 31.98495759,
+      "simplified_free_cash_flow_cny_100m": 6.73472033,
+      "gross_margin_pct": 35.48,
+      "weighted_roe_pct": 28.57,
+      "eps_cny": 1.9875,
+      "parent_equity_cny_100m": 151.12704642,
+      "accounts_receivable_cny_100m": 55.07160245,
+      "inventory_cny_100m": 42.45940570,
+      "rd_expense_cny_100m": 11.40945544,
+      "top_five_customer_share_pct": 53.32
+    },
+    "2026Q1": {
+      "revenue_cny_100m": 62.14156406,
+      "parent_net_profit_cny_100m": 12.42081367,
+      "operating_cash_flow_cny_100m": 5.11016585,
+      "capital_expenditure_cny_100m": 14.67227661,
+      "simplified_free_cash_flow_cny_100m": -9.56211076,
+      "cash_cny_100m": 43.91640589,
+      "assets_cny_100m": 327.20019199,
+      "liabilities_cny_100m": 159.16037828,
+      "parent_equity_cny_100m": 167.89869984,
+      "accounts_receivable_cny_100m": 64.76447190,
+      "inventory_cny_100m": 49.13409150,
+      "eps_cny": 0.6455
+    },
+    "ttm": {
+      "parent_net_profit_cny_100m": 43.01922239,
+      "eps_cny": 2.2355039244,
+      "simplified_free_cash_flow_cny_100m": -10.45709955
+    }
+  },
+  "valuation": {
+    "ttm_pe": 55.75,
+    "q1_parent_bvps_cny": 8.7248950945,
+    "q1_pb": 14.29,
+    "earnings_yield_pct": 1.79,
+    "static_dividend_yield_pct": 0.40,
+    "probability_weighted_discounted_value_cny": 92.1,
+    "reasonable_value_band_cny": [90, 105]
+  },
+  "capital_allocation": {
+    "announced_2026_staged_investment_cny_100m": 179.67,
+    "existing_43b_project_expected_trial": "2026H2",
+    "note": "The 2026 plans are phased commitments rather than an immediate one-off cash outflow; the existing CNY 4.3bn project is separate."
+  },
+  "scenario_assumptions": {
+    "years": 3,
+    "bull": {"earnings_growth_pct": 30, "exit_pe": 42, "target_price_cny": 206.3},
+    "base": {"earnings_growth_pct": 18, "exit_pe": 32, "target_price_cny": 117.5},
+    "bear": {"earnings_growth_pct": 3, "exit_pe": 20, "target_price_cny": 48.9}
+  }
+}

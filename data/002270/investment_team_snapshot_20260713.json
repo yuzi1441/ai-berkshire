@@ -1,0 +1,92 @@
+{
+  "company": "华明装备",
+  "ticker": "002270.SZ",
+  "research_date": "2026-07-13",
+  "quote_cutoff": "2026-07-13 close, Asia/Shanghai",
+  "quote": {
+    "price_cny": 17.81,
+    "tencent_price_cny": 17.81,
+    "sina_price_cny": 17.81,
+    "price_cross_source_deviation_pct": 0.0,
+    "previous_close_cny": 18.19,
+    "intraday_high_cny": 18.77,
+    "intraday_low_cny": 17.54,
+    "total_shares": 896225431,
+    "calculated_market_cap_cny": 15961774926.11,
+    "tencent_market_cap_yi_cny": 159.62
+  },
+  "valuation_inputs": {
+    "ttm_eps_cny": 0.7826411886877152,
+    "bvps_2026q1_cny": 3.482850669097,
+    "fcf_per_share_2025_cny": 0.548851788764,
+    "dividend_per_share_2025_cny": 0.61,
+    "revenue_per_share_2025_cny": 2.70779484288
+  },
+  "valuation_outputs": {
+    "pe_ttm": 22.76,
+    "pb": 5.11,
+    "p_fcf": 32.45,
+    "fcf_yield_pct": 3.08,
+    "dividend_yield_pct": 3.43,
+    "ps": 6.58
+  },
+  "scenario_3y": {
+    "bull": {
+      "eps_growth": 0.15,
+      "exit_pe": 24,
+      "target_price_cny": 28.6,
+      "total_return_with_flat_dividend_pct": 70.9,
+      "annualized_total_return_pct": 19.5
+    },
+    "base": {
+      "eps_growth": 0.08,
+      "exit_pe": 18,
+      "target_price_cny": 17.7,
+      "total_return_with_flat_dividend_pct": 9.7,
+      "annualized_total_return_pct": 3.1
+    },
+    "bear": {
+      "eps_growth": 0.0,
+      "exit_pe": 12,
+      "target_price_cny": 9.4,
+      "total_return_with_flat_dividend_pct": -36.9,
+      "annualized_total_return_pct": -14.2
+    }
+  },
+  "base_case_entry_thresholds": {
+    "annualized_total_return_10pct_price_cny": 14.67317806160781,
+    "annualized_total_return_12pct_price_cny": 13.901068239795915
+  },
+  "financial_cross_validation": {
+    "2025_revenue_yi_cny": {
+      "cninfo": 24.2679460012,
+      "eastmoney": 24.2679460012,
+      "deviation_pct": 0.0
+    },
+    "2025_parent_net_profit_yi_cny": {
+      "cninfo": 7.0973736027,
+      "eastmoney": 7.0973736027,
+      "deviation_pct": 0.0
+    },
+    "2025_operating_cash_flow_yi_cny": {
+      "cninfo": 6.040314429,
+      "eastmoney": 6.040314429,
+      "deviation_pct": 0.0
+    },
+    "2026q1_revenue_yi_cny": {
+      "cninfo": 5.3027178647,
+      "eastmoney": 5.3027178647,
+      "deviation_pct": 0.0
+    },
+    "2026q1_parent_net_profit_yi_cny": {
+      "cninfo": 1.6302654807,
+      "eastmoney": 1.6302654807,
+      "deviation_pct": 0.0
+    }
+  },
+  "latest_disclosure": {
+    "date": "2026-06-02",
+    "title": "关于2025年员工持股计划预留授予部分非交易过户完成的公告",
+    "note": "Eastmoney announcement list and public search showed no newer statutory disclosure through 2026-07-13."
+  }
+}
