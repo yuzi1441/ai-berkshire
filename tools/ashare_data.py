@@ -16,17 +16,21 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 from decimal import Decimal, ROUND_HALF_EVEN
 
 _TIMEOUT = 15
+_CURL_BIN = os.environ.get("CURL_BIN") or shutil.which("curl")
 
 
 def _curl(url):
     """用 curl --noproxy 直连，绕过系统代理。"""
+    if not _CURL_BIN:
+        raise RuntimeError("未找到 curl；请安装 curl 或设置 CURL_BIN 指向 curl 可执行文件")
     result = subprocess.run(
-        ["/usr/bin/curl", "-s", "--noproxy", "*",
+        [_CURL_BIN, "-s", "--noproxy", "*",
          "-H", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
          url],
         capture_output=True, timeout=_TIMEOUT,
