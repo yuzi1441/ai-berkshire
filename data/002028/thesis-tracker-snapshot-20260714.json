@@ -1,0 +1,50 @@
+{
+  "company": "思源电气",
+  "ticker": "002028.SZ",
+  "mode": "candidate_thesis_unactivated",
+  "created_at": "2026-07-14",
+  "data_cutoff": "2026-07-14",
+  "quote_cutoff": "2026-07-14 10:34:36 +08:00",
+  "actual_buy_price_cny": null,
+  "actual_position_percent": 0,
+  "planned_first_buy_range_cny": [110, 125],
+  "current_quote": {
+    "tencent_cny": 155.01,
+    "sina_cny": 155.01,
+    "market_cap_100m_cny": 1213.0668444282,
+    "ttm_pe": 36.27,
+    "pb": 7.36
+  },
+  "valuation": {
+    "ttm_eps_cny": 4.2736133194,
+    "h1_bvps_cny": 21.06,
+    "planned_buy_ttm_pe_range": [25.7393, 29.2493],
+    "planned_buy_market_cap_100m_cny_range": [860.8306, 978.2166],
+    "base_value_cny": 159.3,
+    "base_value_market_cap_100m_cny": 1246.6392,
+    "bull_value_cny": 245.8,
+    "bear_value_cny": 76.9,
+    "current_margin_of_safety_to_base_percent": 2.693,
+    "buy_range_margin_of_safety_to_base_percent": [21.532, 30.948]
+  },
+  "health": {
+    "score": 7,
+    "status": "边际弱化",
+    "green_assumptions": 4,
+    "yellow_assumptions": 3,
+    "red_assumptions": 0,
+    "broken_assumptions": 0,
+    "triggered_red_lines": 0
+  },
+  "assumptions": [
+    {"id": 1, "status": "green", "topic": "收入与利润增长"},
+    {"id": 2, "status": "yellow", "topic": "核心分部毛利与净利率"},
+    {"id": 3, "status": "yellow", "topic": "海外增长质量"},
+    {"id": 4, "status": "green", "topic": "滚动现金转化"},
+    {"id": 5, "status": "green", "topic": "ROE ROIC 与资产负债表"},
+    {"id": 6, "status": "yellow", "topic": "H 股稀释与扩产回报"},
+    {"id": 7, "status": "green", "topic": "创始人持股与质量事件"}
+  ],
+  "current_action": "空仓观察，不追高",
+  "next_check": "2026年正式半年度报告发布后；H股最终条款若先公布则提前检查"
+}

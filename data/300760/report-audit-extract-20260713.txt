@@ -1,0 +1,253 @@
+======================================================================
+报告数据抽检清单
+文件：reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md
+总提取数据点：115  |  抽样比例：15%  |  抽检数量：18
+随机种子：300760（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2     32  财务质量与估值 · 评分（1-5）                            3.80  
+  5     34  风险与管理层 · 评分（1-5）                             3.70  
+  8     53  收盘价 · 核验口径                                2026.00  
+ 20     60  TTM PS · 核验口径                              333.97  亿元
+ 36    101  2025 营业收入 · 巨潮财报                           332.82  亿元
+ 38    102  2025 归母净利润 · 巨潮财报                           81.36  亿元
+ 57    118  医学影像 · 占比                                   17.18  %
+ 64    138  全球渠道与服务 · 评分                                 4.50  
+ 68    142  规模与成本 · 评分                                   4.00  
+ 70    143  转换成本 · 评分                                    3.50  
+ 74    189  现金转换 · 事实                                 2025.00  
+ 75    190  单季现金流 · 事实                                2026.00  
+ 76    191  应收账款 · 事实                                 2026.00  
+ 87    287  安图生物 · TTM PE                               17.23  x
+ 99    300  中性 · 第 5 年 EPS                               8.25  
+105    301  悲观 · 第 5 年目标价                               81.80  
+102    301  悲观 · EPS CAGR                                2.00  %
+113    368  保守型 · 更合适的条件                               100.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "财务质量与估值 · 评分（1-5）",
+    "reported_value": 3.8,
+    "unit": "",
+    "line_number": 32,
+    "raw_text": "| 财务质量与估值 | 巴菲特 | 3.8 | 资产负债表和现金流优秀；2025 利润中枢下移，当前安全边际不足。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "风险与管理层 · 评分（1-5）",
+    "reported_value": 3.7,
+    "unit": "",
+    "line_number": 34,
+    "raw_text": "| 风险与管理层 | 李录 | 3.7 | 创始人体系和股东回报较好；并购、继任、质押趋势、合规和海外政策需折价。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "收盘价 · 核验口径",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 53,
+    "raw_text": "| 收盘价 | 139.68 元 | 腾讯与新浪 2026-07-13 收盘完全一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 20,
+    "label": "TTM PS · 核验口径",
+    "reported_value": 333.97,
+    "unit": "亿元",
+    "line_number": 60,
+    "raw_text": "| TTM PS | 5.07x | 市值 / TTM 收入 333.97 亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "2025 营业收入 · 巨潮财报",
+    "reported_value": 332.8216,
+    "unit": "亿元",
+    "line_number": 101,
+    "raw_text": "| 2025 营业收入 | 332.8216 亿元 | 332.8216 亿元 | 0.00% | 一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 38,
+    "label": "2025 归母净利润 · 巨潮财报",
+    "reported_value": 81.3578,
+    "unit": "亿元",
+    "line_number": 102,
+    "raw_text": "| 2025 归母净利润 | 81.3578 亿元 | 81.3578 亿元 | 0.00% | 一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "医学影像 · 占比",
+    "reported_value": 17.18,
+    "unit": "%",
+    "line_number": 118,
+    "raw_text": "| 医学影像 | 57.17 亿元 | 17.18% | -18.02% | 63.05% | -4.21pct |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 64,
+    "label": "全球渠道与服务 · 评分",
+    "reported_value": 4.5,
+    "unit": "",
+    "line_number": 138,
+    "raw_text": "| 全球渠道与服务 | 4.5 / 5 | 多国注册、本地子公司、服务中心、备件和培训体系 | 海外增长降至个位数且销售服务费用持续上升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 68,
+    "label": "规模与成本 · 评分",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 142,
+    "raw_text": "| 规模与成本 | 4.0 / 5 | 共享制造、供应链、渠道和注册平台 | 毛利率长期跌破 58%，规模优势未转化为利润 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "转换成本 · 评分",
+    "reported_value": 3.5,
+    "unit": "",
+    "line_number": 143,
+    "raw_text": "| 转换成本 | 3.5 / 5 | IVD 流水线、试剂、质控和 IT 嵌入较深 | 集采和检验互认让客户更易切换，单机产出下降 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 74,
+    "label": "现金转换 · 事实",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 189,
+    "raw_text": "| 现金转换 | 2025 经营现金流 101.45 亿元，自由现金流 81.07 亿元，接近归母净利 | 年度利润质量较好 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 75,
+    "label": "单季现金流 · 事实",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 190,
+    "raw_text": "| 单季现金流 | 2026Q1 经营现金流 / 归母净利 59.28% | 偏弱但有季节性，需看半年累计 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "应收账款 · 事实",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 191,
+    "raw_text": "| 应收账款 | 2026Q1 35.74 亿元，较年末 +4.87% | 略快于收入，尚不足以判定恶化 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "安图生物 · TTM PE",
+    "reported_value": 17.23,
+    "unit": "x",
+    "line_number": 287,
+    "raw_text": "| 安图生物 | 31.20 元 | 17.23x | IVD 可比，估值更低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 99,
+    "label": "中性 · 第 5 年 EPS",
+    "reported_value": 8.25,
+    "unit": "",
+    "line_number": 300,
+    "raw_text": "| 中性 | +5% | 20x | 8.25 元 | 165.00 元 | +18.1% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 105,
+    "label": "悲观 · 第 5 年目标价",
+    "reported_value": 81.8,
+    "unit": "",
+    "line_number": 301,
+    "raw_text": "| 悲观 | -2% | 14x | 5.84 元 | 81.80 元 | -41.4% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 102,
+    "label": "悲观 · EPS CAGR",
+    "reported_value": 2.0,
+    "unit": "%",
+    "line_number": 301,
+    "raw_text": "| 悲观 | -2% | 14x | 5.84 元 | 81.80 元 | -41.4% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 113,
+    "label": "保守型 · 更合适的条件",
+    "reported_value": 100.0,
+    "unit": "",
+    "line_number": 368,
+    "raw_text": "| 保守型 | 继续观察 | 100 元附近并确认论文未破坏，或连续两个季度经营修复 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

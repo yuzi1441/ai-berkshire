@@ -1,0 +1,53 @@
+{
+  "company": "工商银行",
+  "code": "601398.SH / 1398.HK",
+  "created_at": "2026-07-13",
+  "financial_cutoff": "2026Q1",
+  "detailed_asset_quality_cutoff": "2025A",
+  "market_cutoff": "2026-07-13 close",
+  "position_context": {
+    "actual_purchase_price": null,
+    "share_class": null,
+    "position_size": null,
+    "tracking_anchor_a_cny": 7.53,
+    "note": "The tracking anchor is not an assumed transaction price."
+  },
+  "health": {
+    "supported_assumptions": 3,
+    "weakened_assumptions": 3,
+    "damaged_assumptions": 0,
+    "broken_assumptions": 0,
+    "triggered_red_lines": 0,
+    "score": 7,
+    "formula": "10 - 0*3 - 0*2 - 3*1 - 0*5"
+  },
+  "valuation": {
+    "latest_disclosed_ordinary_bvps_cny": 11.062471327531828,
+    "static_2025a_eps_cny": 1.0,
+    "static_2025a_pe": 7.53,
+    "latest_disclosed_equity_pb": 0.6806797303293021,
+    "implemented_2025_dps_cny": 0.3103,
+    "trailing_pretax_dividend_yield_pct": 4.1208499335989375,
+    "current_fair_value_range_cny": [6.8, 8.3],
+    "preferred_entry_zone_cny": [6.1, 6.6],
+    "stronger_margin_at_or_below_cny": 6.1,
+    "full_pricing_review_at_or_above_cny": 9.4,
+    "scenario_2028_terminal_prices_cny": {
+      "bull": 10.42,
+      "base": 8.49,
+      "bear": 5.65
+    },
+    "scenario_note": "Terminal prices are undiscounted 2028 values before interim dividends; they are not current intrinsic values."
+  },
+  "internal_thresholds": {
+    "nim_two_comparable_quarters_below_pct": 1.15,
+    "annualized_roe_two_quarters_below_pct": 8.0,
+    "provision_coverage_below_pct": 180.0,
+    "mortgage_npl_above_pct": 1.5,
+    "credit_card_npl_above_pct": 5.5,
+    "personal_business_loan_npl_above_pct": 2.5,
+    "cet1_below_pct": 12.0,
+    "payout_ratio_below_pct": 25.0,
+    "note": "These are thesis discipline thresholds, not company guidance or regulatory minima."
+  }
+}

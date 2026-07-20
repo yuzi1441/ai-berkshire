@@ -1,0 +1,57 @@
+China Shenhua thesis-tracker financial rigor record
+Establishment date: 2026-07-14
+Reference quote date: 2026-07-14 close
+
+Account fields:
+- Actual purchase price: not provided
+- Current position: not provided
+- Target position: not provided
+- The reference prices below are not assumed purchase prices.
+
+Reference valuation:
+- A-share price: CNY 43.42
+- H-share price: HKD 42.30
+- HKD/CNY midpoint: 0.86746
+- H-share CNY equivalent: CNY 36.693558
+- Midpoint TTM EPS: CNY 2.458155397357108
+- A/H midpoint TTM PE: 17.66x / 14.93x
+- A/H PB: 1.96x / 1.65x
+- A/H trailing gross dividend yield: 4.63% / 5.48%
+- H-share discount to A-share: 15.49%
+
+Frozen per-share baselines:
+- 2025 current-share-normalized OCF/share: 750.59 / 216.89434304 = CNY 3.460625
+- 2025 current-share-normalized simplified FCF/share: 266.61 / 216.89434304 = CNY 1.229216
+- 2025 simplified FCF / cash dividend: 266.61 / 418.11 = 0.637655x
+- 2026Q1 short-term borrowing / 2025 OCF: 867 / 750.59 = 1.155091x
+
+Three-year scenario anchors:
+
+Bull:
+- EPS growth: +2%
+- Terminal PE: 17x
+- A/H target: CNY 44.35 / HKD 51.12
+- A/H safety margin at reference prices: +2.10% / +17.25%
+- A-price-implied reference market cap: CNY 961.926 billion
+- A/H annualized total return: +5.16% / +11.23%
+
+Base:
+- EPS growth: -2%
+- Terminal PE: 14x
+- A/H target: CNY 32.39 / HKD 37.34
+- A/H safety margin at reference prices: -34.05% / -13.28%
+- A-price-implied reference market cap: CNY 702.521 billion
+- A/H annualized total return: -4.65% / +0.85%
+
+Bear:
+- EPS growth: -6%
+- Terminal PE: 11x
+- A/H target: CNY 22.46 / HKD 25.89
+- A/H safety margin at reference prices: -93.32% / -63.38%
+- A-price-implied reference market cap: CNY 487.145 billion
+- A/H annualized total return: -15.01% / -10.10%
+
+Safety margin formula:
+(scenario value - reference price) / scenario value
+
+All calculations were executed with tools/financial_rigor.py. Scenario values are terminal anchors rather than present-value DCF outputs. Returns exclude tax, future FX changes, reinvestment, and transaction costs.

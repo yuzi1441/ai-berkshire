@@ -1,0 +1,122 @@
+China Shenhua (601088.SH / 01088.HK) financial rigor record
+Report date: 2026-07-14
+Quote cutoff: 2026-07-14 close
+Information note: includes the 2026H1 forecast released after close and formally dated 2026-07-15.
+
+1. Quote cross-validation
+
+A-share close:
+- Eastmoney: CNY 43.42
+- Tencent: CNY 43.42
+- Deviation: 0.00% (PASS)
+
+H-share close:
+- Eastmoney: HKD 42.30
+- Tencent: HKD 42.30
+- Deviation: 0.00% (PASS)
+
+HKD/CNY midpoint:
+- China Foreign Exchange Trade System via Xinhua: 0.86746
+- H-share CNY equivalent: 42.30 * 0.86746 = CNY 36.693558
+- H-share discount to A-share price: 15.49%
+
+2. Market-cap verification
+
+Input:
+- A-share price: CNY 43.42
+- Total shares: 21,689,434,304
+
+Output from tools/financial_rigor.py:
+- Calculated reference market cap: CNY 941.76 billion
+- Exact value: CNY 941,755,237,479.68
+- Deviation from the reported reference input: 0.00% (PASS)
+
+3. 2026H1 forecast and TTM bridge
+
+Issuer forecast:
+- Net profit: CNY 26.3-29.8 billion
+- Restated year-on-year change: -4.7% to +8.0%
+- Adjusted net profit: CNY 26.1-28.1 billion
+- Adjusted year-on-year change: +7.4% to +15.6%
+
+TTM formula:
+2025 full-year net profit - 2025H1 restated net profit + 2026H1 forecast
+
+TTM net profit:
+- Low: 52.849 - 27.583 + 26.300 = CNY 51.566 billion
+- Mid: 52.849 - 27.583 + 28.050 = CNY 53.316 billion
+- High: 52.849 - 27.583 + 29.800 = CNY 55.066 billion
+
+Current-share EPS:
+- Low: CNY 2.377471
+- Mid: CNY 2.458155
+- High: CNY 2.538840
+
+4. Valuation verification
+
+A-share at CNY 43.42:
+- Midpoint TTM PE: 17.66x
+- Earnings yield: 5.66%
+- PB using 2026Q1 BVPS CNY 22.172178: 1.96x
+- Trailing gross dividend yield using DPS CNY 2.01: 4.63%
+- Simplified P/FCF using 2025 FCF per share CNY 1.229: 35.33x
+- Simplified FCF yield: 2.83%
+
+H-share at CNY-equivalent 36.693558:
+- Midpoint TTM PE: 14.93x
+- Earnings yield: 6.70%
+- PB: 1.65x
+- Trailing gross dividend yield: 5.48%
+- Simplified P/FCF: 29.86x
+- Simplified FCF yield: 3.35%
+
+5. Cash flow and dividend checks
+
+2025:
+- Operating cash flow: CNY 75.059 billion
+- Cash paid for long-term assets: CNY 48.398 billion
+- Simplified FCF proxy: CNY 26.661 billion
+- Cash dividends: CNY 41.811 billion
+- Simplified FCF dividend coverage: 63.77%
+- Dividend / simplified FCF: 156.82%
+
+Current share count impact:
+- Share count increase versus 2025 year-end: 9.16%
+- Cash required to maintain DPS CNY 2.01: CNY 43.596 billion
+- Mechanical DPS at 65% of midpoint TTM profit: about CNY 1.60
+
+6. Three-scenario valuation
+
+Input:
+- Current price: CNY 43.42
+- Midpoint TTM EPS: CNY 2.458155
+- Forecast period: 3 years
+
+Bull:
+- EPS growth: +2%
+- Target PE: 17x
+- Target EPS: CNY 2.61
+- A-share target price: CNY 44.35
+- H-share target price at fixed FX: HKD 51.12
+- Annual DPS assumption: CNY 2.05
+- A/H approximate annualized total return: +5.16% / +11.23%
+
+Base:
+- EPS growth: -2%
+- Target PE: 14x
+- Target EPS: CNY 2.31
+- A-share target price: CNY 32.39
+- H-share target price at fixed FX: HKD 37.34
+- Annual DPS assumption: CNY 1.75
+- A/H approximate annualized total return: -4.65% / +0.85%
+
+Bear:
+- EPS growth: -6%
+- Target PE: 11x
+- Target EPS: CNY 2.04
+- A-share target price: CNY 22.46
+- H-share target price at fixed FX: HKD 25.89
+- Annual DPS assumption: CNY 1.40
+- A/H approximate annualized total return: -15.01% / -10.10%
+
+All arithmetic was executed with tools/financial_rigor.py. Scenario dividend assumptions are not forecasts and exclude tax, reinvestment, future FX changes, and transaction costs.

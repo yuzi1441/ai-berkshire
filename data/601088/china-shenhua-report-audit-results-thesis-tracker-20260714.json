@@ -1,0 +1,82 @@
+[
+  {
+    "id": 4,
+    "label": "2025 简化 FCF / 现金分红 · 建档基线",
+    "reported_value": 0.638,
+    "unit": "x",
+    "fetched_value": 0.6376551625,
+    "fetched_source": "financial_rigor calc：266.61/418.11",
+    "fetched_value2": 0.638,
+    "fetched_source2": "中国神华2025年报现金流与利润分配公告复算"
+  },
+  {
+    "id": 5,
+    "label": "2026Q1 资产负债率 · 建档基线",
+    "reported_value": 29.03,
+    "unit": "%",
+    "fetched_value": 29.03,
+    "fetched_source": "中国神华2026Q1资产负债表",
+    "fetched_value2": 29.03,
+    "fetched_source2": "东方财富2026Q1资产负债率"
+  },
+  {
+    "id": 6,
+    "label": "2026Q1 短期借款 · 建档基线",
+    "reported_value": 867.0,
+    "unit": "亿元",
+    "fetched_value": 867.0,
+    "fetched_source": "中国神华2026Q1资产负债表",
+    "fetched_value2": 867.0,
+    "fetched_source2": "2026Q1重大变动原因表"
+  },
+  {
+    "id": 12,
+    "label": "TTM PE 中值 · A 股",
+    "reported_value": 17.66,
+    "unit": "x",
+    "fetched_value": 17.66,
+    "fetched_source": "financial_rigor verify-valuation：43.42/2.4581553974",
+    "fetched_value2": 17.66,
+    "fetched_source2": "data/601088/china-shenhua-investment-team-snapshot-20260714.json"
+  },
+  {
+    "id": 19,
+    "label": "历史 DPS 2.01 元对应税前股息率 · H 股",
+    "reported_value": 5.48,
+    "unit": "%",
+    "fetched_value": 5.48,
+    "fetched_source": "financial_rigor verify-valuation：2.01/(42.30*0.86746)",
+    "fetched_value2": 5.48,
+    "fetched_source2": "行情预告快照与新华社汇率中间价"
+  },
+  {
+    "id": 24,
+    "label": "乐观 · A 股安全边际",
+    "reported_value": 2.1,
+    "unit": "%",
+    "fetched_value": 2.0969560316,
+    "fetched_source": "financial_rigor calc：(44.35-43.42)/44.35",
+    "fetched_value2": 2.1,
+    "fetched_source2": "thesis-tracker金融严谨性记录"
+  },
+  {
+    "id": 30,
+    "label": "中性 · A 股价值",
+    "reported_value": 32.39,
+    "unit": "",
+    "fetched_value": 32.39,
+    "fetched_source": "financial_rigor三情景模型精确值",
+    "fetched_value2": 32.39,
+    "fetched_source2": "行情预告快照scenario base"
+  },
+  {
+    "id": 46,
+    "label": "主要建仓区 · H 股",
+    "reported_value": 35.0,
+    "unit": "",
+    "fetched_value": 35.0,
+    "fetched_source": "investment-team行动价格带下沿",
+    "fetched_value2": 35.0,
+    "fetched_source2": "thesis-valuation独立复核建仓阈值"
+  }
+]

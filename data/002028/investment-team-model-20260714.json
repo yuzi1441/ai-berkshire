@@ -1,0 +1,90 @@
+{
+  "company": "思源电气",
+  "ticker": "002028.SZ",
+  "cutoff_date": "2026-07-14",
+  "quote_cutoff": "2026-07-14 10:06:48 +08:00",
+  "quote": {
+    "price_cny": 154.27,
+    "tencent_price_cny": 154.27,
+    "sina_price_cny": 154.27,
+    "total_shares": 782573282,
+    "market_cap_100m_cny": 1207.28
+  },
+  "2026_h1_preliminary": {
+    "revenue_100m_cny": 108.032335,
+    "revenue_yoy_percent": 27.14,
+    "operating_profit_100m_cny": 18.128785,
+    "operating_profit_yoy_percent": 18.66,
+    "parent_net_profit_100m_cny": 14.869709,
+    "parent_net_profit_yoy_percent": 15.03,
+    "deducted_parent_net_profit_100m_cny": 14.193797,
+    "deducted_parent_net_profit_yoy_percent": 14.83,
+    "operating_cash_flow_100m_cny_rounded": 2.25,
+    "basic_eps_cny": 1.90,
+    "weighted_roe_percent": 9.15,
+    "bvps_cny": 21.06,
+    "net_margin_percent": 13.7641,
+    "prior_h1_net_margin_percent": 15.2138,
+    "operating_margin_percent": 16.7809,
+    "prior_h1_operating_margin_percent": 17.9804,
+    "note": "Preliminary and unaudited; segment gross margin and H1 capex are not disclosed."
+  },
+  "2026_q2_derived": {
+    "revenue_100m_cny": 62.3456963238,
+    "revenue_yoy_percent": 18.2958,
+    "parent_net_profit_100m_cny": 9.3701802925,
+    "parent_net_profit_yoy_percent": 10.7327
+  },
+  "ttm": {
+    "revenue_100m_cny": 238.4538570533,
+    "parent_net_profit_100m_cny": 33.4441560138,
+    "eps_cny": 4.2736133194,
+    "net_margin_percent": 14.0254,
+    "pe": 36.10,
+    "pb": 7.33,
+    "ps": 5.06,
+    "earnings_yield_percent": 2.77,
+    "fcf_through_2026_q1_100m_cny": 15.4064475362,
+    "p_fcf_through_2026_q1": 78.36
+  },
+  "three_year_scenarios": [
+    {
+      "scenario": "bull",
+      "eps_cagr_percent": 18,
+      "exit_pe": 35,
+      "target_eps_cny": 7.02,
+      "target_price_cny": 245.8,
+      "price_return_percent": 59.3
+    },
+    {
+      "scenario": "base",
+      "eps_cagr_percent": 10,
+      "exit_pe": 28,
+      "target_eps_cny": 5.69,
+      "target_price_cny": 159.3,
+      "price_return_percent": 3.2
+    },
+    {
+      "scenario": "bear",
+      "eps_cagr_percent": 0,
+      "exit_pe": 18,
+      "target_eps_cny": 4.27,
+      "target_price_cny": 76.9,
+      "price_return_percent": -50.1
+    }
+  ],
+  "reverse_expectation": {
+    "target_annual_price_return_percent": 10,
+    "required_eps_cagr_if_exit_pe_28_percent": 19.72,
+    "required_eps_cagr_if_exit_pe_25_percent": 24.33,
+    "sell_side_2026_profit_range_100m_cny": [41.4, 42.0],
+    "required_2026_h2_yoy_for_sell_side_range_percent": [42.83, 46.06]
+  },
+  "price_bands_cny": {
+    "no_chase_or_hold": ">145",
+    "aggressive_small_position": "125-145",
+    "balanced_staged_buy": "110-125",
+    "conservative_margin_of_safety": "90-110",
+    "deep_value_recheck_thesis": "<90"
+  }
+}

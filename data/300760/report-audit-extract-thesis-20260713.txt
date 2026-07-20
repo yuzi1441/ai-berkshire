@@ -1,0 +1,201 @@
+======================================================================
+报告数据抽检清单
+文件：reports/迈瑞医疗/迈瑞医疗-thesis.md
+总提取数据点：92  |  抽样比例：15%  |  抽检数量：14
+随机种子：300760（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2      9  建立日期 · 内容                                 2026.00  
+  5     15  计划买入纪律 · 内容                                115.00  
+  8     26  统一证据包 · 来源                              300760.00  
+ 20     40  2025 收入 / 归母净利 · 结论                          9.38  %
+ 36    103  PB（归母口径） · 普通买入上限 115 元                      3.48  x
+ 38    104  P/FCF · 当前 139.68 元                         21.46  x
+ 57    116  市值 / 第五年目标市值 · 悲观情景                        991.78  亿元
+ 64    119  10% 要求回报现值 · 乐观情景                          180.98  
+ 68    120  115 元相对情景现值 · 中性情景                           3.64  %
+ 70    144  成立 / 有条件成立 · 数量                              3.00  
+ 74    146  受损 · 扣分                                      2.00  
+ 75    149  初始健康度 · 数量                                  10.00  
+ 76    157  2026-07-13 · 健康度                             6.00  
+ 87    180  IVD 增长质量 · 改善线                               5.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "建立日期 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 9,
+    "raw_text": "| 建立日期 | 2026-07-13 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "计划买入纪律 · 内容",
+    "reported_value": 115.0,
+    "unit": "",
+    "line_number": 15,
+    "raw_text": "| 计划买入纪律 | 115 元以下才进入普通分批研究区；100 元附近才有更强安全边际 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "统一证据包 · 来源",
+    "reported_value": 300760.0,
+    "unit": "",
+    "line_number": 26,
+    "raw_text": "| 统一证据包 | `data/300760/mindray-evidence-pack-20260713.md` | 关键事实、计算口径和来源索引 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 20,
+    "label": "2025 收入 / 归母净利 · 结论",
+    "reported_value": 9.38,
+    "unit": "%",
+    "line_number": 40,
+    "raw_text": "| 2025 收入 / 归母净利 | 332.82 亿元 / 81.36 亿元 | 同比 -9.38% / -30.28% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "PB（归母口径） · 普通买入上限 115 元",
+    "reported_value": 3.48,
+    "unit": "x",
+    "line_number": 103,
+    "raw_text": "| PB（归母口径） | 4.22x | 3.48x | 3.02x |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 38,
+    "label": "P/FCF · 当前 139.68 元",
+    "reported_value": 21.46,
+    "unit": "x",
+    "line_number": 104,
+    "raw_text": "| P/FCF | 21.46x | 17.67x | 15.37x |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "市值 / 第五年目标市值 · 悲观情景",
+    "reported_value": 991.78,
+    "unit": "亿元",
+    "line_number": 116,
+    "raw_text": "| 市值 / 第五年目标市值 | 1,394.31 亿元 | 3,154.77 亿元 | 2,000.53 亿元 | 991.78 亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 64,
+    "label": "10% 要求回报现值 · 乐观情景",
+    "reported_value": 180.98,
+    "unit": "",
+    "line_number": 119,
+    "raw_text": "| 10% 要求回报现值 | 不适用 | 180.98 元 | 119.35 元 | 64.69 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 68,
+    "label": "115 元相对情景现值 · 中性情景",
+    "reported_value": 3.64,
+    "unit": "%",
+    "line_number": 120,
+    "raw_text": "| 115 元相对情景现值 | 买入纪律 | +36.46% | +3.64% | -77.78% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "成立 / 有条件成立 · 数量",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 144,
+    "raw_text": "| 成立 / 有条件成立 | 3 | 0 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 74,
+    "label": "受损 · 扣分",
+    "reported_value": 2.0,
+    "unit": "",
+    "line_number": 146,
+    "raw_text": "| 受损 | 1 | -2 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 75,
+    "label": "初始健康度 · 数量",
+    "reported_value": 10.0,
+    "unit": "",
+    "line_number": 149,
+    "raw_text": "| **初始健康度** |  | **10 - 2 - 2 = 6/10** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "2026-07-13 · 健康度",
+    "reported_value": 6.0,
+    "unit": "",
+    "line_number": 157,
+    "raw_text": "| 2026-07-13 | 6/10 | 首次建档；国际增长和资产负债表成立，国内修复与 IVD 盈利质量弱化，综合利润修复受损；无红线触发 | **空仓等待，不在 139.68 元建仓；健康度恢复至 7/10 且价格不高于 115 元后",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "IVD 增长质量 · 改善线",
+    "reported_value": 5.0,
+    "unit": "%",
+    "line_number": 180,
+    "raw_text": "| IVD 增长质量 | 收入不低于 +5%，份额提升且毛利率稳定 | 收入增长但毛利率继续小幅下降 | 收入不增或毛利率再下降超过 2pct |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

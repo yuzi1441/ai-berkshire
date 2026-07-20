@@ -1,0 +1,85 @@
+{
+  "company": {
+    "name_zh": "恒瑞医药",
+    "a_share_ticker": "600276.SH",
+    "h_share_ticker": "01276.HK",
+    "cutoff_date": "2026-07-13"
+  },
+  "quotes": {
+    "a_share_cny": 55.75,
+    "a_share_date": "2026-07-13",
+    "a_share_sources": {
+      "tencent": 55.75,
+      "sina": 55.75
+    },
+    "h_share_hkd": 59.05,
+    "h_share_date": "2026-07-13",
+    "hkd_cny_reference": 0.8641015,
+    "hkd_cny_reference_date": "2026-07-10"
+  },
+  "shares": {
+    "a_shares": 6379002274,
+    "h_shares": 258197600,
+    "total_issued_shares": 6637199874,
+    "treasury_a_shares_20260630": 8310450
+  },
+  "market_cap": {
+    "a_price_equivalent_all_shares_cny": 370023892975.5,
+    "split_market_approx_cny": 368804000000.0,
+    "note": "The first value applies the A-share price to all issued A/H shares; the second uses each market price and the 2026-07-10 ECB reference FX rate."
+  },
+  "reported_financials_cny": {
+    "fy2025_revenue": 31629416193.83,
+    "fy2025_parent_net_profit": 7711054811.98,
+    "fy2025_operating_cash_flow": 11235378130.63,
+    "fy2025_capex_proxy": 2961906284.58,
+    "fy2025_license_out_revenue": 3392409960.56,
+    "q1_2026_revenue": 8140565320.77,
+    "q1_2025_revenue": 7205611122.72,
+    "q1_2026_parent_net_profit": 2282268233.13,
+    "q1_2025_parent_net_profit": 1874055519.98,
+    "q1_2026_operating_cash_flow": 786445900.71,
+    "q1_2025_operating_cash_flow": 555174088.51,
+    "q1_2026_capex_proxy": 704818964.87,
+    "q1_2025_capex_proxy": 702031901.52,
+    "q1_2026_parent_equity": 63626264350.1,
+    "q1_2026_cash": 40526883022.78
+  },
+  "derived_ttm": {
+    "revenue_cny": 32564370391.88,
+    "parent_net_profit_cny": 8119267525.13,
+    "free_cash_flow_proxy_cny": 8501956594.9,
+    "revenue_per_share_cny": 4.906341681745173,
+    "eps_cny": 1.2232971251831253,
+    "fcf_per_share_cny": 1.2809553360303099,
+    "bvps_mrq_cny": 9.586311329773885,
+    "pe_ttm": 45.57,
+    "ps_ttm": 11.36,
+    "pb_mrq": 5.82,
+    "p_fcf_ttm": 43.52,
+    "dividend_yield_pct": 0.36
+  },
+  "three_scenario": {
+    "years": 3,
+    "bull": { "eps_growth": 0.18, "exit_pe": 45, "target_price_cny": 90.4, "upside_pct": 62.2 },
+    "base": { "eps_growth": 0.12, "exit_pe": 35, "target_price_cny": 60.2, "upside_pct": 7.9 },
+    "bear": { "eps_growth": 0.02, "exit_pe": 25, "target_price_cny": 32.5, "upside_pct": -41.8 }
+  },
+  "incremental_events": [
+    {
+      "disclosure_date": "2026-07-08",
+      "event": "SHR-4685 clinical trial approval",
+      "source": "https://static.cninfo.com.cn/finalpage/2026-07-08/1225413220.PDF"
+    },
+    {
+      "disclosure_date": "2026-07-10",
+      "event": "Camrelizumab plus apatinib FDA complete response letter",
+      "source": "https://static.cninfo.com.cn/finalpage/2026-07-10/1225418138.PDF"
+    },
+    {
+      "disclosure_date": "2026-07-11",
+      "event": "Ioversol added to the 2026 National Essential Medicines List",
+      "source": "https://static.cninfo.com.cn/finalpage/2026-07-11/1225418806.PDF"
+    }
+  ]
+}

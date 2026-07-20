@@ -1,0 +1,409 @@
+======================================================================
+报告数据抽检清单
+文件：reports/工商银行/工商银行-investment-team-20260713.md
+总提取数据点：199  |  抽样比例：15%  |  抽检数量：30
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  7     31  营业收入 · 2026Q1                             2303.70  亿元
+  8     31  营业收入 · 关键变化                                  2.00  %
+  9     32  归母净利润 · 2024A                             3658.63  亿元
+ 23     36  平均 ROA · 2024A                               0.78  %
+ 24     36  平均 ROA · 2025A                               0.72  %
+ 27     37  净利息收益率（NIM） · 2025A                          1.28  %
+ 29     38  净利差 · 2024A                                  1.23  %
+ 36     40  客户存款 · 2025A                                37.31  万亿
+ 51     44  资本充足率 · 2026Q1                              18.21  %
+ 56     53  最新已披露权益口径 PB · 数值                            0.68  倍
+ 57     53  最新已披露权益口径 PB · 口径说明                          7.53  
+ 58     54  2025 全年每股股息 · 数值                             0.31  
+ 60     55  A 股追踪税前股息率 · 数值                              4.12  %
+ 63     56  A 股部分市值 · 口径说明                            2696.12  亿
+ 71     90  2026Q1 营业收入 · 一手报告                        2303.70  亿元
+109    130  中国银行 · 核心一级资本充足率                            12.53  %
+108    130  中国银行 · 拨备覆盖率                               200.37  %
+115    131  招商银行 · 拨备覆盖率                               391.79  %
+130    162  重组贷款 · 判断                                   12.18  %
+140    206  保持当前派息 · 派息率                                31.00  %
+144    206  保持当前派息 · 对应价值                                6.82  
+152    215  乐观 · 2028E EPS                               1.16  
+155    215  乐观 · 较 7.53 元价格变化                           38.40  %
+164    217  悲观 · 2028 年末目标价                              5.65  
+167    225  2021 年末 · 同期 BVPS                            8.15  
+174    227  2023 年末 · 年末 PB                              0.50  倍
+189    240  合理与过渡区 · 估值依据与条件                             6.80  
+188    240  合理与过渡区 · A 股价格                               6.60  
+190    241  偏充分定价 · A 股价格                                8.30  
+197    303  已持有者 · 建议                                    7.53  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 7,
+    "label": "营业收入 · 2026Q1",
+    "reported_value": 2303.7,
+    "unit": "亿元",
+    "line_number": 31,
+    "raw_text": "| 营业收入 | 8,218.03 亿元 | 8,382.70 亿元 | 2,303.70 亿元 | 全年同比 +2.00%；一季度同比 +8.27% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "营业收入 · 关键变化",
+    "reported_value": 2.0,
+    "unit": "%",
+    "line_number": 31,
+    "raw_text": "| 营业收入 | 8,218.03 亿元 | 8,382.70 亿元 | 2,303.70 亿元 | 全年同比 +2.00%；一季度同比 +8.27% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "归母净利润 · 2024A",
+    "reported_value": 3658.63,
+    "unit": "亿元",
+    "line_number": 32,
+    "raw_text": "| 归母净利润 | 3,658.63 亿元 | 3,685.62 亿元 | 869.41 亿元 | 全年同比 +0.74%；一季度同比 +3.31% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "平均 ROA · 2024A",
+    "reported_value": 0.78,
+    "unit": "%",
+    "line_number": 36,
+    "raw_text": "| 平均 ROA | 0.78% | 0.72% | 0.64%（年化） | 规模增长未转为等比例回报 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "平均 ROA · 2025A",
+    "reported_value": 0.72,
+    "unit": "%",
+    "line_number": 36,
+    "raw_text": "| 平均 ROA | 0.78% | 0.72% | 0.64%（年化） | 规模增长未转为等比例回报 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "净利息收益率（NIM） · 2025A",
+    "reported_value": 1.28,
+    "unit": "%",
+    "line_number": 37,
+    "raw_text": "| 净利息收益率（NIM） | 1.42% | 1.28% | 1.29%（年化） | 一季度与全年平均余额口径不同，不能据此确认拐点 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "净利差 · 2024A",
+    "reported_value": 1.23,
+    "unit": "%",
+    "line_number": 38,
+    "raw_text": "| 净利差 | 1.23% | 1.15% | 未披露 | 不得与 NIM 混称 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "客户存款 · 2025A",
+    "reported_value": 37.31,
+    "unit": "万亿",
+    "line_number": 40,
+    "raw_text": "| 客户存款 | 34.84 万亿元 | 37.31 万亿元 | 38.59 万亿元 | 全年 +7.1%；一季度较年末 +3.42% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "资本充足率 · 2026Q1",
+    "reported_value": 18.21,
+    "unit": "%",
+    "line_number": 44,
+    "raw_text": "| 资本充足率 | 19.39% | 18.76% | 18.21% | 资本仍充裕，但持续消耗 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "最新已披露权益口径 PB · 数值",
+    "reported_value": 0.681,
+    "unit": "倍",
+    "line_number": 53,
+    "raw_text": "| 最新已披露权益口径 PB | 0.681 倍 | 7.53 / 2026Q1 普通股 BVPS 11.06 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "最新已披露权益口径 PB · 口径说明",
+    "reported_value": 7.53,
+    "unit": "",
+    "line_number": 53,
+    "raw_text": "| 最新已披露权益口径 PB | 0.681 倍 | 7.53 / 2026Q1 普通股 BVPS 11.06 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "2025 全年每股股息 · 数值",
+    "reported_value": 0.3103,
+    "unit": "",
+    "line_number": 54,
+    "raw_text": "| 2025 全年每股股息 | 0.3103 元 | 中期 0.1414 元 + 末期 0.1689 元，已实施 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "A 股追踪税前股息率 · 数值",
+    "reported_value": 4.12,
+    "unit": "%",
+    "line_number": 55,
+    "raw_text": "| A 股追踪税前股息率 | 4.12% | 2025 DPS / 7.53；不代表未来派息已锁定 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "A 股部分市值 · 口径说明",
+    "reported_value": 2696.12,
+    "unit": "亿",
+    "line_number": 56,
+    "raw_text": "| A 股部分市值 | 2.0302 万亿元 | 2,696.12 亿 A 股乘 7.53 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "2026Q1 营业收入 · 一手报告",
+    "reported_value": 2303.7,
+    "unit": "亿元",
+    "line_number": 90,
+    "raw_text": "| 2026Q1 营业收入 | 2,303.70 亿元 | 2,303.70 亿元 | 0.00% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "中国银行 · 核心一级资本充足率",
+    "reported_value": 12.53,
+    "unit": "%",
+    "line_number": 130,
+    "raw_text": "| 中国银行 | 8.94% | 1.26% | 1.23% | 200.37% | 12.53% | 8.00 倍 | 0.708 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 108,
+    "label": "中国银行 · 拨备覆盖率",
+    "reported_value": 200.37,
+    "unit": "%",
+    "line_number": 130,
+    "raw_text": "| 中国银行 | 8.94% | 1.26% | 1.23% | 200.37% | 12.53% | 8.00 倍 | 0.708 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "招商银行 · 拨备覆盖率",
+    "reported_value": 391.79,
+    "unit": "%",
+    "line_number": 131,
+    "raw_text": "| 招商银行 | 13.44% | 1.87% | 0.94% | 391.79% | 14.16% | 6.54 倍 | 0.858 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 130,
+    "label": "重组贷款 · 判断",
+    "reported_value": 12.18,
+    "unit": "%",
+    "line_number": 162,
+    "raw_text": "| 重组贷款 | 1,390.86 亿元 | 1,560.27 亿元 | +12.18% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 140,
+    "label": "保持当前派息 · 派息率",
+    "reported_value": 31.0,
+    "unit": "%",
+    "line_number": 206,
+    "raw_text": "| 保持当前派息 | 8.8% | 31% | 6.07% | 10.5% | 0.616 倍 | 6.82 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 144,
+    "label": "保持当前派息 · 对应价值",
+    "reported_value": 6.82,
+    "unit": "",
+    "line_number": 206,
+    "raw_text": "| 保持当前派息 | 8.8% | 31% | 6.07% | 10.5% | 0.616 倍 | 6.82 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 152,
+    "label": "乐观 · 2028E EPS",
+    "reported_value": 1.16,
+    "unit": "",
+    "line_number": 215,
+    "raw_text": "| 乐观 | +5% | 1.16 元 | 9 倍 | 10.42 元 | +38.4% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 155,
+    "label": "乐观 · 较 7.53 元价格变化",
+    "reported_value": 38.4,
+    "unit": "%",
+    "line_number": 215,
+    "raw_text": "| 乐观 | +5% | 1.16 元 | 9 倍 | 10.42 元 | +38.4% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 164,
+    "label": "悲观 · 2028 年末目标价",
+    "reported_value": 5.65,
+    "unit": "",
+    "line_number": 217,
+    "raw_text": "| 悲观 | 每年收缩 2% | 0.94 元 | 6 倍 | 5.65 元 | 下跌 25.0% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 167,
+    "label": "2021 年末 · 同期 BVPS",
+    "reported_value": 8.15,
+    "unit": "",
+    "line_number": 225,
+    "raw_text": "| 2021 年末 | 4.63 元 | 8.15 元 | 0.568 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 174,
+    "label": "2023 年末 · 年末 PB",
+    "reported_value": 0.501,
+    "unit": "倍",
+    "line_number": 227,
+    "raw_text": "| 2023 年末 | 4.78 元 | 9.55 元 | 0.501 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 189,
+    "label": "合理与过渡区 · 估值依据与条件",
+    "reported_value": 6.8,
+    "unit": "",
+    "line_number": 240,
+    "raw_text": "| 合理与过渡区 | 6.60-8.30 元 | 持有；低端可小额增配 | 正式合理价值锚为 6.80-8.30 元；6.60-6.80 元是过渡区 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 188,
+    "label": "合理与过渡区 · A 股价格",
+    "reported_value": 6.6,
+    "unit": "",
+    "line_number": 240,
+    "raw_text": "| 合理与过渡区 | 6.60-8.30 元 | 持有；低端可小额增配 | 正式合理价值锚为 6.80-8.30 元；6.60-6.80 元是过渡区 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 190,
+    "label": "偏充分定价 · A 股价格",
+    "reported_value": 8.3,
+    "unit": "",
+    "line_number": 241,
+    "raw_text": "| 偏充分定价 | 8.30-9.40 元 | 不追高，等待盈利验证 | 高于 0.75 倍 BVPS 后更依赖 ROE 改善 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 197,
+    "label": "已持有者 · 建议",
+    "reported_value": 7.53,
+    "unit": "",
+    "line_number": 303,
+    "raw_text": "| 已持有者 | 7.53 元可持有观察；若基本面未改善且价格充分定价，可减仓 | 9.40 元以上重点复核 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

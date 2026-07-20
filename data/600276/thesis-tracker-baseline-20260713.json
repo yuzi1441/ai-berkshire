@@ -1,0 +1,54 @@
+{
+  "company": "恒瑞医药",
+  "ticker": "600276.SH / 01276.HK",
+  "mode": "establish_observation_thesis",
+  "established_date": "2026-07-13",
+  "reference_price_cny": 55.75,
+  "actual_cost_cny": null,
+  "position": null,
+  "core_thesis_length_chars": 189,
+  "health": {
+    "score": 7,
+    "green_assumptions": 4,
+    "yellow_assumptions": 3,
+    "red_assumptions": 0,
+    "broken_assumptions": 0,
+    "triggered_red_lines": 0,
+    "formula": "10 - (0*3) - (0*2) - (3*1) - (0*5) = 7"
+  },
+  "assumptions": [
+    { "id": 1, "name": "innovation_drug_commercialization", "status": "green" },
+    { "id": 2, "name": "product_sales_ex_license", "status": "green" },
+    { "id": 3, "name": "cash_conversion_and_balance_sheet", "status": "green" },
+    { "id": 4, "name": "rd_quality_and_capitalization", "status": "green" },
+    { "id": 5, "name": "bd_terminal_value_realization", "status": "yellow" },
+    { "id": 6, "name": "global_cmc_execution", "status": "yellow" },
+    { "id": 7, "name": "governance_and_succession", "status": "yellow" }
+  ],
+  "valuation": {
+    "ttm_eps_cny": 1.2232971251831253,
+    "pe_ttm": 45.57,
+    "terminal_years": 3,
+    "terminal_prices_cny": {
+      "bull": 90.4,
+      "base": 60.2,
+      "bear": 32.5
+    },
+    "present_values_at_10pct_cny": {
+      "bull": 67.9188580015,
+      "base": 45.2291510143,
+      "bear": 24.4177310293
+    },
+    "base_present_value_by_required_return_cny": {
+      "10pct": 45.23,
+      "12pct": 42.85,
+      "15pct": 39.58
+    }
+  },
+  "next_review": [
+    "2026 half-year report",
+    "FDA remediation, reinspection, resubmission or decision for camrelizumab plus apatinib",
+    "major Phase III result, safety action or partner termination",
+    "audit, management or related-party governance event"
+  ]
+}

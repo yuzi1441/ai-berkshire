@@ -1,0 +1,122 @@
+[
+  {
+    "id": 4,
+    "label": "实际买入价 · 内容",
+    "reported_value": 28.42,
+    "unit": "元",
+    "line_number": 12,
+    "raw_text": "用户未提供实际买入价；28.42元为建档行情锚",
+    "fetched_value": 28.42,
+    "fetched_source": "腾讯2026-07-13收盘行情",
+    "fetched_value2": 28.42,
+    "fetched_source2": "新浪2026-07-13收盘行情"
+  },
+  {
+    "id": 7,
+    "label": "总股本 · 建档值",
+    "reported_value": 244.6822,
+    "unit": "亿股",
+    "line_number": 26,
+    "raw_text": "总股本244.6822亿股",
+    "fetched_value": 244.68217716,
+    "fetched_source": "长江电力2025年报",
+    "fetched_value2": 244.68217716,
+    "fetched_source2": "腾讯2026-07-13行情"
+  },
+  {
+    "id": 9,
+    "label": "TTM EPS / PE · 建档值",
+    "reported_value": 1.4747,
+    "unit": "元",
+    "line_number": 28,
+    "raw_text": "TTM EPS 1.4747元",
+    "fetched_value": 1.4747,
+    "fetched_source": "2025年报与2025Q1、2026Q1报告滚动计算",
+    "fetched_value2": 1.4747,
+    "fetched_source2": "financial_rigor.py估值输入"
+  },
+  {
+    "id": 15,
+    "label": "2025 全年分红 · 证据与含义",
+    "reported_value": 0.21,
+    "unit": "元/股",
+    "line_number": 31,
+    "raw_text": "2025中期分红0.21元/股，包含在全年1.00元内",
+    "fetched_value": 0.21,
+    "fetched_source": "2025年中期权益分派实施公告",
+    "fetched_value2": 0.21,
+    "fetched_source2": "2025年度权益分派实施公告2026-027"
+  },
+  {
+    "id": 16,
+    "label": "当前静态股息率 · 建档值",
+    "reported_value": 3.52,
+    "unit": "%",
+    "line_number": 32,
+    "raw_text": "1.00/28.42=3.52%",
+    "fetched_value": 3.52,
+    "fetched_source": "financial_rigor.py verify-valuation",
+    "fetched_value2": 3.51865,
+    "fetched_source2": "1.00/28.42精确复算"
+  },
+  {
+    "id": 36,
+    "label": "中性 · 当前相对价值",
+    "reported_value": 23.6,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "现价相对中性折现价值溢价23.6%",
+    "fetched_value": 23.60678,
+    "fetched_source": "financial_rigor.py calc",
+    "fetched_value2": 23.60678,
+    "fetched_source2": "28.42/22.9922665-1复算"
+  },
+  {
+    "id": 44,
+    "label": "股价/五年终值 · 乐观",
+    "reported_value": 37.7,
+    "unit": "元",
+    "line_number": 115,
+    "raw_text": "乐观情景五年终值37.7元",
+    "fetched_value": 37.7,
+    "fetched_source": "financial_rigor.py three-scenario",
+    "fetched_value2": 37.7,
+    "fetched_source2": "investment-team计算记录"
+  },
+  {
+    "id": 48,
+    "label": "对应市值 · 乐观",
+    "reported_value": 9225.0,
+    "unit": "亿元",
+    "line_number": 116,
+    "raw_text": "37.7元对应市值约9225亿元",
+    "fetched_value": 9224.52,
+    "fetched_source": "financial_rigor.py 37.7x244.68217716",
+    "fetched_value2": 9224.52,
+    "fetched_source2": "情景终值与年报股本复算"
+  },
+  {
+    "id": 60,
+    "label": "当前安全边际 · 中性",
+    "reported_value": 23.6,
+    "unit": "%",
+    "line_number": 119,
+    "raw_text": "当前相对中性价值溢价约23.6%",
+    "fetched_value": 23.60678,
+    "fetched_source": "financial_rigor.py calc",
+    "fetched_value2": 23.60678,
+    "fetched_source2": "估值折现模型复算"
+  },
+  {
+    "id": 66,
+    "label": "2026-07-13 · 动作建议",
+    "reported_value": 28.42,
+    "unit": "元",
+    "line_number": 174,
+    "raw_text": "不在28.42元加仓",
+    "fetched_value": 28.42,
+    "fetched_source": "腾讯2026-07-13收盘行情",
+    "fetched_value2": 28.42,
+    "fetched_source2": "新浪2026-07-13收盘行情"
+  }
+]

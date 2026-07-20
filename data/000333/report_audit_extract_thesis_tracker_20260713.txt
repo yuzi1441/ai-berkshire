@@ -1,0 +1,149 @@
+======================================================================
+报告数据抽检清单
+文件：reports\美的集团\美的集团-thesis.md
+总提取数据点：63  |  抽样比例：15%  |  抽检数量：10
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2      9  建立日期 · 内容                                 2026.00  
+  7     27  官方财报 · 来源                                 2025.00  
+  8     28  同日团队报告 · 来源                           20260713.00  
+  9     29  结构化快照 · 来源                                 333.00  
+ 16     40  PB · 论文含义                                    1.00  
+ 15     40  PB · 数值                                      2.63  x
+ 18     41  静态税前股息率 · 论文含义                            2025.00  
+ 41    120  从 80.40 元出发的含股息年化回报 · 乐观情景                  17.31  %
+ 48    155  🟡 边际弱化 · 数量                                  3.00  
+ 60    188  现金与营运资本 · 进一步受损                              0.70  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "建立日期 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 9,
+    "raw_text": "| 建立日期 | 2026-07-13 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "官方财报 · 来源",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 27,
+    "raw_text": "| 官方财报 | 美的集团 2025 年年度报告、2026 年第一季度报告 | 收入、利润、现金流、分部资产与利润、股本和归母权益 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "同日团队报告 · 来源",
+    "reported_value": 20260713.0,
+    "unit": "",
+    "line_number": 28,
+    "raw_text": "| 同日团队报告 | `reports/美的集团/美的集团-investment-team-20260713.md` | 商业模式、护城河、管理层、风险、行业与估值基线 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "结构化快照 · 来源",
+    "reported_value": 333.0,
+    "unit": "",
+    "line_number": 29,
+    "raw_text": "| 结构化快照 | `data/000333/financial_analyst_snapshot_20260713.json` | 行情、股本、财务输入、估值与资本事项的可复现记录 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "PB · 论文含义",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 40,
+    "raw_text": "| PB | 2.63x / 3.00x | Q1 报告口径 / 扣除已实施末期股息后的保守估算 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "PB · 数值",
+    "reported_value": 2.63,
+    "unit": "x",
+    "line_number": 40,
+    "raw_text": "| PB | 2.63x / 3.00x | Q1 报告口径 / 扣除已实施末期股息后的保守估算 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "静态税前股息率 · 论文含义",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 41,
+    "raw_text": "| 静态税前股息率 | 5.35% | 按 2025 年每股 4.30 元回看，不是未来承诺 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 41,
+    "label": "从 80.40 元出发的含股息年化回报 · 乐观情景",
+    "reported_value": 17.31,
+    "unit": "%",
+    "line_number": 120,
+    "raw_text": "| 从 80.40 元出发的含股息年化回报 | 不适用 | +17.31% | +7.61% | -4.10% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "🟡 边际弱化 · 数量",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 155,
+    "raw_text": "| 🟡 边际弱化 | 3 | -3 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "现金与营运资本 · 进一步受损",
+    "reported_value": 0.7,
+    "unit": "",
+    "line_number": 188,
+    "raw_text": "| 现金与营运资本 | 半年度 OCF/归母净利不低于 0.9；应收、合同资产和存货增速接近收入 | OCF/归母 0.7-0.9，营运资本仍需解释 | OCF/归母低于 0.7，且经营性资产增速高于收入 10pct 以上 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

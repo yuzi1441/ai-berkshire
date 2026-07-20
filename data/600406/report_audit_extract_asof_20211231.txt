@@ -1,0 +1,253 @@
+======================================================================
+报告数据抽检清单
+文件：reports\国电南瑞\国电南瑞-investment-team-asof-20211231.md
+总提取数据点：117  |  抽样比例：15%  |  抽检数量：18
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     39  风险与管理层 · 评分                                  3.00  
+  5     40  综合 · 评分                                      3.10  
+ 15     68  营业收入 · 截面 TTM                              416.36  
+ 14     68  营业收入 · 2021 年1-9月                          232.32  
+ 12     68  营业收入 · 2020 全年                             385.02  
+ 18     69  归母净利润 · 2021 年1-9月                          31.93  
+ 29     72  会计口径 FCF · 2020 年1-9月                       27.13  
+ 28     72  会计口径 FCF · 2020 全年                          21.71  
+ 30     72  会计口径 FCF · 2021 年1-9月                       30.96  
+ 32     80  货币资金 · 金额                                  105.41  亿元
+ 36     84  负债合计 · 金额                                  311.70  亿元
+ 55    119  继电保护及柔性输电 · 毛利率                             38.06  %
+115    173  财务与估值结论                                      3.00  
+ 70    217  许继电气 · 收盘价                                  26.10  
+ 76    219  东方电子 · 收盘价                                   8.47  
+ 82    221  国电南瑞 · 收盘价                                  40.03  
+ 87    321  市值 · 结果                                   2219.84  亿元
+ 95    341  乐观 · 三年净利年增速                                15.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "风险与管理层 · 评分",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "| 风险与管理层 | 李录 | 3.0/5 | 内控和组织能力合格；关联客户与控股股东重合需治理折价 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "综合 · 评分",
+    "reported_value": 3.1,
+    "unit": "",
+    "line_number": 40,
+    "raw_text": "| **综合** | 四角色汇总 | **3.1/5** | **好公司，不是基准价下的高赔率投资** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "营业收入 · 截面 TTM",
+    "reported_value": 416.36,
+    "unit": "",
+    "line_number": 68,
+    "raw_text": "| 营业收入 | 385.02 | 200.98 | 232.32 | **416.36** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "营业收入 · 2021 年1-9月",
+    "reported_value": 232.32,
+    "unit": "",
+    "line_number": 68,
+    "raw_text": "| 营业收入 | 385.02 | 200.98 | 232.32 | **416.36** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "营业收入 · 2020 全年",
+    "reported_value": 385.02,
+    "unit": "",
+    "line_number": 68,
+    "raw_text": "| 营业收入 | 385.02 | 200.98 | 232.32 | **416.36** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "归母净利润 · 2021 年1-9月",
+    "reported_value": 31.93,
+    "unit": "",
+    "line_number": 69,
+    "raw_text": "| 归母净利润 | 48.52 | 25.49 | 31.93 | **54.96** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "会计口径 FCF · 2020 年1-9月",
+    "reported_value": 27.13,
+    "unit": "",
+    "line_number": 72,
+    "raw_text": "| 会计口径 FCF | 21.71 | -27.13 | -30.96 | **17.89** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 28,
+    "label": "会计口径 FCF · 2020 全年",
+    "reported_value": 21.71,
+    "unit": "",
+    "line_number": 72,
+    "raw_text": "| 会计口径 FCF | 21.71 | -27.13 | -30.96 | **17.89** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 30,
+    "label": "会计口径 FCF · 2021 年1-9月",
+    "reported_value": 30.96,
+    "unit": "",
+    "line_number": 72,
+    "raw_text": "| 会计口径 FCF | 21.71 | -27.13 | -30.96 | **17.89** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "货币资金 · 金额",
+    "reported_value": 105.41,
+    "unit": "亿元",
+    "line_number": 80,
+    "raw_text": "| 货币资金 | 105.41 亿元 | 提供流动性缓冲 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "负债合计 · 金额",
+    "reported_value": 311.7,
+    "unit": "亿元",
+    "line_number": 84,
+    "raw_text": "| 负债合计 | 311.70 亿元 | 资产负债率约 45.14% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "继电保护及柔性输电 · 毛利率",
+    "reported_value": 38.06,
+    "unit": "%",
+    "line_number": 119,
+    "raw_text": "| 继电保护及柔性输电 | 60.14 亿元 | 38.06% | 技术附加值较高的利润池 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "财务与估值结论",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 173,
+    "raw_text": "**财务与估值结论：3.0/5。** 报表盈利质量不差，现金转化是短板；基准价对“稳定双位数增长 + 高 ROE + 现金改善”的要求过高。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "许继电气 · 收盘价",
+    "reported_value": 26.1,
+    "unit": "",
+    "line_number": 217,
+    "raw_text": "| 许继电气 | 26.10 元 | 7.83 亿元 | 33.60x | 直流输电、变配电、配网与国网集采 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "东方电子 · 收盘价",
+    "reported_value": 8.47,
+    "unit": "",
+    "line_number": 219,
+    "raw_text": "| 东方电子 | 8.47 元 | 3.09 亿元 | 36.80x | 配网、调度信息化与能源管理 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "国电南瑞 · 收盘价",
+    "reported_value": 40.03,
+    "unit": "",
+    "line_number": 221,
+    "raw_text": "| **国电南瑞** | **40.03 元** | **54.96 亿元** | **40.39x** | 业务最完整，估值也高于样本上沿 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "市值 · 结果",
+    "reported_value": 2219.84,
+    "unit": "亿元",
+    "line_number": 321,
+    "raw_text": "| 市值 | 2,219.84 亿元 | 价格乘股本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 95,
+    "label": "乐观 · 三年净利年增速",
+    "reported_value": 15.0,
+    "unit": "%",
+    "line_number": 341,
+    "raw_text": "| 乐观 | +15% | 38x | 1.51 元 | **57.3 元** | +43.1% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

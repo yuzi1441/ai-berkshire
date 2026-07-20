@@ -1,0 +1,136 @@
+======================================================================
+报告数据抽检清单
+文件：reports/工商银行/工商银行-thesis.md
+总提取数据点：55  |  抽样比例：15%  |  抽检数量：9
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2     38  H 股收盘价 · 建档值                                 6.83  
+  7     43  最新已披露权益口径 PB · 建档值                           0.68  倍
+  8     44  2025 全年 DPS · 建档值                            0.31  
+  9     45  追踪税前股息率 · 建档值                                4.12  %
+ 15     51  2025 / 2026Q1 加权 ROE · 建档值                   9.45  %
+ 16     52  2026Q1 不良贷款率 · 建档值                           1.31  %
+ 18     54  2026Q1 核心一级资本充足率 · 建档值                      13.26  %
+ 41    133  更强安全边际 · 价格上限                                6.10  
+ 48    137  充分定价 · 价格下限                                  9.40  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "H 股收盘价 · 建档值",
+    "reported_value": 6.83,
+    "unit": "",
+    "line_number": 38,
+    "raw_text": "| H 股收盘价 | 6.83 港元 | 腾讯与新浪同日收盘一致；本论文动作价格带以 A 股为基准 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "最新已披露权益口径 PB · 建档值",
+    "reported_value": 0.6807,
+    "unit": "倍",
+    "line_number": 43,
+    "raw_text": "| 最新已披露权益口径 PB | 0.6807 倍 | `7.53 / 11.06247`；尚未对期后分红和未披露的二季度利润作实时调整 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "2025 全年 DPS · 建档值",
+    "reported_value": 0.3103,
+    "unit": "",
+    "line_number": 44,
+    "raw_text": "| 2025 全年 DPS | 0.3103 元 | 中期 0.1414 元加末期 0.1689 元，均已实施 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "追踪税前股息率 · 建档值",
+    "reported_value": 4.12,
+    "unit": "%",
+    "line_number": 45,
+    "raw_text": "| 追踪税前股息率 | 4.12% | `0.3103 / 7.53`；只有未来 DPS 维持时才近似前瞻收益率 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "2025 / 2026Q1 加权 ROE · 建档值",
+    "reported_value": 9.45,
+    "unit": "%",
+    "line_number": 51,
+    "raw_text": "| 2025 / 2026Q1 加权 ROE | 9.45% / 8.83% | 一季度为年化口径，盈利能力仍在下行 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "2026Q1 不良贷款率 · 建档值",
+    "reported_value": 1.31,
+    "unit": "%",
+    "line_number": 52,
+    "raw_text": "| 2026Q1 不良贷款率 | 1.31% | 比率稳定，但不能替代逾期、二阶段和重组贷款穿透 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2026Q1 核心一级资本充足率 · 建档值",
+    "reported_value": 13.26,
+    "unit": "%",
+    "line_number": 54,
+    "raw_text": "| 2026Q1 核心一级资本充足率 | 13.26% | 较 2025 年末继续下降 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 41,
+    "label": "更强安全边际 · 价格上限",
+    "reported_value": 6.1,
+    "unit": "",
+    "line_number": 133,
+    "raw_text": "| 更强安全边际 | 无 | 6.10 元 | 若红线未触发且黄灯未恶化，可分批建立实质仓位 | 约不高于 0.55 倍最新已披露 BVPS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "充分定价 · 价格下限",
+    "reported_value": 9.4,
+    "unit": "",
+    "line_number": 137,
+    "raw_text": "| 充分定价 | 9.40 元 | 无上限 | 无基本面改善则复核减仓 | 约 0.85 倍以上 BVPS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

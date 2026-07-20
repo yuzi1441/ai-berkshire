@@ -1,0 +1,123 @@
+{
+  "company": "中国神华",
+  "a_share_ticker": "601088.SH",
+  "h_share_ticker": "01088.HK",
+  "report_date": "2026-07-14",
+  "quote_cutoff": "2026-07-14 close",
+  "information_cutoff_note": "Includes the after-close 2026H1 forecast released on Beijing evening 2026-07-14 and formally dated 2026-07-15.",
+  "shares": {
+    "total": 21689434304,
+    "total_100m": 216.89434304,
+    "source": "China Shenhua post-restructuring share registration and 2026Q1 disclosure"
+  },
+  "prices": {
+    "a_share_cny": {
+      "value": 43.42,
+      "eastmoney": 43.42,
+      "tencent": 43.42,
+      "deviation_pct": 0.0
+    },
+    "h_share_hkd": {
+      "value": 42.3,
+      "eastmoney": 42.3,
+      "tencent": 42.3,
+      "deviation_pct": 0.0
+    },
+    "hkd_cny_midpoint": {
+      "value": 0.86746,
+      "date": "2026-07-14",
+      "source": "China Foreign Exchange Trade System via Xinhua"
+    }
+  },
+  "market_cap": {
+    "a_price_times_total_shares_cny": 941755237479.68,
+    "a_price_times_total_shares_cny_100m": 9417.5523747968
+  },
+  "h1_2026_forecast_cny_100m": {
+    "net_profit": {
+      "low": 263.0,
+      "mid": 280.5,
+      "high": 298.0,
+      "restated_yoy_pct": {
+        "low": -4.7,
+        "high": 8.0
+      }
+    },
+    "adjusted_net_profit": {
+      "low": 261.0,
+      "high": 281.0,
+      "yoy_pct": {
+        "low": 7.4,
+        "high": 15.6
+      }
+    },
+    "source": "CNInfo issuer PDF 1225423805, unaudited and unreviewed"
+  },
+  "current_share_normalized_eps": {
+    "h1_low": 1.2125719662107421,
+    "h1_mid": 1.293256412631609,
+    "h1_high": 1.373940859052476,
+    "h1_2025_restated_profit_normalized": 1.2717251917867263,
+    "simple_annualized_mid": 2.586512825263218,
+    "warning": "Simple annualization assumes H2 equals H1 and is a valuation sensitivity, not a formal forecast."
+  },
+  "ttm_from_h1_forecast": {
+    "formula": "2025 full year - 2025H1 restated + 2026H1 forecast",
+    "net_profit_cny_100m": {
+      "low": 515.66,
+      "mid": 533.16,
+      "high": 550.66
+    },
+    "eps": {
+      "low": 2.377470950936241,
+      "mid": 2.458155397357108,
+      "high": 2.538839843777975
+    }
+  },
+  "valuation": {
+    "a_share": {
+      "ttm_mid_pe": 17.66,
+      "pb": 1.96,
+      "trailing_gross_dividend_yield_pct": 4.63
+    },
+    "h_share_cny_equivalent": {
+      "price_cny": 36.693558,
+      "ttm_mid_pe": 14.93,
+      "pb": 1.65,
+      "trailing_gross_dividend_yield_pct": 5.48,
+      "discount_to_a_share_pct": 15.49
+    }
+  },
+  "three_year_scenarios": [
+    {
+      "name": "bull",
+      "eps_growth_pct": 2.0,
+      "target_pe": 17.0,
+      "target_price_cny": 44.35,
+      "target_price_hkd_at_fixed_fx": 51.12,
+      "annual_dps_assumption_cny": 2.05,
+      "a_share_annualized_total_return_pct": 5.16,
+      "h_share_annualized_total_return_pct": 11.23
+    },
+    {
+      "name": "base",
+      "eps_growth_pct": -2.0,
+      "target_pe": 14.0,
+      "target_price_cny": 32.39,
+      "target_price_hkd_at_fixed_fx": 37.34,
+      "annual_dps_assumption_cny": 1.75,
+      "a_share_annualized_total_return_pct": -4.65,
+      "h_share_annualized_total_return_pct": 0.85
+    },
+    {
+      "name": "bear",
+      "eps_growth_pct": -6.0,
+      "target_pe": 11.0,
+      "target_price_cny": 22.46,
+      "target_price_hkd_at_fixed_fx": 25.89,
+      "annual_dps_assumption_cny": 1.4,
+      "a_share_annualized_total_return_pct": -15.01,
+      "h_share_annualized_total_return_pct": -10.1
+    }
+  ]
+}

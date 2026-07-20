@@ -1,0 +1,409 @@
+======================================================================
+报告数据抽检清单
+文件：reports\半导体设备材料国产化\半导体设备材料国产化-industry-funnel-20260713.md
+总提取数据点：312  |  抽样比例：15%  |  抽检数量：30
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     16  华海清科 · 当前结论                                  4.00  
+303     27  A类                                          35.00  
+ 13     42  中微公司 · 90日涨幅                                74.60  %
+ 17     43  拓荆科技 · 90日涨幅                               156.10  %
+ 16     43  拓荆科技 · 30日涨幅                                59.60  %
+ 14     43  拓荆科技 · 代码                               688072.00  
+ 45     50  富创精密 · 90日涨幅                               139.80  %
+ 48     51  芯源微 · 30日涨幅                                 54.10  %
+ 53     52  江丰电子 · 90日涨幅                               102.20  %
+ 58     54  精测电子 · 代码                               300567.00  
+ 72     57  雅克科技 · 30日涨幅                                76.10  %
+ 80     59  芯碁微装 · 30日涨幅                                33.30  %
+ 82     60  彤程新材 · 代码                               603650.00  
+102     65  先导基电 · 代码                               600641.00  
+112     67  神工股份 · 30日涨幅                                80.90  %
+113     67  神工股份 · 90日涨幅                                76.30  %
+115     68  正帆科技 · 市值/亿元                               188.00  
+120     78  Lam Research · 市值/十亿美元                     416.80  
+126     82  Air Liquide · 市值/十亿美元                      127.60  
+141     91  Tokyo Ohka Kogyo · 代码                     4186.00  T
+143    100  奕斯伟材料 · 关键环节                                12.00  
+175    137  华海清科 · PEG代理                                24.89  
+215    144  江丰电子 · 通过                                    3.00  
+217    145  安集科技 · PEG代理                                 1.76  
+230    147  微导纳米 · 现金流/净利                                1.76  
+259    152  彤程新材 · 现金流/净利                                0.58  
+280    157  先导基电 · 负债率                                  28.40  %
+288    159  神工股份 · PEG代理                                 1.80  
+302    335  加仓条件 · 安集科技                                 70.00  %
+309    384  腾讯复权日线 web.ifzq.gtimg.cn                    30.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "华海清科 · 当前结论",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 16,
+    "raw_text": "| 华海清科 | 卫星观察，CMP设备 | ★★★☆☆ | 30% | 4/5硬指标通过，但146.7x PE把未来增长提前计价；当前价只在乐观情景下有小幅空间 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 303,
+    "label": "A类",
+    "reported_value": 35.0,
+    "unit": "",
+    "line_number": 27,
+    "raw_text": "- A类：35家A股基础池中，近30个交易日估算日均成交额前20。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 13,
+    "label": "中微公司 · 90日涨幅",
+    "reported_value": 74.6,
+    "unit": "%",
+    "line_number": 42,
+    "raw_text": "| 中微公司 | 688012 | 刻蚀设备 | 3,850 | +37.3% | +74.6% | AC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 17,
+    "label": "拓荆科技 · 90日涨幅",
+    "reported_value": 156.1,
+    "unit": "%",
+    "line_number": 43,
+    "raw_text": "| 拓荆科技 | 688072 | 薄膜沉积 | 2,389 | +59.6% | +156.1% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "拓荆科技 · 30日涨幅",
+    "reported_value": 59.6,
+    "unit": "%",
+    "line_number": 43,
+    "raw_text": "| 拓荆科技 | 688072 | 薄膜沉积 | 2,389 | +59.6% | +156.1% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "拓荆科技 · 代码",
+    "reported_value": 688072.0,
+    "unit": "",
+    "line_number": 43,
+    "raw_text": "| 拓荆科技 | 688072 | 薄膜沉积 | 2,389 | +59.6% | +156.1% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 45,
+    "label": "富创精密 · 90日涨幅",
+    "reported_value": 139.8,
+    "unit": "%",
+    "line_number": 50,
+    "raw_text": "| 富创精密 | 688409 | 设备零部件 | 777 | +68.5% | +139.8% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "芯源微 · 30日涨幅",
+    "reported_value": 54.1,
+    "unit": "%",
+    "line_number": 51,
+    "raw_text": "| 芯源微 | 688037 | 涂胶显影/清洗 | 762 | +54.1% | +75.0% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 53,
+    "label": "江丰电子 · 90日涨幅",
+    "reported_value": 102.2,
+    "unit": "%",
+    "line_number": 52,
+    "raw_text": "| 江丰电子 | 300666 | 高纯靶材 | 704 | +67.4% | +102.2% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "精测电子 · 代码",
+    "reported_value": 300567.0,
+    "unit": "",
+    "line_number": 54,
+    "raw_text": "| 精测电子 | 300567 | 量测检测 | 675 | +36.4% | +91.9% | ABC | 中 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 72,
+    "label": "雅克科技 · 30日涨幅",
+    "reported_value": 76.1,
+    "unit": "%",
+    "line_number": 57,
+    "raw_text": "| 雅克科技 | 002409 | 前驱体/电子材料 | 602 | +76.1% | +95.3% | ABC | 中 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 80,
+    "label": "芯碁微装 · 30日涨幅",
+    "reported_value": 33.3,
+    "unit": "%",
+    "line_number": 59,
+    "raw_text": "| 芯碁微装 | 688630 | 直写光刻 | 588 | +33.3% | +122.2% | ABC | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "彤程新材 · 代码",
+    "reported_value": 603650.0,
+    "unit": "",
+    "line_number": 60,
+    "raw_text": "| 彤程新材 | 603650 | 光刻胶/树脂 | 489 | +52.6% | +33.8% | C | 中 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 102,
+    "label": "先导基电 · 代码",
+    "reported_value": 600641.0,
+    "unit": "",
+    "line_number": 65,
+    "raw_text": "| 先导基电 | 600641 | 离子注入/转型 | 366 | +46.4% | +110.3% | BC | 中 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 112,
+    "label": "神工股份 · 30日涨幅",
+    "reported_value": 80.9,
+    "unit": "%",
+    "line_number": 67,
+    "raw_text": "| 神工股份 | 688233 | 硅材料零部件 | 263 | +80.9% | +76.3% | B | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 113,
+    "label": "神工股份 · 90日涨幅",
+    "reported_value": 76.3,
+    "unit": "%",
+    "line_number": 67,
+    "raw_text": "| 神工股份 | 688233 | 硅材料零部件 | 263 | +80.9% | +76.3% | B | 高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "正帆科技 · 市值/亿元",
+    "reported_value": 188.0,
+    "unit": "",
+    "line_number": 68,
+    "raw_text": "| 正帆科技 | 688596 | 高纯工艺系统 | 188 | +57.7% | +89.9% | B | 中高 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 120,
+    "label": "Lam Research · 市值/十亿美元",
+    "reported_value": 416.8,
+    "unit": "",
+    "line_number": 78,
+    "raw_text": "| Lam Research | LRCX | 纳斯达克 | 416.8 | 刻蚀/沉积 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 126,
+    "label": "Air Liquide · 市值/十亿美元",
+    "reported_value": 127.6,
+    "unit": "",
+    "line_number": 82,
+    "raw_text": "| Air Liquide | AI.PA | 巴黎 | 127.6 | 电子气体 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 141,
+    "label": "Tokyo Ohka Kogyo · 代码",
+    "reported_value": 4186.0,
+    "unit": "T",
+    "line_number": 91,
+    "raw_text": "| Tokyo Ohka Kogyo | 4186.T | 东京 | 7.6 | 光刻胶 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 143,
+    "label": "奕斯伟材料 · 关键环节",
+    "reported_value": 12.0,
+    "unit": "",
+    "line_number": 100,
+    "raw_text": "| 奕斯伟材料 | 12英寸硅片 | IPO进程需后续核验 | 产能重要，仍需看盈利质量 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 175,
+    "label": "华海清科 · PEG代理",
+    "reported_value": 24.89,
+    "unit": "",
+    "line_number": 137,
+    "raw_text": "| 华海清科 | 146.7 | 24.89 | 15.5% | 0.73 | 43.2% | ★★★★☆ | 4/5 | 保留 | 仅估值不及格 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 215,
+    "label": "江丰电子 · 通过",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 144,
+    "raw_text": "| 江丰电子 | 159.1 | 6.44 | 10.6% | 0.94 | 54.4% | ★★★☆☆ | 3/5 | 淘汰 | PE、ROE不及格 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 217,
+    "label": "安集科技 · PEG代理",
+    "reported_value": 1.76,
+    "unit": "",
+    "line_number": 145,
+    "raw_text": "| 安集科技 | 82.3 | 1.76 | 25.2% | 0.56 | 29.9% | ★★★★☆ | 3/5 | 保留例外 | PE/PEG略高、现金转化偏低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 230,
+    "label": "微导纳米 · 现金流/净利",
+    "reported_value": 1.76,
+    "unit": "",
+    "line_number": 147,
+    "raw_text": "| 微导纳米 | 395.2 | — | 7.9% | 1.76 | 69.3% | ★★★☆☆ | 2/5 | 淘汰 | PE、ROE、负债率 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 259,
+    "label": "彤程新材 · 现金流/净利",
+    "reported_value": 0.58,
+    "unit": "",
+    "line_number": 152,
+    "raw_text": "| 彤程新材 | 83.9 | 9.47 | 16.0% | 0.58 | 53.8% | ★★★☆☆ | 3/5 | 淘汰 | 估值、现金转化 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 280,
+    "label": "先导基电 · 负债率",
+    "reported_value": 28.4,
+    "unit": "%",
+    "line_number": 157,
+    "raw_text": "| 先导基电 | 亏损 | — | -1.6% | — | 28.4% | ★★☆☆☆ | 1/5 | 淘汰 | 转型期亏损、护城河未证实 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 288,
+    "label": "神工股份 · PEG代理",
+    "reported_value": 1.8,
+    "unit": "",
+    "line_number": 159,
+    "raw_text": "| 神工股份 | 265.7 | 1.80 | 5.5% | 1.70 | 5.7% | ★★★☆☆ | 3/5 | 淘汰 | 估值、ROE不及格 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 302,
+    "label": "加仓条件 · 安集科技",
+    "reported_value": 70.0,
+    "unit": "%",
+    "line_number": 335,
+    "raw_text": "| 加仓条件 | 现金流/净利>70%，新品持续放量 | 净利增速重新超过收入增速 | 经营现金流追上利润、订单可见度提升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 309,
+    "label": "腾讯复权日线 web.ifzq.gtimg.cn",
+    "reported_value": 30.0,
+    "unit": "",
+    "line_number": 384,
+    "raw_text": "- 腾讯复权日线 `web.ifzq.gtimg.cn`：30/90日涨幅与30日成交额代理。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

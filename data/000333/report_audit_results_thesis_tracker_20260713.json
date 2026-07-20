@@ -1,0 +1,122 @@
+[
+  {
+    "id": 2,
+    "label": "建立日期 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 9,
+    "raw_text": "| 建立日期 | 2026-07-13 |",
+    "fetched_value": 2026.0,
+    "fetched_source": "Get-Date task baseline: 2026-07-13 23:56 +08:00",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "financial_analyst_snapshot_20260713.json cutoff: 2026-07-13"
+  },
+  {
+    "id": 7,
+    "label": "官方财报 · 来源",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 27,
+    "raw_text": "| 官方财报 | 美的集团 2025 年年度报告、2026 年第一季度报告 | 收入、利润、现金流、分部资产与利润、股本和归母权益 |",
+    "fetched_value": 2025.0,
+    "fetched_source": "美的集团2025年年度报告（深交所PDF）",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "financial_analyst_snapshot_20260713.json financial_sources.2025_annual_report"
+  },
+  {
+    "id": 8,
+    "label": "同日团队报告 · 来源",
+    "reported_value": 20260713.0,
+    "unit": "",
+    "line_number": 28,
+    "raw_text": "| 同日团队报告 | `reports/美的集团/美的集团-investment-team-20260713.md` | 商业模式、护城河、管理层、风险、行业与估值基线 |",
+    "fetched_value": 20260713.0,
+    "fetched_source": "reports/美的集团/美的集团-investment-team-20260713.md 文件名及报告头",
+    "fetched_value2": 20260713.0,
+    "fetched_source2": "financial_analyst_snapshot_20260713.json cutoff"
+  },
+  {
+    "id": 9,
+    "label": "结构化快照 · 来源",
+    "reported_value": 333.0,
+    "unit": "",
+    "line_number": 29,
+    "raw_text": "| 结构化快照 | `data/000333/financial_analyst_snapshot_20260713.json` | 行情、股本、财务输入、估值与资本事项的可复现记录 |",
+    "fetched_value": 333.0,
+    "fetched_source": "data/000333/financial_analyst_snapshot_20260713.json 路径证券代码",
+    "fetched_value2": 333.0,
+    "fetched_source2": "美的集团2025年年度报告证券代码000333"
+  },
+  {
+    "id": 16,
+    "label": "PB · 论文含义",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 40,
+    "raw_text": "| PB | 2.63x / 3.00x | Q1 报告口径 / 扣除已实施末期股息后的保守估算 |",
+    "fetched_value": 1.0,
+    "fetched_source": "美的集团2026年第一季度报告（Q1）",
+    "fetched_value2": 1.0,
+    "fetched_source2": "financial_analyst_snapshot_20260713.json valuation.q1_report_basis_pb"
+  },
+  {
+    "id": 15,
+    "label": "PB · 数值",
+    "reported_value": 2.63,
+    "unit": "x",
+    "line_number": 40,
+    "raw_text": "| PB | 2.63x / 3.00x | Q1 报告口径 / 扣除已实施末期股息后的保守估算 |",
+    "fetched_value": 2.6314382804,
+    "fetched_source": "2026Q1归母权益2323.07706亿元/Q1股本76.03276亿股与80.40元复算",
+    "fetched_value2": 2.63,
+    "fetched_source2": "data/000333/financial_rigor_thesis_tracker_20260713.txt"
+  },
+  {
+    "id": 18,
+    "label": "静态税前股息率 · 论文含义",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 41,
+    "raw_text": "| 静态税前股息率 | 5.35% | 按 2025 年每股 4.30 元回看，不是未来承诺 |",
+    "fetched_value": 2025.0,
+    "fetched_source": "美的集团2025年年度报告利润分配记录",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "美的集团2025年度A股利润分配实施公告"
+  },
+  {
+    "id": 41,
+    "label": "从 80.40 元出发的含股息年化回报 · 乐观情景",
+    "reported_value": 17.31,
+    "unit": "%",
+    "line_number": 120,
+    "raw_text": "| 从 80.40 元出发的含股息年化回报 | 不适用 | +17.31% | +7.61% | -4.10% |",
+    "fetched_value": 17.3116027575,
+    "fetched_source": "financial_analyst_snapshot_20260713.json three_year_scenarios.bull.total_return_cagr_pct",
+    "fetched_value2": 17.31,
+    "fetched_source2": "美的集团-investment-team-20260713.md 三情景估值"
+  },
+  {
+    "id": 48,
+    "label": "🟡 边际弱化 · 数量",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 155,
+    "raw_text": "| 🟡 边际弱化 | 3 | -3 |",
+    "fetched_value": 3.0,
+    "fetched_source": "美的集团-thesis.md A2逐项状态计数：假设1、3、4",
+    "fetched_value2": 3.0,
+    "fetched_source2": "健康度独立复算：10分减3个黄灯等于7分"
+  },
+  {
+    "id": 60,
+    "label": "现金与营运资本 · 进一步受损",
+    "reported_value": 0.7,
+    "unit": "",
+    "line_number": 188,
+    "raw_text": "| 现金与营运资本 | 半年度 OCF/归母净利不低于 0.9；应收、合同资产和存货增速接近收入 | OCF/归母 0.7-0.9，营运资本仍需解释 | OCF/归母低于 0.7，且经营性资产增速高于收入 10pct 以上 |",
+    "fetched_value": 0.7,
+    "fetched_source": "美的集团-thesis.md A7预设纪律阈值（内部规则，非外部事实）",
+    "fetched_value2": 0.7,
+    "fetched_source2": "阈值边界复算：观察区间0.7-0.9的下界"
+  }
+]

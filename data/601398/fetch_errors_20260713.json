@@ -1,0 +1,14 @@
+[
+  {
+    "url": "http://push2.eastmoney.com/api/qt/stock/get?secid=1.601398&fields=f57,f58,f43,f44,f45,f46,f47,f48,f60,f84,f116,f117,f162,f167,f170,f171",
+    "error": "ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+  },
+  {
+    "source": "akshare:indicator_eastmoney",
+    "error": "TypeError: 'NoneType' object is not subscriptable"
+  },
+  {
+    "source": "akshare:history_eastmoney",
+    "error": "ProxyError: HTTPSConnectionPool(host='push2his.eastmoney.com', port=443): Max retries exceeded with url: /api/qt/stock/kline/get?fields1=f1%2Cf2%2Cf3%2Cf4%2Cf5%2Cf6&fields2=f51%2Cf52%2Cf53%2Cf54%2Cf55%2Cf56%2Cf57%2Cf58%2Cf59%2Cf60%2Cf61%2Cf116&ut=7eea3edcaed734bea9cbfc24409ed989&klt=101&fqt=0&secid=1.601398&beg=20260713&end=20260713 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))"
+  }
+]

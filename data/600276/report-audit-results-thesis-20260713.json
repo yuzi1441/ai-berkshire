@@ -1,0 +1,72 @@
+[
+  {
+    "id": 2,
+    "label": "数据截止 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "本地 Get-Date 确认 2026-07-13，抽取器仅识别年份",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "腾讯与新浪 2026-07-13 收盘快照日期复核"
+  },
+  {
+    "id": 8,
+    "label": "2026-07-11 · 事件",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "抽取器误识别国家基本药物目录年份，非经营数值",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "巨潮 1225418806.PDF 人工复核，碘佛醇进入 2026 年版目录"
+  },
+  {
+    "id": 9,
+    "label": "2026-07-11 · 下一证据",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "抽取器误识别目录施行日期年份，非经营数值",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "巨潮 1225418806.PDF 人工复核，目录自 2026-09-01 施行"
+  },
+  {
+    "id": 15,
+    "label": "PE TTM · 口径",
+    "reported_value": 1.223297,
+    "unit": "",
+    "fetched_value": 1.2232971252,
+    "fetched_source": "2025 年报与 2026Q1 财报滚动归母净利/法定总股本计算",
+    "fetched_value2": 1.2232971252,
+    "fetched_source2": "东方财富 F10 年度及季度归母净利与公开股本独立复算"
+  },
+  {
+    "id": 16,
+    "label": "PB MRQ · 当前值",
+    "reported_value": 5.82,
+    "unit": "x",
+    "fetched_value": 5.82,
+    "fetched_source": "2026Q1 归母权益与腾讯 55.75 元收盘价计算",
+    "fetched_value2": 5.82,
+    "fetched_source2": "东方财富 F10 归母权益与新浪 55.75 元收盘价独立复算"
+  },
+  {
+    "id": 18,
+    "label": "P/FCF TTM · 当前值",
+    "reported_value": 43.52,
+    "unit": "x",
+    "fetched_value": 43.52,
+    "fetched_source": "公司财报滚动 OCF-Capex 与腾讯 55.75 元收盘价计算",
+    "fetched_value2": 43.52,
+    "fetched_source2": "东方财富现金流数据与新浪 55.75 元收盘价独立复算"
+  },
+  {
+    "id": 41,
+    "label": "核心论文字符数 · 状态",
+    "reported_value": 189.0,
+    "unit": "",
+    "fetched_value": 189.0,
+    "fetched_source": "PowerShell UTF-8 读取后 .NET String.Length 计数",
+    "fetched_value2": 189.0,
+    "fetched_source2": "Python UTF-8 读取后 len() 独立计数"
+  }
+]

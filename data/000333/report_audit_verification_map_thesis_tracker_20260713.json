@@ -1,0 +1,20 @@
+{
+  "report": "reports/美的集团/美的集团-thesis.md",
+  "cutoff": "2026-07-13",
+  "seed": 42,
+  "ratio": 0.15,
+  "sample_count": 10,
+  "method_note": "外部事实优先使用两组来源；文件日期、证券代码、状态计数和纪律阈值属于元数据或内部规则，使用文件存在性与独立复算验证，不伪装成第三方市场数据。",
+  "items": [
+    {"id": 2, "kind": "metadata", "check": "任务日期与结构化快照截止日均为2026-07-13"},
+    {"id": 7, "kind": "source_year", "check": "官方2025年年度报告及结构化来源索引"},
+    {"id": 8, "kind": "artifact_date", "check": "团队报告文件名、报告头和快照截止日"},
+    {"id": 9, "kind": "security_code", "check": "项目路径000333与官方证券代码000333"},
+    {"id": 16, "kind": "period_label", "check": "Q1报告口径与快照q1字段"},
+    {"id": 15, "kind": "valuation", "check": "官方权益和股本复算2.631438x；financial_rigor为2.63x"},
+    {"id": 18, "kind": "dividend_year", "check": "2025年报与2025年度利润分配实施公告"},
+    {"id": 41, "kind": "scenario", "check": "结构化精确值17.311603%与主报告17.31%"},
+    {"id": 48, "kind": "internal_count", "check": "A2三项黄灯逐项计数并用健康度公式反算"},
+    {"id": 60, "kind": "policy_threshold", "check": "A7内部纪律阈值0.7及区间边界复算"}
+  ]
+}

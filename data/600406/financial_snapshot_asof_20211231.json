@@ -1,0 +1,159 @@
+{
+  "company": "国电南瑞科技股份有限公司",
+  "ticker": "600406.SH",
+  "knowledge_cutoff": "2021-12-31T23:59:59+08:00",
+  "currency": "CNY",
+  "unit": "yuan",
+  "comparability_policy": {
+    "2016": "采用2017年报因同一控制下重大重组追溯重述的比较数，禁用2016年报重组前旧口径",
+    "2017": "主序列采用2017年报数；2018年报因报表格式解释对收入和经营现金流作极小重分类，作为二源核验",
+    "2021": "仅使用Q1、半年报和三季报；不使用截止日前尚未公开的全年报告",
+    "accounting_fcf": "经营活动产生的现金流量净额减购建固定资产、无形资产和其他长期资产支付的现金"
+  },
+  "annual_history": [
+    {
+      "year": 2016,
+      "basis": "2017年报同一控制下重述比较数",
+      "revenue": 28248377857.25,
+      "net_profit_attributable": 3161150209.22,
+      "operating_cash_flow": 4263094254.22,
+      "cash_capex": 746357353.55,
+      "accounting_fcf": 3516736900.67,
+      "weighted_roe_pct": 16.12,
+      "primary_source": "600406_2017_annual_20180419.pdf",
+      "secondary_check": "600406_2018_annual_20190429.pdf的2016比较列；收入差异0.0052%，利润和CFO一致"
+    },
+    {
+      "year": 2017,
+      "basis": "2017年报主口径",
+      "revenue": 24197908118.35,
+      "net_profit_attributable": 3240522727.39,
+      "operating_cash_flow": 3300822668.23,
+      "cash_capex": 1195496629.87,
+      "accounting_fcf": 2105326038.36,
+      "weighted_roe_pct": 16.38,
+      "primary_source": "600406_2017_annual_20180419.pdf",
+      "secondary_check": "600406_2018_annual_20190429.pdf及独立审计报表；收入差异0.0141%，CFO差异0.2090%"
+    },
+    {
+      "year": 2018,
+      "basis": "2018年报",
+      "revenue": 28540370796.48,
+      "net_profit_attributable": 4162074561.84,
+      "operating_cash_flow": 3208251553.77,
+      "cash_capex": 1713957108.62,
+      "accounting_fcf": 1494294445.15,
+      "weighted_roe_pct": 16.90,
+      "primary_source": "600406_2018_annual_20190429.pdf",
+      "secondary_check": "央广网2019-06-25经营数据、2018年度独立审计报告和中诚信评级报告"
+    },
+    {
+      "year": 2019,
+      "basis": "2019年报",
+      "revenue": 32423594529.38,
+      "net_profit_attributable": 4343067280.95,
+      "operating_cash_flow": 4684302588.32,
+      "cash_capex": 2929091988.15,
+      "accounting_fcf": 1755210600.17,
+      "weighted_roe_pct": 14.82,
+      "primary_source": "600406_2019_annual_20200430.pdf",
+      "secondary_check": "中诚信2020-05-21评级报告、腾讯新闻2021-04-26历史序列和2019年度独立审计报告"
+    },
+    {
+      "year": 2020,
+      "basis": "2020年报",
+      "revenue": 38502411143.75,
+      "net_profit_attributable": 4851540712.46,
+      "operating_cash_flow": 5635016246.11,
+      "cash_capex": 3464015210.28,
+      "accounting_fcf": 2171001035.83,
+      "weighted_roe_pct": 15.06,
+      "primary_source": "600406_2020_annual_20210423.pdf",
+      "secondary_check": "东吴证券2021-04-23年报点评、腾讯新闻2021-04-26和2020年度独立审计报告"
+    }
+  ],
+  "annual_trend_calculations": {
+    "revenue_cagr_2016_2020_pct": 8.049709443741193,
+    "net_profit_cagr_2016_2020_pct": 11.303452756819898,
+    "accounting_fcf_cagr_2016_2020_pct": -11.359940674012192
+  },
+  "ttm_components": {
+    "formula": "2020FY + 2021Q1-Q3 - 2020Q1-Q3",
+    "2020_fy": {
+      "revenue": 38502411143.75,
+      "net_profit_attributable": 4851540712.46,
+      "operating_cash_flow": 5635016246.11,
+      "cash_capex": 3464015210.28,
+      "accounting_fcf": 2171001035.83
+    },
+    "2020_q1_q3": {
+      "revenue": 20097801383.67,
+      "net_profit_attributable": 2548693459.86,
+      "operating_cash_flow": -902875891.56,
+      "cash_capex": 1810298198.66,
+      "accounting_fcf": -2713174090.22
+    },
+    "2021_q1_q3": {
+      "revenue": 23231593867.38,
+      "net_profit_attributable": 3192845375.04,
+      "operating_cash_flow": -1343812279.56,
+      "cash_capex": 1751862668.72,
+      "accounting_fcf": -3095674948.28
+    },
+    "ttm_at_cutoff": {
+      "revenue": 41636203627.46,
+      "net_profit_attributable": 5495692627.64,
+      "operating_cash_flow": 5194079858.11,
+      "cash_capex": 3405579680.34,
+      "accounting_fcf": 1788500177.77,
+      "cfo_to_net_profit_pct": 94.51183335812721,
+      "fcf_to_net_profit_pct": 32.543671907248395
+    }
+  },
+  "latest_disclosed_balance_sheet": {
+    "date": "2021-09-30",
+    "cash": 10541059772.87,
+    "accounts_receivable": 20064086600.74,
+    "contract_assets": 888037170.48,
+    "inventory": 10177864523.24,
+    "total_liabilities": 31169794717.78,
+    "equity_attributable": 35549799977.65,
+    "minority_equity": 2329632010.40,
+    "liability_to_assets_pct": 45.14141027324243,
+    "accounts_receivable_plus_contract_assets_to_ttm_revenue_pct": 50.32188803448355,
+    "inventory_to_ttm_revenue_pct": 24.444746726446195,
+    "source": "600406_2021_q3_20211030.pdf"
+  },
+  "operating_evidence": {
+    "2020_top_five_customer_share_pct": 72.33,
+    "2020_related_party_sales_assessment": "超过70%（精确比例因缺少真正独立二源不准入）",
+    "2020_r_and_d_spend": 2523499334.53,
+    "2020_r_and_d_to_revenue_pct": 6.55,
+    "2020_order_backlog": 45572000000,
+    "2020_segments": [
+      {"name": "电网自动化及工业控制", "revenue": 21529942992.94, "gross_margin_pct": 26.31},
+      {"name": "继电保护及柔性输电", "revenue": 6013998795.35, "gross_margin_pct": 38.06},
+      {"name": "电力自动化信息通信", "revenue": 6500997394.91, "gross_margin_pct": 20.11},
+      {"name": "发电及水利环保", "revenue": 2561612347.55, "gross_margin_pct": 13.39},
+      {"name": "集成及其他", "revenue": 1792960143.24, "gross_margin_pct": 36.57}
+    ],
+    "2021_h1_segments": [
+      {"name": "电网自动化及工业控制", "revenue": 7480419784.39, "gross_margin_pct": 25.79},
+      {"name": "继电保护及柔性输电", "revenue": 2760622965.64, "gross_margin_pct": 38.98},
+      {"name": "电力自动化信息通信", "revenue": 2724414011.16, "gross_margin_pct": 20.35},
+      {"name": "发电及水利环保", "revenue": 1040685732.31, "gross_margin_pct": 12.71},
+      {"name": "集成及其他", "revenue": 762288149.82, "gross_margin_pct": 44.68}
+    ]
+  },
+  "governance_at_cutoff": {
+    "chairman": "冷俊",
+    "general_manager": "张贱明",
+    "supervisory_board_chairman": "郑宗强",
+    "controlling_shareholder": "南瑞集团有限公司",
+    "controlling_shareholder_stake_pct_latest_disclosed": 51.79,
+    "related_directors_recused": 7,
+    "board_members_at_related_transaction_vote": 12,
+    "internal_control_2020": "财务及非财务报告未发现重大缺陷；财务报告内控有效",
+    "2021_incentive_status": "草案，未视为已授予"
+  }
+}

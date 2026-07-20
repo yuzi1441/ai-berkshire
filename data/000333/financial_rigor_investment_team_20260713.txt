@@ -1,0 +1,73 @@
+Midea Group investment-team financial analyst verification record
+Cutoff: 2026-07-13 22:22:59+08:00
+
+1. Quote cross-check
+- A share 000333.SZ: Tencent 80.40 CNY at 2026-07-13 16:14:57; Sina 80.40 CNY at 16:29:45; difference 0.00%.
+- H share 0300.HK: Tencent 88.80 HKD at 2026-07-13 16:08:56; Sina 88.80 HKD at 16:08; difference 0.00%.
+- Both exchanges traded on 2026-07-13. These are closing, not intraday, prices.
+
+2. Market capitalization
+Command:
+python tools/financial_rigor.py verify-market-cap --price 80.40 --shares 7613438907 --reported 612120488122.8 --currency CNY
+Output summary: calculated market cap CNY 612.12bn; reported CNY 612.12bn; difference 0.00%; passed.
+
+3. TTM valuation and two PB bases
+TTM EPS command:
+python tools/financial_rigor.py calc --expr "(439.45411 - 124.22233 + 126.74556) / 76.13438907"
+Exact TTM EPS: CNY 5.80522606668104.
+
+Q1 report-basis BVPS command:
+python tools/financial_rigor.py calc --expr "2323.07706 / 76.03276"
+Exact BVPS: CNY 30.553633197058744; PB at CNY 80.40: 2.6314382803986707x (2.63x).
+
+Paid final dividend command:
+python tools/financial_rigor.py calc --expr "68.20019535 * 3.8 + 6.508485 * 3.8"
+Exact paid final dividend: CNY 28.389298533bn (A share CNY 25.916074233bn plus H share CNY 2.473224300bn).
+
+Post-dividend pro forma BVPS command:
+python tools/financial_rigor.py calc --expr "(2323.07706 - (68.20019535 * 3.8 + 6.508485 * 3.8)) / 76.13438907"
+Exact pro forma BVPS: CNY 26.784007852156265; PB at CNY 80.40: 3.0017912346724223x (3.00x).
+
+Verification command (Q1 report basis):
+python tools/financial_rigor.py verify-valuation --price 80.40 --eps 5.80522606668104 --bvps 30.553633197058744 --fcf-per-share 5.543361090242213 --dividend 4.30 --revenue-per-share 59.95342401451807
+Output summary: PE 13.85x; earnings yield 7.22%; PB 2.63x; P/FCF 14.50x; FCF yield 6.89%; static trailing gross dividend yield 5.35%; PS 1.34x.
+
+Verification command (post-dividend pro forma basis):
+python tools/financial_rigor.py verify-valuation --price 80.40 --eps 5.80522606668104 --bvps 26.784007852156265 --fcf-per-share 5.543361090242213 --dividend 4.30 --revenue-per-share 59.95342401451807
+Output summary: PE 13.85x; PB 3.00x; P/FCF 14.50x; static trailing gross dividend yield 5.35%.
+
+4. Three-scenario model
+Command:
+python tools/financial_rigor.py three-scenario --price 80.40 --eps 5.80 --shares 76.13438907 --growth 0.08 0.05 0.0 --pe 16 13 10 --years 3 --currency CNY
+Tool output:
+- Bull: 8% EPS CAGR, 16x exit PE, CNY 116.9 target, +45.4% price return.
+- Base: 5% EPS CAGR, 13x exit PE, CNY 87.3 target, +8.6% price return.
+- Bear: 0% EPS CAGR, 10x exit PE, CNY 58.0 target, -27.9% price return.
+
+With a flat CNY 4.30 annual dividend for three years (CNY 12.90 cumulative):
+- Bull total-return CAGR: 17.31%.
+- Base total-return CAGR: 7.61%.
+- Bear total-return CAGR: -4.10%.
+
+Base-case total value CNY 100.184925 implies maximum entry prices:
+- 10% required CAGR: CNY 75.27.
+- 12% required CAGR: CNY 71.31.
+- 15% required CAGR: CNY 65.87.
+
+5. Cross-source financial checks
+- 2025 revenue: annual report CNY 456.451731bn (4,564.51731 in CNY 100m units); Sina CNY 456.452bn; difference 0.00%.
+- 2025 attributable net profit: annual report CNY 43.945411bn; Eastmoney CNY 43.945bn; difference 0.00%.
+- 2026Q1 revenue: SZSE quarterly report CNY 131.098601bn; Yicai CNY 131.099bn; difference 0.00%.
+- 2026-07-13 A-share close: Tencent 80.40; Sina 80.40; difference 0.00%.
+
+6. Capital event review, 2026-07-10 through 2026-07-13 cutoff
+- No new dividend, buyback or convertible-bond announcement was found in this interval.
+- One share-capital-relevant announcement was published after market close at 17:40 on 2026-07-13 (legal notice date 2026-07-14): the ninth stock option plan third exercise period starts 2026-07-14.
+- Maximum exercise: 28,849,231 new A shares at CNY 41.44 per share through 2027-06-07.
+- Full exercise would add 0.378925% to the 2026-07-13 share count and raise CNY 1.195512133bn. It did not affect the 2026-07-13 closing share count.
+- Official company IR PDF: https://ea-cdn.eurolandir.com/press-releases-attachments/4153432/7c29e286-4ce3-4a05-a0fb-02e4c5301800.PDF (announcement 2026-058).
+
+7. Important limitations
+- Q1 report-basis PB matches Q1 equity with Q1 share capital. The pro forma PB subtracts the paid final dividend and uses the current share count, but does not add undisclosed Q2 profit or post-Q1 option-exercise proceeds.
+- Dividend yield is backward-looking and static; it is not a 2026 forecast.
+- Scenario returns exclude taxes, reinvestment, buyback accretion, stock-option dilution and H-share convertible-bond dilution.

@@ -1,0 +1,99 @@
+[
+  {
+    "id": 2,
+    "label": "2025毛利率 · 数值",
+    "reported_value": 25.84,
+    "unit": "%",
+    "line_number": 32,
+    "fetched_value": 25.837094,
+    "fetched_source": "国电南瑞2025年报收入与营业成本",
+    "fetched_value2": 25.837094,
+    "fetched_source2": "东方财富/AkShare收入成本复算"
+  },
+  {
+    "id": 8,
+    "label": "2025自由现金流 · 判断",
+    "reported_value": 1.29,
+    "unit": "x",
+    "line_number": 35,
+    "fetched_value": 1.28739988,
+    "fetched_source": "financial_rigor.py：106.5834720294/82.7897172332",
+    "fetched_value2": 1.28739988,
+    "fetched_source2": "2025年报CFO、现金资本开支和归母净利复算"
+  },
+  {
+    "id": 9,
+    "label": "五年累计FCF/累计净利 · 数值",
+    "reported_value": 1.06,
+    "unit": "x",
+    "line_number": 36,
+    "fetched_value": 1.059819092,
+    "fetched_source": "financial_rigor.py五年FCF和归母净利合计复算",
+    "fetched_value2": 1.059819092,
+    "fetched_source2": "2021-2025年报结构化历史数据复核"
+  },
+  {
+    "id": 16,
+    "label": "TTM PE · 截止 / 来源",
+    "reported_value": 21.7,
+    "unit": "",
+    "line_number": 40,
+    "fetched_value": 21.7,
+    "fetched_source": "腾讯行情2026-07-13",
+    "fetched_value2": 21.7,
+    "fetched_source2": "新浪行情2026-07-13"
+  },
+  {
+    "id": 15,
+    "label": "TTM PE · 数值",
+    "reported_value": 20.95,
+    "unit": "x",
+    "line_number": 40,
+    "fetched_value": 20.95,
+    "fetched_source": "financial_rigor.py：21.70/1.035896956304",
+    "fetched_value2": 20.95,
+    "fetched_source2": "20260713估值快照复核"
+  },
+  {
+    "id": 18,
+    "label": "PB · 截止 / 来源",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 41,
+    "fetched_value": 1.0,
+    "fetched_source": "报告期间标签Q1；对应2026年第一季度报告"
+  },
+  {
+    "id": 41,
+    "label": "乐观 · EPS年增速",
+    "reported_value": 12.0,
+    "unit": "%",
+    "line_number": 134,
+    "fetched_value": 12.0,
+    "fetched_source": "Checklist乐观情景研究假设",
+    "fetched_value2": 12.0,
+    "fetched_source2": "financial_rigor.py三情景输入记录"
+  },
+  {
+    "id": 48,
+    "label": "中性 · 较21.70元",
+    "reported_value": 40.8,
+    "unit": "%",
+    "line_number": 135,
+    "fetched_value": 40.8,
+    "fetched_source": "financial_rigor.py五年Base情景",
+    "fetched_value2": 40.8388202647,
+    "fetched_source2": "1.04×1.08^5×20/21.70-1独立复算"
+  },
+  {
+    "id": 57,
+    "label": "严格Checklist买点 · 价格 / 条件",
+    "reported_value": 17.5,
+    "unit": "",
+    "line_number": 227,
+    "fetched_value": 17.48,
+    "fetched_source": "financial_rigor.py：21.85×80%",
+    "fetched_value2": 17.5,
+    "fetched_source2": "按一位小数形成的研究行动阈值"
+  }
+]

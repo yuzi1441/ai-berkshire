@@ -1,0 +1,38 @@
+======================================================================
+[1m报告数据抽检 — 准出/打回判决[0m
+报告：reports/工商银行/工商银行-thesis.md
+======================================================================
+
+  [92m✅ 通过[0m [ 2] H 股收盘价 · 建档值                         报告:         6.83 
+                                                    Tencent hk01398 close snapshot, 2026-07-13: 6.83 (偏差 0.00%)  |  Sina hk01398 close snapshot, 2026-07-13: 6.83 (偏差 0.00%)
+  [92m✅ 通过[0m [ 7] 最新已披露权益口径 PB · 建档值                   报告:         0.68 倍
+                                                    ICBC 2026Q1 ordinary equity and exact shares plus Tencent A-share close: 0.68 (偏差 0.00%)  |  financial_rigor_thesis_tracker_20260713.txt, 7.53/11.062471327531828: 0.68 (偏差 0.00%)
+  [92m✅ 通过[0m [ 8] 2025 全年 DPS · 建档值                    报告:         0.31 
+                                                    ICBC 2025 annual dividend implementation announcement, lines 33-35: 0.31 (偏差 0.00%)  |  ICBC 2025 annual report, total ordinary DPS disclosure: 0.31 (偏差 0.00%)
+  [92m✅ 通过[0m [ 9] 追踪税前股息率 · 建档值                        报告:         4.12 %
+                                                    financial_rigor_thesis_tracker_20260713.txt, verify-valuation: 4.12 (偏差 0.02%)  |  independent exact calculation, 0.3103/7.53*100: 4.12 (偏差 0.02%)
+  [92m✅ 通过[0m [15] 2025 / 2026Q1 加权 ROE · 建档值           报告:         9.45 %
+                                                    ICBC 2025 annual report, weighted average ROE: 9.45 (偏差 0.00%)  |  Eastmoney finance snapshot, 2025 ROEJQ: 9.45 (偏差 0.00%)
+  [92m✅ 通过[0m [16] 2026Q1 不良贷款率 · 建档值                   报告:         1.31 %
+                                                    ICBC A-share 2026Q1 report, NPL ratio: 1.31 (偏差 0.00%)  |  ICBC H-share 2026Q1 announcement, NPL ratio: 1.31 (偏差 0.00%)
+  [92m✅ 通过[0m [18] 2026Q1 核心一级资本充足率 · 建档值               报告:        13.26 %
+                                                    ICBC A-share 2026Q1 report, CET1 ratio: 13.26 (偏差 0.00%)  |  ICBC H-share 2026Q1 announcement, CET1 ratio: 13.26 (偏差 0.00%)
+  [92m✅ 通过[0m [41] 更强安全边际 · 价格上限                        报告:         6.10 
+                                                    thesis_assumptions_20260713.json, stronger-margin action threshold: 6.10 (偏差 0.00%)  |  financial_rigor calculation, 0.55*11.062471327531828: 6.08 (偏差 0.26%)
+  [92m✅ 通过[0m [48] 充分定价 · 价格下限                          报告:         9.40 
+                                                    thesis_assumptions_20260713.json, full-pricing review threshold: 9.40 (偏差 0.00%)  |  financial_rigor calculation, 0.85*11.062471327531828: 9.40 (偏差 0.03%)
+
+----------------------------------------------------------------------
+  抽检总数: 9  |  通过: [92m9[0m  |  警告: [93m0[0m  |  不通过: [91m0[0m
+
+[1m[92m【准出】所有抽检数据通过，报告可发布。[0m
+======================================================================
+{
+  "verdict": "PASS",
+  "pass_count": 9,
+  "warn_count": 0,
+  "fail_count": 0,
+  "total": 9,
+  "fail_items": [],
+  "warn_items": []
+}

@@ -1,0 +1,156 @@
+[
+  {
+    "id": 2,
+    "label": "建立日期 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 9,
+    "fetched_value": 2026.0,
+    "fetched_source": "本机Get-Date 2026-07-13",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "同日investment-team报告数据截止"
+  },
+  {
+    "id": 5,
+    "label": "计划买入纪律 · 内容",
+    "reported_value": 115.0,
+    "unit": "",
+    "line_number": 15,
+    "fetched_value": 115.0,
+    "fetched_source": "investment-team价格带与thesis-tracker买入纪律",
+    "fetched_value2": 115.0,
+    "fetched_source2": "data/300760/financial-rigor-thesis-buy115-20260713.txt"
+  },
+  {
+    "id": 8,
+    "label": "统一证据包 · 来源",
+    "reported_value": 300760.0,
+    "unit": "",
+    "line_number": 26,
+    "fetched_value": 300760.0,
+    "fetched_source": "迈瑞医疗证券代码",
+    "fetched_value2": 300760.0,
+    "fetched_source2": "data/300760/mindray-evidence-pack-20260713.md路径读回"
+  },
+  {
+    "id": 20,
+    "label": "2025 收入 / 归母净利 · 结论",
+    "reported_value": 9.38,
+    "unit": "%",
+    "line_number": 40,
+    "fetched_value": 9.38,
+    "fetched_source": "巨潮2025年年度报告营业收入同比",
+    "fetched_value2": 9.3765,
+    "fetched_source2": "东方财富/AkShare data/mindray/profit.csv绝对值"
+  },
+  {
+    "id": 36,
+    "label": "PB（归母口径） · 普通买入上限 115 元",
+    "reported_value": 3.48,
+    "unit": "x",
+    "line_number": 103,
+    "fetched_value": 3.48,
+    "fetched_source": "data/300760/financial-rigor-thesis-buy115-20260713.txt",
+    "fetched_value2": 3.4762,
+    "fetched_source2": "115/33.082087归母BVPS独立复核"
+  },
+  {
+    "id": 38,
+    "label": "P/FCF · 当前 139.68 元",
+    "reported_value": 21.46,
+    "unit": "x",
+    "line_number": 104,
+    "fetched_value": 21.46,
+    "fetched_source": "data/300760/financial-rigor-thesis-current-20260713.txt",
+    "fetched_value2": 21.4648,
+    "fetched_source2": "139.68/6.507866独立复核"
+  },
+  {
+    "id": 57,
+    "label": "市值 / 第五年目标市值 · 悲观情景",
+    "reported_value": 991.78,
+    "unit": "亿元",
+    "line_number": 116,
+    "fetched_value": 991.7771,
+    "fetched_source": "81.80元目标价乘1,212,441,394股",
+    "fetched_value2": 991.78,
+    "fetched_source2": "financial_rigor精确计算读回"
+  },
+  {
+    "id": 64,
+    "label": "10% 要求回报现值 · 乐观情景",
+    "reported_value": 180.98,
+    "unit": "",
+    "line_number": 119,
+    "fetched_value": 180.9835,
+    "fetched_source": "data/300760/financial-rigor-pv-bull-20260713.txt",
+    "fetched_value2": 180.98,
+    "fetched_source2": "investment-team三情景折现表"
+  },
+  {
+    "id": 68,
+    "label": "115 元相对情景现值 · 中性情景",
+    "reported_value": 3.64,
+    "unit": "%",
+    "line_number": 120,
+    "fetched_value": 3.6447,
+    "fetched_source": "(119.35-115)/119.35精确计算",
+    "fetched_value2": 3.64,
+    "fetched_source2": "thesis估值锚点表独立复核"
+  },
+  {
+    "id": 70,
+    "label": "成立 / 有条件成立 · 数量",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 144,
+    "fetched_value": 3.0,
+    "fetched_source": "A2假设1、5、6状态计数",
+    "fetched_value2": 3.0,
+    "fetched_source2": "business/industry/risk三角色复核"
+  },
+  {
+    "id": 74,
+    "label": "受损 · 扣分",
+    "reported_value": 2.0,
+    "unit": "",
+    "line_number": 146,
+    "fetched_value": 2.0,
+    "fetched_source": "thesis-tracker公式：受损假设每项扣2分",
+    "fetched_value2": 2.0,
+    "fetched_source2": "A2假设3受损状态复核"
+  },
+  {
+    "id": 75,
+    "label": "初始健康度 · 数量",
+    "reported_value": 10.0,
+    "unit": "",
+    "line_number": 149,
+    "fetched_value": 10.0,
+    "fetched_source": "thesis-tracker健康度公式满分基数",
+    "fetched_value2": 10.0,
+    "fetched_source2": "报告公式10-2-2=6读回"
+  },
+  {
+    "id": 76,
+    "label": "2026-07-13 · 健康度",
+    "reported_value": 6.0,
+    "unit": "",
+    "line_number": 157,
+    "fetched_value": 6.0,
+    "fetched_source": "10-受损1项×2-弱化2项×1=6",
+    "fetched_value2": 6.0,
+    "fetched_source2": "industry-researcher独立健康度复核"
+  },
+  {
+    "id": 87,
+    "label": "IVD 增长质量 · 改善线",
+    "reported_value": 5.0,
+    "unit": "%",
+    "line_number": 180,
+    "fetched_value": 5.0,
+    "fetched_source": "thesis-tracker预设改善阈值",
+    "fetched_value2": 5.0,
+    "fetched_source2": "2026Q1 IVD实际+4.96%四舍五入锚点"
+  }
+]

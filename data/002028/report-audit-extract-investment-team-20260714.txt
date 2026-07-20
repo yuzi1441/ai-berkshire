@@ -1,0 +1,383 @@
+======================================================================
+报告数据抽检清单
+文件：reports/思源电气/思源电气-investment-team-20260714.md
+总提取数据点：186  |  抽样比例：15%  |  抽检数量：28
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  7     28  当前估值已消化成长 · 必须补上的反证                         28.00  x
+  8     34  business-analyst · 评分                        3.60  
+  9     35  financial-analyst · 评分                       3.10  
+184     39  综合评分                                         3.55  
+ 23     54  扣非归母净利润 · 同比/变化                             14.83  %
+ 24     55  基本 EPS · 2026H1                              1.90  
+ 29     56  加权 ROE · 同比/变化                               0.74  
+ 27     56  加权 ROE · 2026H1                              9.15  %
+ 36     59  经营现金流 · 2026H1                               2.25  
+ 51     73  归母净利润 · 2026Q2                               9.37  亿元
+ 56     81  营业收入 · 2026H1/TTM                            1.00  
+ 58     82  收入同比 · 2024                                 24.06  %
+ 60     82  收入同比 · 2026H1/TTM                            1.00  
+ 57     82  收入同比 · 2023                                 18.25  %
+ 63     83  归母净利润 · 2025                                31.50  
+ 71     85  经营现金流 · 2025                                22.34  
+109    103  储能及元件 · 毛利率                                 11.71  %
+108    103  储能及元件 · 占比                                   7.11  %
+115    113  H1 EPS · 东方财富/第二行情源                          1.90  
+130    161  定价权 · 评分                                     2.50  
+140    260  中国 2025 电网投资 · 最新公开数据                     6395.00  亿元
+144    276  平高电气 · 相对优势                               1100.00  
+151    306  TTM EPS · 数值                                 4.27  
+152    307  PE · 数值                                     36.10  x
+155    309  PS · 数值                                      5.06  x
+164    323  25x · 所需 EPS CAGR                           24.33  %
+174    334  中性 · 相对 154.27 元                             3.20  %
+177    335  悲观 · 第 3 年目标价                               76.90  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 7,
+    "label": "当前估值已消化成长 · 必须补上的反证",
+    "reported_value": 28.0,
+    "unit": "x",
+    "line_number": 28,
+    "raw_text": "| 当前估值已消化成长 | TTM PE 已从更高水平回落至 36.10x | 若三年后退出 PE 为 28x，要获得 10% 年化股价回报，EPS 仍需年复合增长约 19.72% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "business-analyst · 评分",
+    "reported_value": 3.6,
+    "unit": "",
+    "line_number": 34,
+    "raw_text": "| business-analyst | 段永平：商业模式与护城河 | 3.6 / 5 | 核心设备是好生意，但平台收入扩张快于高质量利润池扩张 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "financial-analyst · 评分",
+    "reported_value": 3.1,
+    "unit": "",
+    "line_number": 35,
+    "raw_text": "| financial-analyst | 巴菲特：财务质量与估值 | 3.1 / 5 | 资产负债表和长期回报仍好，H1 利润率、现金转化和当前价格扣分 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 184,
+    "label": "综合评分",
+    "reported_value": 3.55,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "**综合评分：3.55 / 5，四舍五入为 3.6 / 5。** 这是一家值得长期研究的优质公司，但优质公司与优质买点仍是两件事。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "扣非归母净利润 · 同比/变化",
+    "reported_value": 14.83,
+    "unit": "%",
+    "line_number": 54,
+    "raw_text": "| 扣非归母净利润 | **14.19** | 12.36 | +14.83% | 与归母趋势一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "基本 EPS · 2026H1",
+    "reported_value": 1.9,
+    "unit": "",
+    "line_number": 55,
+    "raw_text": "| 基本 EPS | **1.90 元** | 1.66 元 | +14.46% | 股本小幅增加后低于利润增速 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "加权 ROE · 同比/变化",
+    "reported_value": 0.74,
+    "unit": "",
+    "line_number": 56,
+    "raw_text": "| 加权 ROE | **9.15%** | 9.89% | -0.74pct | 回报率暂时回落 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "加权 ROE · 2026H1",
+    "reported_value": 9.15,
+    "unit": "%",
+    "line_number": 56,
+    "raw_text": "| 加权 ROE | **9.15%** | 9.89% | -0.74pct | 回报率暂时回落 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "经营现金流 · 2026H1",
+    "reported_value": 2.25,
+    "unit": "",
+    "line_number": 59,
+    "raw_text": "| 经营现金流 | **约 2.25** | 约 -7.13 | 同比增加约 9.38 | 方向改善，但仅为归母净利的约 15.13% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "归母净利润 · 2026Q2",
+    "reported_value": 9.37,
+    "unit": "亿元",
+    "line_number": 73,
+    "raw_text": "| 归母净利润 | 9.37 亿元 | 8.46 亿元 | **+10.73%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "营业收入 · 2026H1/TTM",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 81,
+    "raw_text": "| 营业收入 | 124.60 | 154.58 | **215.39** | H1 108.03；TTM 238.45 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "收入同比 · 2024",
+    "reported_value": 24.06,
+    "unit": "%",
+    "line_number": 82,
+    "raw_text": "| 收入同比 | +18.25% | +24.06% | **+39.34%** | H1 +27.14% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "收入同比 · 2026H1/TTM",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 82,
+    "raw_text": "| 收入同比 | +18.25% | +24.06% | **+39.34%** | H1 +27.14% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "收入同比 · 2023",
+    "reported_value": 18.25,
+    "unit": "%",
+    "line_number": 82,
+    "raw_text": "| 收入同比 | +18.25% | +24.06% | **+39.34%** | H1 +27.14% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "归母净利润 · 2025",
+    "reported_value": 31.5,
+    "unit": "",
+    "line_number": 83,
+    "raw_text": "| 归母净利润 | 15.59 | 20.49 | **31.50** | H1 14.87；TTM 33.44 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "经营现金流 · 2025",
+    "reported_value": 22.34,
+    "unit": "",
+    "line_number": 85,
+    "raw_text": "| 经营现金流 | 22.72 | 24.62 | **22.34** | H1 约 2.25 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "储能及元件 · 毛利率",
+    "reported_value": 11.71,
+    "unit": "%",
+    "line_number": 103,
+    "raw_text": "| 储能及元件 | 15.31 | 7.11% | +120.52% | 11.71% | 增长快，尚未成为高质量利润池 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 108,
+    "label": "储能及元件 · 占比",
+    "reported_value": 7.11,
+    "unit": "%",
+    "line_number": 103,
+    "raw_text": "| 储能及元件 | 15.31 | 7.11% | +120.52% | 11.71% | 增长快，尚未成为高质量利润池 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 115,
+    "label": "H1 EPS · 东方财富/第二行情源",
+    "reported_value": 1.9,
+    "unit": "",
+    "line_number": 113,
+    "raw_text": "| H1 EPS | 1.90 元 | 1.90 元 | 0.00% | 一致 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 130,
+    "label": "定价权 · 评分",
+    "reported_value": 2.5,
+    "unit": "",
+    "line_number": 161,
+    "raw_text": "| 定价权 | 2.5 / 5 | 海外强调价值定价，交付紧缺期有溢价 | 强势客户、招标、原材料和同行扩产限制长期涨价权 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 140,
+    "label": "中国 2025 电网投资 · 最新公开数据",
+    "reported_value": 6395.0,
+    "unit": "亿元",
+    "line_number": 260,
+    "raw_text": "| 中国 2025 电网投资 | 6,395 亿元 | 国内基本盘稳健 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 144,
+    "label": "平高电气 · 相对优势",
+    "reported_value": 1100.0,
+    "unit": "",
+    "line_number": 276,
+    "raw_text": "| 平高电气 | 1100kV GIS、特高压开关、国网体系 | 思源产品矩阵与海外增长更强 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 151,
+    "label": "TTM EPS · 数值",
+    "reported_value": 4.2736,
+    "unit": "",
+    "line_number": 306,
+    "raw_text": "| TTM EPS | 4.2736 元 | 归母净利润 / 总股本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 152,
+    "label": "PE · 数值",
+    "reported_value": 36.1,
+    "unit": "x",
+    "line_number": 307,
+    "raw_text": "| PE | **36.10x** | 当前价 / TTM EPS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 155,
+    "label": "PS · 数值",
+    "reported_value": 5.06,
+    "unit": "x",
+    "line_number": 309,
+    "raw_text": "| PS | **5.06x** | 市值 / TTM 收入 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 164,
+    "label": "25x · 所需 EPS CAGR",
+    "reported_value": 24.33,
+    "unit": "%",
+    "line_number": 323,
+    "raw_text": "| 25x | 8.21 元 | **24.33%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 174,
+    "label": "中性 · 相对 154.27 元",
+    "reported_value": 3.2,
+    "unit": "%",
+    "line_number": 334,
+    "raw_text": "| 中性 | +10% | 5.69 元 | 28x | **159.3 元** | **+3.2%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 177,
+    "label": "悲观 · 第 3 年目标价",
+    "reported_value": 76.9,
+    "unit": "",
+    "line_number": 335,
+    "raw_text": "| 悲观 | 0% | 4.27 元 | 18x | **76.9 元** | **-50.1%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

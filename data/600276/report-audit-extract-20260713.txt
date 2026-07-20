@@ -1,0 +1,305 @@
+======================================================================
+报告数据抽检清单
+文件：reports\恒瑞医疗\恒瑞医药-investment-team-20260713.md
+总提取数据点：143  |  抽样比例：15%  |  抽检数量：22
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  7     42  A 股法定股本 · 核验与口径                           2026.00  
+  9     43  H 股法定股本 · 核验与口径                           2026.00  
+  8     43  H 股法定股本 · 数值                         258197600.00  
+ 23     57  2021A · FCF                                 25.54  
+ 24     57  2021A · 研发投入/收入                             23.95  %
+ 29     58  2022A · ROE                                 10.89  %
+ 27     58  2022A · 扣非归母                                34.10  
+ 36     59  2023A · 毛利率                                 84.55  %
+ 56     61  2025A · 研发投入/收入                             27.58  %
+ 51     61  2025A · 扣非归母                                74.13  
+ 54     61  2025A · OCF                                112.35  
+ 58     77  创新药销售收入 · 2026Q1                            45.26  亿元
+ 60     78  肿瘤创新药收入 · 2025A                            132.40  亿元
+ 63     79  非肿瘤创新药收入 · 2026Q1                           12.13  亿元
+ 71     97  2026-07-11 · 事实                           2026.00  
+ 70     97  2026-07-11 · 事件                           2026.00  
+ 84    153  专利/数据排他 · 评分                                 3.50  
+ 90    209  分红 · 判断                                      0.36  %
+142    253  恒瑞竞争位置                                       4.00  
+143    253  趋势价值捕获                                       3.50  
+ 92    265  TTM 营收 · 数值                                325.64  亿元
+109    286  乐观 · 目标价                                    90.40  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 7,
+    "label": "A 股法定股本 · 核验与口径",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 42,
+    "raw_text": "| A 股法定股本 | 6,379,002,274 股 | 港交所 2026 年 6 月月报 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "H 股法定股本 · 核验与口径",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 43,
+    "raw_text": "| H 股法定股本 | 258,197,600 股 | 港交所 2026 年 6 月月报 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "H 股法定股本 · 数值",
+    "reported_value": 258197600.0,
+    "unit": "",
+    "line_number": 43,
+    "raw_text": "| H 股法定股本 | 258,197,600 股 | 港交所 2026 年 6 月月报 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "2021A · FCF",
+    "reported_value": 25.54,
+    "unit": "",
+    "line_number": 57,
+    "raw_text": "| 2021A | 259.06 | 45.30 | 42.01 | 85.56% | 13.96% | 42.19 | 25.54 | 23.95% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "2021A · 研发投入/收入",
+    "reported_value": 23.95,
+    "unit": "%",
+    "line_number": 57,
+    "raw_text": "| 2021A | 259.06 | 45.30 | 42.01 | 85.56% | 13.96% | 42.19 | 25.54 | 23.95% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "2022A · ROE",
+    "reported_value": 10.89,
+    "unit": "%",
+    "line_number": 58,
+    "raw_text": "| 2022A | 212.75 | 39.06 | 34.10 | 83.61% | 10.89% | 12.65 | -7.27 | 29.83% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "2022A · 扣非归母",
+    "reported_value": 34.1,
+    "unit": "",
+    "line_number": 58,
+    "raw_text": "| 2022A | 212.75 | 39.06 | 34.10 | 83.61% | 10.89% | 12.65 | -7.27 | 29.83% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "2023A · 毛利率",
+    "reported_value": 84.55,
+    "unit": "%",
+    "line_number": 59,
+    "raw_text": "| 2023A | 228.20 | 43.02 | 41.41 | 84.55% | 10.99% | 76.44 | 61.60 | 26.95% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "2025A · 研发投入/收入",
+    "reported_value": 27.58,
+    "unit": "%",
+    "line_number": 61,
+    "raw_text": "| **2025A** | **316.29** | **77.11** | **74.13** | **86.21%** | **14.26%** | **112.35** | **82.73** | **27.58%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "2025A · 扣非归母",
+    "reported_value": 74.13,
+    "unit": "",
+    "line_number": 61,
+    "raw_text": "| **2025A** | **316.29** | **77.11** | **74.13** | **86.21%** | **14.26%** | **112.35** | **82.73** | **27.58%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 54,
+    "label": "2025A · OCF",
+    "reported_value": 112.35,
+    "unit": "",
+    "line_number": 61,
+    "raw_text": "| **2025A** | **316.29** | **77.11** | **74.13** | **86.21%** | **14.26%** | **112.35** | **82.73** | **27.58%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "创新药销售收入 · 2026Q1",
+    "reported_value": 45.26,
+    "unit": "亿元",
+    "line_number": 77,
+    "raw_text": "| 创新药销售收入 | 163.42 亿元，+26.09% | 45.26 亿元，+25.75% | 分别占总营收约 51.67%、55.60% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "肿瘤创新药收入 · 2025A",
+    "reported_value": 132.4,
+    "unit": "亿元",
+    "line_number": 78,
+    "raw_text": "| 肿瘤创新药收入 | 132.40 亿元，+18.52% | 33.13 亿元，+11.63% | 仍是核心，但增速低于创新药整体 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "非肿瘤创新药收入 · 2026Q1",
+    "reported_value": 12.13,
+    "unit": "亿元",
+    "line_number": 79,
+    "raw_text": "| 非肿瘤创新药收入 | 31.02 亿元，+73.36% | 12.13 亿元，+92.13% | 第二增长曲线开始形成，但仍有低基数效应 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "2026-07-11 · 事实",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 97,
+    "raw_text": "| 2026-07-11 | 碘佛醇进入 2026 版国家基本药物目录 | 2026-09-01 生效，有利于覆盖各级医疗机构 | 渠道小利好；公司明确预计短期不会对业绩产生重大影响 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "2026-07-11 · 事件",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 97,
+    "raw_text": "| 2026-07-11 | 碘佛醇进入 2026 版国家基本药物目录 | 2026-09-01 生效，有利于覆盖各级医疗机构 | 渠道小利好；公司明确预计短期不会对业绩产生重大影响 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 84,
+    "label": "专利/数据排他 · 评分",
+    "reported_value": 3.5,
+    "unit": "",
+    "line_number": 153,
+    "raw_text": "| 专利/数据排他 | 3.5/5 | 大量境内外发明专利及上市产品数据积累 | 专利挑战、专利到期衰减、同靶点替代速度 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 90,
+    "label": "分红 · 判断",
+    "reported_value": 0.36,
+    "unit": "%",
+    "line_number": 209,
+    "raw_text": "| 分红 | 2025 年度每股现金红利 0.20 元 | 股息率仅约 0.36%，投资回报主要依赖增长 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 142,
+    "label": "恒瑞竞争位置",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 253,
+    "raw_text": "**行业吸引力：4.0/5；恒瑞竞争位置：4.0/5；趋势价值捕获：3.5/5。** 最大非共识点是：行业 BD 金额增长不代表行业平均 ROIC 上升，合作方购买的常常只是高不确定性资产的选择权。恒瑞处于国内第一梯队，但海外价值兑现仍以首",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 143,
+    "label": "趋势价值捕获",
+    "reported_value": 3.5,
+    "unit": "",
+    "line_number": 253,
+    "raw_text": "**行业吸引力：4.0/5；恒瑞竞争位置：4.0/5；趋势价值捕获：3.5/5。** 最大非共识点是：行业 BD 金额增长不代表行业平均 ROIC 上升，合作方购买的常常只是高不确定性资产的选择权。恒瑞处于国内第一梯队，但海外价值兑现仍以首",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 92,
+    "label": "TTM 营收 · 数值",
+    "reported_value": 325.64,
+    "unit": "亿元",
+    "line_number": 265,
+    "raw_text": "| TTM 营收 | 325.64 亿元 | 财报滚动口径 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "乐观 · 目标价",
+    "reported_value": 90.4,
+    "unit": "",
+    "line_number": 286,
+    "raw_text": "| 乐观 | +18% | 45x | 2.01 元 | **90.4 元** | +62.2% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

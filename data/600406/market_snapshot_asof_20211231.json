@@ -1,0 +1,115 @@
+{
+  "company": "国电南瑞科技股份有限公司",
+  "ticker": "600406.SH",
+  "market_date": "2021-12-31",
+  "price_basis": "未复权真实收盘价",
+  "price": 40.03,
+  "price_sources": [
+    {
+      "provider": "腾讯历史K线",
+      "url": "https://web.ifzq.gtimg.cn/appstock/app/kline/kline?param=sh600406,day,2021-12-31,2021-12-31,1",
+      "date": "2021-12-31",
+      "open": 41.00,
+      "close": 40.03,
+      "high": 41.10,
+      "low": 39.50,
+      "volume_lots": 232578,
+      "admission": "仅采用指定日期的历史day数组；其他非目标日期字段全部排除"
+    },
+    {
+      "provider": "搜狐历史行情",
+      "url": "https://q.stock.sohu.com/hisHq?code=cn_600406&start=20211231&end=20211231&stat=1&order=D&period=d",
+      "date": "2021-12-31",
+      "open": 41.00,
+      "close": 40.03,
+      "high": 41.10,
+      "low": 39.50,
+      "volume_lots": 232578
+    }
+  ],
+  "shares_outstanding": 5545436888,
+  "share_sources": [
+    {
+      "source": "国电南瑞部分限制性股票回购注销实施公告",
+      "first_public_date": "2021-11-03",
+      "effective_date": "2021-11-05",
+      "value": 5545436888,
+      "local_file": "600406_2021_share_cancel_20211103.pdf"
+    },
+    {
+      "source": "国电南瑞2021年限制性股票激励计划草案",
+      "first_public_date": "2021-12-09",
+      "value": 5545436888,
+      "local_file": "600406_2021_incentive_draft_20211209.pdf",
+      "note": "草案只用于确认公告时股本，不视为已授予"
+    },
+    {
+      "source": "新浪财经历史股本表",
+      "historical_row_date": "2021-11-05",
+      "historical_announcement_date": "2021-11-03",
+      "value_rounded": 5545436890,
+      "url": "https://vip.stock.finance.sina.com.cn/corp/go.php/vCI_StockStructure/stockid/600406.phtml"
+    }
+  ],
+  "calculated": {
+    "market_cap": 221983838626.64,
+    "market_cap_yi": 2219.8383862664,
+    "ttm_eps": 0.9910296949790118,
+    "bvps_20210930": 6.410640080419576,
+    "ttm_revenue_per_share": 7.5081917743141755,
+    "ttm_accounting_fcf_per_share": 0.3225174524373741,
+    "ttm_pe": 40.39,
+    "pb_on_20210930_equity": 6.24,
+    "ttm_ps": 5.33,
+    "ttm_p_fcf": 124.12,
+    "ttm_fcf_yield_pct": 0.81,
+    "ttm_earnings_yield_pct": 2.48
+  },
+  "peer_snapshot": [
+    {
+      "company": "许继电气",
+      "ticker": "000400.SZ",
+      "price": 26.10,
+      "price_sources": ["腾讯历史K线", "搜狐历史行情"],
+      "shares_basis": "2021-09-30三季报股本",
+      "shares": 1008327309,
+      "ttm_net_profit": 783204183.34,
+      "market_cap_estimate": 26317342764.90,
+      "ttm_pe_estimate": 33.60
+    },
+    {
+      "company": "四方股份",
+      "ticker": "601126.SH",
+      "price": 20.90,
+      "price_sources": ["腾讯历史K线", "搜狐历史行情"],
+      "shares_basis": "2021-09-30三季报股本",
+      "shares": 813172000,
+      "ttm_net_profit": 484886747.13,
+      "market_cap_estimate": 16995294800.00,
+      "ttm_pe_estimate": 35.05
+    },
+    {
+      "company": "东方电子",
+      "ticker": "000682.SZ",
+      "price": 8.47,
+      "price_sources": ["腾讯历史K线", "搜狐历史行情"],
+      "shares_basis": "2021-09-30三季报股本",
+      "shares": 1340727007,
+      "ttm_net_profit": 308592251.25,
+      "market_cap_estimate": 11355957749.29,
+      "ttm_pe_estimate": 36.80
+    },
+    {
+      "company": "国电南自",
+      "ticker": "600268.SH",
+      "price": 10.03,
+      "price_sources": ["腾讯历史K线", "搜狐历史行情"],
+      "shares_basis": "2021-09-30三季报股本",
+      "shares": 695265184,
+      "ttm_net_profit": 249429466.13,
+      "market_cap_estimate": 6973509795.52,
+      "ttm_pe_estimate": 27.96
+    }
+  ],
+  "peer_limitations": "同行股本采用截止日前最新可得的2021Q3股本，因此市值和TTM PE为估算；未表述为年末登记结算实际股本"
+}

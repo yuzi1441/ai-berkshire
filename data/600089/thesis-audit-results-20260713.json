@@ -1,0 +1,72 @@
+[
+  {
+    "id": 2,
+    "label": "股价 · 计划研究仓锚",
+    "reported_value": 13.3,
+    "unit": "",
+    "fetched_value": 13.3,
+    "fetched_source": "特变电工研究报告-20260713分层价格框架",
+    "fetched_value2": 13.3,
+    "fetched_source2": "thesis-tracker入场纪律参数"
+  },
+  {
+    "id": 8,
+    "label": "TTM归母PE · 变化要求",
+    "reported_value": 1.2208,
+    "unit": "",
+    "fetched_value": 1.220834,
+    "fetched_source": "2025年报与2026Q1报告滚动归母利润/期末股本",
+    "fetched_value2": 1.220834,
+    "fetched_source2": "financial_rigor.py估值输入复核"
+  },
+  {
+    "id": 9,
+    "label": "TTM扣非PE · 2026-07-13收盘",
+    "reported_value": 21.51,
+    "unit": "x",
+    "fetched_value": 21.51,
+    "fetched_source": "financial_rigor.py verify-valuation收盘版",
+    "fetched_value2": 21.5056,
+    "fetched_source2": "19.14元/0.8900006137元独立复算"
+  },
+  {
+    "id": 16,
+    "label": "股息率 · 变化要求",
+    "reported_value": 0.36,
+    "unit": "",
+    "fetched_value": 0.36,
+    "fetched_source": "特变电工2025年年度报告分红方案",
+    "fetched_value2": 0.36,
+    "fetched_source2": "上交所2025年度权益分派实施公告"
+  },
+  {
+    "id": 15,
+    "label": "股息率 · 计划研究仓锚",
+    "reported_value": 2.71,
+    "unit": "%",
+    "fetched_value": 2.71,
+    "fetched_source": "financial_rigor.py对13.3元入场锚验算",
+    "fetched_value2": 2.7068,
+    "fetched_source2": "0.36元/13.3元独立复算"
+  },
+  {
+    "id": 18,
+    "label": "相对概率加权价值14.825元的安全边际 · 计划研究仓锚",
+    "reported_value": 10.29,
+    "unit": "%",
+    "fetched_value": 10.29,
+    "fetched_source": "financial_rigor.py calc输出",
+    "fetched_value2": 10.2867,
+    "fetched_source2": "1-13.3/14.825独立复算"
+  },
+  {
+    "id": 41,
+    "label": "研究仓 · 最大动作",
+    "reported_value": 25.0,
+    "unit": "%",
+    "fetched_value": 25.0,
+    "fetched_source": "核心论文预设仓位纪律",
+    "fetched_value2": 25.0,
+    "fetched_source2": "仓位纪律表复核"
+  }
+]

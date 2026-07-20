@@ -1,0 +1,41 @@
+{
+  "valuation_date": "2026-07-15 CST intraday",
+  "current_price_cny": 11.69,
+  "base_ttm_eps_cny": 0.7520,
+  "years": 5,
+  "scenarios": {
+    "bull": {
+      "eps_growth_pct": 10.0,
+      "terminal_pe": 17.0,
+      "terminal_price_cny": 20.6,
+      "price_cagr_pct": 12.0
+    },
+    "base": {
+      "eps_growth_pct": 5.0,
+      "terminal_pe": 14.0,
+      "terminal_price_cny": 13.4,
+      "price_cagr_pct": 2.8
+    },
+    "bear": {
+      "eps_growth_pct": -2.0,
+      "terminal_pe": 10.0,
+      "terminal_price_cny": 6.8,
+      "price_cagr_pct": -10.3
+    }
+  },
+  "discounted_price_anchors_at_10pct_required_return": {
+    "bull_cny": 13.62,
+    "base_cny": 9.15,
+    "bear_cny": 5.05,
+    "dividend_assumption_cny_per_year": 0.2659,
+    "note": "Assumes a flat annual dividend for five years and discounts terminal price plus dividends. This is a decision aid, not intrinsic value."
+  },
+  "action_bands_cny": {
+    "aggressive_initial_position_at_or_below": 10.5,
+    "steady_buy_at_or_below": 9.5,
+    "conservative_buy_at_or_below": 9.0,
+    "valuation_review_at_or_above": 13.8,
+    "review_or_trim_at_or_above": 16.5
+  },
+  "key_assumption_risk": "The model is highly sensitive to the domestic tractor cycle, export margin, high-end product commercialization and terminal multiple."
+}

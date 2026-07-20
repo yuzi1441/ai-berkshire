@@ -1,0 +1,305 @@
+======================================================================
+报告数据抽检清单
+文件：reports\一拖股份\一拖股份-investment-team-20260714.md
+总提取数据点：146  |  抽样比例：15%  |  抽检数量：22
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  7     48  营业收入（亿元） · 2022A                           124.55  
+  9     48  营业收入（亿元） · 2024A                           119.04  
+  8     48  营业收入（亿元） · 2023A                           115.28  
+ 23     51  EPS（元） · 2023A                               0.89  
+ 24     51  EPS（元） · 2024A                               0.82  
+ 29     52  加权 ROE · 2024A                              13.22  %
+ 27     52  加权 ROE · 2022A                              11.99  %
+ 36     54  经营现金流（亿元） · 2021A                            5.82  
+ 51     66  农业机械，分部抵消前 · 收入（亿元）                         98.93  
+ 56     69  国内 · 收入（亿元）                                 96.32  
+ 57     69  国内 · 毛利率                                    15.48  %
+ 58     70  国外 · 收入（亿元）                                 11.91  
+ 60     71  经销 · 收入（亿元）                                 82.75  
+ 63     72  直销 · 结论                                     23.54  %
+ 71    102  拖拉机整机 · 一拖做什么                               25.00  
+ 76    127  规模与产业链 · 评分                                  3.80  
+108    245  TTM EPS · 口径                              2025.00  
+109    246  2026Q1 BVPS · 数值                             7.32  
+130    270  悲观 · 五年目标 PE                                10.00  x
+141    323  小仓持有 · 下一步触发条件                            2026.00  
+142    324  较重持仓 · 下一步触发条件                               9.50  
+145    384  农机 360                                    2025.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 7,
+    "label": "营业收入（亿元） · 2022A",
+    "reported_value": 124.55,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 营业收入（亿元） | 92.09 | 124.55 | 115.28 | 119.04 | **108.23** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "营业收入（亿元） · 2024A",
+    "reported_value": 119.04,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 营业收入（亿元） | 92.09 | 124.55 | 115.28 | 119.04 | **108.23** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "营业收入（亿元） · 2023A",
+    "reported_value": 115.28,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 营业收入（亿元） | 92.09 | 124.55 | 115.28 | 119.04 | **108.23** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 23,
+    "label": "EPS（元） · 2023A",
+    "reported_value": 0.89,
+    "unit": "",
+    "line_number": 51,
+    "raw_text": "| EPS（元） | 0.39 | 0.61 | 0.89 | 0.82 | **0.72** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "EPS（元） · 2024A",
+    "reported_value": 0.82,
+    "unit": "",
+    "line_number": 51,
+    "raw_text": "| EPS（元） | 0.39 | 0.61 | 0.89 | 0.82 | **0.72** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "加权 ROE · 2024A",
+    "reported_value": 13.22,
+    "unit": "%",
+    "line_number": 52,
+    "raw_text": "| 加权 ROE | 8.49% | 11.99% | 15.76% | 13.22% | **10.86%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 27,
+    "label": "加权 ROE · 2022A",
+    "reported_value": 11.99,
+    "unit": "%",
+    "line_number": 52,
+    "raw_text": "| 加权 ROE | 8.49% | 11.99% | 15.76% | 13.22% | **10.86%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "经营现金流（亿元） · 2021A",
+    "reported_value": 5.82,
+    "unit": "",
+    "line_number": 54,
+    "raw_text": "| 经营现金流（亿元） | 5.82 | 36.02 | 10.56 | 12.16 | **9.16** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 51,
+    "label": "农业机械，分部抵消前 · 收入（亿元）",
+    "reported_value": 98.93,
+    "unit": "",
+    "line_number": 66,
+    "raw_text": "| 农业机械，分部抵消前 | 98.93 | -9.72% | 14.04% | 核心业务，规模大但盈利不厚 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 56,
+    "label": "国内 · 收入（亿元）",
+    "reported_value": 96.32,
+    "unit": "",
+    "line_number": 69,
+    "raw_text": "| 国内 | 96.32 | -12.29% | 15.48% | 受粮价、作业收益与更新周期压制 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "国内 · 毛利率",
+    "reported_value": 15.48,
+    "unit": "%",
+    "line_number": 69,
+    "raw_text": "| 国内 | 96.32 | -12.29% | 15.48% | 受粮价、作业收益与更新周期压制 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 58,
+    "label": "国外 · 收入（亿元）",
+    "reported_value": 11.91,
+    "unit": "",
+    "line_number": 70,
+    "raw_text": "| 国外 | 11.91 | +29.04% | 12.44% | 增长快，但尚未形成海外溢价 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "经销 · 收入（亿元）",
+    "reported_value": 82.75,
+    "unit": "",
+    "line_number": 71,
+    "raw_text": "| 经销 | 82.75 | - | - | 占收入 76.46%，渠道质量很关键 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 63,
+    "label": "直销 · 结论",
+    "reported_value": 23.54,
+    "unit": "%",
+    "line_number": 72,
+    "raw_text": "| 直销 | 25.48 | - | - | 占收入 23.54%，动力/OEM 更重要 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 71,
+    "label": "拖拉机整机 · 一拖做什么",
+    "reported_value": 25.0,
+    "unit": "",
+    "line_number": 102,
+    "raw_text": "| 拖拉机整机 | 25-450 马力轮式与履带式产品 | 可靠性、油耗、作业效率、残值、服务时效 | 销量、产品结构、促销、钢材与核心部件成本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "规模与产业链 · 评分",
+    "reported_value": 3.8,
+    "unit": "",
+    "line_number": 127,
+    "raw_text": "| 规模与产业链 | 3.8 | 核心部件自制、集采、柔性制造 | 材料占制造成本约 90%，综合毛利率仍低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 108,
+    "label": "TTM EPS · 口径",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 245,
+    "raw_text": "| TTM EPS | 0.7520 元 | 2025A - 2025Q1 + 2026Q1 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "2026Q1 BVPS · 数值",
+    "reported_value": 7.3181,
+    "unit": "",
+    "line_number": 246,
+    "raw_text": "| 2026Q1 BVPS | 7.3181 元 | 归母净资产 / 总股本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 130,
+    "label": "悲观 · 五年目标 PE",
+    "reported_value": 10.0,
+    "unit": "x",
+    "line_number": 270,
+    "raw_text": "| 悲观 | -2% | 10x | 0.68 元 | **6.8 元** | -10.3% | 周期低迷、价格战、海外低毛利和估值收缩 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 141,
+    "label": "小仓持有 · 下一步触发条件",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 323,
+    "raw_text": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 142,
+    "label": "较重持仓 · 下一步触发条件",
+    "reported_value": 9.5,
+    "unit": "",
+    "line_number": 324,
+    "raw_text": "| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 145,
+    "label": "农机 360",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 384,
+    "raw_text": "12. [农机 360：2025 年轮式拖拉机行业报告，数据截至 2026-02-27](https://news.nongji360.com/report/1077)",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]
