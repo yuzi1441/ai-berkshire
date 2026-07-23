@@ -1,0 +1,172 @@
+{
+  "company": "中国神华",
+  "a_share_ticker": "601088.SH",
+  "h_share_ticker": "01088.HK",
+  "check_date": "2026-07-20",
+  "data_cutoff": "2026-07-20 A/H close",
+  "baseline_date": "2026-07-14",
+  "account_fields": {
+    "actual_purchase_price": null,
+    "share_class": null,
+    "position": null,
+    "required_return": null
+  },
+  "thesis_health": {
+    "score": 8,
+    "green_assumptions": 4,
+    "yellow_assumptions": 2,
+    "red_assumptions": 0,
+    "broken_assumptions": 0,
+    "triggered_redlines": 0,
+    "fundamental_status": "完整",
+    "valuation_drift": "Weakened"
+  },
+  "prices": {
+    "a_share_cny": {
+      "baseline": 43.42,
+      "current": 46.14,
+      "change_pct": 6.264394288346381,
+      "sources": {
+        "Tencent": 46.14,
+        "Eastmoney": 46.14,
+        "Sina": 46.14
+      }
+    },
+    "h_share_hkd": {
+      "baseline": 42.30,
+      "current": 43.60,
+      "change_pct": 3.0732860520094665,
+      "sources": {
+        "Tencent": 43.60,
+        "Eastmoney": 43.60,
+        "ETNet": 43.60
+      }
+    },
+    "hkd_cny": {
+      "baseline": 0.86746,
+      "current": 0.86669,
+      "primary_source": "PBOC/CFETS midpoint",
+      "secondary_value": 0.864745,
+      "secondary_source": "ER-API",
+      "source_deviation_pct": 0.224417
+    },
+    "h_share_cny_equivalent": 37.787684,
+    "h_discount_to_a_pct": {
+      "baseline": 15.49157531091664,
+      "current": 18.10211530125705,
+      "change_percentage_points": 2.6105399903404116
+    }
+  },
+  "valuation": {
+    "ttm_eps_mid_cny": 2.458155397357108,
+    "q1_bvps_cny": 22.172,
+    "historical_dps_cny": 2.01,
+    "simplified_fcf_per_share_cny": 1.229216,
+    "a_share": {
+      "market_cap_cny": 1000750498786.56,
+      "pe": 18.77017215819941,
+      "pb": 2.0810030669312645,
+      "gross_historical_dividend_yield_pct": 4.35630689206762
+    },
+    "h_share_cny_equivalent": {
+      "pe": 15.372373951877705,
+      "pb": 1.7042974923326717,
+      "gross_historical_dividend_yield_pct": 5.319193417622524
+    },
+    "scenario_terminal_values": {
+      "a_share_cny": {
+        "bull": 44.35,
+        "base": 32.39,
+        "bear": 22.46
+      },
+      "h_share_hkd": {
+        "bull": 51.12,
+        "base": 37.34,
+        "bear": 25.89
+      }
+    },
+    "scenario_price_space_pct": {
+      "formula": "(scenario value / current price - 1) * 100",
+      "a_share": {
+        "bull": -3.8794971824880786,
+        "base": -29.80060684872128,
+        "bear": -51.32206328565236
+      },
+      "h_share": {
+        "bull": 17.24770642201834,
+        "base": -14.357798165137615,
+        "bear": -40.61926605504588
+      }
+    },
+    "scenario_safety_margin_pct": {
+      "formula": "(scenario value - current price) / scenario value * 100",
+      "a_share_bull": -4.036076662908679,
+      "h_share_bull": 14.710485133020338
+    }
+  },
+  "h1_2026_operations": {
+    "coal_production_mt": {
+      "value": 249.9,
+      "yoy_pct": -3.6
+    },
+    "coal_sales_mt": {
+      "value": 300.2,
+      "yoy_pct": 1.8,
+      "full_year_target_mt": 618.1,
+      "target_completion_pct": 48.568192849053546
+    },
+    "own_rail_turnover_bn_tkm": {
+      "value": 163.2,
+      "yoy_pct": 6.8
+    },
+    "huanghua_port_loading_mt": {
+      "value": 112.1,
+      "yoy_pct": 4.2
+    },
+    "tianjin_coal_terminal_loading_mt": {
+      "value": 22.4,
+      "yoy_pct": 2.8
+    },
+    "shipping_volume_mt": {
+      "value": 142.0,
+      "yoy_pct": 10.5
+    },
+    "power_generation_twh": {
+      "value": 136.64,
+      "yoy_pct": 5.6,
+      "full_year_target_twh": 288.1,
+      "target_completion_pct": 47.427976397084336
+    }
+  },
+  "redline_audit_exception": {
+    "event_date": "2026-01-11",
+    "regulator_disclosure_date": "2026-04-30",
+    "entity": "神朔铁路分公司",
+    "event": "调车挤岔一般铁路交通事故",
+    "official_wording": "未按规定上报事故信息",
+    "treatment": "基线数据质量例外和披露控制警示；不等同监管明确认定的瞒报；不是本期新事件；类似未按规定上报若重复发生，事件驱动重审红线1和5",
+    "redline_triggered": false
+  },
+  "actions": {
+    "no_position": "观察，A/H均不追价",
+    "existing_a_holder": "进入减仓观察估值复核，不加仓；因账户信息未知，不设减仓比例",
+    "existing_h_holder": "持有但不加仓",
+    "clear_position": "当前证据不支持"
+  },
+  "source_urls": {
+    "a_quote_tencent": "https://qt.gtimg.cn/q=sh601088",
+    "a_quote_eastmoney": "https://push2.eastmoney.com/api/qt/stock/get?secid=1.601088&fields=f43,f44,f45,f46,f47,f48,f49,f50,f51,f52,f57,f58,f60,f86,f169,f170",
+    "a_quote_sina": "https://hq.sinajs.cn/list=sh601088",
+    "h_quote_tencent": "https://qt.gtimg.cn/q=hk01088",
+    "h_quote_eastmoney": "https://push2.eastmoney.com/api/qt/stock/get?secid=116.01088&fields=f43,f44,f45,f46,f47,f48,f49,f50,f51,f52,f57,f58,f60,f86,f169,f170",
+    "h_quote_etnet": "https://stocks.etnet.com.hk/www/sc/stocks/realtime/quote_ci_brief.php?code=1088",
+    "pbc_fx": "https://www.pbc.gov.cn/zhengcehuobisi/125207/125217/125925/2026072009003848832/index.html",
+    "independent_fx": "https://open.er-api.com/v6/latest/HKD",
+    "nra_penalty": "https://www.nra.gov.cn/zzjg/jgj/bjdc/ggbj/202604/t20260430_351173.shtml"
+  },
+  "source_files": [
+    "research/source_docs/中国神华/601088_2026年6月份主要运营数据_20260720.pdf",
+    "research/source_docs/中国神华/601088_近期运营情况_20260720.pdf",
+    "research/source_docs/中国神华/601088_2026H1_业绩预告_20260715.pdf"
+  ]
+}

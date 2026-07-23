@@ -1,0 +1,105 @@
+Tencent Holdings (0700.HK) financial rigor record
+Research date: 2026-07-22
+Financial cutoff: 2026-03-31
+Price cutoff: 2026-07-22 HKEX close
+Share-count cutoff: 2026-07-09 latest statutory disclosure located
+
+[Market data and currency]
+Price: HKD 440.60
+Previous close: HKD 474.00
+Direct change: -7.0464%
+Yahoo date-limited chart: HKD 440.60 close, 66,379,871 shares traded
+Investing.com historical page: HKD 440.60 close, 66.38M shares traded
+Direct price difference: 0.00%; PASS
+
+Currency conversion used: 1 HKD = 0.8627780079841614 CNY
+Yahoo HKDCNY=X 2026-07-22 close: 0.8627780079841614 CNY/HKD
+HKAB 2026-07-22 counter-rate midpoint: 100 / ((117.15 + 114.65) / 2) = 0.8628127696289905 CNY/HKD
+Direct difference versus Yahoo: 0.004029%; PASS
+
+[Share count and market capitalization]
+HKEX/Tencent 2026-07-09 next-day disclosure: 9,092,516,289 issued shares excluding treasury shares; treasury shares 0
+Yahoo profile: 9,001,629,075 shares; no comparable as-of date exposed
+Direct difference: 90,887,214 shares; 0.999583% of HKEX value (1.009675% of Yahoo value)
+Status: timing/definition difference unresolved; use statutory HKEX figure. Do not call this a two-source PASS.
+
+verify-market-cap input: price 440.6; shares 9,092,516,289; reported 4,006,162,676,933.4; currency HKD
+Calculated market cap: HKD 4,006,162,676,933.4004 (HKD 4.006T)
+Converted market cap: CNY 3,456,429,054,065.0947 (CNY 3.456T)
+Status: exact arithmetic check only, not an independent market-cap source validation.
+
+[Direct cross-validation]
+The percentages below use |source 1 - source 2| / source 1. They do not use each source's deviation from the midpoint.
+
+FY2025 revenue: Tencent annual report 751,766 million; Eastmoney 751,766 million; direct difference 0.00%; PASS
+FY2025 IFRS profit attributable: Tencent annual report 224,842 million; Eastmoney 224,842 million; direct difference 0.00%; PASS
+2026Q1 total cash: Tencent announcement 533,700 million; Eastmoney component reconstruction 533,119 million; direct difference 0.108863%; PASS
+FY2025 official FCF: Tencent results 182,600 million; single company-defined primary metric, with period arithmetic rechecked; not an independent two-source PASS
+2026Q1 official FCF: Tencent results 56,700 million; single company-defined primary metric, with period arithmetic rechecked; not an independent two-source PASS
+2026Q1 net cash: Tencent announcement 146,900 million; total cash less disclosed interest-bearing debt 146,865 million; direct difference 0.023826%; PASS as an arithmetic reconstruction, not an independent source
+
+[TTM valuation]
+TTM Non-IFRS attributable profit = 259,626 + 67,905 - 61,329 = 266,202 million CNY
+TTM Non-IFRS EPS = 266,202,000,000 / 9,092,516,289 / 0.8627780079841614 = HKD 33.93346120096326
+TTM IFRS attributable profit = 224,842 + 58,093 - 47,817 = 235,118 million CNY
+TTM IFRS EPS = 235,118,000,000 / 9,092,516,289 / 0.8627780079841614 = HKD 29.971102886710387
+2026Q1 attributable equity / current shares / FX = HKD 143.750851595128 BVPS
+TTM official FCF = 182,600 + 56,700 - 47,100 = 192,200 million CNY
+TTM FCF per share = HKD 24.500233818022167
+Price = HKD 440.60; dividend = HKD 5.30
+
+verify-valuation output:
+Non-IFRS PE: 12.98x
+Non-IFRS earnings yield: 7.70%
+IFRS PE: 14.70x
+PB: 3.07x
+ROE using Non-IFRS EPS/latest BVPS: 23.61%
+P/FCF: 17.98x
+FCF yield: 5.56%
+Dividend yield: 1.20%
+PASS: exact decimal calculation
+
+[Profit-to-FCF bridge]
+TTM Non-IFRS attributable profit: CNY 266.202B
+Less Non-IFRS/IFRS net definition gap: CNY 31.084B
+TTM IFRS attributable profit: CNY 235.118B
+Less aggregate result gap from IFRS attributable profit to official FCF: CNY 42.918B
+TTM official FCF: CNY 192.200B
+Non-IFRS profit less official FCF: CNY 74.002B
+Apparent cash conversion: 192.200 / 266.202 = 72.2008%
+Definition warning: the CNY 42.918B line is a result gap, not one cash expense. The saved evidence does not support a precise TTM decomposition.
+
+[Three-year terminal-price scenarios]
+Input EPS HKD 33.93346120096326; years 3; current price HKD 440.60; shares 90.92516289 hundred million
+Bull: growth 14%, PE 18x, terminal price HKD 904.9, terminal-price change +105.4%
+Base: growth 9%, PE 15x, terminal price HKD 659.2, terminal-price change +49.6%
+Bear: growth 0%, PE 11x, terminal price HKD 373.3, terminal-price change -15.3%
+PASS: financial_rigor.py three-scenario exact calculation
+
+[Discounted current-value scenarios]
+Required return: 10%; dividend base: HKD 5.30; each scenario's dividend growth equals EPS growth; no separate investment-asset or net-cash add-back
+Formula: current value = terminal price / (1+r)^3 + sum(dividend_t / (1+r)^t), t=1..3
+Bull: terminal PV HKD 679.89; dividend PV HKD 17.08; current value HKD 696.97; +58.19% versus price
+Base: terminal PV HKD 495.25; dividend PV HKD 15.61; current value HKD 510.86; +15.95% versus price
+Bear: terminal PV HKD 280.44; dividend PV HKD 13.18; current value HKD 293.62; -33.36% versus price
+Current price HKD 440.60 implies approximately 15.62% annualized total return in the base scenario.
+
+[Base-scenario action thresholds]
+15% required return: HKD 447.71
+12% required return: HKD 484.25
+10% required return: HKD 510.86
+8% required return: HKD 539.47
+10%-discounted bull current value: HKD 696.97
+
+[Reverse DCF sensitivity]
+FCF base CNY 192.200B; discount rate 10%; terminal growth 3%; ten-year explicit forecast; no separate investment-asset or net-cash add-back
+FCF growth 4%: CNY 3.044188T; HKD 388.05 per share
+FCF growth 5%: CNY 3.277493T; HKD 417.79 per share
+FCF growth 6%: CNY 3.529284T; HKD 449.89 per share
+FCF growth 7%: CNY 3.800932T; HKD 484.51 per share
+FCF growth 8%: CNY 4.093895T; HKD 521.86 per share
+Current market cap CNY 3.456429T implies approximately 5.72% annual FCF growth under these assumptions.
+
+[Important definition and double-counting notes]
+Tencent official FCF (FY2025: CNY 182.6B) is lower than standard OCF-minus-capex databases (approximately CNY 215.6B) because the company additionally deducts media-content and lease-related payments. This report uses official FCF throughout.
+Whole-company Non-IFRS earnings and FCF may already contain contributions related to associates or investments. Investment assets and net cash are not added separately unless the related earnings are first removed and asset values are adjusted for tax, liquidity, and control.

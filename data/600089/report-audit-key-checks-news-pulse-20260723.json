@@ -1,0 +1,136 @@
+{
+  "report": "reports/特变电工/特变电工-news-20260723.md",
+  "cutoff": "2026-07-23",
+  "checks": [
+    {
+      "label": "2026-07-23收盘价",
+      "reported": 21.53,
+      "unit": "元",
+      "source_1": "腾讯行情API",
+      "value_1": 21.53,
+      "source_2": "新浪行情API",
+      "value_2": 21.53,
+      "status": "PASS"
+    },
+    {
+      "label": "2026-07-23单日涨幅",
+      "reported": 8.85,
+      "unit": "%",
+      "source_1": "腾讯行情API",
+      "value_1": 8.85,
+      "source_2": "新浪收盘价与前收独立复算",
+      "value_2": 8.85,
+      "status": "PASS"
+    },
+    {
+      "label": "2026-07-23成交量",
+      "reported": 2.8726,
+      "unit": "亿股",
+      "source_1": "新浪行情API",
+      "value_1": 2.87255714,
+      "source_2": "腾讯行情API",
+      "value_2": 2.872557,
+      "status": "PASS"
+    },
+    {
+      "label": "2026-07-23总市值",
+      "reported": 1087.87,
+      "unit": "亿元",
+      "source_1": "financial_rigor股价乘总股本",
+      "value_1": 1087.8692365463,
+      "source_2": "腾讯行情API",
+      "value_2": 1087.87,
+      "status": "PASS"
+    },
+    {
+      "label": "特变特高压第三批中标",
+      "reported": 23.12,
+      "unit": "亿元",
+      "source_1": "国网候选人明细镜像7行精确汇总",
+      "value_1": 23.1159321509,
+      "source_2": "证券时报2026-07-23",
+      "value_2": 23.12,
+      "status": "PASS"
+    },
+    {
+      "label": "特变常规输变电第三批候选报价保守口径",
+      "reported": 9.07,
+      "unit": "亿元",
+      "source_1": "国网候选人明细镜像28行精确汇总",
+      "value_1": 9.0678133631,
+      "source_2": "北极星智能电网候选人逐项汇总",
+      "value_2": 9.067813,
+      "status": "PASS",
+      "note": "另有10.89亿元品牌归集口径，报告未采用"
+    },
+    {
+      "label": "特高压第三批总额",
+      "reported": 108.72,
+      "unit": "亿元",
+      "source_1": "证券时报2026-07-23",
+      "value_1": 108.72,
+      "source_2": "中信证券统计转引",
+      "value_2": 108.72,
+      "status": "PASS"
+    },
+    {
+      "label": "2026年前三批特高压累计",
+      "reported": 292.61,
+      "unit": "亿元",
+      "source_1": "证券时报2026-07-23",
+      "value_1": 292.61,
+      "source_2": "中信证券统计转引",
+      "value_2": 292.61,
+      "status": "PASS"
+    },
+    {
+      "label": "2025年全年特高压采购",
+      "reported": 220.62,
+      "unit": "亿元",
+      "source_1": "证券时报2026-07-23",
+      "value_1": 220.62,
+      "source_2": "中信证券统计转引",
+      "value_2": 220.62,
+      "status": "PASS"
+    },
+    {
+      "label": "两批保守中标额占2025年营收",
+      "reported": 3.31,
+      "unit": "%",
+      "source_1": "32.19亿元/公司2025年报营收972.265384亿元精确复算",
+      "value_1": 3.3108,
+      "status": "PASS"
+    },
+    {
+      "label": "当前价高于13.30元入场锚",
+      "reported": 61.88,
+      "unit": "%",
+      "source_1": "精确十进制复算",
+      "value_1": 61.88,
+      "status": "PASS"
+    },
+    {
+      "label": "TTM归母PE代理",
+      "reported": 17.64,
+      "unit": "x",
+      "source_1": "financial_rigor.py verify-valuation",
+      "value_1": 17.64,
+      "status": "PASS"
+    },
+    {
+      "label": "归母PB代理",
+      "reported": 1.42,
+      "unit": "x",
+      "source_1": "financial_rigor.py verify-valuation",
+      "value_1": 1.42,
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "total": 13,
+    "pass": 13,
+    "warn": 0,
+    "fail": 0,
+    "verdict": "PASS"
+  }
+}

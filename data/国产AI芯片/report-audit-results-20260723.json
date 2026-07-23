@@ -1,0 +1,82 @@
+[
+  {
+    "id": 6,
+    "label": "通富微电当前价相对十年10%回报阈值",
+    "reported_value": 3.2,
+    "unit": "%",
+    "fetched_value": 3.17,
+    "fetched_source": "tools/financial_rigor.py exact calculation",
+    "fetched_value2": 3.2,
+    "fetched_source2": "data/国产AI芯片/bottleneck-valuation-20260723.json rounded presentation"
+  },
+  {
+    "id": 4,
+    "label": "通富微电乐观情景年限",
+    "reported_value": 10,
+    "unit": "year",
+    "fetched_value": 10,
+    "fetched_source": "report valuation method definition",
+    "fetched_value2": 10,
+    "fetched_source2": "data/国产AI芯片/bottleneck-valuation-20260723.json method"
+  },
+  {
+    "id": 19,
+    "label": "寒武纪当前价",
+    "reported_value": 1249,
+    "unit": "CNY",
+    "fetched_value": 1249,
+    "fetched_source": "Tencent quote API",
+    "fetched_value2": 1249,
+    "fetched_source2": "Eastmoney push2delay quote API"
+  },
+  {
+    "id": 23,
+    "label": "寒武纪乐观净利润CAGR假设",
+    "reported_value": 30,
+    "unit": "%",
+    "fetched_value": 30,
+    "fetched_source": "report scenario definition",
+    "fetched_value2": 30,
+    "fetched_source2": "data/国产AI芯片/bottleneck-valuation-20260723.json"
+  },
+  {
+    "id": 28,
+    "label": "中芯国际当前价",
+    "reported_value": 145.09,
+    "unit": "CNY",
+    "fetched_value": 145.09,
+    "fetched_source": "Tencent quote API",
+    "fetched_value2": 145.09,
+    "fetched_source2": "Eastmoney push2delay quote API"
+  },
+  {
+    "id": 35,
+    "label": "概伦电子PS",
+    "reported_value": 30.67,
+    "unit": "x",
+    "fetched_value": 30.6694,
+    "fetched_source": "tools/financial_rigor.py market cap / 2025 annual report revenue",
+    "fetched_value2": 30.67,
+    "fetched_source2": "Eastmoney market cap and F10 revenue"
+  },
+  {
+    "id": 40,
+    "label": "长电科技2.5D技术名称",
+    "reported_value": 2.5,
+    "unit": "technology label",
+    "fetched_value": 2.5,
+    "fetched_source": "长电科技2025年报",
+    "fetched_value2": 2.5,
+    "fetched_source2": "TrendForce advanced packaging terminology"
+  },
+  {
+    "id": 42,
+    "label": "寒武纪观察名单降级阈值",
+    "reported_value": 100,
+    "unit": "%",
+    "fetched_value": 100,
+    "fetched_source": "bottleneck-hunter PS red-light decision rule adapted to watch trigger",
+    "fetched_value2": 100,
+    "fetched_source2": "report action table definition"
+  }
+]

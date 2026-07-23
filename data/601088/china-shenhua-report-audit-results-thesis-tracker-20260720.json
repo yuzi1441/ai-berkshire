@@ -1,0 +1,86 @@
+[
+  {
+    "id": 10,
+    "label": "发电量 · 机械完成率",
+    "reported_value": 47.43,
+    "unit": "%",
+    "line_number": 50,
+    "raw_text": "| 发电量 | 136.64 TWh | +5.6% | 288.1 TWh | 47.43% | 大体符合半程进度 |",
+    "fetched_value": 47.427976397084336,
+    "fetched_source": "发行人近期运营情况公告中的H1发电量136.64TWh和全年目标288.1TWh复算",
+    "fetched_value2": 47.427976397084336,
+    "fetched_source2": "financial_rigor calc与结构化快照target_completion_pct"
+  },
+  {
+    "id": 20,
+    "label": "A / H 中值 TTM PE · 当前（2026-07-20）",
+    "reported_value": 18.77,
+    "unit": "x",
+    "line_number": 97,
+    "raw_text": "| A / H 中值 TTM PE | 17.66x / 14.93x | **18.77x / 15.37x** | 两地均扩张 |",
+    "fetched_value": 18.77017215819941,
+    "fetched_source": "financial_rigor verify-valuation: 46.14 / 2.458155397357108",
+    "fetched_value2": 18.77017215819941,
+    "fetched_source2": "A股三源收盘价共识与冻结EPS独立复算；结构化快照"
+  },
+  {
+    "id": 19,
+    "label": "A / H 中值 TTM PE · 建档（2026-07-14）",
+    "reported_value": 17.66,
+    "unit": "x",
+    "line_number": 97,
+    "raw_text": "| A / H 中值 TTM PE | 17.66x / 14.93x | **18.77x / 15.37x** | 两地均扩张 |",
+    "fetched_value": 17.663651389445565,
+    "fetched_source": "financial_rigor calc: 43.42 / 2.458155397357108",
+    "fetched_value2": 17.66,
+    "fetched_source2": "data/601088/china-shenhua-investment-team-snapshot-20260714.json"
+  },
+  {
+    "id": 21,
+    "label": "A / H PB · 建档（2026-07-14）",
+    "reported_value": 1.96,
+    "unit": "x",
+    "line_number": 98,
+    "raw_text": "| A / H PB | 1.96x / 1.65x | **2.08x / 1.70x** | 两地均扩张 |",
+    "fetched_value": 1.9583258163449395,
+    "fetched_source": "financial_rigor calc: 43.42 / 22.172",
+    "fetched_value2": 1.96,
+    "fetched_source2": "data/601088/china-shenhua-investment-team-snapshot-20260714.json"
+  },
+  {
+    "id": 23,
+    "label": "A / H 历史 DPS 税前收益率 · 建档（2026-07-14）",
+    "reported_value": 4.63,
+    "unit": "%",
+    "line_number": 99,
+    "raw_text": "| A / H 历史 DPS 税前收益率 | 4.63% / 5.48% | **4.36% / 5.32%** | 未计税、汇率和费用 |",
+    "fetched_value": 4.629203132197143,
+    "fetched_source": "financial_rigor calc: 2.01 / 43.42 * 100",
+    "fetched_value2": 4.63,
+    "fetched_source2": "data/601088/china-shenhua-investment-team-snapshot-20260714.json"
+  },
+  {
+    "id": 26,
+    "label": "H 股相对 A 股折价 · 当前（2026-07-20）",
+    "reported_value": 18.1,
+    "unit": "%",
+    "line_number": 100,
+    "raw_text": "| H 股相对 A 股折价 | 15.49% | **18.10%** | 扩大 2.61 个百分点 |",
+    "fetched_value": 18.10211530125705,
+    "fetched_source": "financial_rigor calc: [1-(43.60*0.86669)/46.14]*100",
+    "fetched_value2": 18.10211530125705,
+    "fetched_source2": "三源A/H收盘价、央行中间价与结构化快照独立复核"
+  },
+  {
+    "id": 41,
+    "label": "核心假设 · 7 月 20 日判断",
+    "reported_value": 4.0,
+    "unit": "",
+    "line_number": 121,
+    "raw_text": "| 核心假设 | 4 绿、2 黄 | 4 绿、2 黄 | Unchanged | 新运营数据增强证据，但未改变状态 |",
+    "fetched_value": 4.0,
+    "fetched_source": "报告第二节六项假设逐行计数：1-4为绿色",
+    "fetched_value2": 4.0,
+    "fetched_source2": "结构化快照thesis_health.green_assumptions"
+  }
+]

@@ -1,0 +1,192 @@
+[
+  {
+    "id": 7,
+    "label": "总市值 · 口径（解析器实际抽到股价）",
+    "reported_value": 114.23,
+    "unit": "",
+    "fetched_value": 114.23,
+    "fetched_source": "腾讯行情 2026-07-22 收盘",
+    "fetched_value2": 114.23,
+    "fetched_source2": "东方财富行情 2026-07-22 收盘"
+  },
+  {
+    "id": 9,
+    "label": "TTM 归母净利润 · 口径（解析器实际抽到公式年份）",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "巨潮 2025 年年度报告期标签",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "东方财富 2025 年年报期标签"
+  },
+  {
+    "id": 11,
+    "label": "TTM PE · 2026-07-22 数值",
+    "reported_value": 51.1,
+    "unit": "x",
+    "fetched_value": 51.1,
+    "fetched_source": "financial_rigor.py：114.23 / 2.2355039244",
+    "fetched_value2": 51.1,
+    "fetched_source2": "腾讯/巨潮股价与 TTM 利润独立重算"
+  },
+  {
+    "id": 15,
+    "label": "2025 PS · 口径（解析器实际抽到公式年份）",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "巨潮 2025 年年度报告期标签",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "东方财富 2025 年年报期标签"
+  },
+  {
+    "id": 18,
+    "label": "TTM 简化 FCF 收益率绝对值",
+    "reported_value": 0.48,
+    "unit": "%",
+    "fetched_value": 0.48,
+    "fetched_source": "financial_rigor.py：实际结果 -0.48%，解析器忽略负号",
+    "fetched_value2": 0.48,
+    "fetched_source2": "TTM FCF -10.4571 亿元 / 市值 2198.2005 亿元独立重算绝对值"
+  },
+  {
+    "id": 32,
+    "label": "归母净利润 · 2026Q1",
+    "reported_value": 12.42,
+    "unit": "亿元",
+    "fetched_value": 12.42081367,
+    "fetched_source": "巨潮 2026 年第一季度报告",
+    "fetched_value2": 12.42081367,
+    "fetched_source2": "东方财富 2026Q1 财务镜像"
+  },
+  {
+    "id": 36,
+    "label": "加权 ROE · 2025A",
+    "reported_value": 28.57,
+    "unit": "%",
+    "fetched_value": 28.57,
+    "fetched_source": "巨潮 2025 年年度报告",
+    "fetched_value2": 28.57,
+    "fetched_source2": "东方财富 2025 年财务镜像"
+  },
+  {
+    "id": 37,
+    "label": "加权 ROE · 2026Q1",
+    "reported_value": 7.81,
+    "unit": "%",
+    "fetched_value": 7.81,
+    "fetched_source": "巨潮 2026 年第一季度报告",
+    "fetched_value2": 7.81,
+    "fetched_source2": "东方财富 2026Q1 财务镜像"
+  },
+  {
+    "id": 52,
+    "label": "存货 · 解读（解析器实际抽到年份）",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "巨潮 2025 年年度报告期标签",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "东方财富 2025 年年报期标签"
+  },
+  {
+    "id": 54,
+    "label": "货币资金 · 2026Q1",
+    "reported_value": 43.92,
+    "unit": "亿元",
+    "fetched_value": 43.9164,
+    "fetched_source": "巨潮 2026 年第一季度报告",
+    "fetched_value2": 43.9164,
+    "fetched_source2": "东方财富 2026Q1 财务镜像"
+  },
+  {
+    "id": 53,
+    "label": "货币资金 · 2025A",
+    "reported_value": 25.79,
+    "unit": "亿元",
+    "fetched_value": 25.79,
+    "fetched_source": "巨潮 2025 年年度报告",
+    "fetched_value2": 25.79,
+    "fetched_source2": "东方财富 2025 年财务镜像"
+  },
+  {
+    "id": 71,
+    "label": "新产能爬坡不顺 · 可观察指标（研究阈值）",
+    "reported_value": 70.0,
+    "unit": "%",
+    "fetched_value": 70.0,
+    "fetched_source": "报告风险监测规则：利用率阈值",
+    "fetched_value2": 70.0,
+    "fetched_source2": "研究模型复核：非公司披露事实"
+  },
+  {
+    "id": 73,
+    "label": "CoWoP/mSAP 商业化失败 · 可观察指标（研究阈值）",
+    "reported_value": 12.0,
+    "unit": "",
+    "fetched_value": 12.0,
+    "fetched_source": "报告风险监测规则：12 个月观察窗口",
+    "fetched_value2": 12.0,
+    "fetched_source2": "研究模型复核：非公司披露事实"
+  },
+  {
+    "id": 75,
+    "label": "经济权益 · 已确认事实（Happy Union 家族持股）",
+    "reported_value": 75.82,
+    "unit": "%",
+    "fetched_value": 75.82,
+    "fetched_source": "巨潮 2025 年年度报告",
+    "fetched_value2": 75.82,
+    "fetched_source2": "港交所 2026-06-05 更新版申请资料"
+  },
+  {
+    "id": 85,
+    "label": "保守 · 全年归母净利润",
+    "reported_value": 50.55,
+    "unit": "亿元",
+    "fetched_value": 50.54525325,
+    "fetched_source": "financial_rigor.py：H1 中点 + 2025H2",
+    "fetched_value2": 50.54525325,
+    "fetched_source2": "29.15 + (38.22306272 - 16.82780947) 独立重算"
+  },
+  {
+    "id": 90,
+    "label": "基准 · EPS",
+    "reported_value": 3.02,
+    "unit": "",
+    "fetched_value": 3.015729137,
+    "fetched_source": "financial_rigor.py 2026E 基准情景",
+    "fetched_value2": 3.015729137,
+    "fetched_source2": "58.0335918875 / 19.24363537 独立重算"
+  },
+  {
+    "id": 100,
+    "label": "乐观 · 相对 114.23 元",
+    "reported_value": 80.5,
+    "unit": "%",
+    "fetched_value": 80.5,
+    "fetched_source": "financial_rigor.py three-scenario",
+    "fetched_value2": 80.5,
+    "fetched_source2": "(206.2 / 114.23 - 1) 独立重算"
+  },
+  {
+    "id": 107,
+    "label": "基准 · 年化回报",
+    "reported_value": 3.98,
+    "unit": "%",
+    "fetched_value": 3.9811,
+    "fetched_source": "financial_rigor.py 三年复合回报重算",
+    "fetched_value2": 3.9811,
+    "fetched_source2": "(128.4233174346 / 114.23)^(1/3)-1 独立重算"
+  },
+  {
+    "id": 112,
+    "label": "悲观 · 年化回报绝对值",
+    "reported_value": 19.18,
+    "unit": "%",
+    "fetched_value": 19.1812,
+    "fetched_source": "financial_rigor.py：实际结果 -19.18%，解析器忽略负号",
+    "fetched_value2": 19.1812,
+    "fetched_source2": "(60.3 / 114.23)^(1/3)-1 独立重算绝对值"
+  }
+]

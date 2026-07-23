@@ -63,6 +63,20 @@ def fetch_json(url: str, params: dict[str, str | int | float]) -> dict:
     return json.loads(text)
 
 
+def fetch_json_with_fallback(
+    urls: tuple[str, ...], params: dict[str, str | int | float]
+) -> dict:
+    """Fetch the same Eastmoney endpoint from the first responsive host."""
+    last_error: Exception | None = None
+    for url in urls:
+        try:
+            full_url = f"{url}?{urlencode(params, safe=':+,')}"
+            return json.loads(fetch(full_url, retries=2))
+        except Exception as exc:  # noqa: BLE001 - report all host failures together.
+            last_error = exc
+    raise RuntimeError(f"all fallback hosts failed: {last_error}")
+
+
 def to_float(value) -> float | None:
     if value in (None, "", "-", "--"):
         return None
@@ -168,7 +182,10 @@ def fetch_quotes(codes: list[str]) -> dict[str, dict[str, str]]:
 
 
 def fetch_industry_boards() -> list[dict[str, object]]:
-    url = "https://push2.eastmoney.com/api/qt/clist/get"
+    urls = (
+        "https://push2delay.eastmoney.com/api/qt/clist/get",
+        "https://push2.eastmoney.com/api/qt/clist/get",
+    )
     rows = []
     for page in range(1, 8):
         params = {
@@ -182,7 +199,7 @@ def fetch_industry_boards() -> list[dict[str, object]]:
             "fs": "m:90+t:2",
             "fields": "f12,f14,f3,f6,f20,f9,f23",
         }
-        data = fetch_json(url, params)
+        data = fetch_json_with_fallback(urls, params)
         page_rows = data.get("data", {}).get("diff", []) or []
         rows.extend(page_rows)
         if len(page_rows) < 100:
@@ -213,7 +230,10 @@ def fetch_industry_boards() -> list[dict[str, object]]:
 
 
 def fetch_board_constituents(board_code: str, limit: int = 80) -> list[dict[str, object]]:
-    url = "https://push2.eastmoney.com/api/qt/clist/get"
+    urls = (
+        "https://push2delay.eastmoney.com/api/qt/clist/get",
+        "https://push2.eastmoney.com/api/qt/clist/get",
+    )
     params = {
         "pn": 1,
         "pz": limit,
@@ -226,7 +246,7 @@ def fetch_board_constituents(board_code: str, limit: int = 80) -> list[dict[str,
         "fields": "f12,f14,f2,f3,f6,f20,f9,f23",
     }
     try:
-        data = fetch_json(url, params)
+        data = fetch_json_with_fallback(urls, params)
     except RuntimeError as exc:
         print(f"warn: skip board {board_code}: {exc}")
         return []
@@ -373,6 +393,7 @@ def main() -> None:
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "source_urls": {
             "eastmoney_boards": "https://push2.eastmoney.com/api/qt/clist/get?fs=m:90+t:2",
+            "eastmoney_boards_fallback": "https://push2delay.eastmoney.com/api/qt/clist/get?fs=m:90+t:2",
             "eastmoney_board_constituents": "https://push2.eastmoney.com/api/qt/clist/get?fs=b:{board_code}",
             "eastmoney_search": "https://searchadapter.eastmoney.com/api/suggest/get",
             "tencent_quote": "https://qt.gtimg.cn/q={symbols}",

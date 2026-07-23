@@ -1,0 +1,64 @@
+{
+  "report": "reports/中国神华/中国神华-thesis-tracker-20260720.md",
+  "report_sha256": "082444B810CB31888B0E46E48D47C8B1EF30AA32C3EB822ECAB8D3F050C0DEFE",
+  "manual_critical_checks": [
+    {
+      "check": "health_score",
+      "reported": "8/10; 4 green, 2 yellow, 0 red, 0 broken, 0 redlines",
+      "verification": "10 - 2*1 = 8; assumption table and structured snapshot agree",
+      "status": "PASS"
+    },
+    {
+      "check": "a_share_close",
+      "reported": 46.14,
+      "sources": {"Tencent": 46.14, "Eastmoney": 46.14, "Sina": 46.14},
+      "status": "PASS"
+    },
+    {
+      "check": "h_share_close",
+      "reported": 43.6,
+      "sources": {"Tencent": 43.6, "Eastmoney": 43.6, "ETNet": 43.6},
+      "status": "PASS"
+    },
+    {
+      "check": "hkd_cny",
+      "reported": 0.86669,
+      "primary": {"PBOC_CFETS": 0.86669},
+      "secondary": {"ExchangeRate_API": 0.864745},
+      "deviation_pct": 0.22441703492597984,
+      "status": "PASS"
+    },
+    {
+      "check": "valuation",
+      "reported": {"a_pe": 18.77, "h_pe": 15.37, "a_pb": 2.08, "h_pb": 1.7, "a_yield_pct": 4.36, "h_yield_pct": 5.32},
+      "verification": "tools/financial_rigor.py verify-valuation using frozen EPS/BVPS/DPS",
+      "status": "PASS"
+    },
+    {
+      "check": "h_discount_to_a",
+      "reported_pct": 18.1,
+      "exact_pct": 18.10211530125705,
+      "widening_percentage_points": 2.6105399903404116,
+      "status": "PASS"
+    },
+    {
+      "check": "h1_operating_data",
+      "reported": {"coal_output_mt": 249.9, "coal_sales_mt": 300.2, "rail_turnover_bn_tkm": 163.2, "huanghua_mt": 112.1, "tianjin_mt": 22.4, "shipping_mt": 142.0, "generation_twh": 136.64, "electricity_sales_twh": 128.08},
+      "source": "Issuer June operating-data announcement cross-posted by SSE and HKEX",
+      "source_independence_note": "The two exchange files are the same issuer disclosure, not independent underlying sources.",
+      "status": "PASS"
+    },
+    {
+      "check": "action_thresholds",
+      "reported": "A 46.14 is 0.14 above the >46 reduce/watch line; H 43.60 is 0.40 below the 44 line",
+      "verification": "Frozen living-thesis action table",
+      "status": "PASS"
+    },
+    {
+      "check": "historical_baseline_exception",
+      "reported": "Pre-baseline general railway accident and lighter-tier reporting penalty; no frozen redline triggered",
+      "verification": "NRA 2026-04-30 notice; official wording retained as 未按规定上报事故信息",
+      "status": "PASS_WITH_DISCLOSURE_LAG_CAVEAT"
+    }
+  ]
+}

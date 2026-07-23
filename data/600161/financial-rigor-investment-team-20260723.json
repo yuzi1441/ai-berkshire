@@ -1,0 +1,128 @@
+{
+  "company": "天坛生物",
+  "ticker": "600161.SH",
+  "as_of": "2026-07-23",
+  "currency": "CNY",
+  "market_cap_verification": {
+    "price": 12.42,
+    "shares": 1977371446,
+    "calculated_market_cap_cny": 24558953359.32,
+    "reported_market_cap_cny_rounded": 24560000000,
+    "rounded_deviation_pct": 0.0,
+    "status": "PASS"
+  },
+  "valuation_verification": {
+    "q1_ttm_net_income_cny": 972558349.22,
+    "q1_ttm_eps": 0.4918440342543512,
+    "q1_ttm_pe": 25.2525230789669,
+    "latest_bvps": 5.999204,
+    "latest_pb": 2.070274157661514,
+    "earnings_yield_pct": 3.9600000000000004,
+    "post_h1_pro_forma_ttm_net_income_cny": 763504781.2,
+    "post_h1_pro_forma_ttm_pe": 32.166860986410285,
+    "h1_annualized_net_income_cny": 610457600,
+    "h1_annualized_pe": 40.23138078602019,
+    "fy2025_dividend_per_share": 0.2,
+    "dividend_yield_pct": 1.6103059581320454
+  },
+  "cross_validation": [
+    {
+      "field": "2025营业收入",
+      "annual_report_cny": 6168036314.63,
+      "eastmoney_cny": 6168036314.63,
+      "deviation_pct": 0.0,
+      "status": "PASS"
+    },
+    {
+      "field": "2025归母净利润",
+      "annual_report_cny": 1090837981.2,
+      "eastmoney_cny": 1090837981.2,
+      "deviation_pct": 0.0,
+      "status": "PASS"
+    },
+    {
+      "field": "2025经营现金流",
+      "annual_report_cny": 338746658.63,
+      "eastmoney_cny": 338746658.63,
+      "deviation_pct": 0.0,
+      "status": "PASS"
+    },
+    {
+      "field": "2026H1归母净利预告",
+      "company_announcement_cny": 305228800,
+      "eastmoney_news_cny": 305000000,
+      "maximum_deviation_to_median_pct": 0.04,
+      "source_to_source_difference_pct": 0.075,
+      "status": "PASS"
+    },
+    {
+      "field": "2026-07-23收盘价",
+      "tencent_cny": 12.42,
+      "sina_cny": 12.42,
+      "deviation_pct": 0.0,
+      "status": "PASS"
+    }
+  ],
+  "derived_checks": {
+    "accounts_receivable_to_revenue_pct": 22.456568174239525,
+    "operating_cash_flow_to_parent_net_income_pct": 31.053801248958568,
+    "related_finance_company_deposits_to_cash_pct": 86.03716725263686,
+    "insider_disclosed_holding_pct": 0.007640446123848801,
+    "revenue_cagr_2021_2025_pct": 10.668354861660356,
+    "parent_net_income_cagr_2021_2025_pct": 9.455266990525524,
+    "five_year_simple_fcf_to_parent_net_income_pct": 7.828151665800993
+  },
+  "scenario_valuation": {
+    "starting_eps_2026e": 0.36,
+    "forecast_years": 2,
+    "current_price": 12.42,
+    "scenarios": [
+      {
+        "name": "Bull",
+        "eps_cagr": 0.38,
+        "target_pe": 25,
+        "target_eps_2028": 0.685584,
+        "target_price_2028": 17.1396,
+        "price_return_pct": 37.99999999999999,
+        "cumulative_dividend": 0.45,
+        "annualized_total_return_to_2028_end_pct": 15.329474874536286
+      },
+      {
+        "name": "Base",
+        "eps_cagr": 0.21,
+        "target_pe": 20,
+        "target_eps_2028": 0.527076,
+        "target_price_2028": 10.54152,
+        "price_return_pct": -15.124637681159423,
+        "cumulative_dividend": 0.3,
+        "annualized_total_return_to_2028_end_pct": -5.4183698731836705
+      },
+      {
+        "name": "Bear",
+        "eps_cagr": -0.01,
+        "target_pe": 15,
+        "target_eps_2028": 0.352836,
+        "target_price_2028": 5.29254,
+        "price_return_pct": -57.3877616747182,
+        "cumulative_dividend": 0.15,
+        "annualized_total_return_to_2028_end_pct": -28.69047315575015
+      }
+    ],
+    "present_values_at_10pct_for_2_44_years_ex_dividend": {
+      "bull": 13.58321360945266,
+      "base": 8.354204177945658,
+      "bear": 4.1943628414066
+    },
+    "base_present_value_25pct_margin_price_ex_dividend": 6.265653133459243,
+    "base_present_value_25pct_margin_price_including_terminal_dividend": 6.443966691659368,
+    "reverse_valuation": {
+      "required_2028_parent_net_income_cny_bn_at_20x_pe": 1.5197910128174845,
+      "required_2028_parent_net_income_cny_bn_at_25x_pe": 1.2158328102539877,
+      "assumed_required_return": 0.1,
+      "years_to_2028_end": 2.44,
+      "assumed_cumulative_dividend": 0.3
+    }
+  },
+  "tool": "tools/financial_rigor.py",
+  "status": "PASS"
+}

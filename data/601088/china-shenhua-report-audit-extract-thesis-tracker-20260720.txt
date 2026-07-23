@@ -1,0 +1,18 @@
+China Shenhua thesis-tracker report audit extract
+Report: reports/中国神华/中国神华-thesis-tracker-20260720.md
+Command: python tools/report_audit.py extract --report reports/中国神华/中国神华-thesis-tracker-20260720.md --ratio 0.15 --seed 20260720
+Total extracted points: 42
+Sample ratio: 15%
+Sample count: 7
+Seed: 20260720
+
+Sampled points
+- ID 10, line 50: 发电量 · 机械完成率 = 47.43%
+- ID 20, line 97: A / H 中值 TTM PE · 当前（2026-07-20） = 18.77x
+- ID 19, line 97: A / H 中值 TTM PE · 建档（2026-07-14） = 17.66x
+- ID 21, line 98: A / H PB · 建档（2026-07-14） = 1.96x
+- ID 23, line 99: A / H 历史 DPS 税前收益率 · 建档（2026-07-14） = 4.63%
+- ID 26, line 100: H 股相对 A 股折价 · 当前（2026-07-20） = 18.10%
+- ID 41, line 121: 核心假设 · 7 月 20 日判断 = 4 green assumptions
+
+The report-audit parser drops some paired-table values and cannot audit semantic status by itself. All seven sampled items were filled manually in the companion results JSON. Current prices, FX, operating volumes, health score, redline count, and action thresholds also received non-random consistency checks.

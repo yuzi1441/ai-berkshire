@@ -1,0 +1,167 @@
+{
+  "topic": "国产AI芯片",
+  "data_cutoff": "2026-07-23 09:33:24 -05:00",
+  "currency": "CNY",
+  "units": {
+    "market_cap": "亿元",
+    "revenue": "亿元",
+    "net_profit": "亿元",
+    "price": "元/股"
+  },
+  "method": {
+    "ps": "2026-07-23 market cap / 2025 annual revenue",
+    "pe": "2026-07-23 market cap / 2025 annual attributable net profit",
+    "optimistic_return": "Assume company-specific 10-year net profit CAGR, then exit at 25x PE; dividends ignored",
+    "threshold_price": "Maximum current price that yields 10% annualized under the optimistic case; this is not fair value and has no margin of safety"
+  },
+  "market_sources": [
+    "Tencent quote API via tools/ashare_data.py",
+    "Eastmoney push2delay quote API"
+  ],
+  "financial_sources": [
+    "2025 annual reports downloaded from CNInfo/SSE/SZSE",
+    "Eastmoney F10 structured annual financial data"
+  ],
+  "companies": [
+    {
+      "name": "寒武纪",
+      "code": "688256",
+      "price": 1249.0,
+      "market_cap": 7847.38,
+      "revenue_2025": 64.97,
+      "net_profit_2025": 20.59,
+      "revenue_growth": 453.21,
+      "ps": 120.78,
+      "pe_2025a": 381.13,
+      "optimistic_profit_cagr": 30.0,
+      "optimistic_annualized_return": -1.0,
+      "ten_percent_return_threshold_price": 435.45
+    },
+    {
+      "name": "海光信息",
+      "code": "688041",
+      "price": 312.0,
+      "market_cap": 7251.93,
+      "revenue_2025": 143.77,
+      "net_profit_2025": 25.45,
+      "revenue_growth": 56.92,
+      "ps": 50.44,
+      "pe_2025a": 284.95,
+      "optimistic_profit_cagr": 30.0,
+      "optimistic_annualized_return": 1.92,
+      "ten_percent_return_threshold_price": 145.49
+    },
+    {
+      "name": "中芯国际",
+      "code": "688981",
+      "price": 145.09,
+      "market_cap": 12420.87,
+      "revenue_2025": 673.23,
+      "net_profit_2025": 50.41,
+      "revenue_growth": 16.49,
+      "ps": 18.45,
+      "pe_2025a": 246.4,
+      "optimistic_profit_cagr": 20.0,
+      "optimistic_annualized_return": -4.54,
+      "ten_percent_return_threshold_price": 35.14
+    },
+    {
+      "name": "长电科技",
+      "code": "600584",
+      "price": 80.81,
+      "market_cap": 1446.03,
+      "revenue_2025": 388.71,
+      "net_profit_2025": 15.65,
+      "revenue_growth": 8.09,
+      "ps": 3.72,
+      "pe_2025a": 92.4,
+      "optimistic_profit_cagr": 20.0,
+      "optimistic_annualized_return": 5.3,
+      "ten_percent_return_threshold_price": 52.19
+    },
+    {
+      "name": "通富微电",
+      "code": "002156",
+      "price": 69.82,
+      "market_cap": 1059.59,
+      "revenue_2025": 279.21,
+      "net_profit_2025": 12.19,
+      "revenue_growth": 16.92,
+      "ps": 3.79,
+      "pe_2025a": 86.92,
+      "optimistic_profit_cagr": 25.0,
+      "optimistic_annualized_return": 10.35,
+      "ten_percent_return_threshold_price": 72.1
+    },
+    {
+      "name": "华天科技",
+      "code": "002185",
+      "price": 17.69,
+      "market_cap": 587.91,
+      "revenue_2025": 172.14,
+      "net_profit_2025": 7.11,
+      "revenue_growth": 19.03,
+      "ps": 3.42,
+      "pe_2025a": 82.69,
+      "optimistic_profit_cagr": 20.0,
+      "optimistic_annualized_return": 6.47,
+      "ten_percent_return_threshold_price": 12.77
+    },
+    {
+      "name": "长川科技",
+      "code": "300604",
+      "price": 291.24,
+      "market_cap": 1847.68,
+      "revenue_2025": 52.92,
+      "net_profit_2025": 13.31,
+      "revenue_growth": 45.31,
+      "ps": 34.91,
+      "pe_2025a": 138.82,
+      "optimistic_profit_cagr": 25.0,
+      "optimistic_annualized_return": 5.31,
+      "ten_percent_return_threshold_price": 188.33
+    },
+    {
+      "name": "华大九天",
+      "code": "301269",
+      "price": 93.06,
+      "market_cap": 507.58,
+      "revenue_2025": 13.25,
+      "net_profit_2025": 0.61,
+      "revenue_growth": 8.4,
+      "ps": 38.31,
+      "pe_2025a": 832.32,
+      "optimistic_profit_cagr": 30.0,
+      "optimistic_annualized_return": -8.44,
+      "ten_percent_return_threshold_price": 14.86
+    },
+    {
+      "name": "广立微",
+      "code": "301095",
+      "price": 69.57,
+      "market_cap": 139.34,
+      "revenue_2025": 7.35,
+      "net_profit_2025": 0.89,
+      "revenue_growth": 34.4,
+      "ps": 18.96,
+      "pe_2025a": 157.11,
+      "optimistic_profit_cagr": 25.0,
+      "optimistic_annualized_return": 4.01,
+      "ten_percent_return_threshold_price": 39.75
+    },
+    {
+      "name": "概伦电子",
+      "code": "688206",
+      "price": 34.0,
+      "market_cap": 148.44,
+      "revenue_2025": 4.84,
+      "net_profit_2025": 0.34,
+      "revenue_growth": 15.41,
+      "ps": 30.67,
+      "pe_2025a": 433.49,
+      "optimistic_profit_cagr": 30.0,
+      "optimistic_annualized_return": -2.27,
+      "ten_percent_return_threshold_price": 10.42
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+China Shenhua thesis-tracker report audit verdict
+Report: reports/中国神华/中国神华-thesis-tracker-20260720.md
+Report SHA256: 082444B810CB31888B0E46E48D47C8B1EF30AA32C3EB822ECAB8D3F050C0DEFE
+Seed: 20260720
+Sample ratio: 0.15
+Total extracted points: 42
+Sample count: 7
+
+Verdict: PASS
+Pass: 7
+Warn: 0
+Fail: 0
+
+All seven sampled points contained both fetched values and source descriptions. The results count equals the sample count, and the tool returned exit code 0 with no warnings or failures.
+
+Non-random critical checks were also completed for current A/H prices, FX conversion, current valuation, A/H discount, eight H1 operating metrics, health-score arithmetic, redline count, action thresholds, and the historical baseline exception. See china-shenhua-report-audit-key-checks-thesis-tracker-20260720.json.

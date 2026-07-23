@@ -1,0 +1,119 @@
+{
+  "company": "国电南瑞科技股份有限公司",
+  "ticker": "600406.SH",
+  "research_date_chicago": "2026-07-23",
+  "evidence_cutoff_shanghai": "2026-07-23 23:01",
+  "financial_cutoff": "2026-03-31",
+  "comparison": {
+    "old_snapshot": "reports/国电南瑞/国电南瑞-thesis-drift-20260720.md",
+    "old_snapshot_date": "2026-07-20",
+    "new_snapshot_date": "2026-07-23",
+    "incremental_window_days": 3
+  },
+  "quote": {
+    "close_cny": 24.37,
+    "previous_close_cny": 23.75,
+    "daily_change_cny": 0.62,
+    "daily_change_pct": 2.6105263157894854,
+    "tencent_timestamp": "2026-07-23 16:14:53 Asia/Shanghai",
+    "sina_timestamp": "2026-07-23 15:34:59 Asia/Shanghai",
+    "tencent_close_cny": 24.37,
+    "sina_close_cny": 24.37,
+    "cross_source_deviation_pct": 0.0
+  },
+  "capitalization": {
+    "total_shares": 8031756156,
+    "market_cap_cny": 195733897521.72,
+    "market_cap_100m_cny": 1957.3389752172,
+    "share_sources": [
+      "Tencent quote total-share field",
+      "SSE share-structure query"
+    ]
+  },
+  "valuation": {
+    "ttm_eps_cny": 1.035896956304,
+    "q1_2026_bvps_cny": 6.6602304069,
+    "ttm_fcf_per_share_cny": 1.1600518009,
+    "fy2025_dividend_per_share_cny": 0.622,
+    "ttm_pe": 23.53,
+    "q1_2026_pb": 3.66,
+    "ttm_price_to_fcf": 21.01,
+    "ttm_fcf_yield_pct": 4.76,
+    "trailing_dividend_yield_pct": 2.55,
+    "base_present_value_cny": 21.85,
+    "premium_to_base_present_value_pct": 11.533180778032026,
+    "base_value_discount_to_price_pct": -10.340582683627408,
+    "bear_present_value_cny": 13.75,
+    "downside_to_bear_present_value_pct": -43.57816988100124,
+    "strict_20pct_margin_candidate_cny": 17.48
+  },
+  "price_changes": {
+    "vs_2026_07_20_pct": 3.4380305602716543,
+    "vs_2026_07_13_pct": 12.304147465437797,
+    "vs_2026_07_06_pct": 5.224525043177897,
+    "market_cap_change_vs_2026_07_20_100m_cny": 65.06520886359999,
+    "base_premium_change_vs_2026_07_20_percentage_points": 3.7070907780320264
+  },
+  "buyback_proposal_status": {
+    "announcement_date": "2026-07-20",
+    "amount_100m_cny": [
+      5,
+      10
+    ],
+    "status_as_of_cutoff": "Chairman proposal only; no formal plan, approval, execution or cancellation disclosure",
+    "estimated_share_count_at_current_price": [
+      20517029,
+      41034058
+    ],
+    "estimated_total_share_pct_at_current_price": [
+      0.25544885496622605,
+      0.5108977099324521
+    ]
+  },
+  "incremental_evidence": {
+    "company_announcements_2026_07_21_to_2026_07_23": 0,
+    "new_financial_report": false,
+    "new_redline_event": false,
+    "competitor_event": {
+      "company": "许继电气股份有限公司",
+      "disclosure_date": "2026-07-22",
+      "event": "国家电网2026年特高压项目第三次设备采购中标",
+      "amount_100m_cny": 12.450489,
+      "contract_signed": false,
+      "assessment": "Monitoring item only; no same-caliber evidence of NARI share loss, pricing deterioration or structural substitution"
+    }
+  },
+  "drift": {
+    "overall_incremental": "Negative",
+    "source": "Valuation and price only",
+    "valuation_anchor": "Weakened",
+    "core_assumptions": "Unchanged",
+    "redlines": "Unchanged",
+    "management": "Unchanged",
+    "competitive_moat": "Unchanged",
+    "improved_count": 0,
+    "unchanged_count": 4,
+    "weakened_count": 1
+  },
+  "action": {
+    "previous": "Hold/Watch",
+    "current": "Hold/Watch",
+    "migration": false,
+    "holder": "Hold; do not add",
+    "non_holder": "Watch",
+    "reduce_or_exit_triggered": false
+  },
+  "sources": {
+    "official_company_announcements": "http://www.sse.com.cn/assortment/stock/list/info/announcement/index.shtml?productId=600406",
+    "official_buyback_notice": "https://www.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-07-20/600406_20260720_NO5C.pdf",
+    "eastmoney_company_announcements": "https://data.eastmoney.com/notices/stock/600406.html",
+    "tencent_quote": "https://qt.gtimg.cn/q=sh600406",
+    "sina_quote": "https://hq.sinajs.cn/list=sh600406",
+    "xj_electric_notice_mirror": "https://paper.cnstock.com/html/2026-07/23/content_2247642.htm"
+  },
+  "limitations": [
+    "SSE announcement check ended at 23:01 Asia/Shanghai; extremely late disclosures may be indexed on the next trading day.",
+    "No same-caliber full tender share data was available for NARI and XJ Electric.",
+    "Scenario values are research assumptions, not reported company facts."
+  ]
+}

@@ -1,0 +1,17 @@
+国电南瑞投资论文漂移报告数据抽检清单
+报告：reports/国电南瑞/国电南瑞-thesis-drift-20260723.md
+工具：tools/report_audit.py extract
+抽样比例：15%
+随机种子：42
+总提取数据点：40
+抽检数量：6
+
+ID 2，行20，旧快照主要结论，报告值23.56。
+ID 8，行45，核心假设清单旧判断，报告值4.00。
+ID 9，行87，2026-07-20股价，报告值23.56。
+ID 16，行89，2026-07-23 TTM PE，报告值23.53x。
+ID 15，行89，2026-07-20 TTM PE，报告值22.74x。
+ID 18，行90，2026-07-23 PB，报告值3.66x。
+
+核验结果文件：data/600406/report_audit_results_thesis_drift_20260723.json
+准出判决文件：data/600406/report_audit_verdict_thesis_drift_20260723.txt

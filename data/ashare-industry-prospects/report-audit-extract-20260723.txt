@@ -1,0 +1,266 @@
+======================================================================
+报告数据抽检清单
+文件：reports\A股行业投资前景筛选\A股行业投资前景筛选-20260723.md
+总提取数据点：122  |  抽样比例：15%  |  抽检数量：19
+随机种子：20260723（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2     23  行情口径偏误 · 本报告的处理                            162.00  
+  6     37  质量公司召回 · 样本数                               100.00  
+  8     38  低估值与质量交集 · 样本数                              44.00  
+  9     39  四角色压力测试 · 样本数                               22.00  
+ 11     78  2025 年检验检测收入 5,303.08 亿元、增长 8.76% ·      54340.00  
+ 21    122  人形机器人与 eVTOL · 综合分                           2.05  
+ 38    135  高端白酒 · TTM PE                               19.53  倍
+ 46    137  教育出版 · 行业 PE                                12.37  倍
+ 49    138  电信运营商 · 行业 PE                               15.55  倍
+ 55    139  快递 · TTM PE                                 15.65  倍
+ 66    141  工业金属 · 2025 ROE                             33.04  %
+ 70    142  检测服务 · 2025 ROE                             13.96  %
+ 80    145  银行 · PB                                      0.89  倍
+ 79    145  银行 · TTM PE                                  6.51  倍
+ 83    146  半导体设备 · TTM PE                              96.31  
+ 89    148  煤炭 · 行业 PE                                  20.46  倍
+ 91    148  煤炭 · PB                                      2.05  
+ 96    174  技术与产品 · 强度                                   3.50  
+119    391  教材出版 · 触发重审的信号                               5.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "行情口径偏误 · 本报告的处理",
+    "reported_value": 162.0,
+    "unit": "",
+    "line_number": 23,
+    "raw_text": "| 行情口径偏误 | 两个平台的 PE 字段可以直接互相验证 | 腾讯字段按 TTM 口径使用；东财 `f162` 为最近一期简单年化，二者不混用 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 6,
+    "label": "质量公司召回 · 样本数",
+    "reported_value": 100.0,
+    "unit": "",
+    "line_number": 37,
+    "raw_text": "| 质量公司召回 | 100 家公司 | 7 条去劣指标，70 家通过，65 家映射到实时行情 | 不是全 A 股公司基本面普查 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "低估值与质量交集 · 样本数",
+    "reported_value": 44.0,
+    "unit": "",
+    "line_number": 38,
+    "raw_text": "| 低估值与质量交集 | 44 个板块 | 板块估值与质量公司名单交叉 | 识别“便宜行业里是否真有好公司” |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "四角色压力测试 · 样本数",
+    "reported_value": 22.0,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "| 四角色压力测试 | 22 个重点方向 | 商业、财务、产业、风险四条独立证据链 | 对热门行业和冷门现金牛同时反证 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 11,
+    "label": "2025 年检验检测收入 5,303.08 亿元、增长 8.76% · 不能直接推出的结论",
+    "reported_value": 54340.0,
+    "unit": "",
+    "line_number": 78,
+    "raw_text": "| 2025 年检验检测收入 5,303.08 亿元、增长 8.76% | 高端实验室和可信品牌仍有扩张空间 | 54,340 家机构都具备护城河 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 21,
+    "label": "人形机器人与 eVTOL · 综合分",
+    "reported_value": 2.05,
+    "unit": "",
+    "line_number": 122,
+    "raw_text": "| 人形机器人与 eVTOL | 2.05 | 商业化和单位经济尚未验证，A 股纯正价值捕获者稀缺 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 38,
+    "label": "高端白酒 · TTM PE",
+    "reported_value": 19.53,
+    "unit": "倍",
+    "line_number": 135,
+    "raw_text": "| 高端白酒 | 19.42 倍 | 贵州茅台 | 19.53 倍 | 6.94 倍 | 32.53% | 生意质量极高，但利润增长降至中低个位数 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 46,
+    "label": "教育出版 · 行业 PE",
+    "reported_value": 12.37,
+    "unit": "倍",
+    "line_number": 137,
+    "raw_text": "| 教育出版 | 12.37 倍 | 凤凰传媒 | 14.23 倍 | 1.20 倍 | 数据待统一 | 估值低，重点核查税收、分红和非主业投资 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 49,
+    "label": "电信运营商 · 行业 PE",
+    "reported_value": 15.55,
+    "unit": "倍",
+    "line_number": 138,
+    "raw_text": "| 电信运营商 | 15.55 倍 | 中国移动 | 15.08 倍 | 1.44 倍 | 9.90% | 2025 FCF 820 亿元，同比下降 45.9% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "快递 · TTM PE",
+    "reported_value": 15.65,
+    "unit": "倍",
+    "line_number": 139,
+    "raw_text": "| 快递 | 14.59 倍 | 顺丰控股 | 15.65 倍 | 1.81 倍 | 11.51% | OCF/净利 2.48，现金转化改善 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 66,
+    "label": "工业金属 · 2025 ROE",
+    "reported_value": 33.04,
+    "unit": "%",
+    "line_number": 141,
+    "raw_text": "| 工业金属 | 16.06 倍 | 紫金矿业 | 14.25 倍 | 4.64 倍 | 33.04% | 当前盈利强，但高度依赖金铜价格 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "检测服务 · 2025 ROE",
+    "reported_value": 13.96,
+    "unit": "%",
+    "line_number": 142,
+    "raw_text": "| 检测服务 | 33.78 倍 | 华测检测 | 21.62 倍 | 3.00 倍 | 13.96% | 2025 OCF 增长 29.02%，质量较好 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 80,
+    "label": "银行 · PB",
+    "reported_value": 0.89,
+    "unit": "倍",
+    "line_number": 145,
+    "raw_text": "| 银行 | 6.95 倍 | 招商银行 | 6.51 倍 | 0.89 倍 | 13.44% | 低估值成立与否取决于息差和信用成本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 79,
+    "label": "银行 · TTM PE",
+    "reported_value": 6.51,
+    "unit": "倍",
+    "line_number": 145,
+    "raw_text": "| 银行 | 6.95 倍 | 招商银行 | 6.51 倍 | 0.89 倍 | 13.44% | 低估值成立与否取决于息差和信用成本 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 83,
+    "label": "半导体设备 · TTM PE",
+    "reported_value": 96.31,
+    "unit": "",
+    "line_number": 146,
+    "raw_text": "| 半导体设备 | 138.35 倍 | 北方华创 / 中微公司 | 96.31 / 131.70 倍 | 13.86 / 13.03 倍 | 口径不宜横比 | 高增长已经对应极高预期 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 89,
+    "label": "煤炭 · 行业 PE",
+    "reported_value": 20.46,
+    "unit": "倍",
+    "line_number": 148,
+    "raw_text": "| 煤炭 | 20.46 倍 | 中国神华 | 19.06 倍 | 2.05 / 2.14 倍 | 12.76% | PB 两源冲突；盈利下行，不是真正低估 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 91,
+    "label": "煤炭 · PB",
+    "reported_value": 2.05,
+    "unit": "",
+    "line_number": 148,
+    "raw_text": "| 煤炭 | 20.46 倍 | 中国神华 | 19.06 倍 | 2.05 / 2.14 倍 | 12.76% | PB 两源冲突；盈利下行，不是真正低估 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 96,
+    "label": "技术与产品 · 强度",
+    "reported_value": 3.5,
+    "unit": "",
+    "line_number": 174,
+    "raw_text": "| 技术与产品 | 3.5/5 | 能效、变频、智能家居和工业技术 | 可守，但不是不可复制 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 119,
+    "label": "教材出版 · 触发重审的信号",
+    "reported_value": 5.0,
+    "unit": "%",
+    "line_number": 391,
+    "raw_text": "| 教材出版 | 学生数、教材订数、现金回收、非主业投资 | 订单年降超过 5%，非主业投资超过 OCF |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

@@ -1,3 +1,16 @@
+<!-- 20260723-ashare-compute-bottleneck -->
+
+## 2026-07-23 更新：A股算力供应链
+
+- **报告**：[A股算力-bottleneck-20260723.md](A股算力-bottleneck-20260723.md)
+- **S级瓶颈**：先进封装/CoWoS；T-glass/Low-Dk2玻纤布；InP/CW/EML激光器；大型变压器/分接开关。
+- **A级瓶颈**：高速CCL/高多层PCB；HVLP4/5铜箔；高密UPS/HVDC/PDU；UQD/CDU。
+- **核心结论**：没有同时满足“S级瓶颈 + A股高纯度 + 估值绿灯”的明确买点。工业富联是业绩兑现型对照，华明装备是电网扩容间接受益；源杰科技最贴近光芯片咽喉但估值红灯。
+- **观察项**：工业富联、华明装备、科华数据、沪电股份、新易盛。生益科技、中际旭创、英维克、寒武纪、海光信息、源杰科技等待利润或价格消化估值。
+- **方法备注**：行情与市值截至2026-07-23，2025年报统一口径，精确估值见 `data/bottleneck-map/ashare-compute-metrics-20260723.csv`。
+
+---
+
 <!-- 20260710-defense-energetic-materials-bottleneck -->
 
 ## 2026-07-10 更新：国防含能材料 / 民爆 / 防务材料链
@@ -743,3 +756,15 @@ AI芯片（GPU/HBM）
 - 当前估值红灯但瓶颈真实：中船特气、石英股份。
 - 证据文件：`reports/bottleneck-map/战略矿物-bottleneck-20260710.md`；`data/bottleneck-map/strategic-minerals-bottleneck-combined-20260710.csv`。
 <!-- strategic-minerals-20260710:end -->
+
+<!-- domestic-ai-chip-20260723:start -->
+## 2026-07-23 更新：国产 AI 芯片
+
+- **S级瓶颈**：HBM 与高带宽存储。主要供应体系集中，受出口管制影响，国产量产规模缺乏上市公司一手披露。
+- **A级瓶颈**：国内可用先进制程产能与良率、2.5D/3D 先进封装、完整 EDA/IP/PDK、AI 芯片高端测试与良率闭环。
+- **本轮明确买入标的**：无。全部候选 2025A PE 超过 80x；多家公司 PS 超过 30x。
+- **相对优先深研**：通富微电、长电科技。二者 PS 较低，但 AI/HPC 收入占比未披露，不能直接按纯 AI 瓶颈标的定价。
+- **直接芯片观察**：寒武纪、海光信息。业务稀缺性高，但十年 25x PE 乐观测试仍缺乏安全边际。
+- **报告**：`reports/bottleneck-map/国产AI芯片-bottleneck-20260723.md`
+- **数据**：`data/国产AI芯片/bottleneck-valuation-20260723.json`
+<!-- domestic-ai-chip-20260723:end -->

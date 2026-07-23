@@ -1,0 +1,28 @@
+Tencent investment-research report audit extraction
+Report: reports/腾讯/腾讯控股研究报告-20260722.md
+Command: python tools/report_audit.py extract --report reports/腾讯/腾讯控股研究报告-20260722.md --ratio 0.15 --seed 42
+Extracted numeric points: 170
+Sample ratio: 15%
+Random sample size: 26
+Seed: 42
+
+Randomly sampled IDs:
+7, 9, 8, 23, 24, 29, 27, 36, 51, 56, 57, 58, 60, 63, 71, 72, 108, 109, 115, 130, 140, 144, 152, 162, 164, 168
+
+Included random-sample checks (16):
+7, 9, 23, 24, 29, 27, 36, 56, 57, 58, 60, 63, 115, 130, 140, 152
+
+Excluded random-sample items (10):
+- 8: definition-level total
+- 51: parser noise (year parsed from narrative)
+- 71, 72: duplicate copies of sampled revenue fact
+- 108, 109: subjective analyst scores
+- 144: target-PE model assumption
+- 162, 164: model/action thresholds
+- 168: ticker digits parsed from citation metadata
+
+Mandatory supplemental checks (15):
+1001 close price; 1002 previous close; 1003 daily change; 1004 statutory shares; 1005 FX; 1006 calculated market cap; 1007 total cash; 1008 net cash; 1009 TTM Non-IFRS profit; 1010 TTM IFRS profit; 1011 official TTM FCF; 1012 Non-IFRS PE; 1013 P/FCF; 1014 base discounted current value; 1015 6%-growth FCF DCF value.
+
+Verdict denominator: 16 random eligible checks + 15 mandatory checks = 31.
+Model assumptions, subjective scores, duplicates, parser noise and citation metadata are not counted as external-fact PASS items.

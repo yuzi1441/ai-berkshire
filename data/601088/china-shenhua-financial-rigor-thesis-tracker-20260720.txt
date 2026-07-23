@@ -1,0 +1,51 @@
+China Shenhua thesis-tracker financial rigor record
+Check date: 2026-07-20
+Quote cutoff: 2026-07-20 A/H close
+
+Account fields:
+- Actual purchase price: not provided
+- Share class and position: not provided
+- Required return: not provided
+- Current quotes are research reference prices, not assumed purchase prices.
+
+Cross-source quote checks:
+- A-share close: Sina 46.14, Tencent 46.14, Eastmoney 46.14 CNY; accepted deviation 0.00%.
+- H-share close: Tencent 43.60, Eastmoney 43.60, ETNet 43.60 HKD; accepted deviation 0.00%.
+- Sina H-share 16:05 snapshot was pre-closing-auction and was not used.
+- HKD/CNY: PBOC/CFETS 0.86669; ER-API 0.864745; deviation 0.224417%, within 1%.
+
+Price and FX changes from the frozen 2026-07-14 baseline:
+- A-share: (46.14 - 43.42) / 43.42 = +6.264394288346381%.
+- H-share nominal: (43.60 - 42.30) / 42.30 = +3.0732860520094665%.
+- H-share CNY equivalent: 43.60 x 0.86669 = CNY 37.787684.
+- H-share CNY-equivalent change: (37.787684 - 36.693558) / 36.693558 = +2.98179315290165%.
+- H discount to A: 18.10211530125705%, versus 15.49157531091664%; widened 2.6105399903404116 percentage points.
+
+Current valuation using unchanged baseline fundamentals:
+- Midpoint TTM EPS: CNY 2.458155397357108, constructed from the unaudited H1 forecast.
+- 2026Q1 BVPS: CNY 22.172.
+- 2025 current-share-normalized simplified FCF/share: CNY 1.229216.
+- Historical DPS: CNY 2.01.
+- A PE: 46.14 / 2.458155397357108 = 18.77017215819941x.
+- H PE: 37.787684 / 2.458155397357108 = 15.372373951877705x.
+- A PB: 46.14 / 22.172 = 2.0810030669312645x.
+- H PB: 37.787684 / 22.172 = 1.7042974923326717x.
+- A gross historical dividend yield: 2.01 / 46.14 = 4.35630689206762%.
+- H gross historical dividend yield: 2.01 / 37.787684 = 5.319193417622524%.
+- A price-times-total-shares market cap: 46.14 x 21,689,434,304 = CNY 1,000,750,498,786.56.
+
+Unchanged three-year terminal scenario anchors:
+- A-share bull/base/bear: CNY 44.35 / 32.39 / 22.46.
+- H-share bull/base/bear: HKD 51.12 / 37.34 / 25.89.
+- Price-only terminal upside/downside from current A price: -3.8794971824880786% / -29.80060684872128% / -51.32206328565236%.
+- Price-only terminal upside/downside from current H price: +17.24770642201834% / -14.357798165137615% / -40.61926605504588%.
+- A bull safety margin: (44.35 - 46.14) / 44.35 = -4.036076662908679%.
+- H bull safety margin: (51.12 - 43.60) / 51.12 = +14.710485133020338%.
+
+Operating target completion:
+- Coal sales: 300.2 / 618.1 = 48.568192849053546%.
+- Power generation: 136.64 / 288.1 = 47.427976397084336%.
+- These are mechanical half-year completion ratios and do not adjust for seasonality.
+
+All arithmetic above was executed or cross-checked with tools/financial_rigor.py.
+Scenario values are terminal anchors, not present-value DCF estimates. Returns exclude dividends unless explicitly stated, tax, future FX changes, reinvestment, and transaction costs.

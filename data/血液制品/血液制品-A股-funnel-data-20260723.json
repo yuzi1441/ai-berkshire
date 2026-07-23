@@ -1,0 +1,336 @@
+{
+  "report": "血液制品A股行业漏斗筛选",
+  "research_date": "2026-07-23",
+  "data_cutoff": "2026-07-23 09:46 America/Chicago",
+  "scope": {
+    "included_markets": [
+      "上海证券交易所",
+      "深圳证券交易所"
+    ],
+    "included_companies": [
+      "600161 天坛生物",
+      "002007 华兰生物",
+      "002252 上海莱士",
+      "300294 博雅生物",
+      "000403 派林生物",
+      "002880 卫光生物",
+      "300318 博晖创新"
+    ],
+    "excluded_from_ranking": "所有港股、美股及其他海外上市公司；仅可作为经营或估值参照",
+    "industry_definition": "以人血浆采集、分离和血液制品销售为核心；疫苗、检测和创新生物药仅作为上市公司边界业务"
+  },
+  "quote_source": {
+    "primary": "Tencent qt.gtimg.cn close snapshot, 2026-07-23",
+    "secondary": "Yahoo Finance adjusted daily prices and price times reported share count",
+    "currency": "CNY"
+  },
+  "financial_source": {
+    "primary": "各公司2025年年度报告及2026年第一季度报告",
+    "secondary": "东方财富 RPT_F10_FINANCE_MAINFINADATA",
+    "cross_check_rule": "关键财务值双源偏差不超过1%；报告中四舍五入至亿元或0.1个百分点"
+  },
+  "universe": [
+    {
+      "code": "600161",
+      "name": "天坛生物",
+      "price_cny": 12.42,
+      "market_cap_cny_bn": 24.559,
+      "pe_dynamic": 25.25,
+      "pb": 2.07,
+      "revenue_2025_cny_bn": 6.168,
+      "net_income_2025_cny_bn": 1.091,
+      "roe_2025_pct": 9.51,
+      "ocf_2025_cny_bn": 0.339,
+      "ocf_to_net_income_2025_pct": 31.1,
+      "debt_ratio_2025_pct": 7.64,
+      "net_income_2023_2025_cny_bn": [1.110, 1.549, 1.091],
+      "roe_2023_2025_pct": [11.93, 14.81, 9.51],
+      "q1_2026": {
+        "revenue_cny_bn": 1.142,
+        "revenue_yoy_pct": -13.36,
+        "net_income_cny_bn": 0.126,
+        "net_income_yoy_pct": -48.45,
+        "gross_margin_pct": 34.59
+      },
+      "h1_2026_forecast": {
+        "net_income_low_cny_bn": 0.305,
+        "net_income_high_cny_bn": 0.305,
+        "yoy_low_pct": -51.75,
+        "yoy_high_pct": -51.75
+      },
+      "operating_assets": "107家浆站、85家在营；2025年采浆2,801吨，约占国内20%",
+      "moat_stars": 5,
+      "hard_filter_pass_count": 2,
+      "research_disposition": "终选研究锚；当前观察，不配置"
+    },
+    {
+      "code": "002007",
+      "name": "华兰生物",
+      "price_cny": 13.10,
+      "market_cap_cny_bn": 23.917,
+      "pe_dynamic": 27.89,
+      "pb": 2.22,
+      "revenue_2025_cny_bn": 4.595,
+      "net_income_2025_cny_bn": 0.940,
+      "roe_2025_pct": 8.19,
+      "ocf_2025_cny_bn": 0.878,
+      "ocf_to_net_income_2025_pct": 93.4,
+      "debt_ratio_2025_pct": 12.26,
+      "net_income_2023_2025_cny_bn": [1.482, 1.088, 0.940],
+      "roe_2023_2025_pct": [13.70, 9.44, 8.19],
+      "q1_2026": {
+        "revenue_cny_bn": 0.762,
+        "revenue_yoy_pct": -12.16,
+        "net_income_cny_bn": 0.230,
+        "net_income_yoy_pct": -26.44,
+        "gross_margin_pct": 50.19
+      },
+      "h1_2026_forecast": null,
+      "operating_assets": "34家浆站（含6家分站）；2025年采浆1,669.49吨；血制品收入33.87亿元",
+      "moat_stars": 4,
+      "hard_filter_pass_count": 3,
+      "research_disposition": "终选卫星候选；当前观察，不配置"
+    },
+    {
+      "code": "002252",
+      "name": "上海莱士",
+      "price_cny": 5.12,
+      "market_cap_cny_bn": 33.754,
+      "pe_dynamic": 25.44,
+      "pb": 1.05,
+      "revenue_2025_cny_bn": 7.348,
+      "net_income_2025_cny_bn": 1.577,
+      "roe_2025_pct": 4.90,
+      "ocf_2025_cny_bn": -0.329,
+      "ocf_to_net_income_2025_pct": -20.8,
+      "debt_ratio_2025_pct": 14.10,
+      "net_income_2023_2025_cny_bn": [1.779, 2.193, 1.577],
+      "roe_2023_2025_pct": [6.06, 7.13, 4.90],
+      "q1_2026": {
+        "revenue_cny_bn": 1.509,
+        "revenue_yoy_pct": -24.75,
+        "net_income_cny_bn": 0.316,
+        "net_income_yoy_pct": -44.21,
+        "gross_margin_pct": 37.54
+      },
+      "h1_2026_forecast": null,
+      "operating_assets": "2025年完成南岳生物并购，全年采浆超过2,000吨；与Grifols保持进口白蛋白和血筛合作",
+      "moat_stars": 4,
+      "hard_filter_pass_count": 2,
+      "research_disposition": "终选反转观察；现金流转正和回购落地前不配置"
+    },
+    {
+      "code": "300294",
+      "name": "博雅生物",
+      "price_cny": 15.02,
+      "market_cap_cny_bn": 7.574,
+      "pe_dynamic": 2204.84,
+      "pb": 1.02,
+      "revenue_2025_cny_bn": 2.059,
+      "net_income_2025_cny_bn": 0.113,
+      "roe_2025_pct": 1.51,
+      "ocf_2025_cny_bn": 0.061,
+      "ocf_to_net_income_2025_pct": 54.3,
+      "debt_ratio_2025_pct": 13.76,
+      "net_income_2023_2025_cny_bn": [0.237, 0.397, 0.113],
+      "roe_2023_2025_pct": [3.28, 5.36, 1.51],
+      "q1_2026": {
+        "revenue_cny_bn": 0.321,
+        "revenue_yoy_pct": -40.07,
+        "net_income_cny_bn": 0.030,
+        "net_income_yoy_pct": -78.33,
+        "gross_margin_pct": 46.26
+      },
+      "h1_2026_forecast": null,
+      "blood_products_revenue_share_2025_pct": 81.21,
+      "operating_assets": "华润旗下血液制品平台；智能工厂建设中，2025年新增达拉特旗浆站批复",
+      "moat_stars": 3,
+      "hard_filter_pass_count": 2,
+      "research_disposition": "淘汰；利润与现金转化未恢复"
+    },
+    {
+      "code": "000403",
+      "name": "派林生物",
+      "price_cny": 9.70,
+      "market_cap_cny_bn": 9.219,
+      "pe_dynamic": 26.10,
+      "pb": 1.14,
+      "revenue_2025_cny_bn": 2.633,
+      "net_income_2025_cny_bn": 0.419,
+      "roe_2025_pct": 5.24,
+      "ocf_2025_cny_bn": -0.216,
+      "ocf_to_net_income_2025_pct": -51.5,
+      "debt_ratio_2025_pct": 14.63,
+      "net_income_2023_2025_cny_bn": [0.612, 0.745, 0.419],
+      "roe_2023_2025_pct": [8.58, 9.65, 5.24],
+      "q1_2026": {
+        "revenue_cny_bn": 0.343,
+        "revenue_yoy_pct": -8.47,
+        "net_income_cny_bn": 0.023,
+        "net_income_yoy_pct": -74.22,
+        "gross_margin_pct": 34.82
+      },
+      "h1_2026_forecast": {
+        "net_income_low_cny_bn": 0.080,
+        "net_income_high_cny_bn": 0.110,
+        "yoy_low_pct": -66.07,
+        "yoy_high_pct": -53.35
+      },
+      "operating_assets": "双林与派斯菲科平台；2026年控制权转让终止增加治理不确定性",
+      "moat_stars": 3,
+      "hard_filter_pass_count": 2,
+      "research_disposition": "淘汰；现金流、盈利趋势和治理均不达标"
+    },
+    {
+      "code": "002880",
+      "name": "卫光生物",
+      "price_cny": 19.61,
+      "market_cap_cny_bn": 4.448,
+      "pe_dynamic": 19.04,
+      "pb": 1.85,
+      "revenue_2025_cny_bn": 1.267,
+      "net_income_2025_cny_bn": 0.246,
+      "roe_2025_pct": 10.67,
+      "ocf_2025_cny_bn": 0.263,
+      "ocf_to_net_income_2025_pct": 106.8,
+      "debt_ratio_2025_pct": 34.62,
+      "net_income_2023_2025_cny_bn": [0.219, 0.254, 0.246],
+      "roe_2023_2025_pct": [11.37, 11.99, 10.67],
+      "q1_2026": {
+        "revenue_cny_bn": 0.222,
+        "revenue_yoy_pct": -1.39,
+        "net_income_cny_bn": 0.031,
+        "net_income_yoy_pct": -29.21,
+        "gross_margin_pct": 37.74
+      },
+      "h1_2026_forecast": {
+        "net_income_low_cny_bn": 0.04306,
+        "net_income_high_cny_bn": 0.05382,
+        "yoy_low_pct": -60.0,
+        "yoy_high_pct": -50.0
+      },
+      "operating_assets": "9家浆站；2025年采浆约602吨；现有约650吨处理能力并向1,200吨扩产",
+      "moat_stars": 3,
+      "hard_filter_pass_count": 4,
+      "research_disposition": "第四顺位高风险观察；2026趋势使静态估值失效"
+    },
+    {
+      "code": "300318",
+      "name": "博晖创新",
+      "price_cny": 4.63,
+      "market_cap_cny_bn": 3.782,
+      "pe_dynamic": -39.75,
+      "pb": 2.96,
+      "revenue_2025_cny_bn": 0.825,
+      "net_income_2025_cny_bn": -0.092,
+      "roe_2025_pct": -6.90,
+      "ocf_2025_cny_bn": -0.135,
+      "ocf_to_net_income_2025_pct": null,
+      "debt_ratio_2025_pct": 49.45,
+      "net_income_2023_2025_cny_bn": [-0.025, 0.009, -0.092],
+      "roe_2023_2025_pct": [-1.80, 0.67, -6.90],
+      "q1_2026": {
+        "revenue_cny_bn": 0.190,
+        "revenue_yoy_pct": -5.85,
+        "net_income_cny_bn": -0.0073,
+        "net_income_yoy_pct": -79.68,
+        "gross_margin_pct": 29.72
+      },
+      "h1_2026_forecast": null,
+      "operating_assets": "血液制品与检验检测并行，业务纯度和盈利稳定性均低",
+      "moat_stars": 2,
+      "hard_filter_pass_count": 1,
+      "research_disposition": "直接淘汰；亏损且缺乏估值锚"
+    }
+  ],
+  "aggregate_ashare": {
+    "market_cap_cny_bn": 107.251,
+    "net_income_2025_cny_bn": 4.294,
+    "equity_2025_cny_bn_est": 74.68,
+    "weighted_pe_2025": 24.98,
+    "weighted_pb_2025": 1.44,
+    "limitation": "2026年盈利快速下修，2025静态PE低估前瞻估值；不是历史估值分位"
+  },
+  "selection": {
+    "strictly_investable_count": 0,
+    "research_priority": [
+      {
+        "rank": 1,
+        "code": "600161",
+        "name": "天坛生物",
+        "type": "核心质量锚",
+        "current_action": "观察"
+      },
+      {
+        "rank": 2,
+        "code": "002007",
+        "name": "华兰生物",
+        "type": "卫星/分散化候选",
+        "current_action": "观察"
+      },
+      {
+        "rank": 3,
+        "code": "002252",
+        "name": "上海莱士",
+        "type": "反转/高弹性观察",
+        "current_action": "不配置"
+      }
+    ],
+    "fourth_place": "002880 卫光生物：2025财务质量较好，但2026H1利润腰斩且当前前瞻估值约39倍"
+  },
+  "two_year_valuation": [
+    {
+      "code": "600161",
+      "name": "天坛生物",
+      "current_price_cny": 12.42,
+      "normalized_2026_eps_cny_est": 0.34,
+      "bull": {"growth_pct": 15, "target_pe": 28, "target_price_cny": 12.6, "upside_pct": 1.4},
+      "base": {"growth_pct": 6, "target_pe": 22, "target_price_cny": 8.4, "upside_pct": -32.3},
+      "bear": {"growth_pct": -5, "target_pe": 16, "target_price_cny": 4.9, "upside_pct": -60.5}
+    },
+    {
+      "code": "002007",
+      "name": "华兰生物",
+      "current_price_cny": 13.10,
+      "normalized_2026_eps_cny_est": 0.47,
+      "bull": {"growth_pct": 12, "target_pe": 26, "target_price_cny": 15.3, "upside_pct": 17.0},
+      "base": {"growth_pct": 5, "target_pe": 21, "target_price_cny": 10.9, "upside_pct": -16.9},
+      "bear": {"growth_pct": -6, "target_pe": 15, "target_price_cny": 6.2, "upside_pct": -52.4}
+    },
+    {
+      "code": "002880",
+      "name": "卫光生物",
+      "current_price_cny": 19.61,
+      "normalized_2026_eps_cny_est": 0.50,
+      "bull": {"growth_pct": 15, "target_pe": 25, "target_price_cny": 16.5, "upside_pct": -15.7},
+      "base": {"growth_pct": 5, "target_pe": 20, "target_price_cny": 11.0, "upside_pct": -43.8},
+      "bear": {"growth_pct": -10, "target_pe": 15, "target_price_cny": 6.1, "upside_pct": -69.0}
+    },
+    {
+      "code": "002252",
+      "name": "上海莱士",
+      "status": "exclusion_sensitivity",
+      "current_price_cny": 5.12,
+      "normalized_2026_eps_cny_est": 0.18,
+      "bull": {"growth_pct": 12, "target_pe": 24, "target_price_cny": 5.4, "upside_pct": 5.8},
+      "base": {"growth_pct": 4, "target_pe": 19, "target_price_cny": 3.7, "upside_pct": -27.8},
+      "bear": {"growth_pct": -8, "target_pe": 14, "target_price_cny": 2.1, "upside_pct": -58.3}
+    }
+  ],
+  "model_limits": [
+    "2026 EPS为研究估计，不是公司指引；仅天坛、派林和卫光披露了半年度业绩预告",
+    "目标PE按成熟且受监管的血液制品企业设定，未使用历史高估值外推",
+    "目标价未计股息，亦未对未上市研发管线赋予成功价值",
+    "结果是估值敏感性，不是收益承诺"
+  ],
+  "key_sources": [
+    "http://static.cninfo.com.cn/finalpage/2026-03-28/1225042495.PDF",
+    "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-28/bb6d6644-1ec5-459e-99ee-7af73ecc0f6f.PDF",
+    "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-27/17dd428d-720c-475a-b5d7-5fb3cb5c977e.PDF",
+    "https://disc.static.szse.cn/disc/disk03/finalpage/2026-04-27/c9e78ca0-3850-47c9-96f5-e7223d014395.PDF",
+    "https://fgk.chinatax.gov.cn/zcfgk/c102416/c5247434/content.html",
+    "https://www.nbd.com.cn/articles/2026-07-14/4472125.html",
+    "https://www.nbd.com.cn/articles/2026-07-14/4471927.html",
+    "https://www.nbd.com.cn/articles/2026-07-14/4472171.html"
+  ]
+}
