@@ -283,8 +283,9 @@ def main():
     csv_path = output_dir / f"financial_shortlist_{args.as_of}.csv"
     json_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
     flat_rows = [flatten(row) for row in rows]
+    fieldnames = list(dict.fromkeys(key for row in flat_rows for key in row))
     with csv_path.open("w", newline="", encoding="utf-8-sig") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(flat_rows[0]))
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(flat_rows)
 
