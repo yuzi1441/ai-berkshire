@@ -13,6 +13,7 @@ import csv
 import json
 import math
 import re
+import time
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -118,20 +119,29 @@ def clean_title(value: str) -> str:
 
 
 def find_cninfo_report(code: str, keyword: str, category: str, end_date: str):
-    try:
-        frame = ak.stock_zh_a_disclosure_report_cninfo(
-            symbol=code,
-            keyword=keyword,
-            category=category,
-            start_date="20260101",
-            end_date=end_date,
-        )
-    except Exception as exc:  # Keep the snapshot usable when CNInfo throttles.
-        return {"error": f"{type(exc).__name__}: {exc}"}
+    errors = []
+    frame = None
+    for search_keyword in dict.fromkeys((keyword, "")):
+        try:
+            candidate = ak.stock_zh_a_disclosure_report_cninfo(
+                symbol=code,
+                keyword=search_keyword,
+                category=category,
+                start_date="20260101",
+                end_date=end_date,
+            )
+            if not candidate.empty:
+                frame = candidate
+                break
+        except Exception as exc:  # Keep the snapshot usable when CNInfo throttles.
+            errors.append(f"{type(exc).__name__}: {exc}")
+
+    if frame is None:
+        return {"error": "; ".join(errors) if errors else "not found"}
 
     for _, item in frame.iterrows():
         title = clean_title(item.get("公告标题", ""))
-        if "摘要" in title or "取消" in title:
+        if any(marker in title for marker in ("摘要", "取消", "英文", "简版", "关于")):
             continue
         detail_url = str(item.get("公告链接", ""))
         published = str(item.get("公告时间", ""))[:10]
@@ -149,7 +159,7 @@ def find_cninfo_report(code: str, keyword: str, category: str, end_date: str):
             "detail_url": detail_url,
             "pdf_url": pdf_url,
         }
-    return {"error": "not found"}
+    return {"error": "no full report found"}
 
 
 def build_row(code, name, subsector, business, quotes, end_date):
@@ -243,16 +253,27 @@ def download_annuals(rows, source_dir: Path):
             item.update({"ok": False, "error": report.get("error", "missing URL")})
             manifest.append(item)
             continue
-        try:
-            response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=90)
-            response.raise_for_status()
-            if not response.content.startswith(b"%PDF"):
-                raise ValueError("response was not a PDF")
-            if not target.exists():
+        if target.exists() and target.read_bytes()[:4] == b"%PDF":
+            item.update({"ok": True, "bytes": target.stat().st_size, "cached": True})
+            manifest.append(item)
+            continue
+        for attempt in range(1, 4):
+            try:
+                response = requests.get(
+                    url,
+                    headers={"User-Agent": "Mozilla/5.0"},
+                    timeout=90,
+                )
+                response.raise_for_status()
+                if not response.content.startswith(b"%PDF"):
+                    raise ValueError("response was not a PDF")
                 target.write_bytes(response.content)
-            item.update({"ok": True, "bytes": len(response.content)})
-        except Exception as exc:
-            item.update({"ok": False, "error": f"{type(exc).__name__}: {exc}"})
+                item.update({"ok": True, "bytes": len(response.content), "attempt": attempt})
+                break
+            except Exception as exc:
+                item.update({"ok": False, "error": f"{type(exc).__name__}: {exc}"})
+                if attempt < 3:
+                    time.sleep(attempt * 2)
         manifest.append(item)
     return manifest
 

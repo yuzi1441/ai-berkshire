@@ -1,0 +1,39 @@
+{
+  "validated_at": "2026-07-24",
+  "data_cutoff": "2026-07-24 close",
+  "universe_count": 169,
+  "candidate_count": 63,
+  "candidate_csv_sha256": "0F708D0FC842B223DBB28D5C54AAD96D1D649728EF47CBB877D90CEDCAF8EBAF",
+  "candidate_json_sha256": "6A2E28DCB2A1846EC6A073DB74FBDA4AF53BC6656F639D4A5AD41248CD8858D4",
+  "relevance_universe_json_sha256": "28512D8D05958CDDC37C1151434BB39F58379A7C0E2414BAFE1976EE3F562522",
+  "rank_checks": {
+    "A_top_30_turnover": 30,
+    "B_top_20_return_30d": 20,
+    "B_top_20_return_90d": 20,
+    "C_top_30_market_cap": 30,
+    "union_count": 63
+  },
+  "financial_rigor": {
+    "tool": "tools/financial_rigor.py",
+    "verify_market_cap_checks": 63,
+    "cross_validate_market_cap_checks": 63,
+    "failures": 0,
+    "tolerance_pct": 1.0,
+    "maximum_tencent_eastmoney_difference_pct": 0.008628896640072133
+  },
+  "schema_checks": {
+    "unique_codes": true,
+    "all_candidate_metrics_present": true,
+    "all_candidate_business_sources_present": true,
+    "all_candidate_quote_sources_present": true,
+    "all_history_cutoffs_equal_2026_07_24": true,
+    "csv_json_row_counts_match": true
+  },
+  "limitations": [
+    "Qualitative purity labels are not audited revenue percentages.",
+    "Auto-added Eastmoney photovoltaic-equipment constituents are conservatively marked medium until 2025 annual-report segment revenue is quantified.",
+    "Returns are unadjusted closing-price returns over 30 and 90 calendar-day windows.",
+    "Average turnover uses trading sessions falling within the final 30 calendar days.",
+    "Jina Reader timed out for part of the external-evidence work; Exa extraction and direct primary/data APIs were used instead."
+  ]
+}

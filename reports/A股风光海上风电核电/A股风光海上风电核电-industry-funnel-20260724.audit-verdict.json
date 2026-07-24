@@ -1,0 +1,18 @@
+{
+  "report": "A股风光海上风电核电-industry-funnel-20260724.md",
+  "audit_date": "2026-07-24",
+  "tool": "tools/report_audit.py",
+  "ratio": 0.15,
+  "seed": 20260724,
+  "extracted_points": 431,
+  "sampled_points": 30,
+  "verdict": "PASS",
+  "pass_count": 30,
+  "warn_count": 0,
+  "fail_count": 0,
+  "notes": [
+    "亏损公司的OCF/净利比率统一改为NA，避免无经济意义的负比率和解析器丢失负号。",
+    "上海电气ROE和帝尔激光OCF/净利提高显示精度后重新核验。",
+    "动态PE来自腾讯2026-07-24行情，明确不是TTM PE。"
+  ]
+}

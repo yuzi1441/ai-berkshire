@@ -1,0 +1,53 @@
+{
+  "data_cutoff": "2026-07-24",
+  "collection": {
+    "skill": "agent-reach",
+    "search_backend": "Exa via mcporter",
+    "search_status": "ok",
+    "reader_backend": "Jina Reader",
+    "reader_status": "unavailable: r.jina.ai TCP connection timed out on repeated direct, resolved-IP, HTTP and HTTPS attempts",
+    "fallback": "Exa extracted source text plus direct Eastmoney/Tencent data APIs"
+  },
+  "primary_evidence": [
+    {
+      "company": "金风科技",
+      "code": "002202",
+      "source_type": "深圳证券交易所披露的2025年年度报告",
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-28/7c7c2787-dabb-4ae2-8802-72b5b47a462a.PDF",
+      "finding": "风机制造、风电服务、风电场投资与开发为三大主营业务；2025年风机及零部件收入占营业收入78.34%。"
+    },
+    {
+      "company": "海力风电",
+      "code": "301155",
+      "source_type": "2025年年度报告",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604281821687235_1.pdf",
+      "finding": "主营聚焦海上风电设备零部件，主要产品为塔筒、桩基、导管架和升压站，并布局深远海产品。"
+    },
+    {
+      "company": "中国广核",
+      "code": "003816",
+      "source_type": "深圳证券交易所披露的2025年年度报告",
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-26/9ab2d2e1-0fbc-43a7-98ea-7f8e02043b16.PDF",
+      "finding": "公司是中广核核能发电唯一平台；截至2025年底管理28台在运和20台在建机组，2025年管理核电站上网电量占全国53.00%。"
+    },
+    {
+      "company": "中核科技",
+      "code": "000777",
+      "source_type": "2025年年度报告摘要",
+      "url": "https://epaper.stcn.com/att/202604/28/ZQ28B877-QQ_eBook.pdf",
+      "finding": "核心业务为工业阀门，产品覆盖核工程、石化等场景；公司披露其持续稳固核电和核化工关键阀门地位。"
+    },
+    {
+      "company": "晶科科技",
+      "code": "601778",
+      "source_type": "巨潮资讯2026年第一季度报告",
+      "url": "http://dataclouds.cninfo.com.cn/shgonggao/hsomarket/2026/20260428/e4951c6c9d1c477888f3bce847d8eecc.PDF",
+      "finding": "公告明确发电业务及户用光伏电站滚动开发是业绩驱动项，并披露海外光伏电站开发和转让事项。"
+    }
+  ],
+  "row_level_sources": {
+    "business": "Each candidate row contains an Eastmoney F10 company-survey URL and the returned MAIN_BUSINESS field.",
+    "market_cap": "Each candidate row contains Tencent and Eastmoney quote URLs, both market-cap values, and their percentage difference.",
+    "history": "Tencent historical K-line API through AkShare-compatible endpoint; returns and average turnover are calculated through 2026-07-24 close."
+  }
+}
