@@ -1,0 +1,469 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - paragraph [ref=e5]: AI BERKSHIRE
+        - heading "投资决策看板" [level=1] [ref=e6]
+      - link "研究库" [ref=e7] [cursor=pointer]:
+        - /url: https://github.com/yuzi1441/ai-berkshire
+  - main [ref=e8]:
+    - region "决策总览" [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - generic [ref=e12]: 当前结论
+          - strong [ref=e13]: "115"
+        - generic [ref=e14]:
+          - generic [ref=e15]: A股
+          - strong [ref=e16]: "37"
+        - generic [ref=e17]:
+          - generic [ref=e18]: 港股
+          - strong [ref=e19]: "41"
+        - generic [ref=e20]:
+          - generic [ref=e21]: 买入 / 分批买入
+          - strong [ref=e22]: "14"
+    - region "研究结论" [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: 市场
+          - combobox "市场" [ref=e27]:
+            - option "全部市场"
+            - option "A股"
+            - option "港股" [selected]
+            - option "美股"
+            - option "待识别"
+        - generic [ref=e28]:
+          - generic [ref=e29]: 结论
+          - combobox "结论" [ref=e30]:
+            - option "全部结论" [selected]
+            - option "买入"
+            - option "分批买入"
+            - option "持有"
+            - option "观察"
+            - option "减仓/卖出"
+        - generic [ref=e31]:
+          - generic [ref=e32]: 检索
+          - searchbox "检索" [ref=e33]
+        - button "清除筛选" [ref=e34] [cursor=pointer]
+      - generic [ref=e35]: 显示 41 / 115 个当前结论
+      - table [ref=e37]:
+        - rowgroup [ref=e38]:
+          - row [ref=e39]:
+            - columnheader "公司" [ref=e40]
+            - columnheader "市场 / 代码" [ref=e41]
+            - columnheader "数据截止日" [ref=e42]
+            - columnheader "结论" [ref=e43]
+            - columnheader "报告买入价" [ref=e44]
+            - columnheader "行情快照" [ref=e45]
+            - columnheader "报告" [ref=e46]
+        - rowgroup [ref=e47]:
+          - row [ref=e1084]:
+            - cell "Alibaba" [ref=e1085]
+            - cell "港股 / 09988.HK" [ref=e1086]
+            - cell "待复核" [ref=e1087]
+            - cell "分批买入" [ref=e1088]
+            - cell "US$134" [ref=e1089]
+            - cell "HK$114.9" [ref=e1090]
+            - cell [ref=e1091]:
+              - link "打开报告" [ref=e1092] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Alibaba/最终报告-投研团队-20260513.md
+          - row [ref=e1093]:
+            - cell "MINIMAX" [ref=e1094]
+            - cell "港股 / 09922.HK" [ref=e1095]
+            - cell "待复核" [ref=e1096]
+            - cell "观察" [ref=e1097]
+            - cell "价格未给出" [ref=e1098]
+            - cell "HK$1.27" [ref=e1099]
+            - cell [ref=e1100]:
+              - link "打开报告" [ref=e1101] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/MINIMAX/最终报告.md
+          - row [ref=e1102]:
+            - cell "万洲国际" [ref=e1103]
+            - cell "港股 / 00288.HK" [ref=e1104]
+            - cell "待复核" [ref=e1105]
+            - cell "持有" [ref=e1106]
+            - cell "价格未给出" [ref=e1107]
+            - cell "HK$8.4" [ref=e1108]
+            - cell [ref=e1109]:
+              - link "打开报告" [ref=e1110] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/万洲国际/最终报告.md
+          - row [ref=e1111]:
+            - cell "京东集团" [ref=e1112]
+            - cell "港股 / 09618.HK" [ref=e1113]
+            - cell "待复核" [ref=e1114]
+            - cell "持有" [ref=e1115]
+            - cell "价格未给出" [ref=e1116]
+            - cell "HK$119.6" [ref=e1117]
+            - cell [ref=e1118]:
+              - link "打开报告" [ref=e1119] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/京东集团/最终报告.md
+          - row [ref=e1120]:
+            - cell "众安在线" [ref=e1121]
+            - cell "港股 / 06060.HK" [ref=e1122]
+            - cell "待复核" [ref=e1123]
+            - cell "观察" [ref=e1124]
+            - cell "价格未给出" [ref=e1125]
+            - cell "HK$10.91" [ref=e1126]
+            - cell [ref=e1127]:
+              - link "打开报告" [ref=e1128] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/众安在线/众安在线-research-20260410.md
+          - row [ref=e1129]:
+            - cell "创科实业" [ref=e1130]
+            - cell "港股 / 00669.HK" [ref=e1131]
+            - cell "待复核" [ref=e1132]
+            - cell "买入" [ref=e1133]
+            - cell "约HK$124.5" [ref=e1134]
+            - cell "HK$132" [ref=e1135]
+            - cell [ref=e1136]:
+              - link "打开报告" [ref=e1137] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/创科实业/最终报告.md
+          - row [ref=e1138]:
+            - cell "华润万象生活" [ref=e1139]
+            - cell "港股 / 01209.HK" [ref=e1140]
+            - cell "待复核" [ref=e1141]
+            - cell "观察" [ref=e1142]
+            - cell "HK$40" [ref=e1143]
+            - cell "HK$39.24" [ref=e1144]
+            - cell [ref=e1145]:
+              - link "打开报告" [ref=e1146] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润万象生活/最终报告.md
+          - row [ref=e1147]:
+            - cell "华润啤酒" [ref=e1148]
+            - cell "港股 / 00291.HK" [ref=e1149]
+            - cell "待复核" [ref=e1150]
+            - cell "持有" [ref=e1151]
+            - cell "回落至HK$25" [ref=e1152]
+            - cell "HK$23.92" [ref=e1153]
+            - cell [ref=e1154]:
+              - link "打开报告" [ref=e1155] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润啤酒/最终报告.md
+          - row [ref=e1156]:
+            - cell "华润置地" [ref=e1157]
+            - cell "港股 / 01109.HK" [ref=e1158]
+            - cell "2026-05-16" [ref=e1159]
+            - cell "观察" [ref=e1160]
+            - cell "HK$30-33" [ref=e1161]
+            - cell "HK$34" [ref=e1162]
+            - cell [ref=e1163]:
+              - link "打开报告" [ref=e1164] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润置地-被排除/最终报告.md
+          - row [ref=e1165]:
+            - cell "同程旅行" [ref=e1166]
+            - cell "港股 / 00780.HK" [ref=e1167]
+            - cell "待复核" [ref=e1168]
+            - cell "未提取" [ref=e1169]
+            - cell "价格未给出" [ref=e1170]
+            - cell "HK$13.18" [ref=e1171]
+            - cell [ref=e1172]:
+              - link "打开报告" [ref=e1173] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/同程旅行/最终报告.md
+          - row [ref=e1174]:
+            - cell "名创优品" [ref=e1175]
+            - cell "港股 / 09896.HK" [ref=e1176]
+            - cell "待复核" [ref=e1177]
+            - cell "观察" [ref=e1178]
+            - cell "价格未给出" [ref=e1179]
+            - cell "HK$24.58" [ref=e1180]
+            - cell [ref=e1181]:
+              - link "打开报告" [ref=e1182] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/名创优品/最终报告.md
+          - row [ref=e1183]:
+            - cell "小米" [ref=e1184]
+            - cell "港股 / 01810.HK" [ref=e1185]
+            - cell "待复核" [ref=e1186]
+            - cell "观察" [ref=e1187]
+            - cell "跌至HK$18" [ref=e1188]
+            - cell "HK$27.14" [ref=e1189]
+            - cell [ref=e1190]:
+              - link "打开报告" [ref=e1191] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/小米/最终报告.md
+          - row [ref=e1192]:
+            - cell "康师傅控股" [ref=e1193]
+            - cell "港股 / 00322.HK" [ref=e1194]
+            - cell "待复核" [ref=e1195]
+            - cell "观察" [ref=e1196]
+            - cell "约HK$7.5-8.5" [ref=e1197]
+            - cell "HK$11.5" [ref=e1198]
+            - cell [ref=e1199]:
+              - link "打开报告" [ref=e1200] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/康师傅控股/最终报告.md
+          - row [ref=e1201]:
+            - cell "快手" [ref=e1202]
+            - cell "港股 / 01024.HK" [ref=e1203]
+            - cell "待复核" [ref=e1204]
+            - cell "买入" [ref=e1205]
+            - cell "价格未给出" [ref=e1206]
+            - cell "HK$43.08" [ref=e1207]
+            - cell [ref=e1208]:
+              - link "打开报告" [ref=e1209] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/快手/最终报告.md
+          - row [ref=e1210]:
+            - cell "思格新能-team-20260409" [ref=e1211]
+            - cell "港股 / 06656.HK" [ref=e1212]
+            - cell "2026-04-09" [ref=e1213]
+            - cell "观察" [ref=e1214]
+            - cell "价格未给出" [ref=e1215]
+            - cell "HK$312.4" [ref=e1216]
+            - cell [ref=e1217]:
+              - link "打开报告" [ref=e1218] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/思格新能-team-20260409/最终报告.md
+          - row [ref=e1219]:
+            - cell "恒安国际" [ref=e1220]
+            - cell "港股 / 01044.HK" [ref=e1221]
+            - cell "待复核" [ref=e1222]
+            - cell "未提取" [ref=e1223]
+            - cell "价格未给出" [ref=e1224]
+            - cell "HK$23.56" [ref=e1225]
+            - cell [ref=e1226]:
+              - link "打开报告" [ref=e1227] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/恒安国际/最终报告.md
+          - row [ref=e1228]:
+            - cell "招商银行" [ref=e1229]
+            - cell "港股 / 03968.HK" [ref=e1230]
+            - cell "待复核" [ref=e1231]
+            - cell "观察" [ref=e1232]
+            - cell "价格未给出" [ref=e1233]
+            - cell "HK$48.52" [ref=e1234]
+            - cell [ref=e1235]:
+              - link "打开报告" [ref=e1236] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/招商银行/最终报告.md
+          - row [ref=e1237]:
+            - cell "新东方" [ref=e1238]
+            - cell "港股 / 09901.HK" [ref=e1239]
+            - cell "待复核" [ref=e1240]
+            - cell "观察" [ref=e1241]
+            - cell "跌至HK$30" [ref=e1242]
+            - cell "HK$38.78" [ref=e1243]
+            - cell [ref=e1244]:
+              - link "打开报告" [ref=e1245] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/新东方/最终报告.md
+          - row [ref=e1246]:
+            - cell "新奥能源" [ref=e1247]
+            - cell "港股 / 02688.HK" [ref=e1248]
+            - cell "待复核" [ref=e1249]
+            - cell "未提取" [ref=e1250]
+            - cell "HK$63" [ref=e1251]
+            - cell "HK$44.62" [ref=e1252]
+            - cell [ref=e1253]:
+              - link "打开报告" [ref=e1254] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/新奥能源-被排除/最终报告.md
+          - row [ref=e1255]:
+            - cell "智谱" [ref=e1256]
+            - cell "港股 / 02513.HK" [ref=e1257]
+            - cell "2026-07-04" [ref=e1258]
+            - cell "观察" [ref=e1259]
+            - cell "价格未给出" [ref=e1260]
+            - cell "HK$1171" [ref=e1261]
+            - cell [ref=e1262]:
+              - link "打开报告" [ref=e1263] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/智谱/智谱投资研究报告_20260704.md
+          - row [ref=e1264]:
+            - cell "比亚迪" [ref=e1265]
+            - cell "港股 / 01211.HK" [ref=e1266]
+            - cell "待复核" [ref=e1267]
+            - cell "观察" [ref=e1268]
+            - cell "价格未给出" [ref=e1269]
+            - cell "HK$88.65" [ref=e1270]
+            - cell [ref=e1271]:
+              - link "打开报告" [ref=e1272] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/比亚迪-被排除/最终报告.md
+          - row [ref=e1273]:
+            - cell "比亚迪电子" [ref=e1274]
+            - cell "港股 / 00285.HK" [ref=e1275]
+            - cell "待复核" [ref=e1276]
+            - cell "观察" [ref=e1277]
+            - cell "跌至HK$25" [ref=e1278]
+            - cell "HK$24.06" [ref=e1279]
+            - cell [ref=e1280]:
+              - link "打开报告" [ref=e1281] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/比亚迪电子-被排除/最终报告.md
+          - row [ref=e1282]:
+            - cell "泡泡玛特" [ref=e1283]
+            - cell "港股 / 09992.HK" [ref=e1284]
+            - cell "待复核" [ref=e1285]
+            - cell "观察" [ref=e1286]
+            - cell "价格未给出" [ref=e1287]
+            - cell "HK$162" [ref=e1288]
+            - cell [ref=e1289]:
+              - link "打开报告" [ref=e1290] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/泡泡玛特/泡泡玛特-research-20260408.md
+          - row [ref=e1291]:
+            - cell "港铁公司" [ref=e1292]
+            - cell "港股 / 00066.HK" [ref=e1293]
+            - cell "待复核" [ref=e1294]
+            - cell "观察" [ref=e1295]
+            - cell "HK$30" [ref=e1296]
+            - cell "HK$32.6" [ref=e1297]
+            - cell [ref=e1298]:
+              - link "打开报告" [ref=e1299] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/港铁公司/最终报告.md
+          - row [ref=e1300]:
+            - cell "理想汽车" [ref=e1301]
+            - cell "港股 / 02015.HK" [ref=e1302]
+            - cell "待复核" [ref=e1303]
+            - cell "观察" [ref=e1304]
+            - cell "US$15-18" [ref=e1305]
+            - cell "HK$48.96" [ref=e1306]
+            - cell [ref=e1307]:
+              - link "打开报告" [ref=e1308] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/理想汽车/理想汽车-投研团队深度研究报告-20260519.md
+          - row [ref=e1309]:
+            - cell "百威亚太" [ref=e1310]
+            - cell "港股 / 01876.HK" [ref=e1311]
+            - cell "待复核" [ref=e1312]
+            - cell "分批买入" [ref=e1313]
+            - cell "HK$5-6" [ref=e1314]
+            - cell "HK$6.58" [ref=e1315]
+            - cell [ref=e1316]:
+              - link "打开报告" [ref=e1317] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/百威亚太/最终报告.md
+          - row [ref=e1318]:
+            - cell "百度-deepseek分析" [ref=e1319]
+            - cell "港股 / 09888.HK" [ref=e1320]
+            - cell "待复核" [ref=e1321]
+            - cell "观察" [ref=e1322]
+            - cell "US$100-130" [ref=e1323]
+            - cell "HK$106.8" [ref=e1324]
+            - cell [ref=e1325]:
+              - link "打开报告" [ref=e1326] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/百度-deepseek分析/百度-research-20260428.md
+          - row [ref=e1327]:
+            - cell "百度集团" [ref=e1328]
+            - cell "港股 / 09888.HK" [ref=e1329]
+            - cell "待复核" [ref=e1330]
+            - cell "观察" [ref=e1331]
+            - cell "价格未给出" [ref=e1332]
+            - cell "HK$106.8" [ref=e1333]
+            - cell [ref=e1334]:
+              - link "打开报告" [ref=e1335] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/百度集团/最终报告.md
+          - row [ref=e1336]:
+            - cell "石药集团" [ref=e1337]
+            - cell "港股 / 01093.HK" [ref=e1338]
+            - cell "待复核" [ref=e1339]
+            - cell "观察" [ref=e1340]
+            - cell "价格未给出" [ref=e1341]
+            - cell "HK$8.37" [ref=e1342]
+            - cell [ref=e1343]:
+              - link "打开报告" [ref=e1344] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/石药集团/最终报告.md
+          - row [ref=e1345]:
+            - cell "美团" [ref=e1346]
+            - cell "港股 / 03690.HK" [ref=e1347]
+            - cell "待复核" [ref=e1348]
+            - cell "分批买入" [ref=e1349]
+            - cell "价格未给出" [ref=e1350]
+            - cell "HK$87.3" [ref=e1351]
+            - cell [ref=e1352]:
+              - link "打开报告" [ref=e1353] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/美团/美团投资研究报告_20260410.md
+          - row [ref=e1354]:
+            - cell "群核科技-team-20260409" [ref=e1355]
+            - cell "港股 / 00068.HK" [ref=e1356]
+            - cell "待复核" [ref=e1357]
+            - cell "观察" [ref=e1358]
+            - cell "价格未给出" [ref=e1359]
+            - cell "HK$8.62" [ref=e1360]
+            - cell [ref=e1361]:
+              - link "打开报告" [ref=e1362] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/群核科技-team-20260409/最终报告.md
+          - row [ref=e1363]:
+            - cell "联想集团" [ref=e1364]
+            - cell "港股 / 00992.HK" [ref=e1365]
+            - cell "待复核" [ref=e1366]
+            - cell "观察" [ref=e1367]
+            - cell "HK$12.94" [ref=e1368]
+            - cell "HK$24.62" [ref=e1369]
+            - cell [ref=e1370]:
+              - link "打开报告" [ref=e1371] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/联想集团/最终报告.md
+          - row [ref=e1372]:
+            - cell "腾讯" [ref=e1373]
+            - cell "港股 / 00700.HK" [ref=e1374]
+            - cell "2026-07-22" [ref=e1375]
+            - cell "分批买入" [ref=e1376]
+            - cell "HK$440.60" [ref=e1377]
+            - cell "HK$445.2" [ref=e1378]
+            - cell [ref=e1379]:
+              - link "打开报告" [ref=e1380] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/腾讯/腾讯控股研究报告-20260722.md
+          - row [ref=e1381]:
+            - cell "蒙牛乳业" [ref=e1382]
+            - cell "港股 / 02319.HK" [ref=e1383]
+            - cell "待复核" [ref=e1384]
+            - cell "观察" [ref=e1385]
+            - cell "价格未给出" [ref=e1386]
+            - cell "HK$18.22" [ref=e1387]
+            - cell [ref=e1388]:
+              - link "打开报告" [ref=e1389] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/蒙牛乳业/最终报告.md
+          - row [ref=e1390]:
+            - cell "蔚来" [ref=e1391]
+            - cell "港股 / 09866.HK" [ref=e1392]
+            - cell "待复核" [ref=e1393]
+            - cell "观察" [ref=e1394]
+            - cell "价格未给出" [ref=e1395]
+            - cell "HK$37.72" [ref=e1396]
+            - cell [ref=e1397]:
+              - link "打开报告" [ref=e1398] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/蔚来-被排除/最终报告.md
+          - row [ref=e1399]:
+            - cell "金山软件" [ref=e1400]
+            - cell "港股 / 03888.HK" [ref=e1401]
+            - cell "待复核" [ref=e1402]
+            - cell "观察" [ref=e1403]
+            - cell "跌至HK$28" [ref=e1404]
+            - cell "HK$24.4" [ref=e1405]
+            - cell [ref=e1406]:
+              - link "打开报告" [ref=e1407] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/金山软件/最终报告.md
+          - row [ref=e1408]:
+            - cell "金蝶国际" [ref=e1409]
+            - cell "港股 / 00268.HK" [ref=e1410]
+            - cell "待复核" [ref=e1411]
+            - cell "观察" [ref=e1412]
+            - cell "HK$7" [ref=e1413]
+            - cell "HK$7.18" [ref=e1414]
+            - cell [ref=e1415]:
+              - link "打开报告" [ref=e1416] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/金蝶国际/最终报告.md
+          - row [ref=e1417]:
+            - cell "长光辰芯" [ref=e1418]
+            - cell "港股 / 03277.HK" [ref=e1419]
+            - cell "待复核" [ref=e1420]
+            - cell "观察" [ref=e1421]
+            - cell "价格未给出" [ref=e1422]
+            - cell "HK$67.85" [ref=e1423]
+            - cell [ref=e1424]:
+              - link "打开报告" [ref=e1425] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/长光辰芯/长光辰芯-private-20260409.md
+          - row [ref=e1426]:
+            - cell "长光辰芯-team-20260409" [ref=e1427]
+            - cell "港股 / 03277.HK" [ref=e1428]
+            - cell "待复核" [ref=e1429]
+            - cell "持有" [ref=e1430]
+            - cell "价格未给出" [ref=e1431]
+            - cell "HK$67.85" [ref=e1432]
+            - cell [ref=e1433]:
+              - link "打开报告" [ref=e1434] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/长光辰芯-team-20260409/最终报告.md
+          - row [ref=e1435]:
+            - cell "阿里巴巴" [ref=e1436]
+            - cell "港股 / 09988.HK" [ref=e1437]
+            - cell "待复核" [ref=e1438]
+            - cell "分批买入" [ref=e1439]
+            - cell "US$134" [ref=e1440]
+            - cell "HK$114.9" [ref=e1441]
+            - cell [ref=e1442]:
+              - link "打开报告" [ref=e1443] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/阿里巴巴/最终报告-投研团队-20260513.md
+          - row [ref=e1444]:
+            - cell "零跑汽车" [ref=e1445]
+            - cell "港股 / 09863.HK" [ref=e1446]
+            - cell "待复核" [ref=e1447]
+            - cell "观察" [ref=e1448]
+            - cell "HK$35-40" [ref=e1449]
+            - cell "HK$34.64" [ref=e1450]
+            - cell [ref=e1451]:
+              - link "打开报告" [ref=e1452] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/零跑汽车-被排除/最终报告.md
+  - contentinfo [ref=e1083]: 仅供学习与研究，不构成投资建议。

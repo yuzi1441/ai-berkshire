@@ -1,0 +1,72 @@
+[
+  {
+    "id": 2,
+    "label": "2026Q1 归母净利润 · 建档基线",
+    "reported_value": 11.07,
+    "unit": "亿元",
+    "fetched_value": 11.0681598981,
+    "fetched_source": "厦门钨业2026Q1报告（巨潮资讯）",
+    "fetched_value2": 11.07,
+    "fetched_source2": "东方财富2026Q1公告镜像"
+  },
+  {
+    "id": 8,
+    "label": "2026H1 预告归母净利润 · 建档基线",
+    "reported_value": 22.16,
+    "unit": "亿元",
+    "fetched_value": 22.160318,
+    "fetched_source": "厦门钨业2026H1业绩预增公告（巨潮资讯）",
+    "fetched_value2": 22.160318,
+    "fetched_source2": "新浪财经公司公告全文镜像"
+  },
+  {
+    "id": 9,
+    "label": "研究参考价 · 当前值",
+    "reported_value": 48.39,
+    "unit": "元",
+    "fetched_value": 48.39,
+    "fetched_source": "腾讯行情2026-07-24 15:36:23",
+    "fetched_value2": 48.39,
+    "fetched_source2": "东方财富行情接口2026-07-24收盘快照"
+  },
+  {
+    "id": 16,
+    "label": "预告构造 TTM 归母净利润 · 口径与限制中的基准年度",
+    "reported_value": 2025.0,
+    "unit": "年",
+    "fetched_value": 2025.0,
+    "fetched_source": "厦门钨业2025年年度报告摘要（巨潮资讯）",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "TTM构造公式基准年度复核"
+  },
+  {
+    "id": 15,
+    "label": "预告构造 TTM 归母净利润 · 当前值",
+    "reported_value": 35.56,
+    "unit": "亿元",
+    "fetched_value": 35.560875,
+    "fetched_source": "2025年报与2026H1预告公告数据复算",
+    "fetched_value2": 35.560875,
+    "fetched_source2": "tools/financial_rigor.py calc"
+  },
+  {
+    "id": 18,
+    "label": "PE / PB · 当前值中的PE",
+    "reported_value": 21.60,
+    "unit": "x",
+    "fetched_value": 21.60,
+    "fetched_source": "tools/financial_rigor.py verify-valuation",
+    "fetched_value2": 21.603316,
+    "fetched_source2": "48.39元除以预告构造TTM EPS 2.239934元"
+  },
+  {
+    "id": 41,
+    "label": "2026-07-24 · 健康度",
+    "reported_value": 7.0,
+    "unit": "分/10",
+    "fetched_value": 7.0,
+    "fetched_source": "thesis-tracker公式：10 - 3项黄色 x 1",
+    "fetched_value2": 7.0,
+    "fetched_source2": "核心假设表人工复核：2绿、3黄、0红线"
+  }
+]

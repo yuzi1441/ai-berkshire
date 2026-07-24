@@ -1,0 +1,1209 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e4]:
+        - paragraph [ref=f1e5]: AI BERKSHIRE
+        - heading "投资决策看板" [level=1] [ref=f1e6]
+      - link "研究库" [ref=f1e7] [cursor=pointer]:
+        - /url: https://github.com/yuzi1441/ai-berkshire
+  - main [ref=f1e8]:
+    - region "决策总览" [ref=f1e9]:
+      - generic [ref=f1e10]:
+        - generic [ref=f1e11]:
+          - generic [ref=f1e12]: 当前结论
+          - strong [ref=f1e13]: "115"
+        - generic [ref=f1e14]:
+          - generic [ref=f1e15]: A股
+          - strong [ref=f1e16]: "37"
+        - generic [ref=f1e17]:
+          - generic [ref=f1e18]: 港股
+          - strong [ref=f1e19]: "41"
+        - generic [ref=f1e20]:
+          - generic [ref=f1e21]: 买入 / 分批买入
+          - strong [ref=f1e22]: "14"
+    - region "研究结论" [ref=f1e23]:
+      - generic [ref=f1e24]:
+        - generic [ref=f1e25]:
+          - generic [ref=f1e26]: 市场
+          - combobox "市场" [ref=f1e27]:
+            - option "全部市场" [selected]
+            - option "A股"
+            - option "港股"
+            - option "美股"
+            - option "待识别"
+        - generic [ref=f1e28]:
+          - generic [ref=f1e29]: 结论
+          - combobox "结论" [ref=f1e30]:
+            - option "全部结论" [selected]
+            - option "买入"
+            - option "分批买入"
+            - option "持有"
+            - option "观察"
+            - option "减仓/卖出"
+        - generic [ref=f1e31]:
+          - generic [ref=f1e32]: 检索
+          - searchbox "检索" [ref=f1e33]
+        - button "清除筛选" [ref=f1e34] [cursor=pointer]
+      - generic [ref=f1e35]: 显示 115 / 115 个当前结论
+      - table [ref=f1e37]:
+        - rowgroup [ref=f1e38]:
+          - row [ref=f1e39]:
+            - columnheader "公司" [ref=f1e40]
+            - columnheader "市场 / 代码" [ref=f1e41]
+            - columnheader "数据截止日" [ref=f1e42]
+            - columnheader "结论" [ref=f1e43]
+            - columnheader "报告买入价" [ref=f1e44]
+            - columnheader "行情快照" [ref=f1e45]
+            - columnheader "报告" [ref=f1e46]
+        - rowgroup [ref=f1e47]:
+          - row [ref=f1e48]:
+            - cell "AI高速互联PCB材料" [ref=f1e49]
+            - cell "A股 / 600183.SH" [ref=f1e50]
+            - cell "2026-07-09" [ref=f1e51]
+            - cell "观察" [ref=f1e52]
+            - cell "价格未给出" [ref=f1e53]
+            - cell "125.1" [ref=f1e54]
+            - cell [ref=f1e55]:
+              - link "打开报告" [ref=f1e56] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/AI高速互联PCB材料/AI高速互联PCB材料-industry-research-20260709.md
+          - row [ref=f1e57]:
+            - cell "Yangtze-Power" [ref=f1e58]
+            - cell "A股 / 600900.SH" [ref=f1e59]
+            - cell "待复核" [ref=f1e60]
+            - cell "持有" [ref=f1e61]
+            - cell "跌至23-25 元" [ref=f1e62]
+            - cell "28.94" [ref=f1e63]
+            - cell [ref=f1e64]:
+              - link "打开报告" [ref=f1e65] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Yangtze-Power/长江电力投资研究报告.md
+          - row [ref=f1e66]:
+            - cell "guangdong-hongda" [ref=f1e67]
+            - cell "A股 / 002683.SZ" [ref=f1e68]
+            - cell "2026-07-09" [ref=f1e69]
+            - cell "观察" [ref=f1e70]
+            - cell "21 元" [ref=f1e71]
+            - cell "26.3" [ref=f1e72]
+            - cell [ref=f1e73]:
+              - link "打开报告" [ref=f1e74] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md
+          - row [ref=f1e75]:
+            - cell "东方电子" [ref=f1e76]
+            - cell "A股 / 000682.SZ" [ref=f1e77]
+            - cell "2026-07-07" [ref=f1e78]
+            - cell "观察" [ref=f1e79]
+            - cell "12 元" [ref=f1e80]
+            - cell "12.11" [ref=f1e81]
+            - cell [ref=f1e82]:
+              - link "打开报告" [ref=f1e83] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/东方电子/东方电子投资研究报告-20260707.md
+          - row [ref=f1e84]:
+            - cell "中国广核" [ref=f1e85]
+            - cell "A股 / 003816.SZ" [ref=f1e86]
+            - cell "待复核" [ref=f1e87]
+            - cell "观察" [ref=f1e88]
+            - cell "3.2-3.5 元" [ref=f1e89]
+            - cell "4.16" [ref=f1e90]
+            - cell [ref=f1e91]:
+              - link "打开报告" [ref=f1e92] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/中国广核/最终报告.md
+          - row [ref=f1e93]:
+            - cell "中国神华" [ref=f1e94]
+            - cell "A股 / 601088.SH" [ref=f1e95]
+            - cell "2026-07-07" [ref=f1e96]
+            - cell "观察" [ref=f1e97]
+            - cell "跌至35 元" [ref=f1e98]
+            - cell "45.32" [ref=f1e99]
+            - cell [ref=f1e100]:
+              - link "打开报告" [ref=f1e101] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/中国神华/中国神华研究报告-20260707.md
+          - row [ref=f1e102]:
+            - cell "五粮液" [ref=f1e103]
+            - cell "A股 / 000858.SZ" [ref=f1e104]
+            - cell "待复核" [ref=f1e105]
+            - cell "观察" [ref=f1e106]
+            - cell "75-85 元" [ref=f1e107]
+            - cell "74.84" [ref=f1e108]
+            - cell [ref=f1e109]:
+              - link "打开报告" [ref=f1e110] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/五粮液/五粮液-投研团队最终报告-20260516.md
+          - row [ref=f1e111]:
+            - cell "兴发集团" [ref=f1e112]
+            - cell "A股 / 600141.SH" [ref=f1e113]
+            - cell "待复核" [ref=f1e114]
+            - cell "观察" [ref=f1e115]
+            - cell "价格未给出" [ref=f1e116]
+            - cell "29.83" [ref=f1e117]
+            - cell [ref=f1e118]:
+              - link "打开报告" [ref=f1e119] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/兴发集团/兴发集团投资研究报告_20260708.md
+          - row [ref=f1e120]:
+            - cell "北化股份" [ref=f1e121]
+            - cell "A股 / 002246.SZ" [ref=f1e122]
+            - cell "2026-07-09" [ref=f1e123]
+            - cell "观察" [ref=f1e124]
+            - cell "价格未给出" [ref=f1e125]
+            - cell "18.71" [ref=f1e126]
+            - cell [ref=f1e127]:
+              - link "打开报告" [ref=f1e128] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/北化股份/北化股份研究报告-20260709.md
+          - row [ref=f1e129]:
+            - cell "华明装备" [ref=f1e130]
+            - cell "A股 / 002270.SZ" [ref=f1e131]
+            - cell "2026-07-13" [ref=f1e132]
+            - cell "持有" [ref=f1e133]
+            - cell "17.81 元" [ref=f1e134]
+            - cell "18.4" [ref=f1e135]
+            - cell [ref=f1e136]:
+              - link "打开报告" [ref=f1e137] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/华明装备/华明装备-thesis.md
+          - row [ref=f1e138]:
+            - cell "厦门钨业" [ref=f1e139]
+            - cell "A股 / 600549.SH" [ref=f1e140]
+            - cell "2026-07-09" [ref=f1e141]
+            - cell "观察" [ref=f1e142]
+            - cell "55 元" [ref=f1e143]
+            - cell "50.27" [ref=f1e144]
+            - cell [ref=f1e145]:
+              - link "打开报告" [ref=f1e146] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/厦门钨业/厦门钨业-investment-team-20260709.md
+          - row [ref=f1e147]:
+            - cell "四方股份" [ref=f1e148]
+            - cell "A股 / 601126.SH" [ref=f1e149]
+            - cell "2026-07-07" [ref=f1e150]
+            - cell "观察" [ref=f1e151]
+            - cell "24-30 元" [ref=f1e152]
+            - cell "44.77" [ref=f1e153]
+            - cell [ref=f1e154]:
+              - link "打开报告" [ref=f1e155] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/四方股份/四方股份投资研究报告_20260707.md
+          - row [ref=f1e156]:
+            - cell "国电南瑞" [ref=f1e157]
+            - cell "A股 / 600406.SH" [ref=f1e158]
+            - cell "2026-07-06" [ref=f1e159]
+            - cell "观察" [ref=f1e160]
+            - cell "30 元" [ref=f1e161]
+            - cell "24.37" [ref=f1e162]
+            - cell [ref=f1e163]:
+              - link "打开报告" [ref=f1e164] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/国电南瑞/国电南瑞-thesis-tracker-20260706.md
+          - row [ref=f1e165]:
+            - cell "国药现代" [ref=f1e166]
+            - cell "A股 / 600420.SH" [ref=f1e167]
+            - cell "2026-07-08" [ref=f1e168]
+            - cell "分批买入" [ref=f1e169]
+            - cell "回落至7 元" [ref=f1e170]
+            - cell "8.69" [ref=f1e171]
+            - cell [ref=f1e172]:
+              - link "打开报告" [ref=f1e173] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/国药现代/国药现代-investment-team-20260708.md
+          - row [ref=f1e174]:
+            - cell "宇视科技" [ref=f1e175]
+            - cell "A股 / 002373.SZ" [ref=f1e176]
+            - cell "待复核" [ref=f1e177]
+            - cell "未提取" [ref=f1e178]
+            - cell "价格未给出" [ref=f1e179]
+            - cell "7.4" [ref=f1e180]
+            - cell [ref=f1e181]:
+              - link "打开报告" [ref=f1e182] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/宇视科技/宇视科技-投研团队最终报告-20260516.md
+          - row [ref=f1e183]:
+            - cell "工业富联" [ref=f1e184]
+            - cell "A股 / 601138.SH" [ref=f1e185]
+            - cell "2026-07-23" [ref=f1e186]
+            - cell "持有" [ref=f1e187]
+            - cell "价格未给出" [ref=f1e188]
+            - cell "62.88" [ref=f1e189]
+            - cell [ref=f1e190]:
+              - link "打开报告" [ref=f1e191] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/工业富联/工业富联-investment-team-20260723.md
+          - row [ref=f1e192]:
+            - cell "工商银行" [ref=f1e193]
+            - cell "A股 / 601398.SH" [ref=f1e194]
+            - cell "2026-07-13" [ref=f1e195]
+            - cell "分批买入" [ref=f1e196]
+            - cell "价格未给出" [ref=f1e197]
+            - cell "7.68" [ref=f1e198]
+            - cell [ref=f1e199]:
+              - link "打开报告" [ref=f1e200] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/工商银行/工商银行-thesis.md
+          - row [ref=f1e201]:
+            - cell "平安集团" [ref=f1e202]
+            - cell "A股 / 601318.SH" [ref=f1e203]
+            - cell "待复核" [ref=f1e204]
+            - cell "观察" [ref=f1e205]
+            - cell "55-60 元" [ref=f1e206]
+            - cell "54.3" [ref=f1e207]
+            - cell [ref=f1e208]:
+              - link "打开报告" [ref=f1e209] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/平安集团/平安集团-research-20260410.md
+          - row [ref=f1e210]:
+            - cell "平高电气" [ref=f1e211]
+            - cell "A股 / 600312.SH" [ref=f1e212]
+            - cell "2026-07-07" [ref=f1e213]
+            - cell "持有" [ref=f1e214]
+            - cell "17.64 元" [ref=f1e215]
+            - cell "20.05" [ref=f1e216]
+            - cell [ref=f1e217]:
+              - link "打开报告" [ref=f1e218] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/平高电气/平高电气研究报告-20260707.md
+          - row [ref=f1e219]:
+            - cell "思源电气" [ref=f1e220]
+            - cell "A股 / 002028.SZ" [ref=f1e221]
+            - cell "2026-07-09" [ref=f1e222]
+            - cell "买入" [ref=f1e223]
+            - cell "110-130 元" [ref=f1e224]
+            - cell "164.6" [ref=f1e225]
+            - cell [ref=f1e226]:
+              - link "打开报告" [ref=f1e227] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/思源电气/思源电气-investment-team-20260709.md
+          - row [ref=f1e228]:
+            - cell "恒瑞医疗" [ref=f1e229]
+            - cell "A股 / 600276.SH" [ref=f1e230]
+            - cell "2026-07-06" [ref=f1e231]
+            - cell "观察" [ref=f1e232]
+            - cell "价格未给出" [ref=f1e233]
+            - cell "54.91" [ref=f1e234]
+            - cell [ref=f1e235]:
+              - link "打开报告" [ref=f1e236] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md
+          - row [ref=f1e237]:
+            - cell "杭叉集团-deepseek分析" [ref=f1e238]
+            - cell "A股 / 603298.SH" [ref=f1e239]
+            - cell "待复核" [ref=f1e240]
+            - cell "观察" [ref=f1e241]
+            - cell "价格未给出" [ref=f1e242]
+            - cell "26.97" [ref=f1e243]
+            - cell [ref=f1e244]:
+              - link "打开报告" [ref=f1e245] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/杭叉集团-deepseek分析/最终报告.md
+          - row [ref=f1e246]:
+            - cell "格力电器" [ref=f1e247]
+            - cell "A股 / 000651.SZ" [ref=f1e248]
+            - cell "2026-07-06" [ref=f1e249]
+            - cell "观察" [ref=f1e250]
+            - cell "38 元" [ref=f1e251]
+            - cell "40.57" [ref=f1e252]
+            - cell [ref=f1e253]:
+              - link "打开报告" [ref=f1e254] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/格力电器/格力电器投资研究报告-20260706.md
+          - row [ref=f1e255]:
+            - cell "江南化工" [ref=f1e256]
+            - cell "A股 / 002226.SZ" [ref=f1e257]
+            - cell "2026-07-09" [ref=f1e258]
+            - cell "观察" [ref=f1e259]
+            - cell "3.3-3.7 元" [ref=f1e260]
+            - cell "4.67" [ref=f1e261]
+            - cell [ref=f1e262]:
+              - link "打开报告" [ref=f1e263] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/江南化工/江南化工-investment-team-20260709.md
+          - row [ref=f1e264]:
+            - cell "沪电股份" [ref=f1e265]
+            - cell "A股 / 002463.SZ" [ref=f1e266]
+            - cell "2026-07-13" [ref=f1e267]
+            - cell "观察" [ref=f1e268]
+            - cell "价格未给出" [ref=f1e269]
+            - cell "115.74" [ref=f1e270]
+            - cell [ref=f1e271]:
+              - link "打开报告" [ref=f1e272] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/沪电股份/沪电股份-thesis.md
+          - row [ref=f1e273]:
+            - cell "泸州老窖" [ref=f1e274]
+            - cell "A股 / 000568.SZ" [ref=f1e275]
+            - cell "待复核" [ref=f1e276]
+            - cell "观察" [ref=f1e277]
+            - cell "80-85 元" [ref=f1e278]
+            - cell "85.13" [ref=f1e279]
+            - cell [ref=f1e280]:
+              - link "打开报告" [ref=f1e281] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/泸州老窖/泸州老窖投资研究报告_20260719.md
+          - row [ref=f1e282]:
+            - cell "深南电路" [ref=f1e283]
+            - cell "A股 / 002916.SZ" [ref=f1e284]
+            - cell "2026-07-09" [ref=f1e285]
+            - cell "观察" [ref=f1e286]
+            - cell "250-300 元" [ref=f1e287]
+            - cell "337.47" [ref=f1e288]
+            - cell [ref=f1e289]:
+              - link "打开报告" [ref=f1e290] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/深南电路/深南电路研究报告-20260709.md
+          - row [ref=f1e291]:
+            - cell "湖南黄金" [ref=f1e292]
+            - cell "A股 / 002155.SZ" [ref=f1e293]
+            - cell "2026-07-09" [ref=f1e294]
+            - cell "观察" [ref=f1e295]
+            - cell "17-20 元" [ref=f1e296]
+            - cell "23.34" [ref=f1e297]
+            - cell [ref=f1e298]:
+              - link "打开报告" [ref=f1e299] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/湖南黄金/湖南黄金研究报告-20260709.md
+          - row [ref=f1e300]:
+            - cell "特变电工" [ref=f1e301]
+            - cell "A股 / 600089.SH" [ref=f1e302]
+            - cell "2026-07-10" [ref=f1e303]
+            - cell "观察" [ref=f1e304]
+            - cell "12 元" [ref=f1e305]
+            - cell "21.53" [ref=f1e306]
+            - cell [ref=f1e307]:
+              - link "打开报告" [ref=f1e308] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/特变电工/特变电工-investment-team-20260710.md
+          - row [ref=f1e309]:
+            - cell "百济神州" [ref=f1e310]
+            - cell "A股 / 688235.SH" [ref=f1e311]
+            - cell "2026-07-06" [ref=f1e312]
+            - cell "观察" [ref=f1e313]
+            - cell "US$240-260" [ref=f1e314]
+            - cell "272.45" [ref=f1e315]
+            - cell [ref=f1e316]:
+              - link "打开报告" [ref=f1e317] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/百济神州/百济神州研究报告-20260706.md
+          - row [ref=f1e318]:
+            - cell "神火股份" [ref=f1e319]
+            - cell "A股 / 000933.SZ" [ref=f1e320]
+            - cell "待复核" [ref=f1e321]
+            - cell "观察" [ref=f1e322]
+            - cell "15 元" [ref=f1e323]
+            - cell "26.26" [ref=f1e324]
+            - cell [ref=f1e325]:
+              - link "打开报告" [ref=f1e326] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/神火股份/神火股份投资研究报告_20260623.md
+          - row [ref=f1e327]:
+            - cell "美的集团" [ref=f1e328]
+            - cell "A股 / 000333.SZ" [ref=f1e329]
+            - cell "2026-07-13" [ref=f1e330]
+            - cell "观察" [ref=f1e331]
+            - cell "80.40 元" [ref=f1e332]
+            - cell "84.77" [ref=f1e333]
+            - cell [ref=f1e334]:
+              - link "打开报告" [ref=f1e335] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/美的集团/美的集团-thesis.md
+          - row [ref=f1e336]:
+            - cell "联影医疗" [ref=f1e337]
+            - cell "A股 / 688271.SH" [ref=f1e338]
+            - cell "2026-07-06" [ref=f1e339]
+            - cell "观察" [ref=f1e340]
+            - cell "70-80 元" [ref=f1e341]
+            - cell "113.85" [ref=f1e342]
+            - cell [ref=f1e343]:
+              - link "打开报告" [ref=f1e344] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/联影医疗/联影医疗投资研究报告_team-20260706.md
+          - row [ref=f1e345]:
+            - cell "许继电气" [ref=f1e346]
+            - cell "A股 / 000400.SZ" [ref=f1e347]
+            - cell "2026-07-07" [ref=f1e348]
+            - cell "观察" [ref=f1e349]
+            - cell "约13-15 元" [ref=f1e350]
+            - cell "23.08" [ref=f1e351]
+            - cell [ref=f1e352]:
+              - link "打开报告" [ref=f1e353] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/许继电气/许继电气投资研究报告_20260707.md
+          - row [ref=f1e354]:
+            - cell "迈瑞医疗" [ref=f1e355]
+            - cell "A股 / 300760.SZ" [ref=f1e356]
+            - cell "2026-07-13" [ref=f1e357]
+            - cell "持有" [ref=f1e358]
+            - cell "115 元" [ref=f1e359]
+            - cell "150.8" [ref=f1e360]
+            - cell [ref=f1e361]:
+              - link "打开报告" [ref=f1e362] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/迈瑞医疗/迈瑞医疗-thesis.md
+          - row [ref=f1e363]:
+            - cell "金盘科技" [ref=f1e364]
+            - cell "A股 / 688676.SH" [ref=f1e365]
+            - cell "2026-07-09" [ref=f1e366]
+            - cell "持有" [ref=f1e367]
+            - cell "45 元" [ref=f1e368]
+            - cell "70.16" [ref=f1e369]
+            - cell [ref=f1e370]:
+              - link "打开报告" [ref=f1e371] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/金盘科技/金盘科技-investment-team-20260712.md
+          - row [ref=f1e372]:
+            - cell "长江电力" [ref=f1e373]
+            - cell "A股 / 600900.SH" [ref=f1e374]
+            - cell "2026-07-13" [ref=f1e375]
+            - cell "观察" [ref=f1e376]
+            - cell "28.42 元" [ref=f1e377]
+            - cell "28.94" [ref=f1e378]
+            - cell [ref=f1e379]:
+              - link "打开报告" [ref=f1e380] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/长江电力/长江电力-thesis.md
+          - row [ref=f1e381]:
+            - cell "Alibaba" [ref=f1e382]
+            - cell "港股 / 09988.HK" [ref=f1e383]
+            - cell "待复核" [ref=f1e384]
+            - cell "分批买入" [ref=f1e385]
+            - cell "US$134" [ref=f1e386]
+            - cell "HK$114.9" [ref=f1e387]
+            - cell [ref=f1e388]:
+              - link "打开报告" [ref=f1e389] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Alibaba/最终报告-投研团队-20260513.md
+          - row [ref=f1e390]:
+            - cell "MINIMAX" [ref=f1e391]
+            - cell "港股 / 09922.HK" [ref=f1e392]
+            - cell "待复核" [ref=f1e393]
+            - cell "观察" [ref=f1e394]
+            - cell "价格未给出" [ref=f1e395]
+            - cell "HK$1.27" [ref=f1e396]
+            - cell [ref=f1e397]:
+              - link "打开报告" [ref=f1e398] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/MINIMAX/最终报告.md
+          - row [ref=f1e399]:
+            - cell "万洲国际" [ref=f1e400]
+            - cell "港股 / 00288.HK" [ref=f1e401]
+            - cell "待复核" [ref=f1e402]
+            - cell "持有" [ref=f1e403]
+            - cell "价格未给出" [ref=f1e404]
+            - cell "HK$8.4" [ref=f1e405]
+            - cell [ref=f1e406]:
+              - link "打开报告" [ref=f1e407] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/万洲国际/最终报告.md
+          - row [ref=f1e408]:
+            - cell "京东集团" [ref=f1e409]
+            - cell "港股 / 09618.HK" [ref=f1e410]
+            - cell "待复核" [ref=f1e411]
+            - cell "持有" [ref=f1e412]
+            - cell "价格未给出" [ref=f1e413]
+            - cell "HK$119.6" [ref=f1e414]
+            - cell [ref=f1e415]:
+              - link "打开报告" [ref=f1e416] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/京东集团/最终报告.md
+          - row [ref=f1e417]:
+            - cell "众安在线" [ref=f1e418]
+            - cell "港股 / 06060.HK" [ref=f1e419]
+            - cell "待复核" [ref=f1e420]
+            - cell "观察" [ref=f1e421]
+            - cell "价格未给出" [ref=f1e422]
+            - cell "HK$10.91" [ref=f1e423]
+            - cell [ref=f1e424]:
+              - link "打开报告" [ref=f1e425] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/众安在线/众安在线-research-20260410.md
+          - row [ref=f1e426]:
+            - cell "创科实业" [ref=f1e427]
+            - cell "港股 / 00669.HK" [ref=f1e428]
+            - cell "待复核" [ref=f1e429]
+            - cell "买入" [ref=f1e430]
+            - cell "约HK$124.5" [ref=f1e431]
+            - cell "HK$132" [ref=f1e432]
+            - cell [ref=f1e433]:
+              - link "打开报告" [ref=f1e434] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/创科实业/最终报告.md
+          - row [ref=f1e435]:
+            - cell "华润万象生活" [ref=f1e436]
+            - cell "港股 / 01209.HK" [ref=f1e437]
+            - cell "待复核" [ref=f1e438]
+            - cell "观察" [ref=f1e439]
+            - cell "HK$40" [ref=f1e440]
+            - cell "HK$39.24" [ref=f1e441]
+            - cell [ref=f1e442]:
+              - link "打开报告" [ref=f1e443] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润万象生活/最终报告.md
+          - row [ref=f1e444]:
+            - cell "华润啤酒" [ref=f1e445]
+            - cell "港股 / 00291.HK" [ref=f1e446]
+            - cell "待复核" [ref=f1e447]
+            - cell "持有" [ref=f1e448]
+            - cell "回落至HK$25" [ref=f1e449]
+            - cell "HK$23.92" [ref=f1e450]
+            - cell [ref=f1e451]:
+              - link "打开报告" [ref=f1e452] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润啤酒/最终报告.md
+          - row [ref=f1e453]:
+            - cell "华润置地" [ref=f1e454]
+            - cell "港股 / 01109.HK" [ref=f1e455]
+            - cell "2026-05-16" [ref=f1e456]
+            - cell "观察" [ref=f1e457]
+            - cell "HK$30-33" [ref=f1e458]
+            - cell "HK$34" [ref=f1e459]
+            - cell [ref=f1e460]:
+              - link "打开报告" [ref=f1e461] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/华润置地-被排除/最终报告.md
+          - row [ref=f1e462]:
+            - cell "同程旅行" [ref=f1e463]
+            - cell "港股 / 00780.HK" [ref=f1e464]
+            - cell "待复核" [ref=f1e465]
+            - cell "未提取" [ref=f1e466]
+            - cell "价格未给出" [ref=f1e467]
+            - cell "HK$13.18" [ref=f1e468]
+            - cell [ref=f1e469]:
+              - link "打开报告" [ref=f1e470] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/同程旅行/最终报告.md
+          - row [ref=f1e471]:
+            - cell "名创优品" [ref=f1e472]
+            - cell "港股 / 09896.HK" [ref=f1e473]
+            - cell "待复核" [ref=f1e474]
+            - cell "观察" [ref=f1e475]
+            - cell "价格未给出" [ref=f1e476]
+            - cell "HK$24.58" [ref=f1e477]
+            - cell [ref=f1e478]:
+              - link "打开报告" [ref=f1e479] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/名创优品/最终报告.md
+          - row [ref=f1e480]:
+            - cell "小米" [ref=f1e481]
+            - cell "港股 / 01810.HK" [ref=f1e482]
+            - cell "待复核" [ref=f1e483]
+            - cell "观察" [ref=f1e484]
+            - cell "跌至HK$18" [ref=f1e485]
+            - cell "HK$27.14" [ref=f1e486]
+            - cell [ref=f1e487]:
+              - link "打开报告" [ref=f1e488] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/小米/最终报告.md
+          - row [ref=f1e489]:
+            - cell "康师傅控股" [ref=f1e490]
+            - cell "港股 / 00322.HK" [ref=f1e491]
+            - cell "待复核" [ref=f1e492]
+            - cell "观察" [ref=f1e493]
+            - cell "约HK$7.5-8.5" [ref=f1e494]
+            - cell "HK$11.5" [ref=f1e495]
+            - cell [ref=f1e496]:
+              - link "打开报告" [ref=f1e497] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/康师傅控股/最终报告.md
+          - row [ref=f1e498]:
+            - cell "快手" [ref=f1e499]
+            - cell "港股 / 01024.HK" [ref=f1e500]
+            - cell "待复核" [ref=f1e501]
+            - cell "买入" [ref=f1e502]
+            - cell "价格未给出" [ref=f1e503]
+            - cell "HK$43.08" [ref=f1e504]
+            - cell [ref=f1e505]:
+              - link "打开报告" [ref=f1e506] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/快手/最终报告.md
+          - row [ref=f1e507]:
+            - cell "思格新能-team-20260409" [ref=f1e508]
+            - cell "港股 / 06656.HK" [ref=f1e509]
+            - cell "2026-04-09" [ref=f1e510]
+            - cell "观察" [ref=f1e511]
+            - cell "价格未给出" [ref=f1e512]
+            - cell "HK$312.4" [ref=f1e513]
+            - cell [ref=f1e514]:
+              - link "打开报告" [ref=f1e515] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/思格新能-team-20260409/最终报告.md
+          - row [ref=f1e516]:
+            - cell "恒安国际" [ref=f1e517]
+            - cell "港股 / 01044.HK" [ref=f1e518]
+            - cell "待复核" [ref=f1e519]
+            - cell "未提取" [ref=f1e520]
+            - cell "价格未给出" [ref=f1e521]
+            - cell "HK$23.56" [ref=f1e522]
+            - cell [ref=f1e523]:
+              - link "打开报告" [ref=f1e524] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/恒安国际/最终报告.md
+          - row [ref=f1e525]:
+            - cell "招商银行" [ref=f1e526]
+            - cell "港股 / 03968.HK" [ref=f1e527]
+            - cell "待复核" [ref=f1e528]
+            - cell "观察" [ref=f1e529]
+            - cell "价格未给出" [ref=f1e530]
+            - cell "HK$48.52" [ref=f1e531]
+            - cell [ref=f1e532]:
+              - link "打开报告" [ref=f1e533] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/招商银行/最终报告.md
+          - row [ref=f1e534]:
+            - cell "新东方" [ref=f1e535]
+            - cell "港股 / 09901.HK" [ref=f1e536]
+            - cell "待复核" [ref=f1e537]
+            - cell "观察" [ref=f1e538]
+            - cell "跌至HK$30" [ref=f1e539]
+            - cell "HK$38.78" [ref=f1e540]
+            - cell [ref=f1e541]:
+              - link "打开报告" [ref=f1e542] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/新东方/最终报告.md
+          - row [ref=f1e543]:
+            - cell "新奥能源" [ref=f1e544]
+            - cell "港股 / 02688.HK" [ref=f1e545]
+            - cell "待复核" [ref=f1e546]
+            - cell "未提取" [ref=f1e547]
+            - cell "HK$63" [ref=f1e548]
+            - cell "HK$44.62" [ref=f1e549]
+            - cell [ref=f1e550]:
+              - link "打开报告" [ref=f1e551] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/新奥能源-被排除/最终报告.md
+          - row [ref=f1e552]:
+            - cell "智谱" [ref=f1e553]
+            - cell "港股 / 02513.HK" [ref=f1e554]
+            - cell "2026-07-04" [ref=f1e555]
+            - cell "观察" [ref=f1e556]
+            - cell "价格未给出" [ref=f1e557]
+            - cell "HK$1171" [ref=f1e558]
+            - cell [ref=f1e559]:
+              - link "打开报告" [ref=f1e560] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/智谱/智谱投资研究报告_20260704.md
+          - row [ref=f1e561]:
+            - cell "比亚迪" [ref=f1e562]
+            - cell "港股 / 01211.HK" [ref=f1e563]
+            - cell "待复核" [ref=f1e564]
+            - cell "观察" [ref=f1e565]
+            - cell "价格未给出" [ref=f1e566]
+            - cell "HK$88.65" [ref=f1e567]
+            - cell [ref=f1e568]:
+              - link "打开报告" [ref=f1e569] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/比亚迪-被排除/最终报告.md
+          - row [ref=f1e570]:
+            - cell "比亚迪电子" [ref=f1e571]
+            - cell "港股 / 00285.HK" [ref=f1e572]
+            - cell "待复核" [ref=f1e573]
+            - cell "观察" [ref=f1e574]
+            - cell "跌至HK$25" [ref=f1e575]
+            - cell "HK$24.06" [ref=f1e576]
+            - cell [ref=f1e577]:
+              - link "打开报告" [ref=f1e578] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/比亚迪电子-被排除/最终报告.md
+          - row [ref=f1e579]:
+            - cell "泡泡玛特" [ref=f1e580]
+            - cell "港股 / 09992.HK" [ref=f1e581]
+            - cell "待复核" [ref=f1e582]
+            - cell "观察" [ref=f1e583]
+            - cell "价格未给出" [ref=f1e584]
+            - cell "HK$162" [ref=f1e585]
+            - cell [ref=f1e586]:
+              - link "打开报告" [ref=f1e587] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/泡泡玛特/泡泡玛特-research-20260408.md
+          - row [ref=f1e588]:
+            - cell "港铁公司" [ref=f1e589]
+            - cell "港股 / 00066.HK" [ref=f1e590]
+            - cell "待复核" [ref=f1e591]
+            - cell "观察" [ref=f1e592]
+            - cell "HK$30" [ref=f1e593]
+            - cell "HK$32.6" [ref=f1e594]
+            - cell [ref=f1e595]:
+              - link "打开报告" [ref=f1e596] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/港铁公司/最终报告.md
+          - row [ref=f1e597]:
+            - cell "理想汽车" [ref=f1e598]
+            - cell "港股 / 02015.HK" [ref=f1e599]
+            - cell "待复核" [ref=f1e600]
+            - cell "观察" [ref=f1e601]
+            - cell "US$15-18" [ref=f1e602]
+            - cell "HK$48.96" [ref=f1e603]
+            - cell [ref=f1e604]:
+              - link "打开报告" [ref=f1e605] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/理想汽车/理想汽车-投研团队深度研究报告-20260519.md
+          - row [ref=f1e606]:
+            - cell "百威亚太" [ref=f1e607]
+            - cell "港股 / 01876.HK" [ref=f1e608]
+            - cell "待复核" [ref=f1e609]
+            - cell "分批买入" [ref=f1e610]
+            - cell "HK$5-6" [ref=f1e611]
+            - cell "HK$6.58" [ref=f1e612]
+            - cell [ref=f1e613]:
+              - link "打开报告" [ref=f1e614] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/百威亚太/最终报告.md
+          - row [ref=f1e615]:
+            - cell "百度-deepseek分析" [ref=f1e616]
+            - cell "港股 / 09888.HK" [ref=f1e617]
+            - cell "待复核" [ref=f1e618]
+            - cell "观察" [ref=f1e619]
+            - cell "US$100-130" [ref=f1e620]
+            - cell "HK$106.8" [ref=f1e621]
+            - cell [ref=f1e622]:
+              - link "打开报告" [ref=f1e623] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/百度-deepseek分析/百度-research-20260428.md
+          - row [ref=f1e624]:
+            - cell "百度集团" [ref=f1e625]
+            - cell "港股 / 09888.HK" [ref=f1e626]
+            - cell "待复核" [ref=f1e627]
+            - cell "观察" [ref=f1e628]
+            - cell "价格未给出" [ref=f1e629]
+            - cell "HK$106.8" [ref=f1e630]
+            - cell [ref=f1e631]:
+              - link "打开报告" [ref=f1e632] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/百度集团/最终报告.md
+          - row [ref=f1e633]:
+            - cell "石药集团" [ref=f1e634]
+            - cell "港股 / 01093.HK" [ref=f1e635]
+            - cell "待复核" [ref=f1e636]
+            - cell "观察" [ref=f1e637]
+            - cell "价格未给出" [ref=f1e638]
+            - cell "HK$8.37" [ref=f1e639]
+            - cell [ref=f1e640]:
+              - link "打开报告" [ref=f1e641] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/石药集团/最终报告.md
+          - row [ref=f1e642]:
+            - cell "美团" [ref=f1e643]
+            - cell "港股 / 03690.HK" [ref=f1e644]
+            - cell "待复核" [ref=f1e645]
+            - cell "分批买入" [ref=f1e646]
+            - cell "价格未给出" [ref=f1e647]
+            - cell "HK$87.3" [ref=f1e648]
+            - cell [ref=f1e649]:
+              - link "打开报告" [ref=f1e650] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/美团/美团投资研究报告_20260410.md
+          - row [ref=f1e651]:
+            - cell "群核科技-team-20260409" [ref=f1e652]
+            - cell "港股 / 00068.HK" [ref=f1e653]
+            - cell "待复核" [ref=f1e654]
+            - cell "观察" [ref=f1e655]
+            - cell "价格未给出" [ref=f1e656]
+            - cell "HK$8.62" [ref=f1e657]
+            - cell [ref=f1e658]:
+              - link "打开报告" [ref=f1e659] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/群核科技-team-20260409/最终报告.md
+          - row [ref=f1e660]:
+            - cell "联想集团" [ref=f1e661]
+            - cell "港股 / 00992.HK" [ref=f1e662]
+            - cell "待复核" [ref=f1e663]
+            - cell "观察" [ref=f1e664]
+            - cell "HK$12.94" [ref=f1e665]
+            - cell "HK$24.62" [ref=f1e666]
+            - cell [ref=f1e667]:
+              - link "打开报告" [ref=f1e668] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/联想集团/最终报告.md
+          - row [ref=f1e669]:
+            - cell "腾讯" [ref=f1e670]
+            - cell "港股 / 00700.HK" [ref=f1e671]
+            - cell "2026-07-22" [ref=f1e672]
+            - cell "分批买入" [ref=f1e673]
+            - cell "HK$440.60" [ref=f1e674]
+            - cell "HK$445.2" [ref=f1e675]
+            - cell [ref=f1e676]:
+              - link "打开报告" [ref=f1e677] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/腾讯/腾讯控股研究报告-20260722.md
+          - row [ref=f1e678]:
+            - cell "蒙牛乳业" [ref=f1e679]
+            - cell "港股 / 02319.HK" [ref=f1e680]
+            - cell "待复核" [ref=f1e681]
+            - cell "观察" [ref=f1e682]
+            - cell "价格未给出" [ref=f1e683]
+            - cell "HK$18.22" [ref=f1e684]
+            - cell [ref=f1e685]:
+              - link "打开报告" [ref=f1e686] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/蒙牛乳业/最终报告.md
+          - row [ref=f1e687]:
+            - cell "蔚来" [ref=f1e688]
+            - cell "港股 / 09866.HK" [ref=f1e689]
+            - cell "待复核" [ref=f1e690]
+            - cell "观察" [ref=f1e691]
+            - cell "价格未给出" [ref=f1e692]
+            - cell "HK$37.72" [ref=f1e693]
+            - cell [ref=f1e694]:
+              - link "打开报告" [ref=f1e695] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/蔚来-被排除/最终报告.md
+          - row [ref=f1e696]:
+            - cell "金山软件" [ref=f1e697]
+            - cell "港股 / 03888.HK" [ref=f1e698]
+            - cell "待复核" [ref=f1e699]
+            - cell "观察" [ref=f1e700]
+            - cell "跌至HK$28" [ref=f1e701]
+            - cell "HK$24.4" [ref=f1e702]
+            - cell [ref=f1e703]:
+              - link "打开报告" [ref=f1e704] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/金山软件/最终报告.md
+          - row [ref=f1e705]:
+            - cell "金蝶国际" [ref=f1e706]
+            - cell "港股 / 00268.HK" [ref=f1e707]
+            - cell "待复核" [ref=f1e708]
+            - cell "观察" [ref=f1e709]
+            - cell "HK$7" [ref=f1e710]
+            - cell "HK$7.18" [ref=f1e711]
+            - cell [ref=f1e712]:
+              - link "打开报告" [ref=f1e713] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/金蝶国际/最终报告.md
+          - row [ref=f1e714]:
+            - cell "长光辰芯" [ref=f1e715]
+            - cell "港股 / 03277.HK" [ref=f1e716]
+            - cell "待复核" [ref=f1e717]
+            - cell "观察" [ref=f1e718]
+            - cell "价格未给出" [ref=f1e719]
+            - cell "HK$67.85" [ref=f1e720]
+            - cell [ref=f1e721]:
+              - link "打开报告" [ref=f1e722] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/长光辰芯/长光辰芯-private-20260409.md
+          - row [ref=f1e723]:
+            - cell "长光辰芯-team-20260409" [ref=f1e724]
+            - cell "港股 / 03277.HK" [ref=f1e725]
+            - cell "待复核" [ref=f1e726]
+            - cell "持有" [ref=f1e727]
+            - cell "价格未给出" [ref=f1e728]
+            - cell "HK$67.85" [ref=f1e729]
+            - cell [ref=f1e730]:
+              - link "打开报告" [ref=f1e731] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/长光辰芯-team-20260409/最终报告.md
+          - row [ref=f1e732]:
+            - cell "阿里巴巴" [ref=f1e733]
+            - cell "港股 / 09988.HK" [ref=f1e734]
+            - cell "待复核" [ref=f1e735]
+            - cell "分批买入" [ref=f1e736]
+            - cell "US$134" [ref=f1e737]
+            - cell "HK$114.9" [ref=f1e738]
+            - cell [ref=f1e739]:
+              - link "打开报告" [ref=f1e740] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/阿里巴巴/最终报告-投研团队-20260513.md
+          - row [ref=f1e741]:
+            - cell "零跑汽车" [ref=f1e742]
+            - cell "港股 / 09863.HK" [ref=f1e743]
+            - cell "待复核" [ref=f1e744]
+            - cell "观察" [ref=f1e745]
+            - cell "HK$35-40" [ref=f1e746]
+            - cell "HK$34.64" [ref=f1e747]
+            - cell [ref=f1e748]:
+              - link "打开报告" [ref=f1e749] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/港股召回池/零跑汽车-被排除/最终报告.md
+          - row [ref=f1e750]:
+            - cell "ADP" [ref=f1e751]
+            - cell "未识别" [ref=f1e752]
+            - cell "待复核" [ref=f1e753]
+            - cell "观察" [ref=f1e754]
+            - cell "US$209" [ref=f1e755]
+            - cell "行情未更新" [ref=f1e756]
+            - cell [ref=f1e757]:
+              - link "打开报告" [ref=f1e758] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/ADP/最终报告.md
+          - row [ref=f1e759]:
+            - cell "Accenture" [ref=f1e760]
+            - cell "未识别" [ref=f1e761]
+            - cell "待复核" [ref=f1e762]
+            - cell "观察" [ref=f1e763]
+            - cell "US$170-200" [ref=f1e764]
+            - cell "行情未更新" [ref=f1e765]
+            - cell [ref=f1e766]:
+              - link "打开报告" [ref=f1e767] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Accenture/最终报告.md
+          - row [ref=f1e768]:
+            - cell "Adobe" [ref=f1e769]
+            - cell "未识别" [ref=f1e770]
+            - cell "待复核" [ref=f1e771]
+            - cell "减仓/卖出" [ref=f1e772]
+            - cell "跌至US$220" [ref=f1e773]
+            - cell "行情未更新" [ref=f1e774]
+            - cell [ref=f1e775]:
+              - link "打开报告" [ref=f1e776] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Adobe/最终报告.md
+          - row [ref=f1e777]:
+            - cell "Almonty-Industries" [ref=f1e778]
+            - cell "未识别" [ref=f1e779]
+            - cell "待复核" [ref=f1e780]
+            - cell "观察" [ref=f1e781]
+            - cell "价格未给出" [ref=f1e782]
+            - cell "行情未更新" [ref=f1e783]
+            - cell [ref=f1e784]:
+              - link "打开报告" [ref=f1e785] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Almonty-Industries/Almonty-Industries-深度研究-20260604.md
+          - row [ref=f1e786]:
+            - cell "Booking" [ref=f1e787]
+            - cell "未识别" [ref=f1e788]
+            - cell "待复核" [ref=f1e789]
+            - cell "未提取" [ref=f1e790]
+            - cell "价格未给出" [ref=f1e791]
+            - cell "行情未更新" [ref=f1e792]
+            - cell [ref=f1e793]:
+              - link "打开报告" [ref=f1e794] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Booking/最终报告.md
+          - row [ref=f1e795]:
+            - cell "Mastercard" [ref=f1e796]
+            - cell "未识别" [ref=f1e797]
+            - cell "待复核" [ref=f1e798]
+            - cell "分批买入" [ref=f1e799]
+            - cell "价格未给出" [ref=f1e800]
+            - cell "行情未更新" [ref=f1e801]
+            - cell [ref=f1e802]:
+              - link "打开报告" [ref=f1e803] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Mastercard/最终报告.md
+          - row [ref=f1e804]:
+            - cell "Meta" [ref=f1e805]
+            - cell "未识别" [ref=f1e806]
+            - cell "待复核" [ref=f1e807]
+            - cell "持有" [ref=f1e808]
+            - cell "约US$500-530" [ref=f1e809]
+            - cell "行情未更新" [ref=f1e810]
+            - cell [ref=f1e811]:
+              - link "打开报告" [ref=f1e812] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Meta/最终报告.md
+          - row [ref=f1e813]:
+            - cell "Novo Nordisk" [ref=f1e814]
+            - cell "未识别" [ref=f1e815]
+            - cell "待复核" [ref=f1e816]
+            - cell "观察" [ref=f1e817]
+            - cell "价格未给出" [ref=f1e818]
+            - cell "行情未更新" [ref=f1e819]
+            - cell [ref=f1e820]:
+              - link "打开报告" [ref=f1e821] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Novo Nordisk/最终报告.md
+          - row [ref=f1e822]:
+            - cell "Progressive" [ref=f1e823]
+            - cell "未识别" [ref=f1e824]
+            - cell "待复核" [ref=f1e825]
+            - cell "观察" [ref=f1e826]
+            - cell "价格未给出" [ref=f1e827]
+            - cell "行情未更新" [ref=f1e828]
+            - cell [ref=f1e829]:
+              - link "打开报告" [ref=f1e830] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Progressive/最终报告.md
+          - row [ref=f1e831]:
+            - cell "Qualcomm" [ref=f1e832]
+            - cell "未识别" [ref=f1e833]
+            - cell "待复核" [ref=f1e834]
+            - cell "观察" [ref=f1e835]
+            - cell "价格未给出" [ref=f1e836]
+            - cell "行情未更新" [ref=f1e837]
+            - cell [ref=f1e838]:
+              - link "打开报告" [ref=f1e839] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Qualcomm/最终报告.md
+          - row [ref=f1e840]:
+            - cell "SK海力士" [ref=f1e841]
+            - cell "未识别" [ref=f1e842]
+            - cell "待复核" [ref=f1e843]
+            - cell "分批买入" [ref=f1e844]
+            - cell "价格未给出" [ref=f1e845]
+            - cell "行情未更新" [ref=f1e846]
+            - cell [ref=f1e847]:
+              - link "打开报告" [ref=f1e848] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/SK海力士/SK海力士-research-20260605.md
+          - row [ref=f1e849]:
+            - cell "Uber" [ref=f1e850]
+            - cell "未识别" [ref=f1e851]
+            - cell "2026-05-06" [ref=f1e852]
+            - cell "观察" [ref=f1e853]
+            - cell "价格未给出" [ref=f1e854]
+            - cell "行情未更新" [ref=f1e855]
+            - cell [ref=f1e856]:
+              - link "打开报告" [ref=f1e857] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/Uber/最终报告.md
+          - row [ref=f1e858]:
+            - cell "liblibAI" [ref=f1e859]
+            - cell "未识别" [ref=f1e860]
+            - cell "待复核" [ref=f1e861]
+            - cell "观察" [ref=f1e862]
+            - cell "价格未给出" [ref=f1e863]
+            - cell "行情未更新" [ref=f1e864]
+            - cell [ref=f1e865]:
+              - link "打开报告" [ref=f1e866] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/liblibAI/LiblibAI-四大师综合分析-20260613.md
+          - row [ref=f1e867]:
+            - cell "lululemon" [ref=f1e868]
+            - cell "未识别" [ref=f1e869]
+            - cell "待复核" [ref=f1e870]
+            - cell "观察" [ref=f1e871]
+            - cell "US$100" [ref=f1e872]
+            - cell "行情未更新" [ref=f1e873]
+            - cell [ref=f1e874]:
+              - link "打开报告" [ref=f1e875] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/lululemon/最终报告.md
+          - row [ref=f1e876]:
+            - cell "国防含能材料-民爆-防务材料链" [ref=f1e877]
+            - cell "未识别" [ref=f1e878]
+            - cell "2026-07-09" [ref=f1e879]
+            - cell "分批买入" [ref=f1e880]
+            - cell "价格未给出" [ref=f1e881]
+            - cell "行情未更新" [ref=f1e882]
+            - cell [ref=f1e883]:
+              - link "打开报告" [ref=f1e884] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/国防含能材料-民爆-防务材料链/国防含能材料-民爆-防务材料链-industry-research-20260709.md
+          - row [ref=f1e885]:
+            - cell "懂车帝" [ref=f1e886]
+            - cell "未识别" [ref=f1e887]
+            - cell "待复核" [ref=f1e888]
+            - cell "观察" [ref=f1e889]
+            - cell "价格未给出" [ref=f1e890]
+            - cell "行情未更新" [ref=f1e891]
+            - cell [ref=f1e892]:
+              - link "打开报告" [ref=f1e893] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/懂车帝/18-汽车之家深度对标分析.md
+          - row [ref=f1e894]:
+            - cell "房产研究" [ref=f1e895]
+            - cell "未识别" [ref=f1e896]
+            - cell "待复核" [ref=f1e897]
+            - cell "持有" [ref=f1e898]
+            - cell "价格未给出" [ref=f1e899]
+            - cell "行情未更新" [ref=f1e900]
+            - cell [ref=f1e901]:
+              - link "打开报告" [ref=f1e902] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/房产研究/ZJHY房产投资研究报告_20260429.md
+          - row [ref=f1e903]:
+            - cell "拼多多" [ref=f1e904]
+            - cell "未识别" [ref=f1e905]
+            - cell "2026-04-12" [ref=f1e906]
+            - cell "观察" [ref=f1e907]
+            - cell "US$95-105" [ref=f1e908]
+            - cell "行情未更新" [ref=f1e909]
+            - cell [ref=f1e910]:
+              - link "打开报告" [ref=f1e911] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/拼多多/最终报告-护城河专题-20260412.md
+          - row [ref=f1e912]:
+            - cell "搜狐" [ref=f1e913]
+            - cell "未识别" [ref=f1e914]
+            - cell "待复核" [ref=f1e915]
+            - cell "减仓/卖出" [ref=f1e916]
+            - cell "US$14-17" [ref=f1e917]
+            - cell "行情未更新" [ref=f1e918]
+            - cell [ref=f1e919]:
+              - link "打开报告" [ref=f1e920] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/搜狐/最终报告.md
+          - row [ref=f1e921]:
+            - cell "暖哇科技" [ref=f1e922]
+            - cell "未识别" [ref=f1e923]
+            - cell "待复核" [ref=f1e924]
+            - cell "未提取" [ref=f1e925]
+            - cell "价格未给出" [ref=f1e926]
+            - cell "行情未更新" [ref=f1e927]
+            - cell [ref=f1e928]:
+              - link "打开报告" [ref=f1e929] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/暖哇科技/暖哇科技-research-20260410.md
+          - row [ref=f1e930]:
+            - cell "李录" [ref=f1e931]
+            - cell "未识别" [ref=f1e932]
+            - cell "待复核" [ref=f1e933]
+            - cell "未提取" [ref=f1e934]
+            - cell "价格未给出" [ref=f1e935]
+            - cell "行情未更新" [ref=f1e936]
+            - cell [ref=f1e937]:
+              - link "打开报告" [ref=f1e938] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/李录/李录-战绩深度核查-20260422.md
+          - row [ref=f1e939]:
+            - cell "永新股份-deepseek分析" [ref=f1e940]
+            - cell "未识别" [ref=f1e941]
+            - cell "待复核" [ref=f1e942]
+            - cell "观察" [ref=f1e943]
+            - cell "价格未给出" [ref=f1e944]
+            - cell "行情未更新" [ref=f1e945]
+            - cell [ref=f1e946]:
+              - link "打开报告" [ref=f1e947] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/永新股份-deepseek分析/最终报告.md
+          - row [ref=f1e948]:
+            - cell "汽车之家" [ref=f1e949]
+            - cell "未识别" [ref=f1e950]
+            - cell "待复核" [ref=f1e951]
+            - cell "减仓/卖出" [ref=f1e952]
+            - cell "<US$15" [ref=f1e953]
+            - cell "行情未更新" [ref=f1e954]
+            - cell [ref=f1e955]:
+              - link "打开报告" [ref=f1e956] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/汽车之家/汽车之家-深度投研-20260614.md
+          - row [ref=f1e957]:
+            - cell "海尔智家-deepseek分析" [ref=f1e958]
+            - cell "未识别" [ref=f1e959]
+            - cell "2026-04-27" [ref=f1e960]
+            - cell "观察" [ref=f1e961]
+            - cell "20-21 元" [ref=f1e962]
+            - cell "行情未更新" [ref=f1e963]
+            - cell [ref=f1e964]:
+              - link "打开报告" [ref=f1e965] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/海尔智家-deepseek分析/海尔智家-最终报告-20260427.md
+          - row [ref=f1e966]:
+            - cell "灵境万维-team-20260512" [ref=f1e967]
+            - cell "未识别" [ref=f1e968]
+            - cell "待复核" [ref=f1e969]
+            - cell "观察" [ref=f1e970]
+            - cell "价格未给出" [ref=f1e971]
+            - cell "行情未更新" [ref=f1e972]
+            - cell [ref=f1e973]:
+              - link "打开报告" [ref=f1e974] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/灵境万维-team-20260512/灵境万维_投资研究报告_20260512.md
+          - row [ref=f1e975]:
+            - cell "瑞·达利欧" [ref=f1e976]
+            - cell "未识别" [ref=f1e977]
+            - cell "待复核" [ref=f1e978]
+            - cell "未提取" [ref=f1e979]
+            - cell "价格未给出" [ref=f1e980]
+            - cell "行情未更新" [ref=f1e981]
+            - cell [ref=f1e982]:
+              - link "打开报告" [ref=f1e983] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/瑞·达利欧/瑞·达利欧-2026年访谈合集-20260508.md
+          - row [ref=f1e984]:
+            - cell "网易" [ref=f1e985]
+            - cell "未识别" [ref=f1e986]
+            - cell "2026-05-19" [ref=f1e987]
+            - cell "持有" [ref=f1e988]
+            - cell "跌至US$90-95" [ref=f1e989]
+            - cell "行情未更新" [ref=f1e990]
+            - cell [ref=f1e991]:
+              - link "打开报告" [ref=f1e992] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/网易/网易-深度投研-20260519.md
+          - row [ref=f1e993]:
+            - cell "耳朵时间-team-20260424" [ref=f1e994]
+            - cell "未识别" [ref=f1e995]
+            - cell "待复核" [ref=f1e996]
+            - cell "未提取" [ref=f1e997]
+            - cell "价格未给出" [ref=f1e998]
+            - cell "行情未更新" [ref=f1e999]
+            - cell [ref=f1e1000]:
+              - link "打开报告" [ref=f1e1001] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/耳朵时间-team-20260424/最终报告.md
+          - row [ref=f1e1002]:
+            - cell "腾讯音乐" [ref=f1e1003]
+            - cell "未识别" [ref=f1e1004]
+            - cell "2026-05-19" [ref=f1e1005]
+            - cell "观察" [ref=f1e1006]
+            - cell "US$8-9" [ref=f1e1007]
+            - cell "行情未更新" [ref=f1e1008]
+            - cell [ref=f1e1009]:
+              - link "打开报告" [ref=f1e1010] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/腾讯音乐/腾讯音乐-深度投研-20260519.md
+          - row [ref=f1e1011]:
+            - cell "英伟达" [ref=f1e1012]
+            - cell "未识别" [ref=f1e1013]
+            - cell "待复核" [ref=f1e1014]
+            - cell "观察" [ref=f1e1015]
+            - cell "US$160-180" [ref=f1e1016]
+            - cell "行情未更新" [ref=f1e1017]
+            - cell [ref=f1e1018]:
+              - link "打开报告" [ref=f1e1019] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/英伟达/英伟达-research-20260408.md
+          - row [ref=f1e1020]:
+            - cell "茅台" [ref=f1e1021]
+            - cell "未识别" [ref=f1e1022]
+            - cell "2026-05-15" [ref=f1e1023]
+            - cell "分批买入" [ref=f1e1024]
+            - cell "400 元" [ref=f1e1025]
+            - cell "行情未更新" [ref=f1e1026]
+            - cell [ref=f1e1027]:
+              - link "打开报告" [ref=f1e1028] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/茅台/贵州茅台DCF估值研究-20260515.md
+          - row [ref=f1e1029]:
+            - cell "蚂蚁数科" [ref=f1e1030]
+            - cell "未识别" [ref=f1e1031]
+            - cell "2026-04-28" [ref=f1e1032]
+            - cell "观察" [ref=f1e1033]
+            - cell "价格未给出" [ref=f1e1034]
+            - cell "行情未更新" [ref=f1e1035]
+            - cell [ref=f1e1036]:
+              - link "打开报告" [ref=f1e1037] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/蚂蚁数科/估值聚焦-20260428/04-每股价值.md
+          - row [ref=f1e1038]:
+            - cell "蚂蚁数科-team-20260417" [ref=f1e1039]
+            - cell "未识别" [ref=f1e1040]
+            - cell "2026-04-17" [ref=f1e1041]
+            - cell "观察" [ref=f1e1042]
+            - cell "价格未给出" [ref=f1e1043]
+            - cell "行情未更新" [ref=f1e1044]
+            - cell [ref=f1e1045]:
+              - link "打开报告" [ref=f1e1046] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/蚂蚁数科-team-20260417/README.md
+          - row [ref=f1e1047]:
+            - cell "蚂蚁集团" [ref=f1e1048]
+            - cell "未识别" [ref=f1e1049]
+            - cell "待复核" [ref=f1e1050]
+            - cell "观察" [ref=f1e1051]
+            - cell "价格未给出" [ref=f1e1052]
+            - cell "行情未更新" [ref=f1e1053]
+            - cell [ref=f1e1054]:
+              - link "打开报告" [ref=f1e1055] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/蚂蚁集团/蚂蚁集团投资研究报告_20260410.md
+          - row [ref=f1e1056]:
+            - cell "赛轮轮胎-deepseek分析" [ref=f1e1057]
+            - cell "未识别" [ref=f1e1058]
+            - cell "待复核" [ref=f1e1059]
+            - cell "观察" [ref=f1e1060]
+            - cell "12-14 元" [ref=f1e1061]
+            - cell "行情未更新" [ref=f1e1062]
+            - cell [ref=f1e1063]:
+              - link "打开报告" [ref=f1e1064] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/赛轮轮胎-deepseek分析/最终报告.md
+          - row [ref=f1e1065]:
+            - cell "追觅科技" [ref=f1e1066]
+            - cell "未识别" [ref=f1e1067]
+            - cell "待复核" [ref=f1e1068]
+            - cell "观察" [ref=f1e1069]
+            - cell "价格未给出" [ref=f1e1070]
+            - cell "行情未更新" [ref=f1e1071]
+            - cell [ref=f1e1072]:
+              - link "打开报告" [ref=f1e1073] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/追觅科技/最终报告-20260410.md
+          - row [ref=f1e1074]:
+            - cell "银行股" [ref=f1e1075]
+            - cell "未识别" [ref=f1e1076]
+            - cell "待复核" [ref=f1e1077]
+            - cell "观察" [ref=f1e1078]
+            - cell "<35 元" [ref=f1e1079]
+            - cell "行情未更新" [ref=f1e1080]
+            - cell [ref=f1e1081]:
+              - link "打开报告" [ref=f1e1082] [cursor=pointer]:
+                - /url: https://github.com/yuzi1441/ai-berkshire/blob/main/reports/银行股/银行股投资研究-20260505.md
+  - contentinfo [ref=f1e1083]: 仅供学习与研究，不构成投资建议。

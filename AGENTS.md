@@ -1,4 +1,4 @@
-﻿# AI Berkshire Codex Guide
+# AI Berkshire Codex Guide
 
 This repository contains investment research workflows, reports, and shared
 validation tools. Keep compatibility with both Claude Code and Codex users.
@@ -61,6 +61,17 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   under `reports/<topic-name>/` rather than directly in the `reports/` root.
 - Do not write new research outputs directly into the `reports/` root. If the
   target folder does not exist, create it before writing the report.
+- Before saving a newly generated report, resolve its parent directory with
+  `py -3 tools/report_routing.py resolve`. Pass the original report filename
+  through `--filename` unchanged, and use `--create --json` before writing:
+  - company report: `--company <name> [--ticker <code>] [--market <market>] --report-type company`
+  - industry or theme report: `--topic <topic> --report-type topic`
+  - multi-company comparison: `--report-type comparison`
+  - unresolved ownership: `--report-type unknown`, which routes to
+    `reports/_inbox/待归档/` rather than the `reports/` root.
+  Write to the returned `destination_path`. This routing step controls only the
+  parent directory; it must not change the report body, its filename, or any
+  research workflow logic.
 - Use stable Markdown filenames in this format when possible:
   `<company-or-topic>-<skill-or-report-type>-<YYYYMMDD>.md`.
 - Keep final human-readable reports in `reports/<company-or-topic>/`. Raw PDFs,
@@ -74,6 +85,25 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
 - When reorganizing existing reports, never overwrite a different existing file;
   create a suffixed conflict copy and record the move in `logs/`.
 
+## Decision Dashboard Rules
+
+- The public decision board only includes individual-stock research. Industry,
+  theme, comparison, funnel, and screening reports stay in `reports/` but are not
+  listed on the board.
+- After saving a newly generated company report into its routed folder, rebuild
+  the decision board so the web page and Obsidian indexes refresh:
+  `py -3 tools/build_investment_dashboard.py`
+- Optional A/H quote refresh after the board rebuild:
+  `py -3 tools/market_snapshot.py`
+- The board exposes both the current conclusion and each company's historical
+  report conclusions under `report_history`. Newer reports never inherit older
+  prices; missing prices stay `价格未给出`.
+- Generated artifacts include:
+  - `reports/00-index/投资决策总表.md`
+  - `data/investment-dashboard/decision_board.json`
+  - `data/investment-dashboard/report_history.json`
+  - `site/data/*` for the static web dashboard
+
 ## Editing Rules
 
 - Preserve existing report files unless the task specifically asks to change
@@ -86,4 +116,5 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   `python3 scripts/sync-codex-skills.py --check`
   and, when slash prompts are relevant:
   `python3 scripts/sync-codex-prompts.py --check`
+
 

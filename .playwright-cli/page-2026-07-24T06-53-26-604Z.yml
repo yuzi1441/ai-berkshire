@@ -1,0 +1,124 @@
+- generic [ref=f3e2]:
+  - banner [ref=f3e3]:
+    - generic [ref=f3e4]:
+      - generic [ref=f3e5]: AB
+      - generic [ref=f3e6]:
+        - paragraph [ref=f3e7]: AI BERKSHIRE
+        - heading "个股投资决策看板" [level=1] [ref=f3e8]
+    - generic [ref=f3e9]:
+      - generic "行情状态" [ref=f3e10]: 实时行情 · 176 只 · 01:53:07
+      - button "刷新行情" [ref=f3e13] [cursor=pointer]
+      - link "研究库" [ref=f3e14] [cursor=pointer]:
+        - /url: https://github.com/yuzi1441/ai-berkshire
+  - region "决策总览" [ref=f3e73]:
+    - generic [ref=f3e74]:
+      - generic [ref=f3e11825]:
+        - generic [ref=f3e11826]: 当前个股
+        - strong [ref=f3e11827]: "1"
+      - generic [ref=f3e11828]:
+        - generic [ref=f3e11829]: A股
+        - strong [ref=f3e11830]: "1"
+      - generic [ref=f3e11831]:
+        - generic [ref=f3e11832]: 港股
+        - strong [ref=f3e11833]: "0"
+      - generic [ref=f3e11834]:
+        - generic [ref=f3e11835]: 稳健/保守
+        - strong [ref=f3e11836]: "1"
+      - generic [ref=f3e11837]:
+        - generic [ref=f3e11838]: 暂不买入
+        - strong [ref=f3e11839]: "0"
+  - region "筛选与检索" [ref=f3e15]:
+    - generic [ref=f3e16]:
+      - generic [ref=f3e17]: 检索公司或代码
+      - searchbox "检索公司或代码" [ref=f3e18]
+      - generic [ref=f3e19]: /
+    - tablist "市场" [ref=f3e20]:
+      - button "全部" [ref=f3e21] [cursor=pointer]
+      - button "A股" [ref=f3e22] [cursor=pointer]
+      - button "港股" [ref=f3e23] [cursor=pointer]
+      - button "美股" [ref=f3e24] [cursor=pointer]
+      - button "待识别" [ref=f3e25] [cursor=pointer]
+    - tablist "当前买入建议" [ref=f3e26]:
+      - generic [ref=f3e27]: 现价建议
+      - button "全部" [ref=f3e28] [cursor=pointer]
+      - button "保守买入" [active] [ref=f3e29] [cursor=pointer]
+      - button "稳健买入" [ref=f3e30] [cursor=pointer]
+      - button "激进买入" [ref=f3e31] [cursor=pointer]
+      - button "暂不买入" [ref=f3e32] [cursor=pointer]
+      - button "待比价" [ref=f3e33] [cursor=pointer]
+    - generic [ref=f3e34]:
+      - generic [ref=f3e35]:
+        - generic [ref=f3e36]: 排序
+        - combobox "排序" [ref=f3e37]:
+          - option "按买入建议" [selected]
+          - option "按研究结论"
+          - option "按当日涨跌"
+          - option "按研报截止日"
+          - option "按公司名"
+      - button "清除筛选" [ref=f3e38] [cursor=pointer]
+      - paragraph [ref=f3e90]: 显示 1 / 231 · 排序：按买入建议
+  - generic [ref=f3e39]:
+    - region "个股列表" [ref=f3e40]:
+      - table [ref=f3e42]:
+        - rowgroup [ref=f3e43]:
+          - row [ref=f3e44]:
+            - columnheader "公司" [ref=f3e45]
+            - columnheader "市场/代码" [ref=f3e46]
+            - columnheader "分层结论" [ref=f3e47]
+            - columnheader "现价" [ref=f3e48]
+            - columnheader "买入建议" [ref=f3e49]
+            - columnheader "估值原表" [ref=f3e50]
+            - columnheader "研报日" [ref=f3e51]
+        - rowgroup [ref=f3e91]:
+          - row [ref=f3e11840] [cursor=pointer]:
+            - cell "国药现代 含估值原表" [ref=f3e11841]:
+              - generic [ref=f3e11842]: 国药现代
+              - generic [ref=f3e11843]: 含估值原表
+            - cell "A股 600420.SH" [ref=f3e11844]:
+              - generic [ref=f3e11845]: A股
+              - generic [ref=f3e11846]: 600420.SH
+            - cell "保守 观望为主 8.70 元" [ref=f3e11847]:
+              - generic [ref=f3e11849]:
+                - generic [ref=f3e11850]: 保守
+                - generic [ref=f3e11851]:
+                  - generic [ref=f3e11852]: 观望为主
+                  - generic [ref=f3e11853]: 8.70 元
+            - cell "8.47 -2.53% · 实时" [ref=f3e11854]:
+              - generic [ref=f3e11855]: "8.47"
+              - generic [ref=f3e11856]: "-2.53% · 实时"
+            - cell "适合保守买入 现价 8.47 · 保守带 ≤8.70（亦满足稳健/激进价格带）" [ref=f3e11857]:
+              - generic [ref=f3e11858]:
+                - generic [ref=f3e11859]: 适合保守买入
+                - generic [ref=f3e11860]: 现价 8.47 · 保守带 ≤8.70（亦满足稳健/激进价格带）
+            - cell "估值与安全边际 查看原表" [ref=f3e11861]:
+              - generic [ref=f3e11862]: 估值与安全边际
+              - generic [ref=f3e11863]: 查看原表
+            - cell "2026-07-08" [ref=f3e11864]
+      - paragraph [ref=f3e52]:
+        - text: 点击行打开估值原文 ·
+        - generic [ref=f3e53]: j
+        - text: /
+        - generic [ref=f3e54]: k
+        - text: 切换 ·
+        - generic [ref=f3e55]: Enter
+        - text: 详情 ·
+        - generic [ref=f3e56]: Esc
+        - text: 关闭 ·
+        - generic [ref=f3e57]: /
+        - text: 搜索
+    - complementary "个股详情" [ref=f3e58]:
+      - generic [ref=f3e59]:
+        - generic [ref=f3e60]:
+          - paragraph [ref=f3e61]: 个股详情
+          - heading "选择一家公司" [level=2] [ref=f3e62]
+          - paragraph
+        - button "关闭详情" [ref=f3e63] [cursor=pointer]: ×
+      - tablist [ref=f3e64]:
+        - button "估值原文" [ref=f3e65] [cursor=pointer]
+        - button "摘要" [ref=f3e66] [cursor=pointer]
+        - button "历史研报" [ref=f3e67] [cursor=pointer]
+      - generic [ref=f3e69]:
+        - link "打开研报" [ref=f3e70] [cursor=pointer]:
+          - /url: "#"
+        - button "复制链接" [ref=f3e71] [cursor=pointer]
+  - contentinfo [ref=f3e72]: 仅收录个股研究；价格以报告估值原文表格为准，不构成投资建议。 行情优先实时拉取腾讯 A/H 接口，失败时回退本地快照。
