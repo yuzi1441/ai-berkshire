@@ -1,0 +1,65 @@
+name: Investment dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "reports/**"
+      - "data/investment-dashboard/**"
+      - "data/report-routing/**"
+      - "tools/build_investment_dashboard.py"
+      - "tools/market_snapshot.py"
+      - "site/**"
+      - "wrangler.toml"
+      - ".github/workflows/investment-dashboard.yml"
+  schedule:
+    # China/Hong Kong weekday sessions, with the script handling lunch breaks and holidays.
+    - cron: "*/5 1-7 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: investment-dashboard-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build report-derived data
+        run: python tools/build_investment_dashboard.py
+      - name: Refresh A/H market snapshot when open
+        run: python tools/market_snapshot.py
+      - name: Include latest quote data in static output
+        run: |
+          mkdir -p site/data/quotes
+          cp data/investment-dashboard/quotes/latest.json site/data/quotes/latest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: investment-dashboard-site
+          path: site
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    if: vars.CLOUDFLARE_PAGES_PROJECT != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: investment-dashboard-site
+          path: site
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy site --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
