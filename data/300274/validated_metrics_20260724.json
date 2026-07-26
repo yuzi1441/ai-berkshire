@@ -1,0 +1,50 @@
+{
+  "company": "阳光电源股份有限公司",
+  "ticker": "300274.SZ",
+  "cutoff_date": "2026-07-24",
+  "currency": "CNY",
+  "market": {
+    "close_price": 113.42,
+    "shares": 2073211424,
+    "market_cap_cny": 235143639710.08,
+    "pe_ttm": 19.72,
+    "pe_static_2025_current_shares": 17.47,
+    "quote_vendor_dynamic_pe": 25.66,
+    "pb_reported_q1_pre_dividend": 4.83,
+    "pb_pro_forma_post_dividend": 4.98,
+    "ps_ttm": 2.74,
+    "dividend_yield_ttm": 0.014334
+  },
+  "financials": {
+    "2025": {
+      "revenue_cny_100m": 891.8436,
+      "net_profit_parent_cny_100m": 134.6128,
+      "net_profit_parent_ex_items_cny_100m": 128.2904,
+      "operating_cash_flow_cny_100m": 169.1778,
+      "capex_cash_cny_100m": 30.0794,
+      "simplified_fcf_cny_100m": 139.0984,
+      "gross_margin": 0.3183,
+      "roe_weighted": 0.3126
+    },
+    "2026Q1": {
+      "revenue_cny_100m": 155.6065,
+      "net_profit_parent_cny_100m": 22.9127,
+      "net_profit_parent_ex_items_cny_100m": 20.3237,
+      "operating_cash_flow_cny_100m": 12.0840,
+      "equity_parent_cny_100m": 486.6071,
+      "gross_margin": 0.3326,
+      "roe_weighted": 0.0481
+    },
+    "ttm_to_2026Q1": {
+      "revenue_cny_100m": 857.0855,
+      "net_profit_parent_cny_100m": 119.2639,
+      "eps_current_shares": 5.752615
+    }
+  },
+  "scenario_valuation": {
+    "years": 3,
+    "bull": {"eps_growth": 0.18, "exit_pe": 25, "target_price": 236.3},
+    "base": {"eps_growth": 0.10, "exit_pe": 20, "target_price": 153.1},
+    "bear": {"eps_growth": -0.02, "exit_pe": 14, "target_price": 75.8}
+  }
+}

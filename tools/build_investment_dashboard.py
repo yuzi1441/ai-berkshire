@@ -351,7 +351,11 @@ def extract_summary(section: list[str]) -> str:
     ]
     for line in [*preferred, *section]:
         summary = clean_markdown(line)
-        if len(summary) >= 16 and not re.fullmatch(r"[-:| ]+", summary):
+        has_explicit_action = len(summary) >= 8 and re.search(
+            r"观察|等待|买入|建仓|持有|减仓|卖出|不追",
+            summary,
+        )
+        if (len(summary) >= 16 or has_explicit_action) and not re.fullmatch(r"[-:| ]+", summary):
             return summary[:360]
     return "未提取到可供看板展示的结论。"
 
@@ -1778,26 +1782,6 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
         preferred_section = prefer_valuation_section(selected, ordered)
         if preferred_section:
             selected["valuation_section"] = preferred_section
-        # If the newest cutoff report has no layered step-8 table, reuse a richer
-        # same-company research stance table for multi-angle display (not invent prices).
-        if len(selected.get("investor_stances") or []) < 2:
-            section = selected.get("valuation_section") or {}
-            markdown = section.get("markdown") if isinstance(section, dict) else None
-            from_section = extract_investor_stances(str(markdown or "").splitlines()) if markdown else []
-            richer = from_section
-            if len(richer) < 2:
-                for candidate in ordered:
-                    candidate_stances = candidate.get("investor_stances") or []
-                    if len(candidate_stances) > len(richer):
-                        richer = candidate_stances
-            if len(richer) >= 2:
-                selected["investor_stances"] = richer
-                selected["conclusion_summary"] = (
-                    investor_stances_summary(richer) or selected.get("conclusion_summary")
-                )
-                stance_action = classify_action_from_stances(richer)
-                if stance_action and selected.get("action") in {None, "", "未提取"}:
-                    selected["action"] = stance_action
         selected["price_status"] = (
             "已提取价格计划"
             if selected.get("price_plan")

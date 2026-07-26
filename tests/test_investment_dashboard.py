@@ -189,6 +189,36 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertIn("历史研报结论", table)
             self.assertNotIn("AI产业研究", table)
 
+    def test_new_report_never_inherits_old_investor_prices(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            company_dir = root / "reports" / "示例公司"
+            (company_dir / "older.md").write_text(
+                "# 旧报告\n\n数据截止：2026-06-01\n股票代码：000001.SZ\n\n"
+                "## 第八步：最终决策与行动清单\n\n"
+                "| 投资者类型 | 建议 | 价格区间 |\n|---|---|---:|\n"
+                "| 激进型 | 小仓试探 | 18-20 元 |\n"
+                "| 稳健型 | 分批建仓 | 15-18 元 |\n"
+                "| 保守型 | 继续等待 | 低于 15 元 |\n",
+                encoding="utf-8",
+            )
+            (company_dir / "newer.md").write_text(
+                "# 新报告\n\n数据截止：2026-07-01\n股票代码：000001.SZ\n\n"
+                "## 最终建议\n\n继续观察，等待基本面验证。\n",
+                encoding="utf-8",
+            )
+
+            board = dashboard.build_dashboard(root)
+            selected = board["decisions"][0]
+
+            self.assertEqual(selected["report_path"], "reports/示例公司/newer.md")
+            self.assertEqual(selected["investor_stances"], [])
+            self.assertEqual(selected["conclusion_summary"], "继续观察，等待基本面验证。")
+            self.assertIsNone(selected["buy_price"])
+            self.assertEqual(selected["price_status"], "价格未给出")
+            self.assertEqual(len(selected["report_history"][1]["investor_stances"]), 3)
+
     def test_prefers_original_valuation_section_over_tracker_note(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
