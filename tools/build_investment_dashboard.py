@@ -176,7 +176,15 @@ def extract_data_cutoff(lines: list[str]) -> str | None:
     Only labelled lines are considered. A filename date and filesystem timestamp
     are intentionally ignored because neither is a report data cutoff.
     """
-    primary_labels = ("数据截止", "数据截至", "截止日期", "data cutoff", "as of", "股价截至")
+    primary_labels = (
+        "数据截止",
+        "数据截至",
+        "截止日期",
+        "data cutoff",
+        "as of",
+        "股价截至",
+        "行情基准",
+    )
     secondary_labels = ("报告日期", "研究日期", "撰写日期")
     primary: list[str] = []
     secondary: list[str] = []
@@ -188,13 +196,40 @@ def extract_data_cutoff(lines: list[str]) -> str | None:
         if not labels:
             continue
         bucket = primary if labels is primary_labels else secondary
-        for match in DATE_PATTERN.finditer(line):
+        # A labelled cutoff line may also state the later report completion date.
+        # The first date is the one attached to the cutoff / market-benchmark label.
+        match = DATE_PATTERN.search(line)
+        if match:
             parsed = parse_date(match.group(0))
             if parsed:
                 bucket.append(parsed)
     if primary:
         return max(primary)
     return max(secondary) if secondary else None
+
+
+def extract_report_completed_date(lines: list[str]) -> str | None:
+    """Extract an explicitly labelled report completion date for tie-breaking.
+
+    This is intentionally separate from the data cutoff. It is only used when
+    two reports cover the same data date, so newer completed research can
+    supersede an earlier tracking note without relying on file timestamps.
+    """
+    labels = ("报告完成日", "报告完成日期", "研究完成日", "完成日期", "建立日期", "撰写日期")
+    dates: list[str] = []
+    for line in lines[:120]:
+        folded = line.casefold()
+        for label in labels:
+            start = folded.find(label)
+            if start < 0:
+                continue
+            match = DATE_PATTERN.search(line[start + len(label) :])
+            if not match:
+                continue
+            parsed = parse_date(match.group(0))
+            if parsed:
+                dates.append(parsed)
+    return max(dates) if dates else None
 
 
 def extract_ticker(text: str) -> str | None:
@@ -1668,6 +1703,9 @@ def candidate_record(
         "ticker": report_override.get("ticker", ticker),
         "market": report_override.get("market", market_for_ticker(ticker, market_hint)),
         "data_cutoff": report_override.get("data_cutoff", extract_data_cutoff(lines)),
+        "report_completed_at": report_override.get(
+            "report_completed_at", extract_report_completed_date(lines)
+        ),
         "action": coarse_action,
         "investor_stances": investor_stances,
         "conclusion_summary": investor_stances_summary(investor_stances)
@@ -1694,12 +1732,12 @@ def candidate_record(
     return record
 
 
-def record_rank(record: dict[str, Any]) -> tuple[int, str, int, int, int, str]:
-    """Rank candidates by explicit cutoff, then decision strength and path.
+def record_rank(record: dict[str, Any]) -> tuple[int, str, str, int, int, int, str]:
+    """Rank candidates by cutoff, explicit completion date, then report quality.
 
-    No filesystem timestamp or filename date participates in this ranking.
-    When cutoffs are equal, prefer reports that actually contain price plans or
-    scenario targets so checklist notes do not outrank full research reports.
+    No filesystem timestamp or filename date participates in this ranking. A
+    completion date is considered only when reports share the same explicit
+    data cutoff; report content remains the final fallback for equal dates.
     """
     action_rank = {"买入": 5, "分批买入": 4, "持有": 3, "观察": 2, "减仓/卖出": 1}.get(
         record["action"], 0
@@ -1730,6 +1768,7 @@ def record_rank(record: dict[str, Any]) -> tuple[int, str, int, int, int, str]:
     return (
         1 if record["data_cutoff"] else 0,
         record["data_cutoff"] or "0000-00-00",
+        record.get("report_completed_at") or "0000-00-00",
         price_rank,
         action_rank,
         kind_rank,
@@ -1932,7 +1971,8 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
                 )
             )
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    content = "\n".join(lines)
+    path.write_text("\n".join(line.rstrip() for line in content.splitlines()) + "\n", encoding="utf-8")
 
 
 def write_library_moc(path: Path, reports_directory: Path, decisions: list[dict[str, Any]], generated_at: str) -> None:
