@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-27T23:08:18-05:00",
-  "record_count": 1928,
+  "generated_at": "2026-07-28T18:22:59+08:00",
+  "record_count": 1929,
   "records": [
     {
       "company": "Accenture",
@@ -25797,6 +25797,33 @@
       "report_path": "reports/四方股份/四方股份-management-20260707.md",
       "report_link": "四方股份/四方股份-management-20260707.md",
       "price_status": "价格未给出",
+      "data_status": "已标注"
+    },
+    {
+      "company": "四方股份",
+      "entity_kind": "company",
+      "entity_directory": "四方股份",
+      "ticker": "601126.SH",
+      "market": "A股",
+      "data_cutoff": "2026-07-28",
+      "report_completed_at": "2026-07-28",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "> 重要声明：仅用于学习和研究，不构成投资建议。",
+      "buy_price": "约36 元",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "四、估值锚点",
+        "start_line": 48,
+        "end_line": 75,
+        "markdown": "## 四、估值锚点\n\n### 4.1 当前估值核验\n\n| 指标 | 2026-07-28 盘中参考 | 口径 |\n|---|---:|---|\n| 股价 | 40.90 元 | 腾讯与新浪行情，13:16:23 |\n| 总市值 | 约 340.74 亿元 | 腾讯行情；按总股本 8.331055 亿股复算约 340.74 亿元 |\n| PE（TTM） | 39.71 倍 | TTM EPS 约 1.03 元 |\n| PB | 6.59 倍 | 2026Q1 BVPS 6.205654 元 |\n| P/FCF | 59.03 倍 | 2025 每股企业自由现金流 0.69285 元，仅作近似 |\n| 股息率 | 1.76% | 2025 年度每股分红 0.72 元 |\n\n以上由 `python3 tools/financial_rigor.py verify-valuation` 以精确十进制复核。盘中数据会变化；收盘后应更新。\n\n### 4.2 情景锚点\n\n| 指标 | 实际买入时 | 乐观 | 中性 | 悲观 |\n|---|---:|---:|---:|---:|\n| 股价 | 待填写 | 44–58 元 | 24–30 元 | 14–17 元 |\n| 归母利润中枢 | 待填写 | 13–15 亿元 | 10 亿元 | 8 亿元 |\n| PE 假设 | 待填写 | 28–32 倍 | 20–25 倍 | 15–18 倍 |\n| 合理市值 | 待填写 | 364–480 亿元 | 200–250 亿元 | 120–144 亿元 |\n| 内在价值估算 | 待填写 | 44–58 元/股 | 24–30 元/股 | 14–17 元/股 |\n| 相对 40.90 元安全边际 | 待填写 | -7% 至 +42% | **-41% 至 -27%** | -66% 至 -58% |\n\n说明：“安全边际”为内在价值相对当前价的折溢价区间。中性估值下当前价仍高于内在价值约 36%–70%，并非安全边际。**建仓观察区暂定 24–30 元；若业绩上台阶，先重估利润再调整锚点，不能因股价上涨倒推价值。**"
+      },
+      "recommendation": "> 重要声明：仅用于学习和研究，不构成投资建议。",
+      "title": "四方股份（601126.SH）投资论文",
+      "report_path": "reports/四方股份/四方股份-thesis.md",
+      "report_link": "四方股份/四方股份-thesis.md",
+      "price_status": "已提取",
       "data_status": "已标注"
     },
     {
