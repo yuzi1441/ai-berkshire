@@ -173,7 +173,7 @@ function parseStanceBand(stance) {
   // A bare number has no dependable comparison basis: it may be a multiple,
   // a target in another market, or a value quoted in a table header.
   if (!currency) return null;
-  const range = cleaned.match(/(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)\s*[-—~至到]\s*(\d+(?:\.\d+)?)/);
+  const range = cleaned.match(/(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)\s*[-—–~至到]\s*(\d+(?:\.\d+)?)/);
   if (range) {
     const a = Number(range[1]);
     const b = Number(range[2]);
@@ -218,6 +218,7 @@ function buyAdviceForItem(item, quote) {
   const order = ["保守型", "稳健型", "激进型"];
   const byName = {};
   for (const s of stances) {
+    if (s.buy_eligible === false) continue;
     byName[s.stance] = Object.assign({}, s, { band: parseStanceBand(s) });
   }
   const usable = order.map(function (name) { return byName[name]; }).filter(function (s) {
@@ -244,7 +245,7 @@ function buyAdviceForItem(item, quote) {
     return {
       key: "no",
       label: "不适合买入",
-      detail: top != null ? ("现价 " + priceText + " 高于激进上限约 " + fmt(top)) : ("现价 " + priceText + " 不在任一买入带"),
+      detail: top != null ? ("现价 " + priceText + " 高于可执行买入上限约 " + fmt(top)) : ("现价 " + priceText + " 不在任一买入带"),
       rank: 1,
       className: "hot-zone",
       matched: null,
@@ -564,7 +565,7 @@ function looksNumeric(value) {
     .replace(/[,，\s]/g, "")
     .replace(/^(HK\$|US\$|RMB|CNY|USD|HKD|约|低于|高于|≤|≥|<|>)/i, "")
     .replace(/(元|港元|美元|%|x|X|倍)$/g, "");
-  return /^-?\d+(\.\d+)?$/.test(text) || /^-?\d+(\.\d+)?[-—~至到]\d+(\.\d+)?$/.test(text);
+  return /^-?\d+(\.\d+)?$/.test(text) || /^-?\d+(\.\d+)?[-—–~至到]\d+(\.\d+)?$/.test(text);
 }
 
 function rowToneClass(cells) {

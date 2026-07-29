@@ -957,7 +957,7 @@ def looks_like_price_band(value: str) -> bool:
         return False
     return bool(
         re.search(
-            r"(元|港元|美元|HK\$|US\$|\$|PE|x|倍|以下|以上|低于|高于|不高于|不超过|≤|≥|<|>|—|-|~)",
+            r"(元|港元|美元|HK\$|US\$|\$|PE|x|倍|以下|以上|低于|高于|不高于|不超过|≤|≥|<|>|—|–|-|~)",
             text,
             re.I,
         )
@@ -1160,7 +1160,7 @@ def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
                 profile = action
             # Keep only the leading price token when the cell contains extra conditions.
             compact = re.match(
-                r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$)?\s*\d+(?:\.\d+)?(?:\s*[-—~至到]\s*\d+(?:\.\d+)?)?\s*(?:元|港元)?)",
+                r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$)?\s*\d+(?:\.\d+)?(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*(?:元|港元)?)",
                 price_range,
             )
             if compact and len(price_range) > len(compact.group(1)) + 2:
@@ -1255,7 +1255,7 @@ def _price_from_cells(cells: list[str]) -> str | None:
         r"(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
         r"(?:HK\$|US\$|₩)?\s*"
         r"\d+(?:\.\d+)?"
-        r"(?:\s*[-—~至到]\s*\d+(?:\.\d+)?)?\s*"
+        r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
         r"(?:元|港元|美元|韩元)?",
         re.I,
     )
@@ -1271,7 +1271,7 @@ def _price_from_cells(cells: list[str]) -> str | None:
             score += 40
         if re.search(r"(元|港元|美元|HK\$|US\$|\$|₩|韩元)", text, re.I):
             score += 20
-        if re.search(r"(不高于|不低于|低于|高于|≤|≥|<|>|约|\d\s*[-—~至到]\s*\d)", text):
+        if re.search(r"(不高于|不低于|低于|高于|≤|≥|<|>|约|\d\s*[-—–~至到]\s*\d)", text):
             score += 10
         if re.search(r"(PE|PB|PS|市盈|市净|倍|x\b)", text, re.I) and not re.search(r"元|港元|HK\$|US\$", text, re.I):
             score -= 15
@@ -1456,11 +1456,182 @@ def stances_from_price_plan(price_plan: list[dict[str, str]]) -> list[dict[str, 
     return [collected[name] for name in ("激进型", "稳健型", "保守型") if name in collected]
 
 
+def _price_plan_market(item: dict[str, str]) -> str | None:
+    """Identify an explicitly denominated price-plan row."""
+    blob = " ".join(
+        str(item.get(field) or "")
+        for field in ("price_range", "profile", "action")
+    )
+    if re.search(r"港元|HK\$|HKD", blob, re.I):
+        return "港股"
+    if re.search(r"美元|US\$|USD", blob, re.I):
+        return "美股"
+    if re.search(r"\d\s*元", blob):
+        return "A股"
+    return None
+
+
+def _price_plan_matches_market(item: dict[str, str], market: str | None) -> bool:
+    """Keep A/H/US price bands from leaking into another listing's row."""
+    row_market = _price_plan_market(item)
+    if not market or market == "未识别" or row_market is None:
+        return True
+    return row_market == market
+
+
+def _price_plan_anchor(price_range: str) -> float | None:
+    """Return the upper end of a price band for risk-tolerance ordering."""
+    numbers = re.findall(r"\d+(?:\.\d+)?", clean_markdown(price_range or ""))
+    if not numbers:
+        return None
+    values = [float(number) for number in numbers[:2]]
+    return max(values)
+
+
+def _compact_price_plan_action(item: dict[str, str]) -> tuple[str, str | None]:
+    """Make long action-discipline cells fit the layered dashboard row."""
+    original = clean_markdown(
+        item.get("action") or item.get("profile") or "见报告"
+    )
+    compact = re.sub(r"[（(]\s*现价[^）)]*[）)]", "", original).strip()
+    first_sentence = re.split(r"[。；;]", compact, maxsplit=1)[0].strip()
+    if first_sentence:
+        compact = first_sentence
+    if len(compact) > 60:
+        compact = compact[:59].rstrip("，, ") + "…"
+    note = clean_markdown(item.get("rationale") or "")
+    if not note and original != compact:
+        note = original
+    return compact or "见报告", note or None
+
+
+def infer_stances_from_price_plan(
+    price_plan: list[dict[str, str]],
+    *,
+    market: str | None = None,
+) -> list[dict[str, str]]:
+    """Infer layered display rows from one report's unlabeled action bands.
+
+    The fallback is intentionally conservative: it requires at least one
+    buy/build-position band and at least two distinct usable price bands.
+    Explicit investor-style labels remain authoritative.
+    """
+    candidates: list[dict[str, Any]] = []
+    for index, item in enumerate(price_plan or []):
+        if not isinstance(item, dict) or not _price_plan_matches_market(item, market):
+            continue
+        action = clean_markdown(
+            item.get("action") or item.get("profile") or ""
+        )
+        price_range = clean_markdown(item.get("price_range") or "")
+        anchor = _price_plan_anchor(price_range)
+        if not action or anchor is None:
+            continue
+        positive_action = re.sub(
+            r"(?:不|勿|停止|暂停|暂缓|无需|无须|不建议|不宜|不急于|不必|避免)"
+            r"[^，。；;]{0,5}(?:买入|建仓|加仓|配置)",
+            "",
+            action,
+        )
+        is_buy = bool(
+            re.search(
+                r"买入|建仓|加仓|配置|小仓|轻仓|重仓(?!者)|积累|介入|试探|试错|研究性",
+                positive_action,
+            )
+        )
+        is_watch = bool(
+            re.search(r"持有|观望|观察|等待|不追|不加仓|不新建仓|暂停", action)
+        )
+        is_exit = bool(
+            re.search(r"减仓|卖出|清仓|降低仓位|回避|不建议买入|不宜买入", action)
+        )
+        if is_exit and not is_buy:
+            continue
+        if not (is_buy or is_watch):
+            continue
+        candidates.append(
+            {
+                "index": index,
+                "item": item,
+                "anchor": anchor,
+                "kind": "buy" if is_buy else "watch",
+            }
+        )
+
+    buy_candidates = [item for item in candidates if item["kind"] == "buy"]
+    if not buy_candidates:
+        return []
+
+    # Keep one row per price boundary. Prefer a buy action over a watch action
+    # when a report repeats the same boundary in adjacent rows.
+    distinct: dict[float, dict[str, Any]] = {}
+    for candidate in candidates:
+        previous = distinct.get(candidate["anchor"])
+        if previous is None or (
+            previous["kind"] == "watch" and candidate["kind"] == "buy"
+        ):
+            distinct[candidate["anchor"]] = candidate
+    candidates = list(distinct.values())
+    buy_candidates = sorted(
+        (item for item in candidates if item["kind"] == "buy"),
+        key=lambda item: (-item["anchor"], item["index"]),
+    )
+    watch_candidates = sorted(
+        (item for item in candidates if item["kind"] == "watch"),
+        key=lambda item: (item["anchor"], item["index"]),
+    )
+
+    selected: list[dict[str, Any]]
+    if watch_candidates and len(buy_candidates) >= 2:
+        # Closest wait/observe band, first entry band, and deepest entry band.
+        selected = [watch_candidates[0], buy_candidates[0], buy_candidates[-1]]
+    elif watch_candidates and buy_candidates:
+        selected = [watch_candidates[0], buy_candidates[0]]
+    elif len(buy_candidates) >= 3:
+        middle = buy_candidates[len(buy_candidates) // 2]
+        selected = [buy_candidates[0], middle, buy_candidates[-1]]
+    else:
+        selected = buy_candidates
+
+    # Remove any duplicate selected rows and require real layering.
+    unique: list[dict[str, Any]] = []
+    seen: set[tuple[float, int]] = set()
+    for candidate in selected:
+        key = (candidate["anchor"], candidate["index"])
+        if key not in seen:
+            unique.append(candidate)
+            seen.add(key)
+    if len(unique) < 2:
+        return []
+
+    stance_names = (
+        ("激进型", "稳健型", "保守型")
+        if len(unique) >= 3
+        else ("激进型", "保守型")
+    )
+    stances: list[dict[str, str]] = []
+    for stance, candidate in zip(stance_names, unique[:3]):
+        item = candidate["item"]
+        action, note = _compact_price_plan_action(item)
+        entry = {
+            "stance": stance,
+            "action": action,
+            "price_range": clean_markdown(item.get("price_range") or ""),
+            "source": "inferred_price_plan",
+            "buy_eligible": candidate["kind"] == "buy",
+        }
+        if note:
+            entry["note"] = note
+        stances.append(entry)
+    return stances
+
+
 def extract_investor_stances(
     lines: list[str],
     *,
     valuation_lines: list[str] | None = None,
     price_plan: list[dict[str, str]] | None = None,
+    market: str | None = None,
 ) -> list[dict[str, str]]:
     """Extract 激进/稳健/保守 layered advice, preferring step-8 decision tables.
 
@@ -1490,13 +1661,19 @@ def extract_investor_stances(
     if len(plan_stances) >= 2:
         return plan_stances
     if len(plan_stances) > len(best):
-        return plan_stances
-    return best
+        best = plan_stances
+    if best:
+        return best
+    return infer_stances_from_price_plan(price_plan or [], market=market)
 
 
 def classify_action_from_stances(stances: list[dict[str, str]]) -> str | None:
     """Derive a coarse filter label, preferring the 稳健型 empty-money stance."""
     if not stances:
+        return None
+    # Inferred display layers organize an existing price plan; they must not
+    # rewrite the report's own coarse current recommendation.
+    if all(item.get("source") == "inferred_price_plan" for item in stances):
         return None
     by_name = {item["stance"]: item for item in stances if item.get("stance")}
     for name in ("稳健型", "激进型", "保守型"):
@@ -1667,6 +1844,10 @@ def candidate_record(
     report_override = overrides.get("reports", {}).get(report_relative, {})
     if not isinstance(report_override, dict):
         raise ValueError(f"Report override must be an object: {report_relative}")
+    effective_ticker = report_override.get("ticker", ticker)
+    effective_market = report_override.get(
+        "market", market_for_ticker(effective_ticker, market_hint)
+    )
 
     # Prefer prices from the valuation section itself; fall back to the full report.
     valuation_lines = (
@@ -1689,6 +1870,7 @@ def candidate_record(
             lines,
             valuation_lines=valuation_lines,
             price_plan=price_plan if isinstance(price_plan, list) else [],
+            market=effective_market,
         ),
     )
     if not isinstance(investor_stances, list):
@@ -1700,8 +1882,8 @@ def candidate_record(
         "company": report_override.get("company", entity),
         "entity_kind": report_override.get("entity_kind", entity_kind),
         "entity_directory": entity_directory,
-        "ticker": report_override.get("ticker", ticker),
-        "market": report_override.get("market", market_for_ticker(ticker, market_hint)),
+        "ticker": effective_ticker,
+        "market": effective_market,
         "data_cutoff": report_override.get("data_cutoff", extract_data_cutoff(lines)),
         "report_completed_at": report_override.get(
             "report_completed_at", extract_report_completed_date(lines)
