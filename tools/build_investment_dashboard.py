@@ -968,7 +968,7 @@ def looks_like_action(value: str) -> bool:
     """Return True when a cell describes a buy/hold/sell style action."""
     return bool(
         re.search(
-            r"买入|建仓|加仓|持有|观望|观察|等待|回避|减仓|卖出|配置|追高|重仓|分批|积累|介入|不追|降低|暂停|小仓|重点研究|轻仓|试错|验证",
+            r"买入|买点|建仓|加仓|持有|观望|观察|等待|回避|减仓|卖出|配置|追高|重仓|重注|分批|积累|介入|不追|降低|暂停|小仓|重点研究|轻仓|试错|验证",
             clean_markdown(value),
         )
     )
@@ -1075,7 +1075,11 @@ def extract_scenario_valuation(lines: list[str]) -> list[dict[str, str]]:
     return []
 
 
-def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
+def extract_price_plan(
+    lines: list[str],
+    *,
+    market: str | None = None,
+) -> list[dict[str, str]]:
     """Extract explicit buy, hold, and caution price bands from a report table."""
     table_specs = (
         (("价格区间建议",), (("类型", "区间", "投资者"), ("区间", "价格", "建仓价格"), ("动作", "建议"))),
@@ -1095,9 +1099,18 @@ def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
         if not headers:
             continue
         joined = " ".join(headers)
-        if not any(token in joined for token in ("价格区间", "行动", "价格带", "合理价格")) and not (
+        if not any(
+            token in joined
+            for token in ("价格区间", "行动", "价格带", "合理价格", "买入价")
+        ) and not (
             any("区间" in header or "价格" in header for header in headers)
-            and any("建议" in header or "动作" in header for header in headers)
+            and any(
+                any(token in header for token in ("建议", "动作", "空仓", "新资金", "适合", "逻辑"))
+                for header in headers
+            )
+        ) and not (
+            any(token in header for header in headers for token in ("策略", "维度", "类别"))
+            and any("建议" in header for header in headers)
         ):
             continue
         rows: list[list[str]] = []
@@ -1113,9 +1126,71 @@ def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
             tables.append((headers, rows))
 
     for headers, rows in tables:
-        profile_index = first_header_index(headers, ("投资者类型", "投资风格", "类型", "价格区间", "区间", "价格", "档位", "安全边际", "风格"))
-        range_index = first_header_index(headers, ("建仓价格区间", "建仓价格", "价格区间", "价格", "区间"))
-        action_index = first_header_index(headers, ("动作建议", "动作", "建议", "新资金动作", "行动"))
+        profile_index = first_header_index(
+            headers,
+            (
+                "投资者类型",
+                "投资风格",
+                "类型",
+                "策略",
+                "维度",
+                "情景",
+                "价格区间",
+                "区间",
+                "价格",
+                "档位",
+                "安全边际",
+                "风格",
+            ),
+        )
+        range_index = None
+        market_price_headers = {
+            "A股": ("A股价格", "A 股价格", "人民币价格"),
+            "港股": ("H股价格", "H 股价格", "港股价格", "港元价格"),
+            "美股": ("美股价格", "美元价格"),
+        }
+        if market in market_price_headers:
+            range_index = first_header_index(
+                headers,
+                market_price_headers[market],
+            )
+        if range_index is None:
+            range_index = first_header_index(
+                headers,
+                (
+                    "建仓价格区间",
+                    "建仓价格",
+                    "买入价格",
+                    "买入价",
+                    "股价",
+                    "价格区间",
+                    "价格",
+                    "区间",
+                ),
+            )
+        action_index = first_header_index(
+            headers,
+            (
+                "动作建议",
+                "操作建议",
+                "具体建议",
+                "动作",
+                "建议",
+                "新资金动作",
+                "行动",
+                "适合",
+                "逻辑",
+            ),
+        )
+        empty_money_index = first_header_index(
+            headers,
+            ("空仓者", "空仓", "新资金", "未持有者"),
+        )
+        if action_index is None and empty_money_index is not None:
+            # Some reports provide separate 空仓者 / 持仓者 columns. The
+            # dashboard's entry-price layers should follow the empty-money
+            # action rather than mix two different position states.
+            action_index = empty_money_index
         rationale_index = next(
             (
                 index
@@ -1133,18 +1208,33 @@ def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
                 if any(token in headers[candidate] for token in ("价格", "区间")):
                     range_index = candidate
                     break
-        if range_index is None:
-            # Single-column band tables like "≤ HK$448 | ... | 动作"
-            range_index = profile_index
-
         plans: list[dict[str, str]] = []
         for row in rows:
             profile = clean_markdown(row[profile_index])
-            price_range = clean_markdown(row[range_index])
             action = clean_markdown(row[action_index]) if action_index is not None and action_index < len(row) else ""
+            if range_index is None:
+                # Generic "策略 | 具体建议" tables sometimes put the price
+                # inside the value cell. Require an explicit currency so
+                # years, percentages, and position sizes are not treated as
+                # share-price bands.
+                price_range = next(
+                    (
+                        clean_markdown(cell)
+                        for cell in row
+                        if looks_like_price_band(cell)
+                        and re.search(
+                            r"元|港元|美元|HK\$|US\$|\$",
+                            clean_markdown(cell),
+                            re.I,
+                        )
+                    ),
+                    "",
+                )
+            else:
+                price_range = clean_markdown(row[range_index])
             if not profile and not price_range:
                 continue
-            if range_index == profile_index:
+            if range_index is not None and range_index == profile_index:
                 # First column is already the band.
                 if looks_like_price_band(profile):
                     price_range = profile
@@ -1155,15 +1245,23 @@ def extract_price_plan(lines: list[str]) -> list[dict[str, str]]:
                 continue
             if not (looks_like_action(action) or looks_like_action(profile) or looks_like_action(price_range)):
                 continue
+            if not looks_like_action(action) and looks_like_action(profile):
+                action = profile
             # Prefer concise labels when the action column is already descriptive.
             if looks_like_action(action) and (not profile or profile == price_range or looks_like_price_band(profile)):
                 profile = action
             # Keep only the leading price token when the cell contains extra conditions.
-            compact = re.match(
-                r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$)?\s*\d+(?:\.\d+)?(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*(?:元|港元)?)",
+            compact = re.search(
+                r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
+                r"(?:(?:HK|US)?\$)?\s*\d+(?:\.\d+)?"
+                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:元|港元|美元)?\s*(?:以下|以上|以内|附近)?)",
                 price_range,
             )
-            if compact and len(price_range) > len(compact.group(1)) + 2:
+            if compact and (
+                range_index is None
+                or len(price_range) > len(compact.group(1)) + 2
+            ):
                 price_range = clean_markdown(compact.group(1))
             entry = {
                 "profile": profile or "价格带",
@@ -1248,20 +1346,47 @@ def extract_step8_lines(lines: list[str]) -> list[str]:
 
 
 
-def _price_from_cells(cells: list[str]) -> str | None:
+def _price_from_cells(
+    cells: list[str],
+    headers: list[str] | None = None,
+) -> str | None:
     """Pick the most price-like cell from a table row."""
     best: tuple[int, str] | None = None
     price_token = re.compile(
         r"(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
         r"(?:HK\$|US\$|₩)?\s*"
-        r"\d+(?:\.\d+)?"
-        r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+        r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
+        r"(?:\s*[-—–~至到]\s*(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)?\s*"
         r"(?:元|港元|美元|韩元)?",
         re.I,
     )
-    for cell in cells:
+    for cell_index, cell in enumerate(cells):
         text = clean_markdown(cell)
         if not text or not re.search(r"\d", text):
+            continue
+        header = clean_markdown(
+            headers[cell_index]
+            if headers and cell_index < len(headers)
+            else ""
+        )
+        explicit_currency = bool(
+            re.search(r"元|港元|美元|韩元|HK\$|US\$|\$|₩", text, re.I)
+        )
+        price_header = bool(
+            re.search(r"价格|股价|价位|买入价|价格区间", header)
+        )
+        if not explicit_currency and not price_header:
+            continue
+        if explicit_currency and re.search(
+            r"亿元|亿港元|亿美元|万元|万股|铜价|金价|油价|/吨|每吨",
+            text,
+        ):
+            continue
+        if not explicit_currency and re.search(
+            r"%|20\d{2}|年|季度|收入|利润|回撤|市值|PE|PB|PS|倍",
+            text,
+            re.I,
+        ):
             continue
         # Reject revenue / contract magnitudes that are not share prices.
         if re.search(r"亿元|万千瓦|亿港元|亿美元", text) and not re.search(r"\d+(?:\.\d+)?\s*元", text):
@@ -1278,7 +1403,19 @@ def _price_from_cells(cells: list[str]) -> str | None:
         if re.search(r"亿元|中标|报价口径", text):
             score -= 40
         score -= min(len(text) // 20, 8)
-        compact = price_token.search(text)
+        token_matches = list(price_token.finditer(text))
+        compact = next(
+            (
+                match
+                for match in token_matches
+                if re.search(
+                    r"元|港元|美元|韩元|HK\$|US\$|\$|₩",
+                    match.group(0),
+                    re.I,
+                )
+            ),
+            token_matches[0] if token_matches else None,
+        )
         if compact:
             score += 15
             display = clean_markdown(compact.group(0))
@@ -1340,6 +1477,11 @@ def _stances_from_table_rows(headers: list[str], rows: list[list[str]]) -> dict[
     """Collect investor stances from one Markdown table."""
     collected: dict[str, dict[str, str]] = {}
     header_blob = " ".join(headers)
+    if "情景" in header_blob and not re.search(
+        r"投资者|投资风格|建议|动作|操作|纪律",
+        header_blob,
+    ):
+        return collected
     looks_investorish = bool(
         re.search(r"投资者|投资风格|类型|风格|档位|价格区间|建议|动作|合理动作", header_blob)
         or any(normalize_investor_stance(cell) for row in rows for cell in row)
@@ -1368,7 +1510,7 @@ def _stances_from_table_rows(headers: list[str], rows: list[list[str]]) -> dict[
                     break
         if stance is None:
             continue
-        price = _price_from_cells(cells)
+        price = _price_from_cells(cells, headers)
         action = _action_label_from_cells(cells, stance)
         used = {stance_cell, action}
         if price:
@@ -1464,7 +1606,7 @@ def _price_plan_market(item: dict[str, str]) -> str | None:
     )
     if re.search(r"港元|HK\$|HKD", blob, re.I):
         return "港股"
-    if re.search(r"美元|US\$|USD", blob, re.I):
+    if re.search(r"美元|US\$|USD|(?<!HK)\$", blob, re.I):
         return "美股"
     if re.search(r"\d\s*元", blob):
         return "A股"
@@ -1493,7 +1635,16 @@ def _compact_price_plan_action(item: dict[str, str]) -> tuple[str, str | None]:
     original = clean_markdown(
         item.get("action") or item.get("profile") or "见报告"
     )
+    original = re.sub(r"^(?:[-*>]\s*)+", "", original).strip()
     compact = re.sub(r"[（(]\s*现价[^）)]*[）)]", "", original).strip()
+    if re.search(r"[：:]", compact):
+        left, right = re.split(r"[：:]", compact, maxsplit=1)
+        left = left.strip()
+        right = right.strip()
+        if looks_like_action(left) and not looks_like_price_band(left):
+            compact = left
+        elif looks_like_price_band(left) and looks_like_action(right):
+            compact = right
     first_sentence = re.split(r"[。；;]", compact, maxsplit=1)[0].strip()
     if first_sentence:
         compact = first_sentence
@@ -1503,6 +1654,51 @@ def _compact_price_plan_action(item: dict[str, str]) -> tuple[str, str | None]:
     if not note and original != compact:
         note = original
     return compact or "见报告", note or None
+
+
+def _price_plan_action_kind(action: str) -> str | None:
+    """Classify one price-band action as buy, watch, or unusable."""
+    text = clean_markdown(action or "")
+    positive_action = re.sub(
+        r"(?:不|勿|停止|暂停|暂缓|无需|无须|不建议|不宜|不急于|不必|避免)"
+        r"[^，。；;]{0,5}(?:买入|建仓|加仓|配置)",
+        "",
+        text,
+    )
+    positive_action = re.sub(
+        r"分批[^，。；;]{0,4}(?:减仓|卖出|退出)|"
+        r"(?:减仓|卖出|退出)[^，。；;]{0,4}分批",
+        "",
+        positive_action,
+    )
+    is_buy = bool(
+        re.search(
+            r"买入|买点|建仓|加仓|增持|配置|小仓|轻仓|重仓(?!者)|积累|介入|"
+            r"重注|分批|试探|试错|研究性|"
+            r"\d+\s*/\s*\d+\s*仓|建立[^，。；;]{0,8}仓位|"
+            r"(?:建立|可建)[^，。；;]{0,4}观察仓",
+            positive_action,
+        )
+    )
+    is_watch = bool(
+        re.search(
+            r"持有|观望|观察|等待|不追|不加仓|不新建仓|暂停|不新增|无安全边际",
+            text,
+        )
+    )
+    is_exit = bool(
+        re.search(
+            r"减仓|卖出|清仓|降低仓位|回避|不建议买入|不宜买入",
+            text,
+        )
+    )
+    if is_exit and not is_buy:
+        return None
+    if is_buy:
+        return "buy"
+    if is_watch:
+        return "watch"
+    return None
 
 
 def infer_stances_from_price_plan(
@@ -1527,34 +1723,15 @@ def infer_stances_from_price_plan(
         anchor = _price_plan_anchor(price_range)
         if not action or anchor is None:
             continue
-        positive_action = re.sub(
-            r"(?:不|勿|停止|暂停|暂缓|无需|无须|不建议|不宜|不急于|不必|避免)"
-            r"[^，。；;]{0,5}(?:买入|建仓|加仓|配置)",
-            "",
-            action,
-        )
-        is_buy = bool(
-            re.search(
-                r"买入|建仓|加仓|配置|小仓|轻仓|重仓(?!者)|积累|介入|试探|试错|研究性",
-                positive_action,
-            )
-        )
-        is_watch = bool(
-            re.search(r"持有|观望|观察|等待|不追|不加仓|不新建仓|暂停", action)
-        )
-        is_exit = bool(
-            re.search(r"减仓|卖出|清仓|降低仓位|回避|不建议买入|不宜买入", action)
-        )
-        if is_exit and not is_buy:
-            continue
-        if not (is_buy or is_watch):
+        kind = _price_plan_action_kind(action)
+        if kind is None:
             continue
         candidates.append(
             {
                 "index": index,
                 "item": item,
                 "anchor": anchor,
-                "kind": "buy" if is_buy else "watch",
+                "kind": kind,
             }
         )
 
@@ -1572,6 +1749,38 @@ def infer_stances_from_price_plan(
         ):
             distinct[candidate["anchor"]] = candidate
     candidates = list(distinct.values())
+    # A prose report may repeat the current quote inside a wider actionable
+    # band. Keep the band and drop the redundant point-in-time quote.
+    filtered_candidates: list[dict[str, Any]] = []
+    for candidate in candidates:
+        item = candidate["item"]
+        price_numbers = re.findall(
+            r"\d+(?:\.\d+)?",
+            clean_markdown(item.get("price_range") or ""),
+        )
+        action_text = clean_markdown(item.get("action") or "")
+        nested_current = False
+        if len(price_numbers) == 1 and re.search(r"当前|现价|当前位置", action_text):
+            point = float(price_numbers[0])
+            for other in candidates:
+                if other is candidate:
+                    continue
+                other_numbers = re.findall(
+                    r"\d+(?:\.\d+)?",
+                    clean_markdown(
+                        other["item"].get("price_range") or ""
+                    ),
+                )
+                if len(other_numbers) >= 2:
+                    lower, upper = sorted(
+                        (float(other_numbers[0]), float(other_numbers[1]))
+                    )
+                    if lower <= point <= upper:
+                        nested_current = True
+                        break
+        if not nested_current:
+            filtered_candidates.append(candidate)
+    candidates = filtered_candidates
     buy_candidates = sorted(
         (item for item in candidates if item["kind"] == "buy"),
         key=lambda item: (-item["anchor"], item["index"]),
@@ -1582,14 +1791,14 @@ def infer_stances_from_price_plan(
     )
 
     selected: list[dict[str, Any]]
-    if watch_candidates and len(buy_candidates) >= 2:
+    if len(buy_candidates) >= 3:
+        middle = buy_candidates[len(buy_candidates) // 2]
+        selected = [buy_candidates[0], middle, buy_candidates[-1]]
+    elif watch_candidates and len(buy_candidates) >= 2:
         # Closest wait/observe band, first entry band, and deepest entry band.
         selected = [watch_candidates[0], buy_candidates[0], buy_candidates[-1]]
     elif watch_candidates and buy_candidates:
         selected = [watch_candidates[0], buy_candidates[0]]
-    elif len(buy_candidates) >= 3:
-        middle = buy_candidates[len(buy_candidates) // 2]
-        selected = [buy_candidates[0], middle, buy_candidates[-1]]
     else:
         selected = buy_candidates
 
@@ -1613,12 +1822,20 @@ def infer_stances_from_price_plan(
     for stance, candidate in zip(stance_names, unique[:3]):
         item = candidate["item"]
         action, note = _compact_price_plan_action(item)
+        price_range = _price_range_with_header_unit(
+            clean_markdown(item.get("price_range") or ""),
+            "",
+            market,
+        )
+        executable_price = not bool(
+            re.search(r"PE|PB|PS|倍|x\b|%", price_range, re.I)
+        )
         entry = {
             "stance": stance,
             "action": action,
-            "price_range": clean_markdown(item.get("price_range") or ""),
+            "price_range": price_range,
             "source": "inferred_price_plan",
-            "buy_eligible": candidate["kind"] == "buy",
+            "buy_eligible": candidate["kind"] == "buy" and executable_price,
         }
         if note:
             entry["note"] = note
@@ -1641,6 +1858,40 @@ def _compact_valuation_band_meaning(meaning: str) -> str:
     return first_sentence or "见报告"
 
 
+def _price_range_with_header_unit(
+    price_range: str,
+    header: str,
+    market: str | None,
+) -> str:
+    """Attach a currency unit when it exists only in a table header."""
+    price = clean_markdown(price_range or "")
+    header_text = clean_markdown(header or "")
+    if not price or re.search(
+        r"元|港元|美元|韩元|HK\$|US\$|(?<![A-Z])\$|₩|CNY|RMB|HKD|USD|KRW",
+        price,
+        re.I,
+    ):
+        return price
+    if re.search(r"港元|HKD|HK\$", header_text, re.I):
+        return f"{price} 港元"
+    if re.search(r"美元|USD|US\$", header_text, re.I):
+        return f"{price} 美元"
+    if re.search(r"人民币|CNY|RMB", header_text, re.I):
+        return f"{price} 元"
+    # Bare numeric bands are common in older tables. The selected listing
+    # market supplies the unit, but valuation multiples/percentages must stay
+    # display-only rather than masquerade as share prices.
+    if re.search(r"PE|PB|PS|倍|x\b|%", price, re.I):
+        return price
+    if market == "港股":
+        return f"{price} 港元"
+    if market == "美股":
+        return f"{price} 美元"
+    if market == "A股":
+        return f"{price} 元"
+    return price
+
+
 def infer_stances_from_valuation_bands(
     lines: list[str],
     *,
@@ -1651,13 +1902,57 @@ def infer_stances_from_valuation_bands(
         headers = markdown_cells(line)
         if not headers:
             continue
-        price_index = first_header_index(headers, ("价格区间", "股价区间"))
+        # Scenario target tables are forecasts, not investor/action layers.
+        # A few reports unfortunately call valuation *zones* "情景"; retain
+        # those only when the table also has an explicit action column.
+        has_explicit_action_header = any(
+            any(token in header for token in ("动作", "操作建议", "投资建议", "策略"))
+            for header in headers
+        )
+        if any("指标" in header for header in headers) and not has_explicit_action_header:
+            continue
+        if any("情景" in header for header in headers) and not has_explicit_action_header:
+            continue
+        price_index = first_header_index(
+            headers,
+            (
+                "价格区间",
+                "股价区间",
+                "A股价格",
+                "H股价格",
+                "对应价格",
+                "对应股价",
+                "股价范围",
+                "股价",
+                "价位",
+                "价格",
+                "区间",
+            ),
+        )
         meaning_index = first_header_index(
             headers,
-            ("估值含义", "估值判断", "安全边际含义"),
+            (
+                "动作纪律",
+                "投资建议",
+                "操作建议",
+                "策略",
+                "建议",
+                "估值含义",
+                "安全边际含义",
+                "含义",
+                "估值判断",
+                "判断",
+                "触发条件",
+            ),
         )
-        if price_index is None or meaning_index is None:
+        if price_index is None or meaning_index is None or price_index == meaning_index:
             continue
+        context_index = first_header_index(
+            headers,
+            ("区间定义", "区间", "档位", "情景"),
+        )
+        if context_index in {price_index, meaning_index}:
+            context_index = None
         candidates: list[dict[str, Any]] = []
         for row_index in range(index + 1, min(len(lines), index + 18)):
             row = markdown_cells(lines[row_index])
@@ -1667,20 +1962,32 @@ def infer_stances_from_valuation_bands(
                 continue
             if len(row) != len(headers):
                 continue
-            price_range = clean_markdown(row[price_index])
+            price_range = _price_range_with_header_unit(
+                row[price_index],
+                headers[price_index],
+                market,
+            )
             meaning = clean_markdown(row[meaning_index])
+            context = (
+                clean_markdown(row[context_index])
+                if context_index is not None
+                else ""
+            )
+            evidence = "：".join(part for part in (context, meaning) if part)
             if not looks_like_price_band(price_range) or not meaning:
+                continue
+            if re.search(r"当前位置|当前价|现价", context):
                 continue
             synthetic = {
                 "price_range": price_range,
-                "profile": meaning,
+                "profile": context or meaning,
                 "action": meaning,
             }
             if not _price_plan_matches_market(synthetic, market):
                 continue
             # High-price caution rows are not part of the three useful lower
             # valuation layers.
-            if re.search(r"赔率转差|明显高估|估值过高|减仓|卖出|回避", meaning):
+            if re.search(r"赔率转差|明显高估|估值过高|减仓|卖出|回避", evidence):
                 continue
             anchor = _price_plan_anchor(price_range)
             if anchor is None:
@@ -1691,6 +1998,7 @@ def infer_stances_from_valuation_bands(
                     "anchor": anchor,
                     "price_range": price_range,
                     "meaning": meaning,
+                    "evidence": evidence,
                 }
             )
         distinct: dict[float, dict[str, Any]] = {}
@@ -1714,13 +2022,135 @@ def infer_stances_from_valuation_bands(
                     "stance": stance,
                     "action": _compact_valuation_band_meaning(candidate["meaning"]),
                     "price_range": candidate["price_range"],
-                    "note": candidate["meaning"],
+                    "note": candidate["evidence"],
                     "source": "inferred_valuation_bands",
-                    "buy_eligible": False,
+                    "buy_eligible": (
+                        _price_plan_action_kind(candidate["evidence"]) == "buy"
+                        and not re.search(
+                            r"PE|PB|PS|倍|x\b|%",
+                            candidate["price_range"],
+                            re.I,
+                        )
+                    ),
                 }
             )
         return stances
     return []
+
+
+def infer_stances_from_inline_price_actions(
+    lines: list[str],
+    *,
+    market: str | None = None,
+) -> list[dict[str, Any]]:
+    """Infer layers from two-plus explicit price/action phrases in report prose.
+
+    This covers concise decision lines such as "110 元以下分批，90-100 元
+    重注" without treating scenario targets or isolated valuation numbers as
+    actionable bands.
+    """
+    price_token = re.compile(
+        r"(?<![\d.])"
+        r"(?:(?:不高于|不低于|低于|高于|不超过|约|≤|≥|<|>)\s*)?"
+        r"(?:(?:HK|US)?\$\s*)?"
+        r"\d+(?:\.\d+)?"
+        r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?"
+        r"\s*(?:港元|美元|元)?"
+        r"(?:以下|以上|以内|附近|左右|起)?"
+        r"(?![\d.,%倍xX年月日亿万])",
+        re.I,
+    )
+    candidates: list[dict[str, str]] = []
+    for raw_line in lines:
+        stripped = raw_line.strip()
+        if not stripped or stripped.startswith("|"):
+            continue
+        text = clean_markdown(stripped)
+        if not text or len(text) > 900:
+            continue
+        if stripped.startswith(">") and re.search(r"巴菲特|芒格|段永平|李录", text):
+            continue
+        if re.search(
+            r"回购|股东|员工持股|买入逻辑|买入成本|买入价没有|"
+            r"愿意[^。；]{0,60}持有[^。；]{0,20}吗|能否[^。；]{0,20}加仓|"
+            r"什么情况下[^。；]{0,20}买入|宁愿[^。；]{0,20}买入|"
+            r"按(?:中位价|最低价|最高价)|买入[^。；]{0,15}跌到|"
+            r"被套|买入价|不视为[^。；]{0,20}买入|不满足[^。；]{0,20}条件|"
+            r"前提下可控|(?:^|[，。；])\s*以[^。；]{0,20}买入",
+            text,
+        ):
+            continue
+        # Split dense final-decision sentences so each price keeps its nearby
+        # action rather than inheriting an unrelated action elsewhere.
+        fragments = [
+            fragment.strip()
+            for fragment in re.split(r"[，；;。]\s*", text)
+            if fragment.strip()
+        ]
+        if len(price_token.findall(text)) == 1:
+            fragments.append(text)
+        for fragment in fragments:
+            if re.search(
+                r"^以[^。；]{0,20}买入|愿意[^。；]{0,60}持有[^。；]{0,20}吗|"
+                r"买入[^。；]{0,15}跌到|被套|买入价",
+                fragment,
+            ):
+                continue
+            kind = _price_plan_action_kind(fragment)
+            if kind is None:
+                continue
+            match = price_token.search(fragment)
+            if not match:
+                continue
+            price_range = clean_markdown(match.group(0))
+            if not looks_like_price_band(price_range):
+                continue
+            if not re.search(
+                r"元|港元|美元|HK\$|US\$|\$",
+                price_range,
+                re.I,
+            ) and not re.search(
+                r"股价|价格|价位|买点|买入区|建仓区",
+                fragment,
+            ):
+                continue
+            item = {
+                "profile": fragment,
+                "price_range": price_range,
+                "action": fragment,
+            }
+            if not _price_plan_matches_market(item, market):
+                continue
+            candidates.append(item)
+
+    stances = infer_stances_from_price_plan(candidates, market=market)
+    for item in stances:
+        item["source"] = "inferred_inline_price_actions"
+    return stances
+
+
+def _stance_prices_for_market(
+    stances: list[dict[str, Any]],
+    market: str | None,
+) -> list[dict[str, Any]]:
+    """Blank an explicit price quoted for a different listing market."""
+    cleaned: list[dict[str, Any]] = []
+    for stance in stances:
+        item = dict(stance)
+        price_range = clean_markdown(item.get("price_range") or "")
+        if price_range and not _price_plan_matches_market(
+            {"price_range": price_range},
+            market,
+        ):
+            item["price_range"] = ""
+        elif price_range:
+            item["price_range"] = _price_range_with_header_unit(
+                price_range,
+                "",
+                market,
+            )
+        cleaned.append(item)
+    return cleaned
 
 
 def extract_investor_stances(
@@ -1744,7 +2174,10 @@ def extract_investor_stances(
 
     best: list[dict[str, str]] = []
     for window in windows:
-        stances = _stances_from_lines(window)
+        stances = _stance_prices_for_market(
+            _stances_from_lines(window),
+            market,
+        )
         if len(stances) >= 2:
             return stances
         if len(stances) > len(best):
@@ -1754,7 +2187,10 @@ def extract_investor_stances(
         ):
             best = stances
 
-    plan_stances = stances_from_price_plan(price_plan or [])
+    plan_stances = _stance_prices_for_market(
+        stances_from_price_plan(price_plan or []),
+        market,
+    )
     if len(plan_stances) >= 2:
         return plan_stances
     if len(plan_stances) > len(best):
@@ -1764,10 +2200,17 @@ def extract_investor_stances(
     inferred_plan = infer_stances_from_price_plan(price_plan or [], market=market)
     if inferred_plan:
         return inferred_plan
-    return infer_stances_from_valuation_bands(
-        valuation_lines or lines,
-        market=market,
-    )
+    if valuation_lines:
+        valuation_stances = infer_stances_from_valuation_bands(
+            valuation_lines,
+            market=market,
+        )
+        if valuation_stances:
+            return valuation_stances
+    valuation_stances = infer_stances_from_valuation_bands(lines, market=market)
+    if valuation_stances:
+        return valuation_stances
+    return infer_stances_from_inline_price_actions(lines, market=market)
 
 
 def classify_action_from_stances(stances: list[dict[str, str]]) -> str | None:
@@ -1958,7 +2401,11 @@ def candidate_record(
         if valuation_section
         else lines
     )
-    price_plan = report_override.get("price_plan", extract_price_plan(valuation_lines) or extract_price_plan(lines))
+    price_plan = report_override.get(
+        "price_plan",
+        extract_price_plan(valuation_lines, market=effective_market)
+        or extract_price_plan(lines, market=effective_market),
+    )
     scenarios = report_override.get(
         "scenario_valuation",
         extract_scenario_valuation(valuation_lines) or extract_scenario_valuation(lines),
