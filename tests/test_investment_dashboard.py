@@ -514,6 +514,37 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(len(selected["investor_stances"]), 3)
             self.assertEqual(selected["action"], "观察")
 
+    def test_infers_display_only_layers_from_valuation_meaning_table(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "valuation-bands.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "### 价格区间（研究结论）\n\n"
+                "| 价格区间 | 估值含义 |\n|---|---|\n"
+                "| 低于 30 元 | 较中性价值有缓冲，安全边际充分 |\n"
+                "| 30 – 36 元 | 接近历史低位，赔率明显占优 |\n"
+                "| 36 – 45 元 | 当前所在区间，估值合理偏低，但需中报验证 |\n"
+                "| 45 – 55 元 | 需要盈利上修支撑 |\n"
+                "| 高于 55 元 | 赔率转差 |\n\n"
+                "## 最终建议\n\n当前继续观察，等待中报验证。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            by = {
+                item["stance"]: item
+                for item in selected["investor_stances"]
+            }
+            self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
+            self.assertEqual(by["激进型"]["price_range"], "36 – 45 元")
+            self.assertEqual(by["稳健型"]["action"], "赔率明显占优")
+            self.assertEqual(by["保守型"]["action"], "安全边际充分")
+            self.assertTrue(
+                all(not item["buy_eligible"] for item in by.values())
+            )
+            self.assertEqual(selected["action"], "观察")
+
     def test_does_not_infer_layers_from_one_unlabeled_price_band(self):
         stances = dashboard.infer_stances_from_price_plan(
             [

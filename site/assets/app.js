@@ -212,6 +212,9 @@ function buyAdviceForItem(item, quote) {
   if (!stances.length) {
     return { key: "unknown", label: "无分层价", detail: "报告未给出激进/稳健/保守价格带", rank: 0, className: "unknown-zone" };
   }
+  if (!stances.some(function (s) { return s.buy_eligible !== false; })) {
+    return { key: "unknown", label: "仅估值分层", detail: "报告给出估值区间，但未明确可执行买入价", rank: 0, className: "unknown-zone" };
+  }
   if (!Number.isFinite(price)) {
     return { key: "unknown", label: "待比价", detail: "等待现价后对照分层价格带", rank: 0, className: "unknown-zone" };
   }

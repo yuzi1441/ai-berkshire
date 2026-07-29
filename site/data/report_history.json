@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-29T23:55:50+08:00",
+  "generated_at": "2026-07-30T00:02:48+08:00",
   "companies": [
     {
       "company": "BYD",
@@ -2238,8 +2238,33 @@
         {
           "data_cutoff": "2026-07-26",
           "action": "持有",
-          "investor_stances": [],
-          "conclusion_summary": "7.7 价格区间（研究结论，非个人操作建议）",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "估值合理偏低，需条件验证",
+              "price_range": "36 – 45 元",
+              "note": "当前所在区间。PE 5 年 6% 分位、2026E PE 17.4x，估值合理偏低，但需中报验证现金流与毛利率",
+              "source": "inferred_valuation_bands",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "赔率明显占优",
+              "price_range": "30 – 36 元",
+              "note": "PE 18-22x，接近 5 年 PB 最低点，赔率明显占优",
+              "source": "inferred_valuation_bands",
+              "buy_eligible": false
+            },
+            {
+              "stance": "保守型",
+              "action": "安全边际充分",
+              "price_range": "低于 30 元",
+              "note": "PE < 18x、PB < 3.0x，较中性情景折现值有 16% 以上缓冲，安全边际充分",
+              "source": "inferred_valuation_bands",
+              "buy_eligible": false
+            }
+          ],
+          "conclusion_summary": "激进型：估值合理偏低，需条件验证（36 – 45 元）；稳健型：赔率明显占优（30 – 36 元）；保守型：安全边际充分（低于 30 元）",
           "buy_price": "低于30 元",
           "price_plan": [],
           "scenario_valuation": [
