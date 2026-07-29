@@ -122,6 +122,15 @@ function reportPriceRows(item) {
     }));
 }
 
+function reportPriceRowText(row) {
+  const action = String(row?.action || row?.profile || "见报告");
+  const profile = String(row?.profile || "");
+  if (profile && profile !== action && !/^(价格带|区间)$/.test(profile)) {
+    return `${profile} · ${action}`;
+  }
+  return action;
+}
+
 function currentActionKind(row) {
   const action = `${row?.profile || ""} ${row?.action || ""}`;
   if (/回避|不买|不参与|不建议买入|不宜买入|减仓|卖出|清仓|退出|降低仓位|明显高估|赔率转差|超过历史高位/.test(action)) return "no";
@@ -155,14 +164,7 @@ function renderPriceActionTable(item, quote, { compact = true } = {}) {
     price.textContent = rowData.price_range;
     const action = document.createElement("div");
     action.className = "price-action-text";
-    if (rowData.profile && rowData.profile !== rowData.action && !/^(价格带|区间)$/.test(rowData.profile)) {
-      const profile = document.createElement("span");
-      profile.className = "price-action-profile";
-      profile.textContent = rowData.profile;
-      action.append(profile, document.createTextNode(` · ${rowData.action}`));
-    } else {
-      action.textContent = rowData.action;
-    }
+    action.textContent = reportPriceRowText(rowData);
     row.append(price, action);
     wrap.append(row);
   }
@@ -292,11 +294,6 @@ function matchReportPriceRow(item, quote) {
   return null;
 }
 
-function compactAdviceLabel(text) {
-  const cleaned = String(text || "").split(/[。；;]/, 1)[0].trim();
-  return cleaned.length > 24 ? `${cleaned.slice(0, 23)}…` : cleaned;
-}
-
 function buyAdviceForItem(item, quote) {
   const rows = reportPriceRows(item);
   if (!rows.length) {
@@ -322,12 +319,11 @@ function buyAdviceForItem(item, quote) {
     no: { key: "no", rank: 1, className: "hot-zone" },
     unknown: { key: "unknown", rank: 0, className: "unknown-zone" },
   }[kind];
-  const action = matched.row.action || matched.row.profile || "见报告";
-  const profile = matched.row.profile && matched.row.profile !== action ? ` · ${matched.row.profile}` : "";
+  const action = reportPriceRowText(matched.row);
   return {
     key: meta.key,
-    label: compactAdviceLabel(action) || "见报告",
-    detail: `现价 ${priceText} · 报告价格档 ${matched.row.price_range}${profile}`,
+    label: action,
+    detail: `现价 ${priceText} · 报告价格档 ${matched.row.price_range}`,
     rank: meta.rank,
     className: meta.className,
     matched: matched.row,

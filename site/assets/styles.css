@@ -1008,8 +1008,8 @@ tbody tr.active .valuation-chip.ready {
 
 /* Current-price buy advice vs layered bands */
 .buy-advice-cell {
-  min-width: 132px;
-  max-width: 180px;
+  min-width: 190px;
+  max-width: 300px;
 }
 .buy-advice {
   display: flex;
@@ -1034,7 +1034,10 @@ tbody tr.active .valuation-chip.ready {
   max-width: 100%;
   white-space: normal;
   text-align: left;
-  line-height: 1.25;
+  line-height: 1.35;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-weight: 650;
 }
 
 /* Phone layout: each company becomes a self-contained, touch-friendly card. */
