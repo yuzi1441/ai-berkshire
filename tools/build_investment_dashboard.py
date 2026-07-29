@@ -1626,6 +1626,103 @@ def infer_stances_from_price_plan(
     return stances
 
 
+def _compact_valuation_band_meaning(meaning: str) -> str:
+    """Prefer the decision-bearing phrase from a valuation-band explanation."""
+    text = clean_markdown(meaning or "")
+    if "安全边际充分" in text:
+        return "安全边际充分"
+    if "赔率明显占优" in text:
+        return "赔率明显占优"
+    if "估值合理偏低" in text:
+        return "估值合理偏低，需条件验证" if re.search(r"验证|确认|等待", text) else "估值合理偏低"
+    first_sentence = re.split(r"[。；;]", text, maxsplit=1)[0].strip()
+    if len(first_sentence) > 60:
+        return first_sentence[:59].rstrip("，, ") + "…"
+    return first_sentence or "见报告"
+
+
+def infer_stances_from_valuation_bands(
+    lines: list[str],
+    *,
+    market: str | None = None,
+) -> list[dict[str, Any]]:
+    """Use an explicit three-plus-band valuation table as a display-only fallback."""
+    for index, line in enumerate(lines):
+        headers = markdown_cells(line)
+        if not headers:
+            continue
+        price_index = first_header_index(headers, ("价格区间", "股价区间"))
+        meaning_index = first_header_index(
+            headers,
+            ("估值含义", "估值判断", "安全边际含义"),
+        )
+        if price_index is None or meaning_index is None:
+            continue
+        candidates: list[dict[str, Any]] = []
+        for row_index in range(index + 1, min(len(lines), index + 18)):
+            row = markdown_cells(lines[row_index])
+            if row is None:
+                if candidates:
+                    break
+                continue
+            if len(row) != len(headers):
+                continue
+            price_range = clean_markdown(row[price_index])
+            meaning = clean_markdown(row[meaning_index])
+            if not looks_like_price_band(price_range) or not meaning:
+                continue
+            synthetic = {
+                "price_range": price_range,
+                "profile": meaning,
+                "action": meaning,
+            }
+            if not _price_plan_matches_market(synthetic, market):
+                continue
+            # High-price caution rows are not part of the three useful lower
+            # valuation layers.
+            if re.search(r"赔率转差|明显高估|估值过高|减仓|卖出|回避", meaning):
+                continue
+            anchor = _price_plan_anchor(price_range)
+            if anchor is None:
+                continue
+            candidates.append(
+                {
+                    "index": row_index,
+                    "anchor": anchor,
+                    "price_range": price_range,
+                    "meaning": meaning,
+                }
+            )
+        distinct: dict[float, dict[str, Any]] = {}
+        for candidate in candidates:
+            distinct.setdefault(candidate["anchor"], candidate)
+        if len(distinct) < 3:
+            continue
+        # The three lowest valuation bands represent increasing safety margin.
+        selected = sorted(
+            distinct.values(),
+            key=lambda item: (item["anchor"], item["index"]),
+        )[:3]
+        selected.reverse()
+        stances: list[dict[str, Any]] = []
+        for stance, candidate in zip(
+            ("激进型", "稳健型", "保守型"),
+            selected,
+        ):
+            stances.append(
+                {
+                    "stance": stance,
+                    "action": _compact_valuation_band_meaning(candidate["meaning"]),
+                    "price_range": candidate["price_range"],
+                    "note": candidate["meaning"],
+                    "source": "inferred_valuation_bands",
+                    "buy_eligible": False,
+                }
+            )
+        return stances
+    return []
+
+
 def extract_investor_stances(
     lines: list[str],
     *,
@@ -1664,7 +1761,13 @@ def extract_investor_stances(
         best = plan_stances
     if best:
         return best
-    return infer_stances_from_price_plan(price_plan or [], market=market)
+    inferred_plan = infer_stances_from_price_plan(price_plan or [], market=market)
+    if inferred_plan:
+        return inferred_plan
+    return infer_stances_from_valuation_bands(
+        valuation_lines or lines,
+        market=market,
+    )
 
 
 def classify_action_from_stances(stances: list[dict[str, str]]) -> str | None:
@@ -1673,7 +1776,7 @@ def classify_action_from_stances(stances: list[dict[str, str]]) -> str | None:
         return None
     # Inferred display layers organize an existing price plan; they must not
     # rewrite the report's own coarse current recommendation.
-    if all(item.get("source") == "inferred_price_plan" for item in stances):
+    if all(str(item.get("source") or "").startswith("inferred_") for item in stances):
         return None
     by_name = {item["stance"]: item for item in stances if item.get("stance")}
     for name in ("稳健型", "激进型", "保守型"):
