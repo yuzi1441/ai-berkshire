@@ -375,6 +375,158 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertIn("9.0", by["保守型"]["price_range"])
         self.assertIn("9.0-9.5", by["稳健型"]["price_range"])
 
+    def test_infers_layered_stances_from_unlabeled_action_bands(self):
+        """Ordinary action bands become three display layers without editing the report."""
+        lines = """### 行动价格带
+
+| 价格区间 | 动作纪律 |
+|---|---|
+| **> 55 元** | 减仓复核区 |
+| **42 – 55 元** | 观察区，暂不新建仓 |
+| **33.5 – 42 元** | 研究性小仓候选区 |
+| **28 – 33.5 元** | 主要建仓区 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines)
+        self.assertEqual(
+            [item["price_range"] for item in price_plan],
+            ["> 55 元", "42 – 55 元", "33.5 – 42 元", "28 – 33.5 元"],
+        )
+
+        stances = dashboard.extract_investor_stances(
+            lines,
+            price_plan=price_plan,
+            market="A股",
+        )
+        by = {item["stance"]: item for item in stances}
+        self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
+        self.assertEqual(by["激进型"]["price_range"], "42 – 55 元")
+        self.assertEqual(by["稳健型"]["price_range"], "33.5 – 42 元")
+        self.assertEqual(by["保守型"]["price_range"], "28 – 33.5 元")
+        self.assertFalse(by["激进型"]["buy_eligible"])
+        self.assertTrue(by["稳健型"]["buy_eligible"])
+        self.assertTrue(by["保守型"]["buy_eligible"])
+        self.assertTrue(all("减仓" not in item["action"] for item in stances))
+
+    def test_inferred_stances_use_only_the_listed_market(self):
+        lines = """### 行动价格带
+
+| 市场 | 价格区间 | 行动 |
+|---|---:|---|
+| A 股 | 不高于 3.20 元 | 可开始分批研究建仓 |
+| A 股 | 3.20-3.60 元 | 观察或极小仓 |
+| A 股 | 3.60-4.30 元 | 持有、不追价 |
+| A 股 | 高于 4.30 元 | 考虑减仓 |
+| H 股 | 不高于 2.50 港元 | 可分批建仓 |
+| H 股 | 2.50-2.90 港元 | 可小仓配置 |
+| H 股 | 2.90-3.30 港元 | 持有、等待验证 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines)
+        stances = dashboard.extract_investor_stances(
+            lines,
+            price_plan=price_plan,
+            market="A股",
+        )
+        self.assertEqual(len(stances), 3)
+        self.assertTrue(
+            all("港元" not in item["price_range"] for item in stances)
+        )
+        self.assertEqual(stances[0]["price_range"], "3.60-4.30 元")
+        self.assertEqual(stances[-1]["price_range"], "不高于 3.20 元")
+
+    def test_negative_buy_phrases_remain_watch_bands(self):
+        price_plan = [
+            {
+                "profile": "持有不加仓",
+                "price_range": "25–30 元",
+                "action": "持有不加仓",
+            },
+            {
+                "profile": "持有 / 观察",
+                "price_range": "21.84–25 元",
+                "action": "持有 / 观察",
+            },
+            {
+                "profile": "分批建仓",
+                "price_range": "17.48–21.84 元",
+                "action": "分批建仓",
+            },
+            {
+                "profile": "重仓候选",
+                "price_range": "≤ 15.29 元",
+                "action": "重仓候选",
+            },
+        ]
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="A股",
+        )
+        self.assertEqual(stances[0]["price_range"], "21.84–25 元")
+        self.assertEqual(stances[1]["price_range"], "17.48–21.84 元")
+        self.assertEqual(stances[2]["price_range"], "≤ 15.29 元")
+
+    def test_holder_reduction_row_is_not_treated_as_a_buy_band(self):
+        price_plan = [
+            {
+                "profile": "小额分批买入",
+                "price_range": "≤ HK$448",
+                "action": "小额分批买入",
+            },
+            {
+                "profile": "小额分批买入或持有",
+                "price_range": "HK$448-484",
+                "action": "小额分批买入或持有",
+            },
+            {
+                "profile": "持有，不追价",
+                "price_range": "HK$484-511",
+                "action": "持有，不追价",
+            },
+            {
+                "profile": "等待盈利上调；重仓者可逐步减仓",
+                "price_range": "HK$539-697",
+                "action": "等待盈利上调；重仓者可逐步减仓",
+            },
+        ]
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="港股",
+        )
+        self.assertEqual(stances[0]["price_range"], "HK$484-511")
+        self.assertEqual(stances[1]["price_range"], "HK$448-484")
+        self.assertEqual(stances[2]["price_range"], "≤ HK$448")
+
+    def test_inferred_layers_do_not_rewrite_the_coarse_recommendation(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "bands.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "### 行动价格带\n\n"
+                "| 价格区间 | 动作纪律 |\n|---|---|\n"
+                "| 40-50 元 | 观望，停止加仓 |\n"
+                "| 30-40 元 | 小仓研究 |\n"
+                "| 低于 30 元 | 分批建仓 |\n\n"
+                "## 最终建议\n\n当前继续观察，不追价。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(len(selected["investor_stances"]), 3)
+            self.assertEqual(selected["action"], "观察")
+
+    def test_does_not_infer_layers_from_one_unlabeled_price_band(self):
+        stances = dashboard.infer_stances_from_price_plan(
+            [
+                {
+                    "profile": "分批建仓",
+                    "price_range": "低于 20 元",
+                    "action": "分批建仓",
+                }
+            ],
+            market="A股",
+        )
+        self.assertEqual(stances, [])
+
 
 if __name__ == "__main__":
     unittest.main()

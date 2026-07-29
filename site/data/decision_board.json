@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "generated_at": "2026-07-28T18:28:04+08:00",
+  "generated_at": "2026-07-29T23:55:50+08:00",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Industry/theme reports are excluded from the decision board.",
   "decision_count": 233,
@@ -651,8 +651,30 @@
       "data_cutoff": "2026-06-27",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 不追高，可小仓位观察 26.65 元不是错价；更好的建仓区是 23-25 元，理想击球区是 21-23 元",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有为主，小仓位可接受",
+          "price_range": "25-30 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "加仓区",
+          "price_range": "21-23 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "基本面未变可积极买入",
+          "price_range": "21 元以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有为主，小仓位可接受（25-30 元）；稳健型：加仓区（21-23 元）；保守型：基本面未变可积极买入（21 元以下）",
       "buy_price": "21 元以下",
       "price_plan": [
         {
@@ -726,8 +748,30 @@
         {
           "data_cutoff": "2026-06-27",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 不追高，可小仓位观察 26.65 元不是错价；更好的建仓区是 23-25 元，理想击球区是 21-23 元",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，小仓位可接受",
+              "price_range": "25-30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "加仓区",
+              "price_range": "21-23 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "基本面未变可积极买入",
+              "price_range": "21 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，小仓位可接受（25-30 元）；稳健型：加仓区（21-23 元）；保守型：基本面未变可积极买入（21 元以下）",
           "buy_price": "21 元以下",
           "price_plan": [
             {
@@ -798,8 +842,30 @@
         {
           "data_cutoff": "2026-06-27",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望或小仓位。 当前 26.65 元可作为防守资产轻仓配置，但更好的安全边际在 23-25 元。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，空仓不急追",
+              "price_range": "25-30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "更舒服的买入区",
+              "price_range": "23-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未变，可积极买入",
+              "price_range": "21 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，空仓不急追（25-30 元）；稳健型：更舒服的买入区（23-25 元）；保守型：若基本面未变，可积极买入（21 元以下）",
           "buy_price": "21 元以下",
           "price_plan": [
             {
@@ -873,8 +939,30 @@
         {
           "data_cutoff": "2026-06-27",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望或小仓位。 当前 26.65 元可作为防守资产轻仓配置，但更好的安全边际在 23-25 元。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，空仓不急追",
+              "price_range": "25-30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "更舒服的买入区",
+              "price_range": "23-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未变，可积极买入",
+              "price_range": "21 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，空仓不急追（25-30 元）；稳健型：更舒服的买入区（23-25 元）；保守型：若基本面未变，可积极买入（21 元以下）",
           "buy_price": "21 元以下",
           "price_plan": [
             {
@@ -948,8 +1036,30 @@
         {
           "data_cutoff": "2026-06-27",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望或小仓位。 当前 26.65 元可作为防守资产轻仓配置，但更好的安全边际在 23-25 元。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，空仓不急追",
+              "price_range": "25-30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "更舒服的建仓区",
+              "price_range": "23-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未变，可积极买入",
+              "price_range": "21 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，空仓不急追（25-30 元）；稳健型：更舒服的建仓区（23-25 元）；保守型：若基本面未变，可积极买入（21 元以下）",
           "buy_price": "21 元以下",
           "price_plan": [
             {
@@ -1020,8 +1130,30 @@
         {
           "data_cutoff": "2026-06-27",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望或小仓位。 当前 26.65 元可作为防守资产轻仓配置，但更好的安全边际在 23-25 元。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，空仓不急追",
+              "price_range": "25-30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "更舒服的建仓区",
+              "price_range": "23-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未变，可积极买入",
+              "price_range": "21 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，空仓不急追（25-30 元）；稳健型：更舒服的建仓区（23-25 元）；保守型：若基本面未变，可积极买入（21 元以下）",
           "buy_price": "21 元以下",
           "price_plan": [
             {
@@ -1746,8 +1878,30 @@
       "data_cutoff": "2026-06-23",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 可小仓位配置（5-10%），定位为高股息防御标的。 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有区——当前位置，收息等待",
+          "price_range": "4.5-5.5元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "建仓区——安全边际充足",
+          "price_range": "3.6-4.5元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓区——极端悲观情景，股息率7%+",
+          "price_range": "3.6元以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有区——当前位置，收息等待（4.5-5.5元）；稳健型：建仓区——安全边际充足（3.6-4.5元）；保守型：重仓区——极端悲观情景，股息率7%+（3.6元以下）",
       "buy_price": "3.6-4.5元",
       "price_plan": [
         {
@@ -1816,8 +1970,30 @@
         {
           "data_cutoff": "2026-06-23",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 可小仓位配置（5-10%），定位为高股息防御标的。 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有区——当前位置，收息等待",
+              "price_range": "4.5-5.5元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "建仓区——安全边际充足",
+              "price_range": "3.6-4.5元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓区——极端悲观情景，股息率7%+",
+              "price_range": "3.6元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有区——当前位置，收息等待（4.5-5.5元）；稳健型：建仓区——安全边际充足（3.6-4.5元）；保守型：重仓区——极端悲观情景，股息率7%+（3.6元以下）",
           "buy_price": "3.6-4.5元",
           "price_plan": [
             {
@@ -2397,8 +2573,30 @@
       "data_cutoff": "2026-06-24",
       "report_completed_at": null,
       "action": "分批买入",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 可在27元以下分批建仓，占总仓位5%~10%。这是一家全球前二的矿业公司，估值处于近5年偏低位置。但需做好承受30%回撤的准备（若金铜价大幅下跌）。若追求更高安全边际，可等待22~24元区间（对应悲观情景估值附近）。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有为主，不追高",
+          "price_range": "28~35元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "当前区间，可分批建仓",
+          "price_range": "22~28元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓买入机会，需确认无基本面恶化",
+          "price_range": "20~22元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有为主，不追高（28~35元）；稳健型：当前区间，可分批建仓（22~28元）；保守型：重仓买入机会，需确认无基本面恶化（20~22元）",
       "buy_price": "22~28元",
       "price_plan": [
         {
@@ -2467,8 +2665,30 @@
         {
           "data_cutoff": "2026-06-24",
           "action": "分批买入",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 可在27元以下分批建仓，占总仓位5%~10%。这是一家全球前二的矿业公司，估值处于近5年偏低位置。但需做好承受30%回撤的准备（若金铜价大幅下跌）。若追求更高安全边际，可等待22~24元区间（对应悲观情景估值附近）。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，不追高",
+              "price_range": "28~35元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "当前区间，可分批建仓",
+              "price_range": "22~28元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓买入机会，需确认无基本面恶化",
+              "price_range": "20~22元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，不追高（28~35元）；稳健型：当前区间，可分批建仓（22~28元）；保守型：重仓买入机会，需确认无基本面恶化（20~22元）",
           "buy_price": "22~28元",
           "price_plan": [
             {
@@ -2534,8 +2754,30 @@
         {
           "data_cutoff": "2026-06-24",
           "action": "分批买入",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 可在27元以下分批建仓，占总仓位5%~10%。这是一家全球前二的矿业公司，估值处于近5年偏低位置。但需做好承受30%回撤的准备（若金铜价大幅下跌）。若追求更高安全边际，可等待22~24元区间（对应悲观情景估值附近）。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有为主，不追高",
+              "price_range": "28~35元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "当前区间，可分批建仓",
+              "price_range": "22~28元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓买入机会，需确认无基本面恶化",
+              "price_range": "20~22元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有为主，不追高（28~35元）；稳健型：当前区间，可分批建仓（22~28元）；保守型：重仓买入机会，需确认无基本面恶化（20~22元）",
           "buy_price": "22~28元",
           "price_plan": [
             {
@@ -3474,8 +3716,30 @@
       "data_cutoff": "2026-07-24",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有、不追价",
+          "price_range": "3.60-4.30 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "观察或极小仓",
+          "price_range": "3.20-3.60 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "可开始分批研究建仓",
+          "price_range": "不高于 3.20 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有、不追价（3.60-4.30 元）；稳健型：观察或极小仓（3.20-3.60 元）；保守型：可开始分批研究建仓（不高于 3.20 元）",
       "buy_price": "不高于 2.50 港元",
       "price_plan": [
         {
@@ -3553,8 +3817,30 @@
         {
           "data_cutoff": "2026-07-24",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有、不追价",
+              "price_range": "3.60-4.30 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "观察或极小仓",
+              "price_range": "3.20-3.60 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "可开始分批研究建仓",
+              "price_range": "不高于 3.20 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有、不追价（3.60-4.30 元）；稳健型：观察或极小仓（3.20-3.60 元）；保守型：可开始分批研究建仓（不高于 3.20 元）",
           "buy_price": "不高于 2.50 港元",
           "price_plan": [
             {
@@ -3908,8 +4194,23 @@
         {
           "data_cutoff": "2026-07-12",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "8.3 巴菲特买入前 Checklist",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "当前所在区间，空仓者不追",
+              "price_range": "41-45 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "保守型",
+              "action": "持有或小幅加仓，不宜重仓追价",
+              "price_range": "36-40 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：当前所在区间，空仓者不追（41-45 元）；保守型：持有或小幅加仓，不宜重仓追价（36-40 元）",
           "buy_price": "35 元",
           "price_plan": [
             {
@@ -3967,8 +4268,23 @@
         {
           "data_cutoff": "2026-07-07",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望，不追高。优先等待 30-35 元区间，或等待 2026 半年报验证重组资产贡献。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "空仓不追，持仓观察",
+              "price_range": "41-45 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "保守型",
+              "action": "空仓者可分批建仓，股息率和赔率较平衡",
+              "price_range": "30-35 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：空仓不追，持仓观察（41-45 元）；保守型：空仓者可分批建仓，股息率和赔率较平衡（30-35 元）",
           "buy_price": "30-35 元",
           "price_plan": [
             {
@@ -5294,15 +5610,15 @@
         {
           "stance": "稳健型",
           "action": "回避追高，列入观察名单，等磷化工周期与概念热度回落",
-          "price_range": "12"
+          "price_range": "12–14"
         },
         {
           "stance": "保守型",
           "action": "等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力",
-          "price_range": "22"
+          "price_range": "22–26 元"
         }
       ],
-      "conclusion_summary": "激进型：若已持有可部分止盈（48 元）；稳健型：回避追高，列入观察名单，等磷化工周期与概念热度回落（12）；保守型：等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力（22）",
+      "conclusion_summary": "激进型：若已持有可部分止盈（48 元）；稳健型：回避追高，列入观察名单，等磷化工周期与概念热度回落（12–14）；保守型：等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力（22–26 元）",
       "buy_price": "正常化 PE 12–14x → 26–32 元 起研究",
       "price_plan": [
         {
@@ -5317,7 +5633,7 @@
         },
         {
           "profile": "保守型",
-          "price_range": "22",
+          "price_range": "22–26 元",
           "action": "等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力"
         }
       ],
@@ -5349,15 +5665,15 @@
             {
               "stance": "稳健型",
               "action": "回避追高，列入观察名单，等磷化工周期与概念热度回落",
-              "price_range": "12"
+              "price_range": "12–14"
             },
             {
               "stance": "保守型",
               "action": "等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力",
-              "price_range": "22"
+              "price_range": "22–26 元"
             }
           ],
-          "conclusion_summary": "激进型：若已持有可部分止盈（48 元）；稳健型：回避追高，列入观察名单，等磷化工周期与概念热度回落（12）；保守型：等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力（22）",
+          "conclusion_summary": "激进型：若已持有可部分止盈（48 元）；稳健型：回避追高，列入观察名单，等磷化工周期与概念热度回落（12–14）；保守型：等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力（22–26 元）",
           "buy_price": "正常化 PE 12–14x → 26–32 元 起研究",
           "price_plan": [
             {
@@ -5372,7 +5688,7 @@
             },
             {
               "profile": "保守型",
-              "price_range": "22",
+              "price_range": "22–26 元",
               "action": "等待周期底部/市场恐慌，正常化 PE 10–12x 才具吸引力"
             }
           ],
@@ -5600,8 +5916,31 @@
       "data_cutoff": "2026-07-13",
       "report_completed_at": "2026-07-08",
       "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "价格下跌 2.14% 不等于论文增强。当前中性情景仅提供约 3.1% 年化总回报，空仓者仍不应把“好公司”误当成“好价格”。已有仓位若成本显著低于 14—15 元且红线未触发，可保留核心仓；成本接近或高于当前价，则应把仓位控制在能够承受悲观情景的水平。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "已有仓位持有观察",
+          "price_range": "18—23 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "已有仓位持有观察；新增仓位要非常克制"
+        },
+        {
+          "stance": "稳健型",
+          "action": "可小仓位观察型买入，仍需跟踪 Q2/中报",
+          "price_range": "15—18 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "若基本面未恶化，可重点研究并分批建仓",
+          "price_range": "13—15 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：已有仓位持有观察（18—23 元）；稳健型：可小仓位观察型买入，仍需跟踪 Q2/中报（15—18 元）；保守型：若基本面未恶化，可重点研究并分批建仓（13—15 元）",
       "buy_price": "13—15 元",
       "price_plan": [
         {
@@ -5658,8 +5997,31 @@
         {
           "data_cutoff": "2026-07-13",
           "action": "持有",
-          "investor_stances": [],
-          "conclusion_summary": "价格下跌 2.14% 不等于论文增强。当前中性情景仅提供约 3.1% 年化总回报，空仓者仍不应把“好公司”误当成“好价格”。已有仓位若成本显著低于 14—15 元且红线未触发，可保留核心仓；成本接近或高于当前价，则应把仓位控制在能够承受悲观情景的水平。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "已有仓位持有观察",
+              "price_range": "18—23 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "已有仓位持有观察；新增仓位要非常克制"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可小仓位观察型买入，仍需跟踪 Q2/中报",
+              "price_range": "15—18 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未恶化，可重点研究并分批建仓",
+              "price_range": "13—15 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：已有仓位持有观察（18—23 元）；稳健型：可小仓位观察型买入，仍需跟踪 Q2/中报（15—18 元）；保守型：若基本面未恶化，可重点研究并分批建仓（13—15 元）",
           "buy_price": "13—15 元",
           "price_plan": [
             {
@@ -5925,6 +6287,89 @@
         },
         {
           "data_cutoff": "2026-07-06",
+          "action": "观察",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "当前所处区间",
+              "price_range": "18—23 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "当前所处区间；适合持有/观察，不适合重仓追高"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可小仓位跟踪型买入，等待业绩验证",
+              "price_range": "15—18 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "可重点研究并分批建仓，前提是基本面未恶化",
+              "price_range": "13—15 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：当前所处区间（18—23 元）；稳健型：可小仓位跟踪型买入，等待业绩验证（15—18 元）；保守型：可重点研究并分批建仓，前提是基本面未恶化（13—15 元）",
+          "buy_price": "15—18 元",
+          "price_plan": [
+            {
+              "profile": "高安全边际",
+              "price_range": "13—15 元",
+              "action": "可重点研究并分批建仓，前提是基本面未恶化"
+            },
+            {
+              "profile": "合理偏便宜",
+              "price_range": "15—18 元",
+              "action": "可小仓位跟踪型买入，等待业绩验证"
+            },
+            {
+              "profile": "合理偏贵",
+              "price_range": "18—23 元",
+              "action": "当前所处区间；适合持有/观察，不适合重仓追高"
+            }
+          ],
+          "scenario_valuation": [
+            {
+              "scenario": "乐观",
+              "target_price": "36.3 元",
+              "eps_growth": "18%",
+              "target_pe": "28x",
+              "target_eps": "1.30",
+              "upside": "+83.0%"
+            },
+            {
+              "scenario": "中性",
+              "target_price": "23.1 元",
+              "eps_growth": "10%",
+              "target_pe": "22x",
+              "target_eps": "1.05",
+              "upside": "+16.5%"
+            },
+            {
+              "scenario": "悲观",
+              "target_price": "13.4 元",
+              "eps_growth": "2%",
+              "target_pe": "16x",
+              "target_eps": "0.84",
+              "upside": "-32.5%"
+            }
+          ],
+          "valuation_section": {
+            "heading": "第七步：估值与安全边际 —— 巴菲特“内在价值” + 段永平“对的价格”",
+            "start_line": 266,
+            "end_line": 365,
+            "markdown": "## 第七步：估值与安全边际 —— 巴菲特“内在价值” + 段永平“对的价格”\n\n### 7.1 当前市场定价\n\n基于腾讯行情 2026-07-06 收盘后快照：\n\n| 指标 | 数值 | 说明 |\n|---|---:|---|\n| 股价 | 19.86 元 | 2026-07-06 收盘 |\n| 总股本 | 8.96225431 亿股 | 腾讯行情 |\n| 总市值 | 177.99 亿元 | 腾讯行情；工具验算股价×股本偏差 0.00% |\n| PE TTM | 25.38x | 腾讯行情口径 |\n| PB MRQ | 5.70x | 腾讯行情口径 |\n| 2025 EPS | 0.79 元 | 年报口径 |\n| 2025 每股分红 | 0.21 元 | 每 10 股派 2.10 元 |\n| 2025 股息率 | 年度预案单次约 1.06%；2025 累计分红口径约 3.07% | 年度预案 0.21 / 19.86；2025 半年+三季+年度预案累计约 0.61 / 19.86 |\n\n`financial_rigor.py` 验算：以 19.86 元、2025 EPS 0.79 元、每股净资产约 3.506 元、2025 累计分红约 0.61 元计算，PE 约 25.14x，PB 约 5.66x，盈利收益率约 3.98%，累计分红口径股息率约 3.07%。若仅采用年度利润分配预案单次 0.21 元，则对应股息率约 1.06%。\n\n### 7.2 同行估值对比\n\n腾讯行情 2026-07-06 快照：\n\n| 公司 | 收盘价 | 总市值（亿元） | PE TTM | PB | 备注 |\n|---|---:|---:|---:|---:|---|\n| 华明装备 | 19.86 | 177.99 | 25.38 | 5.70 | 分接开关细分龙头 |\n| 思源电气 | 174.20 | 1,363.24 | 41.90 | 8.46 | 输配电设备平台型龙头 |\n| 国电南瑞 | 23.16 | 1,860.15 | 22.36 | 3.74 | 电网自动化龙头 |\n| 特变电工 | 21.35 | 1,078.77 | 17.49 | 1.54 | 变压器/新能源材料，业务更重 |\n| 中国西电 | 14.02 | 718.65 | 54.39 | 3.11 | 高压输变电装备，估值受周期/预期影响 |\n| 许继电气 | 21.11 | 215.03 | 20.08 | 1.78 | 电网二次/一次设备 |\n\n华明相对思源便宜，相对国电南瑞、许继电气不便宜；PB 明显高于多数同行，说明市场已经认可其高毛利、轻资产、细分冠军属性。\n\n### 7.3 反向 DCF / 市场隐含预期\n\n以 19.86 元、2025 EPS 0.79 元看，当前 PE 约 25x，盈利收益率约 4%。若长期合理 PE 回到 20—22x，则公司需要未来 3 年 EPS 复合增长约 8%—12%，投资者才可能获得中等收益；若希望获得较好收益，则需要：\n\n- EPS 继续保持 15% 以上增长；或\n- 市场愿意长期给 25x 以上估值；或\n- 股价回落提供更高初始收益率。\n\n### 7.4 三情景估值\n\n使用 `tools/financial_rigor.py three-scenario`，假设当前 EPS 0.79 元、预测期 3 年：\n\n| 情景  | EPS 年增速 | 目标 PE | 3 年后 EPS |    目标价 | 较 19.86 元涨跌幅 |\n| --- | ------: | ----: | -------: | -----: | -----------: |\n| 乐观  |     18% |   28x |     1.30 | 36.3 元 |       +83.0% |\n| 中性  |     10% |   22x |     1.05 | 23.1 元 |       +16.5% |\n| 悲观  |      2% |   16x |     0.84 | 13.4 元 |       -32.5% |\n\n### 7.5 合理价格区间与行动阈值\n\n| 区间 | 价格 | 隐含含义 | 动作建议 |\n|---|---:|---|---|\n| 高安全边际 | 13—15 元 | 接近悲观情景或 16—19x PE | 可重点研究并分批建仓，前提是基本面未恶化 |\n| 合理偏便宜 | 15—18 元 | 约 19—23x 2025 PE | 可小仓位跟踪型买入，等待业绩验证 |\n| 合理偏贵 | 18—23 元 | 约 23—29x 2025 PE | 当前所处区间；适合持有/观察，不适合重仓追高 |\n| 明显乐观定价 | 23 元以上 | 需要 10%+ 增长和较高估值维持 | 除非订单/海外/特高压明显超预期，否则新增仓位性价比下降 |\n\n**段永平式追问：** 如果股市明天关闭 5 年，我愿意以 19.86 元买入吗？答案是：如果已有仓位，可以继续持有观察；如果空仓，当前价格还不够“闭眼买”，更好的策略是等价格回到 18 元以下，或等 2026—2027 年利润增长被进一步验证。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 8.1 六维结论表\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 好生意。分接开关小而关键，可靠性、认证、定制化和服务形成较好经济性 | 高 |\n| 护城河（巴菲特） | 国内 500kV 以下领先、产品+服务、海外布局构成护城河；高端特高压仍需验证 | 中高 |\n| 管理层（段永平+巴菲特） | 聚焦主业、退出低毛利工程、分红回购员工持股动作较清晰；H 股与海外扩张需看回报 | 中高 |\n| 最大风险（芒格） | 市场把细分冠军估成大平台，25x PE 下若增长回落，收益率不足 | 高 |\n| 文明趋势（李录） | 电气化、新能源并网、数据中心和全球电网升级长期利好；但传导到分接开关有天花板 | 中高 |\n| 估值（巴菲特+段永平） | 当前不贵到离谱，但缺少足够安全边际；更适合观察/持有，不适合追高 | 高 |\n\n### 8.2 最终建议\n\n| 投资者状态 | 建议 |\n|---|---|\n| 空仓者 | **观察，等待 18 元以下或 2026 年利润恢复增长后再考虑。** 当前 19.86 元对应约 25x PE，安全边际一般。 |\n| 已持仓者 | **可继续持有，但不建议因“出海+特高压”叙事盲目加仓。** 跟踪 2026H1 电力设备收入、海外毛利率、股份支付影响。 |\n| 想加仓者 | 加仓信号：价格跌至 15—18 元区间且基本面未变坏；或 2026H1/2026A 扣非净利恢复双位数增长。 |\n| 卖出/减仓信号 | PE 超过 30x 且订单/利润没有同步加速；海外收入增速明显下滑；电力设备毛利率连续回落；高端产品替代无新项目验证。 |\n| 重新研究触发点 | H 股上市进展、海外工厂盈利能力、±800kV/特高压项目订单、2026 中报、北向/大股东持股变化。 |\n\n### 8.3 四位大师模拟点评\n\n> **巴菲特：** “我喜欢关键零部件、客户不愿轻易更换、现金流不错的生意。但我不喜欢在安全边际不充分时为好故事付太多钱。”\n\n> **芒格：** “反过来想，亏钱的路径不是公司破产，而是你把一个小而美的细分冠军买成了无限大市场。”\n\n> **段永平：** “这是个不错的生意，也有不错的人在做对的事。但买股票还是要看价格，19.86 元不是让我很兴奋的价格。”\n\n> **李录：** “电气化和电网升级是文明进步的一部分，华明处在关键节点；但文明趋势不自动等于每个价格都有投资价值。”\n\n---"
+          },
+          "price_status": "已提取价格计划",
+          "title": "华明装备（002270.SZ）投资研究报告",
+          "report_path": "reports/华明装备/华明装备投资研究报告-20260706.md",
+          "report_link": "华明装备/华明装备投资研究报告-20260706.md"
+        },
+        {
+          "data_cutoff": "2026-07-06",
           "action": "买入",
           "investor_stances": [
             {
@@ -5982,66 +6427,6 @@
           "title": "华明装备（002270.SZ）财务与估值分析报告",
           "report_path": "reports/华明装备/华明装备财务估值分析-20260706.md",
           "report_link": "华明装备/华明装备财务估值分析-20260706.md"
-        },
-        {
-          "data_cutoff": "2026-07-06",
-          "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观察，等待 18 元以下或 2026 年利润恢复增长后再考虑。 当前 19.86 元对应约 25x PE，安全边际一般。",
-          "buy_price": "15—18 元",
-          "price_plan": [
-            {
-              "profile": "高安全边际",
-              "price_range": "13—15 元",
-              "action": "可重点研究并分批建仓，前提是基本面未恶化"
-            },
-            {
-              "profile": "合理偏便宜",
-              "price_range": "15—18 元",
-              "action": "可小仓位跟踪型买入，等待业绩验证"
-            },
-            {
-              "profile": "合理偏贵",
-              "price_range": "18—23 元",
-              "action": "当前所处区间；适合持有/观察，不适合重仓追高"
-            }
-          ],
-          "scenario_valuation": [
-            {
-              "scenario": "乐观",
-              "target_price": "36.3 元",
-              "eps_growth": "18%",
-              "target_pe": "28x",
-              "target_eps": "1.30",
-              "upside": "+83.0%"
-            },
-            {
-              "scenario": "中性",
-              "target_price": "23.1 元",
-              "eps_growth": "10%",
-              "target_pe": "22x",
-              "target_eps": "1.05",
-              "upside": "+16.5%"
-            },
-            {
-              "scenario": "悲观",
-              "target_price": "13.4 元",
-              "eps_growth": "2%",
-              "target_pe": "16x",
-              "target_eps": "0.84",
-              "upside": "-32.5%"
-            }
-          ],
-          "valuation_section": {
-            "heading": "第七步：估值与安全边际 —— 巴菲特“内在价值” + 段永平“对的价格”",
-            "start_line": 266,
-            "end_line": 365,
-            "markdown": "## 第七步：估值与安全边际 —— 巴菲特“内在价值” + 段永平“对的价格”\n\n### 7.1 当前市场定价\n\n基于腾讯行情 2026-07-06 收盘后快照：\n\n| 指标 | 数值 | 说明 |\n|---|---:|---|\n| 股价 | 19.86 元 | 2026-07-06 收盘 |\n| 总股本 | 8.96225431 亿股 | 腾讯行情 |\n| 总市值 | 177.99 亿元 | 腾讯行情；工具验算股价×股本偏差 0.00% |\n| PE TTM | 25.38x | 腾讯行情口径 |\n| PB MRQ | 5.70x | 腾讯行情口径 |\n| 2025 EPS | 0.79 元 | 年报口径 |\n| 2025 每股分红 | 0.21 元 | 每 10 股派 2.10 元 |\n| 2025 股息率 | 年度预案单次约 1.06%；2025 累计分红口径约 3.07% | 年度预案 0.21 / 19.86；2025 半年+三季+年度预案累计约 0.61 / 19.86 |\n\n`financial_rigor.py` 验算：以 19.86 元、2025 EPS 0.79 元、每股净资产约 3.506 元、2025 累计分红约 0.61 元计算，PE 约 25.14x，PB 约 5.66x，盈利收益率约 3.98%，累计分红口径股息率约 3.07%。若仅采用年度利润分配预案单次 0.21 元，则对应股息率约 1.06%。\n\n### 7.2 同行估值对比\n\n腾讯行情 2026-07-06 快照：\n\n| 公司 | 收盘价 | 总市值（亿元） | PE TTM | PB | 备注 |\n|---|---:|---:|---:|---:|---|\n| 华明装备 | 19.86 | 177.99 | 25.38 | 5.70 | 分接开关细分龙头 |\n| 思源电气 | 174.20 | 1,363.24 | 41.90 | 8.46 | 输配电设备平台型龙头 |\n| 国电南瑞 | 23.16 | 1,860.15 | 22.36 | 3.74 | 电网自动化龙头 |\n| 特变电工 | 21.35 | 1,078.77 | 17.49 | 1.54 | 变压器/新能源材料，业务更重 |\n| 中国西电 | 14.02 | 718.65 | 54.39 | 3.11 | 高压输变电装备，估值受周期/预期影响 |\n| 许继电气 | 21.11 | 215.03 | 20.08 | 1.78 | 电网二次/一次设备 |\n\n华明相对思源便宜，相对国电南瑞、许继电气不便宜；PB 明显高于多数同行，说明市场已经认可其高毛利、轻资产、细分冠军属性。\n\n### 7.3 反向 DCF / 市场隐含预期\n\n以 19.86 元、2025 EPS 0.79 元看，当前 PE 约 25x，盈利收益率约 4%。若长期合理 PE 回到 20—22x，则公司需要未来 3 年 EPS 复合增长约 8%—12%，投资者才可能获得中等收益；若希望获得较好收益，则需要：\n\n- EPS 继续保持 15% 以上增长；或\n- 市场愿意长期给 25x 以上估值；或\n- 股价回落提供更高初始收益率。\n\n### 7.4 三情景估值\n\n使用 `tools/financial_rigor.py three-scenario`，假设当前 EPS 0.79 元、预测期 3 年：\n\n| 情景  | EPS 年增速 | 目标 PE | 3 年后 EPS |    目标价 | 较 19.86 元涨跌幅 |\n| --- | ------: | ----: | -------: | -----: | -----------: |\n| 乐观  |     18% |   28x |     1.30 | 36.3 元 |       +83.0% |\n| 中性  |     10% |   22x |     1.05 | 23.1 元 |       +16.5% |\n| 悲观  |      2% |   16x |     0.84 | 13.4 元 |       -32.5% |\n\n### 7.5 合理价格区间与行动阈值\n\n| 区间 | 价格 | 隐含含义 | 动作建议 |\n|---|---:|---|---|\n| 高安全边际 | 13—15 元 | 接近悲观情景或 16—19x PE | 可重点研究并分批建仓，前提是基本面未恶化 |\n| 合理偏便宜 | 15—18 元 | 约 19—23x 2025 PE | 可小仓位跟踪型买入，等待业绩验证 |\n| 合理偏贵 | 18—23 元 | 约 23—29x 2025 PE | 当前所处区间；适合持有/观察，不适合重仓追高 |\n| 明显乐观定价 | 23 元以上 | 需要 10%+ 增长和较高估值维持 | 除非订单/海外/特高压明显超预期，否则新增仓位性价比下降 |\n\n**段永平式追问：** 如果股市明天关闭 5 年，我愿意以 19.86 元买入吗？答案是：如果已有仓位，可以继续持有观察；如果空仓，当前价格还不够“闭眼买”，更好的策略是等价格回到 18 元以下，或等 2026—2027 年利润增长被进一步验证。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 8.1 六维结论表\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 好生意。分接开关小而关键，可靠性、认证、定制化和服务形成较好经济性 | 高 |\n| 护城河（巴菲特） | 国内 500kV 以下领先、产品+服务、海外布局构成护城河；高端特高压仍需验证 | 中高 |\n| 管理层（段永平+巴菲特） | 聚焦主业、退出低毛利工程、分红回购员工持股动作较清晰；H 股与海外扩张需看回报 | 中高 |\n| 最大风险（芒格） | 市场把细分冠军估成大平台，25x PE 下若增长回落，收益率不足 | 高 |\n| 文明趋势（李录） | 电气化、新能源并网、数据中心和全球电网升级长期利好；但传导到分接开关有天花板 | 中高 |\n| 估值（巴菲特+段永平） | 当前不贵到离谱，但缺少足够安全边际；更适合观察/持有，不适合追高 | 高 |\n\n### 8.2 最终建议\n\n| 投资者状态 | 建议 |\n|---|---|\n| 空仓者 | **观察，等待 18 元以下或 2026 年利润恢复增长后再考虑。** 当前 19.86 元对应约 25x PE，安全边际一般。 |\n| 已持仓者 | **可继续持有，但不建议因“出海+特高压”叙事盲目加仓。** 跟踪 2026H1 电力设备收入、海外毛利率、股份支付影响。 |\n| 想加仓者 | 加仓信号：价格跌至 15—18 元区间且基本面未变坏；或 2026H1/2026A 扣非净利恢复双位数增长。 |\n| 卖出/减仓信号 | PE 超过 30x 且订单/利润没有同步加速；海外收入增速明显下滑；电力设备毛利率连续回落；高端产品替代无新项目验证。 |\n| 重新研究触发点 | H 股上市进展、海外工厂盈利能力、±800kV/特高压项目订单、2026 中报、北向/大股东持股变化。 |\n\n### 8.3 四位大师模拟点评\n\n> **巴菲特：** “我喜欢关键零部件、客户不愿轻易更换、现金流不错的生意。但我不喜欢在安全边际不充分时为好故事付太多钱。”\n\n> **芒格：** “反过来想，亏钱的路径不是公司破产，而是你把一个小而美的细分冠军买成了无限大市场。”\n\n> **段永平：** “这是个不错的生意，也有不错的人在做对的事。但买股票还是要看价格，19.86 元不是让我很兴奋的价格。”\n\n> **李录：** “电气化和电网升级是文明进步的一部分，华明处在关键节点；但文明趋势不自动等于每个价格都有投资价值。”\n\n---"
-          },
-          "price_status": "已提取价格计划",
-          "title": "华明装备（002270.SZ）投资研究报告",
-          "report_path": "reports/华明装备/华明装备投资研究报告-20260706.md",
-          "report_link": "华明装备/华明装备投资研究报告-20260706.md"
         },
         {
           "data_cutoff": "2026-07-06",
@@ -6318,11 +6703,11 @@
             {
               "stance": "保守型",
               "action": "暂不买",
-              "price_range": "12",
+              "price_range": "12–14 元",
               "note": "需要 12–14 元附近或明确自由现金流改善后才有足够安全边际。"
             }
           ],
-          "conclusion_summary": "激进型：小仓试错（50）；稳健型：观察为主（20 元）；保守型：暂不买（12）",
+          "conclusion_summary": "激进型：小仓试错（50）；稳健型：观察为主（20 元）；保守型：暂不买（12–14 元）",
           "buy_price": "20 元",
           "price_plan": [],
           "scenario_valuation": [
@@ -6365,9 +6750,34 @@
       "data_cutoff": "2026-07-24",
       "report_completed_at": "2026-07-26",
       "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 回避。 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：(a) 价格跌至 33.5 元以下；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上。两者都不满足前，不建仓。",
-      "buy_price": "42",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观察区",
+          "price_range": "42 – 55 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "观察区（现价 48.39 在此）。 半年报前不新建仓。"
+        },
+        {
+          "stance": "稳健型",
+          "action": "研究性小仓候选区",
+          "price_range": "33.5 – 42 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。"
+        },
+        {
+          "stance": "保守型",
+          "action": "主要建仓区",
+          "price_range": "28 – 33.5 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。"
+        }
+      ],
+      "conclusion_summary": "激进型：观察区（42 – 55 元）；稳健型：研究性小仓候选区（33.5 – 42 元）；保守型：主要建仓区（28 – 33.5 元）",
+      "buy_price": "42 – 55 元",
       "price_plan": [
         {
           "profile": "减仓复核区。除非现金流和正常化利润同步上修，否则不追价。",
@@ -6376,17 +6786,17 @@
         },
         {
           "profile": "观察区（现价 48.39 在此）。 半年报前不新建仓。",
-          "price_range": "42",
+          "price_range": "42 – 55 元",
           "action": "观察区（现价 48.39 在此）。 半年报前不新建仓。"
         },
         {
           "profile": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。",
-          "price_range": "33.5",
+          "price_range": "33.5 – 42 元",
           "action": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。"
         },
         {
           "profile": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。",
-          "price_range": "28",
+          "price_range": "28 – 33.5 元",
           "action": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。"
         }
       ],
@@ -6430,9 +6840,34 @@
         {
           "data_cutoff": "2026-07-24",
           "action": "持有",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 回避。 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：(a) 价格跌至 33.5 元以下；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上。两者都不满足前，不建仓。",
-          "buy_price": "42",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "观察区",
+              "price_range": "42 – 55 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "观察区（现价 48.39 在此）。 半年报前不新建仓。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "研究性小仓候选区",
+              "price_range": "33.5 – 42 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。"
+            },
+            {
+              "stance": "保守型",
+              "action": "主要建仓区",
+              "price_range": "28 – 33.5 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。"
+            }
+          ],
+          "conclusion_summary": "激进型：观察区（42 – 55 元）；稳健型：研究性小仓候选区（33.5 – 42 元）；保守型：主要建仓区（28 – 33.5 元）",
+          "buy_price": "42 – 55 元",
           "price_plan": [
             {
               "profile": "减仓复核区。除非现金流和正常化利润同步上修，否则不追价。",
@@ -6441,17 +6876,17 @@
             },
             {
               "profile": "观察区（现价 48.39 在此）。 半年报前不新建仓。",
-              "price_range": "42",
+              "price_range": "42 – 55 元",
               "action": "观察区（现价 48.39 在此）。 半年报前不新建仓。"
             },
             {
               "profile": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。",
-              "price_range": "33.5",
+              "price_range": "33.5 – 42 元",
               "action": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。"
             },
             {
               "profile": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。",
-              "price_range": "28",
+              "price_range": "28 – 33.5 元",
               "action": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。"
             }
           ],
@@ -6967,9 +7402,33 @@
       "data_cutoff": "2026-07-26",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 观察，不买入。 纳入核心观察池。等待 ≤ 21.84 元（中性现值）开始分批、≤ 17.48 元（20% 安全边际）积极建仓。现价买入的期望年化约 7.8%（中性情景含股息），低于 10% 要求回报率，且承担 −42% 的悲观下行。没有任何需要现在就买的理由——公司不会消失，2026 年内已给过 21.68 元的机会（3 月至 7 月跌 31.2%）。",
-      "buy_price": "17.48",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有 / 观察",
+          "price_range": "21.84–25 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "质地可接受，价格公允偏贵，无安全边际"
+        },
+        {
+          "stance": "稳健型",
+          "action": "分批建仓",
+          "price_range": "17.48–21.84 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "进入中性现值下方，接近 20% 安全边际"
+        },
+        {
+          "stance": "保守型",
+          "action": "30% 安全边际，重仓候选",
+          "price_range": "≤ 15.29 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有 / 观察（21.84–25 元）；稳健型：分批建仓（17.48–21.84 元）；保守型：30% 安全边际，重仓候选（≤ 15.29 元）",
+      "buy_price": "17.48–21.84 元",
       "price_plan": [
         {
           "profile": "减仓",
@@ -6979,19 +7438,19 @@
         },
         {
           "profile": "持有不加仓",
-          "price_range": "25",
+          "price_range": "25–30 元",
           "action": "持有不加仓",
           "rationale": "超过中性现值，安全边际为负"
         },
         {
           "profile": "持有 / 观察（现价 23.58 元在此区间）",
-          "price_range": "21.84",
+          "price_range": "21.84–25 元",
           "action": "持有 / 观察（现价 23.58 元在此区间）",
           "rationale": "质地可接受，价格公允偏贵，无安全边际"
         },
         {
           "profile": "分批建仓",
-          "price_range": "17.48",
+          "price_range": "17.48–21.84 元",
           "action": "分批建仓",
           "rationale": "进入中性现值下方，接近 20% 安全边际"
         },
@@ -7030,9 +7489,33 @@
         {
           "data_cutoff": "2026-07-26",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观察，不买入。 纳入核心观察池。等待 ≤ 21.84 元（中性现值）开始分批、≤ 17.48 元（20% 安全边际）积极建仓。现价买入的期望年化约 7.8%（中性情景含股息），低于 10% 要求回报率，且承担 −42% 的悲观下行。没有任何需要现在就买的理由——公司不会消失，2026 年内已给过 21.68 元的机会（3 月至 7 月跌 31.2%）。",
-          "buy_price": "17.48",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有 / 观察",
+              "price_range": "21.84–25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "质地可接受，价格公允偏贵，无安全边际"
+            },
+            {
+              "stance": "稳健型",
+              "action": "分批建仓",
+              "price_range": "17.48–21.84 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "进入中性现值下方，接近 20% 安全边际"
+            },
+            {
+              "stance": "保守型",
+              "action": "30% 安全边际，重仓候选",
+              "price_range": "≤ 15.29 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有 / 观察（21.84–25 元）；稳健型：分批建仓（17.48–21.84 元）；保守型：30% 安全边际，重仓候选（≤ 15.29 元）",
+          "buy_price": "17.48–21.84 元",
           "price_plan": [
             {
               "profile": "减仓",
@@ -7042,19 +7525,19 @@
             },
             {
               "profile": "持有不加仓",
-              "price_range": "25",
+              "price_range": "25–30 元",
               "action": "持有不加仓",
               "rationale": "超过中性现值，安全边际为负"
             },
             {
               "profile": "持有 / 观察（现价 23.58 元在此区间）",
-              "price_range": "21.84",
+              "price_range": "21.84–25 元",
               "action": "持有 / 观察（现价 23.58 元在此区间）",
               "rationale": "质地可接受，价格公允偏贵，无安全边际"
             },
             {
               "profile": "分批建仓",
-              "price_range": "17.48",
+              "price_range": "17.48–21.84 元",
               "action": "分批建仓",
               "rationale": "进入中性现值下方，接近 20% 安全边际"
             },
@@ -7164,6 +7647,53 @@
         },
         {
           "data_cutoff": "2026-07-13",
+          "action": "观察",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "已持有者可持有",
+              "price_range": "当前21.70元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "已持有者可持有；不因跌价自动加仓"
+            },
+            {
+              "stance": "保守型",
+              "action": "接近中性现值八折",
+              "price_range": "≤17.5元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "接近中性现值八折；红线未触发时重新评估核心加仓"
+            }
+          ],
+          "conclusion_summary": "激进型：已持有者可持有（当前21.70元）；保守型：接近中性现值八折（≤17.5元）",
+          "buy_price": "21.70 元",
+          "price_plan": [
+            {
+              "profile": "已持有者可持有；不因跌价自动加仓",
+              "price_range": "当前21.70元",
+              "action": "已持有者可持有；不因跌价自动加仓"
+            },
+            {
+              "profile": "接近中性现值八折；红线未触发时重新评估核心加仓",
+              "price_range": "≤17.5元",
+              "action": "接近中性现值八折；红线未触发时重新评估核心加仓"
+            }
+          ],
+          "scenario_valuation": [],
+          "valuation_section": {
+            "heading": "五、估值更新",
+            "start_line": 80,
+            "end_line": 105,
+            "markdown": "## 五、估值更新\n\n| 指标 | 建档时（2026-07-06） | 上次检查 | 当前（2026-07-13） | 变化 |\n|---|---:|---:|---:|---|\n| 股价 | 23.16元 | 23.16元 | **21.70元** | -6.30% |\n| 总市值 | 约1,860.15亿元 | 约1,860.15亿元 | **1,742.89亿元** | -6.30% |\n| PE | 约22.5x（粗算） | 约22.5x | **TTM 20.95x** | 估值下降，口径更严谨 |\n| PB | 约3.7x（行情口径） | 约3.74x | **3.26x** | 采用Q1归母权益复算 |\n| 股息率 | 约2.67% | 约2.67% | **2.87%** | 价格下降带来提升 |\n| TTM FCF收益率 | 未列 | 未列 | **5.35%** | 当前P/FCF 18.71x |\n| 五年中性终值 | 约30.3元 | 约30.3元 | **30.6元** | EPS起点与工具口径更新 |\n| 中性现值 | 未折现 | 未折现 | **21.85元** | 按10%要求回报折现 |\n| 当前安全边际 | 误写为约24% | 误写为约24% | **约0.69%** | 原口径把终值当现值，已纠正 |\n\n### 当前估值纪律\n\n| 价格 / 条件 | 动作 |\n|---|---|\n| 当前21.70元 | 已持有者可持有；不因跌价自动加仓 |\n| 20-21元 | 基本面稳定时可做小额跟踪仓，但仍不是严格安全边际 |\n| ≤17.5元 | 接近中性现值八折；红线未触发时重新评估核心加仓 |\n| ≤15.3元 | 接近中性现值七折；先确认价格下跌不是论文破裂所致 |\n| ≥27元 | 若EPS、核心毛利率没有上修，复核仓位与机会成本 |\n\n---"
+          },
+          "price_status": "已提取价格计划",
+          "title": "国电南瑞投资论文追踪检查报告（2026-07-13）",
+          "report_path": "reports/国电南瑞/国电南瑞-thesis-tracker-20260713.md",
+          "report_link": "国电南瑞/国电南瑞-thesis-tracker-20260713.md"
+        },
+        {
+          "data_cutoff": "2026-07-13",
           "action": "未提取",
           "investor_stances": [],
           "conclusion_summary": "本文仅供学习研究，不构成投资建议。Checklist的任务是排除坏选择，不是替好公司寻找买入理由。",
@@ -7217,36 +7747,6 @@
           "title": "国电南瑞（600406.SH）巴菲特价值投资买入前 Checklist",
           "report_path": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
           "report_link": "国电南瑞/国电南瑞-巴菲特Checklist-20260713.md"
-        },
-        {
-          "data_cutoff": "2026-07-13",
-          "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "本文仅供学习研究，不构成投资建议。论文追踪的对象是事实与假设，不是股价情绪。",
-          "buy_price": "21.70 元",
-          "price_plan": [
-            {
-              "profile": "已持有者可持有；不因跌价自动加仓",
-              "price_range": "当前21.70元",
-              "action": "已持有者可持有；不因跌价自动加仓"
-            },
-            {
-              "profile": "接近中性现值八折；红线未触发时重新评估核心加仓",
-              "price_range": "≤17.5元",
-              "action": "接近中性现值八折；红线未触发时重新评估核心加仓"
-            }
-          ],
-          "scenario_valuation": [],
-          "valuation_section": {
-            "heading": "五、估值更新",
-            "start_line": 80,
-            "end_line": 105,
-            "markdown": "## 五、估值更新\n\n| 指标 | 建档时（2026-07-06） | 上次检查 | 当前（2026-07-13） | 变化 |\n|---|---:|---:|---:|---|\n| 股价 | 23.16元 | 23.16元 | **21.70元** | -6.30% |\n| 总市值 | 约1,860.15亿元 | 约1,860.15亿元 | **1,742.89亿元** | -6.30% |\n| PE | 约22.5x（粗算） | 约22.5x | **TTM 20.95x** | 估值下降，口径更严谨 |\n| PB | 约3.7x（行情口径） | 约3.74x | **3.26x** | 采用Q1归母权益复算 |\n| 股息率 | 约2.67% | 约2.67% | **2.87%** | 价格下降带来提升 |\n| TTM FCF收益率 | 未列 | 未列 | **5.35%** | 当前P/FCF 18.71x |\n| 五年中性终值 | 约30.3元 | 约30.3元 | **30.6元** | EPS起点与工具口径更新 |\n| 中性现值 | 未折现 | 未折现 | **21.85元** | 按10%要求回报折现 |\n| 当前安全边际 | 误写为约24% | 误写为约24% | **约0.69%** | 原口径把终值当现值，已纠正 |\n\n### 当前估值纪律\n\n| 价格 / 条件 | 动作 |\n|---|---|\n| 当前21.70元 | 已持有者可持有；不因跌价自动加仓 |\n| 20-21元 | 基本面稳定时可做小额跟踪仓，但仍不是严格安全边际 |\n| ≤17.5元 | 接近中性现值八折；红线未触发时重新评估核心加仓 |\n| ≤15.3元 | 接近中性现值七折；先确认价格下跌不是论文破裂所致 |\n| ≥27元 | 若EPS、核心毛利率没有上修，复核仓位与机会成本 |\n\n---"
-          },
-          "price_status": "已提取价格计划",
-          "title": "国电南瑞投资论文追踪检查报告（2026-07-13）",
-          "report_path": "reports/国电南瑞/国电南瑞-thesis-tracker-20260713.md",
-          "report_link": "国电南瑞/国电南瑞-thesis-tracker-20260713.md"
         },
         {
           "data_cutoff": "2026-07-10",
@@ -7402,8 +7902,32 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "- 空仓者：可以纳入观察池，但当前不是明显“闭眼买”的价格；优先等待中报验证或更高安全边际。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有/观察",
+              "price_range": "21–25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "可分批加仓",
+              "price_range": "18–21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "对中性价值有较充分安全边际。"
+            },
+            {
+              "stance": "保守型",
+              "action": "可积极研究加仓",
+              "price_range": "≤ 18 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "接近悲观情景价值，赔率明显改善。"
+            }
+          ],
+          "conclusion_summary": "激进型：持有/观察（21–25 元）；稳健型：可分批加仓（18–21 元）；保守型：可积极研究加仓（≤ 18 元）",
           "buy_price": "35 元",
           "price_plan": [
             {
@@ -7414,18 +7938,18 @@
             },
             {
               "profile": "可分批加仓",
-              "price_range": "18",
+              "price_range": "18–21 元",
               "action": "可分批加仓",
               "rationale": "对中性价值有较充分安全边际。"
             },
             {
               "profile": "持有/观察",
-              "price_range": "21",
+              "price_range": "21–25 元",
               "action": "持有/观察"
             },
             {
               "profile": "谨慎持有，不轻易加仓",
-              "price_range": "25",
+              "price_range": "25–30 元",
               "action": "谨慎持有，不轻易加仓",
               "rationale": "接近中性情景价值，需靠业绩继续兑现。"
             },
@@ -7514,8 +8038,33 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "生意质量 高。电网安全和智能化升级需求刚性，现金流优秀。 高",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有可以，空仓不必追",
+              "price_range": "21-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "持有可以，空仓不必追。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可建观察仓或小仓，等待订单/毛利验证",
+              "price_range": "20-21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "可建观察仓或小仓，等待订单/毛利验证。"
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未坏，是有安全边际的加仓区",
+              "price_range": "18 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "若基本面未坏，是有安全边际的加仓区。"
+            }
+          ],
+          "conclusion_summary": "激进型：持有可以，空仓不必追（21-25 元）；稳健型：可建观察仓或小仓，等待订单/毛利验证（20-21 元）；保守型：若基本面未坏，是有安全边际的加仓区（18 元以下）",
           "buy_price": "18-20 元",
           "price_plan": [
             {
@@ -7584,8 +8133,33 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "生意质量 高。电网安全和智能化升级需求刚性，现金流优秀。 高",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有可以，空仓不必追",
+              "price_range": "21-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "持有可以，空仓不必追。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可建观察仓或小仓，等待订单/毛利验证",
+              "price_range": "20-21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "可建观察仓或小仓，等待订单/毛利验证。"
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未坏，是有安全边际的加仓区",
+              "price_range": "18 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "若基本面未坏，是有安全边际的加仓区。"
+            }
+          ],
+          "conclusion_summary": "激进型：持有可以，空仓不必追（21-25 元）；稳健型：可建观察仓或小仓，等待订单/毛利验证（20-21 元）；保守型：若基本面未坏，是有安全边际的加仓区（18 元以下）",
           "buy_price": "18-20 元",
           "price_plan": [
             {
@@ -7654,8 +8228,33 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "生意质量 高。电网安全和智能化升级需求刚性，现金流优秀。 高",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有可以，空仓不必追",
+              "price_range": "21-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "持有可以，空仓不必追。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可建观察仓或小仓，等待订单/毛利验证",
+              "price_range": "20-21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "可建观察仓或小仓，等待订单/毛利验证。"
+            },
+            {
+              "stance": "保守型",
+              "action": "若基本面未坏，是有安全边际的加仓区",
+              "price_range": "18 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "若基本面未坏，是有安全边际的加仓区。"
+            }
+          ],
+          "conclusion_summary": "激进型：持有可以，空仓不必追（21-25 元）；稳健型：可建观察仓或小仓，等待订单/毛利验证（20-21 元）；保守型：若基本面未坏，是有安全边际的加仓区（18 元以下）",
           "buy_price": "18-20 元",
           "price_plan": [
             {
@@ -9421,8 +10020,33 @@
       "data_cutoff": "2026-07-07",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持仓者可持有，空仓者不宜追高",
+          "price_range": "17-22 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "持仓者可持有，空仓者不宜追高。"
+        },
+        {
+          "stance": "稳健型",
+          "action": "观察/小仓位，等待订单或现金流验证",
+          "price_range": "14-17 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "观察/小仓位，等待订单或现金流验证。"
+        },
+        {
+          "stance": "保守型",
+          "action": "可以列为积极买入区，但需确认利润未结构性下滑",
+          "price_range": "≤ 12 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "可以列为积极买入区，但需确认利润未结构性下滑。"
+        }
+      ],
+      "conclusion_summary": "激进型：持仓者可持有，空仓者不宜追高（17-22 元）；稳健型：观察/小仓位，等待订单或现金流验证（14-17 元）；保守型：可以列为积极买入区，但需确认利润未结构性下滑（≤ 12 元）",
       "buy_price": "12-14 元",
       "price_plan": [
         {
@@ -9491,8 +10115,33 @@
         {
           "data_cutoff": "2026-07-07",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持仓者可持有，空仓者不宜追高",
+              "price_range": "17-22 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "持仓者可持有，空仓者不宜追高。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "观察/小仓位，等待订单或现金流验证",
+              "price_range": "14-17 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "观察/小仓位，等待订单或现金流验证。"
+            },
+            {
+              "stance": "保守型",
+              "action": "可以列为积极买入区，但需确认利润未结构性下滑",
+              "price_range": "≤ 12 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "可以列为积极买入区，但需确认利润未结构性下滑。"
+            }
+          ],
+          "conclusion_summary": "激进型：持仓者可持有，空仓者不宜追高（17-22 元）；稳健型：观察/小仓位，等待订单或现金流验证（14-17 元）；保守型：可以列为积极买入区，但需确认利润未结构性下滑（≤ 12 元）",
           "buy_price": "12-14 元",
           "price_plan": [
             {
@@ -9865,34 +10514,34 @@
             {
               "stance": "激进型",
               "action": "140–160 元谨慎参与",
-              "price_range": "140",
+              "price_range": "140–160 元",
               "note": "小仓跟踪/已有仓位可持有，不建议一次性重仓追高"
             },
             {
               "stance": "稳健型",
               "action": "观察为主，等待更高安全边际",
-              "price_range": "110",
+              "price_range": "110–130 元",
               "note": "对应约 26–31x 2025 EPS，风险收益更均衡。"
             },
             {
               "stance": "保守型",
               "action": "只在明显错杀时考虑",
-              "price_range": "100",
+              "price_range": "100–110 元",
               "note": "接近悲观情景目标价，能覆盖估值回落和现金流风险。"
             }
           ],
-          "conclusion_summary": "激进型：140–160 元谨慎参与（140）；稳健型：观察为主，等待更高安全边际（110）；保守型：只在明显错杀时考虑（100）",
-          "buy_price": "110",
+          "conclusion_summary": "激进型：140–160 元谨慎参与（140–160 元）；稳健型：观察为主，等待更高安全边际（110–130 元）；保守型：只在明显错杀时考虑（100–110 元）",
+          "buy_price": "110–130 元",
           "price_plan": [
             {
               "profile": "激进型",
-              "price_range": "140",
+              "price_range": "140–160 元",
               "action": "小仓跟踪/已有仓位可持有，不建议一次性重仓追高",
               "rationale": "接受高波动，押注海外和电网景气持续兑现。"
             },
             {
               "profile": "稳健型",
-              "price_range": "110",
+              "price_range": "110–130 元",
               "action": "观察为主，等待更高安全边际"
             }
           ],
@@ -10114,8 +10763,31 @@
       "data_cutoff": "2026-07-13",
       "report_completed_at": "2026-07-13",
       "action": "减仓/卖出",
-      "investor_stances": [],
-      "conclusion_summary": ">45.2 至 60.2 元 已持有者持有验证；空仓者不追 中性预期回报低于约 10%",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "已持有者持有验证",
+          "price_range": ">45.2 至 60.2 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "已持有者持有验证；空仓者不追"
+        },
+        {
+          "stance": "稳健型",
+          "action": "可小步建仓",
+          "price_range": ">42.9 至 45.2 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "可重点研究并分批建仓",
+          "price_range": "<=39.6 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：已持有者持有验证（>45.2 至 60.2 元）；稳健型：可小步建仓（>42.9 至 45.2 元）；保守型：可重点研究并分批建仓（<=39.6 元）",
       "buy_price": "<=39.6 元",
       "price_plan": [
         {
@@ -10169,8 +10841,31 @@
         {
           "data_cutoff": "2026-07-13",
           "action": "减仓/卖出",
-          "investor_stances": [],
-          "conclusion_summary": ">45.2 至 60.2 元 已持有者持有验证；空仓者不追 中性预期回报低于约 10%",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "已持有者持有验证",
+              "price_range": ">45.2 至 60.2 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "已持有者持有验证；空仓者不追"
+            },
+            {
+              "stance": "稳健型",
+              "action": "可小步建仓",
+              "price_range": ">42.9 至 45.2 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "可重点研究并分批建仓",
+              "price_range": "<=39.6 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：已持有者持有验证（>45.2 至 60.2 元）；稳健型：可小步建仓（>42.9 至 45.2 元）；保守型：可重点研究并分批建仓（<=39.6 元）",
           "buy_price": "<=39.6 元",
           "price_plan": [
             {
@@ -13746,8 +14441,32 @@
       "data_cutoff": "2026-07-13",
       "report_completed_at": "2026-07-13",
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "当前最大的机会成本不是公司会不会马上变差，而是以 80.40 元承担接班和第二曲线回报不确定性，中性情景却只有约 7.61%年化总回报。对空仓者，等待更低价格或更强事实，都是比追逐“优秀公司”标签更清楚的动作。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有但不追价",
+          "price_range": "88-100 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "持有但不追价；空仓等待"
+        },
+        {
+          "stance": "稳健型",
+          "action": "当前 80.40 元位于此区间",
+          "price_range": "75.27-88 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "当前 80.40 元位于此区间；不因静态股息率单独买入"
+        },
+        {
+          "stance": "保守型",
+          "action": "先排除论文恶化导致的下跌，再考虑更积极建仓",
+          "price_range": "不高于 65.87 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有但不追价（88-100 元）；稳健型：当前 80.40 元位于此区间（75.27-88 元）；保守型：先排除论文恶化导致的下跌，再考虑更积极建仓（不高于 65.87 元）",
       "buy_price": "75.27-88 元",
       "price_plan": [
         {
@@ -13801,8 +14520,32 @@
         {
           "data_cutoff": "2026-07-13",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "当前最大的机会成本不是公司会不会马上变差，而是以 80.40 元承担接班和第二曲线回报不确定性，中性情景却只有约 7.61%年化总回报。对空仓者，等待更低价格或更强事实，都是比追逐“优秀公司”标签更清楚的动作。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有但不追价",
+              "price_range": "88-100 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "持有但不追价；空仓等待"
+            },
+            {
+              "stance": "稳健型",
+              "action": "当前 80.40 元位于此区间",
+              "price_range": "75.27-88 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "当前 80.40 元位于此区间；不因静态股息率单独买入"
+            },
+            {
+              "stance": "保守型",
+              "action": "先排除论文恶化导致的下跌，再考虑更积极建仓",
+              "price_range": "不高于 65.87 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有但不追价（88-100 元）；稳健型：当前 80.40 元位于此区间（75.27-88 元）；保守型：先排除论文恶化导致的下跌，再考虑更积极建仓（不高于 65.87 元）",
           "buy_price": "75.27-88 元",
           "price_plan": [
             {
@@ -14152,54 +14895,83 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "小仓位观察，不做重仓",
-          "price_range": "95-110 元",
-          "note": "95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。"
-        },
-        {
-          "stance": "稳健型",
-          "action": "等待更好价格或证据",
-          "price_range": "80-95 元",
-          "note": "80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。"
+          "action": "空仓者更合理的等待区间",
+          "price_range": "70-80 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "约 30-35x 2025 PE，较适合长期资金建立观察仓"
         },
         {
           "stance": "保守型",
-          "action": "暂不买入",
-          "price_range": "70-80 元",
-          "note": "70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。"
+          "action": "若基本面未恶化，可重点研究和分批买入",
+          "price_range": "55-65 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "悲观情景附近，市场开始给周期/竞争折价"
         }
       ],
-      "conclusion_summary": "激进型：小仓位观察，不做重仓（95-110 元）；稳健型：等待更好价格或证据（80-95 元）；保守型：暂不买入（70-80 元）",
-      "buy_price": "70-80 元",
-      "price_plan": [],
+      "conclusion_summary": "激进型：空仓者更合理的等待区间（70-80 元）；保守型：若基本面未恶化，可重点研究和分批买入（55-65 元）",
+      "buy_price": "55-65 元",
+      "price_plan": [
+        {
+          "profile": "若基本面未恶化，可重点研究和分批买入",
+          "price_range": "55-65 元",
+          "action": "若基本面未恶化，可重点研究和分批买入",
+          "rationale": "悲观情景附近，市场开始给周期/竞争折价"
+        },
+        {
+          "profile": "空仓者更合理的等待区间",
+          "price_range": "70-80 元",
+          "action": "空仓者更合理的等待区间",
+          "rationale": "约 30-35x 2025 PE，较适合长期资金建立观察仓"
+        },
+        {
+          "profile": "持仓可持有，新增仓位要谨慎",
+          "price_range": "90-110 元",
+          "action": "持仓可持有，新增仓位要谨慎",
+          "rationale": "接近中性情景估值，需靠后续业绩兑现"
+        },
+        {
+          "profile": "除非订单/现金流超预期，否则不宜追高",
+          "price_range": "130 元以上",
+          "action": "除非订单/现金流超预期，否则不宜追高",
+          "rationale": "需要海外高增和利润率持续修复同时兑现"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
-          "target_price": "168.6 元",
-          "target_pe": "45x"
+          "target_price": "157.3 元",
+          "eps_growth": "+18%",
+          "target_pe": "42x",
+          "target_eps": "3.75"
         },
         {
           "scenario": "中性",
-          "target_price": "97.1 元",
-          "target_pe": "32x"
+          "target_price": "102.5 元",
+          "eps_growth": "+12%",
+          "target_pe": "32x",
+          "target_eps": "3.20"
         },
         {
           "scenario": "悲观",
-          "target_price": "53.2 元",
-          "target_pe": "22x"
+          "target_price": "54.8 元",
+          "eps_growth": "+3%",
+          "target_pe": "22x",
+          "target_eps": "2.49"
         }
       ],
       "valuation_section": {
-        "heading": "7. 估值与最终投资建议",
-        "start_line": 182,
-        "end_line": 234,
-        "markdown": "## 7. 估值与最终投资建议\n\n### 7.1 三情景估值\n\n工具假设：当前股价 106.75 元，当前 EPS 2.28 元，预测期 3 年，总股本 8.2416 亿股；使用 `financial_rigor.py three-scenario` 验算。\n\n| 情景 | EPS CAGR | 3年后目标PE | 3年后EPS | 目标价 | 相对当前 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观 | +18% | 45x | 3.75 | 168.6 元 | +57.9% | 海外高增、服务占比提升、ROE和现金流修复，市场继续给高估值。 |\n| 中性 | +10% | 32x | 3.03 | 97.1 元 | -9.0% | 国内稳健、海外推进但费用高，现金流改善但不惊艳。 |\n| 悲观 | +2% | 22x | 2.42 | 53.2 元 | -50.1% | 采购周期回落、降价、海外受阻、应收存货恶化，估值杀至设备制造口径。 |\n\n**估值结论**：当前 106.75 元略高于中性情景价值，需要偏乐观假设才能获得满意回报；安全边际不足。\n\n### 7.2 定性判断表\n\n| 维度 | 判断 | 操作含义 |\n|---|---|---|\n| 生意质量 | 较好但复杂 | 可长期研究，不宜按消费品式轻松复利估值。 |\n| 管理层 | 能力强，需观察 | 能进入观察池，但关联交易和减持需跟踪。 |\n| 财务质量 | 资产负债表健康，现金流波动 | 重点看 OCF/FCF、应收、存货和 ROE 修复。 |\n| 估值 | 当前偏充分 | 空仓不急追，持仓者看证据而非叙事加仓。 |\n| 时机 | 不在明显低估区 | 等价格回落或基本面超预期兑现。 |\n\n### 7.3 分层操作建议\n\n| 投资者类型 | 建议 | 参考价格/条件 |\n|---|---|---|\n| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |\n| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |\n| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |\n| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |\n\n### 7.4 加仓信号与减仓信号\n\n**加仓/上修信号：**\n\n1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。\n2. 服务收入增速持续高于设备收入，服务占比提升且毛利率稳定。\n3. 海外收入保持高增，同时海外毛利率和回款质量不恶化。\n4. ROE 回升至 12%-15%并非由杠杆驱动。\n5. 关联交易透明、占比可控，管理层与股东同船感增强。\n\n**减仓/重审信号：**\n\n1. 毛利率跌破 45%且非一次性因素。\n2. 应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。\n3. 海外收入增速明显放缓但费用继续高增。\n4. 研发资本化比例继续上升，而新品销售贡献和现金流不匹配。\n5. 关联交易持续扩大、核心人员持续减持或出现质量/合规事件。\n\n---"
+        "heading": "第七步：估值与安全边际",
+        "start_line": 216,
+        "end_line": 298,
+        "markdown": "## 第七步：估值与安全边际\n\n### 1. 当前估值工具验算\n\nfinancial_rigor.py 输出摘要：\n\n| 指标 | 计算 |\n|---|---:|\n| 市值 | 106.75 元 × 824.16 百万股 = 879.79 亿元 |\n| 2025 PE | 106.75 / 2.28 = 46.82x |\n| PB | 106.75 / 26.17 = 4.08x（按 2025 BVPS）；按 2026Q1 BVPS 约 4.01x |\n| P/FCF | 106.75 / 3.2506 = 32.84x（按 2025 每股经营现金流近似） |\n| PS | 106.75 / 16.7447 = 6.38x（按 2025 收入/股）；TTM PS 约 6.18x |\n\n### 2. 反向 DCF 直觉\n\n现价约 46x TTM PE。若 5 年后市场愿意给 30x PE，要获得约 10% 年化回报，EPS 需要从约 2.30 元增长到约 6.4 元，五年 CAGR 约 23%。这要求：\n- 国内设备更新不只是一次性脉冲；\n- 海外收入维持高增且不牺牲毛利率；\n- 研发费用率逐步释放经营杠杆；\n- 现金流与应收存货控制同步改善。\n\n这不是不可能，但难度不低。\n\n### 3. 三情景估值\n\n工具参数：当前价 106.75 元，2025 EPS 2.28 元，三年期。\n\n| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +18% | 42x | 3.75 | **157.3 元** | +47.4% |\n| 中性 | +12% | 32x | 3.20 | **102.5 元** | -4.0% |\n| 悲观 | +3% | 22x | 2.49 | **54.8 元** | -48.7% |\n\n### 4. 价格区间与操作含义\n\n| 价格区间 | 隐含判断 | 行动建议 |\n|---|---|---|\n| 55-65 元 | 悲观情景附近，市场开始给周期/竞争折价 | 若基本面未恶化，可重点研究和分批买入 |\n| 70-80 元 | 约 30-35x 2025 PE，较适合长期资金建立观察仓 | 空仓者更合理的等待区间 |\n| 90-110 元 | 接近中性情景估值，需靠后续业绩兑现 | 持仓可持有，新增仓位要谨慎 |\n| 130 元以上 | 需要海外高增和利润率持续修复同时兑现 | 除非订单/现金流超预期，否则不宜追高 |\n| 155 元以上 | 接近乐观情景三年目标价 | 需要重新审视预期是否过热 |\n\n> 段永平式追问：如果明天股市关闭五年，愿不愿意以 106.75 元持有？我的答案是：如果已持有优质仓位可以忍受波动，但空仓新买缺少足够安全边际。\n\n---\n\n## 第八步：最终决策与行动清单\n\n### 综合评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 高端医疗设备龙头，产品和服务粘性较强，但资本品周期属性明显 | 中高 |\n| 护城河（巴菲特） | 技术、产品矩阵、临床口碑和装机服务构成护城河，仍需对抗全球巨头 | 中高 |\n| 管理层（段永平+巴菲特） | 长期研发投入和全球化方向清晰，执行力较强 | 中高 |\n| 最大风险（芒格） | 估值偏高 + 行业周期 + 海外建设低于预期 + 应收存货占用 | 高 |\n| 文明趋势（李录） | 医疗资源均衡、国产替代、AI 影像均是长期趋势 | 高 |\n| 估值（巴菲特+段永平） | 好公司但价格不便宜，中性情景缺乏上行空间 | 中高 |\n\n### 决策表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | **观望为主**。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。 |\n| 持仓者 | **可持有但控制仓位**。若买入成本低、仓位不高，可继续跟踪海外收入、服务收入和现金流；若仓位过重，可在高估区间分批降风险。 |\n| 加仓信号 | 1）境外收入继续 +40% 以上且毛利率稳定；2）扣非净利增速回到 +25% 以上；3）经营现金流/净利润持续 >1；4）股价回落到 70-80 元且基本面未坏。 |\n| 卖出/减仓信号 | 1）连续两个季度扣非净利低增或负增；2）存货、应收增速显著高于收入；3）毛利率跌破 45%；4）海外费用投入高但收入不兑现；5）估值升至乐观情景以上但订单没有同步超预期。 |\n| 本报告评级 | **观望 / 持有**，不是回避型公司，但现价不是舒服买点。 |\n\n### 四位大师模拟点评\n\n> **巴菲特**：这是一家有真实技术和客户价值的企业，但我更想在市场悲观时买，而不是在大家都相信国产替代时支付高倍数。\n\n> **芒格**：最危险的错误是把宏大叙事当成护城河。你要盯住回款、存货和真实利润，而不是只看收入增长。\n\n> **段永平**：公司做的是对的事，长期主义也明显；问题是价格是否对。好公司贵了，也可能让股东几年不赚钱。\n\n> **李录**：高端医疗装备国产化符合文明演进方向，但能否成为世界级公司，关键在全球客户信任和组织能力，而非单一年度订单。\n\n---"
       },
-      "recommendation": "投资者类型 建议 参考价格/条件",
-      "title": "联影医疗（688271.SH）投资研究报告",
-      "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
-      "report_link": "联影医疗/联影医疗投资研究报告_team-20260706.md",
-      "price_status": "已提取三情景",
+      "recommendation": "空仓者 观望为主。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。",
+      "title": "联影医疗（688271.SH）研究报告",
+      "report_path": "reports/联影医疗/联影医疗研究报告-20260706.md",
+      "report_link": "联影医疗/联影医疗研究报告-20260706.md",
+      "price_status": "已提取价格计划",
       "data_status": "已标注",
       "selection_basis": "报告数据截止日",
       "report_history": [
@@ -14209,59 +14981,22 @@
           "investor_stances": [
             {
               "stance": "激进型",
-              "action": "小仓位观察，不做重仓",
-              "price_range": "95-110 元",
-              "note": "95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。"
-            },
-            {
-              "stance": "稳健型",
-              "action": "等待更好价格或证据",
-              "price_range": "80-95 元",
-              "note": "80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。"
+              "action": "空仓者更合理的等待区间",
+              "price_range": "70-80 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "约 30-35x 2025 PE，较适合长期资金建立观察仓"
             },
             {
               "stance": "保守型",
-              "action": "暂不买入",
-              "price_range": "70-80 元",
-              "note": "70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。"
+              "action": "若基本面未恶化，可重点研究和分批买入",
+              "price_range": "55-65 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "悲观情景附近，市场开始给周期/竞争折价"
             }
           ],
-          "conclusion_summary": "激进型：小仓位观察，不做重仓（95-110 元）；稳健型：等待更好价格或证据（80-95 元）；保守型：暂不买入（70-80 元）",
-          "buy_price": "70-80 元",
-          "price_plan": [],
-          "scenario_valuation": [
-            {
-              "scenario": "乐观",
-              "target_price": "168.6 元",
-              "target_pe": "45x"
-            },
-            {
-              "scenario": "中性",
-              "target_price": "97.1 元",
-              "target_pe": "32x"
-            },
-            {
-              "scenario": "悲观",
-              "target_price": "53.2 元",
-              "target_pe": "22x"
-            }
-          ],
-          "valuation_section": {
-            "heading": "7. 估值与最终投资建议",
-            "start_line": 182,
-            "end_line": 234,
-            "markdown": "## 7. 估值与最终投资建议\n\n### 7.1 三情景估值\n\n工具假设：当前股价 106.75 元，当前 EPS 2.28 元，预测期 3 年，总股本 8.2416 亿股；使用 `financial_rigor.py three-scenario` 验算。\n\n| 情景 | EPS CAGR | 3年后目标PE | 3年后EPS | 目标价 | 相对当前 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观 | +18% | 45x | 3.75 | 168.6 元 | +57.9% | 海外高增、服务占比提升、ROE和现金流修复，市场继续给高估值。 |\n| 中性 | +10% | 32x | 3.03 | 97.1 元 | -9.0% | 国内稳健、海外推进但费用高，现金流改善但不惊艳。 |\n| 悲观 | +2% | 22x | 2.42 | 53.2 元 | -50.1% | 采购周期回落、降价、海外受阻、应收存货恶化，估值杀至设备制造口径。 |\n\n**估值结论**：当前 106.75 元略高于中性情景价值，需要偏乐观假设才能获得满意回报；安全边际不足。\n\n### 7.2 定性判断表\n\n| 维度 | 判断 | 操作含义 |\n|---|---|---|\n| 生意质量 | 较好但复杂 | 可长期研究，不宜按消费品式轻松复利估值。 |\n| 管理层 | 能力强，需观察 | 能进入观察池，但关联交易和减持需跟踪。 |\n| 财务质量 | 资产负债表健康，现金流波动 | 重点看 OCF/FCF、应收、存货和 ROE 修复。 |\n| 估值 | 当前偏充分 | 空仓不急追，持仓者看证据而非叙事加仓。 |\n| 时机 | 不在明显低估区 | 等价格回落或基本面超预期兑现。 |\n\n### 7.3 分层操作建议\n\n| 投资者类型 | 建议 | 参考价格/条件 |\n|---|---|---|\n| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |\n| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |\n| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |\n| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |\n\n### 7.4 加仓信号与减仓信号\n\n**加仓/上修信号：**\n\n1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。\n2. 服务收入增速持续高于设备收入，服务占比提升且毛利率稳定。\n3. 海外收入保持高增，同时海外毛利率和回款质量不恶化。\n4. ROE 回升至 12%-15%并非由杠杆驱动。\n5. 关联交易透明、占比可控，管理层与股东同船感增强。\n\n**减仓/重审信号：**\n\n1. 毛利率跌破 45%且非一次性因素。\n2. 应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。\n3. 海外收入增速明显放缓但费用继续高增。\n4. 研发资本化比例继续上升，而新品销售贡献和现金流不匹配。\n5. 关联交易持续扩大、核心人员持续减持或出现质量/合规事件。\n\n---"
-          },
-          "price_status": "已提取三情景",
-          "title": "联影医疗（688271.SH）投资研究报告",
-          "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
-          "report_link": "联影医疗/联影医疗投资研究报告_team-20260706.md"
-        },
-        {
-          "data_cutoff": "2026-07-06",
-          "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望为主。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。",
+          "conclusion_summary": "激进型：空仓者更合理的等待区间（70-80 元）；保守型：若基本面未恶化，可重点研究和分批买入（55-65 元）",
           "buy_price": "55-65 元",
           "price_plan": [
             {
@@ -14322,6 +15057,60 @@
           "title": "联影医疗（688271.SH）研究报告",
           "report_path": "reports/联影医疗/联影医疗研究报告-20260706.md",
           "report_link": "联影医疗/联影医疗研究报告-20260706.md"
+        },
+        {
+          "data_cutoff": "2026-07-06",
+          "action": "观察",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "小仓位观察，不做重仓",
+              "price_range": "95-110 元",
+              "note": "95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "等待更好价格或证据",
+              "price_range": "80-95 元",
+              "note": "80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。"
+            },
+            {
+              "stance": "保守型",
+              "action": "暂不买入",
+              "price_range": "70-80 元",
+              "note": "70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。"
+            }
+          ],
+          "conclusion_summary": "激进型：小仓位观察，不做重仓（95-110 元）；稳健型：等待更好价格或证据（80-95 元）；保守型：暂不买入（70-80 元）",
+          "buy_price": "70-80 元",
+          "price_plan": [],
+          "scenario_valuation": [
+            {
+              "scenario": "乐观",
+              "target_price": "168.6 元",
+              "target_pe": "45x"
+            },
+            {
+              "scenario": "中性",
+              "target_price": "97.1 元",
+              "target_pe": "32x"
+            },
+            {
+              "scenario": "悲观",
+              "target_price": "53.2 元",
+              "target_pe": "22x"
+            }
+          ],
+          "valuation_section": {
+            "heading": "7. 估值与最终投资建议",
+            "start_line": 182,
+            "end_line": 234,
+            "markdown": "## 7. 估值与最终投资建议\n\n### 7.1 三情景估值\n\n工具假设：当前股价 106.75 元，当前 EPS 2.28 元，预测期 3 年，总股本 8.2416 亿股；使用 `financial_rigor.py three-scenario` 验算。\n\n| 情景 | EPS CAGR | 3年后目标PE | 3年后EPS | 目标价 | 相对当前 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观 | +18% | 45x | 3.75 | 168.6 元 | +57.9% | 海外高增、服务占比提升、ROE和现金流修复，市场继续给高估值。 |\n| 中性 | +10% | 32x | 3.03 | 97.1 元 | -9.0% | 国内稳健、海外推进但费用高，现金流改善但不惊艳。 |\n| 悲观 | +2% | 22x | 2.42 | 53.2 元 | -50.1% | 采购周期回落、降价、海外受阻、应收存货恶化，估值杀至设备制造口径。 |\n\n**估值结论**：当前 106.75 元略高于中性情景价值，需要偏乐观假设才能获得满意回报；安全边际不足。\n\n### 7.2 定性判断表\n\n| 维度 | 判断 | 操作含义 |\n|---|---|---|\n| 生意质量 | 较好但复杂 | 可长期研究，不宜按消费品式轻松复利估值。 |\n| 管理层 | 能力强，需观察 | 能进入观察池，但关联交易和减持需跟踪。 |\n| 财务质量 | 资产负债表健康，现金流波动 | 重点看 OCF/FCF、应收、存货和 ROE 修复。 |\n| 估值 | 当前偏充分 | 空仓不急追，持仓者看证据而非叙事加仓。 |\n| 时机 | 不在明显低估区 | 等价格回落或基本面超预期兑现。 |\n\n### 7.3 分层操作建议\n\n| 投资者类型 | 建议 | 参考价格/条件 |\n|---|---|---|\n| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |\n| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |\n| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |\n| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |\n\n### 7.4 加仓信号与减仓信号\n\n**加仓/上修信号：**\n\n1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。\n2. 服务收入增速持续高于设备收入，服务占比提升且毛利率稳定。\n3. 海外收入保持高增，同时海外毛利率和回款质量不恶化。\n4. ROE 回升至 12%-15%并非由杠杆驱动。\n5. 关联交易透明、占比可控，管理层与股东同船感增强。\n\n**减仓/重审信号：**\n\n1. 毛利率跌破 45%且非一次性因素。\n2. 应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。\n3. 海外收入增速明显放缓但费用继续高增。\n4. 研发资本化比例继续上升，而新品销售贡献和现金流不匹配。\n5. 关联交易持续扩大、核心人员持续减持或出现质量/合规事件。\n\n---"
+          },
+          "price_status": "已提取三情景",
+          "title": "联影医疗（688271.SH）投资研究报告",
+          "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+          "report_link": "联影医疗/联影医疗投资研究报告_team-20260706.md"
         },
         {
           "data_cutoff": "2026-07-06",
@@ -15380,8 +16169,25 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "减仓/卖出",
-          "investor_stances": [],
-          "conclusion_summary": "总体评级 观察/等待更好价格。持有人可继续持有并盯 Q2/Q3 毛利率；空仓者不建议在 21 元附近追。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理区，等待 Q2/Q3 数据验证更好",
+              "price_range": "19-21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "静态 PE 约 16.5-18.3x，TTM PE 约 20x"
+            },
+            {
+              "stance": "保守型",
+              "action": "可开始分批研究型建仓",
+              "price_range": "17-18 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "静态 PE 约 15-16x，股息率约 2.2%"
+            }
+          ],
+          "conclusion_summary": "激进型：合理区，等待 Q2/Q3 数据验证更好（19-21 元）；保守型：可开始分批研究型建仓（17-18 元）",
           "buy_price": "17-18 元",
           "price_plan": [
             {
@@ -15714,8 +16520,33 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "持有",
-          "investor_stances": [],
-          "conclusion_summary": "生意质量 8/10 多产品线、全球渠道、研发和服务网络优秀。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "需要等待后续季度验证，适合已有仓位继续跟踪",
+              "price_range": "130-160 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "需要等待后续季度验证，适合已有仓位继续跟踪。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "若基本面未恶化，可分批研究建仓",
+              "price_range": "100-130 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "若基本面未恶化，可分批研究建仓。"
+            },
+            {
+              "stance": "保守型",
+              "action": "可能隐含利润中枢永久损伤，需重新审查而非机械买入",
+              "price_range": "70 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "可能隐含利润中枢永久损伤，需重新审查而非机械买入。"
+            }
+          ],
+          "conclusion_summary": "激进型：需要等待后续季度验证，适合已有仓位继续跟踪（130-160 元）；稳健型：若基本面未恶化，可分批研究建仓（100-130 元）；保守型：可能隐含利润中枢永久损伤，需重新审查而非机械买入（70 元）",
           "buy_price": "70 元",
           "price_plan": [
             {
@@ -15765,8 +16596,33 @@
         {
           "data_cutoff": "2026-07-06",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 观望到分批建仓：120 元以下更有吸引力；若 2026H1/H2 国内收入转正、利润降幅收窄，可在 120-150 元区间小仓位跟踪。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理区",
+              "price_range": "120-150 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "合理区；适合观察/小仓位/持仓不动，等待复苏证据。"
+            },
+            {
+              "stance": "稳健型",
+              "action": "好公司好价格区，适合分批建仓",
+              "price_range": "100-120 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "好公司好价格区，适合分批建仓。"
+            },
+            {
+              "stance": "保守型",
+              "action": "深度安全边际区，若基本面未恶化可积极买入",
+              "price_range": "100 元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "深度安全边际区，若基本面未恶化可积极买入。"
+            }
+          ],
+          "conclusion_summary": "激进型：合理区（120-150 元）；稳健型：好公司好价格区，适合分批建仓（100-120 元）；保守型：深度安全边际区，若基本面未恶化可积极买入（100 元以下）",
           "buy_price": "100-120 元",
           "price_plan": [
             {
@@ -16161,8 +17017,30 @@
       "data_cutoff": "2026-07-10",
       "report_completed_at": "2026-07-13",
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "公司论文还完整吗？ 完整：六库资产、成本、运营和现金流护城河未受损",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "等待/持有",
+          "price_range": "25-28 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "观察仓或小仓跟踪",
+          "price_range": "22-25 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "可分批研究建仓",
+          "price_range": "18-22 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：等待/持有（25-28 元）；稳健型：观察仓或小仓跟踪（22-25 元）；保守型：可分批研究建仓（18-22 元）",
       "buy_price": "18-22 元",
       "price_plan": [
         {
@@ -16220,8 +17098,30 @@
         {
           "data_cutoff": "2026-07-10",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "公司论文还完整吗？ 完整：六库资产、成本、运营和现金流护城河未受损",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "等待/持有",
+              "price_range": "25-28 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "观察仓或小仓跟踪",
+              "price_range": "22-25 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "可分批研究建仓",
+              "price_range": "18-22 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：等待/持有（25-28 元）；稳健型：观察仓或小仓跟踪（22-25 元）；保守型：可分批研究建仓（18-22 元）",
           "buy_price": "18-22 元",
           "price_plan": [
             {
@@ -16606,6 +17506,93 @@
         },
         {
           "data_cutoff": "2026-07-06",
+          "action": "观察",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理区，持有优于追高",
+              "price_range": "24-29 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false,
+              "note": "PE 约 16-20x；股息率约 4.2%-5.0%"
+            },
+            {
+              "stance": "稳健型",
+              "action": "较有安全边际，适合分批买入",
+              "price_range": "21-24 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "PE 约 14-16x；股息率约 5.0%-5.8%"
+            },
+            {
+              "stance": "保守型",
+              "action": "深度价值区，可重点研究加仓",
+              "price_range": "≤ 21 元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "TTM PE 约 14x；股息率接近/超过 5.8%"
+            }
+          ],
+          "conclusion_summary": "激进型：合理区，持有优于追高（24-29 元）；稳健型：较有安全边际，适合分批买入（21-24 元）；保守型：深度价值区，可重点研究加仓（≤ 21 元）",
+          "buy_price": "21-24 元",
+          "price_plan": [
+            {
+              "profile": "深度价值区，可重点研究加仓",
+              "price_range": "≤ 21 元",
+              "action": "深度价值区，可重点研究加仓",
+              "rationale": "TTM PE 约 14x；股息率接近/超过 5.8%"
+            },
+            {
+              "profile": "较有安全边际，适合分批买入",
+              "price_range": "21-24 元",
+              "action": "较有安全边际，适合分批买入",
+              "rationale": "PE 约 14-16x；股息率约 5.0%-5.8%"
+            },
+            {
+              "profile": "合理区，持有优于追高",
+              "price_range": "24-29 元",
+              "action": "合理区，持有优于追高",
+              "rationale": "PE 约 16-20x；股息率约 4.2%-5.0%"
+            },
+            {
+              "profile": "可考虑降低仓位或等待业绩上修",
+              "price_range": "≥ 34 元",
+              "action": "可考虑降低仓位或等待业绩上修"
+            }
+          ],
+          "scenario_valuation": [
+            {
+              "scenario": "乐观",
+              "target_price": "37.7 元",
+              "eps_growth": "4%",
+              "target_pe": "21x"
+            },
+            {
+              "scenario": "中性",
+              "target_price": "29.3 元",
+              "eps_growth": "2%",
+              "target_pe": "18x"
+            },
+            {
+              "scenario": "悲观",
+              "target_price": "20.0 元",
+              "eps_growth": "-2%",
+              "target_pe": "15x"
+            }
+          ],
+          "valuation_section": {
+            "heading": "9. 第七步：估值与安全边际",
+            "start_line": 300,
+            "end_line": 386,
+            "markdown": "## 9. 第七步：估值与安全边际\n\n### 9.1 当前估值验算\n\n| 指标 | 数值 | 计算/来源 |\n|---|---:|---|\n| 股价 | 27.19 元 | 腾讯行情 2026-07-06 |\n| 总股本 | 244.682 亿股 | 公司财报/腾讯行情 |\n| 总市值 | 6,652.91 亿元 | 股价 × 总股本，工具验算偏差 0.00% |\n| TTM EPS | 约 1.4746 元 | 2025 EPS 1.4101 + 2026Q1 0.2763 - 2025Q1 0.2117 |\n| TTM PE | 18.44x | 工具验算 |\n| 每股净资产 | 约 9.313 元 | 2026Q1 归母权益 / 总股本 |\n| PB | 2.92x | 工具验算 |\n| 2025 FCF/股 | 约 1.719 元 | 2025 估算 FCF / 总股本 |\n| P/FCF | 15.82x | 工具验算 |\n| 2025 利润归属期现金回报 | 1.21 元/股 | 2025 三季报 0.21 + 2025 年度预案 1.00 |\n| 对应股息率 | 4.45% | 1.21 / 27.19 |\n\n### 9.2 反向估值直觉\n\n27.19 元对应 18.44x TTM PE，意味着市场要求并不低。若把长江电力当作“低增长、高分红、强确定性”的资产：\n\n- 若长期 EPS 增长 0-2%，18x PE 已接近合理上沿；\n- 若长期 EPS 增长 3-4%，18x PE 可以接受，但安全边际不厚；\n- 若遇到来水、电价或利率不利，PE 回到 15-16x 并不奇怪。\n\n### 9.3 三情景估值（工具精算）\n\n假设当前 TTM EPS 1.4746 元，预测 5 年：\n\n| 情景 | EPS 年增速 | 目标 PE | 第 5 年 EPS | 目标股价 | 相对当前 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 4% | 21x | 1.79 | 37.7 元 | +38.6% |\n| 中性 | 2% | 18x | 1.63 | 29.3 元 | +7.8% |\n| 悲观 | -2% | 15x | 1.33 | 20.0 元 | -26.5% |\n\n若再加上约 4%-5% 的年度现金分红，当前价的长期总回报可以“还不错”，但主要来自分红而非估值便宜。对追求高安全边际的投资者，当前价格并不令人兴奋。\n\n### 9.4 行动价格区间\n\n| 区间 | 对应逻辑 | 动作建议 |\n|---|---|---|\n| ≤ 21 元 | TTM PE 约 14x；股息率接近/超过 5.8% | 深度价值区，可重点研究加仓 |\n| 21-24 元 | PE 约 14-16x；股息率约 5.0%-5.8% | 较有安全边际，适合分批买入 |\n| 24-29 元 | PE 约 16-20x；股息率约 4.2%-5.0% | 合理区，持有优于追高 |\n| 29-34 元 | PE 约 20-23x；股息率降至约 3.6%-4.2% | 需要更高增长兑现，否则谨慎 |\n| ≥ 34 元 | PE 超 23x；高股息吸引力下降 | 可考虑降低仓位或等待业绩上修 |\n\n**段永平式追问**：如果股市明天关闭 5 年，我愿意以 27.19 元持有吗？如果组合目标是稳健收息，可以；如果目标是高赔率增值，不够便宜。\n\n---\n\n## 10. 第八步：综合决策备忘录\n\n### 10.1 六维评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 稀缺水电现金流，需求长期稳定，资产寿命长 | 高 |\n| 护城河（巴菲特） | 流域资源、规模、调度和制度壁垒强 | 高 |\n| 管理层（段永平+巴菲特） | 央企系统治理强，分红纪律好；个人持股激励弱 | 中高 |\n| 最大风险（芒格） | 来水、电价、利率与高估值均值回归 | 中高 |\n| 文明趋势（李录） | 低碳电力与系统调节价值长期有利 | 高 |\n| 估值（巴菲特+段永平） | 合理但不便宜；更像持有价，不是重仓捡便宜价 | 中 |\n\n### 10.2 最终决策表\n\n| 投资者状态 | 建议 |\n|---|---|\n| 空仓者 | 不建议因“好公司”在当前价一次性重仓；可设 24 元以下为主要买入观察区，或用小额定投建立观察仓。 |\n| 已持仓者 | 若成本较低、目标是收息和长期稳健，可继续持有；若仓位过重且买入逻辑是“高成长”，应重新审视。 |\n| 加仓信号 | 股价跌至约 24 元以下；股息率超过 5%；来水和电价未恶化；资本开支未显著侵蚀 FCF。 |\n| 减仓/卖出信号 | PE 超过 22-23x 且利润无明显上修；电价制度持续压低回报；抽蓄/新能源投资 ROIC 低于预期；分红承诺弱化。 |\n| 论文重审信号 | 连续两个年度发电量显著低于计划；资产负债率重新上行且财务费用失控；监管改变水电收益分配机制。 |\n\n### 10.3 四位大师模拟点评\n\n> **巴菲特**：这是一条很深的护城河，但投资回报仍取决于你付出的价格。水电站不会逃走，估值却会波动。\n\n> **芒格**：别死在“好公司不会错”的叙事里。反过来想：如果未来收益很一般，原因大概率是买贵了、来水差了、利率变了。\n\n> **段永平**：这家公司大概率是“对的生意”，但“对的价格”要看股息率和长期持有的机会成本。现在不是明显便宜。\n\n> **李录**：它站在能源文明长期演进的基础设施位置上。长期存在感很强，但投资人要区分“文明需要它”和“股价一定跑赢”。\n\n---"
+          },
+          "price_status": "已提取价格计划",
+          "title": "长江电力（600900.SH）投资研究报告",
+          "report_path": "reports/长江电力/长江电力投资研究报告.md",
+          "report_link": "长江电力/长江电力投资研究报告.md"
+        },
+        {
+          "data_cutoff": "2026-07-06",
           "action": "持有",
           "investor_stances": [],
           "conclusion_summary": "投资者类型 当前建议 价格/条件",
@@ -16672,68 +17659,6 @@
           "title": "长江电力（600900.SH）研究报告",
           "report_path": "reports/长江电力/长江电力研究报告-20260707.md",
           "report_link": "长江电力/长江电力研究报告-20260707.md"
-        },
-        {
-          "data_cutoff": "2026-07-06",
-          "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 不建议因“好公司”在当前价一次性重仓；可设 24 元以下为主要买入观察区，或用小额定投建立观察仓。",
-          "buy_price": "21-24 元",
-          "price_plan": [
-            {
-              "profile": "深度价值区，可重点研究加仓",
-              "price_range": "≤ 21 元",
-              "action": "深度价值区，可重点研究加仓",
-              "rationale": "TTM PE 约 14x；股息率接近/超过 5.8%"
-            },
-            {
-              "profile": "较有安全边际，适合分批买入",
-              "price_range": "21-24 元",
-              "action": "较有安全边际，适合分批买入",
-              "rationale": "PE 约 14-16x；股息率约 5.0%-5.8%"
-            },
-            {
-              "profile": "合理区，持有优于追高",
-              "price_range": "24-29 元",
-              "action": "合理区，持有优于追高",
-              "rationale": "PE 约 16-20x；股息率约 4.2%-5.0%"
-            },
-            {
-              "profile": "可考虑降低仓位或等待业绩上修",
-              "price_range": "≥ 34 元",
-              "action": "可考虑降低仓位或等待业绩上修"
-            }
-          ],
-          "scenario_valuation": [
-            {
-              "scenario": "乐观",
-              "target_price": "37.7 元",
-              "eps_growth": "4%",
-              "target_pe": "21x"
-            },
-            {
-              "scenario": "中性",
-              "target_price": "29.3 元",
-              "eps_growth": "2%",
-              "target_pe": "18x"
-            },
-            {
-              "scenario": "悲观",
-              "target_price": "20.0 元",
-              "eps_growth": "-2%",
-              "target_pe": "15x"
-            }
-          ],
-          "valuation_section": {
-            "heading": "9. 第七步：估值与安全边际",
-            "start_line": 300,
-            "end_line": 386,
-            "markdown": "## 9. 第七步：估值与安全边际\n\n### 9.1 当前估值验算\n\n| 指标 | 数值 | 计算/来源 |\n|---|---:|---|\n| 股价 | 27.19 元 | 腾讯行情 2026-07-06 |\n| 总股本 | 244.682 亿股 | 公司财报/腾讯行情 |\n| 总市值 | 6,652.91 亿元 | 股价 × 总股本，工具验算偏差 0.00% |\n| TTM EPS | 约 1.4746 元 | 2025 EPS 1.4101 + 2026Q1 0.2763 - 2025Q1 0.2117 |\n| TTM PE | 18.44x | 工具验算 |\n| 每股净资产 | 约 9.313 元 | 2026Q1 归母权益 / 总股本 |\n| PB | 2.92x | 工具验算 |\n| 2025 FCF/股 | 约 1.719 元 | 2025 估算 FCF / 总股本 |\n| P/FCF | 15.82x | 工具验算 |\n| 2025 利润归属期现金回报 | 1.21 元/股 | 2025 三季报 0.21 + 2025 年度预案 1.00 |\n| 对应股息率 | 4.45% | 1.21 / 27.19 |\n\n### 9.2 反向估值直觉\n\n27.19 元对应 18.44x TTM PE，意味着市场要求并不低。若把长江电力当作“低增长、高分红、强确定性”的资产：\n\n- 若长期 EPS 增长 0-2%，18x PE 已接近合理上沿；\n- 若长期 EPS 增长 3-4%，18x PE 可以接受，但安全边际不厚；\n- 若遇到来水、电价或利率不利，PE 回到 15-16x 并不奇怪。\n\n### 9.3 三情景估值（工具精算）\n\n假设当前 TTM EPS 1.4746 元，预测 5 年：\n\n| 情景 | EPS 年增速 | 目标 PE | 第 5 年 EPS | 目标股价 | 相对当前 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 4% | 21x | 1.79 | 37.7 元 | +38.6% |\n| 中性 | 2% | 18x | 1.63 | 29.3 元 | +7.8% |\n| 悲观 | -2% | 15x | 1.33 | 20.0 元 | -26.5% |\n\n若再加上约 4%-5% 的年度现金分红，当前价的长期总回报可以“还不错”，但主要来自分红而非估值便宜。对追求高安全边际的投资者，当前价格并不令人兴奋。\n\n### 9.4 行动价格区间\n\n| 区间 | 对应逻辑 | 动作建议 |\n|---|---|---|\n| ≤ 21 元 | TTM PE 约 14x；股息率接近/超过 5.8% | 深度价值区，可重点研究加仓 |\n| 21-24 元 | PE 约 14-16x；股息率约 5.0%-5.8% | 较有安全边际，适合分批买入 |\n| 24-29 元 | PE 约 16-20x；股息率约 4.2%-5.0% | 合理区，持有优于追高 |\n| 29-34 元 | PE 约 20-23x；股息率降至约 3.6%-4.2% | 需要更高增长兑现，否则谨慎 |\n| ≥ 34 元 | PE 超 23x；高股息吸引力下降 | 可考虑降低仓位或等待业绩上修 |\n\n**段永平式追问**：如果股市明天关闭 5 年，我愿意以 27.19 元持有吗？如果组合目标是稳健收息，可以；如果目标是高赔率增值，不够便宜。\n\n---\n\n## 10. 第八步：综合决策备忘录\n\n### 10.1 六维评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 稀缺水电现金流，需求长期稳定，资产寿命长 | 高 |\n| 护城河（巴菲特） | 流域资源、规模、调度和制度壁垒强 | 高 |\n| 管理层（段永平+巴菲特） | 央企系统治理强，分红纪律好；个人持股激励弱 | 中高 |\n| 最大风险（芒格） | 来水、电价、利率与高估值均值回归 | 中高 |\n| 文明趋势（李录） | 低碳电力与系统调节价值长期有利 | 高 |\n| 估值（巴菲特+段永平） | 合理但不便宜；更像持有价，不是重仓捡便宜价 | 中 |\n\n### 10.2 最终决策表\n\n| 投资者状态 | 建议 |\n|---|---|\n| 空仓者 | 不建议因“好公司”在当前价一次性重仓；可设 24 元以下为主要买入观察区，或用小额定投建立观察仓。 |\n| 已持仓者 | 若成本较低、目标是收息和长期稳健，可继续持有；若仓位过重且买入逻辑是“高成长”，应重新审视。 |\n| 加仓信号 | 股价跌至约 24 元以下；股息率超过 5%；来水和电价未恶化；资本开支未显著侵蚀 FCF。 |\n| 减仓/卖出信号 | PE 超过 22-23x 且利润无明显上修；电价制度持续压低回报；抽蓄/新能源投资 ROIC 低于预期；分红承诺弱化。 |\n| 论文重审信号 | 连续两个年度发电量显著低于计划；资产负债率重新上行且财务费用失控；监管改变水电收益分配机制。 |\n\n### 10.3 四位大师模拟点评\n\n> **巴菲特**：这是一条很深的护城河，但投资回报仍取决于你付出的价格。水电站不会逃走，估值却会波动。\n\n> **芒格**：别死在“好公司不会错”的叙事里。反过来想：如果未来收益很一般，原因大概率是买贵了、来水差了、利率变了。\n\n> **段永平**：这家公司大概率是“对的生意”，但“对的价格”要看股息率和长期持有的机会成本。现在不是明显便宜。\n\n> **李录**：它站在能源文明长期演进的基础设施位置上。长期存在感很强，但投资人要区分“文明需要它”和“股价一定跑赢”。\n\n---"
-          },
-          "price_status": "已提取价格计划",
-          "title": "长江电力（600900.SH）投资研究报告",
-          "report_path": "reports/长江电力/长江电力投资研究报告.md",
-          "report_link": "长江电力/长江电力投资研究报告.md"
         },
         {
           "data_cutoff": null,
@@ -19437,8 +20362,32 @@
       "data_cutoff": "2026-06-30",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "3. 强化营销内容、直播话术和投资建议的合规监控。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有观察，谨慎加仓",
+          "price_range": "28-35 港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "观察或轻仓区",
+          "price_range": "22-28 港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "需要结合 2026 中报确认整改影响"
+        },
+        {
+          "stance": "保守型",
+          "action": "可进入重点研究/小仓试错区",
+          "price_range": "低于 22 港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "对中性情景和现金垫有较好折价"
+        }
+      ],
+      "conclusion_summary": "激进型：持有观察，谨慎加仓（28-35 港元）；稳健型：观察或轻仓区（22-28 港元）；保守型：可进入重点研究/小仓试错区（低于 22 港元）",
       "buy_price": "HK$45",
       "price_plan": [
         {
@@ -19505,8 +20454,32 @@
         {
           "data_cutoff": "2026-06-30",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "3. 强化营销内容、直播话术和投资建议的合规监控。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有观察，谨慎加仓",
+              "price_range": "28-35 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "观察或轻仓区",
+              "price_range": "22-28 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "需要结合 2026 中报确认整改影响"
+            },
+            {
+              "stance": "保守型",
+              "action": "可进入重点研究/小仓试错区",
+              "price_range": "低于 22 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "对中性情景和现金垫有较好折价"
+            }
+          ],
+          "conclusion_summary": "激进型：持有观察，谨慎加仓（28-35 港元）；稳健型：观察或轻仓区（22-28 港元）；保守型：可进入重点研究/小仓试错区（低于 22 港元）",
           "buy_price": "HK$45",
           "price_plan": [
             {
@@ -19570,8 +20543,32 @@
         {
           "data_cutoff": "2026-06-30",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "3. 强化营销内容、直播话术和投资建议的合规监控。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有观察，谨慎加仓",
+              "price_range": "28-35 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "观察或轻仓区",
+              "price_range": "22-28 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "需要结合 2026 中报确认整改影响"
+            },
+            {
+              "stance": "保守型",
+              "action": "可进入重点研究/小仓试错区",
+              "price_range": "低于 22 港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true,
+              "note": "对中性情景和现金垫有较好折价"
+            }
+          ],
+          "conclusion_summary": "激进型：持有观察，谨慎加仓（28-35 港元）；稳健型：观察或轻仓区（22-28 港元）；保守型：可进入重点研究/小仓试错区（低于 22 港元）",
           "buy_price": "HK$45",
           "price_plan": [
             {
@@ -20637,8 +21634,30 @@
       "data_cutoff": "2026-05-16",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "当前判断：观望，等待更好价格",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "合理估值区间，可小仓位建仓",
+          "price_range": "120-140",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "显著低估，积极买入",
+          "price_range": "80-100",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "极端恐慌价格，重仓机会",
+          "price_range": "<80",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：合理估值区间，可小仓位建仓（120-140）；稳健型：显著低估，积极买入（80-100）；保守型：极端恐慌价格，重仓机会（<80）",
       "buy_price": "100-120",
       "price_plan": [
         {
@@ -20685,8 +21704,30 @@
         {
           "data_cutoff": "2026-05-16",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "当前判断：观望，等待更好价格",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理估值区间，可小仓位建仓",
+              "price_range": "120-140",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "显著低估，积极买入",
+              "price_range": "80-100",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "极端恐慌价格，重仓机会",
+              "price_range": "<80",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：合理估值区间，可小仓位建仓（120-140）；稳健型：显著低估，积极买入（80-100）；保守型：极端恐慌价格，重仓机会（<80）",
           "buy_price": "100-120",
           "price_plan": [
             {
@@ -20758,8 +21799,30 @@
       "data_cutoff": "2026-05-16",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "1. 当前（40港元）：进入观察名单，不急于买入",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "合理区间，可小仓位观察",
+          "price_range": "38-45港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "有吸引力，可逐步建仓",
+          "price_range": "32-38港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "安全边际充足，可重仓",
+          "price_range": "32港元以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：合理区间，可小仓位观察（38-45港元）；稳健型：有吸引力，可逐步建仓（32-38港元）；保守型：安全边际充足，可重仓（32港元以下）",
       "buy_price": "32-38港元",
       "price_plan": [
         {
@@ -20814,8 +21877,30 @@
         {
           "data_cutoff": "2026-05-16",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "1. 当前（40港元）：进入观察名单，不急于买入",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理区间，可小仓位观察",
+              "price_range": "38-45港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "有吸引力，可逐步建仓",
+              "price_range": "32-38港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "安全边际充足，可重仓",
+              "price_range": "32港元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：合理区间，可小仓位观察（38-45港元）；稳健型：有吸引力，可逐步建仓（32-38港元）；保守型：安全边际充足，可重仓（32港元以下）",
           "buy_price": "32-38港元",
           "price_plan": [
             {
@@ -22266,8 +23351,30 @@
       "data_cutoff": "2026-05-16",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "免责声明：本研究报告仅供投资研究参考，不构成任何投资建议。所有数据来源于公开信息，可能存在滞后或不准确之处。投资有风险，决策须谨慎。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观望",
+          "price_range": "~424",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "小仓位观察",
+          "price_range": "350-400",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓买入",
+          "price_range": "<300",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：观望（~424）；稳健型：小仓位观察（350-400）；保守型：重仓买入（<300）",
       "buy_price": "300-350",
       "price_plan": [
         {
@@ -22314,8 +23421,30 @@
         {
           "data_cutoff": "2026-05-16",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "免责声明：本研究报告仅供投资研究参考，不构成任何投资建议。所有数据来源于公开信息，可能存在滞后或不准确之处。投资有风险，决策须谨慎。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "观望",
+              "price_range": "~424",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "小仓位观察",
+              "price_range": "350-400",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓买入",
+              "price_range": "<300",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：观望（~424）；稳健型：小仓位观察（350-400）；保守型：重仓买入（<300）",
           "buy_price": "300-350",
           "price_plan": [
             {
@@ -22413,8 +23542,30 @@
       "data_cutoff": null,
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "本报告基于公开信息分析，不构成投资建议。所有数据来源：安踏体育2024/2025年报、港交所公告、新华网、每日经济新闻、新浪财经、Yahoo Finance、证券时报、36氪、投中网",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "小仓位试探或继续观察",
+          "price_range": "75-85",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "积极建仓",
+          "price_range": "55-65",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓机会（除非基本面恶化）",
+          "price_range": "55以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：小仓位试探或继续观察（75-85）；稳健型：积极建仓（55-65）；保守型：重仓机会（除非基本面恶化）（55以下）",
       "buy_price": "90-100+",
       "price_plan": [
         {
@@ -22461,8 +23612,30 @@
         {
           "data_cutoff": null,
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "本报告基于公开信息分析，不构成投资建议。所有数据来源：安踏体育2024/2025年报、港交所公告、新华网、每日经济新闻、新浪财经、Yahoo Finance、证券时报、36氪、投中网",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "小仓位试探或继续观察",
+              "price_range": "75-85",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "积极建仓",
+              "price_range": "55-65",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓机会（除非基本面恶化）",
+              "price_range": "55以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：小仓位试探或继续观察（75-85）；稳健型：积极建仓（55-65）；保守型：重仓机会（除非基本面恶化）（55以下）",
           "buy_price": "90-100+",
           "price_plan": [
             {
@@ -28068,8 +29241,30 @@
       "data_cutoff": "2026-06-25",
       "report_completed_at": null,
       "action": "分批买入",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 可以开始建仓，但宜分批买入。当前估值已充分反映补贴大战的负面影响，PS 1x对应的是历史最低水平。建议在HK$60-70区间分3-4批建仓，总仓位不超过组合的8-10%。核心逻辑是买入一张年收入3,649亿、拥有全球最大即时配送网络的公司，价格仅相当于1年收入",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有，不追高",
+          "price_range": "75-110",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "分批建仓（当前位置）",
+          "price_range": "55-75",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "积极买入（出现系统性恐慌时）",
+          "price_range": "<55",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有，不追高（75-110）；稳健型：分批建仓（当前位置）（55-75）；保守型：积极买入（出现系统性恐慌时）（<55）",
       "buy_price": "55-75",
       "price_plan": [
         {
@@ -28133,8 +29328,30 @@
         {
           "data_cutoff": "2026-06-25",
           "action": "分批买入",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 可以开始建仓，但宜分批买入。当前估值已充分反映补贴大战的负面影响，PS 1x对应的是历史最低水平。建议在HK$60-70区间分3-4批建仓，总仓位不超过组合的8-10%。核心逻辑是买入一张年收入3,649亿、拥有全球最大即时配送网络的公司，价格仅相当于1年收入",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有，不追高",
+              "price_range": "75-110",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "分批建仓（当前位置）",
+              "price_range": "55-75",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "积极买入（出现系统性恐慌时）",
+              "price_range": "<55",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有，不追高（75-110）；稳健型：分批建仓（当前位置）（55-75）；保守型：积极买入（出现系统性恐慌时）（<55）",
           "buy_price": "55-75",
           "price_plan": [
             {
@@ -29431,8 +30648,30 @@
       "data_cutoff": "2026-07-22",
       "report_completed_at": null,
       "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "明确结论：可开始小额分批买入 / 已持有者继续持有。 当前 HK$440.60 低于基准情景按 10% 要求回报率折现后的 HK$510.9，基准年化总回报约 15.6%；但它也接近更保守的 FCF 估值锚 HK$449.89，因此不是可以忽略风险的深度低估。当前安全边际主要来自核心盈利的低增长定价和资产负债表韧性；投资资产提供潜在缓冲，但本文没有把它作为独立价值加回。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有，不追价",
+          "price_range": "HK$484-511",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "小额分批买入或持有",
+          "price_range": "HK$448-484",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "小额分批买入",
+          "price_range": "≤ HK$448",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有，不追价（HK$484-511）；稳健型：小额分批买入或持有（HK$448-484）；保守型：小额分批买入（≤ HK$448）",
       "buy_price": "≤ HK$448",
       "price_plan": [
         {
@@ -29506,8 +30745,30 @@
         {
           "data_cutoff": "2026-07-22",
           "action": "持有",
-          "investor_stances": [],
-          "conclusion_summary": "明确结论：可开始小额分批买入 / 已持有者继续持有。 当前 HK$440.60 低于基准情景按 10% 要求回报率折现后的 HK$510.9，基准年化总回报约 15.6%；但它也接近更保守的 FCF 估值锚 HK$449.89，因此不是可以忽略风险的深度低估。当前安全边际主要来自核心盈利的低增长定价和资产负债表韧性；投资资产提供潜在缓冲，但本文没有把它作为独立价值加回。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有，不追价",
+              "price_range": "HK$484-511",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "小额分批买入或持有",
+              "price_range": "HK$448-484",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "小额分批买入",
+              "price_range": "≤ HK$448",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有，不追价（HK$484-511）；稳健型：小额分批买入或持有（HK$448-484）；保守型：小额分批买入（≤ HK$448）",
           "buy_price": "≤ HK$448",
           "price_plan": [
             {
@@ -29929,8 +31190,30 @@
         {
           "data_cutoff": "2026-04-13",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "A. 激进型投资者（可承受40%回撤）",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持仓观望（PE 16.9-20x）",
+              "price_range": "550-650港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "适度建仓（PE 13.8-16.9x）",
+              "price_range": "450-550港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "激进加仓（PE<14x）",
+              "price_range": "450港元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持仓观望（PE 16.9-20x）（550-650港元）；稳健型：适度建仓（PE 13.8-16.9x）（450-550港元）；保守型：激进加仓（PE<14x）（450港元以下）",
           "buy_price": "450-550港元",
           "price_plan": [
             {
@@ -30125,8 +31408,30 @@
         {
           "data_cutoff": "2026-04-07",
           "action": "买入",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 建议建仓。当前510港元（14x前瞻PE）是合理的买入价格。建议分3-4批在450-550港元区间逐步建仓，目标仓位5-10%（视个人风险承受能力）。不建议一次性全仓，因短期仍有波动风险",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有，不加仓",
+              "price_range": "550-700",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "逐步建仓（当前区间）",
+              "price_range": "450-550",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓买入",
+              "price_range": "<380",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有，不加仓（550-700）；稳健型：逐步建仓（当前区间）（450-550）；保守型：重仓买入（<380）",
           "buy_price": "<380",
           "price_plan": [
             {
@@ -32110,8 +33415,30 @@
       "data_cutoff": null,
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "结论：可以作为候选标的进入\"关注池\"，等待更好买入时机。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "可小仓位建底仓（5%以内）",
+          "price_range": "34-40港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "值得加仓（10%仓位）",
+          "price_range": "28-34港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓机会（15-20%仓位）",
+          "price_range": "28港元以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：可小仓位建底仓（5%以内）（34-40港元）；稳健型：值得加仓（10%仓位）（28-34港元）；保守型：重仓机会（15-20%仓位）（28港元以下）",
       "buy_price": "HK$34.9",
       "price_plan": [
         {
@@ -32148,8 +33475,30 @@
         {
           "data_cutoff": null,
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "结论：可以作为候选标的进入\"关注池\"，等待更好买入时机。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "可小仓位建底仓（5%以内）",
+              "price_range": "34-40港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "值得加仓（10%仓位）",
+              "price_range": "28-34港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓机会（15-20%仓位）",
+              "price_range": "28港元以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：可小仓位建底仓（5%以内）（34-40港元）；稳健型：值得加仓（10%仓位）（28-34港元）；保守型：重仓机会（15-20%仓位）（28港元以下）",
           "buy_price": "HK$34.9",
           "price_plan": [
             {
@@ -32249,8 +33598,30 @@
       "data_cutoff": "2026-04-09",
       "report_completed_at": null,
       "action": "减仓/卖出",
-      "investor_stances": [],
-      "conclusion_summary": "基本面 好公司，技术壁垒真实，赛道清晰",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观望，不急于建仓",
+          "price_range": "35-40",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "对应PE ~38-44x，开始分批建仓",
+          "price_range": "28-32",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "对应PE <30x，重仓机会",
+          "price_range": "<22",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：观望，不急于建仓（35-40）；稳健型：对应PE ~38-44x，开始分批建仓（28-32）；保守型：对应PE <30x，重仓机会（<22）",
       "buy_price": "28-32",
       "price_plan": [
         {
@@ -32316,8 +33687,30 @@
         {
           "data_cutoff": "2026-04-09",
           "action": "减仓/卖出",
-          "investor_stances": [],
-          "conclusion_summary": "基本面 好公司，技术壁垒真实，赛道清晰",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "观望，不急于建仓",
+              "price_range": "35-40",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "对应PE ~38-44x，开始分批建仓",
+              "price_range": "28-32",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "对应PE <30x，重仓机会",
+              "price_range": "<22",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：观望，不急于建仓（35-40）；稳健型：对应PE ~38-44x，开始分批建仓（28-32）；保守型：对应PE <30x，重仓机会（<22）",
           "buy_price": "28-32",
           "price_plan": [
             {
@@ -34340,8 +35733,30 @@
       "data_cutoff": "2026-06-23",
       "report_completed_at": null,
       "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 暂不建仓，等待回调。 Forward PE 61x买入一家工业设备公司，风险收益比极差。建议观察$700-800区间（Forward PE ~38-43x），届时安全边际开始出现。如果回调至$550以下（接近Morningstar公允价值），则是极佳建仓机会。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观望区——估值合理但不便宜",
+          "price_range": "$700-900",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "建仓区——安全边际开始出现，分批买入",
+          "price_range": "$500-700",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓区——接近Morningstar公允价值，极具吸引力",
+          "price_range": "$500以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：观望区——估值合理但不便宜（$700-900）；稳健型：建仓区——安全边际开始出现，分批买入（$500-700）；保守型：重仓区——接近Morningstar公允价值，极具吸引力（$500以下）",
       "buy_price": "$500-700",
       "price_plan": [
         {
@@ -34405,8 +35820,30 @@
         {
           "data_cutoff": "2026-06-23",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 暂不建仓，等待回调。 Forward PE 61x买入一家工业设备公司，风险收益比极差。建议观察$700-800区间（Forward PE ~38-43x），届时安全边际开始出现。如果回调至$550以下（接近Morningstar公允价值），则是极佳建仓机会。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "观望区——估值合理但不便宜",
+              "price_range": "$700-900",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "建仓区——安全边际开始出现，分批买入",
+              "price_range": "$500-700",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓区——接近Morningstar公允价值，极具吸引力",
+              "price_range": "$500以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：观望区——估值合理但不便宜（$700-900）；稳健型：建仓区——安全边际开始出现，分批买入（$500-700）；保守型：重仓区——接近Morningstar公允价值，极具吸引力（$500以下）",
           "buy_price": "$500-700",
           "price_plan": [
             {
@@ -35292,8 +36729,30 @@
       "data_cutoff": null,
       "report_completed_at": null,
       "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "注：以上为简化估算，不构成投资建议。实际回报受多种因素影响。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "当前位置——合理但不便宜，可小仓位持有",
+          "price_range": "前瞻 PE 26-32 倍",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "稳健型",
+          "action": "回调 10-15%，较好的买入机会",
+          "price_range": "前瞻 PE 22-26 倍",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "极具吸引力，应果断加仓",
+          "price_range": "前瞻 PE < 22 倍",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：当前位置——合理但不便宜，可小仓位持有（前瞻 PE 26-32 倍）；稳健型：回调 10-15%，较好的买入机会（前瞻 PE 22-26 倍）；保守型：极具吸引力，应果断加仓（前瞻 PE < 22 倍）",
       "buy_price": "前瞻 PE 22-26 倍",
       "price_plan": [
         {
@@ -35330,8 +36789,30 @@
         {
           "data_cutoff": null,
           "action": "未提取",
-          "investor_stances": [],
-          "conclusion_summary": "注：以上为简化估算，不构成投资建议。实际回报受多种因素影响。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "当前位置——合理但不便宜，可小仓位持有",
+              "price_range": "前瞻 PE 26-32 倍",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "稳健型",
+              "action": "回调 10-15%，较好的买入机会",
+              "price_range": "前瞻 PE 22-26 倍",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "极具吸引力，应果断加仓",
+              "price_range": "前瞻 PE < 22 倍",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：当前位置——合理但不便宜，可小仓位持有（前瞻 PE 26-32 倍）；稳健型：回调 10-15%，较好的买入机会（前瞻 PE 22-26 倍）；保守型：极具吸引力，应果断加仓（前瞻 PE < 22 倍）",
           "buy_price": "前瞻 PE 22-26 倍",
           "price_plan": [
             {
@@ -37778,8 +39259,30 @@
       "data_cutoff": "2026-06-23",
       "report_completed_at": null,
       "action": "分批买入",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 建议分批建仓。 当前PE 21.88x是过去10年最低区间，业务质量却是10年来最好。建议在$350-380区间建立初始仓位（30-40%目标仓位），留出子弹在$320以下加仓。不建议一次性满仓——$1,900亿CapEx的不确定性需要时间消化。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "持有区——耐心等待CapEx回报期",
+          "price_range": "$380-500",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "建仓区——分批买入，建立基本仓位",
+          "price_range": "$320-380",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "重仓区——极度低估，积极买入",
+          "price_range": "$320以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
+        }
+      ],
+      "conclusion_summary": "激进型：持有区——耐心等待CapEx回报期（$380-500）；稳健型：建仓区——分批买入，建立基本仓位（$320-380）；保守型：重仓区——极度低估，积极买入（$320以下）",
       "buy_price": "$320-380",
       "price_plan": [
         {
@@ -37848,8 +39351,30 @@
         {
           "data_cutoff": "2026-06-23",
           "action": "分批买入",
-          "investor_stances": [],
-          "conclusion_summary": "空仓者 建议分批建仓。 当前PE 21.88x是过去10年最低区间，业务质量却是10年来最好。建议在$350-380区间建立初始仓位（30-40%目标仓位），留出子弹在$320以下加仓。不建议一次性满仓——$1,900亿CapEx的不确定性需要时间消化。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "持有区——耐心等待CapEx回报期",
+              "price_range": "$380-500",
+              "source": "inferred_price_plan",
+              "buy_eligible": false
+            },
+            {
+              "stance": "稳健型",
+              "action": "建仓区——分批买入，建立基本仓位",
+              "price_range": "$320-380",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "重仓区——极度低估，积极买入",
+              "price_range": "$320以下",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：持有区——耐心等待CapEx回报期（$380-500）；稳健型：建仓区——分批买入，建立基本仓位（$320-380）；保守型：重仓区——极度低估，积极买入（$320以下）",
           "buy_price": "$320-380",
           "price_plan": [
             {
@@ -41084,8 +42609,23 @@
         {
           "data_cutoff": "2026-05-16",
           "action": "观察",
-          "investor_stances": [],
-          "conclusion_summary": "本报告基于公开信息和合理推断撰写，不构成投资建议。投资有风险，决策需谨慎。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "合理区间，可小仓位建仓",
+              "price_range": "170-200港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            },
+            {
+              "stance": "保守型",
+              "action": "有安全边际，可正常建仓",
+              "price_range": "150-170港元",
+              "source": "inferred_price_plan",
+              "buy_eligible": true
+            }
+          ],
+          "conclusion_summary": "激进型：合理区间，可小仓位建仓（170-200港元）；保守型：有安全边际，可正常建仓（150-170港元）",
           "buy_price": "200港元以上",
           "price_plan": [
             {
@@ -41499,21 +43039,21 @@
             {
               "stance": "激进型",
               "action": "当前可以1/3仓位试探",
-              "price_range": "160"
+              "price_range": "160–180"
             },
             {
               "stance": "稳健型",
               "action": "等待回调",
-              "price_range": "105"
+              "price_range": "105–130"
             },
             {
               "stance": "保守型",
               "action": "等待恐慌",
-              "price_range": "70",
+              "price_range": "70–90",
               "note": "对应市值 $1.7–2.2万亿，类似思科峰值回撤40%水平"
             }
           ],
-          "conclusion_summary": "激进型：当前可以1/3仓位试探（160）；稳健型：等待回调（105）；保守型：等待恐慌（70）",
+          "conclusion_summary": "激进型：当前可以1/3仓位试探（160–180）；稳健型：等待回调（105–130）；保守型：等待恐慌（70–90）",
           "buy_price": "$105–130",
           "price_plan": [
             {
