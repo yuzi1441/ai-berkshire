@@ -77,7 +77,7 @@ function stanceActionLabel(stance) {
   if (/持有但不加|继续持有|持有观望|持有/.test(blob) && !/买入|建仓|配置|试探|试错|小仓/.test(blob)) {
     return "持有";
   }
-  if (/强烈买入|积极买入|重点买入/.test(blob)) return "买入";
+  if (/强烈买入|积极买入|重点买入|重仓|重注/.test(blob)) return "买入";
   if (/分批买入|分批建仓|可建仓|可配置|小仓|试探|试错|可参与|开始建仓|可分批|优先买入|重仓候选|可开始/.test(blob)) {
     return "分批买入";
   }
