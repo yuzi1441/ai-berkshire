@@ -641,6 +641,20 @@ class InvestmentDashboardTests(unittest.TestCase):
 | 当前区间 | 101 – 125 元 | 29–36x | 无安全边际 |
 | 明显高估 | > 125 元 | > 36x | 超过历史高位 |
 """.splitlines()
+        price_plan = dashboard.extract_price_plan(lines, market="A股")
+        self.assertEqual(
+            [
+                (item["price_range"], item["action"])
+                for item in price_plan
+            ],
+            [
+                ("< 70 元", "需要板块级恐慌才会出现"),
+                ("70 – 87 元", "有安全边际，可分批建仓"),
+                ("87 – 101 元", "历史中位区，可开始小仓位关注"),
+                ("101 – 125 元", "无安全边际"),
+                ("> 125 元", "超过历史高位"),
+            ],
+        )
         stances = dashboard.infer_stances_from_valuation_bands(
             lines,
             market="A股",

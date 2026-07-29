@@ -1105,7 +1105,20 @@ def extract_price_plan(
         ) and not (
             any("区间" in header or "价格" in header for header in headers)
             and any(
-                any(token in header for token in ("建议", "动作", "空仓", "新资金", "适合", "逻辑"))
+                any(
+                    token in header
+                    for token in (
+                        "建议",
+                        "动作",
+                        "空仓",
+                        "新资金",
+                        "适合",
+                        "逻辑",
+                        "判断",
+                        "估值含义",
+                        "安全边际含义",
+                    )
+                )
                 for header in headers
             )
         ) and not (
@@ -1126,6 +1139,9 @@ def extract_price_plan(
             tables.append((headers, rows))
 
     for headers, rows in tables:
+        header_blob = " ".join(headers)
+        if "情景" in header_blob and "目标" in header_blob:
+            continue
         profile_index = first_header_index(
             headers,
             (
@@ -1180,6 +1196,9 @@ def extract_price_plan(
                 "行动",
                 "适合",
                 "逻辑",
+                "判断",
+                "估值含义",
+                "安全边际含义",
             ),
         )
         empty_money_index = first_header_index(
@@ -1231,7 +1250,11 @@ def extract_price_plan(
                     "",
                 )
             else:
-                price_range = clean_markdown(row[range_index])
+                price_range = _price_range_with_header_unit(
+                    clean_markdown(row[range_index]),
+                    headers[range_index],
+                    market,
+                )
             if not profile and not price_range:
                 continue
             if range_index is not None and range_index == profile_index:
@@ -1243,7 +1266,19 @@ def extract_price_plan(
                     profile = profile or action or "价格带"
             if not looks_like_price_band(price_range):
                 continue
-            if not (looks_like_action(action) or looks_like_action(profile) or looks_like_action(price_range)):
+            semantic_action_column = bool(
+                action_index is not None
+                and any(
+                    token in headers[action_index]
+                    for token in ("判断", "估值含义", "安全边际含义")
+                )
+            )
+            if not (
+                semantic_action_column
+                or looks_like_action(action)
+                or looks_like_action(profile)
+                or looks_like_action(price_range)
+            ):
                 continue
             if not looks_like_action(action) and looks_like_action(profile):
                 action = profile

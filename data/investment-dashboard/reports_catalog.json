@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-30T00:53:48+08:00",
+  "generated_at": "2026-07-30T01:19:15+08:00",
   "record_count": 1940,
   "records": [
     {
@@ -15672,7 +15672,48 @@
       ],
       "conclusion_summary": "激进型：🔴 PE红灯（~¥94B / ~¥2,800）；稳健型：✅ 合理，新增债务风险（$800M票据）（~$12B / ~$9）；保守型：⚠️ 黄灯（~$2.5B）",
       "buy_price": "US$288",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "YES — 当前最佳入场窗口",
+          "price_range": "$288",
+          "action": "✅ 绿灯"
+        },
+        {
+          "profile": "YES — 技术性回调，论点完整",
+          "price_range": "17",
+          "action": "✅ 前向PE绿灯"
+        },
+        {
+          "profile": "接近YES — 回调至520p以下入场",
+          "price_range": "2.5",
+          "action": "✅ 合理"
+        },
+        {
+          "profile": "观望 — 等Hormuz结果",
+          "price_range": "$12",
+          "action": "观望 — 等Hormuz结果"
+        },
+        {
+          "profile": "NO — 等回调至$121（PS<10x）",
+          "price_range": "$3.2",
+          "action": "⚠️ 超过绿区"
+        },
+        {
+          "profile": "NO — 等回调至PE<25x（约¥1,800）",
+          "price_range": "94",
+          "action": "🔴 PE红灯"
+        },
+        {
+          "profile": "NO — 等PE<25x（约¥7,500-8,000）",
+          "price_range": "350",
+          "action": "⚠️ 黄灯"
+        },
+        {
+          "profile": "等Q2财报（约8月）验证",
+          "price_range": "~$2.5B",
+          "action": "等Q2财报（约8月）验证"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "估值快评（观察名单全量）",
@@ -15684,7 +15725,7 @@
       "title": "瓶颈猎手日报 — 2026-06-11 午后",
       "report_path": "reports/bottleneck-map/daily/2026-06-11-pm.md",
       "report_link": "bottleneck-map/daily/2026-06-11-pm.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "待复核：未标注数据截止日"
     },
     {
@@ -16312,32 +16353,73 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "⚠️ 安全边际极低（10年25xPE退出需CAGR~46%，基本不可能）",
-          "price_range": "❌ 当前价格无安全边际；Russell纳入T-7天为技术性事件，非价值买点 元",
-          "note": "⚠️ 安全边际极低（10年25xPE退出需CAGR~46%，基本不可能）",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "🟢 6/30 Section 232报告为催化剂",
+          "price_range": "6 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "🟢 6/30 Section 232报告为催化剂；继续持有"
         },
         {
           "stance": "稳健型",
-          "action": "数据不足",
-          "price_range": "⚠️ 等Q2财报和WF6占收入比例数据 元",
-          "note": "数据不足",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "❌ 当前价格无安全边际",
+          "price_range": "7 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "❌ 当前价格无安全边际；Russell纳入T-7天为技术性事件，非价值买点"
         },
         {
           "stance": "保守型",
-          "action": "合理（H2利润率修复预期）",
-          "price_range": "🟢 小批可买；H2利润确认后加仓 元",
-          "note": "合理（H2利润率修复预期）",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "🟢 小批可买",
+          "price_range": "2 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true,
+          "note": "🟢 小批可买；H2利润确认后加仓"
         }
       ],
-      "conclusion_summary": "激进型：⚠️ 安全边际极低（10年25xPE退出需CAGR~46%，基本不可能）（❌ 当前价格无安全边际；Russell纳入T-7天为技术性事件，非价值买点 元）；稳健型：数据不足（⚠️ 等Q2财报和WF6占收入比例数据 元）；保守型：合理（H2利润率修复预期）（🟢 小批可买；H2利润确认后加仓 元）",
+      "conclusion_summary": "激进型：🟢 6/30 Section 232报告为催化剂（6 元）；稳健型：❌ 当前价格无安全边际（7 元）；保守型：🟢 小批可买（2 元）",
       "buy_price": "US$5.3",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "🟢 小批可买；H2利润确认后加仓",
+          "price_range": "2",
+          "action": "🟢 小批可买；H2利润确认后加仓"
+        },
+        {
+          "profile": "🟢 已持有；等8月H1确认EBITDA转正",
+          "price_range": "8",
+          "action": "🟢 已持有；等8月H1确认EBITDA转正"
+        },
+        {
+          "profile": "❌ 当前价格无安全边际；Russell纳入T-7天为技术性事件，非价值买点",
+          "price_range": "7",
+          "action": "❌ 当前价格无安全边际；Russell纳入T-7天为技术性事件，非价值买点"
+        },
+        {
+          "profile": "🟢 6/30 Section 232报告为催化剂；继续持有",
+          "price_range": "6",
+          "action": "🟢 6/30 Section 232报告为催化剂；继续持有"
+        },
+        {
+          "profile": "🟢 等7/28 Q2财报验证",
+          "price_range": "7",
+          "action": "🟢 等7/28 Q2财报验证"
+        },
+        {
+          "profile": "⚠️ 高估值（从$121信号点已涨23%）",
+          "price_range": ">20",
+          "action": "⚠️ 高估值（从$121信号点已涨23%）"
+        },
+        {
+          "profile": "⚠️ 等Q2财报和WF6占收入比例数据",
+          "price_range": "2",
+          "action": "数据不足"
+        },
+        {
+          "profile": "⚠️ 7/1之后评估",
+          "price_range": "7",
+          "action": "数据不足（7/1停产，短期不确定）"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "估值快评",
@@ -16349,7 +16431,7 @@
       "title": "瓶颈猎手日报 — 2026-06-22 午后",
       "report_path": "reports/bottleneck-map/daily/2026-06-22-pm.md",
       "report_link": "bottleneck-map/daily/2026-06-22-pm.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "待复核：未标注数据截止日"
     },
     {
@@ -16803,7 +16885,26 @@
       "investor_stances": [],
       "conclusion_summary": "已排除（有理由不追踪）",
       "buy_price": "US$43.3",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "①Nvidia $1500亿台湾+Constellation Campus今日（5/28）开工（AI全链瓶颈需求持续验证）；②Fastmarkets锑\"充足\"反向信号（UAMY黄灯）；③印度-美国关键矿产框架（2026-05-26，30种矿物，长期多元化路径）。所有watchlist标的评级不变",
+          "price_range": "3",
+          "action": "①Nvidia $1500亿台湾+Constellation Campus今日（5/28）开工（AI全链瓶颈需求持续验证）；②Fastmarkets锑\"充足\"反向信号（UAMY黄灯）；③印度-美国关键矿产框架（2026-05-26，30种矿物，长期多元化路径）。所有watchlist标的评级不变",
+          "rationale": "①Nvidia $1500亿台湾+Constellation Campus今日（5/28）开工（AI全链瓶颈需求持续验证）；②Fastmarkets锑\"充足\"反向信号（UAMY黄灯）；③印度-美国关键矿产框架（2026-05-26，30种矿物，长期多元化路径）。所有watchlist标的评级不变"
+        },
+        {
+          "profile": "5项确认；生成daily/2026-05-29-pm.md",
+          "price_range": "5",
+          "action": "①WF6库存耗尽窗口TODAY激活（尚无公开中断报道但进入最高风险期，Kanto Denka FY2027指引¥95B多渠道确认前向双绿灯）；②Nittobo T-glass\"无交期\"（比\"交期延长\"更严峻），花旗>25%涨价预期；③中国锑/镓/锗暂停令（2025-11-09至2026-11-27）正式补录为UAMY商业承压基础原因；④Aixtron Q2指引€110M确认；⑤InP供需缺口>70%三源核实。所有评级不变",
+          "rationale": "①WF6库存耗尽窗口TODAY激活（尚无公开中断报道但进入最高风险期，Kanto Denka FY2027指引¥95B多渠道确认前向双绿灯）；②Nittobo T-glass\"无交期\"（比\"交期延长\"更严峻），花旗>25%涨价预期；③中国锑/镓/锗暂停令（2025-11-09至2026-11-27）正式补录为UAMY商业承压基础原因；④Aixtron Q2指引€110M确认；⑤InP供需缺口>70%三源核实。所有评级不变"
+        },
+        {
+          "profile": "WF6临界窗口第2天（5/30 09:09）无实际中断；InP S级再交叉验证；NC/弹药链再确认",
+          "price_range": "6",
+          "action": "WF6临界窗口第2天（5/30 09:09）无实际中断；InP S级再交叉验证；NC/弹药链再确认",
+          "rationale": "IntelliEPI CEO Q1财报亲口确认\"InP shortage是整个AI基础设施的瓶颈\"（第三方CEO一级来源）；NATO NC缺口>50%（欧洲4,500-10,000吨/年 vs 需求>20,000吨/年）第三方再确认（强化CHG★★★★不变）；WF6临界窗口Day2无breaking news；Almonty Phase 2投票June 8（9天）；Centrus DOE续约June 30（31天）；所有S/A/B级瓶颈评级不变，所有其他标的评级不变"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "3. AXT Inc (AXTI，纳斯达克) ★★★★ ⚠️估值警告",
@@ -16815,7 +16916,7 @@
       "title": "瓶颈猎手观察名单（持续更新）",
       "report_path": "reports/bottleneck-map/watchlist.md",
       "report_link": "bottleneck-map/watchlist.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "待复核：未标注数据截止日"
     },
     {
@@ -17731,7 +17832,18 @@
       ],
       "conclusion_summary": "激进型：当前价位（100-110 元）；稳健型：安全边际较充足（70-80 元）；保守型：极端悲观（类似2023年底）（50-60 元）",
       "buy_price": "70-80 元",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "持有但控制仓位在10%以内。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势",
+          "price_range": "10",
+          "action": "持有但控制仓位在10%以内。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势"
+        },
+        {
+          "profile": "（1）欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上；（4）张和君大幅减持（>1%持股）",
+          "price_range": "1",
+          "action": "卖出信号"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -17765,7 +17877,7 @@
       "title": "德业股份（605117.SH）投资研究报告",
       "report_path": "reports/deye/deye-investment-research-20260623.md",
       "report_link": "deye/deye-investment-research-20260623.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -18287,7 +18399,18 @@
       "investor_stances": [],
       "conclusion_summary": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
       "buy_price": "5 元",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "强烈建议减仓至5%以下甚至清仓。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调",
+          "price_range": "5",
+          "action": "强烈建议减仓至5%以下甚至清仓。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调"
+        },
+        {
+          "profile": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑",
+          "price_range": "1",
+          "action": "卖出信号"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -18321,7 +18444,7 @@
       "title": "华工科技（000988.SZ）投资研究报告",
       "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
       "report_link": "hgtech/hgtech-investment-research-20260623.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -19920,7 +20043,28 @@
       ],
       "conclusion_summary": "激进型：观察区：接近中性情景公允值（约110港元）才谈得上讨论，但仍需强执行验证（110–340港元）；稳健型：价值投资者可开始研究的起点，但前提是收入维持50%+增速、监管无重大恶化（< 110港元（PS<55倍））；保守型：若基本面未崩坏而价格到此，才可能出现真正的安全边际（< 60港元（悲观情景附近））",
       "buy_price": "HK$340",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "回避区：即便乐观情景也无上行，无任何安全边际",
+          "price_range": "> 340港元",
+          "action": "回避区：即便乐观情景也无上行，无任何安全边际"
+        },
+        {
+          "profile": "观察区：接近中性情景公允值（约110港元）才谈得上讨论，但仍需强执行验证",
+          "price_range": "110–340港元",
+          "action": "观察区：接近中性情景公允值（约110港元）才谈得上讨论，但仍需强执行验证"
+        },
+        {
+          "profile": "价值投资者可开始研究的起点，但前提是收入维持50%+增速、监管无重大恶化",
+          "price_range": "< 110港元",
+          "action": "价值投资者可开始研究的起点，但前提是收入维持50%+增速、监管无重大恶化"
+        },
+        {
+          "profile": "若基本面未崩坏而价格到此，才可能出现真正的安全边际",
+          "price_range": "< 60港元",
+          "action": "若基本面未崩坏而价格到此，才可能出现真正的安全边际"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "中性",
@@ -19937,7 +20081,7 @@
       "title": "MiniMax（稀宇科技，00100.HK）投资研究报告",
       "report_path": "reports/MINIMAX/MiniMax-research-20260702.md",
       "report_link": "MINIMAX/MiniMax-research-20260702.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -20130,23 +20274,33 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "当前HK$346.60：无安全边际",
-          "price_range": "HK$346.60",
-          "source": "inferred_inline_price_actions",
-          "buy_eligible": false
+          "action": "加仓信号",
+          "price_range": "HK$120以下",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         },
         {
           "stance": "保守型",
-          "action": "概率加权直觉（主观赋权：乐观25% / 中性50% / 悲观25%）：期望值约HK$278，仍低于现价约20%",
-          "price_range": "约HK$278",
-          "source": "inferred_inline_price_actions",
-          "buy_eligible": true,
-          "note": "概率加权直觉（主观赋权：乐观25% / 中性50% / 悲观25%）：期望值约HK$278，仍低于现价约20%。即便给乐观情景35%的权重，期望值也只是勉强追平现价——在当前价格买入，赢了赚84%、输了亏79%，且中性情景都要亏42%：这不是价值投资的赔率结构。"
+          "action": "卖出信号（若未来低价买入后）",
+          "price_range": "低于50 港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         }
       ],
-      "conclusion_summary": "激进型：当前HK$346.60：无安全边际（HK$346.60）；保守型：概率加权直觉（主观赋权：乐观25% / 中性50% / 悲观25%）：期望值约HK$278，仍低于现价约20%（约HK$278）",
+      "conclusion_summary": "激进型：加仓信号（HK$120以下）；保守型：卖出信号（若未来低价买入后）（低于50 港元）",
       "buy_price": "HK$25",
-      "price_plan": [],
+      "price_plan": [
+        {
+          "profile": "Talkie在美再遭下架/联邦立法落地；B端收入连续两个报告期增速低于50%或毛利率跌破60%；闫俊杰离任或再有联创级人物出走；现金储备跌破12个月消耗量",
+          "price_range": "低于50",
+          "action": "卖出信号（若未来低价买入后）"
+        },
+        {
+          "profile": "加仓信号",
+          "price_range": "HK$120以下",
+          "action": "加仓信号"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -20171,7 +20325,7 @@
       "title": "MiniMax（稀宇科技，00100.HK）投资研究报告",
       "report_path": "reports/MINIMAX/MiniMax投资研究报告fable.md",
       "report_link": "MINIMAX/MiniMax投资研究报告fable.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -25880,21 +26034,21 @@
         }
       ],
       "conclusion_summary": "激进型：当前价格可小仓位建仓（12-15 港元）；稳健型：等待COR持续改善+保费恢复双位数增长（10-12 港元）；保守型：观望为主，等待更明确的盈利拐点（<10 港元）",
-      "buy_price": "10-12",
+      "buy_price": "10-12 港元",
       "price_plan": [
         {
           "profile": "激进型",
-          "price_range": "12-15",
+          "price_range": "12-15 港元",
           "action": "当前价格可小仓位建仓"
         },
         {
           "profile": "稳健型",
-          "price_range": "10-12",
+          "price_range": "10-12 港元",
           "action": "等待COR持续改善+保费恢复双位数增长"
         },
         {
           "profile": "保守型",
-          "price_range": "<10",
+          "price_range": "<10 港元",
           "action": "观望为主，等待更明确的盈利拐点"
         }
       ],
@@ -26384,23 +26538,23 @@
         }
       ],
       "conclusion_summary": "激进型：小仓位跟踪，等待财报验证后加减（17-18 元）；稳健型：等待回调分批（14-16 元）；保守型：仅观察，等更高股息率或估值收缩（13-14 元）",
-      "buy_price": "¥14-16",
+      "buy_price": "¥14-16 元",
       "price_plan": [
         {
           "profile": "激进型",
-          "price_range": "¥17-18",
+          "price_range": "¥17-18 元",
           "action": "小仓位跟踪，等待财报验证后加减",
           "rationale": "接受估值溢价，押注海外+特高压兑现。"
         },
         {
           "profile": "稳健型",
-          "price_range": "¥14-16",
+          "price_range": "¥14-16 元",
           "action": "等待回调分批",
           "rationale": "接近悲观/合理估值区间，安全边际更好。"
         },
         {
           "profile": "保守型",
-          "price_range": "≤¥13-14",
+          "price_range": "≤¥13-14 元",
           "action": "仅观察，等更高股息率或估值收缩",
           "rationale": "需要更明显安全边际。"
         }
@@ -31124,7 +31278,7 @@
       "price_plan": [
         {
           "profile": "激进型",
-          "price_range": "20-23",
+          "price_range": "20-23 港元",
           "action": "可小仓位建仓",
           "rationale": "RSI严重超卖+净现金占市值36%提供安全垫，赌汽车+AI催化"
         },
@@ -37098,30 +37252,41 @@
           "stance": "激进型",
           "action": "持有区，接近中性情景公允值",
           "price_range": "$95–115",
-          "note": "持有区，接近中性情景公允值",
-          "source": "inferred_valuation_bands",
+          "source": "inferred_price_plan",
           "buy_eligible": false
-        },
-        {
-          "stance": "稳健型",
-          "action": "合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动",
-          "price_range": "$75–95",
-          "note": "合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": true
         },
         {
           "stance": "保守型",
-          "action": "厚安全边际区，即使悲观情形亏损有限",
-          "price_range": "< $75（隐含PE约8x，逼近52周低点$71.94）",
-          "note": "厚安全边际区，即使悲观情形亏损有限",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动",
+          "price_range": "$75–95",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         }
       ],
-      "conclusion_summary": "激进型：持有区，接近中性情景公允值（$95–115）；稳健型：合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动（$75–95）；保守型：厚安全边际区，即使悲观情形亏损有限（< $75（隐含PE约8x，逼近52周低点$71.94））",
-      "buy_price": "US$75-95",
-      "price_plan": [],
+      "conclusion_summary": "激进型：持有区，接近中性情景公允值（$95–115）；保守型：合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动（$75–95）",
+      "buy_price": "$75–95",
+      "price_plan": [
+        {
+          "profile": "厚安全边际区，即使悲观情形亏损有限",
+          "price_range": "< $75",
+          "action": "厚安全边际区，即使悲观情形亏损有限"
+        },
+        {
+          "profile": "合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动",
+          "price_range": "$75–95",
+          "action": "合理买入区（当前$82.52在此区间），赔率偏正但需接受2–3年久期与高波动"
+        },
+        {
+          "profile": "持有区，接近中性情景公允值",
+          "price_range": "$95–115",
+          "action": "持有区，接近中性情景公允值"
+        },
+        {
+          "profile": "兑现区，除非出现回购/港股上市/利润拐点三大催化剂之一，否则应减仓",
+          "price_range": "> $130",
+          "action": "兑现区，除非出现回购/港股上市/利润拐点三大催化剂之一，否则应减仓"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -37155,7 +37320,7 @@
       "title": "拼多多（PDD Holdings, NASDAQ: PDD）投资研究报告",
       "report_path": "reports/拼多多/拼多多投资研究报告fable5.md",
       "report_link": "拼多多/拼多多投资研究报告fable5.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -39148,30 +39313,46 @@
           "stance": "激进型",
           "action": "持有观望，不适合新建仓",
           "price_range": "7.0 - 10.0 港元",
-          "note": "合理：持有观望，不适合新建仓",
-          "source": "inferred_valuation_bands",
+          "source": "inferred_price_plan",
           "buy_eligible": false
-        },
-        {
-          "stance": "稳健型",
-          "action": "如果相信AI制药趋势，可以开始分批跟踪",
-          "price_range": "5.0 - 7.0 港元",
-          "note": "合理偏低：如果相信AI制药趋势，可以开始分批跟踪",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": true
         },
         {
           "stance": "保守型",
-          "action": "积极关注，风险收益比改善",
-          "price_range": "< 5.0 港元",
-          "note": "低估区：积极关注，风险收益比改善",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "如果相信AI制药趋势，可以开始分批跟踪",
+          "price_range": "5.0 - 7.0 港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         }
       ],
-      "conclusion_summary": "激进型：持有观望，不适合新建仓（7.0 - 10.0 港元）；稳健型：如果相信AI制药趋势，可以开始分批跟踪（5.0 - 7.0 港元）；保守型：积极关注，风险收益比改善（< 5.0 港元）",
-      "buy_price": "300 元",
-      "price_plan": [],
+      "conclusion_summary": "激进型：持有观望，不适合新建仓（7.0 - 10.0 港元）；保守型：如果相信AI制药趋势，可以开始分批跟踪（5.0 - 7.0 港元）",
+      "buy_price": "7.0 - 10.0 港元",
+      "price_plan": [
+        {
+          "profile": "低估区",
+          "price_range": "< 5.0 港元",
+          "action": "积极关注，风险收益比改善"
+        },
+        {
+          "profile": "合理偏低",
+          "price_range": "5.0 - 7.0 港元",
+          "action": "如果相信AI制药趋势，可以开始分批跟踪"
+        },
+        {
+          "profile": "合理",
+          "price_range": "7.0 - 10.0 港元",
+          "action": "持有观望，不适合新建仓"
+        },
+        {
+          "profile": "偏贵",
+          "price_range": "10.0 - 13.0 港元",
+          "action": "估值偏高，谨慎"
+        },
+        {
+          "profile": "高估区",
+          "price_range": "> 13.0 港元",
+          "action": "明显高估"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "合理价格区间",
@@ -39183,7 +39364,7 @@
       "title": "亏了50亿之后的第一次盈利",
       "report_path": "reports/晶泰科技/《看懂晶泰科技》/04-风险与判断-亏了50亿之后的第一次盈利.md",
       "report_link": "晶泰科技/《看懂晶泰科技》/04-风险与判断-亏了50亿之后的第一次盈利.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "待复核：未标注数据截止日"
     },
     {
@@ -39219,26 +39400,26 @@
         }
       ],
       "conclusion_summary": "激进型：持有观望（7.0 - 10.0 港元）；稳健型：分批建仓（5.0 - 7.0 港元）；保守型：积极买入（< 5.0 港元）",
-      "buy_price": "5.0 - 7.0",
+      "buy_price": "5.0 - 7.0 港元",
       "price_plan": [
         {
           "profile": "低估区",
-          "price_range": "< 5.0",
+          "price_range": "< 5.0 港元",
           "action": "积极买入"
         },
         {
           "profile": "合理偏低",
-          "price_range": "5.0 - 7.0",
+          "price_range": "5.0 - 7.0 港元",
           "action": "分批建仓"
         },
         {
           "profile": "合理",
-          "price_range": "7.0 - 10.0",
+          "price_range": "7.0 - 10.0 港元",
           "action": "持有观望"
         },
         {
           "profile": "偏贵",
-          "price_range": "10.0 - 13.0",
+          "price_range": "10.0 - 13.0 港元",
           "action": "考虑减仓"
         }
       ],
@@ -40577,32 +40758,43 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "当前区间，安全边际一般",
-          "price_range": "11-13 元",
-          "note": "当前区间，安全边际一般",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        },
-        {
-          "stance": "稳健型",
           "action": "中性区间，适合分批建仓",
-          "price_range": "9-11 元",
-          "note": "中性区间，适合分批建仓",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": true
+          "price_range": "12.5-15 倍",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
         },
         {
           "stance": "保守型",
           "action": "安全边际充足，可考虑买入",
-          "price_range": "<9 元",
-          "note": "安全边际充足，可考虑买入",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": true
+          "price_range": "<12.5 倍",
+          "source": "inferred_price_plan",
+          "buy_eligible": false
         }
       ],
-      "conclusion_summary": "激进型：当前区间，安全边际一般（11-13 元）；稳健型：中性区间，适合分批建仓（9-11 元）；保守型：安全边际充足，可考虑买入（<9 元）",
-      "buy_price": "<9 元",
-      "price_plan": [],
+      "conclusion_summary": "激进型：中性区间，适合分批建仓（12.5-15 倍）；保守型：安全边际充足，可考虑买入（<12.5 倍）",
+      "buy_price": "12.5-15 倍",
+      "price_plan": [
+        {
+          "profile": "安全边际充足，可考虑买入",
+          "price_range": "<12.5 倍",
+          "action": "安全边际充足，可考虑买入"
+        },
+        {
+          "profile": "中性区间，适合分批建仓",
+          "price_range": "12.5-15 倍",
+          "action": "中性区间，适合分批建仓"
+        },
+        {
+          "profile": "11-13 元",
+          "price_range": "15-18 倍",
+          "action": "当前区间，安全边际一般"
+        },
+        {
+          "profile": ">13 元",
+          "price_range": ">18 倍",
+          "action": "溢价明显，不建议追"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "风险、管理层与估值判断",
@@ -40614,7 +40806,7 @@
       "title": "风险、管理层与估值判断",
       "report_path": "reports/永新股份-deepseek分析/《看懂永新股份》/04-风险与估值-买入前必须想清楚的几件事.md",
       "report_link": "永新股份-deepseek分析/《看懂永新股份》/04-风险与估值-买入前必须想清楚的几件事.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "待复核：未标注数据截止日"
     },
     {
@@ -41250,32 +41442,56 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "历史中位区，可开始小仓位关注",
-          "price_range": "87 – 101 元",
-          "note": "合理偏贵：历史中位区，可开始小仓位关注",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": true
+          "action": "无安全边际",
+          "price_range": "101 – 125 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": false,
+          "note": "无安全边际。定价已假设 2026 高增长兑现且 2027 不减速"
         },
         {
           "stance": "稳健型",
-          "action": "有安全边际，可分批建仓",
-          "price_range": "70 – 87 元",
-          "note": "有吸引力：有安全边际，可分批建仓",
-          "source": "inferred_valuation_bands",
+          "action": "历史中位区，可开始小仓位关注",
+          "price_range": "87 – 101 元",
+          "source": "inferred_price_plan",
           "buy_eligible": true
         },
         {
           "stance": "保守型",
-          "action": "需要板块级恐慌才会出现",
-          "price_range": "< 70 元",
-          "note": "明显低估：需要板块级恐慌才会出现；2026年内最低价64.98元曾触及",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "有安全边际，可分批建仓",
+          "price_range": "70 – 87 元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         }
       ],
-      "conclusion_summary": "激进型：历史中位区，可开始小仓位关注（87 – 101 元）；稳健型：有安全边际，可分批建仓（70 – 87 元）；保守型：需要板块级恐慌才会出现（< 70 元）",
-      "buy_price": "70-87 元",
-      "price_plan": [],
+      "conclusion_summary": "激进型：无安全边际（101 – 125 元）；稳健型：历史中位区，可开始小仓位关注（87 – 101 元）；保守型：有安全边际，可分批建仓（70 – 87 元）",
+      "buy_price": "70 – 87 元",
+      "price_plan": [
+        {
+          "profile": "明显低估",
+          "price_range": "< 70 元",
+          "action": "需要板块级恐慌才会出现；2026年内最低价64.98元曾触及"
+        },
+        {
+          "profile": "有吸引力",
+          "price_range": "70 – 87 元",
+          "action": "有安全边际，可分批建仓"
+        },
+        {
+          "profile": "合理偏贵",
+          "price_range": "87 – 101 元",
+          "action": "历史中位区，可开始小仓位关注"
+        },
+        {
+          "profile": "⚠️ 当前区间",
+          "price_range": "101 – 125 元",
+          "action": "无安全边际。定价已假设 2026 高增长兑现且 2027 不减速"
+        },
+        {
+          "profile": "明显高估",
+          "price_range": "> 125 元",
+          "action": "超过历史年末PE最高值"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -41300,7 +41516,7 @@
       "title": "沪电股份（002463.SZ）投资研究报告",
       "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
       "report_link": "沪电股份/沪电股份-research-20260726.md",
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -41928,7 +42144,7 @@
         }
       ],
       "conclusion_summary": "激进型：买入区间：120-145（120-145 港元）；稳健型：买入区间：100-130（100-130 港元）；保守型：暂不参与，等待IP周期风险充分释放",
-      "buy_price": "100-130",
+      "buy_price": "100-130 港元",
       "price_plan": [
         {
           "profile": "激进型",
@@ -41937,7 +42153,7 @@
         },
         {
           "profile": "稳健型",
-          "price_range": "100-130",
+          "price_range": "100-130 港元",
           "action": "观望为主，等待2026H1财报确认非LABUBU IP增长+库存改善后再介入"
         },
         {
@@ -46593,32 +46809,50 @@
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "偏贵，安全边际不足",
-          "price_range": ">22港元",
-          "note": "偏贵，安全边际不足",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
+          "action": "合理区间，可少量配置",
+          "price_range": "18-22港元",
+          "source": "inferred_price_plan",
+          "buy_eligible": true
         },
         {
           "stance": "稳健型",
           "action": "有吸引力，可适度买入",
           "price_range": "15-18港元",
-          "note": "有吸引力，可适度买入",
-          "source": "inferred_valuation_bands",
+          "source": "inferred_price_plan",
           "buy_eligible": true
         },
         {
           "stance": "保守型",
           "action": "低估区间（除非基本面恶化），积极买入",
           "price_range": "<15港元",
-          "note": "低估区间（除非基本面恶化），积极买入",
-          "source": "inferred_valuation_bands",
+          "source": "inferred_price_plan",
           "buy_eligible": true
         }
       ],
-      "conclusion_summary": "激进型：偏贵，安全边际不足（>22港元）；稳健型：有吸引力，可适度买入（15-18港元）；保守型：低估区间（除非基本面恶化），积极买入（<15港元）",
-      "buy_price": "HK$15-18",
-      "price_plan": [],
+      "conclusion_summary": "激进型：合理区间，可少量配置（18-22港元）；稳健型：有吸引力，可适度买入（15-18港元）；保守型：低估区间（除非基本面恶化），积极买入（<15港元）",
+      "buy_price": "15-18港元",
+      "price_plan": [
+        {
+          "profile": "偏贵，安全边际不足",
+          "price_range": ">22港元",
+          "action": "偏贵，安全边际不足"
+        },
+        {
+          "profile": "合理区间，可少量配置",
+          "price_range": "18-22港元",
+          "action": "合理区间，可少量配置"
+        },
+        {
+          "profile": "有吸引力，可适度买入",
+          "price_range": "15-18港元",
+          "action": "有吸引力，可适度买入"
+        },
+        {
+          "profile": "低估区间（除非基本面恶化），积极买入",
+          "price_range": "<15港元",
+          "action": "低估区间（除非基本面恶化），积极买入"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "财务估值 ★★★☆☆ 盈利稳健但自由现金流为负，估值合理偏低",
@@ -46630,7 +46864,7 @@
       "title": "华润电力（0836.HK）：投资研究最终报告",
       "report_path": "reports/港股召回池/华润电力-被排除/最终报告.md",
       "report_link": "港股召回池/华润电力-被排除/最终报告.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -47712,26 +47946,26 @@
         }
       ],
       "conclusion_summary": "激进型：小仓位观察（310-350 港元）；稳健型：分批建仓（260-310 港元）；保守型：重仓买入（<260 港元）",
-      "buy_price": "260-310",
+      "buy_price": "260-310 港元",
       "price_plan": [
         {
           "profile": "极具吸引力",
-          "price_range": "<260",
+          "price_range": "<260 港元",
           "action": "重仓买入"
         },
         {
           "profile": "有吸引力",
-          "price_range": "260-310",
+          "price_range": "260-310 港元",
           "action": "分批建仓"
         },
         {
           "profile": "合理",
-          "price_range": "310-350",
+          "price_range": "310-350 港元",
           "action": "小仓位观察"
         },
         {
           "profile": "偏贵",
-          "price_range": ">400",
+          "price_range": ">400 港元",
           "action": "不建议买入"
         }
       ],
@@ -52039,16 +52273,16 @@
         }
       ],
       "conclusion_summary": "激进型：可接受买入价（7.0-9.0 港元）；保守型：理想买入价（6.0-7.0 港元）",
-      "buy_price": "6.0-7.0",
+      "buy_price": "6.0-7.0 港元",
       "price_plan": [
         {
           "profile": "理想买入价",
-          "price_range": "6.0-7.0",
+          "price_range": "6.0-7.0 港元",
           "action": "理想买入价"
         },
         {
           "profile": "可接受买入价",
-          "price_range": "7.0-9.0",
+          "price_range": "7.0-9.0 港元",
           "action": "可接受买入价"
         }
       ],
@@ -57129,7 +57363,7 @@
         }
       ],
       "conclusion_summary": "激进型：小仓位观察，等待竞争企稳信号后加仓（75-90 港元）；稳健型：等待盈利拐点确认后再建仓（55-70 港元）；保守型：回避，等待竞争格局明朗化（<55 港元）",
-      "buy_price": "55-70",
+      "buy_price": "55-70 港元",
       "price_plan": [
         {
           "profile": "激进型",
@@ -57139,13 +57373,13 @@
         },
         {
           "profile": "稳健型",
-          "price_range": "55-70",
+          "price_range": "55-70 港元",
           "action": "等待盈利拐点确认后再建仓",
           "rationale": "等待季度盈利转正+份额企稳的双重信号"
         },
         {
           "profile": "保守型",
-          "price_range": "<55",
+          "price_range": "<55 港元",
           "action": "回避，等待竞争格局明朗化",
           "rationale": "巴菲特标准：盈利不可预测的公司不碰"
         }
@@ -57462,26 +57696,26 @@
         }
       ],
       "conclusion_summary": "激进型：持有，不追高（75-110 港元）；稳健型：分批建仓（当前位置）（55-75 港元）；保守型：积极买入（出现系统性恐慌时）（<55 港元）",
-      "buy_price": "55-75",
+      "buy_price": "55-75 港元",
       "price_plan": [
         {
           "profile": "深度低估",
-          "price_range": "<55",
+          "price_range": "<55 港元",
           "action": "积极买入（出现系统性恐慌时）"
         },
         {
           "profile": "合理低估",
-          "price_range": "55-75",
+          "price_range": "55-75 港元",
           "action": "分批建仓（当前位置）"
         },
         {
           "profile": "合理区间",
-          "price_range": "75-110",
+          "price_range": "75-110 港元",
           "action": "持有，不追高"
         },
         {
           "profile": "偏贵",
-          "price_range": ">110",
+          "price_range": ">110 港元",
           "action": "考虑减仓获利"
         }
       ],
@@ -57550,17 +57784,17 @@
         }
       ],
       "conclusion_summary": "激进型：分批建仓；稳健型：观望等待；保守型：盈利不可预测+缺乏定价权是硬伤，等待极端悲观定价（PE<8x正常化盈利）才考虑",
-      "buy_price": "60-75",
+      "buy_price": "60-75 港元",
       "price_plan": [
         {
           "profile": "激进型",
-          "price_range": "75-90",
+          "price_range": "75-90 港元",
           "action": "分批建仓",
           "rationale": "当前价格已反映大量悲观预期，1682亿现金提供安全垫，博弈补贴战结束后的利润V型反弹"
         },
         {
           "profile": "稳健型",
-          "price_range": "60-75",
+          "price_range": "60-75 港元",
           "action": "观望等待",
           "rationale": "等待竞争缓和的明确信号（如饿了么/京东退出补贴战），在基准情景25-30%安全边际处买入"
         }
@@ -59090,21 +59324,21 @@
         }
       ],
       "conclusion_summary": "激进型：当前价位开始建仓，跌至430以下加大力度（400-500 港元）；稳健型：等待回调至430-450区间建仓，或当前价位分批买入（430-480 港元）；保守型：等待极端便宜（PE<12x，~350以下）或AI格局更明朗后介入（350-400 港元）",
-      "buy_price": "430-480",
+      "buy_price": "430-480 港元",
       "price_plan": [
         {
           "profile": "激进型",
-          "price_range": "400-500",
+          "price_range": "400-500 港元",
           "action": "当前价位开始建仓，跌至430以下加大力度"
         },
         {
           "profile": "稳健型",
-          "price_range": "430-480",
+          "price_range": "430-480 港元",
           "action": "等待回调至430-450区间建仓，或当前价位分批买入"
         },
         {
           "profile": "保守型",
-          "price_range": "350-400",
+          "price_range": "350-400 港元",
           "action": "等待极端便宜（PE<12x，~350以下）或AI格局更明朗后介入"
         }
       ],
@@ -59562,7 +59796,7 @@
         },
         {
           "profile": "保守型",
-          "price_range": "420以下加仓",
+          "price_range": "420以下",
           "action": "小仓位持有"
         }
       ],
@@ -59818,7 +60052,7 @@
         }
       ],
       "conclusion_summary": "激进型：当前价位可建仓，逢回调加仓（450-500 港元）；稳健型：当前价位可建仓，分批买入（400-490 港元）；保守型：等待更大折扣再建仓（350-400 港元）",
-      "buy_price": "400-490",
+      "buy_price": "400-490 港元",
       "price_plan": [
         {
           "profile": "激进型",
@@ -59828,12 +60062,12 @@
         },
         {
           "profile": "稳健型",
-          "price_range": "400-490",
+          "price_range": "400-490 港元",
           "action": "当前价位可建仓，分批买入"
         },
         {
           "profile": "保守型",
-          "price_range": "350-400",
+          "price_range": "350-400 港元",
           "action": "等待更大折扣再建仓",
           "rationale": "等待港股系统性回调或宏观风险事件创造极端买入机会"
         }
@@ -60141,8 +60375,34 @@
         }
       ],
       "conclusion_summary": "激进型：持仓观望（PE 16.9-20x）（550-650港元）；稳健型：适度建仓（PE 13.8-16.9x）（450-550港元）；保守型：激进加仓（PE<14x）（450港元以下）",
-      "buy_price": "HK$450-550",
-      "price_plan": [],
+      "buy_price": "490 港元",
+      "price_plan": [
+        {
+          "profile": "激进加仓（PE<14x）",
+          "price_range": "490 港元",
+          "action": "激进加仓（PE<14x）"
+        },
+        {
+          "profile": "适度建仓（PE 13.8-16.9x）",
+          "price_range": "490 港元",
+          "action": "适度建仓（PE 13.8-16.9x）"
+        },
+        {
+          "profile": "持仓观望（PE 16.9-20x）",
+          "price_range": "490 港元",
+          "action": "持仓观望（PE 16.9-20x）"
+        },
+        {
+          "profile": "适度减仓（PE>20x）",
+          "price_range": "490 港元",
+          "action": "适度减仓（PE>20x）"
+        },
+        {
+          "profile": "全部减仓（PE>26x）",
+          "price_range": "490 港元",
+          "action": "全部减仓（PE>26x）"
+        }
+      ],
       "scenario_valuation": [],
       "valuation_section": {
         "heading": "4.2 三档情景估值",
@@ -60154,7 +60414,7 @@
       "title": "腾讯控股（0700.HK）深度SOTP估值分析",
       "report_path": "reports/腾讯/腾讯-valuation-20260413.md",
       "report_link": "腾讯/腾讯-valuation-20260413.md",
-      "price_status": "已提取",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
@@ -60738,36 +60998,36 @@
         }
       ],
       "conclusion_summary": "激进型：逐步建仓（当前区间）（450-550 港元）；稳健型：积极买入（380-450 港元）；保守型：重仓买入（<380 港元）",
-      "buy_price": "<380",
+      "buy_price": "<380 港元",
       "price_plan": [
         {
           "profile": "极度低估",
-          "price_range": "<380",
+          "price_range": "<380 港元",
           "action": "重仓买入"
         },
         {
           "profile": "明显低估",
-          "price_range": "380-450",
+          "price_range": "380-450 港元",
           "action": "积极买入"
         },
         {
           "profile": "合理偏低",
-          "price_range": "450-550",
+          "price_range": "450-550 港元",
           "action": "逐步建仓（当前区间）"
         },
         {
           "profile": "合理",
-          "price_range": "550-700",
+          "price_range": "550-700 港元",
           "action": "持有，不加仓"
         },
         {
           "profile": "偏贵",
-          "price_range": "700-900",
+          "price_range": "700-900 港元",
           "action": "考虑减仓"
         },
         {
           "profile": "明显高估",
-          "price_range": ">900",
+          "price_range": ">900 港元",
           "action": "卖出"
         }
       ],
