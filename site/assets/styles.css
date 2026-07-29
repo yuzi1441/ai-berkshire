@@ -888,8 +888,65 @@ tbody tr.active .valuation-chip.ready {
 }
 
 
-/* Layered investor-stance conclusions */
-.conclusion-cell { min-width: 168px; max-width: 240px; }
+/* Report-native price/action tables */
+.conclusion-cell { min-width: 240px; max-width: 340px; }
+.price-action-table {
+  overflow: hidden;
+  border: 1px solid #ddd5c8;
+  border-radius: 9px;
+  background: #fff;
+}
+.price-action-table-detail {
+  margin-top: 4px;
+}
+.price-action-row {
+  display: grid;
+  grid-template-columns: minmax(74px, 0.7fr) minmax(120px, 1.8fr);
+  align-items: stretch;
+  border-bottom: 1px solid #ebe5da;
+}
+.price-action-row:last-child { border-bottom: 0; }
+.price-action-row.current-price-row {
+  background: #e7f5ef;
+  box-shadow: inset 3px 0 0 var(--brand);
+}
+.price-action-band,
+.price-action-text {
+  padding: 5px 7px;
+  font-size: 10.5px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+.price-action-band {
+  color: var(--brand-deep);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  background: #f8f4eb;
+  border-right: 1px solid #ebe5da;
+}
+.current-price-row .price-action-band { background: #dcefe7; }
+.price-action-text {
+  color: var(--ink);
+  font-weight: 600;
+}
+.price-action-profile {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.price-action-table-detail .price-action-band,
+.price-action-table-detail .price-action-text {
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.price-action-more {
+  padding: 5px 7px;
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  text-align: center;
+  background: #fbf8f1;
+}
+
+/* Legacy layered conclusions retained for report-history rendering. */
 .stance-stack {
   display: flex;
   flex-direction: column;
@@ -1076,7 +1133,7 @@ tbody tr.active .valuation-chip.ready {
     letter-spacing: 0.04em;
   }
   .table-wrap tbody td:nth-child(4)::before { content: "实时行情"; }
-  .table-wrap tbody td:nth-child(5)::before { content: "现价建议"; }
+  .table-wrap tbody td:nth-child(5)::before { content: "现价对应动作"; }
   .table-wrap tbody td:nth-child(6)::before { content: "估值材料"; }
   .table-wrap tbody td:nth-child(7)::before { content: "研报截止"; }
   .company-cell { min-width: 0; }
@@ -1087,6 +1144,7 @@ tbody tr.active .valuation-chip.ready {
   .conclusion-cell { min-width: 0; max-width: none; }
   .stance-row { grid-template-columns: 42px minmax(0, 1fr); }
   .stance-action { font-size: 12px; }
+  .price-action-row { grid-template-columns: minmax(72px, 0.7fr) minmax(0, 1.7fr); }
   .quote-block, .buy-advice-cell { min-width: 0; max-width: none; }
   .quote-price { font-size: 16px; }
   .buy-advice-detail { font-size: 10.5px; }

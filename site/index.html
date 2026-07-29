@@ -50,20 +50,20 @@
           <button type="button" class="chip" data-market="美股">美股</button>
           <button type="button" class="chip" data-market="未识别">待识别</button>
         </div>
-        <div class="chip-row advice-filter-row" id="action-chips" role="tablist" aria-label="当前买入建议">
+        <div class="chip-row advice-filter-row" id="action-chips" role="tablist" aria-label="现价对应动作">
           <span class="filter-label">现价建议</span>
           <button type="button" class="chip active" data-action="all">全部</button>
-          <button type="button" class="chip advice-conservative" data-action="conservative">保守买入</button>
-          <button type="button" class="chip advice-balanced" data-action="balanced">稳健买入</button>
-          <button type="button" class="chip advice-aggressive" data-action="aggressive">激进买入</button>
-          <button type="button" class="chip advice-no" data-action="no">暂不买入</button>
+          <button type="button" class="chip advice-conservative" data-action="buy">可执行买入</button>
+          <button type="button" class="chip advice-balanced" data-action="hold">持有</button>
+          <button type="button" class="chip advice-aggressive" data-action="watch">观察/等待</button>
+          <button type="button" class="chip advice-no" data-action="no">回避/减仓</button>
           <button type="button" class="chip advice-unknown" data-action="unknown">待比价</button>
         </div>
         <div class="control-meta">
           <label class="sort-field">
             <span>排序</span>
             <select id="sort-select">
-              <option value="buy_advice">按买入建议</option>
+              <option value="buy_advice">按现价动作</option>
               <option value="action">按研究结论</option>
               <option value="change">按当日涨跌</option>
               <option value="cutoff">按研报截止日</option>
@@ -83,9 +83,9 @@
                 <tr>
                   <th scope="col">公司</th>
                   <th scope="col">市场/代码</th>
-                  <th scope="col">分层结论</th>
+                  <th scope="col">报告价格行动表</th>
                   <th scope="col">现价</th>
-                  <th scope="col">买入建议</th>
+                  <th scope="col">现价对应动作</th>
                   <th scope="col">估值原表</th>
                   <th scope="col">研报日</th>
                 </tr>
