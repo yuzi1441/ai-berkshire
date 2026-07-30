@@ -360,6 +360,58 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(names, ["激进型", "稳健型", "保守型"])
         self.assertTrue(any("24" in (item.get("price_range") or "") for item in stances if item["stance"] == "稳健型"))
 
+    def test_explicit_stances_do_not_turn_event_numbers_into_prices(self):
+        lines = """### 分层操作建议
+
+| 投资者类型 | 建议 | 价格/事件区间 |
+|---|---|---|
+| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元再研究 |
+| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 年收入增长 30% 时才考虑分批 |
+| 激进型 | 当作成长股 | 前提是接受 30-40% 回撤风险 |
+""".splitlines()
+        stances = dashboard.extract_investor_stances(
+            lines,
+            market="A股",
+        )
+        by = {item["stance"]: item for item in stances}
+        self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
+        self.assertEqual(by["激进型"]["price_range"], "")
+        self.assertEqual(by["稳健型"]["price_range"], "")
+        self.assertEqual(by["保守型"]["price_range"], "")
+
+    def test_scenario_rows_named_conservative_are_not_investor_stances(self):
+        lines = """### DCF 情景分析
+
+| 情景 | 铜价假设 | 合理市值 |
+|---|---:|---:|
+| 乐观 | 12000 美元/吨 | 5000 亿元 |
+| 基准 | 10000 美元/吨 | 3500 亿元 |
+| 保守 | 8000 美元/吨 | 2200 亿元 |
+""".splitlines()
+        self.assertEqual(
+            dashboard.extract_investor_stances(lines, market="港股"),
+            [],
+        )
+
+    def test_explicit_stance_price_prefers_currency_over_valuation_multiple(self):
+        lines = """### 分层操作建议
+
+| 投资者类型 | 建议 | 价格参考（韩元/股） |
+|---|---|---|
+| 激进型 | 观望 | 回调至 ₩1,100,000 以下才考虑 |
+| 稳健型 | 等待 | PB 回落至 3 倍（约 ₩700,000） |
+| 保守型 | 等周期底部 | PB 1-1.5 倍（约 ₩230,000-350,000） |
+""".splitlines()
+        stances = dashboard.extract_investor_stances(lines)
+        self.assertEqual(
+            [item["price_range"] for item in stances],
+            [
+                "₩1,100,000",
+                "约 ₩700,000",
+                "约 ₩230,000-350,000",
+            ],
+        )
+
     def test_price_first_table_becomes_stances(self):
         lines = """### 价格区间建议
 
@@ -374,6 +426,469 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
         self.assertIn("9.0", by["保守型"]["price_range"])
         self.assertIn("9.0-9.5", by["稳健型"]["price_range"])
+
+    def test_infers_layered_stances_from_unlabeled_action_bands(self):
+        """Ordinary action bands become three display layers without editing the report."""
+        lines = """### 行动价格带
+
+| 价格区间 | 动作纪律 |
+|---|---|
+| **> 55 元** | 减仓复核区 |
+| **42 – 55 元** | 观察区，暂不新建仓 |
+| **33.5 – 42 元** | 研究性小仓候选区 |
+| **28 – 33.5 元** | 主要建仓区 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines)
+        self.assertEqual(
+            [item["price_range"] for item in price_plan],
+            ["> 55 元", "42 – 55 元", "33.5 – 42 元", "28 – 33.5 元"],
+        )
+
+        stances = dashboard.extract_investor_stances(
+            lines,
+            price_plan=price_plan,
+            market="A股",
+        )
+        by = {item["stance"]: item for item in stances}
+        self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
+        self.assertEqual(by["激进型"]["price_range"], "42 – 55 元")
+        self.assertEqual(by["稳健型"]["price_range"], "33.5 – 42 元")
+        self.assertEqual(by["保守型"]["price_range"], "28 – 33.5 元")
+        self.assertFalse(by["激进型"]["buy_eligible"])
+        self.assertTrue(by["稳健型"]["buy_eligible"])
+        self.assertTrue(by["保守型"]["buy_eligible"])
+        self.assertTrue(all("减仓" not in item["action"] for item in stances))
+
+    def test_inferred_stances_use_only_the_listed_market(self):
+        lines = """### 行动价格带
+
+| 市场 | 价格区间 | 行动 |
+|---|---:|---|
+| A 股 | 不高于 3.20 元 | 可开始分批研究建仓 |
+| A 股 | 3.20-3.60 元 | 观察或极小仓 |
+| A 股 | 3.60-4.30 元 | 持有、不追价 |
+| A 股 | 高于 4.30 元 | 考虑减仓 |
+| H 股 | 不高于 2.50 港元 | 可分批建仓 |
+| H 股 | 2.50-2.90 港元 | 可小仓配置 |
+| H 股 | 2.90-3.30 港元 | 持有、等待验证 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines)
+        stances = dashboard.extract_investor_stances(
+            lines,
+            price_plan=price_plan,
+            market="A股",
+        )
+        self.assertEqual(len(stances), 3)
+        self.assertTrue(
+            all("港元" not in item["price_range"] for item in stances)
+        )
+        self.assertEqual(stances[0]["price_range"], "3.60-4.30 元")
+        self.assertEqual(stances[-1]["price_range"], "不高于 3.20 元")
+
+    def test_negative_buy_phrases_remain_watch_bands(self):
+        price_plan = [
+            {
+                "profile": "持有不加仓",
+                "price_range": "25–30 元",
+                "action": "持有不加仓",
+            },
+            {
+                "profile": "持有 / 观察",
+                "price_range": "21.84–25 元",
+                "action": "持有 / 观察",
+            },
+            {
+                "profile": "分批建仓",
+                "price_range": "17.48–21.84 元",
+                "action": "分批建仓",
+            },
+            {
+                "profile": "重仓候选",
+                "price_range": "≤ 15.29 元",
+                "action": "重仓候选",
+            },
+        ]
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="A股",
+        )
+        self.assertEqual(stances[0]["price_range"], "21.84–25 元")
+        self.assertEqual(stances[1]["price_range"], "17.48–21.84 元")
+        self.assertEqual(stances[2]["price_range"], "≤ 15.29 元")
+
+    def test_holder_reduction_row_is_not_treated_as_a_buy_band(self):
+        price_plan = [
+            {
+                "profile": "小额分批买入",
+                "price_range": "≤ HK$448",
+                "action": "小额分批买入",
+            },
+            {
+                "profile": "小额分批买入或持有",
+                "price_range": "HK$448-484",
+                "action": "小额分批买入或持有",
+            },
+            {
+                "profile": "持有，不追价",
+                "price_range": "HK$484-511",
+                "action": "持有，不追价",
+            },
+            {
+                "profile": "等待盈利上调；重仓者可逐步减仓",
+                "price_range": "HK$539-697",
+                "action": "等待盈利上调；重仓者可逐步减仓",
+            },
+        ]
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="港股",
+        )
+        self.assertEqual(stances[0]["price_range"], "HK$484-511")
+        self.assertEqual(stances[1]["price_range"], "HK$448-484")
+        self.assertEqual(stances[2]["price_range"], "≤ HK$448")
+
+    def test_inferred_layers_do_not_rewrite_the_coarse_recommendation(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "bands.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "### 行动价格带\n\n"
+                "| 价格区间 | 动作纪律 |\n|---|---|\n"
+                "| 40-50 元 | 观望，停止加仓 |\n"
+                "| 30-40 元 | 小仓研究 |\n"
+                "| 低于 30 元 | 分批建仓 |\n\n"
+                "## 最终建议\n\n当前继续观察，不追价。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(len(selected["investor_stances"]), 3)
+            self.assertEqual(selected["action"], "观察")
+
+    def test_infers_display_only_layers_from_valuation_meaning_table(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "valuation-bands.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "### 价格区间（研究结论）\n\n"
+                "| 价格区间 | 估值含义 |\n|---|---|\n"
+                "| 低于 30 元 | 较中性价值有缓冲，安全边际充分 |\n"
+                "| 30 – 36 元 | 接近历史低位，赔率明显占优 |\n"
+                "| 36 – 45 元 | 当前所在区间，估值合理偏低，但需中报验证 |\n"
+                "| 45 – 55 元 | 需要盈利上修支撑 |\n"
+                "| 高于 55 元 | 赔率转差 |\n\n"
+                "## 最终建议\n\n当前继续观察，等待中报验证。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            by = {
+                item["stance"]: item
+                for item in selected["investor_stances"]
+            }
+            self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
+            self.assertEqual(by["激进型"]["price_range"], "36 – 45 元")
+            self.assertEqual(by["稳健型"]["action"], "赔率明显占优")
+            self.assertEqual(by["保守型"]["action"], "安全边际充分")
+            self.assertTrue(
+                all(not item["buy_eligible"] for item in by.values())
+            )
+            self.assertEqual(selected["action"], "观察")
+
+    def test_extracts_empty_money_actions_from_split_holder_table(self):
+        lines = """### 行动价格带
+
+| PE(TTM) | 对应价格 | 空仓者 | 持仓者 |
+|---:|---:|---|---|
+| 14x | 80.54 元 | 深度价值区，可分批建立有意义仓位 | 可加仓 |
+| 16x | 92.04 元 | 有吸引力，可开始建仓 | 可小幅加仓 |
+| 18x | 103.55 元 | 可建立观察仓 | 持有 |
+| 20x | 115.05 元 | 观望，不追价 | 持有并等待 |
+| 24x | 138.06 元 | 回避 | 考虑减仓 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines)
+        self.assertEqual(
+            [item["price_range"] for item in price_plan],
+            ["80.54 元", "92.04 元", "103.55 元", "115.05 元", "138.06 元"],
+        )
+        stances = dashboard.extract_investor_stances(
+            lines,
+            price_plan=price_plan,
+            market="A股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "103.55 元"),
+                ("稳健型", "92.04 元"),
+                ("保守型", "80.54 元"),
+            ],
+        )
+        self.assertTrue(stances[0]["buy_eligible"])
+        self.assertTrue(stances[1]["buy_eligible"])
+        self.assertTrue(stances[2]["buy_eligible"])
+
+    def test_extracts_separate_zone_price_and_judgment_columns(self):
+        lines = """### 价格区间：什么价格值得买
+
+| 区间 | 价格 | 对应PE | 判断 |
+|---|---|---|---|
+| 明显低估 | < 70 元 | < 20x | 需要板块级恐慌才会出现 |
+| 有吸引力 | 70 – 87 元 | 20–25x | 有安全边际，可分批建仓 |
+| 合理偏贵 | 87 – 101 元 | 25–29x | 历史中位区，可开始小仓位关注 |
+| 当前区间 | 101 – 125 元 | 29–36x | 无安全边际 |
+| 明显高估 | > 125 元 | > 36x | 超过历史高位 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines, market="A股")
+        self.assertEqual(
+            [
+                (item["price_range"], item["action"])
+                for item in price_plan
+            ],
+            [
+                ("< 70 元", "需要板块级恐慌才会出现"),
+                ("70 – 87 元", "有安全边际，可分批建仓"),
+                ("87 – 101 元", "历史中位区，可开始小仓位关注"),
+                ("101 – 125 元", "无安全边际"),
+                ("> 125 元", "超过历史高位"),
+            ],
+        )
+        stances = dashboard.infer_stances_from_valuation_bands(
+            lines,
+            market="A股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "87 – 101 元"),
+                ("稳健型", "70 – 87 元"),
+                ("保守型", "< 70 元"),
+            ],
+        )
+        self.assertTrue(stances[0]["buy_eligible"])
+        self.assertTrue(stances[1]["buy_eligible"])
+        self.assertFalse(stances[2]["buy_eligible"])
+
+    def test_price_plan_uses_the_selected_listing_market_column(self):
+        lines = """## 买入价格区间
+
+| 区间 | A股价格（元） | 港股价格（估，港元） | 操作建议 |
+|---|---:|---:|---|
+| 极具吸引力 | <300 | <260 | 重仓买入 |
+| 有吸引力 | 300-350 | 260-310 | 分批建仓 |
+| 合理 | 350-400 | 310-350 | 小仓位观察 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines, market="港股")
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="港股",
+        )
+        self.assertEqual(
+            [item["price_range"] for item in stances],
+            ["310-350 港元", "260-310 港元", "<260 港元"],
+        )
+
+    def test_extracts_price_plans_from_legacy_strategy_tables(self):
+        lines = """## 投资策略
+
+| 策略 | 具体建议 |
+|---|---|
+| 建仓区间 | $170-200（当前价位附近） |
+| 加仓条件 | 股价跌至 $150 以下 |
+| 目标持有期 | 2-3 年 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines, market="美股")
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="美股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "$170-200"),
+                ("保守型", "$150 以下"),
+            ],
+        )
+
+    def test_extracts_buy_price_and_logic_columns(self):
+        lines = """## 买入纪律
+
+| 情景 | 买入价（港元） | 逻辑 |
+|---|---:|---|
+| 理想 | 6.0-7.0 | 理想买入价 |
+| 可接受 | 7.0-9.0 | 可接受买入价 |
+""".splitlines()
+        price_plan = dashboard.extract_price_plan(lines, market="港股")
+        stances = dashboard.infer_stances_from_price_plan(
+            price_plan,
+            market="港股",
+        )
+        self.assertEqual(
+            [item["price_range"] for item in stances],
+            ["7.0-9.0 港元", "6.0-7.0 港元"],
+        )
+
+    def test_valuation_band_parser_skips_scenario_target_table(self):
+        lines = """### 三情景估值
+
+| 情景 | 假设 | 目标股价 | 判断 |
+|---|---|---:|---|
+| 乐观 | 高增长 | 150 元 | 上行空间大 |
+| 中性 | 温和增长 | 100 元 | 接近合理价值 |
+| 悲观 | 利润下滑 | 50 元 | 下行风险明显 |
+""".splitlines()
+        self.assertEqual(
+            dashboard.infer_stances_from_valuation_bands(
+                lines,
+                market="A股",
+            ),
+            [],
+        )
+
+    def test_valuation_band_parser_skips_historical_metric_table(self):
+        lines = """### 估值数据
+
+| 指标 | 当前值 | 历史区间 | 判断 |
+|---|---:|---:|---|
+| PE（TTM） | ~26x | 25-200x（近5年） | 历史低位区间 |
+| PB | ~4x | 3-10x（近5年） | 中位偏低 |
+| 股息率 | 0.4% | 0.1-0.5% | 极低 |
+""".splitlines()
+        self.assertEqual(
+            dashboard.infer_stances_from_valuation_bands(
+                lines,
+                market="港股",
+            ),
+            [],
+        )
+
+    def test_valuation_zone_table_named_scenario_keeps_explicit_actions(self):
+        lines = """### 估值区间
+
+| 情景 | 对应股价（港元） | 操作建议 |
+|---|---:|---|
+| 偏高估 | 50-60 | 观望，持有者考虑减仓 |
+| 当前位置 | ~49 | 观望，不急于买入 |
+| 合理估值 | 40-50 | 可以开始建仓 |
+| 低估 | 33-40 | 积极买入 |
+| 极度低估 | <33 | 重仓买入机会 |
+""".splitlines()
+        stances = dashboard.infer_stances_from_valuation_bands(
+            lines,
+            market="港股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "40-50 港元"),
+                ("稳健型", "33-40 港元"),
+                ("保守型", "<33 港元"),
+            ],
+        )
+        self.assertTrue(all(item["buy_eligible"] for item in stances))
+
+    def test_falls_back_to_full_report_when_short_valuation_window_has_no_bands(self):
+        lines = """## 估值结论
+
+当前估值处于合理区间。
+
+## 行动价格带
+
+| 价格区间 | 建议 |
+|---|---|
+| 58–65 元 | 合理区间，继续观察 |
+| 50–58 元 | 接近底部，等待确认 |
+| <50 元 | 深度价值区，可重仓 |
+""".splitlines()
+        short_valuation_window = lines[:3]
+        stances = dashboard.extract_investor_stances(
+            lines,
+            valuation_lines=short_valuation_window,
+            market="A股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "58–65 元"),
+                ("稳健型", "50–58 元"),
+                ("保守型", "<50 元"),
+            ],
+        )
+
+    def test_infers_layers_from_inline_price_actions(self):
+        lines = """## 最终决策
+
+最终结论：买入（分批、控节奏）。116 元起可建观察仓，110 元以下积极分批，90-100 元重注。
+""".splitlines()
+        stances = dashboard.infer_stances_from_inline_price_actions(
+            lines,
+            market="A股",
+        )
+        self.assertEqual(
+            [(item["stance"], item["price_range"]) for item in stances],
+            [
+                ("激进型", "116 元起"),
+                ("稳健型", "110 元以下"),
+                ("保守型", "90-100 元"),
+            ],
+        )
+        self.assertEqual(stances[1]["action"], "110 元以下积极分批")
+        self.assertTrue(all(item["buy_eligible"] for item in stances))
+
+    def test_inline_parser_rejects_non_share_prices_and_cross_market_dollars(self):
+        lines = """## 结论
+
+那么在 H 股上、以不超过 3-4 成仓位持有。
+- 2025-05 集团增持 H 股。
+我宁愿在铜价 $9,000-10,000 时大举买入。
+股价 15-17 元可分批建仓。
+""".splitlines()
+        self.assertEqual(
+            dashboard.infer_stances_from_inline_price_actions(
+                lines,
+                market="A股",
+            ),
+            [],
+        )
+        self.assertEqual(
+            dashboard.infer_stances_from_inline_price_actions(
+                ["$105 以下分批买入，$92 以下重仓买入。"],
+                market="港股",
+            ),
+            [],
+        )
+
+    def test_inline_parser_keeps_action_after_punctuation_on_same_bullet(self):
+        lines = """## 价格纪律
+
+- 35 港元（当前价格）：观望
+- 30 港元以下：估值开始合理，具有建仓价值
+- 22 港元以下：极端悲观定价，长期投资者的理想买入区间
+""".splitlines()
+        stances = dashboard.infer_stances_from_inline_price_actions(
+            lines,
+            market="港股",
+        )
+        self.assertEqual(
+            [item["price_range"] for item in stances],
+            ["35 港元", "30 港元以下", "22 港元以下"],
+        )
+        self.assertFalse(stances[-1]["action"].startswith("-"))
+
+    def test_does_not_infer_layers_from_one_unlabeled_price_band(self):
+        stances = dashboard.infer_stances_from_price_plan(
+            [
+                {
+                    "profile": "分批建仓",
+                    "price_range": "低于 20 元",
+                    "action": "分批建仓",
+                }
+            ],
+            market="A股",
+        )
+        self.assertEqual(stances, [])
 
 
 if __name__ == "__main__":

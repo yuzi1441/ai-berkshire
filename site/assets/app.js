@@ -67,7 +67,7 @@ function stanceActionLabel(stance) {
   if (/立即卖出|大幅减仓|建议卖出|建议减仓|清仓|锁定利润/.test(blob) && !/卖出信号|加仓信号/.test(blob)) {
     return "减仓/卖出";
   }
-  if (/坚决回避|明确回避|不建议买入|不宜买入|暂不买入|远离|坚决不买|不要追|观望为主|继续观察|保持观望|建议观望|放入观察|等待更好|等待验证|观察池|回避/.test(blob)
+  if (/坚决回避|明确回避|不建议买入|不宜买入|暂不买入|远离|坚决不买|不要追|观望为主|继续观察|保持观望|建议观望|放入观察|等待更好|等待验证|观察池|无安全边际|回避/.test(blob)
       && !/买入|建仓|配置/.test(blob)) {
     return "观察";
   }
@@ -77,7 +77,7 @@ function stanceActionLabel(stance) {
   if (/持有但不加|继续持有|持有观望|持有/.test(blob) && !/买入|建仓|配置|试探|试错|小仓/.test(blob)) {
     return "持有";
   }
-  if (/强烈买入|积极买入|重点买入/.test(blob)) return "买入";
+  if (/强烈买入|积极买入|重点买入|重仓|重注/.test(blob)) return "买入";
   if (/分批买入|分批建仓|可建仓|可配置|小仓|试探|试错|可参与|开始建仓|可分批|优先买入|重仓候选|可开始/.test(blob)) {
     return "分批买入";
   }
@@ -97,38 +97,99 @@ function itemActionSet(item) {
   return set;
 }
 
-function renderStanceStack(item, { compact = true } = {}) {
-  const stances = item.investor_stances || [];
+function reportPriceRows(item) {
+  const plans = Array.isArray(item?.price_plan) ? item.price_plan : [];
+  const planRows = plans
+    .filter((row) => row && row.price_range && (row.action || row.profile))
+    .map((row, index) => ({
+      profile: row.profile || "",
+      price_range: row.price_range || "",
+      action: row.action || row.profile || "见报告",
+      note: row.rationale || "",
+      source: "price_plan",
+      index,
+    }));
+  if (planRows.length) return planRows;
+  return (item?.investor_stances || [])
+    .filter((row) => row && row.price_range)
+    .map((row, index) => ({
+      profile: "",
+      price_range: row.price_range || "",
+      action: row.action || "见报告",
+      note: row.note || "",
+      source: "stance_fallback",
+      index,
+    }));
+}
+
+function reportPriceRowText(row) {
+  const action = String(row?.action || row?.profile || "见报告");
+  const profile = String(row?.profile || "");
+  if (profile && profile !== action && !/^(价格带|区间)$/.test(profile)) {
+    return `${profile} · ${action}`;
+  }
+  return action;
+}
+
+function currentReportActionText(row) {
+  let text = reportPriceRowText(row);
+  text = text
+    .replace(/[（(][^()（）]*(?:现价|当前价|目前价格|当前位置)[^()（）]*[）)]/g, "")
+    .replace(/(^|[。；;]\s*)(?:当前|现价|目前)(?:价格|价)?\s*\d+(?:\.\d+)?\s*(?:元|港元|美元|HKD|USD)?[^。；;]*/gi, "$1")
+    .replace(/当前所在区间|当前位置|当前区间/g, "该价格档")
+    .replace(/当前价附近|现价附近/g, "该价格档附近")
+    .replace(/^[\s。；;·，,]+|[\s。；;·，,]+$/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return text || "按报告价格表执行";
+}
+
+function currentActionKind(row) {
+  const action = `${row?.profile || ""} ${row?.action || ""}`;
+  if (/回避|不买|不参与|不建议买入|不宜买入|减仓|卖出|清仓|退出|降低仓位|明显高估|赔率转差|超过历史高位/.test(action)) return "no";
+  if (/观察仓|小仓|轻仓|少量|小比例|试探|试错/.test(action)) return "trial";
+  if (
+    /空仓.{0,10}(?:等待|不追|观望)|不激活买入|不因.{0,24}买入|不.{0,12}(?:建议加仓|适合买入|急于买|追价)|观望|等待|不追|暂停|无安全边际|未到买点|持有为主|合理偏贵/.test(action)
+  ) return "watch";
+  if (/持有/.test(action)) return "hold";
+  if (/观察|关注/.test(action)) return "watch";
+  if (/买入|买点|建仓|加仓|增持|配置|介入|重仓|重注|可参与|建立.{0,8}仓位|按计划分批/.test(action)) return "buy";
+  return "unknown";
+}
+
+function renderPriceActionTable(item, quote, { compact = true } = {}) {
+  const rows = reportPriceRows(item);
   const wrap = document.createElement("div");
-  wrap.className = compact ? "stance-stack" : "stance-stack stance-stack-detail";
-  if (!stances.length) {
-    const badge = document.createElement("span");
-    badge.className = `decision ${decisionClass(item.action)}`;
-    badge.textContent = item.action || "未分类";
-    wrap.append(badge);
+  wrap.className = compact ? "price-action-table" : "price-action-table price-action-table-detail";
+  if (!rows.length) {
+    const fallback = document.createElement("span");
+    fallback.className = `decision ${decisionClass(item.action)}`;
+    fallback.textContent = item.action || "未提取价格表";
+    wrap.append(fallback);
     return wrap;
   }
-  for (const stance of stances) {
+  const matched = matchReportPriceRow(item, quote)?.row;
+  const limit = compact ? 6 : rows.length;
+  for (const rowData of rows.slice(0, limit)) {
     const row = document.createElement("div");
-    row.className = "stance-row";
-    const coarse = stanceActionLabel(stance);
-    const tag = document.createElement("span");
-    tag.className = `stance-tag ${decisionClass(coarse)}`;
-    tag.textContent = String(stance.stance || "").replace("型", "");
-    const body = document.createElement("div");
-    body.className = "stance-body";
-    const action = document.createElement("div");
-    action.className = "stance-action";
-    action.textContent = stance.action || coarse || "见报告";
-    body.append(action);
-    if (stance.price_range) {
-      const price = document.createElement("div");
-      price.className = "stance-price";
-      price.textContent = stance.price_range;
-      body.append(price);
+    row.className = "price-action-row";
+    if (matched && matched.source === rowData.source && matched.index === rowData.index) {
+      row.classList.add("current-price-row");
     }
-    row.append(tag, body);
+    const price = document.createElement("div");
+    price.className = "price-action-band";
+    price.textContent = rowData.price_range;
+    const action = document.createElement("div");
+    action.className = "price-action-text";
+    action.textContent = reportPriceRowText(rowData);
+    row.append(price, action);
     wrap.append(row);
+  }
+  if (compact && rows.length > limit) {
+    const more = document.createElement("div");
+    more.className = "price-action-more";
+    more.textContent = `另有 ${rows.length - limit} 档，点开查看`;
+    wrap.append(more);
   }
   return wrap;
 }
@@ -161,121 +222,218 @@ function tencentSymbol(ticker, market) {
 }
 
 
-function parseStanceBand(stance) {
-  const text = [stance && stance.price_range, stance && stance.action, stance && stance.note].filter(Boolean).join(" ");
-  if (!text.trim()) return null;
-  const cleaned = text.replace(/,/g, "");
+function quoteCurrencyForMarket(market) {
+  if (market === "港股") return "HKD";
+  if (market === "美股") return "USD";
+  if (market === "A股") return "CNY";
+  return null;
+}
+
+function parseReportPriceBand(row, market) {
+  const text = String(row?.price_range || "").replace(/,/g, "").trim();
+  if (!text || /(?:PE|PB|PS|倍|x\b|%)/i.test(text)) return null;
   let currency = null;
-  if (/(?:HK\$|HKD|港元)/i.test(cleaned)) currency = "HKD";
-  else if (/(?:US\$|USD|美元)/i.test(cleaned)) currency = "USD";
-  else if (/(?:₩|KRW|韩元)/i.test(cleaned)) currency = "KRW";
-  else if (/(?:CNY|人民币|元)/i.test(cleaned)) currency = "CNY";
-  // A bare number has no dependable comparison basis: it may be a multiple,
-  // a target in another market, or a value quoted in a table header.
+  if (/(?:HK\$|HKD|港元)/i.test(text)) currency = "HKD";
+  else if (/(?:US\$|USD|美元)/i.test(text)) currency = "USD";
+  else if (/(?:₩|KRW|韩元)/i.test(text)) currency = "KRW";
+  else if (/(?:CNY|人民币|元)/i.test(text)) currency = "CNY";
+  else if (/\$/.test(text)) currency = quoteCurrencyForMarket(market) || "USD";
+  else currency = quoteCurrencyForMarket(market);
   if (!currency) return null;
-  const range = cleaned.match(/(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)\s*[-—~至到]\s*(\d+(?:\.\d+)?)/);
+
+  const operator = text.match(/^\s*(不高于|不超过|低于|以下|≤|<=|<|不低于|高于|以上|≥|>=|>)/)?.[1] || "";
+  const range = text.match(/(?:HK\$|US\$|₩|\$)?\s*(\d+(?:\.\d+)?)\s*[-—–~至到]\s*(\d+(?:\.\d+)?)/);
   if (range) {
     const a = Number(range[1]);
     const b = Number(range[2]);
-    if (Number.isFinite(a) && Number.isFinite(b)) return { min: Math.min(a, b), max: Math.max(a, b), mode: "range", currency: currency };
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+    const min = Math.min(a, b);
+    const max = Math.max(a, b);
+    if (/不高于|不超过|低于|以下|≤|<=|</.test(operator)) return { min: null, max, mode: "ceiling", currency };
+    if (/不低于|高于|以上|≥|>=|>/.test(operator)) return { min, max: null, mode: "floor", currency };
+    return { min, max, mode: "range", currency };
   }
-  const ceiling = cleaned.match(/(?:不高于|不超过|低于|以下|≤|<=|<)\s*(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)/) || cleaned.match(/(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)\s*(?:元|港元|美元)?\s*(?:以下|以内)/);
-  if (ceiling) {
-    const max = Number(ceiling[1]);
-    if (Number.isFinite(max)) return { min: null, max: max, mode: "ceiling", currency: currency };
+  const number = text.match(/(?:HK\$|US\$|₩|\$)?\s*(\d+(?:\.\d+)?)/);
+  if (!number) return null;
+  const value = Number(number[1]);
+  if (!Number.isFinite(value)) return null;
+  if (/不高于|不超过|低于|以下|≤|<=|</.test(operator) || /以下|以内/.test(text)) {
+    return { min: null, max: value, mode: "ceiling", currency };
   }
-  const floor = cleaned.match(/(?:不低于|高于|≥|>=|>)\s*(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)/);
-  if (floor) {
-    const min = Number(floor[1]);
-    if (Number.isFinite(min)) return { min: min, max: null, mode: "floor", currency: currency };
+  if (/不低于|高于|以上|≥|>=|>/.test(operator) || /以上/.test(text)) {
+    return { min: value, max: null, mode: "floor", currency };
   }
-  const single = cleaned.match(/(?:HK\$|US\$|₩)?\s*(\d+(?:\.\d+)?)\s*(?:元|港元|美元)?/);
-  if (single && /买入|建仓|分批|试探|试错|重仓|配置|以下|不高于|等待|观察|考虑/.test(cleaned)) {
-    const max = Number(single[1]);
-    if (Number.isFinite(max)) return { min: null, max: max, mode: "ceiling", currency: currency };
+  return { min: value, max: value, mode: "point", currency };
+}
+
+function isHolderOnlyPriceRow(row) {
+  const profile = String(row?.profile || "");
+  return /已持有|持仓者|持有者/.test(profile) && !/空仓|新资金|未持有/.test(profile);
+}
+
+function bandContainsExactPrice(price, band) {
+  if (!Number.isFinite(price) || !band) return false;
+  if (band.mode === "range") return price >= band.min - 1e-9 && price <= band.max + 1e-9;
+  if (band.mode === "ceiling") return price <= band.max + 1e-9;
+  if (band.mode === "floor") return price >= band.min - 1e-9;
+  return false;
+}
+
+function inferredPointBand(points, index) {
+  const current = points[index]?.band?.max;
+  const previous = index > 0 ? points[index - 1]?.band?.max : null;
+  if (!Number.isFinite(current)) return null;
+  if (Number.isFinite(previous)) {
+    return {
+      min: previous,
+      max: current,
+      mode: "inferred_range",
+      currency: points[index].band.currency,
+    };
+  }
+  return {
+    min: null,
+    max: current,
+    mode: "inferred_ceiling",
+    currency: points[index].band.currency,
+  };
+}
+
+function matchReportPriceRow(item, quote) {
+  const price = Number(quote?.price);
+  if (!Number.isFinite(price)) return null;
+  const rows = reportPriceRows(item).map((row) => ({
+    row,
+    band: parseReportPriceBand(row, item?.market),
+  })).filter((entry) => entry.band && entry.band.currency === quote.currency);
+  if (!rows.length) return null;
+  const nonHolderRows = rows.filter((entry) => !isHolderOnlyPriceRow(entry.row));
+  const usable = nonHolderRows.length ? nonHolderRows : rows;
+  const actionPriority = { no: 0, watch: 1, hold: 2, trial: 3, buy: 4, unknown: 5 };
+  const exact = usable.filter((entry) => entry.band.mode !== "point" && bandContainsExactPrice(price, entry.band));
+  if (exact.length) {
+    exact.sort((a, b) => {
+      const actionDiff = actionPriority[currentActionKind(a.row)] - actionPriority[currentActionKind(b.row)];
+      if (actionDiff) return actionDiff;
+      const widthA = a.band.mode === "range" ? a.band.max - a.band.min : Number.POSITIVE_INFINITY;
+      const widthB = b.band.mode === "range" ? b.band.max - b.band.min : Number.POSITIVE_INFINITY;
+      return widthA - widthB || a.row.index - b.row.index;
+    });
+    return { ...exact[0], effectiveBand: exact[0].band, confidence: "explicit" };
+  }
+  const points = usable.filter((entry) => entry.band.mode === "point").sort((a, b) => a.band.max - b.band.max);
+  if (points.length >= 2) {
+    const nextIndex = points.findIndex((entry) => price <= entry.band.max + 1e-9);
+    if (nextIndex >= 0) {
+      return {
+        ...points[nextIndex],
+        effectiveBand: inferredPointBand(points, nextIndex),
+        confidence: "inferred_ladder",
+      };
+    }
+    const highest = points[points.length - 1];
+    if (["no", "watch", "hold"].includes(currentActionKind(highest.row))) {
+      return {
+        ...highest,
+        effectiveBand: {
+          min: highest.band.max,
+          max: null,
+          mode: "inferred_floor",
+          currency: highest.band.currency,
+        },
+        confidence: "inferred_ladder",
+      };
+    }
+  }
+  if (points.length === 1) {
+    const only = points[0];
+    const tolerance = Math.max(0.02, only.band.max * 0.001);
+    if (Math.abs(price - only.band.max) <= tolerance) {
+      return { ...only, effectiveBand: only.band, confidence: "exact_point" };
+    }
   }
   return null;
 }
 
-function priceFitsBand(price, band, quote) {
-  if (!band || !Number.isFinite(price)) return false;
-  if (band.currency !== quote?.currency) return false;
-  if (band.mode === "range") return price <= band.max + 1e-9;
-  if (band.mode === "ceiling") return price <= band.max + 1e-9;
-  if (band.mode === "floor") return band.min == null || price >= band.min - 1e-9;
-  return false;
+function formatBandNumber(value) {
+  return Number(value).toFixed(2).replace(/\.?0+$/, "");
+}
+
+function priceBandUnit(currency) {
+  return {
+    CNY: "元",
+    HKD: "港元",
+    USD: "美元",
+    KRW: "韩元",
+  }[currency] || "";
+}
+
+function effectivePriceBandText(band) {
+  if (!band) return "";
+  const unit = priceBandUnit(band.currency);
+  if (band.mode === "range" || band.mode === "inferred_range") {
+    return `${formatBandNumber(band.min)}–${formatBandNumber(band.max)} ${unit}`.trim();
+  }
+  if (band.mode === "ceiling" || band.mode === "inferred_ceiling") {
+    return `≤ ${formatBandNumber(band.max)} ${unit}`.trim();
+  }
+  if (band.mode === "floor" || band.mode === "inferred_floor") {
+    return `≥ ${formatBandNumber(band.min)} ${unit}`.trim();
+  }
+  return `${formatBandNumber(band.max)} ${unit}附近`.trim();
+}
+
+function currentActionLabel(kind) {
+  return {
+    buy: "买入区",
+    trial: "小仓试探区",
+    hold: "持有区",
+    watch: "观察区",
+    no: "回避区",
+    unknown: "无法匹配",
+  }[kind] || "待确认";
 }
 
 function buyAdviceForItem(item, quote) {
-  const price = quote && quote.price;
-  const stances = (item && item.investor_stances) || [];
-  if (!stances.length) {
-    return { key: "unknown", label: "无分层价", detail: "报告未给出激进/稳健/保守价格带", rank: 0, className: "unknown-zone" };
+  const rows = reportPriceRows(item);
+  if (!rows.length) {
+    return { key: "unknown", label: "无价格行动表", detail: "报告没有可用于现价对照的价格区间与动作", rank: 0, className: "unknown-zone" };
   }
+  const price = Number(quote?.price);
   if (!Number.isFinite(price)) {
-    return { key: "unknown", label: "待比价", detail: "等待现价后对照分层价格带", rank: 0, className: "unknown-zone" };
+    return { key: "unknown", label: "待比价", detail: "等待现价后对照报告价格表", rank: 0, className: "unknown-zone" };
   }
-  const order = ["保守型", "稳健型", "激进型"];
-  const byName = {};
-  for (const s of stances) {
-    byName[s.stance] = Object.assign({}, s, { band: parseStanceBand(s) });
-  }
-  const usable = order.map(function (name) { return byName[name]; }).filter(function (s) {
-    return s && s.band && s.band.currency === quote.currency && Number.isFinite(s.band.max != null ? s.band.max : s.band.min);
-  });
-  if (!usable.length) {
-    return { key: "unknown", label: "待比价", detail: "价格带缺少可核对的币种或单位", rank: 0, className: "unknown-zone" };
-  }
-  let matched = null;
-  for (const name of order) {
-    const s = byName[name];
-    if (s && s.band && priceFitsBand(price, s.band, quote)) {
-      matched = name;
-      break;
-    }
-  }
-  const fmt = function (n) {
-    return Number.isFinite(n) ? Number(n).toFixed(2).replace(/\.00$/, "") : "-";
-  };
-  const priceText = fmt(price);
+  const matched = matchReportPriceRow(item, quote);
+  const priceText = Number(price).toFixed(2).replace(/\.00$/, "");
   if (!matched) {
-    const tops = usable.map(function (s) { return s.band.max; }).filter(function (n) { return Number.isFinite(n); });
-    const top = tops.length ? Math.max.apply(null, tops) : null;
-    return {
-      key: "no",
-      label: "不适合买入",
-      detail: top != null ? ("现价 " + priceText + " 高于激进上限约 " + fmt(top)) : ("现价 " + priceText + " 不在任一买入带"),
-      rank: 1,
-      className: "hot-zone",
-      matched: null,
-      price: price
-    };
+    const hasComparable = rows.some((row) => parseReportPriceBand(row, item?.market)?.currency === quote.currency);
+    return hasComparable
+      ? { key: "unknown", label: "区间待确认", detail: `现价 ${priceText} 无法可靠对应报告价格档，不自动给出动作`, rank: 0, className: "unknown-zone" }
+      : { key: "unknown", label: "价格单位待确认", detail: "报告价格表与当前上市市场的币种无法可靠对应", rank: 0, className: "unknown-zone" };
   }
-  const labels = {
-    "保守型": { label: "适合保守买入", className: "buy-zone", rank: 4 },
-    "稳健型": { label: "适合稳健买入", className: "hold-zone", rank: 3 },
-    "激进型": { label: "适合激进买入", className: "watch-zone", rank: 2 }
-  };
-  const meta = labels[matched];
-  const band = byName[matched].band;
-  let bandText = "";
-  if (band.mode === "range") bandText = fmt(band.min) + "-" + fmt(band.max);
-  else if (band.mode === "ceiling") bandText = "≤" + fmt(band.max);
-  else if (band.mode === "floor") bandText = "≥" + fmt(band.min);
-  let extra = "";
-  if (matched === "保守型") extra = "（亦满足稳健/激进价格带）";
-  else if (matched === "稳健型" && byName["激进型"] && byName["激进型"].band && priceFitsBand(price, byName["激进型"].band, quote)) {
-    extra = "（亦满足激进价格带）";
-  }
+  const kind = currentActionKind(matched.row);
+  const meta = {
+    buy: { key: "buy", rank: 5, className: "buy-zone" },
+    trial: { key: "trial", rank: 4, className: "trial-zone" },
+    hold: { key: "hold", rank: 3, className: "hold-zone" },
+    watch: { key: "watch", rank: 2, className: "watch-zone" },
+    no: { key: "no", rank: 1, className: "hot-zone" },
+    unknown: { key: "unknown", rank: 0, className: "unknown-zone" },
+  }[kind];
+  const effectiveBand = matched.effectiveBand || matched.band;
+  const effectiveBandText = effectivePriceBandText(effectiveBand);
+  const cutoff = item?.data_cutoff || "未标注";
   return {
-    key: matched === "保守型" ? "conservative" : matched === "稳健型" ? "balanced" : "aggressive",
-    label: meta.label,
-    detail: "现价 " + priceText + " · " + matched.replace("型", "") + "带 " + bandText + extra,
+    key: meta.key,
+    label: currentActionLabel(kind),
+    detail: `现价 ${priceText} · 对应 ${effectiveBandText || matched.row.price_range} · 报告截止 ${cutoff}`,
+    sourceAction: currentReportActionText(matched.row),
     rank: meta.rank,
     className: meta.className,
-    matched: matched,
-    price: price,
-    band: band
+    matched: matched.row,
+    price,
+    band: effectiveBand,
+    confidence: matched.confidence,
   };
 }
 
@@ -289,7 +447,14 @@ function renderBuyAdviceCell(item, quote) {
   const sub = document.createElement("div");
   sub.className = "buy-advice-detail";
   sub.textContent = advice.detail;
-  wrap.append(badge, sub);
+  wrap.append(badge);
+  if (advice.sourceAction) {
+    const source = document.createElement("div");
+    source.className = "buy-advice-source";
+    source.textContent = `报告动作：${advice.sourceAction}`;
+    wrap.append(source);
+  }
+  wrap.append(sub);
   return wrap;
 }
 
@@ -564,7 +729,7 @@ function looksNumeric(value) {
     .replace(/[,，\s]/g, "")
     .replace(/^(HK\$|US\$|RMB|CNY|USD|HKD|约|低于|高于|≤|≥|<|>)/i, "")
     .replace(/(元|港元|美元|%|x|X|倍)$/g, "");
-  return /^-?\d+(\.\d+)?$/.test(text) || /^-?\d+(\.\d+)?[-—~至到]\d+(\.\d+)?$/.test(text);
+  return /^-?\d+(\.\d+)?$/.test(text) || /^-?\d+(\.\d+)?[-—–~至到]\d+(\.\d+)?$/.test(text);
 }
 
 function rowToneClass(cells) {
@@ -801,8 +966,8 @@ function renderSummary(visible) {
     ["当前个股", visible.length],
     ["A股", visible.filter((i) => i.market === "A股").length],
     ["港股", visible.filter((i) => i.market === "港股").length],
-    ["稳健/保守", (counts.balanced || 0) + (counts.conservative || 0)],
-    ["暂不买入", counts.no || 0],
+    ["买入/试探区", (counts.buy || 0) + (counts.trial || 0)],
+    ["观察/回避", (counts.watch || 0) + (counts.no || 0)],
   ];
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {
@@ -853,12 +1018,12 @@ function renderRows() {
     marketTd.innerHTML = `<span class="market-badge ${marketBadgeClass(item.market)}">${item.market || "未识别"}</span><div class="ticker-code">${item.ticker || "无代码"}</div>`;
     tr.append(marketTd);
 
+    const quote = state.quotes.get(item.ticker);
     const actionTd = document.createElement("td");
     actionTd.className = "conclusion-cell";
-    actionTd.append(renderStanceStack(item, { compact: true }));
+    actionTd.append(renderPriceActionTable(item, quote, { compact: true }));
     tr.append(actionTd);
 
-    const quote = state.quotes.get(item.ticker);
     const change = formatChange(quote);
     const quoteTd = document.createElement("td");
     quoteTd.className = "quote-block";
@@ -916,11 +1081,10 @@ function renderDetail() {
   const quote = state.quotes.get(item.ticker);
   const change = formatChange(quote);
   els.detailKicker.textContent = `${item.market || "未识别"} · ${item.ticker || "无代码"}`;
-  const stanceBrief = (item.investor_stances || [])
-    .map((s) => `${String(s.stance || "").replace("型", "")}${s.action ? "·" + String(s.action).slice(0, 8) : ""}`)
-    .join(" / ") || item.action || "-";
+  const priceRows = reportPriceRows(item);
+  const tableBrief = priceRows.length ? `${priceRows.length} 档报告价格` : "未提取价格表";
   const adviceBrief = buyAdviceForItem(item, quote).label;
-  els.detailSub.textContent = `${adviceBrief} · 分层 ${stanceBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
+  els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
   const sourcePath = item.valuation_section?.source_report_path || item.report_path;
   els.detailReport.href = `${repositoryUrl}${sourcePath || item.report_path}`;
 
@@ -933,27 +1097,35 @@ function renderDetail() {
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
     const advice = buyAdviceForItem(item, quote);
-    adviceCard.innerHTML = `<h3>买入建议（现价对照）</h3>`;
+    adviceCard.innerHTML = `<h3>实时价格映射</h3>`;
     const adviceBody = document.createElement("div");
     adviceBody.className = "buy-advice buy-advice-detail-card";
     const badge = document.createElement("span");
     badge.className = `zone-badge ${advice.className}`;
     badge.textContent = advice.label;
+    if (advice.sourceAction) {
+      const source = document.createElement("p");
+      source.className = "buy-advice-source";
+      source.textContent = `报告动作：${advice.sourceAction}`;
+      adviceBody.append(badge, source);
+    } else {
+      adviceBody.append(badge);
+    }
     const p = document.createElement("p");
     p.className = "source-note";
-    p.textContent = advice.detail + "。规则：现价落入最保守仍满足的风格；高于全部买入上限则不适合买入。仅供研究，不构成投资建议。";
-    adviceBody.append(badge, p);
+    p.textContent = advice.detail + "。规则：明确区间直接匹配；连续价格点按相邻边界动态组成区间；无法可靠匹配时不自动给出动作。报告动作只反映报告截止日的研究判断。仅供研究，不构成投资建议。";
+    adviceBody.append(p);
     adviceCard.append(adviceBody);
     els.detailBody.append(adviceCard);
 
     const overview = document.createElement("div");
     overview.className = "card";
-    overview.innerHTML = `<h3>分层结论（以第八步为准）</h3>`;
-    overview.append(renderStanceStack(item, { compact: false }));
-    if (!(item.investor_stances || []).length) {
+    overview.innerHTML = `<h3>报告价格行动表</h3>`;
+    overview.append(renderPriceActionTable(item, quote, { compact: false }));
+    if (!priceRows.length) {
       const fallback = document.createElement("p");
       fallback.className = "source-note";
-      fallback.textContent = `未提取到激进/稳健/保守分层，回退粗粒度结论：${item.action || "未分类"}`;
+      fallback.textContent = `未提取到价格行动表，回退粗粒度结论：${item.action || "未分类"}`;
       overview.append(fallback);
     }
     els.detailBody.append(overview);
@@ -981,7 +1153,7 @@ function renderDetail() {
 
     const tip = document.createElement("div");
     tip.className = "card";
-    tip.innerHTML = `<h3>价格信息</h3><p class="source-note">分层价格以报告第八步「最终决策与行动清单」为主；完整表格请查看「估值原文」。第七步三情景仅作辅助，不单独作为买卖结论。</p>`;
+    tip.innerHTML = `<h3>价格信息</h3><p class="source-note">“现价所在档位”表示实时价格落入报告价格表的哪一档，不代表系统重新研究后给出的今日投资建议。完整上下文请查看「估值原文」。</p>`;
     els.detailBody.append(tip);
     return;
   }
