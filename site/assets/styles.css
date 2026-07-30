@@ -217,6 +217,7 @@ h1 { margin: 1px 0 0; font-size: clamp(18px, 2.2vw, 22px); letter-spacing: -0.02
   font-weight: 700;
 }
 .chip.advice-conservative.active { background: #dff5ea; border-color: #9ed7bb; color: var(--buy); }
+.chip.advice-trial.active { background: #e8f3e7; border-color: #b8d4ae; color: #4e7444; }
 .chip.advice-balanced.active { background: #e4f4f7; border-color: #a8d5df; color: var(--installment); }
 .chip.advice-aggressive.active { background: #f8f0d8; border-color: #e2cb85; color: var(--watch); }
 .chip.advice-no.active { background: #f8e6e2; border-color: #e3b1a8; color: var(--sell); }
@@ -418,6 +419,7 @@ tbody tr:last-child td { border-bottom: none; }
   color: var(--ink-soft);
 }
 .zone-badge.buy-zone { background: #dff5ea; color: var(--buy); }
+.zone-badge.trial-zone { background: #e8f3e7; color: #4e7444; }
 .zone-badge.hold-zone { background: #f4efe4; color: var(--hold); }
 .zone-badge.watch-zone { background: #f8f0d8; color: var(--watch); }
 .zone-badge.hot-zone { background: #f8e6e2; color: var(--sell); }
@@ -1021,6 +1023,13 @@ tbody tr.active .valuation-chip.ready {
   font-size: 11px;
   line-height: 1.35;
   color: var(--ink-soft);
+  word-break: break-word;
+}
+.buy-advice-source {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ink);
   word-break: break-word;
 }
 .buy-advice-detail-card {

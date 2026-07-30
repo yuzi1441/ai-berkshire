@@ -131,12 +131,29 @@ function reportPriceRowText(row) {
   return action;
 }
 
+function currentReportActionText(row) {
+  let text = reportPriceRowText(row);
+  text = text
+    .replace(/[（(][^()（）]*(?:现价|当前价|目前价格|当前位置)[^()（）]*[）)]/g, "")
+    .replace(/(^|[。；;]\s*)(?:当前|现价|目前)(?:价格|价)?\s*\d+(?:\.\d+)?\s*(?:元|港元|美元|HKD|USD)?[^。；;]*/gi, "$1")
+    .replace(/当前所在区间|当前位置|当前区间/g, "该价格档")
+    .replace(/当前价附近|现价附近/g, "该价格档附近")
+    .replace(/^[\s。；;·，,]+|[\s。；;·，,]+$/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+  return text || "按报告价格表执行";
+}
+
 function currentActionKind(row) {
   const action = `${row?.profile || ""} ${row?.action || ""}`;
   if (/回避|不买|不参与|不建议买入|不宜买入|减仓|卖出|清仓|退出|降低仓位|明显高估|赔率转差|超过历史高位/.test(action)) return "no";
-  if (/买入|买点|建仓|加仓|增持|配置|介入|重仓|重注|试探|试错|可参与|建立.{0,8}仓位|建.{0,8}观察仓/.test(action)) return "buy";
-  if (/观望|观察|等待|不追|暂停|无安全边际|未到买点|持有为主|合理偏贵/.test(action)) return "watch";
+  if (/观察仓|小仓|轻仓|少量|小比例|试探|试错/.test(action)) return "trial";
+  if (
+    /空仓.{0,10}(?:等待|不追|观望)|不激活买入|不因.{0,24}买入|不.{0,12}(?:建议加仓|适合买入|急于买|追价)|观望|等待|不追|暂停|无安全边际|未到买点|持有为主|合理偏贵/.test(action)
+  ) return "watch";
   if (/持有/.test(action)) return "hold";
+  if (/观察|关注/.test(action)) return "watch";
+  if (/买入|买点|建仓|加仓|增持|配置|介入|重仓|重注|可参与|建立.{0,8}仓位|按计划分批/.test(action)) return "buy";
   return "unknown";
 }
 
@@ -262,6 +279,26 @@ function bandContainsExactPrice(price, band) {
   return false;
 }
 
+function inferredPointBand(points, index) {
+  const current = points[index]?.band?.max;
+  const previous = index > 0 ? points[index - 1]?.band?.max : null;
+  if (!Number.isFinite(current)) return null;
+  if (Number.isFinite(previous)) {
+    return {
+      min: previous,
+      max: current,
+      mode: "inferred_range",
+      currency: points[index].band.currency,
+    };
+  }
+  return {
+    min: null,
+    max: current,
+    mode: "inferred_ceiling",
+    currency: points[index].band.currency,
+  };
+}
+
 function matchReportPriceRow(item, quote) {
   const price = Number(quote?.price);
   if (!Number.isFinite(price)) return null;
@@ -272,7 +309,7 @@ function matchReportPriceRow(item, quote) {
   if (!rows.length) return null;
   const nonHolderRows = rows.filter((entry) => !isHolderOnlyPriceRow(entry.row));
   const usable = nonHolderRows.length ? nonHolderRows : rows;
-  const actionPriority = { no: 0, watch: 1, hold: 2, unknown: 3, buy: 4 };
+  const actionPriority = { no: 0, watch: 1, hold: 2, trial: 3, buy: 4, unknown: 5 };
   const exact = usable.filter((entry) => entry.band.mode !== "point" && bandContainsExactPrice(price, entry.band));
   if (exact.length) {
     exact.sort((a, b) => {
@@ -282,16 +319,79 @@ function matchReportPriceRow(item, quote) {
       const widthB = b.band.mode === "range" ? b.band.max - b.band.min : Number.POSITIVE_INFINITY;
       return widthA - widthB || a.row.index - b.row.index;
     });
-    return exact[0];
+    return { ...exact[0], effectiveBand: exact[0].band, confidence: "explicit" };
   }
   const points = usable.filter((entry) => entry.band.mode === "point").sort((a, b) => a.band.max - b.band.max);
-  if (points.length) {
-    const next = points.find((entry) => price <= entry.band.max + 1e-9);
-    if (next) return next;
+  if (points.length >= 2) {
+    const nextIndex = points.findIndex((entry) => price <= entry.band.max + 1e-9);
+    if (nextIndex >= 0) {
+      return {
+        ...points[nextIndex],
+        effectiveBand: inferredPointBand(points, nextIndex),
+        confidence: "inferred_ladder",
+      };
+    }
     const highest = points[points.length - 1];
-    if (["no", "watch", "hold"].includes(currentActionKind(highest.row))) return highest;
+    if (["no", "watch", "hold"].includes(currentActionKind(highest.row))) {
+      return {
+        ...highest,
+        effectiveBand: {
+          min: highest.band.max,
+          max: null,
+          mode: "inferred_floor",
+          currency: highest.band.currency,
+        },
+        confidence: "inferred_ladder",
+      };
+    }
+  }
+  if (points.length === 1) {
+    const only = points[0];
+    const tolerance = Math.max(0.02, only.band.max * 0.001);
+    if (Math.abs(price - only.band.max) <= tolerance) {
+      return { ...only, effectiveBand: only.band, confidence: "exact_point" };
+    }
   }
   return null;
+}
+
+function formatBandNumber(value) {
+  return Number(value).toFixed(2).replace(/\.?0+$/, "");
+}
+
+function priceBandUnit(currency) {
+  return {
+    CNY: "元",
+    HKD: "港元",
+    USD: "美元",
+    KRW: "韩元",
+  }[currency] || "";
+}
+
+function effectivePriceBandText(band) {
+  if (!band) return "";
+  const unit = priceBandUnit(band.currency);
+  if (band.mode === "range" || band.mode === "inferred_range") {
+    return `${formatBandNumber(band.min)}–${formatBandNumber(band.max)} ${unit}`.trim();
+  }
+  if (band.mode === "ceiling" || band.mode === "inferred_ceiling") {
+    return `≤ ${formatBandNumber(band.max)} ${unit}`.trim();
+  }
+  if (band.mode === "floor" || band.mode === "inferred_floor") {
+    return `≥ ${formatBandNumber(band.min)} ${unit}`.trim();
+  }
+  return `${formatBandNumber(band.max)} ${unit}附近`.trim();
+}
+
+function currentActionLabel(kind) {
+  return {
+    buy: "买入区",
+    trial: "小仓试探区",
+    hold: "持有区",
+    watch: "观察区",
+    no: "回避区",
+    unknown: "无法匹配",
+  }[kind] || "待确认";
 }
 
 function buyAdviceForItem(item, quote) {
@@ -308,27 +408,32 @@ function buyAdviceForItem(item, quote) {
   if (!matched) {
     const hasComparable = rows.some((row) => parseReportPriceBand(row, item?.market)?.currency === quote.currency);
     return hasComparable
-      ? { key: "no", label: "未命中报告价格档", detail: `现价 ${priceText} 未落入报告列出的任何价格区间`, rank: 1, className: "hot-zone" }
+      ? { key: "unknown", label: "区间待确认", detail: `现价 ${priceText} 无法可靠对应报告价格档，不自动给出动作`, rank: 0, className: "unknown-zone" }
       : { key: "unknown", label: "价格单位待确认", detail: "报告价格表与当前上市市场的币种无法可靠对应", rank: 0, className: "unknown-zone" };
   }
   const kind = currentActionKind(matched.row);
   const meta = {
-    buy: { key: "buy", rank: 4, className: "buy-zone" },
+    buy: { key: "buy", rank: 5, className: "buy-zone" },
+    trial: { key: "trial", rank: 4, className: "trial-zone" },
     hold: { key: "hold", rank: 3, className: "hold-zone" },
     watch: { key: "watch", rank: 2, className: "watch-zone" },
     no: { key: "no", rank: 1, className: "hot-zone" },
     unknown: { key: "unknown", rank: 0, className: "unknown-zone" },
   }[kind];
-  const action = reportPriceRowText(matched.row);
+  const effectiveBand = matched.effectiveBand || matched.band;
+  const effectiveBandText = effectivePriceBandText(effectiveBand);
+  const cutoff = item?.data_cutoff || "未标注";
   return {
     key: meta.key,
-    label: action,
-    detail: `现价 ${priceText} · 报告价格档 ${matched.row.price_range}`,
+    label: currentActionLabel(kind),
+    detail: `现价 ${priceText} · 对应 ${effectiveBandText || matched.row.price_range} · 报告截止 ${cutoff}`,
+    sourceAction: currentReportActionText(matched.row),
     rank: meta.rank,
     className: meta.className,
     matched: matched.row,
     price,
-    band: matched.band,
+    band: effectiveBand,
+    confidence: matched.confidence,
   };
 }
 
@@ -342,7 +447,14 @@ function renderBuyAdviceCell(item, quote) {
   const sub = document.createElement("div");
   sub.className = "buy-advice-detail";
   sub.textContent = advice.detail;
-  wrap.append(badge, sub);
+  wrap.append(badge);
+  if (advice.sourceAction) {
+    const source = document.createElement("div");
+    source.className = "buy-advice-source";
+    source.textContent = `报告动作：${advice.sourceAction}`;
+    wrap.append(source);
+  }
+  wrap.append(sub);
   return wrap;
 }
 
@@ -854,7 +966,7 @@ function renderSummary(visible) {
     ["当前个股", visible.length],
     ["A股", visible.filter((i) => i.market === "A股").length],
     ["港股", visible.filter((i) => i.market === "港股").length],
-    ["可执行买入", counts.buy || 0],
+    ["买入/试探区", (counts.buy || 0) + (counts.trial || 0)],
     ["观察/回避", (counts.watch || 0) + (counts.no || 0)],
   ];
   els.summary.replaceChildren();
@@ -985,16 +1097,24 @@ function renderDetail() {
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
     const advice = buyAdviceForItem(item, quote);
-    adviceCard.innerHTML = `<h3>现价对应报告动作</h3>`;
+    adviceCard.innerHTML = `<h3>实时价格映射</h3>`;
     const adviceBody = document.createElement("div");
     adviceBody.className = "buy-advice buy-advice-detail-card";
     const badge = document.createElement("span");
     badge.className = `zone-badge ${advice.className}`;
     badge.textContent = advice.label;
+    if (advice.sourceAction) {
+      const source = document.createElement("p");
+      source.className = "buy-advice-source";
+      source.textContent = `报告动作：${advice.sourceAction}`;
+      adviceBody.append(badge, source);
+    } else {
+      adviceBody.append(badge);
+    }
     const p = document.createElement("p");
     p.className = "source-note";
-    p.textContent = advice.detail + "。规则：直接匹配报告原表中的实际价格区间与动作，不再转换为激进/稳健/保守。仅供研究，不构成投资建议。";
-    adviceBody.append(badge, p);
+    p.textContent = advice.detail + "。规则：明确区间直接匹配；连续价格点按相邻边界动态组成区间；无法可靠匹配时不自动给出动作。报告动作只反映报告截止日的研究判断。仅供研究，不构成投资建议。";
+    adviceBody.append(p);
     adviceCard.append(adviceBody);
     els.detailBody.append(adviceCard);
 
@@ -1033,7 +1153,7 @@ function renderDetail() {
 
     const tip = document.createElement("div");
     tip.className = "card";
-    tip.innerHTML = `<h3>价格信息</h3><p class="source-note">现价建议直接使用报告中的价格区间与对应动作；完整上下文请查看「估值原文」。三情景目标价仅作辅助，不单独作为买卖结论。</p>`;
+    tip.innerHTML = `<h3>价格信息</h3><p class="source-note">“现价所在档位”表示实时价格落入报告价格表的哪一档，不代表系统重新研究后给出的今日投资建议。完整上下文请查看「估值原文」。</p>`;
     els.detailBody.append(tip);
     return;
   }
