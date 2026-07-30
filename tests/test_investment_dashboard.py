@@ -712,6 +712,54 @@ class InvestmentDashboardTests(unittest.TestCase):
             ],
         )
 
+    def test_does_not_treat_table_body_rows_as_price_headers(self):
+        lines = """### 最终决策
+
+| 策略 | 建议 |
+|---|---|
+| 空仓者 | 回避当前价位，等待回调至 CNY 70-80 以下 |
+| 持仓者 | 强烈建议减仓至 5% 以下甚至清仓 |
+| 卖出信号 | 净利率低于 -50%；2026 年营收低于 20 亿元 |
+""".splitlines()
+        self.assertEqual(
+            dashboard.extract_price_plan(lines, market="A股"),
+            [],
+        )
+
+    def test_buy_price_does_not_turn_position_size_into_share_price(self):
+        section = [
+            "空仓者可适度建仓（3-5%仓位），当前铜价$13,595/吨，股价若回调至15-17元再加仓更安全。"
+        ]
+        self.assertEqual(
+            dashboard.extract_buy_price(section),
+            "15-17 元",
+        )
+
+    def test_prefers_explicit_share_price_over_valuation_multiple(self):
+        lines = """### 分层操作建议
+
+| 投资者类型 | 当前建议 | 价格/条件 |
+|---|---|---|
+| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |
+| 空仓稳健型 | 观察 | 股价进入35-45元区间后再研究 |
+| 已持有者 | 降低风险 | 若PE维持50x+但业绩低于预期，应降低仓位 |
+""".splitlines()
+        self.assertEqual(
+            dashboard.extract_price_plan(lines, market="A股"),
+            [
+                {
+                    "profile": "空仓保守型",
+                    "price_range": "45-55元",
+                    "action": "等待",
+                },
+                {
+                    "profile": "空仓稳健型",
+                    "price_range": "35-45元",
+                    "action": "观察",
+                },
+            ],
+        )
+
     def test_extracts_buy_price_and_logic_columns(self):
         lines = """## 买入纪律
 

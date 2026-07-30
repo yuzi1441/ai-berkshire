@@ -439,20 +439,13 @@ def extract_buy_price(section: list[str]) -> str | None:
                 score += 20
             candidates.append((score, display))
         for match in PRICE_PATTERN.finditer(line):
+            # Do not truncate commodity quotes such as "$13,595/吨" into a
+            # synthetic "$13" stock-price anchor.
+            if re.match(r",\d{3}", line[match.end() :]):
+                continue
             display = format_price_match(match)
             if not display:
-                if "元" not in line and "港元" not in line and "HK$" not in line.upper() and "US$" not in line.upper():
-                    continue
-                value = match.group("first")
-                if match.group("second"):
-                    value = f"{value}-{match.group('second')}"
-                operator = match.group("operator") or ""
-                if "港元" in line or "HK$" in line.upper():
-                    display = f"{operator}HK${value}"
-                elif "美元" in line or "US$" in line.upper():
-                    display = f"{operator}US${value}"
-                else:
-                    display = f"{operator}{value} 元"
+                continue
             score = 0
             if re.search(r"买入|建仓", line):
                 score += 50
@@ -486,6 +479,15 @@ def markdown_cells(line: str) -> list[str] | None:
     return cells
 
 
+def is_markdown_table_separator(line: str) -> bool:
+    """Return True only for a Markdown table's header separator row."""
+    stripped = line.strip()
+    if not stripped.startswith("|") or stripped.count("|") < 2:
+        return False
+    cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+    return bool(cells) and all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells)
+
+
 def table_after_heading(
     lines: list[str], heading_terms: tuple[str, ...], required_headers: tuple[str, ...]
 ) -> tuple[list[str], list[list[str]]] | None:
@@ -495,7 +497,12 @@ def table_after_heading(
             continue
         for index in range(heading_index + 1, min(len(lines), heading_index + 36)):
             headers = markdown_cells(lines[index])
-            if not headers or not all(any(term in header for header in headers) for term in required_headers):
+            if (
+                not headers
+                or index + 1 >= len(lines)
+                or not is_markdown_table_separator(lines[index + 1])
+                or not all(any(term in header for header in headers) for term in required_headers)
+            ):
                 continue
             rows: list[list[str]] = []
             for row_index in range(index + 1, min(len(lines), index + 18)):
@@ -913,6 +920,8 @@ def find_tables_near_terms(
             headers = markdown_cells(lines[index])
             if not headers:
                 continue
+            if index + 1 >= len(lines) or not is_markdown_table_separator(lines[index + 1]):
+                continue
             if not all(any(any(term in header for term in group) for header in headers) for group in header_matchers):
                 continue
             rows: list[list[str]] = []
@@ -1097,6 +1106,11 @@ def extract_price_plan(
     for index, line in enumerate(lines):
         headers = markdown_cells(line)
         if not headers:
+            continue
+        if index + 1 >= len(lines) or not is_markdown_table_separator(lines[index + 1]):
+            # Body rows can contain words such as "价格" and "建议". Requiring
+            # a real header separator prevents position limits and signal
+            # numbers from being parsed as share-price bands.
             continue
         joined = " ".join(headers)
         if not any(
@@ -1285,14 +1299,38 @@ def extract_price_plan(
             # Prefer concise labels when the action column is already descriptive.
             if looks_like_action(action) and (not profile or profile == price_range or looks_like_price_band(profile)):
                 profile = action
-            # Keep only the leading price token when the cell contains extra conditions.
-            compact = re.search(
+            # Prefer an explicit per-share currency token over PE, position
+            # size, market-cap, or signal numbers that may appear earlier.
+            explicit_suffix = re.search(
+                r"((?:不高于|不低于|不超过|低于|高于|≤|≥|<|>|约)?\s*"
+                r"\d+(?:\.\d+)?"
+                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:港元|美元|(?<![亿万千百])元)\s*(?:以下|以上|以内|附近|起)?)",
+                price_range,
+                re.I,
+            )
+            explicit_prefix = re.search(
+                r"((?:不高于|不低于|不超过|低于|高于|≤|≥|<|>|约)?\s*"
+                r"(?:CNY|RMB|HKD|USD|HK\$|US\$|\$)\s*"
+                r"\d+(?:\.\d+)?"
+                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:以下|以上|以内|附近|起)?)",
+                price_range,
+                re.I,
+            )
+            compact = explicit_suffix or explicit_prefix or re.search(
                 r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
                 r"(?:(?:HK|US)?\$)?\s*\d+(?:\.\d+)?"
                 r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
                 r"(?:元|港元|美元)?\s*(?:以下|以上|以内|附近)?)",
                 price_range,
             )
+            if not (explicit_suffix or explicit_prefix) and re.search(
+                r"亿元|万元|千元|百元|PE|PB|PS|倍|x\b|%",
+                price_range,
+                re.I,
+            ):
+                continue
             if compact and (
                 range_index is None
                 or len(price_range) > len(compact.group(1)) + 2
@@ -1917,6 +1955,14 @@ def _price_range_with_header_unit(
     # market supplies the unit, but valuation multiples/percentages must stay
     # display-only rather than masquerade as share prices.
     if re.search(r"PE|PB|PS|倍|x\b|%", price, re.I):
+        return price
+    if not re.fullmatch(
+        r"(?:不高于|不低于|不超过|低于|高于|≤|≥|<|>|约)?\s*"
+        r"\d+(?:\.\d+)?"
+        r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+        r"(?:以下|以上|以内|附近|起)?",
+        price,
+    ):
         return price
     if market == "港股":
         return f"{price} 港元"
