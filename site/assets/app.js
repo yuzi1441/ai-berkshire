@@ -146,14 +146,14 @@ function currentReportActionText(row) {
 
 function currentActionKind(row) {
   const action = `${row?.profile || ""} ${row?.action || ""}`;
-  if (/回避|不买|不参与|不建议买入|不宜买入|减仓|卖出|清仓|退出|降低仓位|明显高估|赔率转差|超过历史高位/.test(action)) return "no";
+  if (/回避|不买|不参与|不建议买入|不宜买入|减仓|卖出|清仓|退出|降低仓位|明显高估|赔率转差|超过历史高位|生意质量\s*差/.test(action)) return "no";
   if (/观察仓|小仓|轻仓|少量|小比例|试探|试错/.test(action)) return "trial";
   if (
-    /空仓.{0,10}(?:等待|不追|观望)|不激活买入|不因.{0,24}买入|不.{0,12}(?:建议加仓|适合买入|急于买|追价)|观望|等待|不追|暂停|无安全边际|未到买点|持有为主|合理偏贵/.test(action)
+    /空仓.{0,10}(?:等待|不追|观望)|不激活买入|不因.{0,24}买入|不.{0,12}(?:建议加仓|适合买入|急于买|追价)|观望|等待|不追|暂停|无(?:明显)?安全边际|未到买点|持有为主|合理偏贵|明显偏贵|需(?:要)?[^，。；]{0,16}(?:验证|兑现)|等(?:待)?估值消化|预期落空|风险收益比一般|估值无优势|溢价.{0,10}充分反映|非好信号/.test(action)
   ) return "watch";
   if (/持有/.test(action)) return "hold";
   if (/观察|关注/.test(action)) return "watch";
-  if (/买入|买点|建仓|加仓|增持|配置|介入|重仓|重注|可参与|建立.{0,8}仓位|按计划分批/.test(action)) return "buy";
+  if (/买入|买点|建仓|加仓|增持|配置|介入|重仓|重注|可参与|建立.{0,8}仓位|按计划分批|赔率明显占优|安全边际充分|低估区间/.test(action)) return "buy";
   return "unknown";
 }
 
@@ -390,36 +390,154 @@ function currentActionLabel(kind) {
     hold: "持有区",
     watch: "观察区",
     no: "回避区",
-    unknown: "无法匹配",
+    unknown: "无法归类",
   }[kind] || "待确认";
 }
 
-function buyAdviceForItem(item, quote) {
-  const rows = reportPriceRows(item);
-  if (!rows.length) {
-    return { key: "unknown", label: "无价格行动表", detail: "报告没有可用于现价对照的价格区间与动作", rank: 0, className: "unknown-zone" };
-  }
-  const price = Number(quote?.price);
-  if (!Number.isFinite(price)) {
-    return { key: "unknown", label: "待比价", detail: "等待现价后对照报告价格表", rank: 0, className: "unknown-zone" };
-  }
-  const matched = matchReportPriceRow(item, quote);
-  const priceText = Number(price).toFixed(2).replace(/\.00$/, "");
-  if (!matched) {
-    const hasComparable = rows.some((row) => parseReportPriceBand(row, item?.market)?.currency === quote.currency);
-    return hasComparable
-      ? { key: "unknown", label: "区间待确认", detail: `现价 ${priceText} 无法可靠对应报告价格档，不自动给出动作`, rank: 0, className: "unknown-zone" }
-      : { key: "unknown", label: "价格单位待确认", detail: "报告价格表与当前上市市场的币种无法可靠对应", rank: 0, className: "unknown-zone" };
-  }
-  const kind = currentActionKind(matched.row);
-  const meta = {
+function actionMeta(kind) {
+  return {
     buy: { key: "buy", rank: 5, className: "buy-zone" },
     trial: { key: "trial", rank: 4, className: "trial-zone" },
     hold: { key: "hold", rank: 3, className: "hold-zone" },
     watch: { key: "watch", rank: 2, className: "watch-zone" },
     no: { key: "no", rank: 1, className: "hot-zone" },
     unknown: { key: "unknown", rank: 0, className: "unknown-zone" },
-  }[kind];
+  }[kind] || { key: "unknown", rank: 0, className: "unknown-zone" };
+}
+
+function reportFallbackKind(item) {
+  const action = String(item?.action || "").trim();
+  const recommendation = `${item?.recommendation || ""} ${item?.conclusion_summary || ""} ${item?.valuation_section?.heading || ""}`;
+  if (action === "买入") return "buy";
+  if (action === "分批买入") {
+    return /观察仓|小仓|轻仓|少量|小比例|试探|试错|3\s*[-–—~至]\s*5\s*%/.test(recommendation)
+      ? "trial"
+      : "buy";
+  }
+  if (action === "持有") return "hold";
+  if (action === "减仓/卖出") return "no";
+  if (action === "观察") {
+    const inferred = currentActionKind({ action: recommendation });
+    if (["no", "trial", "hold"].includes(inferred)) return inferred;
+    return "watch";
+  }
+  if (/性价比极高/.test(recommendation)) return "buy";
+  if (/估值有吸引力|具有吸引力/.test(recommendation)) return "trial";
+  return currentActionKind({ action: recommendation });
+}
+
+function recentUsableHistoryDecision(item) {
+  const usable = (item?.report_history || []).filter((entry) => {
+    const action = String(entry?.action || "").trim();
+    return action && action !== "未提取";
+  });
+  return usable.find((entry) => /最终报告/.test(String(entry?.report_path || ""))) || usable[0] || null;
+}
+
+function compactReportConclusion(item) {
+  const action = String(item?.action || "").trim();
+  const recommendation = String(item?.recommendation || item?.conclusion_summary || "").trim();
+  const heading = String(item?.valuation_section?.heading || "").trim();
+  const recommendationIsUseful = recommendation
+    && recommendation !== action
+    && !/免责声明|不构成.{0,12}建议|投资研究最终报告|财务估值分析$|研究报告$/.test(recommendation);
+  if (action && action !== "未提取" && !recommendationIsUseful) return action;
+  const preferred = /免责声明|不构成.{0,12}建议|投资研究最终报告|财务估值分析$|研究报告$/.test(recommendation)
+    ? heading
+    : recommendationIsUseful
+      ? recommendation
+      : action;
+  const conclusion = String(preferred || heading)
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!conclusion) return "";
+  const firstSentence = conclusion.split(/[。；;\n]/, 1)[0].trim();
+  return firstSentence.length > 42 ? `${firstSentence.slice(0, 41)}…` : firstSentence;
+}
+
+function reportFallbackResolution(item) {
+  const currentKind = reportFallbackKind(item);
+  if (currentKind !== "unknown") {
+    return {
+      kind: currentKind,
+      conclusion: compactReportConclusion(item) || currentActionLabel(currentKind),
+      cutoff: item?.data_cutoff || "未标注",
+      basis: "latest_report",
+    };
+  }
+  const historical = recentUsableHistoryDecision(item);
+  if (historical) {
+    const historicalKind = reportFallbackKind({
+      action: historical.action,
+      recommendation: historical.recommendation,
+      conclusion_summary: historical.conclusion_summary,
+    });
+    if (historicalKind !== "unknown") {
+      return {
+        kind: historicalKind,
+        conclusion: String(historical.action || "").trim() || currentActionLabel(historicalKind),
+        cutoff: historical.data_cutoff || item?.data_cutoff || "未标注",
+        basis: "recent_history",
+      };
+    }
+  }
+  return {
+    kind: "unknown",
+    conclusion: "",
+    cutoff: item?.data_cutoff || "未标注",
+    basis: "unknown",
+  };
+}
+
+function reportFallbackAdvice(item, reason) {
+  const resolution = reportFallbackResolution(item);
+  const kind = resolution.kind;
+  const meta = actionMeta(kind);
+  const cutoff = resolution.cutoff;
+  if (kind === "unknown") {
+    return {
+      key: meta.key,
+      label: "无法归类",
+      detail: `${reason}，且报告未提取明确操作结论 · 报告截止 ${cutoff}`,
+      rank: meta.rank,
+      className: meta.className,
+      basis: "unknown",
+    };
+  }
+  const basisText = resolution.basis === "recent_history"
+    ? "按最近可用历史报告结论归类"
+    : "按最新报告结论归类";
+  return {
+    key: meta.key,
+    label: currentActionLabel(kind),
+    detail: `${reason} · ${basisText} · 报告截止 ${cutoff}`,
+    sourceAction: resolution.conclusion || currentActionLabel(kind),
+    rank: meta.rank,
+    className: meta.className,
+    basis: resolution.basis,
+  };
+}
+
+function buyAdviceForItem(item, quote) {
+  const rows = reportPriceRows(item);
+  if (!rows.length) {
+    return reportFallbackAdvice(item, "无结构化价格档");
+  }
+  const price = Number(quote?.price);
+  if (!Number.isFinite(price)) {
+    return reportFallbackAdvice(item, "当前行情暂不可比");
+  }
+  const matched = matchReportPriceRow(item, quote);
+  const priceText = Number(price).toFixed(2).replace(/\.00$/, "");
+  if (!matched) {
+    const hasComparable = rows.some((row) => parseReportPriceBand(row, item?.market)?.currency === quote.currency);
+    const reason = hasComparable
+      ? `现价 ${priceText} 未可靠命中报告价格档`
+      : "报告价格单位与当前市场暂不可比";
+    return reportFallbackAdvice(item, reason);
+  }
+  const kind = currentActionKind(matched.row);
+  const meta = actionMeta(kind);
   const effectiveBand = matched.effectiveBand || matched.band;
   const effectiveBandText = effectivePriceBandText(effectiveBand);
   const cutoff = item?.data_cutoff || "未标注";
@@ -434,6 +552,7 @@ function buyAdviceForItem(item, quote) {
     price,
     band: effectiveBand,
     confidence: matched.confidence,
+    basis: "live_price_band",
   };
 }
 
@@ -1097,7 +1216,7 @@ function renderDetail() {
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
     const advice = buyAdviceForItem(item, quote);
-    adviceCard.innerHTML = `<h3>实时价格映射</h3>`;
+    adviceCard.innerHTML = `<h3>综合操作归类</h3>`;
     const adviceBody = document.createElement("div");
     adviceBody.className = "buy-advice buy-advice-detail-card";
     const badge = document.createElement("span");
@@ -1113,7 +1232,7 @@ function renderDetail() {
     }
     const p = document.createElement("p");
     p.className = "source-note";
-    p.textContent = advice.detail + "。规则：明确区间直接匹配；连续价格点按相邻边界动态组成区间；无法可靠匹配时不自动给出动作。报告动作只反映报告截止日的研究判断。仅供研究，不构成投资建议。";
+    p.textContent = advice.detail + "。规则：优先用实时价格匹配报告价格档；暂时无法比价时退回最新报告结论，并明确标注归类依据。报告结论只反映报告截止日的研究判断。仅供研究，不构成投资建议。";
     adviceBody.append(p);
     adviceCard.append(adviceBody);
     els.detailBody.append(adviceCard);
@@ -1153,7 +1272,7 @@ function renderDetail() {
 
     const tip = document.createElement("div");
     tip.className = "card";
-    tip.innerHTML = `<h3>价格信息</h3><p class="source-note">“现价所在档位”表示实时价格落入报告价格表的哪一档，不代表系统重新研究后给出的今日投资建议。完整上下文请查看「估值原文」。</p>`;
+    tip.innerHTML = `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。每只股票的归类依据会显示在操作标签下方，完整上下文请查看「估值原文」。</p>`;
     els.detailBody.append(tip);
     return;
   }
