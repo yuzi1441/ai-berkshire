@@ -42,6 +42,7 @@ const els = {
   detailReport: document.querySelector("#detail-report"),
   detailCopy: document.querySelector("#detail-copy-link"),
   workspace: document.querySelector("#workspace"),
+  tableWrap: document.querySelector(".table-wrap"),
   liveDot: document.querySelector("#live-dot"),
   liveText: document.querySelector("#live-text"),
   refreshQuotes: document.querySelector("#refresh-quotes"),
@@ -1274,10 +1275,12 @@ function renderRows() {
 function renderDetail() {
   const item = selectedItem();
   if (!item) {
+    document.body.classList.remove("drawer-open");
     els.detailPanel.hidden = true;
     els.workspace.classList.remove("detail-open");
     return;
   }
+  document.body.classList.add("drawer-open");
   els.detailPanel.hidden = false;
   els.workspace.classList.add("detail-open");
   els.detailTitle.textContent = item.company;
@@ -1408,19 +1411,34 @@ function updateHash(item) {
   history.replaceState(null, "", `#${token}`);
 }
 
+function revealTableRow(row) {
+  const wrap = els.tableWrap;
+  if (!row || !wrap || wrap.scrollHeight <= wrap.clientHeight) return;
+  const wrapRect = wrap.getBoundingClientRect();
+  const header = wrap.querySelector("thead");
+  const topLimit = wrapRect.top + (header?.getBoundingClientRect().height || 0);
+  const bottomLimit = wrapRect.bottom;
+  const rowRect = row.getBoundingClientRect();
+  let delta = 0;
+  if (rowRect.top < topLimit) delta = rowRect.top - topLimit;
+  else if (rowRect.bottom > bottomLimit) delta = rowRect.bottom - bottomLimit;
+  if (delta) wrap.scrollTop += delta;
+}
+
 function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   if (!item) return;
+  const pageScrollY = window.scrollY;
   state.selectedKey = itemKey(item);
   const visible = filteredDecisions();
   state.focusIndex = visible.findIndex((x) => itemKey(x) === state.selectedKey);
   if (updateUrl) updateHash(item);
   renderRows();
   renderDetail();
-  // Ensure full section is reachable from the top of the scrollable pane.
   if (els.detailBody) els.detailBody.scrollTop = 0;
+  if (window.scrollY !== pageScrollY) window.scrollTo(0, pageScrollY);
   if (scrollRow) {
     const row = els.rows.querySelector(`tr[data-key="${CSS.escape(state.selectedKey)}"]`);
-    row?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    revealTableRow(row);
   }
 }
 
@@ -1502,6 +1520,7 @@ function bindEvents() {
     if (!tab) return;
     state.detailTab = tab.dataset.tab;
     renderDetail();
+    if (els.detailBody) els.detailBody.scrollTop = 0;
   });
   els.detailClose.addEventListener("click", closeDetail);
   els.detailCopy.addEventListener("click", async () => {
