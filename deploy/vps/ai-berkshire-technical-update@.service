@@ -1,0 +1,11 @@
+[Unit]
+Description=AI Berkshire technical analysis update (%i)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/ai-berkshire
+Environment=TZ=Asia/Shanghai
+ExecStart=/usr/local/sbin/ai-berkshire-technical-update %i
