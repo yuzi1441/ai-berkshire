@@ -102,9 +102,10 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(dashboard.scenario_summary(selected["scenario_valuation"]), "悲观 35.7 元；中性 52.1 元；乐观 70.3 元")
             table = (root / "reports" / "00-index" / "投资决策总表.md").read_text(encoding="utf-8")
             # Public table no longer shows lossy price-plan/scenario summaries.
-            self.assertNotIn("稳健型 32-35 元", table.split("## 估值原文附录")[0])
-            self.assertIn("估值章节", table)
-            self.assertIn("估值原文附录", table)
+            self.assertNotIn("稳健型 32-35 元", table.split("## 技术面快照附录")[0])
+            self.assertIn("技术面", table)
+            self.assertIn("技术面快照附录", table)
+            self.assertNotIn("估值原文附录", table)
 
 
     def test_extracts_alternate_price_band_and_scenario_formats(self):
@@ -344,7 +345,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertIn("激进型", selected["conclusion_summary"])
             table = (root / "reports" / "00-index" / "投资决策总表.md").read_text(encoding="utf-8")
             self.assertIn("分层结论", table)
-            self.assertIn("激进型", table.split("## 估值原文附录")[0])
+            self.assertIn("激进型", table.split("## 技术面快照附录")[0])
 
     def test_maps_empty_money_stance_aliases(self):
         lines = """## 第八步：最终决策与行动清单
@@ -937,6 +938,81 @@ class InvestmentDashboardTests(unittest.TestCase):
             market="A股",
         )
         self.assertEqual(stances, [])
+
+    def test_attaches_latest_technical_snapshot_without_changing_fundamental_decision(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            company = root / "reports" / "示例公司"
+            (company / "main.md").write_text(
+                "# 主报告\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n## 最终建议\n\n继续观察，等待基本面验证。\n",
+                encoding="utf-8",
+            )
+            for name, cutoff, state in (
+                ("old-technical.md", "2026-07-18", "中性观察"),
+                ("new-technical.md", "2026-07-30", "防守观察"),
+            ):
+                (company / name).write_text(
+                    f'''---
+type: "technical-analysis"
+company: "示例公司"
+ticker: "600000.SH"
+analysis_date: "2026-07-31"
+data_cutoff: "{cutoff}"
+technical_state: "{state}"
+technical_confidence: "高"
+publishable: true
+latest_price: 12.34
+currency: "CNY"
+preferred_observation_zone: "12-13 CNY"
+---
+
+## 三盏趋势灯
+
+| 观察维度 | 信号 | 直白解释 |
+|---|---|---|
+| 短期（20日） | 红 | 短期转弱。 |
+| 中期（60日） | 黄 | 中期等待确认。 |
+| 长期（200日） | 绿 | 长期趋势尚可。 |
+| 量能确认 | 黄 | 量能未确认。 |
+''',
+                    encoding="utf-8",
+                )
+
+            board = dashboard.build_dashboard(root)
+            selected = board["decisions"][0]
+            technical = selected["technical_analysis"]
+            self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
+            self.assertEqual(selected["action"], "观察")
+            self.assertEqual(selected["data_cutoff"], "2026-07-20")
+            self.assertEqual(technical["status"], "ready")
+            self.assertEqual(technical["state"], "防守观察")
+            self.assertEqual(technical["data_cutoff"], "2026-07-30")
+            self.assertEqual(len(technical["lights"]), 4)
+
+    def test_technical_snapshot_missing_and_review_states_are_explicit(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            company = root / "reports" / "示例公司"
+            (company / "main.md").write_text(
+                "# 主报告\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n## 最终建议\n\n持有。\n",
+                encoding="utf-8",
+            )
+            board = dashboard.build_dashboard(root)
+            self.assertEqual(board["decisions"][0]["technical_analysis"]["status"], "missing")
+
+            (company / "invalid-technical.md").write_text(
+                "---\ntype: \"technical-analysis\"\ncompany: \"示例公司\"\nticker: \"600000.SH\"\n"
+                "analysis_date: \"2026-07-31\"\ndata_cutoff: \"2026-07-30\"\ntechnical_state: \"中性观察\"\n"
+                "publishable: false\n---\n\n## 三盏趋势灯\n\n| 观察维度 | 信号 | 直白解释 |\n|---|---|---|\n"
+                "| 短期（20日） | 黄 | 等待确认。 |\n",
+                encoding="utf-8",
+            )
+            board = dashboard.build_dashboard(root)
+            self.assertEqual(board["decisions"][0]["technical_analysis"]["status"], "review")
+            table = (root / "reports" / "00-index" / "投资决策总表.md").read_text(encoding="utf-8")
+            self.assertIn("待复核技术报告", table)
 
 
 if __name__ == "__main__":

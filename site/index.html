@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="AI Berkshire 个股投资决策看板：估值原文表格、结论与实时行情" />
+    <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260730-a-share-audit" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260731-technical" />
   </head>
   <body>
     <div class="app-shell">
@@ -87,7 +87,7 @@
                   <th scope="col">报告价格行动表</th>
                   <th scope="col">现价</th>
                   <th scope="col">综合操作归类</th>
-                  <th scope="col">估值原表</th>
+                  <th scope="col">技术面</th>
                   <th scope="col">研报日</th>
                 </tr>
               </thead>
@@ -99,7 +99,7 @@
               <p class="empty-desc">试试清除筛选，或换个关键词</p>
             </div>
           </div>
-          <p class="table-hint">点击行打开估值原文 · <kbd>j</kbd>/<kbd>k</kbd> 切换 · <kbd>Enter</kbd> 详情 · <kbd>Esc</kbd> 关闭 · <kbd>/</kbd> 搜索</p>
+          <p class="table-hint">点击行查看技术面 · <kbd>j</kbd>/<kbd>k</kbd> 切换 · <kbd>Enter</kbd> 详情 · <kbd>Esc</kbd> 关闭 · <kbd>/</kbd> 搜索</p>
         </section>
 
         <aside class="detail-panel" id="detail-panel" hidden aria-label="个股详情">
@@ -112,7 +112,7 @@
             <button type="button" class="btn icon" id="detail-close" aria-label="关闭详情">×</button>
           </div>
           <div class="detail-tabs" role="tablist">
-            <button type="button" class="tab active" data-tab="valuation">估值原文</button>
+            <button type="button" class="tab active" data-tab="technical">技术面</button>
             <button type="button" class="tab" data-tab="overview">摘要</button>
             <button type="button" class="tab" data-tab="history">历史研报</button>
           </div>
@@ -125,12 +125,12 @@
       </div>
 
       <footer class="app-footer">
-        仅收录个股研究；价格以报告估值原文表格为准，不构成投资建议。
+        仅收录个股研究；综合操作和筛选仅依据主报告，技术面只辅助观察节奏，不构成投资建议。
         行情优先实时拉取腾讯 A/H 接口，失败时回退本地快照。
       </footer>
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=20260730-a-share-audit3"></script>
+    <script type="module" src="./assets/app.js?v=20260731-technical"></script>
   </body>
 </html>

@@ -603,6 +603,61 @@ tbody tr.active .valuation-chip.ready {
   border-color: #7fbfab;
 }
 
+.technical-col { min-width: 150px; }
+.technical-state {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+.technical-state.defensive { color: #913f32; background: #f9e8e1; border-color: #efc2b4; }
+.technical-state.neutral { color: #785b16; background: #fff4cf; border-color: #ead28b; }
+.technical-state.positive { color: #146344; background: #e4f4e9; border-color: #a8d7b7; }
+.technical-state.review, .technical-state.missing { color: var(--ink-soft); background: #f1ece3; border-color: var(--line); }
+.technical-lights { display: flex; gap: 4px; margin-top: 6px; }
+.technical-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  padding: 3px 4px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.technical-light.green, .technical-light-card strong.green { color: #146344; background: #e4f4e9; border-color: #a8d7b7; }
+.technical-light.yellow, .technical-light-card strong.yellow { color: #785b16; background: #fff4cf; border-color: #ead28b; }
+.technical-light.red, .technical-light-card strong.red { color: #913f32; background: #f9e8e1; border-color: #efc2b4; }
+.technical-light.unknown { color: var(--ink-soft); background: #f1ece3; border-color: var(--line); }
+.technical-freshness { display: block; margin-top: 6px; color: var(--ink-soft); font-size: 10.5px; line-height: 1.25; }
+.technical-detail { display: grid; gap: 12px; }
+.technical-detail h3 { margin: 0; }
+.technical-disclaimer {
+  margin: 0;
+  padding: 9px 10px;
+  border-left: 3px solid #c49b34;
+  background: #fff9e7;
+  color: #5e4b1d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.technical-empty { margin: 0; padding: 16px; border: 1px dashed var(--line); border-radius: 8px; color: var(--ink-soft); line-height: 1.55; }
+.technical-summary { display: grid; grid-template-columns: 98px minmax(0, 1fr); gap: 7px 12px; margin: 0; font-size: 13px; }
+.technical-summary dt { color: var(--ink-soft); }
+.technical-summary dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.technical-light-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.technical-light-card { min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fffefb; }
+.technical-light-card > span { color: var(--ink-soft); font-size: 11px; }
+.technical-light-card strong { display: inline-flex; margin-left: 6px; padding: 2px 6px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; }
+.technical-light-card p { margin: 7px 0 0; color: #34453c; font-size: 12px; line-height: 1.45; }
+
 .valuation-card {
   padding: 0;
   overflow: visible;
@@ -1146,7 +1201,7 @@ tbody tr.active .valuation-chip.ready {
   }
   .table-wrap tbody td:nth-child(4)::before { content: "实时行情"; }
   .table-wrap tbody td:nth-child(5)::before { content: "综合操作归类"; }
-  .table-wrap tbody td:nth-child(6)::before { content: "估值材料"; }
+  .table-wrap tbody td:nth-child(6)::before { content: "技术面（辅助）"; }
   .table-wrap tbody td:nth-child(7)::before { content: "研报截止"; }
   .company-cell { min-width: 0; }
   .company-name { font-size: 15px; }
@@ -1160,9 +1215,12 @@ tbody tr.active .valuation-chip.ready {
   .quote-block, .buy-advice-cell { min-width: 0; max-width: none; }
   .quote-price { font-size: 16px; }
   .buy-advice-detail { font-size: 10.5px; }
-  .valuation-col { min-width: 0; }
+  .valuation-col, .technical-col { min-width: 0; }
   .valuation-chip { padding: 4px 8px; font-size: 11px; }
   .valuation-hint { font-size: 10.5px; }
+  .technical-lights { gap: 3px; }
+  .technical-light { min-width: 24px; font-size: 9.5px; }
+  .technical-freshness { font-size: 10px; }
   .cutoff-cell { white-space: normal; }
   .cutoff-date { font-size: 11.5px; }
   .table-hint { display: none; }
@@ -1201,6 +1259,8 @@ tbody tr.active .valuation-chip.ready {
   .valuation-table th, .valuation-table td { padding: 8px 9px; }
   .valuation-p, .valuation-list { font-size: 12.5px; }
   .kv-grid { grid-template-columns: 84px minmax(0, 1fr); gap: 6px 8px; font-size: 12px; }
+  .technical-summary { grid-template-columns: 82px minmax(0, 1fr); font-size: 12px; }
+  .technical-light-grid { grid-template-columns: 1fr; }
 
   .app-footer { margin-top: 14px; padding: 0 8px; font-size: 11.5px; }
   .toast {

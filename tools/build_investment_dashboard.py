@@ -208,6 +208,134 @@ def extract_data_cutoff(lines: list[str]) -> str | None:
     return max(secondary) if secondary else None
 
 
+def parse_frontmatter(lines: list[str]) -> dict[str, str]:
+    """Parse the small YAML frontmatter subset used by generated reports."""
+    if not lines or lines[0].strip() != "---":
+        return {}
+    values: dict[str, str] = {}
+    for line in lines[1:80]:
+        if line.strip() == "---":
+            return values
+        match = re.match(r"^([A-Za-z_][A-Za-z0-9_-]*)\s*:\s*(.*?)\s*$", line)
+        if not match:
+            continue
+        value = match.group(2).strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {'"', "'"}:
+            value = value[1:-1]
+        values[match.group(1)] = value
+    return {}
+
+
+def frontmatter_date(value: str | None) -> str | None:
+    """Validate a frontmatter date without falling back to filename timestamps."""
+    return parse_date(value or "")
+
+
+def extract_technical_lights(lines: list[str]) -> list[dict[str, str]]:
+    """Extract the fixed four-row trend-light table from a technical report."""
+    start = next(
+        (index for index, line in enumerate(lines) if re.sub(r"[#*\s]", "", line).startswith("三盏趋势灯")),
+        None,
+    )
+    if start is None:
+        return []
+    lights: list[dict[str, str]] = []
+    for line in lines[start + 1 : start + 24]:
+        if not line.lstrip().startswith("|"):
+            if lights:
+                break
+            continue
+        cells = [clean_markdown(cell) for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 3 or cells[0] in {"观察维度", "---"} or re.fullmatch(r":?-{3,}:?", cells[0]):
+            continue
+        signal = cells[1].replace("信号", "").strip()
+        if signal not in {"绿", "黄", "红"}:
+            continue
+        lights.append({"dimension": cells[0], "light": signal, "meaning": cells[2]})
+    return lights
+
+
+def technical_snapshot(report_path: Path, repo_root: Path, registry: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Read a technical report as an auxiliary snapshot, never a decision candidate."""
+    text = report_path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+    frontmatter = parse_frontmatter(lines)
+    if frontmatter.get("type") != "technical-analysis":
+        return None
+    company = normalize_company_name(frontmatter.get("company", ""))
+    ticker = (frontmatter.get("ticker") or "").upper() or None
+    registry_entry = registry_company(registry, company, ticker)
+    if registry_entry:
+        company = str(registry_entry["canonical_name"])
+    analysis_date = frontmatter_date(frontmatter.get("analysis_date"))
+    data_cutoff = frontmatter_date(frontmatter.get("data_cutoff"))
+    lights = extract_technical_lights(lines)
+    required_dimensions = {"短期（20日）", "中期（60日）", "长期（200日）", "量能确认"}
+    light_dimensions = {item["dimension"] for item in lights}
+    try:
+        latest_price = float(frontmatter["latest_price"])
+    except (KeyError, ValueError):
+        latest_price = None
+    publishable = frontmatter.get("publishable", "").casefold() == "true"
+    display_complete = bool(
+        company
+        and analysis_date
+        and data_cutoff
+        and frontmatter.get("technical_state")
+        and frontmatter.get("preferred_observation_zone")
+        and latest_price is not None
+        and required_dimensions <= light_dimensions
+    )
+    return {
+        "company": company,
+        "ticker": ticker,
+        "status": "ready" if publishable and display_complete else "review",
+        "report_path": report_path.relative_to(repo_root).as_posix(),
+        "analysis_date": analysis_date,
+        "data_cutoff": data_cutoff,
+        "state": frontmatter.get("technical_state") or "待复核",
+        "confidence": frontmatter.get("technical_confidence") or "待复核",
+        "publishable": publishable,
+        "latest_price": latest_price,
+        "currency": frontmatter.get("currency") or None,
+        "observation_zone": frontmatter.get("preferred_observation_zone") or None,
+        "lights": lights,
+    }
+
+
+def technical_snapshot_rank(snapshot: dict[str, Any]) -> tuple[str, str, str]:
+    """Rank technical snapshots only by their explicit market and analysis dates."""
+    return (
+        snapshot.get("data_cutoff") or "0000-00-00",
+        snapshot.get("analysis_date") or "0000-00-00",
+        snapshot.get("report_path") or "",
+    )
+
+
+def attach_technical_snapshots(
+    decisions: list[dict[str, Any]], snapshots: list[dict[str, Any]]
+) -> None:
+    """Attach one latest technical snapshot without changing fundamental decisions."""
+    by_ticker: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    by_company_without_ticker: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for snapshot in snapshots:
+        if snapshot.get("ticker"):
+            by_ticker[str(snapshot["ticker"])].append(snapshot)
+        elif snapshot.get("company"):
+            by_company_without_ticker[str(snapshot["company"])].append(snapshot)
+
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        candidates = by_ticker.get(ticker, []) if ticker else by_company_without_ticker.get(str(decision["company"]), [])
+        if not candidates:
+            # Canonical-name matching is only a fallback when the technical report has no ticker.
+            candidates = by_company_without_ticker.get(str(decision["company"]), [])
+        if candidates:
+            decision["technical_analysis"] = max(candidates, key=technical_snapshot_rank).copy()
+        else:
+            decision["technical_analysis"] = {"status": "missing", "lights": []}
+
+
 def extract_report_completed_date(lines: list[str]) -> str | None:
     """Extract an explicitly labelled report completion date for tie-breaking.
 
@@ -2405,6 +2533,10 @@ def is_company_equity(record: dict[str, Any]) -> bool:
         "读书与播客",
         "公众号",
         "主题文章",
+        "宇视科技",
+        "小红书",
+        "散户乙",
+        "智元机器人",
     }
     if company in non_equity_names:
         return False
@@ -2445,6 +2577,8 @@ def candidate_record(
         return None
     text = report_path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
+    if parse_frontmatter(lines).get("type") == "technical-analysis":
+        return None
     valuation_section = extract_valuation_section(lines)
     section = decision_section(lines)
     if not section:
@@ -2702,26 +2836,32 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
         "> 仅收录个股研究结论，不收录行业/主题/筛选类报告。",
         "> 当前结论只按报告明确的“数据截止日”排序，不按文件修改时间排序。",
         "> 当前结论优先展示第八步「最终决策与行动清单」中的激进/稳健/保守分层建议；粗粒度标签仅作筛选辅助。",
-        "> 价格信息以「估值原文附录」中的报告原表为准。下方另附每家公司的历史研报结论。",
+        "> 技术面仅用于辅助观察，不参与分层结论、综合操作筛选或买入建议。下方另附每家公司的历史研报结论。",
         "> 仅供学习与研究，不构成投资建议。",
         "",
-        "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 估值章节 | 历史研报数 | 报告 |",
+        "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 技术面 | 历史研报数 | 报告 |",
         "|---|---|---|---|---|---|---:|---|",
     ]
     for item in decisions:
         market_ticker = " / ".join(part for part in (item["market"], item.get("ticker")) if part)
         link = item["report_link"].rsplit(".", 1)[0]
-        section = item.get("valuation_section") or {}
-        heading = section.get("heading") if isinstance(section, dict) else None
+        technical = item.get("technical_analysis") or {}
+        technical_status = technical.get("status") if isinstance(technical, dict) else "missing"
+        if technical_status == "ready":
+            technical_label = f"{technical.get('state', '待复核')}（技术日 {technical.get('data_cutoff', '待复核')}）"
+        elif technical_status == "review":
+            technical_label = "待复核技术报告"
+        else:
+            technical_label = "未生成技术面报告"
         layered = item.get("conclusion_summary") or investor_stances_summary(item.get("investor_stances") or []) or item.get("action")
         lines.append(
-            "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {valuation} | {history} | [[{link}|{title}]] |".format(
+            "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {technical} | {history} | [[{link}|{title}]] |".format(
                 company=markdown_cell(str(item["company"])),
                 market_ticker=markdown_cell(market_ticker),
                 cutoff=markdown_cell(item.get("data_cutoff") or "待复核"),
                 layered=markdown_cell(layered),
                 action=markdown_cell(item["action"]),
-                valuation=markdown_cell(heading or "未提取估值章节"),
+                technical=markdown_cell(technical_label),
                 history=item.get("report_history_count", len(item.get("report_history", []))),
                 link=link,
                 title=markdown_cell(item["title"]),
@@ -2735,28 +2875,34 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
     else:
         lines.append("当前入表结论均提取到了明确的数据截止日。")
 
-    lines.extend(["", "## 估值原文附录（当前结论）", ""])
-    lines.append("> 优先直接摘录报告中的「第七步：估值与安全边际 / 财务质量与估值」等章节原文表格；当最新跟踪笔记较薄时，会回挂同公司更完整研报中的估值章节，避免只看单一买入价。")
+    lines.extend(["", "## 技术面快照附录", ""])
+    lines.append("> 技术面只辅助观察建仓节奏，不参与综合操作归类、筛选或买入建议。技术日与研报截止日相互独立。")
     for item in decisions:
-        section = item.get("valuation_section") or {}
-        markdown = section.get("markdown") if isinstance(section, dict) else None
-        if not markdown:
-            continue
         lines.extend(["", f"### {item['company']}", ""])
-        source_path = section.get("source_report_path") or item.get("report_path")
-        source_link = (
-            str(source_path).removeprefix("reports/").rsplit(".", 1)[0]
-            if source_path
-            else item["report_link"].rsplit(".", 1)[0]
+        technical = item.get("technical_analysis") or {}
+        if technical.get("status") == "missing":
+            lines.append("未生成技术面报告。")
+            continue
+        if technical.get("status") == "review":
+            lines.append("技术报告待复核，暂不展示推断指标。")
+            continue
+        source_link = str(technical["report_path"]).removeprefix("reports/").rsplit(".", 1)[0]
+        lines.extend(
+            [
+                f"技术状态：**{technical.get('state', '待复核')}**；技术日：{technical.get('data_cutoff', '待复核')}；观察区：{technical.get('observation_zone', '待复核')}",
+                f"来源：[[{source_link}|技术面辅助报告]]",
+                "",
+                "| 短期 | 中期 | 长期 | 量能 |",
+                "|---|---|---|---|",
+                "| " + " | ".join(
+                    markdown_cell(next((light.get('light', '待复核') for light in technical.get('lights', []) if light.get('dimension') == dimension), '待复核'))
+                    for dimension in ("短期（20日）", "中期（60日）", "长期（200日）", "量能确认")
+                ) + " |",
+            ]
         )
-        lines.append(f"来源：[[{source_link}|{section.get('heading') or item.get('title') or '报告'}]]")
-        if section.get("source_note"):
-            lines.append(f"> {section['source_note']}")
-        lines.append("")
-        lines.append(markdown)
 
     lines.extend(["", "## 历史研报结论", ""])
-    lines.append("> 每家公司按数据截止日从新到旧列出历次研报结论与估值章节标题。价格细节见各期报告原文；旧报告价格不会自动延续到新报告。")
+    lines.append("> 每家公司按数据截止日从新到旧列出历次基本面研报结论。价格细节见各期报告原文；旧报告价格不会自动延续到新报告。")
     for item in decisions:
         history = item.get("report_history") or []
         if not history:
@@ -2766,19 +2912,16 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
                 "",
                 f"### {item['company']}",
                 "",
-                "| 数据截止日 | 结论 | 估值章节 | 报告 |",
-                "|---|---|---|---|",
+                "| 数据截止日 | 结论 | 报告 |",
+                "|---|---|---|",
             ]
         )
         for snap in history:
             link = str(snap.get("report_link") or "").rsplit(".", 1)[0]
-            snap_section = snap.get("valuation_section") or {}
-            snap_heading = snap_section.get("heading") if isinstance(snap_section, dict) else None
             lines.append(
-                "| {cutoff} | {action} | {valuation} | [[{link}|{title}]] |".format(
+                "| {cutoff} | {action} | [[{link}|{title}]] |".format(
                     cutoff=markdown_cell(snap.get("data_cutoff") or "待复核"),
                     action=markdown_cell(snap.get("action")),
-                    valuation=markdown_cell(snap_heading or "未提取估值章节"),
                     link=link,
                     title=markdown_cell(snap.get("title") or "报告"),
                 )
@@ -2838,12 +2981,19 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     if overrides.get("schema_version") != 1:
         raise ValueError("Unsupported dashboard overrides schema")
 
+    report_paths = sorted(reports_directory.rglob("*.md"), key=lambda item: item.as_posix().casefold())
     records = [
         record
-        for report_path in sorted(reports_directory.rglob("*.md"), key=lambda item: item.as_posix().casefold())
+        for report_path in report_paths
         if (record := candidate_record(report_path, repo_root, registry, overrides)) is not None
     ]
     decisions = select_decisions(records, overrides)
+    technical_snapshots = [
+        snapshot
+        for report_path in report_paths
+        if (snapshot := technical_snapshot(report_path, repo_root, registry)) is not None
+    ]
+    attach_technical_snapshots(decisions, technical_snapshots)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     catalog = {
         "schema_version": 1,
@@ -2852,10 +3002,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "records": records,
     }
     board = {
-        "schema_version": 3,
+        "schema_version": 4,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Technical snapshots are attached separately and do not affect conclusions, prices, sorting, or filters. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
         "decisions": decisions,
     }

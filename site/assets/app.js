@@ -16,7 +16,7 @@ const state = {
   market: "all",
   action: "all",
   sort: "buy_advice",
-  detailTab: "valuation",
+  detailTab: "technical",
   quoteMode: "idle", // live | snapshot | idle | error
   quoteUpdatedAt: null,
   liveTimer: null,
@@ -1034,36 +1034,136 @@ function renderMarkdownLite(target, markdown, { compact = false } = {}) {
 }
 
 
-function cleanValuationLabel(heading) {
-  if (!heading) return null;
-  let text = String(heading)
-    .replace(/^#+\s*/, "")
-    .replace(/\*+/g, "")
-    .trim();
-  // Drop step / chapter prefixes that look abrupt in the list.
-  text = text
-    .replace(/^(第[一二三四五六七八九十百零〇两\d]+[步部分章节篇节]|[一二三四五六七八九十]+、|[（(]?[0-9]{1,2}[）).、:：]\s*)/u, "")
-    .replace(/^(步骤|章节)\s*/u, "")
-    .replace(/^[:：\s—–-]+/, "")
-    .trim();
-  // Prefer the core phrase when long embellishments follow.
-  const core = text.match(/估值与安全边际|财务质量与估值|估值与价格纪律|最终投资建议|价格区间建议|行动价格带|三情景估值|财务估值|估值更新|估值分析/);
-  if (core) {
-    return core[0];
-  }
-  if (text.length > 18) {
-    return `${text.slice(0, 16)}…`;
-  }
-  return text || "估值原表";
+const TECHNICAL_DIMENSIONS = [
+  ["短期（20日）", "短"],
+  ["中期（60日）", "中"],
+  ["长期（200日）", "长"],
+  ["量能确认", "量"],
+];
+
+function technicalTone(technical) {
+  if (technical?.status !== "ready") return technical?.status === "review" ? "review" : "missing";
+  const state = String(technical.state || "");
+  if (/防守|转弱|风险/.test(state)) return "defensive";
+  if (/确认|分批|偏强/.test(state)) return "positive";
+  return "neutral";
 }
 
-function valuationListLabel(item) {
-  const heading = item?.valuation_section?.heading;
-  const label = cleanValuationLabel(heading);
-  if (!label) {
-    return { label: "暂无原表", ready: false };
+function technicalLight(technical, dimension) {
+  return (technical?.lights || []).find((light) => light?.dimension === dimension) || null;
+}
+
+function renderTechnicalCell(item) {
+  const technical = item?.technical_analysis || { status: "missing", lights: [] };
+  const cell = document.createElement("td");
+  cell.className = "technical-col";
+  const state = document.createElement("span");
+  state.className = `technical-state ${technicalTone(technical)}`;
+  state.textContent = technical.status === "ready"
+    ? technical.state || "待复核"
+    : technical.status === "review" ? "待复核" : "未生成";
+  cell.append(state);
+
+  const lights = document.createElement("div");
+  lights.className = "technical-lights";
+  for (const [dimension, label] of TECHNICAL_DIMENSIONS) {
+    const light = technicalLight(technical, dimension);
+    const badge = document.createElement("span");
+    badge.className = `technical-light ${light?.light === "绿" ? "green" : light?.light === "黄" ? "yellow" : light?.light === "红" ? "red" : "unknown"}`;
+    badge.title = light ? `${dimension}：${light.light}。${light.meaning || ""}` : `${dimension}：待复核`;
+    badge.textContent = `${label}${light?.light || "-"}`;
+    lights.append(badge);
   }
-  return { label, ready: true };
+  cell.append(lights);
+  const freshness = document.createElement("span");
+  freshness.className = "technical-freshness";
+  freshness.textContent = technical.status === "ready"
+    ? `技术日 ${technical.data_cutoff || "待复核"}`
+    : technical.status === "review" ? "报告字段不完整" : "尚无技术报告";
+  cell.append(freshness);
+  return cell;
+}
+
+function renderTechnicalDetail(item) {
+  const technical = item?.technical_analysis || { status: "missing", lights: [] };
+  const card = document.createElement("section");
+  card.className = "card technical-detail";
+  const title = document.createElement("h3");
+  title.textContent = "技术面辅助观察";
+  card.append(title);
+
+  const disclaimer = document.createElement("p");
+  disclaimer.className = "technical-disclaimer";
+  disclaimer.textContent = "技术面仅辅助观察，不参与综合操作归类、筛选或买入建议。";
+  card.append(disclaimer);
+
+  if (technical.status === "missing") {
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = "未生成技术面报告。生成后会按技术指标的实际数据截止日自动显示。";
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
+  if (technical.status === "review") {
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = "技术面报告待复核，暂不显示推断后的指标或状态。";
+    card.append(empty);
+    if (technical.report_path) {
+      const link = document.createElement("a");
+      link.className = "btn ghost";
+      link.href = `${repositoryUrl}${technical.report_path}`;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "打开技术面报告";
+      card.append(link);
+    }
+    els.detailBody.append(card);
+    return;
+  }
+
+  const summary = document.createElement("dl");
+  summary.className = "technical-summary";
+  const rows = [
+    ["技术状态", technical.state || "待复核"],
+    ["技术日", technical.data_cutoff || "待复核"],
+    ["技术收盘价", technical.latest_price != null ? `${technical.latest_price} ${technical.currency || ""}`.trim() : "待复核"],
+    ["技术观察区", technical.observation_zone || "待复核"],
+    ["数据质量", technical.confidence || "待复核"],
+  ];
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  card.append(summary);
+
+  const grid = document.createElement("div");
+  grid.className = "technical-light-grid";
+  for (const [dimension, label] of TECHNICAL_DIMENSIONS) {
+    const light = technicalLight(technical, dimension);
+    const itemNode = document.createElement("div");
+    itemNode.className = "technical-light-card";
+    itemNode.innerHTML = `<span>${label}期</span><strong class="${light?.light === "绿" ? "green" : light?.light === "黄" ? "yellow" : "red"}">${light?.light || "待复核"}</strong>`;
+    const meaning = document.createElement("p");
+    meaning.textContent = light?.meaning || "未提供说明";
+    itemNode.append(meaning);
+    grid.append(itemNode);
+  }
+  card.append(grid);
+  if (technical.report_path) {
+    const link = document.createElement("a");
+    link.className = "btn ghost";
+    link.href = `${repositoryUrl}${technical.report_path}`;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "打开技术面报告";
+    card.append(link);
+  }
+  els.detailBody.append(card);
 }
 
 function renderSummary(visible) {
@@ -1121,7 +1221,7 @@ function renderRows() {
 
     const companyTd = document.createElement("td");
     companyTd.className = "company-cell";
-    companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.valuation_section?.heading ? "含估值原表" : "待补原表"}</div>`;
+    companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.technical_analysis?.status === "ready" ? "已接入技术面" : "技术面待补"}</div>`;
     tr.append(companyTd);
 
     const marketTd = document.createElement("td");
@@ -1148,14 +1248,7 @@ function renderRows() {
     adviceTd.append(renderBuyAdviceCell(item, quote));
     tr.append(adviceTd);
 
-    const valTd = document.createElement("td");
-    const valMeta = valuationListLabel(item);
-    valTd.className = "valuation-col";
-    valTd.innerHTML = `
-      <span class="valuation-chip ${valMeta.ready ? "ready" : "empty"}">${valMeta.label}</span>
-      <span class="valuation-hint">${valMeta.ready ? "查看原表" : "待补充"}</span>
-    `;
-    tr.append(valTd);
+    tr.append(renderTechnicalCell(item));
 
     const cutoffTd = document.createElement("td");
     cutoffTd.className = "cutoff-cell";
@@ -1195,8 +1288,7 @@ function renderDetail() {
   const tableBrief = priceRows.length ? `${priceRows.length} 档报告价格` : "未提取价格表";
   const adviceBrief = buyAdviceForItem(item, quote).label;
   els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
-  const sourcePath = item.valuation_section?.source_report_path || item.report_path;
-  els.detailReport.href = `${repositoryUrl}${sourcePath || item.report_path}`;
+  els.detailReport.href = `${repositoryUrl}${item.report_path}`;
 
   els.detailBody.replaceChildren();
   document.querySelectorAll(".detail-tabs .tab").forEach((tab) => {
@@ -1263,35 +1355,13 @@ function renderDetail() {
 
     const tip = document.createElement("div");
     tip.className = "card";
-    tip.innerHTML = `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。每只股票的归类依据会显示在操作标签下方，完整上下文请查看「估值原文」。</p>`;
+    tip.innerHTML = `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。技术面不会改变上述筛选结果，完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;
   }
 
-  if (state.detailTab === "valuation") {
-    const card = document.createElement("div");
-    card.className = "card valuation-card";
-    const head = document.createElement("div");
-    head.className = "valuation-card-head";
-    const title = document.createElement("h3");
-    title.textContent = item.valuation_section?.heading || "估值原文";
-    head.append(title);
-    if (item.valuation_section?.source_note) {
-      const note = document.createElement("p");
-      note.className = "source-note";
-      note.textContent = item.valuation_section.source_note;
-      head.append(note);
-    } else {
-      const note = document.createElement("p");
-      note.className = "source-note";
-      note.textContent = "以下为报告章节原表渲染，未做价格二次摘要。";
-      head.append(note);
-    }
-    const body = document.createElement("div");
-    body.className = "valuation-markdown";
-    renderMarkdownLite(body, item.valuation_section?.markdown || "");
-    card.append(head, body);
-    els.detailBody.append(card);
+  if (state.detailTab === "technical") {
+    renderTechnicalDetail(item);
     return;
   }
 
@@ -1317,18 +1387,6 @@ function renderDetail() {
         .map((s) => `${String(s.stance || "").replace("型", "")}：${s.action || ""}${s.price_range ? "（" + s.price_range + "）" : ""}`)
         .join("；");
       card.append(histLine);
-    }
-    if (snap.valuation_section?.heading) {
-      const headNote = document.createElement("div");
-      headNote.className = "stack-item muted";
-      headNote.textContent = snap.valuation_section.heading;
-      card.append(headNote);
-    }
-    if (snap.valuation_section?.markdown) {
-      const val = document.createElement("div");
-      val.className = "valuation-markdown";
-      renderMarkdownLite(val, snap.valuation_section.markdown, { compact: true });
-      card.append(val);
     }
     const link = document.createElement("a");
     link.className = "btn ghost";
@@ -1490,7 +1548,7 @@ function bindEvents() {
       openDetail(visible[state.focusIndex]);
     } else if (event.key === "Enter" && state.focusIndex >= 0) {
       openDetail(visible[state.focusIndex]);
-      state.detailTab = "valuation";
+      state.detailTab = "technical";
       renderDetail();
     } else if (event.key === "o" && selectedItem()) {
       els.detailReport.click();
