@@ -22,7 +22,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 body {
   margin: 0;
   font-family: var(--mono);
@@ -33,6 +33,7 @@ body {
     var(--bg);
   min-height: 100vh;
   overflow-x: clip;
+  overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -253,7 +254,13 @@ h1 { margin: 1px 0 0; font-size: clamp(18px, 2.2vw, 22px); letter-spacing: -0.02
   box-shadow: var(--shadow);
 }
 .table-panel { overflow: hidden; }
-.table-wrap { overflow: auto; max-height: calc(100vh - 220px); }
+.table-wrap {
+  overflow: auto;
+  max-height: min(500px, calc(100dvh - 350px));
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
 table {
   width: 100%;
   border-collapse: separate;
@@ -445,8 +452,8 @@ tbody tr:last-child td { border-bottom: none; }
 .detail-panel {
   position: sticky;
   top: 72px;
-  height: calc(100vh - 88px);
-  max-height: calc(100vh - 88px);
+  height: min(calc(100dvh - 300px), 632px);
+  max-height: min(calc(100dvh - 300px), 632px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -481,6 +488,10 @@ tbody tr:last-child td { border-bottom: none; }
   padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   background: #f7f3ea;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
 }
 .tab {
   border: 1px solid transparent;
@@ -512,6 +523,8 @@ tbody tr:last-child td { border-bottom: none; }
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-gutter: stable;
   display: grid;
   gap: 12px;
   align-content: start;
@@ -757,6 +770,7 @@ tbody tr.active .valuation-chip.ready {
   min-width: 0;
   overflow-x: auto;
   overflow-y: visible;
+  overscroll-behavior-x: contain;
   border: 1px solid #e4ddd0;
   border-radius: 12px;
   background: #fff;
@@ -865,6 +879,10 @@ tbody tr.active .valuation-chip.ready {
 }
 
 @media (max-width: 1100px) {
+  body.drawer-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
   .workspace.detail-open { grid-template-columns: 1fr; }
   .detail-panel {
     position: fixed;
@@ -1241,6 +1259,7 @@ tbody tr.active .valuation-chip.ready {
     padding: 7px 10px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    touch-action: pan-x;
     -webkit-overflow-scrolling: touch;
   }
   .tab { flex: 0 0 auto; min-height: 34px; padding: 6px 11px; }
