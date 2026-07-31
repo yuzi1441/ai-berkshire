@@ -1085,6 +1085,54 @@ function renderTechnicalCell(item) {
   return cell;
 }
 
+function compactTechnicalZone(value) {
+  const parts = String(value || "")
+    .split(/[；;]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  return [...new Set(parts)].join("；") || "待复核";
+}
+
+function renderTechnicalCrossCell(item) {
+  const technical = item?.technical_analysis || { status: "missing" };
+  const cell = document.createElement("td");
+  cell.className = "technical-cross-col";
+
+  const zone = document.createElement("div");
+  zone.className = "technical-cross-zone";
+  const zoneLabel = document.createElement("span");
+  zoneLabel.className = "technical-cross-label";
+  zoneLabel.textContent = "技术价";
+  const zoneValue = document.createElement("strong");
+  zoneValue.textContent = technical.status === "ready"
+    ? compactTechnicalZone(technical.observation_zone)
+    : technical.status === "review" ? "待复核" : "未生成";
+  zone.append(zoneLabel, zoneValue);
+
+  const overlap = document.createElement("div");
+  const hasFundamentalPlan = !/未提取|无法核验/.test(String(technical.fundamental_entry_plan || ""));
+  const combined = compactTechnicalZone(technical.combined_candidate_zone);
+  const overlapKind = technical.status !== "ready"
+    ? "pending"
+    : !technical.combined_candidate_zone || !hasFundamentalPlan || technical.valid_buy_candidate === "暂不能判断"
+      ? "pending"
+      : /无交集/.test(combined) ? "none" : "overlap";
+  overlap.className = `technical-cross-overlap ${overlapKind}`;
+  const overlapLabel = document.createElement("span");
+  overlapLabel.className = "technical-cross-label";
+  overlapLabel.textContent = "基本面交叉";
+  const overlapValue = document.createElement("strong");
+  overlapValue.textContent = technical.status !== "ready"
+    ? "待复核"
+    : overlapKind === "pending" ? "待复核"
+      : overlapKind === "none" ? "无交集"
+        : combined;
+  overlap.append(overlapLabel, overlapValue);
+
+  cell.append(zone, overlap);
+  return cell;
+}
+
 function renderTechnicalDetail(item) {
   const technical = item?.technical_analysis || { status: "missing", lights: [] };
   const card = document.createElement("section");
@@ -1250,13 +1298,7 @@ function renderRows() {
     tr.append(adviceTd);
 
     tr.append(renderTechnicalCell(item));
-
-    const cutoffTd = document.createElement("td");
-    cutoffTd.className = "cutoff-cell";
-    cutoffTd.innerHTML = item.data_cutoff
-      ? `<span class="cutoff-date">${item.data_cutoff}</span>`
-      : `<span class="cutoff-pending">待复核</span>`;
-    tr.append(cutoffTd);
+    tr.append(renderTechnicalCrossCell(item));
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {

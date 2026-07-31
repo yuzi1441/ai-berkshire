@@ -299,6 +299,9 @@ def technical_snapshot(report_path: Path, repo_root: Path, registry: list[dict[s
         "latest_price": latest_price,
         "currency": frontmatter.get("currency") or None,
         "observation_zone": frontmatter.get("preferred_observation_zone") or None,
+        "fundamental_entry_plan": frontmatter.get("fundamental_entry_plan") or None,
+        "combined_candidate_zone": frontmatter.get("combined_candidate_zone") or None,
+        "valid_buy_candidate": frontmatter.get("valid_buy_candidate") or None,
         "lights": lights,
     }
 

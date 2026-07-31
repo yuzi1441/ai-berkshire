@@ -965,6 +965,9 @@ publishable: true
 latest_price: 12.34
 currency: "CNY"
 preferred_observation_zone: "12-13 CNY"
+fundamental_entry_plan: "12-13 CNY"
+combined_candidate_zone: "12-13 CNY"
+valid_buy_candidate: "是（候选）"
 ---
 
 ## 三盏趋势灯
@@ -989,6 +992,9 @@ preferred_observation_zone: "12-13 CNY"
             self.assertEqual(technical["state"], "防守观察")
             self.assertEqual(technical["data_cutoff"], "2026-07-30")
             self.assertEqual(len(technical["lights"]), 4)
+            self.assertEqual(technical["fundamental_entry_plan"], "12-13 CNY")
+            self.assertEqual(technical["combined_candidate_zone"], "12-13 CNY")
+            self.assertEqual(technical["valid_buy_candidate"], "是（候选）")
 
     def test_technical_snapshot_missing_and_review_states_are_explicit(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

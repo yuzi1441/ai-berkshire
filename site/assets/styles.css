@@ -617,6 +617,30 @@ tbody tr.active .valuation-chip.ready {
 }
 
 .technical-col { min-width: 150px; }
+.technical-cross-col { min-width: 190px; max-width: 270px; }
+.technical-cross-zone,
+.technical-cross-overlap {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.technical-cross-overlap { margin-top: 7px; }
+.technical-cross-label {
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  line-height: 1.2;
+}
+.technical-cross-zone strong,
+.technical-cross-overlap strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.technical-cross-overlap strong { color: var(--brand-deep); }
+.technical-cross-overlap.none strong { color: var(--sell); }
+.technical-cross-overlap.pending strong { color: var(--ink-soft); }
 .technical-state {
   display: inline-flex;
   align-items: center;
@@ -1220,7 +1244,7 @@ tbody tr.active .valuation-chip.ready {
   .table-wrap tbody td:nth-child(4)::before { content: "实时行情"; }
   .table-wrap tbody td:nth-child(5)::before { content: "综合操作归类"; }
   .table-wrap tbody td:nth-child(6)::before { content: "技术面（辅助）"; }
-  .table-wrap tbody td:nth-child(7)::before { content: "研报截止"; }
+  .table-wrap tbody td:nth-child(7)::before { content: "技术价 / 基本面交叉"; }
   .company-cell { min-width: 0; }
   .company-name { font-size: 15px; }
   .company-meta { font-size: 11px; }
@@ -1239,6 +1263,9 @@ tbody tr.active .valuation-chip.ready {
   .technical-lights { gap: 3px; }
   .technical-light { min-width: 24px; font-size: 9.5px; }
   .technical-freshness { font-size: 10px; }
+  .technical-cross-col { min-width: 0; max-width: none; }
+  .technical-cross-zone strong,
+  .technical-cross-overlap strong { font-size: 11px; }
   .cutoff-cell { white-space: normal; }
   .cutoff-date { font-size: 11.5px; }
   .table-hint { display: none; }
