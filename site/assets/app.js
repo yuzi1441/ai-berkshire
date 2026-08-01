@@ -1454,7 +1454,15 @@ function renderRows() {
     if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
     return;
   }
-  setTableHeader(["公司", "市场/代码", "分层结论", "现价", "买入建议", "估值原表", "研报日"]);
+  setTableHeader([
+    "公司",
+    "市场 / 代码",
+    "报告价格行动表",
+    "现价",
+    "综合操作归类",
+    "技术面（辅助）",
+    "技术价 / 基本面交叉",
+  ]);
 
   visible.forEach((item, index) => {
     const tr = document.createElement("tr");
