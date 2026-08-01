@@ -169,10 +169,27 @@ function itemActionSet(item) {
   return set;
 }
 
-function reportPriceRows(item) {
+function historicalPriceReference(item) {
+  const reference = item?.historical_price_reference;
+  return reference && Array.isArray(reference.price_plan) && reference.price_plan.length
+    ? reference
+    : null;
+}
+
+function usablePriceRow(row, market) {
+  return Boolean(
+    row
+      && row.price_range
+      && row.price_range !== "未给出"
+      && row.price_range !== "待复核"
+      && parseReportPriceBand(row, market),
+  );
+}
+
+function reportPriceRows(item, { historicalFallback = true } = {}) {
   const plans = Array.isArray(item?.price_plan) ? item.price_plan : [];
   const planRows = plans
-    .filter((row) => row && row.price_range && (row.action || row.profile))
+    .filter((row) => usablePriceRow(row, item?.market) && (row.action || row.profile))
     .map((row, index) => ({
       profile: row.profile || "",
       price_range: row.price_range || "",
@@ -182,14 +199,28 @@ function reportPriceRows(item) {
       index,
     }));
   if (planRows.length) return planRows;
-  return (item?.investor_stances || [])
-    .filter((row) => row && row.price_range)
+  const stanceRows = (item?.investor_stances || [])
+    .filter((row) => usablePriceRow(row, item?.market))
     .map((row, index) => ({
       profile: row.stance || row.profile || "",
       price_range: row.price_range || "",
       action: row.action || "见报告",
       note: row.note || "",
       source: "stance_fallback",
+      index,
+    }));
+  if (stanceRows.length) return stanceRows;
+  if (!historicalFallback) return [];
+  const reference = historicalPriceReference(item);
+  if (!reference) return [];
+  return reference.price_plan
+    .filter((row) => usablePriceRow(row, item?.market) && (row.action || row.profile))
+    .map((row, index) => ({
+      profile: row.profile || "",
+      price_range: row.price_range || "",
+      action: row.action || row.profile || "见报告",
+      note: row.rationale || "",
+      source: "historical_price_reference",
       index,
     }));
 }
@@ -218,6 +249,9 @@ function currentReportActionText(row) {
 
 function renderPriceActionTable(item, quote, { compact = true } = {}) {
   const rows = reportPriceRows(item);
+  const historicalReference = rows[0]?.source === "historical_price_reference"
+    ? historicalPriceReference(item)
+    : null;
   const wrap = document.createElement("div");
   wrap.className = compact ? "price-action-table" : "price-action-table price-action-table-detail";
   if (!rows.length) {
@@ -226,6 +260,22 @@ function renderPriceActionTable(item, quote, { compact = true } = {}) {
     fallback.textContent = item.action || "未提取价格表";
     wrap.append(fallback);
     return wrap;
+  }
+  if (historicalReference) {
+    const referenceNote = document.createElement("div");
+    referenceNote.className = "historical-price-reference";
+    const cutoff = historicalReference.source_data_cutoff || "日期未标注";
+    referenceNote.textContent = `历史价格参照 · ${cutoff} · 不参与当前操作归类`;
+    wrap.append(referenceNote);
+    if (!compact && historicalReference.source_report_path) {
+      const source = document.createElement("a");
+      source.className = "historical-price-link";
+      source.href = `${repositoryUrl}${historicalReference.source_report_path}`;
+      source.target = "_blank";
+      source.rel = "noreferrer";
+      source.textContent = "查看来源报告";
+      wrap.append(source);
+    }
   }
   const matched = matchReportPriceRow(item, quote)?.row;
   const limit = compact ? 6 : rows.length;
@@ -317,7 +367,7 @@ function inferredPointBand(points, index) {
 function matchReportPriceRow(item, quote) {
   const price = Number(quote?.price);
   if (!Number.isFinite(price)) return null;
-  const rows = reportPriceRows(item).map((row) => ({
+  const rows = reportPriceRows(item, { historicalFallback: false }).map((row) => ({
     row,
     band: parseReportPriceBand(row, item?.market),
   })).filter((entry) => entry.band && entry.band.currency === quote.currency);
@@ -563,7 +613,7 @@ function staleBuyAnchorAdvice(item, price, ceiling) {
 }
 
 function buyAdviceForItem(item, quote) {
-  const rows = reportPriceRows(item);
+  const rows = reportPriceRows(item, { historicalFallback: false });
   if (!rows.length) {
     const fallback = reportFallbackAdvice(item, "无结构化价格档");
     const price = Number(quote?.price);
@@ -1649,7 +1699,10 @@ function renderDetail() {
   const change = formatChange(quote);
   els.detailKicker.textContent = `${item.market || "未识别"} · ${item.ticker || "无代码"}`;
   const priceRows = reportPriceRows(item);
-  const tableBrief = priceRows.length ? `${priceRows.length} 档报告价格` : "未提取价格表";
+  const historicalReference = priceRows[0]?.source === "historical_price_reference";
+  const tableBrief = priceRows.length
+    ? `${priceRows.length} 档${historicalReference ? "历史价格参照" : "报告价格"}`
+    : "未提取价格表";
   const adviceBrief = buyAdviceForItem(item, quote).label;
   els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
   els.detailReport.href = `${repositoryUrl}${item.report_path}`;
@@ -1762,6 +1815,18 @@ function renderDetail() {
         .map((s) => `${String(s.stance || "").replace("型", "")}：${s.action || ""}${s.price_range ? "（" + s.price_range + "）" : ""}`)
         .join("；");
       card.append(histLine);
+    }
+    const historyPriceItem = {
+      ...snap,
+      market: item.market,
+      ticker: item.ticker,
+    };
+    const historicalPriceRows = reportPriceRows(historyPriceItem, { historicalFallback: false });
+    if (historicalPriceRows.length) {
+      const priceTitle = document.createElement("p");
+      priceTitle.className = "history-price-title";
+      priceTitle.textContent = "当期价格行动表（不与当前行情匹配）";
+      card.append(priceTitle, renderPriceActionTable(historyPriceItem, null, { compact: false }));
     }
     const link = document.createElement("a");
     link.className = "btn ghost";

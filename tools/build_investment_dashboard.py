@@ -2850,15 +2850,7 @@ def candidate_record(
     if decision_contract:
         record["decision_source"] = "看板决策契约"
         record["decision_contract"] = decision_contract
-    record["price_status"] = (
-        "已提取价格计划"
-        if record["price_plan"]
-        else "已提取三情景"
-        if record["scenario_valuation"]
-        else "已提取"
-        if record["buy_price"]
-        else "价格未给出"
-    )
+    record["price_status"] = price_status_for(record)
     record["data_status"] = "已标注" if record["data_cutoff"] else "待复核：未标注数据截止日"
     return record
 
@@ -2918,15 +2910,7 @@ def report_snapshot(record: dict[str, Any]) -> dict[str, Any]:
         "price_plan": record.get("price_plan") or [],
         "scenario_valuation": record.get("scenario_valuation") or [],
         "valuation_section": record.get("valuation_section"),
-        "price_status": (
-            "已提取价格计划"
-            if record.get("price_plan")
-            else "已提取三情景"
-            if record.get("scenario_valuation")
-            else "已提取"
-            if record.get("buy_price")
-            else "价格未给出"
-        ),
+        "price_status": price_status_for(record),
         "title": record.get("title"),
         "report_path": record.get("report_path"),
         "report_link": record.get("report_link"),
@@ -2935,6 +2919,100 @@ def report_snapshot(record: dict[str, Any]) -> dict[str, Any]:
         snapshot["decision_source"] = record.get("decision_source")
         snapshot["decision_contract"] = record["decision_contract"]
     return snapshot
+
+
+def usable_price_plan_rows(
+    price_plan: list[dict[str, Any]] | None,
+    market: str | None,
+) -> list[dict[str, str]]:
+    """Keep only price/action rows safe to present as an actual price reference.
+
+    This is intentionally stricter than merely checking whether a legacy table
+    contained a number.  It rejects valuation multiples and rows denominated for
+    another listing, but accepts an unambiguous band whose currency is implied by
+    the report's selected market.
+    """
+    usable: list[dict[str, str]] = []
+    for row in price_plan or []:
+        if not isinstance(row, dict):
+            continue
+        price_range = clean_markdown(str(row.get("price_range") or ""))
+        action = clean_markdown(str(row.get("action") or row.get("profile") or ""))
+        if (
+            not price_range
+            or is_contract_null(price_range)
+            or not action
+            or is_contract_null(action)
+            or not looks_like_price_band(price_range)
+            or _price_plan_anchor(price_range) is None
+            or not _price_plan_matches_market(row, market)
+        ):
+            continue
+        normalized = {
+            "profile": clean_markdown(str(row.get("profile") or "")),
+            "price_range": price_range,
+            "action": action,
+        }
+        rationale = clean_markdown(str(row.get("rationale") or ""))
+        if rationale:
+            normalized["rationale"] = rationale
+        usable.append(normalized)
+    return usable
+
+
+def price_status_for(
+    record: dict[str, Any],
+    historical_reference: dict[str, Any] | None = None,
+) -> str:
+    """Describe the price source without treating a historical band as current."""
+    if usable_price_plan_rows(record.get("price_plan"), record.get("market")):
+        return "已提取价格计划"
+    if historical_reference:
+        return "历史价格参照"
+    if record.get("scenario_valuation"):
+        return "已提取三情景"
+    if record.get("buy_price"):
+        return "已提取"
+    return "价格未给出"
+
+
+def historical_price_reference(
+    selected: dict[str, Any],
+    ordered: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Return one transparent, market-compatible historical price reference.
+
+    The selected report remains the sole source of current fundamental action.
+    A historical price table is only attached when the selected report has no
+    usable price rows, and the UI must label it as historical rather than feed it
+    into live-price matching or buy/sell filters.
+    """
+    market = selected.get("market")
+    if usable_price_plan_rows(selected.get("price_plan"), market):
+        return None
+    selected_path = selected.get("report_path")
+    seen_paths: set[str] = set()
+    for candidate in ordered:
+        path = str(candidate.get("report_path") or "")
+        if not path or path == selected_path or path in seen_paths:
+            continue
+        seen_paths.add(path)
+        data_cutoff = candidate.get("data_cutoff")
+        if not data_cutoff:
+            # An undated price reference cannot be evaluated for freshness.
+            continue
+        rows = usable_price_plan_rows(candidate.get("price_plan"), market)
+        if not rows:
+            continue
+        return {
+            "source_report_path": path,
+            "source_report_link": candidate.get("report_link"),
+            "source_title": candidate.get("title"),
+            "source_data_cutoff": data_cutoff,
+            "price_plan": rows,
+            "usage": "display_only",
+        }
+    return None
 
 
 def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -> list[dict[str, Any]]:
@@ -2956,18 +3034,15 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
         preferred_section = prefer_valuation_section(selected, ordered)
         if preferred_section:
             selected["valuation_section"] = preferred_section
-        selected["price_status"] = (
-            "已提取价格计划"
-            if selected.get("price_plan")
-            else "已提取三情景"
-            if selected.get("scenario_valuation")
-            else "已提取"
-            if selected.get("buy_price")
-            else "价格未给出"
-        )
+        historical_reference = historical_price_reference(selected, ordered)
+        if historical_reference:
+            selected["historical_price_reference"] = historical_reference
+        selected["price_status"] = price_status_for(selected, historical_reference)
         selected["data_status"] = "已标注" if selected.get("data_cutoff") else "待复核：未标注数据截止日"
         selected["selection_basis"] = "报告数据截止日"
-        # Full history newest-first. Each snapshot keeps its own prices; nothing is carried forward.
+        # Full history remains newest-first. Historical prices never become this
+        # report's price plan; a separately labelled display-only reference may
+        # be attached above when the selected report itself has no usable price.
         selected["report_history"] = [report_snapshot(item) for item in ordered]
         selected["report_history_count"] = len(selected["report_history"])
         selections.append(selected)
@@ -3263,10 +3338,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "records": records,
     }
     board = {
-        "schema_version": 4,
+        "schema_version": 5,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Technical snapshots and explicit post-buy thesis/news reports are attached separately and do not affect conclusions, prices, sorting, or filters. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
         "post_buy_tracking": post_buy_summary,
         "decisions": decisions,

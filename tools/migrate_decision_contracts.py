@@ -9,6 +9,7 @@ missing source facts as ``未给出`` / ``待复核`` instead of inferring them.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -26,6 +27,29 @@ CONTRACT_HEADING = "## 看板决策契约"
 REQUIRED_STANCES = ("激进型", "稳健型", "保守型")
 KNOWN_ACTIONS = {"买入", "分批买入", "持有", "观察", "减仓/卖出"}
 EXPLICIT_PRICE_PATTERN = re.compile(r"(?:元|港元|美元|HK\$|US\$|USD|HKD)", re.IGNORECASE)
+HISTORY_FRAGMENT_PATTERN = re.compile(
+    r"(?:^|[-_])(?:checklist|earnings|management|financial-analyst|business-analyst|"
+    r"risk-assessor|drift|thesis|news|technical|industry|valuation)(?:[-_.]|$)",
+    re.IGNORECASE,
+)
+HISTORY_DUPLICATE_PATTERN = re.compile(
+    r"(?:duplicate|conflict|from-old|recovered|restored)",
+    re.IGNORECASE,
+)
+HISTORY_FRAGMENT_MARKERS = (
+    "巴菲特视角",
+    "芒格视角",
+    "李录视角",
+    "段永平视角",
+    "研究底稿",
+    "财务估值",
+    "财务估值分析",
+    "商业分析",
+    "行业研究",
+    "系列说明",
+    "开篇",
+    "终篇",
+)
 
 
 def cell(value: Any, fallback: str = "未给出") -> str:
@@ -142,6 +166,113 @@ def load_board(repo_root: Path) -> dict[str, Any]:
     return dashboard.build_dashboard(repo_root)
 
 
+def is_primary_history_report(record: dict[str, Any], market: str | None) -> bool:
+    """Keep complete, uniquely identified reports; exclude supporting fragments.
+
+    The decision board's history is intentionally broad for library navigation.
+    Contract migration has a narrower goal: annotate only reports that can stand
+    on their own as a dated company decision, not a role-specific workpaper.
+    """
+    if (
+        not record.get("ticker")
+        or record.get("market") != market
+        or record.get("action") not in KNOWN_ACTIONS
+        or not record.get("data_cutoff")
+    ):
+        return False
+    path = str(record.get("report_path") or "")
+    filename = Path(path).name
+    if (
+        not path
+        or "《" in path
+        or "checklist" in path.casefold()
+        or HISTORY_FRAGMENT_PATTERN.search(filename)
+        or HISTORY_DUPLICATE_PATTERN.search(filename)
+        or any(marker in path for marker in HISTORY_FRAGMENT_MARKERS)
+    ):
+        return False
+    return True
+
+
+def history_duplicate_rank(record: dict[str, Any]) -> tuple[int, int, int, str]:
+    """Prefer a clearly dated final report when byte-identical copies exist."""
+    path = str(record.get("report_path") or "")
+    filename = Path(path).name
+    return (
+        1 if "最终报告" in filename else 0,
+        1 if re.search(r"(?:-|_)20\d{6}", filename) else 0,
+        -len(filename),
+        path,
+    )
+
+
+def source_body_fingerprint(path: Path) -> str:
+    """Fingerprint report prose while ignoring this migration's trailing contract.
+
+    Without this normalization, two byte-identical reports stop deduplicating
+    after one of them receives a contract, and a later run would annotate the
+    remaining copy.  The migration only appends this exact final section, so it
+    is safe to remove for duplicate detection.
+    """
+    text = path.read_text(encoding="utf-8", errors="replace")
+    source_body = re.sub(
+        r"\n{0,3}^## 看板决策契约\s*$[\s\S]*\Z",
+        "",
+        text,
+        flags=re.MULTILINE,
+    ).rstrip()
+    return hashlib.sha256(source_body.encode("utf-8")).hexdigest()
+
+
+def target_records(
+    board: dict[str, Any],
+    repo_root: Path,
+    selected_markets: set[str] | None,
+    *,
+    include_history: bool,
+) -> list[dict[str, Any]]:
+    """Select current reports, optionally expanding to their pre-buy history.
+
+    Historical records are taken from each selected board decision's own
+    ``report_history`` chain.  This deliberately avoids a broad ``reports/``
+    scan, which could otherwise include technical snapshots, thematic notes, or
+    unrelated duplicate files.
+    """
+    decisions = [
+        item
+        for item in board.get("decisions", [])
+        if selected_markets is None or item.get("market") in selected_markets
+    ]
+    if not include_history:
+        return decisions
+
+    catalog_path = repo_root / "data" / "investment-dashboard" / "reports_catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    by_path = {
+        str(record.get("report_path")): record
+        for record in catalog.get("records", [])
+        if isinstance(record, dict) and record.get("report_path")
+    }
+    selected_paths: dict[str, str] = {}
+    for decision in decisions:
+        market = str(decision.get("market") or "")
+        for snapshot in decision.get("report_history") or []:
+            if isinstance(snapshot, dict) and snapshot.get("report_path"):
+                selected_paths[str(snapshot["report_path"])] = market
+
+    unique_records: dict[str, dict[str, Any]] = {}
+    for path in sorted(selected_paths):
+        record = by_path.get(path)
+        if record is None:
+            raise ValueError(f"History report is absent from catalog: {path}")
+        if is_primary_history_report(record, selected_paths[path]):
+            digest = source_body_fingerprint(repo_root / path)
+            previous = unique_records.get(digest)
+            if previous is None or history_duplicate_rank(record) > history_duplicate_rank(previous):
+                unique_records[digest] = record
+    return sorted(unique_records.values(), key=lambda record: str(record["report_path"]))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
@@ -153,6 +284,14 @@ def main() -> int:
         help="limit migration to one or more board markets; defaults to all markets",
     )
     parser.add_argument(
+        "--include-history",
+        action="store_true",
+        help=(
+            "also append contracts to primary, uniquely identified pre-buy historical "
+            "reports reachable from the selected current board companies"
+        ),
+    )
+    parser.add_argument(
         "--replace-existing",
         action="store_true",
         help="replace an existing trailing contract block; use only to repair this migration",
@@ -162,11 +301,12 @@ def main() -> int:
     repo_root = args.repo_root.resolve()
     board = load_board(repo_root)
     selected_markets = set(args.markets) if args.markets else None
-    targets = [
-        item
-        for item in board["decisions"]
-        if selected_markets is None or item.get("market") in selected_markets
-    ]
+    targets = target_records(
+        board,
+        repo_root,
+        selected_markets,
+        include_history=args.include_history,
+    )
     manifest: list[dict[str, Any]] = []
     changed = 0
     for record in targets:
@@ -213,7 +353,8 @@ def main() -> int:
             {
                 "schema_version": 1,
                 "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-                "scope": "latest-board-reports",
+                "scope": "board-report-history" if args.include_history else "latest-board-reports",
+                "include_history": args.include_history,
                 "markets": sorted(selected_markets) if selected_markets else sorted(dashboard.DECISION_CONTRACT_MARKETS),
                 "mode": "apply" if args.apply else "dry-run",
                 "target_count": len(targets),

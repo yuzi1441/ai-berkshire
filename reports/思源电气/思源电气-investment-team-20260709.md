@@ -252,3 +252,27 @@ ROE 近似 = 20.10%
 - [IEA Electricity 2026 Executive Summary](https://www.iea.org/reports/electricity-2026/executive-summary)
 - [IEA：电网设备供应链压力与交付周期](https://www.iea.org/news/rising-component-prices-and-supply-chain-pressures-are-hindering-the-development-of-transmission-grid-infrastructure)
 - [工信部：电力装备行业稳增长工作方案（2025—2026 年）](https://www.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2025/art_e6fdc1fc198d4b3a86551a53c54b9491.html)
+
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | 思源电气 |
+| 股票代码 | 002028.SZ |
+| 市场 | A股 |
+| 报告日期 | 未给出 |
+| 数据截止日 | 2026-07-09 |
+| 基本面建议动作 | 观察 |
+| 结论摘要 | 7.2 分层操作建议（以 156.84 元/股为估值输入） |
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+| 稳健型动作 | 观察为主，等待更高安全边际 |
+| 稳健型价格区间 | 110–130 元 |
+| 保守型动作 | 未给出 |
+| 保守型价格区间 | 未给出 |
+| 买入失效条件 | 未给出 |
+| 下次复核日期 | 未给出 |
+| 研究置信度 | 待复核 |
