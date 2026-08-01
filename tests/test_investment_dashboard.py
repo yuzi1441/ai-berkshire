@@ -175,7 +175,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 """# 示例公司研究
 
 数据截止：2026-07-20
-股票代码：000001.SZ
+股票代码：00001.HK
 
 ### 4. 三情景估值
 
@@ -248,7 +248,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertIn("历史研报结论", table)
             self.assertNotIn("AI产业研究", table)
 
-    def test_new_report_never_inherits_old_investor_prices(self):
+    def test_new_report_keeps_own_prices_and_attaches_display_only_history(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             self.setup_repository(root)
@@ -275,8 +275,64 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(selected["investor_stances"], [])
             self.assertEqual(selected["conclusion_summary"], "继续观察，等待基本面验证。")
             self.assertIsNone(selected["buy_price"])
-            self.assertEqual(selected["price_status"], "价格未给出")
+            self.assertEqual(selected["price_status"], "历史价格参照")
+            self.assertEqual(selected["historical_price_reference"]["usage"], "display_only")
             self.assertEqual(len(selected["report_history"][1]["investor_stances"]), 3)
+
+    def test_missing_current_price_gets_a_labelled_historical_reference(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            company_dir = root / "reports" / "示例公司"
+            (company_dir / "older.md").write_text(
+                "# 旧报告\n\n数据截止：2026-06-01\n股票代码：000001.SZ\n\n"
+                "## 最终建议\n\n建议分批买入。\n\n"
+                "### 价格区间建议\n\n"
+                "| 类型 | 价格区间 | 动作建议 |\n|---|---|---|\n"
+                "| 激进型 | 18-20 元 | 小仓试探 |\n"
+                "| 稳健型 | 15-18 元 | 分批建仓 |\n",
+                encoding="utf-8",
+            )
+            (company_dir / "newer.md").write_text(
+                "# 新报告\n\n数据截止：2026-07-01\n股票代码：000001.SZ\n\n"
+                "## 最终建议\n\n继续观察，等待基本面验证。\n",
+                encoding="utf-8",
+            )
+
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+
+            self.assertEqual(selected["report_path"], "reports/示例公司/newer.md")
+            self.assertEqual(selected["price_plan"], [])
+            self.assertEqual(selected["price_status"], "历史价格参照")
+            reference = selected["historical_price_reference"]
+            self.assertEqual(reference["source_report_path"], "reports/示例公司/older.md")
+            self.assertEqual(reference["source_data_cutoff"], "2026-06-01")
+            self.assertEqual(reference["usage"], "display_only")
+            self.assertEqual(reference["price_plan"][0]["price_range"], "18-20 元")
+
+    def test_historical_price_reference_rejects_another_listing_currency(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            company_dir = root / "reports" / "示例公司"
+            (company_dir / "older.md").write_text(
+                "# 旧报告\n\n数据截止：2026-06-01\n股票代码：000001.SZ\n\n"
+                "## 最终建议\n\n建议分批买入。\n\n"
+                "### 价格区间建议\n\n"
+                "| 类型 | 价格区间 | 动作建议 |\n|---|---|---|\n"
+                "| 激进型 | US$18-20 | 小仓试探 |\n",
+                encoding="utf-8",
+            )
+            (company_dir / "newer.md").write_text(
+                "# 新报告\n\n数据截止：2026-07-01\n股票代码：000001.SZ\n\n"
+                "## 最终建议\n\n继续观察，等待基本面验证。\n",
+                encoding="utf-8",
+            )
+
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+
+            self.assertEqual(selected["price_status"], "价格未给出")
+            self.assertNotIn("historical_price_reference", selected)
 
     def test_excludes_post_buy_tracker_from_pre_buy_decision_selection(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -580,6 +636,71 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(contract["action"], "待复核")
             self.assertIsNone(contract["data_cutoff"])
             self.assertFalse(migration.append_contract(report, record))
+
+    def test_history_migration_targets_only_selected_market_history_chain(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            a_company = root / "reports" / "A股示例"
+            a_company.mkdir()
+            (a_company / "older.md").write_text(
+                "# A股示例旧报告\n\n数据截止：2026-06-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n分批买入，10-12 元。\n",
+                encoding="utf-8",
+            )
+            (a_company / "newer.md").write_text(
+                "# A股示例新报告\n\n数据截止：2026-07-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            (a_company / "newer-copy.md").write_text(
+                (a_company / "newer.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            migration.append_contract(
+                a_company / "newer.md",
+                {
+                    "company": "A股示例",
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "report_completed_at": "2026-07-01",
+                    "data_cutoff": "2026-07-01",
+                    "action": "观察",
+                    "recommendation": "继续观察。",
+                    "investor_stances": [],
+                    "price_plan": [],
+                },
+            )
+            (a_company / "analysis-management.md").write_text(
+                "# A股示例管理层子稿\n\n数据截止：2026-07-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            (a_company / "巴菲特Checklist-A股示例.md").write_text(
+                "# A股示例Checklist\n\n数据截止：2026-07-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            h_company = root / "reports" / "港股示例"
+            h_company.mkdir()
+            (h_company / "report.md").write_text(
+                "# 港股示例报告\n\n数据截止：2026-07-01\n股票代码：00001.HK\n\n"
+                "## 最终建议\n\n分批买入，10-12 港元。\n",
+                encoding="utf-8",
+            )
+
+            board = migration.load_board(root)
+            targets = migration.target_records(
+                board,
+                root,
+                {"A股"},
+                include_history=True,
+            )
+
+            self.assertEqual(
+                {record["report_path"] for record in targets},
+                {"reports/A股示例/older.md", "reports/A股示例/newer.md"},
+            )
 
     def test_migration_does_not_promote_bare_numbers_to_price_ranges(self):
         record = {
