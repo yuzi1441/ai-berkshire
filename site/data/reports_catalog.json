@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T17:39:14+08:00",
+  "generated_at": "2026-08-01T18:31:37+08:00",
   "record_count": 1952,
   "records": [
     {
@@ -69798,8 +69798,34 @@
         }
       ],
       "conclusion_summary": "空仓者 可以分批建仓，不要一次打满。1168 元已进入可接受区间",
-      "buy_price": "1300-1500 元",
-      "price_plan": [],
+      "buy_price": "900 元以下",
+      "price_plan": [
+        {
+          "profile": "分批建仓",
+          "price_range": "900 元以下",
+          "action": "分批建仓"
+        },
+        {
+          "profile": "分批建仓",
+          "price_range": "900-1100 元",
+          "action": "分批建仓"
+        },
+        {
+          "profile": "分批建仓",
+          "price_range": "1100-1300 元",
+          "action": "分批建仓"
+        },
+        {
+          "profile": "观察，不追价",
+          "price_range": "1300-1500 元",
+          "action": "观察，不追价"
+        },
+        {
+          "profile": "观察，等待利润重新加速",
+          "price_range": "1500 元以上",
+          "action": "观察，等待利润重新加速"
+        }
+      ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
@@ -69849,7 +69875,7 @@
         "next_review_date": null,
         "confidence": "待复核"
       },
-      "price_status": "已提取三情景",
+      "price_status": "已提取价格计划",
       "data_status": "已标注"
     },
     {
