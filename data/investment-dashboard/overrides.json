@@ -1,6 +1,155 @@
 {
   "schema_version": 1,
   "description": "Optional reviewed corrections for the report parser. Use report paths as keys; do not edit generated decision_board.json directly.",
-  "reports": {},
+  "reports": {
+    "reports/PayPal/PayPal-深度研究报告-20260607.md": {
+      "action": "观察",
+      "recommendation": "条件性机会；品牌结账企稳前继续观察"
+    },
+    "reports/港股召回池/中国太保/最终报告.md": {
+      "action": "分批买入",
+      "recommendation": "当前估值下风险收益比突出，可分批建仓"
+    },
+    "reports/港股召回池/国药控股-被排除/最终报告.md": {
+      "action": "分批买入",
+      "recommendation": "作为高股息组合小仓配置（3-5%），不作为核心重仓标的"
+    },
+    "reports/港股召回池/申洲国际/最终报告.md": {
+      "action": "观察",
+      "recommendation": "当前估值有吸引力，但需验证毛利率恢复，暂列观察"
+    },
+    "reports/港股召回池/翰森制药/最终报告.md": {
+      "action": "观察",
+      "recommendation": "长期关注、择机配置；当前不构成强烈买入信号"
+    },
+    "reports/ADP/《看懂ADP》/04-风险与估值-打了七折的收费公路.md": {
+      "ticker": "ADP",
+      "market": "美股"
+    },
+    "reports/Accenture/最终报告.md": {
+      "ticker": "ACN",
+      "market": "美股"
+    },
+    "reports/Adobe/最终报告.md": {
+      "ticker": "ADBE",
+      "market": "美股"
+    },
+    "reports/Almonty-Industries/Almonty-Industries-深度研究-20260604.md": {
+      "ticker": "ALM",
+      "market": "美股"
+    },
+    "reports/Booking/《看懂Booking》/04-风险与估值-好公司也需要好价格.md": {
+      "ticker": "BKNG",
+      "market": "美股"
+    },
+    "reports/GE Vernova/GEV-research-20260623.md": {
+      "ticker": "GEV",
+      "market": "美股"
+    },
+    "reports/Google/Google-Alphabet投资研究报告-20260623.md": {
+      "ticker": "GOOGL",
+      "market": "美股"
+    },
+    "reports/Intel/Intel-investment-research-20260623.md": {
+      "ticker": "INTC",
+      "market": "美股"
+    },
+    "reports/Marvell/Marvell-investment-research-20260624.md": {
+      "ticker": "MRVL",
+      "market": "美股"
+    },
+    "reports/Mastercard/《看懂万事达卡》/05-估值判断-为确定性付多少溢价（终章）.md": {
+      "ticker": "MA",
+      "market": "美股"
+    },
+    "reports/Meta/《看懂Meta》/05-估值判断-一道关于信任的数学题.md": {
+      "ticker": "META",
+      "market": "美股"
+    },
+    "reports/Novo Nordisk/最终报告.md": {
+      "ticker": "NVO",
+      "market": "美股"
+    },
+    "reports/PayPal/PayPal-深度研究报告-20260607.md": {
+      "ticker": "PYPL",
+      "market": "美股",
+      "action": "观察",
+      "recommendation": "条件性机会；品牌结账企稳前继续观察"
+    },
+    "reports/Progressive/最终报告.md": {
+      "ticker": "PGR",
+      "market": "美股"
+    },
+    "reports/Qualcomm/02-财务估值分析-巴菲特视角.md": {
+      "ticker": "QCOM",
+      "market": "美股"
+    },
+    "reports/RKLB/RKLB-investment-research.md": {
+      "ticker": "RKLB",
+      "market": "美股"
+    },
+    "reports/Tesla/Tesla-research-20260624.md": {
+      "ticker": "TSLA",
+      "market": "美股"
+    },
+    "reports/Uber/最终报告.md": {
+      "ticker": "UBER",
+      "market": "美股"
+    },
+    "reports/lixiang-auto/lixiang-auto-investment-research-20260624.md": {
+      "ticker": "LI",
+      "market": "美股"
+    },
+    "reports/lululemon/lululemon-research-20260516.md": {
+      "ticker": "LULU",
+      "market": "美股"
+    },
+    "reports/微软/微软-research-20260623.md": {
+      "ticker": "MSFT",
+      "market": "美股"
+    },
+    "reports/拼多多/拼多多投资研究报告_20260704.md": {
+      "ticker": "PDD",
+      "market": "美股"
+    },
+    "reports/搜狐/最终报告.md": {
+      "ticker": "SOHU",
+      "market": "美股"
+    },
+    "reports/汽车之家/汽车之家-深度投研-20260614.md": {
+      "ticker": "ATHM",
+      "market": "美股"
+    },
+    "reports/滴滴/滴滴投资研究专题-20260424.md": {
+      "ticker": "DIDIY",
+      "market": "美股"
+    },
+    "reports/网易/网易-深度投研-20260519.md": {
+      "ticker": "NTES",
+      "market": "美股"
+    },
+    "reports/英伟达/英伟达-安全垫分析-20260426.md": {
+      "ticker": "NVDA",
+      "market": "美股"
+    },
+    "reports/平安集团/《看懂平安集团》/04-风险与长期判断.md": {
+      "ticker": "601318.SH",
+      "market": "A股"
+    },
+    "reports/平安集团/平安集团-research-20260410.md": {
+      "ticker": "601318.SH",
+      "market": "A股"
+    },
+    "reports/大师持仓追踪/大师持仓追踪-13F-2026Q1-20260516.md": {
+      "entity_kind": "topic"
+    },
+    "reports/大师持仓追踪/大师持仓追踪-13F-2026Q1-20260516.duplicate-from-root-20260723.md": {
+      "entity_kind": "topic"
+    },
+    "reports/港股召回池/海尔智家/04-风险管理层评估-李录视角.md": {
+      "ticker": "06690.HK",
+      "market": "港股"
+    }
+  },
   "companies": {}
 }

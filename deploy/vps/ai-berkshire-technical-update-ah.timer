@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh A-share and Hong Kong technical analysis after close
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:30:00 Asia/Shanghai
+Persistent=true
+Unit=ai-berkshire-technical-update@ah.service
+
+[Install]
+WantedBy=timers.target

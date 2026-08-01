@@ -1,0 +1,162 @@
+[
+  {
+    "id": 4,
+    "label": "全股本理论市值 · H 股 02727.HK",
+    "reported_value": 505.05,
+    "unit": "亿港元",
+    "fetched_value": 505.05395317,
+    "fetched_source": "东方财富 02727.HK 2026-07-29 收盘价与 2025 年报总股本",
+    "fetched_value2": 505.05395317,
+    "fetched_source2": "独立复算：3.25 港元×155.40121636 亿股"
+  },
+  {
+    "id": 5,
+    "label": "TTM PE · A 股 601727.SH",
+    "reported_value": 83.68,
+    "unit": "倍",
+    "fetched_value": 83.68,
+    "fetched_source": "financial_rigor.py：6.97 元与 TTM EPS 0.0832913 元",
+    "fetched_value2": 83.68,
+    "fetched_source2": "独立复算：6.97÷[(12.06219+3.80437-2.92299)亿元÷155.40121636亿股]"
+  },
+  {
+    "id": 15,
+    "label": "2023（重述） · 营业利润率",
+    "reported_value": 3.37,
+    "unit": "%",
+    "fetched_value": 3.37,
+    "fetched_source": "上海电气 2025 年报五年摘要/利润表",
+    "fetched_value2": 3.37,
+    "fetched_source2": "东方财富 F10 财务数据"
+  },
+  {
+    "id": 18,
+    "label": "2023（重述） · 自由现金流",
+    "reported_value": 35.33,
+    "unit": "亿元",
+    "fetched_value": 35.33,
+    "fetched_source": "上海电气 2025 年报现金流量表与购建长期资产现金",
+    "fetched_value2": 35.33,
+    "fetched_source2": "独立复算：经营现金流 77.61 亿元-资本开支 42.28 亿元"
+  },
+  {
+    "id": 14,
+    "label": "2023（重述） · 销售毛利率",
+    "reported_value": 17.24,
+    "unit": "%",
+    "fetched_value": 17.24,
+    "fetched_source": "上海电气 2025 年报五年财务数据",
+    "fetched_value2": 17.24,
+    "fetched_source2": "东方财富 F10 财务数据"
+  },
+  {
+    "id": 12,
+    "label": "2023（重述） · 归母净利润",
+    "reported_value": 8.03,
+    "unit": "亿元",
+    "fetched_value": 8.03,
+    "fetched_source": "上海电气 2025 年报比较期重述数据",
+    "fetched_value2": 8.03,
+    "fetched_source2": "东方财富 F10 财务数据"
+  },
+  {
+    "id": 29,
+    "label": "能源装备 · 毛利率",
+    "reported_value": 18.4,
+    "unit": "%",
+    "fetched_value": 18.4,
+    "fetched_source": "上海电气 2025 年报分部经营情况",
+    "fetched_value2": 18.4,
+    "fetched_source2": "上海电气 2025 年度业绩公告"
+  },
+  {
+    "id": 28,
+    "label": "能源装备 · 分部披露收入",
+    "reported_value": 750.24,
+    "unit": "亿元",
+    "fetched_value": 750.24,
+    "fetched_source": "上海电气 2025 年报分部经营情况",
+    "fetched_value2": 750.24,
+    "fetched_source2": "上海电气 2025 年度业绩公告"
+  },
+  {
+    "id": 32,
+    "label": "工业装备 · 占公司收入",
+    "reported_value": 29.13,
+    "unit": "%",
+    "fetched_value": 29.13,
+    "fetched_source": "上海电气 2025 年报：工业装备对外收入 368.9759 亿元/总营收 1266.78586 亿元",
+    "fetched_value2": 29.126,
+    "fetched_source2": "financial_rigor.py 与独立除法复算"
+  },
+  {
+    "id": 36,
+    "label": "集成服务 · 对外收入",
+    "reported_value": 168.91,
+    "unit": "亿元",
+    "fetched_value": 168.9136,
+    "fetched_source": "上海电气 2025 年报分部附注",
+    "fetched_value2": 168.91,
+    "fetched_source2": "上海电气 2025 年度业绩公告分部数据"
+  },
+  {
+    "id": 55,
+    "label": "TTM EPS · A 股",
+    "reported_value": 0.0833,
+    "unit": "元",
+    "fetched_value": 0.0832913,
+    "fetched_source": "financial_rigor.py：TTM 归母净利 12.94357 亿元/总股本",
+    "fetched_value2": 0.0832913,
+    "fetched_source2": "2025 年报及 2025Q1、2026Q1 归母净利独立复算"
+  },
+  {
+    "id": 70,
+    "label": "乐观 · 相对现价",
+    "reported_value": 14.8,
+    "unit": "%",
+    "fetched_value": 14.8,
+    "fetched_source": "financial_rigor.py 三情景模型",
+    "fetched_value2": 14.7776,
+    "fetched_source2": "独立复算：(8.0÷6.97)-1"
+  },
+  {
+    "id": 76,
+    "label": "基准 · A 股三年后价",
+    "reported_value": 3.2,
+    "unit": "元",
+    "fetched_value": 3.2,
+    "fetched_source": "financial_rigor.py：TTM EPS、20% 三年增长、22 倍退出 PE",
+    "fetched_value2": 3.2,
+    "fetched_source2": "独立情景公式复算并按一位小数取整"
+  },
+  {
+    "id": 82,
+    "label": "悲观 · A 股三年后价",
+    "reported_value": 1.2,
+    "unit": "元",
+    "fetched_value": 1.2,
+    "fetched_source": "financial_rigor.py：TTM EPS、0% 三年增长、15 倍退出 PE",
+    "fetched_value2": 1.2,
+    "fetched_source2": "独立情景公式复算并按一位小数取整"
+  },
+  {
+    "id": 87,
+    "label": "A 股观察 · 价格区间",
+    "reported_value": 3.0,
+    "unit": "元",
+    "fetched_value": 3.0,
+    "fetched_source": "报告三情景模型：基准情景三年后价格约 3.2 元，观察区下沿按安全边际设定",
+    "fetched_value2": 3.0,
+    "fetched_source2": "独立价格纪律复核：基准情景价格与条件性研究区之间的观察阈值"
+  },
+  {
+    "id": 95,
+    "label": "管理与治理 · 评分",
+    "reported_value": 2.0,
+    "unit": "分/5分",
+    "fetched_value": 2.0,
+    "fetched_source": "报告六维框架：历史监管处罚、管理层零持股、延期换届与当前修复机会",
+    "fetched_value2": 2.0,
+    "fetched_source2": "独立按治理记录、利益绑定、资本配置和透明度四项复核"
+  }
+]
