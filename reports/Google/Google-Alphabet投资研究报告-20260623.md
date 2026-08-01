@@ -409,3 +409,27 @@ Google 在 Mag7 中估值相对合理——PE 最低之一，增速中等偏上�
 *数据来源：SEC Filings (8-K, 10-Q, DEF 14A), Yahoo Finance, StockAnalysis, MacroTrends, CNBC, Fortune, CompaniesMarketCap, Synergy Research Group, StatCounter, First Page Sage*
 
 *所有财务计算通过 financial_rigor.py 工具验算，结果可审计复现*
+
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | Google |
+| 股票代码 | 未给出 |
+| 市场 | 未识别 |
+| 报告日期 | 未给出 |
+| 数据截止日 | 2026-06-23 |
+| 基本面建议动作 | 观察 |
+| 结论摘要 | 空仓者 当前价格（$349.68）观望为主。等待回调至 $280-300（PE 22-24x）再考虑建仓。Google 是好公司，但好公司不等于好价格 |
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+| 稳健型动作 | 未给出 |
+| 稳健型价格区间 | 未给出 |
+| 保守型动作 | 未给出 |
+| 保守型价格区间 | 未给出 |
+| 买入失效条件 | 未给出 |
+| 下次复核日期 | 未给出 |
+| 研究置信度 | 待复核 |

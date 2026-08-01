@@ -218,6 +218,23 @@ description: 公司新闻脉搏：股价异动时快速归因。用 4 个并行 
 
 写入 `reports/{公司名}/{公司名}-news-{YYYYMMDD}.md`。如果 `reports/{公司名}/` 目录不存在则创建（说明该公司还没建过任何研究报告）。
 
+### 第八点五步：同步持仓异动事件到看板
+
+仅在该公司已经由用户明确登记为实际持仓时同步。不得因为主报告给出买入建议，或只是处于关注池，就创建持仓或预警。
+
+从本次归因报告中提取：股票代码、异动日期、涨跌幅和窗口、性质判断、30-100 字摘要、是否明确建议重审论文、报告相对路径。类别映射为：价值事件→`基本面`、情绪/技术波动→`情绪`或`技术`、混合→`混合`、真因不明→`不明`。只有“触发投资论文重审”为是时传 `--review-required`；其余传 `--no-review-required`。
+
+```bash
+python3 tools/post_buy_tracking.py event {股票代码} \
+  --event-date {YYYY-MM-DD} --change-pct {涨跌幅} --window {窗口} \
+  --category {基本面/行业/情绪/技术/混合/不明} --summary "{归因摘要}" \
+  --report-path {报告相对路径} --skip-unregistered {--review-required 或 --no-review-required}
+python3 tools/post_buy_tracking.py check
+python3 tools/build_investment_dashboard.py
+```
+
+`--skip-unregistered` 会让非持仓标的安静跳过。同步事件只能标记“异动待分析”或“论文待重审”，不得自动改写持仓、基本面建议或执行调仓。
+
 ### 第九步：清理团队
 
 使用 TeamDelete 清理团队资源。

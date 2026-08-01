@@ -333,3 +333,27 @@ Almonty Industries 是一个**高风险、高回报的"瓶颈投资"标的**。�
 - [Alpha Spread - AII估值](https://www.alphaspread.com/security/tsx/aii/summary)
 - [Simply Wall St - AII分析](https://simplywall.st/stocks/ca/materials/tsx-aii/almonty-industries-shares)
 - [Morningstar - ALM](https://www.morningstar.com/stocks/xnas/alm/quote)
+
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | Almonty-Industries |
+| 股票代码 | 未给出 |
+| 市场 | 未识别 |
+| 报告日期 | 未给出 |
+| 数据截止日 | 待复核 |
+| 基本面建议动作 | 观察 |
+| 结论摘要 | 投资建议：有条件的观望，等待更好的入场时机 |
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+| 稳健型动作 | 未给出 |
+| 稳健型价格区间 | 未给出 |
+| 保守型动作 | 回避 |
+| 保守型价格区间 | US$57 |
+| 买入失效条件 | 未给出 |
+| 下次复核日期 | 未给出 |
+| 研究置信度 | 待复核 |

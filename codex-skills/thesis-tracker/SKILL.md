@@ -116,6 +116,31 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 - 估值锚点
 - 追踪记录表（初始为空）
 
+### A6：同步已确认持仓到看板
+
+**只有用户明确确认已实际买入时**，才建立持仓跟踪；基本面主报告中的“买入/分批买入”不能替代这一确认。
+
+从主报告、用户提供的成交信息和本次论文中取得公司、股票代码、市场、买入日期、成本、仓位和下次复核日期。缺少股票代码、市场或买入日期时，不得猜测或登记，明确向用户索取缺失项。
+
+确认信息齐全后，使用项目工具登记一条持仓。`position-weight` 使用百分比，例如 `5` 表示 5% 仓位；`metrics` 填入本论文的 3-5 个核心跟踪指标（JSON 列表）。
+
+```bash
+python3 tools/post_buy_tracking.py register \
+  --ticker {股票代码} --company {公司名} --market {A股/港股/美股/未识别} \
+  --buy-date {YYYY-MM-DD} --cost-basis {成交成本} --position-weight {仓位百分比} \
+  --next-review {YYYY-MM-DD} --thesis-report {论文相对路径} \
+  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"成立"}]'
+python3 tools/post_buy_tracking.py update {股票代码} \
+  --thesis-status healthy --health-score {首次论文健康度1-10} \
+  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
+  --review-action 持有 --thesis-report {论文相对路径} \
+  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/post_buy_tracking.py check
+python3 tools/build_investment_dashboard.py
+```
+
+首次建立论文后必须同步初始健康度、复核动作和下一次复核日期；登记只更新买入后跟踪层，不改写主报告的基本面建议、技术面结论或历史研报。
+
 ---
 
 ## 模式B：追踪检查
@@ -213,6 +238,22 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 | 检查日期 | 健康度 | 核心变化 | 动作建议 |
 |---------|:------:|---------|---------|
 | 2026-04-09 | 7/10 | 收入增速放缓至12%，但利润率改善 | 持有 |
+
+### B8：同步论文健康度到看板
+
+在 B7 成功写入后，更新已登记持仓的论文状态。映射必须固定：`完整`→`healthy`、`边际弱化`→`borderline`、`受损`→`damaged`、`破裂`→`broken`。健康度使用 B6 的 1-10 分；下次复核日期必须是明确的 YYYY-MM-DD，不能只写“下个季报后”。
+
+```bash
+python3 tools/post_buy_tracking.py update {股票代码} \
+  --thesis-status {healthy/borderline/damaged/broken} --health-score {1-10} \
+  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
+  --review-action {加仓/持有/减仓/清仓/观察} --thesis-report {论文相对路径} \
+  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/post_buy_tracking.py check
+python3 tools/build_investment_dashboard.py
+```
+
+若该公司尚未登记为实际持仓，保留论文文件但不要尝试用论文结论自动建立持仓。
 
 ---
 

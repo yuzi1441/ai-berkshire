@@ -33,6 +33,10 @@
       </section>
 
       <section class="control-band" aria-label="筛选与检索">
+        <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
+          <button type="button" class="chip active" data-view="decision">买入前决策</button>
+          <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
+        </div>
         <div class="search-box">
           <label class="sr-only" for="company-filter">检索公司或代码</label>
           <input
@@ -59,6 +63,12 @@
           <button type="button" class="chip advice-no" data-action="no">暂不买入</button>
           <button type="button" class="chip advice-unknown" data-action="unknown">待比价</button>
         </div>
+        <div class="chip-row tracking-filter-row" id="tracking-filter-row" role="tablist" aria-label="持仓跟踪筛选" hidden>
+          <span class="filter-label">跟踪状态</span>
+          <button type="button" class="chip active" data-tracking-filter="all">全部</button>
+          <button type="button" class="chip" data-tracking-filter="alert">有预警</button>
+          <button type="button" class="chip" data-tracking-filter="review">待复核</button>
+        </div>
         <div class="control-meta">
           <label class="sort-field">
             <span>排序</span>
@@ -78,8 +88,8 @@
       <div class="workspace" id="workspace">
         <section class="table-panel" aria-label="个股列表">
           <div class="table-wrap">
-            <table>
-              <thead>
+            <table id="decision-table">
+              <thead id="decision-head">
                 <tr>
                   <th scope="col">公司</th>
                   <th scope="col">市场/代码</th>
@@ -114,6 +124,7 @@
             <button type="button" class="tab active" data-tab="valuation">估值原文</button>
             <button type="button" class="tab" data-tab="overview">摘要</button>
             <button type="button" class="tab" data-tab="history">历史研报</button>
+            <button type="button" class="tab tracking-tab" data-tab="tracking" hidden>持仓跟踪</button>
           </div>
           <div class="detail-body" id="detail-body"></div>
           <div class="detail-foot">
