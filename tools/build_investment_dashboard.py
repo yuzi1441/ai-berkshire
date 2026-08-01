@@ -102,6 +102,31 @@ DATE_PATTERN = re.compile(r"(?<!\d)(20\d{2})[-./年](\d{1,2})[-./月](\d{1,2})(?
 TICKER_PATTERN = re.compile(r"(?i)(?<!\d)(\d{6}\.(?:SH|SZ|BJ)|\d{4,5}\.HK)(?!\d)")
 SIX_DIGIT_TICKER_PATTERN = re.compile(r"(?:股票|证券)代码[^\n|]{0,24}?(?<!\d)(\d{6})(?!\d)")
 DECISION_MARKERS = ("最终决策", "最终建议", "最终投资建议", "明确结论", "投资建议", "综合结论", "行动建议", "行动清单", "操作建议", "分层操作建议", "分层价格区间", "一句话投资判断", "买入前 Checklist", "买入前Checklist")
+DECISION_CONTRACT_HEADING = "看板决策契约"
+DECISION_CONTRACT_VERSION = "1"
+DECISION_CONTRACT_FIELDS = (
+    "契约版本",
+    "报告类型",
+    "公司",
+    "股票代码",
+    "市场",
+    "报告日期",
+    "数据截止日",
+    "基本面建议动作",
+    "结论摘要",
+    "激进型动作",
+    "激进型价格区间",
+    "稳健型动作",
+    "稳健型价格区间",
+    "保守型动作",
+    "保守型价格区间",
+    "买入失效条件",
+    "下次复核日期",
+    "研究置信度",
+)
+DECISION_CONTRACT_ACTIONS = {"买入", "分批买入", "持有", "观察", "减仓/卖出", "待复核"}
+DECISION_CONTRACT_MARKETS = {"A股", "港股", "美股", "未识别"}
+DECISION_CONTRACT_NULL_VALUES = {"", "-", "--", "无", "不适用", "未给出", "待复核"}
 PRICE_PATTERN = re.compile(
     r"(?P<operator>≤|<=|<|低于|以下|跌至|回落至|约)?\s*"
     r"(?P<currency>HK\$|HKD|RMB|CNY|US\$|USD|\$)?\s*"
@@ -398,7 +423,11 @@ def decision_section(lines: list[str]) -> list[str]:
     """Return the most decision-specific report section, if one exists."""
     starts: list[int] = []
     for index, line in enumerate(lines):
-        if line.lstrip().startswith("#") and any(marker in line for marker in DECISION_MARKERS):
+        if (
+            line.lstrip().startswith("#")
+            and DECISION_CONTRACT_HEADING not in line
+            and any(marker in line for marker in DECISION_MARKERS)
+        ):
             starts.append(index)
     if starts:
         start = starts[-1]
@@ -609,6 +638,120 @@ def markdown_cells(line: str) -> list[str] | None:
     if all(re.fullmatch(r"[: -]*", cell) for cell in cells):
         return None
     return cells
+
+
+def is_contract_null(value: str | None) -> bool:
+    """Return whether a contract cell intentionally carries no usable value."""
+    return clean_markdown(value or "") in DECISION_CONTRACT_NULL_VALUES
+
+
+def contract_ticker(value: str) -> str | None:
+    """Normalize a contract ticker while retaining plain US ticker symbols."""
+    if is_contract_null(value):
+        return None
+    parsed = extract_ticker(f"股票代码：{value}")
+    if parsed:
+        return parsed
+    text = clean_markdown(value).upper()
+    return text if re.fullmatch(r"[A-Z][A-Z0-9.-]{0,14}", text) else None
+
+
+def extract_decision_contract(lines: list[str]) -> dict[str, Any] | None:
+    """Read one complete, validated dashboard contract from a report.
+
+    Contracts are deliberately strict. A malformed or incomplete one is ignored
+    so legacy natural-language extraction remains the safe compatibility path.
+    """
+    headings = [
+        index
+        for index, line in enumerate(lines)
+        if line.lstrip().startswith("#") and DECISION_CONTRACT_HEADING in line
+    ]
+    if not headings:
+        return None
+
+    for heading_index in reversed(headings):
+        values: dict[str, str] = {}
+        table_started = False
+        for index in range(heading_index + 1, min(len(lines), heading_index + 48)):
+            cells = markdown_cells(lines[index])
+            if cells is None:
+                if table_started:
+                    if lines[index].lstrip().startswith("|"):
+                        # Markdown table separators are intentionally filtered by
+                        # markdown_cells; they do not end the contract table.
+                        continue
+                    break
+                continue
+            if len(cells) < 2:
+                continue
+            if cells[0] == "字段" and cells[1] in {"内容", "值"}:
+                table_started = True
+                continue
+            if not table_started:
+                continue
+            field, value = cells[0], cells[1]
+            if field not in DECISION_CONTRACT_FIELDS or field in values:
+                return None
+            values[field] = value
+
+        if set(values) != set(DECISION_CONTRACT_FIELDS):
+            continue
+        if values["契约版本"] != DECISION_CONTRACT_VERSION:
+            continue
+        if values["报告类型"] not in {"company-fundamental", "company-checklist"}:
+            continue
+        company = clean_markdown(values["公司"])
+        summary = clean_markdown(values["结论摘要"])
+        report_completed_at = None if is_contract_null(values["报告日期"]) else parse_date(values["报告日期"])
+        data_cutoff = None if is_contract_null(values["数据截止日"]) else parse_date(values["数据截止日"])
+        action = clean_markdown(values["基本面建议动作"])
+        if (
+            not company
+            or is_contract_null(company)
+            or (not is_contract_null(values["报告日期"]) and not report_completed_at)
+            or (not is_contract_null(values["数据截止日"]) and not data_cutoff)
+            or action not in DECISION_CONTRACT_ACTIONS
+        ):
+            continue
+        if is_contract_null(summary):
+            summary = ""
+        market = clean_markdown(values["市场"])
+        if not is_contract_null(market) and market not in DECISION_CONTRACT_MARKETS:
+            continue
+        confidence = clean_markdown(values["研究置信度"])
+        if confidence not in {"高", "中", "低", "待复核"}:
+            continue
+
+        stances: list[dict[str, str]] = []
+        for stance in ("激进型", "稳健型", "保守型"):
+            stance_action = clean_markdown(values[f"{stance}动作"])
+            price_range = clean_markdown(values[f"{stance}价格区间"])
+            if is_contract_null(stance_action) and is_contract_null(price_range):
+                continue
+            if is_contract_null(stance_action):
+                return None
+            item = {"stance": stance, "action": stance_action}
+            if not is_contract_null(price_range):
+                item["price_range"] = price_range
+            stances.append(item)
+
+        return {
+            "version": DECISION_CONTRACT_VERSION,
+            "report_type": values["报告类型"],
+            "company": company,
+            "ticker": contract_ticker(values["股票代码"]),
+            "market": None if is_contract_null(market) else market,
+            "report_completed_at": report_completed_at,
+            "data_cutoff": data_cutoff,
+            "action": action,
+            "summary": summary or None,
+            "investor_stances": stances,
+            "invalidation_triggers": clean_markdown(values["买入失效条件"]),
+            "next_review_date": parse_date(values["下次复核日期"]),
+            "confidence": confidence,
+        }
+    return None
 
 
 def is_markdown_table_separator(line: str) -> bool:
@@ -2566,6 +2709,23 @@ def is_company_equity(record: dict[str, Any]) -> bool:
     return bool(re.search(r"[\u4e00-\u9fffA-Za-z]", company))
 
 
+def is_post_buy_tracking_report(record: dict[str, Any]) -> bool:
+    """Return whether a report belongs exclusively to the post-buy workflow.
+
+    Thesis and news-pulse reports are valuable library artifacts, but they must
+    never supersede a pre-buy fundamental conclusion or expand the decision
+    board. Their results reach the board through the explicit post-buy layer.
+    """
+    filename = Path(str(record.get("report_path") or "")).name
+    return bool(
+        re.search(
+            r"(?:^|[-_])(thesis(?:[-_]?tracker)?|news(?:[-_]?pulse)?)(?:[-_.]|$)",
+            filename,
+            re.I,
+        )
+    )
+
+
 def candidate_record(
     report_path: Path,
     repo_root: Path,
@@ -2583,6 +2743,11 @@ def candidate_record(
     lines = text.splitlines()
     if parse_frontmatter(lines).get("type") == "technical-analysis":
         return None
+    decision_contract = extract_decision_contract(lines)
+    # A Checklist is a screening gate, not a replacement for a full investment
+    # recommendation. Its typed contract prevents it from superseding the main report.
+    if decision_contract and decision_contract["report_type"] == "company-checklist":
+        return None
     valuation_section = extract_valuation_section(lines)
     section = decision_section(lines)
     if not section:
@@ -2598,8 +2763,8 @@ def candidate_record(
         section = lines[-160:] if len(lines) > 160 else lines
 
     entity, entity_kind, market_hint, entity_directory = entity_from_path(relative)
-    entity = normalize_company_name(entity)
-    ticker = extract_ticker("\n".join(lines[:120]))
+    entity = normalize_company_name(decision_contract["company"] if decision_contract else entity)
+    ticker = (decision_contract or {}).get("ticker") or extract_ticker("\n".join(lines[:120]))
     registry_entry = registry_company(registry, entity, ticker)
     if registry_entry:
         entity = str(registry_entry["canonical_name"])
@@ -2609,9 +2774,9 @@ def candidate_record(
     report_override = overrides.get("reports", {}).get(report_relative, {})
     if not isinstance(report_override, dict):
         raise ValueError(f"Report override must be an object: {report_relative}")
-    effective_ticker = report_override.get("ticker", ticker)
+    effective_ticker = report_override.get("ticker", (decision_contract or {}).get("ticker") or ticker)
     effective_market = report_override.get(
-        "market", market_for_ticker(effective_ticker, market_hint)
+        "market", (decision_contract or {}).get("market") or market_for_ticker(effective_ticker, market_hint)
     )
 
     # Prefer prices from the valuation section itself; fall back to the full report.
@@ -2620,9 +2785,11 @@ def candidate_record(
         if valuation_section
         else lines
     )
+    contract_stances = (decision_contract or {}).get("investor_stances") or []
     price_plan = report_override.get(
         "price_plan",
-        extract_price_plan(valuation_lines, market=effective_market)
+        contract_stances
+        or extract_price_plan(valuation_lines, market=effective_market)
         or extract_price_plan(lines, market=effective_market),
     )
     scenarios = report_override.get(
@@ -2635,7 +2802,8 @@ def candidate_record(
     buy_price = report_override.get("buy_price", preferred_buy_price(price_plan) or fallback_buy_price)
     investor_stances = report_override.get(
         "investor_stances",
-        extract_investor_stances(
+        contract_stances
+        or extract_investor_stances(
             lines,
             valuation_lines=valuation_lines,
             price_plan=price_plan if isinstance(price_plan, list) else [],
@@ -2645,7 +2813,9 @@ def candidate_record(
     if not isinstance(investor_stances, list):
         raise ValueError(f"investor_stances override must be a list: {report_relative}")
     stance_action = classify_action_from_stances(investor_stances)
-    coarse_action = report_override.get("action", stance_action or classify_action(section))
+    coarse_action = report_override.get(
+        "action", (decision_contract or {}).get("action") or stance_action or classify_action(section)
+    )
 
     record: dict[str, Any] = {
         "company": report_override.get("company", entity),
@@ -2653,14 +2823,21 @@ def candidate_record(
         "entity_directory": entity_directory,
         "ticker": effective_ticker,
         "market": effective_market,
-        "data_cutoff": report_override.get("data_cutoff", extract_data_cutoff(lines)),
+        "data_cutoff": report_override.get(
+            "data_cutoff", (decision_contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
+        ),
         "report_completed_at": report_override.get(
-            "report_completed_at", extract_report_completed_date(lines)
+            "report_completed_at",
+            (decision_contract or {}).get("report_completed_at") or extract_report_completed_date(lines),
         ),
         "action": coarse_action,
         "investor_stances": investor_stances,
-        "conclusion_summary": investor_stances_summary(investor_stances)
-        or report_override.get("recommendation", extract_summary(section)),
+        "conclusion_summary": report_override.get(
+            "recommendation",
+            (decision_contract or {}).get("summary")
+            or investor_stances_summary(investor_stances)
+            or extract_summary(section),
+        ),
         "buy_price": buy_price,
         "price_plan": price_plan,
         "scenario_valuation": scenarios,
@@ -2670,6 +2847,9 @@ def candidate_record(
         "report_path": report_relative,
         "report_link": report_path.relative_to(repo_root / "reports").as_posix(),
     }
+    if decision_contract:
+        record["decision_source"] = "看板决策契约"
+        record["decision_contract"] = decision_contract
     record["price_status"] = (
         "已提取价格计划"
         if record["price_plan"]
@@ -2729,7 +2909,7 @@ def record_rank(record: dict[str, Any]) -> tuple[int, str, str, int, int, int, s
 
 def report_snapshot(record: dict[str, Any]) -> dict[str, Any]:
     """Project one report into a compact historical report-conclusion record."""
-    return {
+    snapshot = {
         "data_cutoff": record.get("data_cutoff"),
         "action": record.get("action"),
         "investor_stances": record.get("investor_stances") or [],
@@ -2751,13 +2931,17 @@ def report_snapshot(record: dict[str, Any]) -> dict[str, Any]:
         "report_path": record.get("report_path"),
         "report_link": record.get("report_link"),
     }
+    if record.get("decision_contract"):
+        snapshot["decision_source"] = record.get("decision_source")
+        snapshot["decision_contract"] = record["decision_contract"]
+    return snapshot
 
 
 def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -> list[dict[str, Any]]:
     """Select one latest stock conclusion per company and attach historical report conclusions."""
     groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
-        if is_company_equity(record):
+        if is_company_equity(record) and not is_post_buy_tracking_report(record):
             groups[str(record["company"])].append(record)
 
     selections: list[dict[str, Any]] = []
@@ -2839,8 +3023,9 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
         "",
         "> 仅收录个股研究结论，不收录行业/主题/筛选类报告。",
         "> 当前结论只按报告明确的“数据截止日”排序，不按文件修改时间排序。",
-        "> 当前结论优先展示第八步「最终决策与行动清单」中的激进/稳健/保守分层建议；粗粒度标签仅作筛选辅助。",
+        "> 当前结论优先读取报告末尾已校验的「看板决策契约」；旧报告则兼容解析第八步「最终决策与行动清单」等原文。粗粒度标签仅作筛选辅助。",
         "> 技术面仅用于辅助观察，不参与分层结论、综合操作筛选或买入建议。下方另附每家公司的历史研报结论。",
+        "> 买入后论文追踪和异动报告仅进入持仓跟踪层，不替换基本面结论、分层价格或技术面快照。",
         "> 仅供学习与研究，不构成投资建议。",
         "",
         "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 技术面 | 历史研报数 | 报告 |",
@@ -2972,11 +3157,82 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Load optional post-buy tracking and generated alert state.
+
+    The layer is deliberately separate from report-derived decisions. Missing
+    files mean that no user-confirmed positions exist; malformed files fail the
+    build rather than silently attaching stale tracking state to another stock.
+    """
+    tracking = load_json(
+        data_directory / "post_buy_tracking.json",
+        {"schema_version": 1, "positions": {}},
+    )
+    alerts = load_json(
+        data_directory / "post_buy_alerts.json",
+        {"schema_version": 1, "alerts": []},
+    )
+    if tracking.get("schema_version") != 1 or not isinstance(tracking.get("positions"), dict):
+        raise ValueError("Unsupported post-buy tracking schema")
+    if alerts.get("schema_version") != 1 or not isinstance(alerts.get("alerts"), list):
+        raise ValueError("Unsupported post-buy alerts schema")
+    return tracking, alerts
+
+
+def attach_post_buy_tracking(
+    decisions: list[dict[str, Any]],
+    tracking: dict[str, Any],
+    alerts: dict[str, Any],
+) -> dict[str, int]:
+    """Attach only explicitly registered post-buy positions to board records."""
+    positions = tracking.get("positions") or {}
+    alerts_by_ticker: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for alert in alerts.get("alerts") or []:
+        if isinstance(alert, dict) and alert.get("ticker"):
+            alerts_by_ticker[str(alert["ticker"]).upper()].append(alert)
+
+    active_count = sum(
+        1
+        for position in positions.values()
+        if isinstance(position, dict) and (position.get("status") or "holding") == "holding"
+    )
+    alert_count = sum(
+        1
+        for alert in alerts.get("alerts") or []
+        if isinstance(alert, dict) and str(alert.get("ticker") or "").upper() in positions
+    )
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        registered = positions.get(ticker)
+        if not isinstance(registered, dict):
+            decision["post_buy_tracking"] = {"status": "not_tracked", "alerts": []}
+            continue
+        current_alerts = alerts_by_ticker.get(ticker, [])
+        status = registered.get("status") or "holding"
+        decision["post_buy_tracking"] = {
+            "status": status,
+            "buy_date": registered.get("buy_date"),
+            "cost_basis": registered.get("cost_basis"),
+            "position_weight": registered.get("position_weight"),
+            "thesis_report_path": registered.get("thesis_report_path"),
+            "thesis_status": registered.get("thesis_status") or "not_established",
+            "health_score": registered.get("health_score"),
+            "last_review_date": registered.get("last_review_date"),
+            "next_review_date": registered.get("next_review_date"),
+            "review_action": registered.get("review_action"),
+            "metrics": registered.get("metrics") if isinstance(registered.get("metrics"), list) else [],
+            "latest_event": registered.get("latest_event"),
+            "alerts": current_alerts,
+        }
+    return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
+
+
 def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
+    post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
     registry = load_registry(repo_root / "data" / "report-routing" / "company_registry.json")
     overrides = load_json(
         data_directory / "overrides.json",
@@ -2998,6 +3254,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         if (snapshot := technical_snapshot(report_path, repo_root, registry)) is not None
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
+    post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     catalog = {
         "schema_version": 1,
@@ -3009,8 +3266,9 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "schema_version": 4,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Technical snapshots are attached separately and do not affect conclusions, prices, sorting, or filters. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Technical snapshots and explicit post-buy thesis/news reports are attached separately and do not affect conclusions, prices, sorting, or filters. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
+        "post_buy_tracking": post_buy_summary,
         "decisions": decisions,
     }
     history_board = {
@@ -3032,6 +3290,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     write_json(site_directory / "data" / "report_history.json", history_board)
+    write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
+    write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)
     write_library_moc(reports_directory / "00-index" / "报告库-MOC.md", reports_directory, decisions, generated_at)
     return board

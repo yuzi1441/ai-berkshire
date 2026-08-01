@@ -458,3 +458,27 @@ $548亿市值 / 假设10年后P/S 10x / 10%折现率 → 隐含10年后收入需
 ---
 
 *数据来源：SEC 10-K/10-Q文件、StockAnalysis、MacroTrends、CNBC、Yahoo Finance、GuruFocus、MarketBeat、TipRanks、CompaniesMarketCap、McKinsey、Morgan Stanley、Precedence Research、SpaceNews、NASASpaceFlight、Bleecker Street Research等。所有关键数据已通过 financial_rigor.py 工具交叉验证。*
+
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | RKLB |
+| 股票代码 | 未给出 |
+| 市场 | 未识别 |
+| 报告日期 | 未给出 |
+| 数据截止日 | 2026-06-24 |
+| 基本面建议动作 | 观察 |
+| 结论摘要 | 空仓者 观望，不追高。 等待更好的买点：(1) Neutron首飞失败后的恐慌抛售（股价可能回到$40-60区间）；(2) SpaceX IPO后的资金流出；(3) P/S回归30-40x以下（对应股价$35-55）。如果对太空行业有信心且能承受高波动，可在$45-55区间建立小仓位（占组合<3%） |
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+| 稳健型动作 | 未给出 |
+| 稳健型价格区间 | 未给出 |
+| 保守型动作 | 未给出 |
+| 保守型价格区间 | 未给出 |
+| 买入失效条件 | 未给出 |
+| 下次复核日期 | 未给出 |
+| 研究置信度 | 待复核 |

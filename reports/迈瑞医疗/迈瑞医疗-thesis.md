@@ -222,3 +222,27 @@
 3. 2026-07-13 控股股东部分股份解除质押公告：<https://static.cninfo.com.cn/finalpage/2026-07-13/1225421642.PDF>
 4. 欧盟医疗器械 IPI 措施：<https://policy.trade.ec.europa.eu/help-exporters-and-importers/accessing-markets/public-procurement/international-procurement-instrument/china-medical-devices_en>
 5. FDA Mindray BeneVision N1 recall：<https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfres/res.cfm?id=215600>
+
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | 迈瑞医疗 |
+| 股票代码 | 300760.SZ |
+| 市场 | A股 |
+| 报告日期 | 2026-07-13 |
+| 数据截止日 | 2026-07-13 |
+| 基本面建议动作 | 持有 |
+| 结论摘要 | 持仓成本和仓位未提供，因此本文不能给出个人化减仓比例。对空仓者，下一步不是继续补“龙头叙事”，而是等两个条件同时满足：经营健康度至少回到 7/10，价格进入 115 元以下。 |
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+| 稳健型动作 | 未给出 |
+| 稳健型价格区间 | 未给出 |
+| 保守型动作 | 未给出 |
+| 保守型价格区间 | 未给出 |
+| 买入失效条件 | 未给出 |
+| 下次复核日期 | 未给出 |
+| 研究置信度 | 待复核 |

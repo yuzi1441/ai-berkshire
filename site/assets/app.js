@@ -13,8 +13,10 @@ const state = {
   decisions: [],
   quotes: new Map(),
   selectedKey: null,
+  view: "decision",
   market: "all",
   action: "all",
+  trackingFilter: "all",
   sort: "buy_advice",
   detailTab: "technical",
   quoteMode: "idle", // live | snapshot | idle | error
@@ -26,6 +28,8 @@ const state = {
 
 const els = {
   rows: document.querySelector("#decision-rows"),
+  decisionTable: document.querySelector("#decision-table"),
+  decisionHead: document.querySelector("#decision-head"),
   summary: document.querySelector("#summary"),
   status: document.querySelector("#data-status"),
   companyFilter: document.querySelector("#company-filter"),
@@ -33,6 +37,9 @@ const els = {
   clearFilters: document.querySelector("#clear-filters"),
   marketChips: document.querySelector("#market-chips"),
   actionChips: document.querySelector("#action-chips"),
+  viewTabs: document.querySelector("#view-tabs"),
+  trackingFilterRow: document.querySelector("#tracking-filter-row"),
+  trackingCount: document.querySelector("#tracking-count"),
   detailPanel: document.querySelector("#detail-panel"),
   detailTitle: document.querySelector("#detail-title"),
   detailSub: document.querySelector("#detail-sub"),
@@ -49,6 +56,64 @@ const els = {
   toast: document.querySelector("#toast"),
   emptyState: document.querySelector("#empty-state"),
 };
+
+function trackingForItem(item) {
+  const tracking = item?.post_buy_tracking;
+  return tracking && tracking.status !== "not_tracked" ? tracking : null;
+}
+
+function trackingStatusLabel(status) {
+  return { holding: "跟踪中", paused: "已暂停", closed: "已结束" }[status] || "未建立";
+}
+
+function thesisStatusLabel(status) {
+  return {
+    not_established: "未建立",
+    healthy: "健康",
+    borderline: "边际弱化",
+    damaged: "受损",
+    broken: "破裂",
+  }[status] || "待复核";
+}
+
+function trackingStatusClass(status) {
+  return {
+    holding: "tracking-active",
+    paused: "tracking-paused",
+    closed: "tracking-closed",
+    healthy: "tracking-healthy",
+    borderline: "tracking-borderline",
+    damaged: "tracking-damaged",
+    broken: "tracking-broken",
+  }[status] || "tracking-muted";
+}
+
+function trackingAlertLevel(tracking) {
+  const alerts = tracking?.alerts || [];
+  if (alerts.some((alert) => alert.severity === "critical")) return "critical";
+  if (alerts.length) return "warning";
+  return "none";
+}
+
+function trackingNeedsReview(tracking) {
+  return Boolean((tracking?.alerts || []).some((alert) => ["review_due", "thesis_review"].includes(alert.kind)));
+}
+
+function trackingReviewLabel(tracking) {
+  if (!tracking?.next_review_date) return "未设置";
+  const due = (tracking.alerts || []).find((alert) => alert.kind === "review_due");
+  if (due?.severity === "critical") return `${tracking.next_review_date} · 已到期`;
+  if (due?.severity === "warning") return `${tracking.next_review_date} · 即将到期`;
+  return tracking.next_review_date;
+}
+
+function appendTrackingBadge(parent, text, className) {
+  const badge = document.createElement("span");
+  badge.className = `tracking-badge ${className || ""}`;
+  badge.textContent = text;
+  parent.append(badge);
+  return badge;
+}
 
 function marketBadgeClass(market) {
   return {
@@ -600,13 +665,31 @@ function filteredDecisions() {
   const phrase = els.companyFilter.value.trim().toLocaleLowerCase();
   let list = state.decisions.filter((item) => {
     const marketMatch = state.market === "all" || item.market === state.market;
+    const tracking = trackingForItem(item);
     const adviceMatch = state.action === "all"
       || buyAdviceForItem(item, state.quotes.get(item.ticker)).key === state.action;
+    const trackingMatch = state.view !== "tracking"
+      || (tracking && (
+        state.trackingFilter === "all"
+        || (state.trackingFilter === "alert" && trackingAlertLevel(tracking) !== "none")
+        || (state.trackingFilter === "review" && trackingNeedsReview(tracking))
+      ));
     const searchable = `${item.company} ${item.ticker || ""} ${item.title || ""}`.toLocaleLowerCase();
-    return marketMatch && adviceMatch && (!phrase || searchable.includes(phrase));
+    return marketMatch
+      && (state.view === "tracking" ? true : adviceMatch)
+      && trackingMatch
+      && (!phrase || searchable.includes(phrase));
   });
 
   list = [...list].sort((a, b) => {
+    if (state.view === "tracking") {
+      const aa = trackingForItem(a);
+      const bb = trackingForItem(b);
+      const alertRank = { critical: 3, warning: 2, none: 1 };
+      const alertDelta = (alertRank[trackingAlertLevel(bb)] || 0) - (alertRank[trackingAlertLevel(aa)] || 0);
+      if (alertDelta) return alertDelta;
+      return String(aa?.next_review_date || "9999-12-31").localeCompare(String(bb?.next_review_date || "9999-12-31"));
+    }
     if (state.sort === "action") {
       const d = actionRank(b.action) - actionRank(a.action);
       if (d) return d;
@@ -1216,6 +1299,27 @@ function renderTechnicalDetail(item) {
 }
 
 function renderSummary(visible) {
+  if (state.view === "tracking") {
+    const tracked = visible.map((item) => trackingForItem(item)).filter(Boolean);
+    const reviewCount = tracked.filter(trackingNeedsReview).length;
+    const moveCount = tracked.filter((tracking) => (tracking.alerts || []).some((alert) => alert.kind === "price_move")).length;
+    const damagedCount = tracked.filter((tracking) => ["damaged", "broken"].includes(tracking.thesis_status)).length;
+    const metrics = [
+      ["跟踪中", tracked.filter((tracking) => tracking.status === "holding").length],
+      ["论文待复核", reviewCount],
+      ["股价异动", moveCount],
+      ["论文受损", damagedCount],
+      ["当前持仓", tracked.length],
+    ];
+    els.summary.replaceChildren();
+    for (const [label, value] of metrics) {
+      const card = document.createElement("div");
+      card.className = "metric";
+      card.innerHTML = `<span class="metric-label">${label}</span><strong class="metric-value">${value}</strong>`;
+      els.summary.append(card);
+    }
+    return;
+  }
   const counts = visible.reduce((acc, item) => {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
     acc[advice.key] = (acc[advice.key] || 0) + 1;
@@ -1235,6 +1339,90 @@ function renderSummary(visible) {
     card.innerHTML = `<span class="metric-label">${label}</span><strong class="metric-value">${value}</strong>`;
     els.summary.append(card);
   }
+}
+
+function setTableHeader(labels) {
+  els.decisionHead.innerHTML = `<tr>${labels.map((label) => `<th scope="col">${label}</th>`).join("")}</tr>`;
+  els.decisionTable.classList.toggle("tracking-table", state.view === "tracking");
+}
+
+function renderTrackingRows(visible) {
+  setTableHeader(["公司", "持仓状态", "论文状态", "下次复核", "最近异动"]);
+  visible.forEach((item, index) => {
+    const tracking = trackingForItem(item);
+    if (!tracking) return;
+    const tr = document.createElement("tr");
+    const key = itemKey(item);
+    if (key === state.selectedKey) tr.classList.add("active");
+    tr.dataset.key = key;
+    tr.dataset.index = String(index);
+    tr.tabIndex = 0;
+
+    const companyTd = document.createElement("td");
+    companyTd.className = "company-cell";
+    companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.market || "未识别"} · ${item.ticker || "无代码"}</div>`;
+    tr.append(companyTd);
+
+    const statusTd = document.createElement("td");
+    statusTd.dataset.label = "持仓状态";
+    appendTrackingBadge(statusTd, trackingStatusLabel(tracking.status), trackingStatusClass(tracking.status));
+    if (tracking.buy_date) {
+      const buyDate = document.createElement("div");
+      buyDate.className = "tracking-meta";
+      buyDate.textContent = `买入 ${tracking.buy_date}`;
+      statusTd.append(buyDate);
+    }
+    tr.append(statusTd);
+
+    const thesisTd = document.createElement("td");
+    thesisTd.dataset.label = "论文状态";
+    appendTrackingBadge(thesisTd, thesisStatusLabel(tracking.thesis_status), trackingStatusClass(tracking.thesis_status));
+    const score = document.createElement("div");
+    score.className = "tracking-meta";
+    score.textContent = tracking.health_score ? `健康度 ${tracking.health_score}/10` : "尚未完成论文检查";
+    thesisTd.append(score);
+    tr.append(thesisTd);
+
+    const reviewTd = document.createElement("td");
+    reviewTd.dataset.label = "下次复核";
+    const reviewLevel = trackingNeedsReview(tracking) ? (trackingAlertLevel(tracking) === "critical" ? "tracking-review-critical" : "tracking-review-warning") : "";
+    appendTrackingBadge(reviewTd, trackingReviewLabel(tracking), reviewLevel);
+    if (tracking.review_action) {
+      const action = document.createElement("div");
+      action.className = "tracking-meta";
+      action.textContent = tracking.review_action;
+      reviewTd.append(action);
+    }
+    tr.append(reviewTd);
+
+    const eventTd = document.createElement("td");
+    eventTd.dataset.label = "最近异动";
+    const latest = tracking.latest_event;
+    if (latest) {
+      const eventTitle = document.createElement("div");
+      eventTitle.className = "tracking-event-title";
+      eventTitle.textContent = `${latest.date || ""} · ${latest.category || "不明"}${latest.change_pct == null ? "" : ` · ${Number(latest.change_pct).toFixed(2)}%`}`;
+      eventTd.append(eventTitle);
+      const eventSummary = document.createElement("div");
+      eventSummary.className = "tracking-meta tracking-event-summary";
+      eventSummary.textContent = latest.summary || "已记录异动，暂无摘要";
+      eventTd.append(eventSummary);
+    } else {
+      eventTd.textContent = "暂无异动记录";
+      eventTd.className = "tracking-empty";
+    }
+    const alerts = tracking.alerts || [];
+    if (alerts.length) {
+      appendTrackingBadge(eventTd, `${alerts.length} 条预警`, trackingAlertLevel(tracking) === "critical" ? "tracking-alert-critical" : "tracking-alert-warning");
+    }
+    tr.append(eventTd);
+
+    tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
+    tr.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") openDetail(item, { scrollRow: false });
+    });
+    els.rows.append(tr);
+  });
 }
 
 function appendStack(cell, lines) {
@@ -1259,6 +1447,14 @@ function renderRows() {
   const visible = filteredDecisions();
   renderSummary(visible);
   els.rows.replaceChildren();
+  if (state.view === "tracking") {
+    renderTrackingRows(visible);
+    els.status.textContent = `显示 ${visible.length} / ${state.decisions.filter((item) => trackingForItem(item)).length} · 持仓跟踪`;
+    if (els.emptyState) els.emptyState.hidden = visible.length > 0;
+    if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
+    return;
+  }
+  setTableHeader(["公司", "市场/代码", "分层结论", "现价", "买入建议", "估值原表", "研报日"]);
 
   visible.forEach((item, index) => {
     const tr = document.createElement("tr");
@@ -1314,6 +1510,121 @@ function renderRows() {
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
 
+function appendTrackingDetailCard(title, content) {
+  const card = document.createElement("div");
+  card.className = "card tracking-card";
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  card.append(heading, content);
+  els.detailBody.append(card);
+}
+
+function renderTrackingDetail(item, tracking) {
+  if (!tracking) {
+    const empty = document.createElement("div");
+    empty.className = "card tracking-empty-card";
+    empty.innerHTML = "<h3>尚未建立持仓跟踪</h3><p class=\"source-note\">基本面建议“买入”不等于已持仓。确认买入后，再使用持仓登记命令建立论文和预警。</p>";
+    els.detailBody.append(empty);
+    return;
+  }
+
+  const summary = document.createElement("dl");
+  summary.className = "kv-grid";
+  const fields = [
+    ["持仓状态", trackingStatusLabel(tracking.status)],
+    ["买入日期", tracking.buy_date || "未给出"],
+    ["买入成本", tracking.cost_basis == null ? "未给出" : String(tracking.cost_basis)],
+    ["仓位", tracking.position_weight == null ? "未给出" : `${tracking.position_weight}%`],
+    ["论文状态", thesisStatusLabel(tracking.thesis_status)],
+    ["论文健康度", tracking.health_score ? `${tracking.health_score}/10` : "尚未检查"],
+    ["上次复核", tracking.last_review_date || "未给出"],
+    ["下次复核", trackingReviewLabel(tracking)],
+    ["复核动作", tracking.review_action || "未给出"],
+  ];
+  for (const [key, value] of fields) {
+    const dt = document.createElement("dt");
+    dt.textContent = key;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  appendTrackingDetailCard("持仓与论文", summary);
+
+  const metrics = document.createElement("div");
+  metrics.className = "tracking-metric-list";
+  if (tracking.metrics?.length) {
+    for (const metric of tracking.metrics) {
+      const row = document.createElement("div");
+      row.className = "tracking-metric-row";
+      if (typeof metric === "string") {
+        row.textContent = metric;
+      } else {
+        const name = metric?.name || "指标";
+        const target = metric?.target ? ` · 目标 ${metric.target}` : "";
+        const frequency = metric?.frequency ? ` · ${metric.frequency}` : "";
+        const status = metric?.status ? ` · ${metric.status}` : "";
+        row.textContent = `${name}${target}${frequency}${status}`;
+      }
+      metrics.append(row);
+    }
+  } else {
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "尚未登记 3 至 5 个论文跟踪指标。";
+    metrics.append(note);
+  }
+  appendTrackingDetailCard("必须跟踪的指标", metrics);
+
+  const activity = document.createElement("div");
+  activity.className = "tracking-activity";
+  const alerts = tracking.alerts || [];
+  if (alerts.length) {
+    for (const alert of alerts) {
+      const row = document.createElement("div");
+      row.className = `tracking-alert-row ${alert.severity === "critical" ? "critical" : "warning"}`;
+      const title = document.createElement("strong");
+      title.textContent = alert.title || "预警";
+      const detail = document.createElement("span");
+      detail.textContent = alert.detail || "请检查跟踪状态";
+      row.append(title, detail);
+      activity.append(row);
+    }
+  }
+  const latest = tracking.latest_event;
+  if (latest) {
+    const event = document.createElement("div");
+    event.className = "tracking-event-detail";
+    event.textContent = `${latest.date || ""} · ${latest.category || "不明"}${latest.change_pct == null ? "" : ` · ${Number(latest.change_pct).toFixed(2)}%`} · ${latest.summary || "暂无摘要"}`;
+    activity.append(event);
+    if (latest.report_path) {
+      const link = document.createElement("a");
+      link.className = "btn ghost tracking-report-link";
+      link.href = `${repositoryUrl}${latest.report_path}`;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "打开异动报告";
+      activity.append(link);
+    }
+  }
+  if (!activity.childElementCount) {
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "暂无异动预警。行情达到预警线后，先标记待分析，再由你确认是否调用股价异动分析。";
+    activity.append(note);
+  }
+  appendTrackingDetailCard("异动与预警", activity);
+
+  if (tracking.thesis_report_path) {
+    const link = document.createElement("a");
+    link.className = "btn ghost tracking-report-link";
+    link.href = `${repositoryUrl}${tracking.thesis_report_path}`;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "打开投资论文";
+    els.detailBody.append(link);
+  }
+}
+
 function renderDetail() {
   const item = selectedItem();
   if (!item) {
@@ -1336,9 +1647,20 @@ function renderDetail() {
   els.detailReport.href = `${repositoryUrl}${item.report_path}`;
 
   els.detailBody.replaceChildren();
+  const tracking = trackingForItem(item);
+  const trackingTab = document.querySelector(".tracking-tab");
+  if (trackingTab) {
+    trackingTab.hidden = !tracking;
+    if (!tracking && state.detailTab === "tracking") state.detailTab = "overview";
+  }
   document.querySelectorAll(".detail-tabs .tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === state.detailTab);
   });
+
+  if (state.detailTab === "tracking") {
+    renderTrackingDetail(item, tracking);
+    return;
+  }
 
   if (state.detailTab === "overview") {
     const adviceCard = document.createElement("div");
@@ -1497,6 +1819,22 @@ function renderAll() {
   renderDetail();
 }
 
+function setView(view) {
+  state.view = view === "tracking" ? "tracking" : "decision";
+  state.focusIndex = -1;
+  if (state.view === "tracking") {
+    state.detailTab = "tracking";
+  } else if (state.detailTab === "tracking") {
+    state.detailTab = "valuation";
+  }
+  els.viewTabs?.querySelectorAll(".chip").forEach((chip) => {
+    chip.classList.toggle("active", chip.dataset.view === state.view);
+  });
+  if (els.actionChips) els.actionChips.hidden = state.view === "tracking";
+  if (els.trackingFilterRow) els.trackingFilterRow.hidden = state.view !== "tracking";
+  renderAll();
+}
+
 function applyHashRoute() {
   const raw = location.hash.replace(/^#/, "");
   if (!raw) return;
@@ -1528,6 +1866,7 @@ function bindEvents() {
   els.clearFilters.addEventListener("click", () => {
     state.market = "all";
     state.action = "all";
+    state.trackingFilter = "all";
     state.sort = "buy_advice";
     els.companyFilter.value = "";
     els.sortSelect.value = "buy_advice";
@@ -1537,7 +1876,15 @@ function bindEvents() {
     els.actionChips.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.action === "all");
     });
-    renderRows();
+    els.trackingFilterRow?.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.trackingFilter === "all");
+    });
+    setView("decision");
+  });
+  els.viewTabs?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    setView(chip.dataset.view);
   });
   els.marketChips.addEventListener("click", (event) => {
     const chip = event.target.closest(".chip");
@@ -1553,6 +1900,15 @@ function bindEvents() {
     if (!chip) return;
     state.action = chip.dataset.action;
     els.actionChips.querySelectorAll(".chip").forEach((node) => {
+      node.classList.toggle("active", node === chip);
+    });
+    renderRows();
+  });
+  els.trackingFilterRow?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    state.trackingFilter = chip.dataset.trackingFilter || "all";
+    els.trackingFilterRow.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
     renderRows();
@@ -1623,6 +1979,8 @@ async function loadDashboard() {
   if (!response.ok) throw new Error("无法加载 decision_board.json");
   const board = await response.json();
   state.decisions = board.decisions || [];
+  const activeTracking = Number(board.post_buy_tracking?.active_count || 0);
+  if (els.trackingCount) els.trackingCount.textContent = activeTracking ? String(activeTracking) : "0";
   renderAll();
   applyHashRoute();
   await refreshQuotes({ forceLive: isLikelyMarketOpen(), silent: true });

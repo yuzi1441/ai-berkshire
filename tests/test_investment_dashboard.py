@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import build_investment_dashboard as dashboard  # noqa: E402
+import migrate_decision_contracts as migration  # noqa: E402
 
 
 class InvestmentDashboardTests(unittest.TestCase):
@@ -70,6 +71,63 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(report.read_text(encoding="utf-8"), original)
             self.assertTrue((root / "reports" / "00-index" / "投资决策总表.md").is_file())
             self.assertTrue((root / "site" / "data" / "decision_board.json").is_file())
+
+    def test_attaches_only_explicit_post_buy_tracking(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "report.md"
+            report.write_text(
+                "# 示例研究\n\n数据截止：2026-07-10\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察，等待基本面验证。\n",
+                encoding="utf-8",
+            )
+            data_directory = root / "data" / "investment-dashboard"
+            (data_directory / "post_buy_tracking.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "positions": {
+                            "600000.SH": {
+                                "company": "示例公司",
+                                "status": "holding",
+                                "buy_date": "2026-08-01",
+                                "thesis_status": "healthy",
+                                "health_score": 8,
+                                "next_review_date": "2026-10-31",
+                                "metrics": [{"name": "收入增速", "status": "成立"}],
+                                "latest_event": None,
+                            }
+                        },
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            (data_directory / "post_buy_alerts.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "alerts": [
+                            {
+                                "ticker": "600000.SH",
+                                "kind": "review_due",
+                                "severity": "warning",
+                                "title": "论文复核即将到期",
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected["action"], "观察")
+            self.assertEqual(selected["post_buy_tracking"]["status"], "holding")
+            self.assertEqual(selected["post_buy_tracking"]["thesis_status"], "healthy")
+            self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 1)
+            self.assertTrue((root / "site" / "data" / "post_buy_tracking.json").is_file())
 
     def test_extracts_full_price_plan_and_three_scenario_targets(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -220,7 +278,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(selected["price_status"], "价格未给出")
             self.assertEqual(len(selected["report_history"][1]["investor_stances"]), 3)
 
-    def test_prefers_original_valuation_section_over_tracker_note(self):
+    def test_excludes_post_buy_tracker_from_pre_buy_decision_selection(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             self.setup_repository(root)
@@ -248,11 +306,18 @@ class InvestmentDashboardTests(unittest.TestCase):
             )
             board = dashboard.build_dashboard(root)
             selected = board["decisions"][0]
-            self.assertEqual(selected["report_path"], "reports/示例公司/thesis-tracker.md")
-            self.assertEqual(selected["data_cutoff"], "2026-07-20")
+            self.assertEqual(selected["report_path"], "reports/示例公司/full-research.md")
+            self.assertEqual(selected["data_cutoff"], "2026-07-10")
+            self.assertEqual(selected["report_history_count"], 1)
             self.assertIn("估值与安全边际", selected["valuation_section"]["heading"])
             self.assertIn("价格区间建议", selected["valuation_section"]["markdown"])
-            self.assertIn("full-research.md", selected["valuation_section"]["source_report_path"])
+            catalog = json.loads(
+                (root / "data" / "investment-dashboard" / "reports_catalog.json").read_text(encoding="utf-8")
+            )
+            self.assertIn(
+                "reports/示例公司/thesis-tracker.md",
+                {record["report_path"] for record in catalog["records"]},
+            )
 
     def test_excludes_industry_and_person_folders_from_board(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -427,6 +492,108 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(set(by), {"激进型", "稳健型", "保守型"})
         self.assertIn("9.0", by["保守型"]["price_range"])
         self.assertIn("9.0-9.5", by["稳健型"]["price_range"])
+
+    def test_valid_decision_contract_overrides_legacy_natural_language(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "contract.md"
+            report.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察，等待基本面验证。\n\n"
+                "## 看板决策契约\n\n"
+                "| 字段 | 内容 |\n|---|---|\n"
+                "| 契约版本 | 1 |\n| 报告类型 | company-fundamental |\n"
+                "| 公司 | 正式示例公司 |\n| 股票代码 | 600000.SH |\n| 市场 | A股 |\n"
+                "| 报告日期 | 2026-07-31 |\n| 数据截止日 | 2026-07-30 |\n"
+                "| 基本面建议动作 | 分批买入 |\n| 结论摘要 | 估值折价充分，按稳健价格分批建仓。 |\n"
+                "| 激进型动作 | 小仓试探 |\n| 激进型价格区间 | 18-20 元 |\n"
+                "| 稳健型动作 | 分批建仓 |\n| 稳健型价格区间 | 15-18 元 |\n"
+                "| 保守型动作 | 继续等待 |\n| 保守型价格区间 | 低于 15 元 |\n"
+                "| 买入失效条件 | 核心客户流失且毛利率连续两个季度下滑。 |\n"
+                "| 下次复核日期 | 2026-10-31 |\n| 研究置信度 | 中 |\n",
+                encoding="utf-8",
+            )
+
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected["company"], "正式示例公司")
+            self.assertEqual(selected["data_cutoff"], "2026-07-30")
+            self.assertEqual(selected["action"], "分批买入")
+            self.assertEqual(selected["decision_source"], "看板决策契约")
+            self.assertEqual(selected["conclusion_summary"], "估值折价充分，按稳健价格分批建仓。")
+            self.assertEqual(selected["buy_price"], "15-18 元")
+            self.assertEqual(selected["decision_contract"]["next_review_date"], "2026-10-31")
+
+            checklist = root / "reports" / "示例公司" / "newer-checklist.md"
+            checklist.write_text(
+                report.read_text(encoding="utf-8")
+                .replace("company-fundamental", "company-checklist")
+                .replace("| 数据截止日 | 2026-07-30 |", "| 数据截止日 | 2026-07-31 |")
+                .replace("| 基本面建议动作 | 分批买入 |", "| 基本面建议动作 | 观察 |"),
+                encoding="utf-8",
+            )
+            selected_after_checklist = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected_after_checklist["report_path"], "reports/示例公司/contract.md")
+
+    def test_incomplete_decision_contract_falls_back_to_legacy_parser(self):
+        lines = """# 示例公司研究
+
+数据截止：2026-07-20
+
+## 最终建议
+
+继续持有，但不加仓。
+
+## 看板决策契约
+
+| 字段 | 内容 |
+|---|---|
+| 契约版本 | 1 |
+| 报告类型 | company-fundamental |
+| 公司 | 示例公司 |
+""".splitlines()
+        self.assertIsNone(dashboard.extract_decision_contract(lines))
+        self.assertEqual(dashboard.classify_action(dashboard.decision_section(lines)), "持有")
+
+    def test_migration_appends_a_valid_contract_without_rewriting_report_body(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            report = Path(temporary_directory) / "report.md"
+            original = "# 示例公司研究\n\n原正文完全保留。\n"
+            report.write_text(original, encoding="utf-8")
+            record = {
+                "company": "示例公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "report_completed_at": None,
+                "data_cutoff": None,
+                "action": "未提取",
+                "recommendation": "原文没有明确动作，等待复核。",
+                "investor_stances": [],
+                "price_plan": [],
+            }
+
+            self.assertTrue(migration.append_contract(report, record))
+            migrated = report.read_text(encoding="utf-8")
+            self.assertTrue(migrated.startswith(original))
+            contract = dashboard.extract_decision_contract(migrated.splitlines())
+            self.assertIsNotNone(contract)
+            self.assertEqual(contract["action"], "待复核")
+            self.assertIsNone(contract["data_cutoff"])
+            self.assertFalse(migration.append_contract(report, record))
+
+    def test_migration_does_not_promote_bare_numbers_to_price_ranges(self):
+        record = {
+            "investor_stances": [
+                {"stance": "激进型", "action": "小仓观察", "price_range": "30-40"},
+                {"stance": "稳健型", "action": "等待", "price_range": "2026"},
+                {"stance": "保守型", "action": "观察", "price_range": "低于 15 元"},
+                {"stance": "激进型", "action": "未给出", "price_range": "10-12 元"},
+            ]
+        }
+        stances = migration.stance_map(record)
+        self.assertEqual(stances["激进型"]["price_range"], "未给出")
+        self.assertEqual(stances["稳健型"]["price_range"], "未给出")
+        self.assertEqual(stances["保守型"]["price_range"], "低于 15 元")
 
     def test_infers_layered_stances_from_unlabeled_action_bands(self):
         """Ordinary action bands become three display layers without editing the report."""

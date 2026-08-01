@@ -9,12 +9,15 @@ on:
       - "data/report-routing/**"
       - "tools/build_investment_dashboard.py"
       - "tools/market_snapshot.py"
+      - "tools/post_buy_tracking.py"
       - "site/**"
       - "wrangler.toml"
       - ".github/workflows/investment-dashboard.yml"
   schedule:
     # China/Hong Kong weekday sessions, with the script handling lunch breaks and holidays.
     - cron: "*/5 1-7 * * 1-5"
+    # Review-date alerts also refresh each morning, including non-trading days.
+    - cron: "0 1 * * *"
   workflow_dispatch:
 
 permissions:
@@ -37,10 +40,16 @@ jobs:
         run: python tools/build_investment_dashboard.py
       - name: Refresh A/H market snapshot when open
         run: python tools/market_snapshot.py
+      - name: Generate post-buy review and price-move alerts
+        run: python tools/post_buy_tracking.py check
+      - name: Attach post-buy alerts to dashboard data
+        run: python tools/build_investment_dashboard.py
       - name: Include latest quote data in static output
         run: |
-          mkdir -p site/data/quotes
-          cp data/investment-dashboard/quotes/latest.json site/data/quotes/latest.json
+          if [ -f data/investment-dashboard/quotes/latest.json ]; then
+            mkdir -p site/data/quotes
+            cp data/investment-dashboard/quotes/latest.json site/data/quotes/latest.json
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: investment-dashboard-site

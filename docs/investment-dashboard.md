@@ -6,6 +6,8 @@
 - `reports/00-index/报告库-MOC.md`：报告库导航
 - `data/investment-dashboard/decision_board.json`：当前个股结论
 - `data/investment-dashboard/report_history.json`：每家公司的历史研报结论
+- `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
+- `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
 - `site/`：静态网页看板
 
 ## 范围
@@ -60,11 +62,52 @@ py -3 tools\market_snapshot.py
 
 因此：新公司研报只要按路由保存到 `reports/<公司>/` 并推送，网页会同步更新。
 
+## 买入后跟踪与预警
+
+“买入前决策”和“买入后跟踪”在网页中分开显示。主报告里的`买入`或`分批买入`不会自动创建持仓，也不会因技术面、股价异动或论文健康度而被自动改写。
+
+只有确认实际买入后，才登记持仓并建立投资论文：
+
+```powershell
+py -3 tools\post_buy_tracking.py register `
+  --ticker 600406.SH --company 国电南瑞 --market A股 `
+  --buy-date 2026-08-01 --cost-basis 24.37 --position-weight 5 `
+  --next-review 2026-11-01 --thesis-report reports/国电南瑞/国电南瑞-thesis.md
+```
+
+论文检查完成后更新状态；健康度范围为 1-10：
+
+```powershell
+py -3 tools\post_buy_tracking.py update 600406.SH `
+  --thesis-status healthy --health-score 8 `
+  --last-review 2026-08-01 --next-review 2026-11-01 --review-action 持有
+```
+
+股价异动分析完成后记录事件。只有明确需要重审论文时才传入 `--review-required`：
+
+```powershell
+py -3 tools\post_buy_tracking.py event 600406.SH `
+  --change-pct -6.4 --window 1日 --category 情绪 `
+  --summary "大盘与行业同步回撤，暂未发现公司特有事件" `
+  --no-review-required --report-path reports/国电南瑞/国电南瑞-news-20260801.md
+```
+
+日常行情刷新后执行：
+
+```powershell
+py -3 tools\post_buy_tracking.py check
+py -3 tools\build_investment_dashboard.py
+```
+
+默认预警线为单日涨跌幅 `±5%`、复核日前 7 天、复核日到期/逾期。预警只标记“待分析”或“待复核”，不会自动下单、调仓或改变基本面建议。
+
 ## 本地预览
 
 ```powershell
 py -3 tools\build_investment_dashboard.py
 py -3 tools\market_snapshot.py --force
+py -3 tools\post_buy_tracking.py check
+py -3 tools\build_investment_dashboard.py
 Copy-Item data\investment-dashboard\quotes\latest.json site\data\quotes\latest.json -Force
 py -3 -m http.server 8000 --directory site
 ```
@@ -100,4 +143,3 @@ py -3 -m http.server 8000 --directory site
 - **键盘**：`/` 聚焦搜索，`j/k` 或方向键切换个股，`Enter` 打开并跳到估值原文，`Esc` 关闭，`o` 打开研报。
 - **实时行情**：交易时段优先通过腾讯行情脚本接口刷新 A/H 现价（约 45 秒）；失败时回退 `site/data/quotes/latest.json` 快照。
 - **排序**：结论优先级、现价安全边际、当日涨跌、研报截止日、公司名。
-

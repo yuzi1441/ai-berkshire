@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "description": "Explicitly registered post-buy positions only. Fundamental recommendations do not create positions automatically.",
+  "positions": {
+    "603659.SH": {
+      "company": "璞泰来",
+      "ticker": "603659.SH",
+      "market": "A股",
+      "status": "holding",
+      "buy_date": "2026-08-01",
+      "cost_basis": 23.8,
+      "position_weight": 10.0,
+      "thesis_report_path": "reports/璞泰来/璞泰来-thesis.md",
+      "thesis_status": "healthy",
+      "health_score": 8,
+      "last_review_date": "2026-08-01",
+      "next_review_date": "2026-08-31",
+      "review_action": "持有",
+      "metrics": [
+        {
+          "name": "涂覆隔膜份额与盈利质量",
+          "target": "市占率40%+；量价毛利不连续恶化",
+          "frequency": "半年报/年报",
+          "status": "待半年报验证"
+        },
+        {
+          "name": "收入增长",
+          "target": "同比20%+",
+          "frequency": "季报",
+          "status": "2026Q1 +35.32%"
+        },
+        {
+          "name": "扣非利润与经营现金流",
+          "target": "扣非利润同比20%+且经营现金流为正",
+          "frequency": "季报",
+          "status": "2026Q1扣非+38.23%，现金流为正"
+        },
+        {
+          "name": "负极业务修复",
+          "target": "出货/利用率改善且份额不继续下滑",
+          "frequency": "半年报/行业数据",
+          "status": "待观察"
+        },
+        {
+          "name": "技术路线与海外项目",
+          "target": "硅碳/固态客户验证推进；马来项目无重大失控",
+          "frequency": "重大公告/半年报",
+          "status": "项目已开工"
+        }
+      ],
+      "thresholds": {
+        "daily_pct": 5.0,
+        "review_days_before": 7
+      },
+      "events": [],
+      "latest_event": null,
+      "updated_at": "2026-08-01T15:02:49+08:00"
+    }
+  },
+  "updated_at": "2026-08-01T15:02:49+08:00"
+}
