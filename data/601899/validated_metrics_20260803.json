@@ -1,0 +1,142 @@
+{
+  "company": "紫金矿业集团股份有限公司",
+  "tickers": {
+    "a_share": "601899.SH",
+    "h_share": "02899.HK"
+  },
+  "cutoff_date": "2026-08-03",
+  "currency": "CNY unless otherwise stated",
+  "market": {
+    "a_close_cny": 32.55,
+    "h_close_hkd": 32.92,
+    "hkd_cny": 0.8607,
+    "h_close_cny_equivalent": 28.334244,
+    "h_discount_to_a_pct": 12.9516313364,
+    "total_issued_shares": 26590714622,
+    "a_issued_shares": 20601793140,
+    "h_issued_shares": 5988921482,
+    "treasury_a_shares": 77474592,
+    "a_quote_vendor_total_market_cap_cny_100m": 8655.277609461,
+    "two_market_weighted_market_cap_cny_100m": 8402.7992927483,
+    "pe_ttm_a": 14.03029,
+    "pe_ttm_h_cny_equivalent": 12.21314,
+    "pe_ttm_e_h1_preview_a": 12.80640,
+    "pe_ttm_e_h1_preview_h": 11.14776,
+    "pb_q1_reported_a": 4.318,
+    "pb_q1_pro_forma_post_2025_final_dividend_a": 4.548,
+    "dps_2025_cny": 0.60,
+    "dividend_yield_2025_a": 0.018433
+  },
+  "financials_cny_100m": {
+    "2021": {
+      "revenue": 2251.02,
+      "parent_net_profit": 156.73,
+      "gross_margin_pct": 15.44,
+      "operating_cash_flow": 260.72,
+      "capex_cash": 201.49,
+      "simplified_fcf": 59.24,
+      "parent_equity": 710.34,
+      "broad_net_debt_proxy": 611.01
+    },
+    "2022": {
+      "revenue": 2703.29,
+      "parent_net_profit": 200.42,
+      "gross_margin_pct": 15.74,
+      "operating_cash_flow": 286.79,
+      "capex_cash": 247.94,
+      "simplified_fcf": 38.84,
+      "parent_equity": 889.43,
+      "broad_net_debt_proxy": 988.87
+    },
+    "2023": {
+      "revenue": 2934.03,
+      "parent_net_profit": 211.19,
+      "gross_margin_pct": 15.81,
+      "operating_cash_flow": 368.60,
+      "capex_cash": 304.29,
+      "simplified_fcf": 64.31,
+      "parent_equity": 1075.06,
+      "broad_net_debt_proxy": 1185.14
+    },
+    "2024": {
+      "revenue": 3036.40,
+      "parent_net_profit": 320.51,
+      "gross_margin_pct": 20.37,
+      "operating_cash_flow": 488.60,
+      "capex_cash": 247.98,
+      "simplified_fcf": 240.63,
+      "parent_equity": 1397.86,
+      "broad_net_debt_proxy": 1114.12
+    },
+    "2025": {
+      "revenue": 3490.79082852,
+      "parent_net_profit": 517.77327785,
+      "parent_net_profit_ex_items": 507.2351474,
+      "gross_margin_pct": 27.73,
+      "operating_cash_flow": 754.29516296,
+      "capex_cash": 309.8230,
+      "simplified_fcf": 444.472165,
+      "parent_equity": 1855.41965085,
+      "broad_cash": 755.61461404,
+      "interest_bearing_debt_proxy": 1644.93,
+      "broad_net_debt_proxy": 889.31,
+      "weighted_roe_pct": 33.04,
+      "roic_pct": 17.62
+    },
+    "2026Q1": {
+      "revenue": 984.97579591,
+      "parent_net_profit": 200.79391507,
+      "parent_net_profit_ex_items": 184.58909011,
+      "operating_cash_flow": 278.31931440,
+      "gross_margin_pct": 36.33,
+      "cash": 993.92840041,
+      "trading_financial_assets": 128.17542815,
+      "parent_equity": 2004.17222123,
+      "net_debt_proxy_excluding_long_payables": 688.34121076,
+      "net_debt_proxy_including_long_payables": 726.07183959
+    },
+    "ttm_to_2026Q1": {
+      "revenue": 3686.48379527,
+      "parent_net_profit": 616.89942197,
+      "eps_current_issued_shares": 2.3199806050
+    },
+    "ttm_e_from_2026H1_preview": {
+      "parent_net_profit": 675.85575314,
+      "eps_current_issued_shares": 2.541699,
+      "status": "preliminary company estimate, unaudited and unreviewed"
+    }
+  },
+  "scenario_valuation": {
+    "years": 3,
+    "formal_ttm_sensitivity": {
+      "starting_eps": 2.319207,
+      "bull": {"eps_growth": 0.15, "exit_pe": 15, "target_price_cny": 52.9},
+      "base": {"eps_growth": 0.05, "exit_pe": 12, "target_price_cny": 32.2},
+      "bear": {"eps_growth": -0.15, "exit_pe": 9, "target_price_cny": 12.8}
+    },
+    "h1_preview_sensitivity": {
+      "starting_eps": 2.541699,
+      "bull": {"eps_growth": 0.12, "exit_pe": 16, "target_price_cny": 57.1},
+      "base": {"eps_growth": 0.05, "exit_pe": 13, "target_price_cny": 38.3},
+      "bear": {"eps_growth": -0.08, "exit_pe": 10, "target_price_cny": 19.8}
+    }
+  },
+  "sources": {
+    "official_2025_annual_report": "https://www.zjky.cn/upload/file/2026/03/20/bbcd6cbe0ee146628d6dc79ece86f5c6.pdf",
+    "official_2026_q1": "https://www.zjky.cn/upload/file/2026/04/21/ab5d30b549f84f81b2d9abf36bc9e898.pdf",
+    "official_2026_h1_preview": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0709/2026070901150_c.pdf",
+    "official_2026_july_share_monthly_return": "https://www.zijinmining.com/upload/file/2026/08/03/876ab731485547838671eb2c373f7c60.pdf",
+    "eastmoney_raw_files": [
+      "eastmoney_income_20260803.json",
+      "eastmoney_balance_20260803.json",
+      "eastmoney_cashflow_20260803.json",
+      "eastmoney_quote_a_20260803.json",
+      "eastmoney_quote_h_20260803.json"
+    ],
+    "quote_raw_files": [
+      "tencent_quotes_20260803.txt",
+      "sina_quotes_20260803.txt",
+      "tencent_peer_quotes_20260803.txt"
+    ]
+  }
+}
