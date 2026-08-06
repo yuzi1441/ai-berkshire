@@ -1,0 +1,122 @@
+[
+  {
+    "id": 2,
+    "label": "海缆与高压电缆毛利率 · 预设正面阈值",
+    "reported_value": 30.0,
+    "unit": "%",
+    "line_number": 20,
+    "raw_text": "预设正面阈值不低于30%，来自2026-07-26报告第8.3节",
+    "fetched_value": 30.0,
+    "fetched_source": "东方电缆-research-20260726.md第8.3节预设阈值",
+    "fetched_value2": 30.0,
+    "fetched_source2": "东方电缆-thesis.md核心假设2"
+  },
+  {
+    "id": 10,
+    "label": "应收账款 · 2026H1 实际",
+    "reported_value": 32.44,
+    "unit": "%",
+    "line_number": 23,
+    "raw_text": "应收账款较2025年末增长32.44%",
+    "fetched_value": 32.44,
+    "fetched_source": "2026半年报资产负债分析表",
+    "fetched_value2": 32.4377936869,
+    "fetched_source2": "东方财富GBALANCE原值独立复算"
+  },
+  {
+    "id": 15,
+    "label": "股价 · 2026-08-05 当前",
+    "reported_value": 39.09,
+    "unit": "元",
+    "line_number": 88,
+    "raw_text": "2026-08-05 11:30:38盘中股价39.09元",
+    "fetched_value": 39.09,
+    "fetched_source": "腾讯qt.gtimg.cn 20260805113038",
+    "fetched_value2": 39.09,
+    "fetched_source2": "东方财富push2实时行情"
+  },
+  {
+    "id": 25,
+    "label": "TTM FCF · 2026-08-05 当前",
+    "reported_value": 3.38,
+    "unit": "亿元",
+    "line_number": 93,
+    "raw_text": "TTM FCF 3.38亿元",
+    "fetched_value": 3.3828563913,
+    "fetched_source": "2025年报及2025H1/2026H1现金流量表滚动复算",
+    "fetched_value2": 3.3828563913,
+    "fetched_source2": "financial_rigor.py精确计算"
+  },
+  {
+    "id": 24,
+    "label": "TTM FCF · 2026-07-24 基线",
+    "reported_value": 11.74,
+    "unit": "亿元",
+    "line_number": 93,
+    "raw_text": "2025年度FCF 11.74亿元作为旧基线",
+    "fetched_value": 11.7367883986,
+    "fetched_source": "2025年报OCF减购建长期资产现金",
+    "fetched_value2": 11.7368,
+    "fetched_source2": "data/603606/financial_rigor_20260724.md"
+  },
+  {
+    "id": 26,
+    "label": "P/FCF · 2026-07-24 基线",
+    "reported_value": 27.58,
+    "unit": "x",
+    "line_number": 94,
+    "raw_text": "旧基线P/FCF 27.58x",
+    "fetched_value": 27.58,
+    "fetched_source": "39.25元除以2025每股FCF复算",
+    "fetched_value2": 27.58,
+    "fetched_source2": "data/603606/financial_rigor_20260724.md"
+  },
+  {
+    "id": 34,
+    "label": "悲观 · 3 年后目标价",
+    "reported_value": 24.79,
+    "unit": "元",
+    "line_number": 106,
+    "raw_text": "TTM EPS 1.6527859406元、0%增长、15x PE",
+    "fetched_value": 24.791789109,
+    "fetched_source": "financial_rigor.py three-scenario",
+    "fetched_value2": 24.791789109,
+    "fetched_source2": "TTM EPS乘15x独立复算"
+  },
+  {
+    "id": 38,
+    "label": "已持仓 · 证据恢复后可做什么",
+    "reported_value": 30.0,
+    "unit": "元",
+    "line_number": 123,
+    "raw_text": "抽检器从不以跌到30-36元作为单独加仓理由中提取；该值是引用旧价格带，不是事实数据",
+    "fetched_value": 30.0,
+    "fetched_source": "东方电缆-research-20260726.md旧价格带下沿",
+    "fetched_value2": 30.0,
+    "fetched_source2": "本报告行动规则文本复核"
+  },
+  {
+    "id": 45,
+    "label": "海缆分部收入 / 成本 · 公司半年报 / 上交所",
+    "reported_value": 2365448344.23,
+    "unit": "元",
+    "line_number": 146,
+    "raw_text": "2026H1海缆与高压电缆分部收入",
+    "fetched_value": 2365448344.23,
+    "fetched_source": "2026半年报第157页",
+    "fetched_value2": 2365448344.23,
+    "fetched_source2": "东方财富RPT_F10_FN_MAINOP"
+  },
+  {
+    "id": 47,
+    "label": "盘中股价 · 东方财富 F10 / 行情副源",
+    "reported_value": 39.09,
+    "unit": "元",
+    "line_number": 147,
+    "raw_text": "2026-08-05 11:30:38盘中股价",
+    "fetched_value": 39.09,
+    "fetched_source": "东方财富push2实时行情",
+    "fetched_value2": 39.09,
+    "fetched_source2": "腾讯qt.gtimg.cn"
+  }
+]

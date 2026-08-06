@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T18:31:37+08:00",
-  "record_count": 1952,
+  "generated_at": "2026-08-05T11:47:49+08:00",
+  "record_count": 1954,
   "records": [
     {
       "company": "Accenture",
@@ -25177,6 +25177,73 @@
         "confidence": "待复核"
       },
       "price_status": "已提取三情景",
+      "data_status": "已标注"
+    },
+    {
+      "company": "东方电缆",
+      "entity_kind": "company",
+      "entity_directory": "东方电缆",
+      "ticker": "603606.SH",
+      "market": "A股",
+      "data_cutoff": "2026-08-05",
+      "report_completed_at": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "2. 该怎么做？ 空仓者观察；持仓者减仓，保留跟踪仓，不建议清仓。",
+      "buy_price": "39.09 元",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "71.40 元"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "46.45 元"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "24.79 元"
+        }
+      ],
+      "valuation_section": {
+        "heading": "5.2 三情景估值",
+        "start_line": 98,
+        "end_line": 111,
+        "markdown": "### 5.2 三情景估值\n\n为保持与 7 月报告可比，继续使用 20% / 12% / 0% 三年 EPS 增速和 25x / 20x / 15x 目标 PE：\n\n| 情景 | 3 年后目标价 | 9% 折现今日值 | 相对 39.09 元 |\n|---|---:|---:|---:|\n| 乐观 | 71.40 元 | 55.13 元 | +41.0% |\n| 中性 | 46.45 元 | 35.87 元 | -8.2% |\n| 悲观 | 24.79 元 | 19.14 元 | -51.0% |\n\n当前价略高于中性情景的折现现值，且中报没有提供上修增长假设的证据。**历史估值分位低，不等于当前拥有现金流安全边际。**\n\n---"
+      },
+      "recommendation": "2. 该怎么做？ 空仓者观察；持仓者减仓，保留跟踪仓，不建议清仓。",
+      "title": "东方电缆（603606.SH）投资论文追踪报告",
+      "report_path": "reports/东方电缆/东方电缆-thesis-tracker-20260805.md",
+      "report_link": "东方电缆/东方电缆-thesis-tracker-20260805.md",
+      "price_status": "已提取三情景",
+      "data_status": "已标注"
+    },
+    {
+      "company": "东方电缆",
+      "entity_kind": "company",
+      "entity_directory": "东方电缆",
+      "ticker": "603606.SH",
+      "market": "A股",
+      "data_cutoff": "2026-08-05",
+      "report_completed_at": "2026-08-05",
+      "action": "减仓/卖出",
+      "investor_stances": [],
+      "conclusion_summary": "本报告用于学习与研究，不构成投资建议。",
+      "buy_price": "1.6528 元",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "四、估值锚点",
+        "start_line": 54,
+        "end_line": 67,
+        "markdown": "## 四、估值锚点\n\n| 指标 | 买入时 | 2026-08-05 当前 | 乐观 | 中性 | 悲观 |\n|---|---:|---:|---:|---:|---:|\n| 股价 | 未提供 | 39.09 元 | 3 年目标 71.40 元 | 3 年目标 46.45 元 | 3 年目标 24.79 元 |\n| PE | 未提供 | 23.65x TTM | 第 3 年 25x | 第 3 年 20x | 第 3 年 15x |\n| 市值 | 未提供 | 322.42 亿元 | 588.9 亿元 | 383.1 亿元 | 204.5 亿元 |\n| 9% 折现今日值 | 未提供 | - | 55.13 元 | 35.87 元 | 19.14 元 |\n| 相对当前价 | 未提供 | - | +41.0% | -8.2% | -51.0% |\n\n估值以 TTM EPS 1.6528 元为起点，沿用 2026-07-26 主报告的三组增长与目标 PE 参数，以保持前后可比。当前 TTM FCF 仅约 3.38 亿元，对应 P/FCF 95.31x；因此低 PE 不能代替现金流安全边际。\n\n---"
+      },
+      "recommendation": "本报告用于学习与研究，不构成投资建议。",
+      "title": "东方电缆（603606.SH）投资论文",
+      "report_path": "reports/东方电缆/东方电缆-thesis.md",
+      "report_link": "东方电缆/东方电缆-thesis.md",
+      "price_status": "已提取",
       "data_status": "已标注"
     },
     {
