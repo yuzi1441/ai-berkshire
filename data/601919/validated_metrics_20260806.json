@@ -1,0 +1,74 @@
+{
+  "company": "中远海控股份有限公司",
+  "tickers": {
+    "a_share": "601919.SH",
+    "h_share": "01919.HK"
+  },
+  "cutoff_date": "2026-08-06",
+  "currency": "CNY unless otherwise stated",
+  "market": {
+    "a_close_cny": 15.37,
+    "h_close_hkd": 15.13,
+    "hkd_cny": 0.862131,
+    "h_close_cny_equivalent": 13.04404203,
+    "h_discount_to_a_pct": 15.1331032531,
+    "total_issued_shares": 15268122965,
+    "a_issued_shares": 12556536965,
+    "h_issued_shares": 2711586000,
+    "a_quote_market_cap_cny_100m": 2346.7104997205,
+    "two_market_economic_market_cap_cny_100m": 2283.640149040096,
+    "pe_ttm_a": 9.37,
+    "pe_ttm_h_cny_equivalent": 7.95,
+    "pb_q1_reported_a": 0.9985836614,
+    "dps_2025_cny": 1.0,
+    "dividend_yield_2025_a": 0.0650624593,
+    "dividend_yield_2025_h_gross": 0.0766682089
+  },
+  "financials_cny_100m": {
+    "2021": {"revenue": 3336.94, "gross_margin_pct": 42.30, "parent_net_profit": 893.49, "operating_cash_flow": 1710.09, "capex_cash": 95.50, "simplified_fcf": 1614.59},
+    "2022": {"revenue": 3910.58, "gross_margin_pct": 44.26, "parent_net_profit": 1097.03, "operating_cash_flow": 1967.99, "capex_cash": 104.91, "simplified_fcf": 1863.07},
+    "2023": {"revenue": 1754.53, "gross_margin_pct": 16.36, "parent_net_profit": 238.60, "operating_cash_flow": 225.84, "capex_cash": 153.23, "simplified_fcf": 72.61},
+    "2024": {"revenue": 2338.59, "gross_margin_pct": 29.54, "parent_net_profit": 491.00, "operating_cash_flow": 693.13, "capex_cash": 259.99, "simplified_fcf": 433.14},
+    "2025": {"revenue": 2195.038052227, "gross_margin_pct": 20.05, "parent_net_profit": 308.6814782138, "operating_cash_flow": 455.4577043123, "capex_cash": 250.1555161456, "simplified_fcf": 205.3021881667, "eps": 1.99, "weighted_roe_pct": 13.17, "asset_liability_ratio_pct": 41.42},
+    "2026Q1": {"revenue": 517.9687557587, "parent_net_profit": 58.7693930239, "operating_cash_flow": 111.2484213458, "eps": 0.38, "cash_equivalents": 1497.02, "monetary_funds": 1503.3425750827, "asset_liability_ratio_pct": 40.90, "volume_mteu": 6.9156, "volume_yoy_pct": 6.70, "international_revenue_per_teu_usd": 1110.36, "international_revenue_per_teu_yoy_pct": -15.31, "container_ebit_margin_pct": 14.05},
+    "ttm_to_2026Q1": {"revenue": 2133.4026169602, "parent_net_profit": 250.5054827795, "eps": 1.6407091, "operating_cash_flow": 416.0840084816, "capex_cash": 261.7327077711, "simplified_fcf": 154.3513007105, "fcf_per_share": 1.010938}
+  },
+  "balance_sheet_q1_cny_100m": {
+    "cash_equivalents": 1497.02,
+    "monetary_funds": 1503.3425750827,
+    "broad_debt_including_lease": 736.1724102482,
+    "net_cash_including_lease": 767.1701648345,
+    "parent_equity": 2356.8953963773,
+    "reported_bvps": 15.3918
+  },
+  "segments_2025_cny_100m": {
+    "container_shipping_revenue": 2107.31,
+    "container_shipping_gross_margin_pct": 19.44,
+    "terminal_revenue": 120.41,
+    "terminal_gross_margin_pct": 25.91,
+    "note": "分部收入存在合并抵销及口径差异，不将分部简单相加为集团收入"
+  },
+  "scenario_valuation": {
+    "years": 3,
+    "starting_eps": 1.6407091,
+    "bull": {"eps_growth": 0.10, "exit_pe": 9, "target_price_cny": 19.7, "return_pct": 27.9},
+    "base": {"eps_growth": -0.08, "exit_pe": 8, "target_price_cny": 10.2, "return_pct": -33.5},
+    "bear": {"eps_growth": -0.30, "exit_pe": 7, "target_price_cny": 3.9, "return_pct": -74.4}
+  },
+  "sources": {
+    "official_2025_annual_report": "https://static.cninfo.com.cn/finalpage/2026-03-20/1225019947.PDF",
+    "official_2026_q1_report": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0429/2026042905777_c.pdf",
+    "official_share_capital": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0702/2026070200013_c.pdf",
+    "shareholder_return_plan": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0507/2025050701826.pdf",
+    "newbuild_18000_teu": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0113/2026011301460_c.pdf",
+    "newbuild_3000_teu": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0113/2026011301554_c.pdf",
+    "newbuild_13600_teu": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0429/2026042903534_c.pdf",
+    "tencent_a_quote": "https://qt.gtimg.cn/q=sh601919",
+    "tencent_h_quote": "https://qt.gtimg.cn/q=hk01919",
+    "eastmoney_finance": "https://emweb.securities.eastmoney.com/PC_HSF10/NewFinanceAnalysis/Index?type=web&code=SH601919",
+    "fx": "https://open.er-api.com/v6/latest/HKD",
+    "alphaliner": "https://alphaliner.axsmarine.com/PublicTop100/",
+    "scfi": "https://www.sse.net.cn/index/singleIndex?indexType=scfi",
+    "drewry_wci": "https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry"
+  }
+}
