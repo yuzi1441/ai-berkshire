@@ -1,0 +1,106 @@
+{
+  "company": "招商银行股份有限公司",
+  "tickers": {
+    "a_share": "600036.SH",
+    "h_share": "03968.HK"
+  },
+  "cutoff_date": "2026-08-06",
+  "currency": "CNY unless otherwise stated",
+  "market": {
+    "a_close_cny": 38.97,
+    "h_close_hkd": 48.90,
+    "hkd_cny": 0.86557,
+    "hkd_cny_basis": "SAFE official central parity rate for 2026-08-06",
+    "h_close_cny_equivalent": 42.326373,
+    "h_premium_to_a_pct": 8.6127097768,
+    "total_issued_shares": 25219845601,
+    "a_issued_shares": 20628944429,
+    "h_issued_shares": 4590901172,
+    "a_price_equivalent_market_cap_cny_100m": 9828.1738307097,
+    "two_market_weighted_market_cap_cny_100m": 9982.2615981034,
+    "ttm_basic_eps_common_shareholder": 5.71,
+    "pe_ttm_common_shareholder": 6.8248686515,
+    "pe_ttm_quote_vendor_parent_profit_basis": 6.52,
+    "bvps_2026q1_reported": 44.90,
+    "bvps_2026q1_pro_forma_post_2025_final_dividend": 43.897,
+    "pb_reported_q1": 0.8679287305,
+    "pb_pro_forma_post_final_dividend": 0.8877599836,
+    "dps_2025_cny": 2.016,
+    "trailing_dividend_yield": 0.0517321016
+  },
+  "financials_cny_100m": {
+    "2025_prc_gaap": {
+      "revenue": 3375.32,
+      "parent_net_profit": 1501.81,
+      "total_assets": 130705.23,
+      "customer_deposits": 98361.30,
+      "gross_loans": 72580.58,
+      "roe_pct": 13.44,
+      "nim_pct": 1.87,
+      "npl_ratio_pct": 0.94,
+      "allowance_coverage_pct": 391.79,
+      "cet1_advanced_pct": 14.16
+    },
+    "2025_ifrs": {
+      "net_operating_income": 3372.73,
+      "parent_net_profit": 1501.81,
+      "total_assets": 130705.23,
+      "customer_deposits": 98361.30
+    },
+    "2026q1": {
+      "revenue": 869.40,
+      "parent_net_profit": 378.52,
+      "basic_eps": 1.49,
+      "bvps": 44.90,
+      "roe_annualised_pct": 13.48,
+      "nim_pct": 1.83,
+      "npl_ratio_pct": 0.94,
+      "allowance_coverage_pct": 387.76,
+      "special_mention_ratio_pct": 1.48,
+      "overdue_ratio_pct": 1.29,
+      "new_npl": 189.27,
+      "credit_card_new_npl": 120.42,
+      "credit_card_npl_ratio_pct": 1.90,
+      "credit_card_special_mention_ratio_pct": 5.20,
+      "credit_card_overdue_ratio_pct": 3.41,
+      "cet1_advanced_pct": 14.13,
+      "tier1_advanced_pct": 16.05,
+      "capital_adequacy_advanced_pct": 17.76,
+      "liquidity_coverage_ratio_pct": 177.89,
+      "net_stable_funding_ratio_pct": 141.45
+    }
+  },
+  "scenario_valuation": {
+    "years": 3,
+    "starting_eps": 5.71,
+    "bull": {
+      "eps_growth": 0.05,
+      "exit_pe": 8.5,
+      "target_price_cny": 56.2,
+      "three_year_dividend_cny": 6.67,
+      "total_return_pct": 61.3
+    },
+    "base": {
+      "eps_growth": 0.01,
+      "exit_pe": 7.0,
+      "target_price_cny": 41.2,
+      "three_year_dividend_cny": 6.17,
+      "total_return_pct": 21.6
+    },
+    "bear": {
+      "eps_growth": -0.05,
+      "exit_pe": 5.0,
+      "target_price_cny": 24.5,
+      "three_year_dividend_cny": 5.46,
+      "total_return_pct": -23.1
+    }
+  },
+  "source_files": [
+    "research/source_docs/招商银行/招商银行-2025年度报告-A股-20260327.pdf",
+    "research/source_docs/招商银行/招商银行-Annual-Report-2025-HShare-English-20260427.pdf",
+    "research/source_docs/招商银行/招商银行-2026年第一季度报告-20260428.pdf",
+    "research/source_docs/招商银行/招商银行-2026年第一季度第三支柱报告-20260428.pdf",
+    "research/source_docs/招商银行/招商银行-东方财富主要财务数据-截至20260806.json",
+    "data/600036/quote_snapshot_20260806.txt"
+  ]
+}

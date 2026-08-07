@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "superseded",
+  "superseded_by": "data/600036/validated_metrics_20260806.json",
+  "superseded_reason": "This draft used 2026-08-07 intraday quotes. The final report uses 2026-08-06 closing prices and the official 2026-08-06 CNY/HKD central parity rate.",
+  "company": "招商银行",
+  "tickers": ["600036.SH", "03968.HK"],
+  "research_date": "2026-08-06",
+  "timezone_note": "Research date is America/Chicago; China quote timestamps fall on 2026-08-07 Beijing time.",
+  "financial_cutoff": "2026-03-31",
+  "quote_cutoff": "2026-08-07T10:56:31+08:00",
+  "quotes": {
+    "a_share": {
+      "price_cny": 38.86,
+      "tencent_price_cny": 38.86,
+      "sina_price_cny": 38.86,
+      "eastmoney_price_cny": 38.86,
+      "cross_source_deviation_pct": 0.0
+    },
+    "h_share": {
+      "price_hkd": 48.42,
+      "secondary_price_hkd": 48.40,
+      "cross_source_deviation_pct": 0.04,
+      "hkd_cny_mid_rate_20260806": 0.86557,
+      "price_cny_equivalent": 41.91,
+      "premium_to_a_share_pct": 7.85
+    }
+  },
+  "share_capital": {
+    "total_ordinary_shares": 25219845601,
+    "a_shares": 20628944429,
+    "h_shares": 4590901172,
+    "source_primary": "招商银行2025年度报告",
+    "source_secondary": "Tencent quote snapshot"
+  },
+  "annual_financials": [
+    {"year": 2021, "revenue_cny_100m": 3312.53, "net_profit_cny_100m": 1199.22, "roe_pct": 16.96, "nim_pct": 2.48, "net_fee_income_cny_100m": 944.47, "cost_income_pct": 33.12, "npl_pct": 0.91, "provision_coverage_pct": 483.87, "core_tier1_advanced_pct": 12.66},
+    {"year": 2022, "revenue_cny_100m": 3447.83, "net_profit_cny_100m": 1380.12, "roe_pct": 17.06, "nim_pct": 2.40, "net_fee_income_cny_100m": 942.75, "cost_income_pct": 32.88, "npl_pct": 0.96, "provision_coverage_pct": 450.79, "core_tier1_advanced_pct": 13.68},
+    {"year": 2023, "revenue_cny_100m": 3391.23, "net_profit_cny_100m": 1466.02, "roe_pct": 16.22, "nim_pct": 2.15, "net_fee_income_cny_100m": 841.08, "cost_income_pct": 32.96, "npl_pct": 0.95, "provision_coverage_pct": 437.70, "core_tier1_advanced_pct": 13.73},
+    {"year": 2024, "revenue_cny_100m": 3374.88, "net_profit_cny_100m": 1483.91, "roe_pct": 14.49, "nim_pct": 1.98, "net_fee_income_cny_100m": 720.94, "cost_income_pct": 31.89, "npl_pct": 0.95, "provision_coverage_pct": 411.98, "core_tier1_advanced_pct": 14.86},
+    {"year": 2025, "revenue_cny_100m": 3375.32, "net_profit_cny_100m": 1501.81, "roe_pct": 13.44, "nim_pct": 1.87, "net_fee_income_cny_100m": 752.58, "cost_income_pct": 31.98, "npl_pct": 0.94, "provision_coverage_pct": 391.79, "core_tier1_advanced_pct": 14.16}
+  ],
+  "q1_2026": {
+    "revenue_cny_100m": 869.40,
+    "revenue_yoy_pct": 3.81,
+    "net_profit_cny_100m": 378.52,
+    "net_profit_yoy_pct": 1.52,
+    "annualized_roe_pct": 13.48,
+    "nim_pct": 1.83,
+    "nim_yoy_bp": -8,
+    "nim_qoq_bp": -3,
+    "net_fee_income_cny_100m": 206.56,
+    "net_fee_income_yoy_pct": 4.87,
+    "loans_cny_100m": 74643.73,
+    "customer_deposits_cny_100m": 99591.97,
+    "npl_pct": 0.94,
+    "provision_coverage_pct": 387.76,
+    "retail_npl_pct": 1.14,
+    "mortgage_npl_pct": 0.58,
+    "consumer_credit_npl_pct": 1.66,
+    "credit_card_npl_pct": 1.90,
+    "core_tier1_advanced_pct": 14.13,
+    "bvps_cny": 44.90
+  },
+  "business_metrics_2025": {
+    "retail_customers_100m": 2.24,
+    "retail_aum_cny_100m": 170825.19,
+    "sunflower_and_private_customers_10000": 593.15,
+    "retail_deposits_cny_100m": 42655.28,
+    "core_deposit_ratio_pct": 49.01,
+    "wealth_management_fee_cny_100m": 267.11,
+    "wealth_management_fee_yoy_pct": 21.39,
+    "asset_management_fee_cny_100m": 119.27,
+    "custody_fee_cny_100m": 53.75,
+    "financial_technology_investment_cny_100m": 129.01,
+    "financial_technology_investment_parent_revenue_pct": 4.31
+  },
+  "valuation": {
+    "a_share_market_cap_cny_100m": 9800.43,
+    "ttm_attributable_profit_cny_100m": 1507.47,
+    "pe_market_cap_over_attributable_profit_x": 6.50,
+    "ttm_ordinary_eps_cny": 5.71,
+    "pe_ordinary_eps_x": 6.81,
+    "pb_q1_bvps_x": 0.87,
+    "declared_dps_cny": 2.016,
+    "dividend_yield_pct": 5.19,
+    "reverse_residual_income_implied_roe_pct": 9.19,
+    "reverse_model_assumptions": {"cost_of_equity_pct": 10.0, "perpetual_growth_pct": 4.0}
+  },
+  "scenario_valuation_3y": [
+    {"scenario": "bull", "eps_growth_pct": 6, "exit_pe_x": 9, "target_eps_cny": 6.80, "target_price_cny": 61.2, "price_return_pct": 57.5, "estimated_dividends_cny": 6.80, "total_return_pct": 75.0, "annualized_total_return_pct": 20.51},
+    {"scenario": "base", "eps_growth_pct": 3, "exit_pe_x": 7, "target_eps_cny": 6.24, "target_price_cny": 43.7, "price_return_pct": 12.4, "estimated_dividends_cny": 6.42, "total_return_pct": 28.97, "annualized_total_return_pct": 8.85},
+    {"scenario": "bear", "eps_growth_pct": -2, "exit_pe_x": 5, "target_eps_cny": 5.37, "target_price_cny": 26.9, "price_return_pct": -30.9, "estimated_dividends_cny": 5.81, "total_return_pct": -15.83, "annualized_total_return_pct": -5.58}
+  ],
+  "sources": {
+    "annual_report": "https://s3gw.cmbimg.com/lb5001-cmbweb-prd-1255000097/cmbir/20260327/e1efc81f-7ad9-41b7-9b02-5db202026930.pdf",
+    "q1_report": "https://s3gw.cmbimg.com/lb5001-cmbweb-prd-1255000097/cmbir/20260428/0a00dc89-c6b9-4fcc-9798-5f675e8b53b6.pdf",
+    "eastmoney_financials": "https://datacenter.eastmoney.com/securities/api/data/get?type=RPT_F10_FINANCE_MAINFINADATA&sty=ALL&filter=(SECUCODE%3D%22600036.SH%22)&p=1&ps=40&sr=-1&st=REPORT_DATE&source=HSF10&client=PC",
+    "tencent_quotes": "https://qt.gtimg.cn/q=sh600036,hk03968",
+    "sina_quotes": "https://hq.sinajs.cn/list=sh600036,hk03968",
+    "manager_appointment": "http://static.cninfo.com.cn/finalpage/2026-07-29/1225444610.PDF",
+    "dividend_implementation": "http://static.cninfo.com.cn/finalpage/2026-07-04/1225409111.PDF"
+  },
+  "limitations": [
+    "The latest periodic financial report is 2026Q1; 2026H1 results were not available at the cutoff.",
+    "Bank free cash flow and net cash are not decision-useful because deposits and loans are operating assets and liabilities.",
+    "The price snapshot is intraday, not a closing price.",
+    "Scenario valuation is an assumption set, not a forecast or investment promise."
+  ]
+}
