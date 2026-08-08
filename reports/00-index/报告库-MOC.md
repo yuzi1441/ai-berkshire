@@ -1,7 +1,7 @@
 ---
 title: "报告库 MOC"
 type: generated-index
-generated_at: 2026-08-08T00:56:52+08:00
+generated_at: 2026-08-08T01:40:12+08:00
 ---
 
 # 报告库 MOC
@@ -45,7 +45,6 @@ generated_at: 2026-08-08T00:56:52+08:00
 - [chuanrun](../chuanrun/)
 - [chunfeng-dongli](../chunfeng-dongli/)
 - [deye](../deye/)
-- [focus-media](../focus-media/)
 - [guangdong-hongda](../guangdong-hongda/)
 - [guodian-power](../guodian-power/)
 - [hgtech](../hgtech/)
@@ -58,6 +57,7 @@ generated_at: 2026-08-08T00:56:52+08:00
 - [pingan](../pingan/)
 - [skyverse-tech](../skyverse-tech/)
 - [一拖股份](../一拖股份/)
+- [万华化学](../万华化学/)
 - [三一重工](../三一重工/)
 - [三星电子](../三星电子/)
 - [上海电气](../上海电气/)
@@ -67,6 +67,7 @@ generated_at: 2026-08-08T00:56:52+08:00
 - [中创智领](../中创智领/)
 - [中国广核](../中国广核/)
 - [中国神华](../中国神华/)
+- [中国移动](../中国移动/)
 - [中国西电](../中国西电/)
 - [中航机载](../中航机载/)
 - [中远海控](../中远海控/)
@@ -77,6 +78,7 @@ generated_at: 2026-08-08T00:56:52+08:00
 - [伊利股份](../伊利股份/)
 - [兆易创新](../兆易创新/)
 - [兴发集团](../兴发集团/)
+- [分众传媒](../分众传媒/)
 - [北化股份](../北化股份/)
 - [华明装备](../华明装备/)
 - [华钰矿业](../华钰矿业/)
@@ -183,9 +185,9 @@ generated_at: 2026-08-08T00:56:52+08:00
 - [bottleneck-map](../bottleneck-map/)
 - [china-shenhua](../china-shenhua/)
 - [community](../community/)
+- [focus-media](../focus-media/)
 - [openrouter](../openrouter/)
 - [zijin-mining](../zijin-mining/)
-- [万华化学](../万华化学/)
 - [中国AI产业链](../中国AI产业链/)
 - [中国大模型六强横向研究-20260721](../中国大模型六强横向研究-20260721/)
 - [中国汽车市场](../中国汽车市场/)
