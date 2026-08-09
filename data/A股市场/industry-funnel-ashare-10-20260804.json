@@ -1,0 +1,3128 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-08-04",
+  "financial_cutoff": "2025-12-31",
+  "quote_timestamp": "20260804135715",
+  "scope": "沪深京A股；去金融与周期后的30家候选继续压缩到10家",
+  "input_path": "E:\\ai-berkshire\\data\\A股市场\\industry-funnel-ashare-30-20260804.json",
+  "input_counts": {
+    "stage_30": 30,
+    "moat_ready": 30
+  },
+  "rules": {
+    "research_score": "上一层综合分 + 护城河初评分*2 - 风险扣分",
+    "penalty_fcf_yield": "5年累计FCF/当前市值<25%: -4",
+    "penalty_ocf_ni": "5年OCF/净利润<1: -2",
+    "penalty_pe": "PE>15: -2",
+    "penalty_market_cap": "总市值<100亿元: -2",
+    "industry_cap": 2,
+    "selection_count": 10
+  },
+  "counts": {
+    "入选10家": 10,
+    "淘汰": 20
+  },
+  "records": [
+    {
+      "code": "000513",
+      "name": "丽珠集团",
+      "exchange": "SZ",
+      "industry": "化学制药",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 17.541,
+        "fcf_5_total": 9833828810.44,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 64.968751,
+        "ocf_ni_avg_5": 1.437233,
+        "net_margin_avg_10": 18.439595,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 30.85,
+        "change_pct": -0.55,
+        "turnover_pct": 0.7,
+        "pe_ttm": 11.87,
+        "pb": 2.07,
+        "market_cap": 27391936225.0,
+        "free_float_market_cap": 17527112645.0,
+        "name": "丽珠集团",
+        "industry_quote": "化学制药"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 30.85,
+        "tencent_price": 30.84,
+        "difference_pct": 0.032425,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.35900452,
+        "quality_score": 53,
+        "valuation_score": 28,
+        "composite_score": 81,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 12
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "药品注册、产品组合和医药商业化能力",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 12,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 81,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 89,
+        "main_risk": "药品集采与监管、研发管线、单品依赖",
+        "rank": 8
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "000568",
+      "name": "泸州老窖",
+      "exchange": "SZ",
+      "industry": "白酒Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 26.664,
+        "fcf_5_total": 45277324085.54,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 86.949303,
+        "ocf_ni_avg_5": 0.930025,
+        "net_margin_avg_10": 34.829815,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 88.62,
+        "change_pct": -1.96,
+        "turnover_pct": 0.62,
+        "pe_ttm": 8.79,
+        "pb": 2.53,
+        "market_cap": 130439907651.0,
+        "free_float_market_cap": 130365349341.0,
+        "name": "泸州老窖",
+        "industry_quote": "白酒Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 88.62,
+        "tencent_price": 88.64,
+        "difference_pct": 0.022563,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.34711251,
+        "quality_score": 54,
+        "valuation_score": 28,
+        "composite_score": 82,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 8
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "白酒品牌、产品结构和经销商网络",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 8,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 82,
+        "moat_weighted_score": 8,
+        "penalty_points": 2,
+        "penalties": [
+          "OCF/净利<1"
+        ],
+        "research_score": 88,
+        "main_risk": "白酒需求与渠道库存、批价变化、消费结构",
+        "rank": 9
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "000651",
+      "name": "格力电器",
+      "exchange": "SZ",
+      "industry": "白色家电",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 26.362,
+        "fcf_5_total": 140507547030.41,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 27.795968,
+        "ocf_ni_avg_5": 1.141468,
+        "net_margin_avg_10": 14.048562,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": false,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 40.55,
+        "change_pct": -1.0,
+        "turnover_pct": 0.99,
+        "pe_ttm": 9.34,
+        "pb": 1.49,
+        "market_cap": 227137002798.0,
+        "free_float_market_cap": 223917484171.0,
+        "name": "格力电器",
+        "industry_quote": "白色家电"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 40.55,
+        "tencent_price": 40.55,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.61860263,
+        "quality_score": 53,
+        "valuation_score": 30,
+        "composite_score": 83,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 5
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "家电品牌、制造规模、渠道和服务网络",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 5,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 83,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 91,
+        "main_risk": "家电需求、价格竞争、地产链和多元化执行",
+        "rank": 4
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "000848",
+      "name": "承德露露",
+      "exchange": "SZ",
+      "industry": "饮料乳品",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 22.368,
+        "fcf_5_total": 2942328282.13,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 43.756567,
+        "ocf_ni_avg_5": 1.154963,
+        "net_margin_avg_10": 20.730144,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 9.06,
+        "change_pct": -2.58,
+        "turnover_pct": 1.73,
+        "pe_ttm": 9.3,
+        "pb": 2.89,
+        "market_cap": 9241200670.0,
+        "free_float_market_cap": 9160965310.0,
+        "name": "承德露露",
+        "industry_quote": "饮料乳品"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 9.06,
+        "tencent_price": 9.08,
+        "difference_pct": 0.220264,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.31839242,
+        "quality_score": 53,
+        "valuation_score": 28,
+        "composite_score": 81,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 13
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "植物蛋白饮料品牌和渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 13,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 81,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 85,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "000858",
+      "name": "五 粮 液",
+      "exchange": "SZ",
+      "industry": "白酒Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 21.328,
+        "fcf_5_total": 145683954301.36,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 76.233413,
+        "ocf_ni_avg_5": 1.565099,
+        "net_margin_avg_10": 32.814251,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 76.95,
+        "change_pct": -1.42,
+        "turnover_pct": 0.73,
+        "pe_ttm": 9.26,
+        "pb": 2.53,
+        "market_cap": 298689735985.0,
+        "free_float_market_cap": 298682455437.0,
+        "name": "五 粮 液",
+        "industry_quote": "白酒Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 76.95,
+        "tencent_price": 76.94,
+        "difference_pct": 0.012997,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.48774342,
+        "quality_score": 58,
+        "valuation_score": 28,
+        "composite_score": 86,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 2
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 5,
+        "rating": "5/5",
+        "basis": "高端白酒品牌、渠道和消费心智",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 2,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 86,
+        "moat_weighted_score": 10,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 96,
+        "main_risk": "白酒需求与渠道库存、批价变化、消费结构",
+        "rank": 1
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "002027",
+      "name": "分众传媒",
+      "exchange": "SZ",
+      "industry": "广告营销",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 34.978,
+        "fcf_5_total": 36724221808.25,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 65.893699,
+        "ocf_ni_avg_5": 1.861697,
+        "net_margin_avg_10": 35.828833,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 5.31,
+        "change_pct": -0.56,
+        "turnover_pct": 1.09,
+        "pe_ttm": 10.71,
+        "pb": 6.04,
+        "market_cap": 76688080545.0,
+        "free_float_market_cap": 76688080545.0,
+        "name": "分众传媒",
+        "industry_quote": "广告营销"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 5.31,
+        "tencent_price": 5.31,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.47887783,
+        "quality_score": 60,
+        "valuation_score": 22,
+        "composite_score": 82,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 6
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "核心楼宇媒体点位网络和规模化销售系统",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 6,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 82,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 90,
+        "main_risk": "广告需求、媒体点位成本、应收账款",
+        "rank": 6
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "002034",
+      "name": "旺能环境",
+      "exchange": "SZ",
+      "industry": "环境治理",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 10.196,
+        "fcf_5_total": 1946416184.51,
+        "interest_coverage_latest": 4.435732,
+        "gross_margin_avg_5": 38.255299,
+        "ocf_ni_avg_5": 2.280277,
+        "net_margin_avg_10": 23.170396,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 14.5,
+        "change_pct": -0.34,
+        "turnover_pct": 1.04,
+        "pe_ttm": 9.31,
+        "pb": 0.89,
+        "market_cap": 7492167444.0,
+        "free_float_market_cap": 7460937518.0,
+        "name": "旺能环境",
+        "industry_quote": "环境治理"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 14.5,
+        "tencent_price": 14.5,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135700"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.25979347,
+        "quality_score": 50,
+        "valuation_score": 30,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 21
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "固废处理项目资质、特许经营和运营经验",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 21,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 84,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "002035",
+      "name": "华帝股份",
+      "exchange": "SZ",
+      "industry": "厨卫电器",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 15.942,
+        "fcf_5_total": 1943268195.16,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 40.924405,
+        "ocf_ni_avg_5": 2.132438,
+        "net_margin_avg_10": 7.609461,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 4.88,
+        "change_pct": -1.41,
+        "turnover_pct": 0.8,
+        "pe_ttm": 10.23,
+        "pb": 1.1,
+        "market_cap": 4136549656.0,
+        "free_float_market_cap": 3816343815.0,
+        "name": "华帝股份",
+        "industry_quote": "厨卫电器"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 4.88,
+        "tencent_price": 4.88,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.46977998,
+        "quality_score": 52,
+        "valuation_score": 30,
+        "composite_score": 82,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 10
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "厨卫品牌、渠道覆盖和产品迭代",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 10,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 82,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 86,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "002508",
+      "name": "老板电器",
+      "exchange": "SZ",
+      "industry": "厨卫电器",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 21.378,
+        "fcf_5_total": 7189242087.27,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 50.568043,
+        "ocf_ni_avg_5": 1.193458,
+        "net_margin_avg_10": 17.279485,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 15.81,
+        "change_pct": -1.62,
+        "turnover_pct": 0.68,
+        "pe_ttm": 12.18,
+        "pb": 1.32,
+        "market_cap": 14939484262.0,
+        "free_float_market_cap": 14759453752.0,
+        "name": "老板电器",
+        "industry_quote": "厨卫电器"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 15.81,
+        "tencent_price": 15.81,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.48122425,
+        "quality_score": 53,
+        "valuation_score": 27,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 16
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "厨电品牌、渠道与服务体系",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 16,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 88,
+        "main_risk": "厨电需求、地产链、渠道和高端竞争"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "002555",
+      "name": "三七互娱",
+      "exchange": "SZ",
+      "industry": "游戏Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 25.756,
+        "fcf_5_total": 13999205712.98,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 80.041279,
+        "ocf_ni_avg_5": 1.200342,
+        "net_margin_avg_10": 18.025125,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 20.14,
+        "change_pct": 0.75,
+        "turnover_pct": 3.03,
+        "pe_ttm": 12.75,
+        "pb": 3.39,
+        "market_cap": 44554466895.0,
+        "free_float_market_cap": 31969407219.0,
+        "name": "三七互娱",
+        "industry_quote": "游戏Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 20.14,
+        "tencent_price": 20.15,
+        "difference_pct": 0.049628,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.31420431,
+        "quality_score": 57,
+        "valuation_score": 22,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 22
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "游戏研发发行、IP运营和流量投放能力；竞争激烈",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 22,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 85,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "002818",
+      "name": "富森美",
+      "exchange": "SZ",
+      "industry": "一般零售",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 14.95,
+        "fcf_5_total": 3787859368.52,
+        "interest_coverage_latest": 20399.967148,
+        "gross_margin_avg_5": 67.882021,
+        "ocf_ni_avg_5": 1.302941,
+        "net_margin_avg_10": 51.680124,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 10.88,
+        "change_pct": -0.18,
+        "turnover_pct": 0.76,
+        "pe_ttm": 5.26,
+        "pb": 1.42,
+        "market_cap": 8143233267.0,
+        "free_float_market_cap": 3245883560.0,
+        "name": "富森美",
+        "industry_quote": "一般零售"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 10.88,
+        "tencent_price": 10.88,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135703"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.46515423,
+        "quality_score": 51,
+        "valuation_score": 30,
+        "composite_score": 81,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 15
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "家居卖场区位、商户网络和运营能力",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 15,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 81,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 85,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "300770",
+      "name": "新媒股份",
+      "exchange": "SZ",
+      "industry": "电视广播Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 22.346,
+        "fcf_5_total": 3237427097.55,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 51.507439,
+        "ocf_ni_avg_5": 1.119809,
+        "net_margin_avg_10": 38.528848,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 35.73,
+        "change_pct": 0.62,
+        "turnover_pct": 0.89,
+        "pe_ttm": 14.21,
+        "pb": 2.29,
+        "market_cap": 8140672856.0,
+        "free_float_market_cap": 8140672856.0,
+        "name": "新媒股份",
+        "industry_quote": "电视广播Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 35.73,
+        "tencent_price": 35.73,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.39768544,
+        "quality_score": 54,
+        "valuation_score": 25,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 26
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "IPTV平台运营资质、内容分发和区域用户基础",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 26,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 83,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "300861",
+      "name": "美畅股份",
+      "exchange": "SZ",
+      "industry": "通用设备",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 39.068,
+        "fcf_5_total": 2368764767.95,
+        "interest_coverage_latest": 214.533314,
+        "gross_margin_avg_5": 39.937599,
+        "ocf_ni_avg_5": 2.524068,
+        "net_margin_avg_10": 35.889447,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": false,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 16.47,
+        "change_pct": 2.81,
+        "turnover_pct": 2.83,
+        "pe_ttm": 14.24,
+        "pb": 1.71,
+        "market_cap": 11065212047.0,
+        "free_float_market_cap": 6948114722.0,
+        "name": "美畅股份",
+        "industry_quote": "通用设备"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 16.47,
+        "tencent_price": 16.47,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135709"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.21407315,
+        "quality_score": 57,
+        "valuation_score": 25,
+        "composite_score": 82,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 7
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "金刚石线技术、客户认证和制造规模",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 7,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 82,
+        "moat_weighted_score": 8,
+        "penalty_points": 4,
+        "penalties": [
+          "5年FCF/市值<25%"
+        ],
+        "research_score": 86,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "300888",
+      "name": "稳健医疗",
+      "exchange": "SZ",
+      "industry": "个护用品",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 19.799,
+        "fcf_5_total": 3605406763.41,
+        "interest_coverage_latest": 160.487594,
+        "gross_margin_avg_5": 48.243538,
+        "ocf_ni_avg_5": 1.666393,
+        "net_margin_avg_10": 13.343343,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 29.87,
+        "change_pct": -2.7,
+        "turnover_pct": 0.83,
+        "pe_ttm": 17.31,
+        "pb": 1.5,
+        "market_cap": 17413341619.0,
+        "free_float_market_cap": 17335381636.0,
+        "name": "稳健医疗",
+        "industry_quote": "个护用品"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 29.87,
+        "tencent_price": 29.87,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.20704853,
+        "quality_score": 52,
+        "valuation_score": 27,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 28
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "医疗耗材品牌、质量体系和渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 28,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 8,
+        "penalty_points": 6,
+        "penalties": [
+          "5年FCF/市值<25%",
+          "PE>15"
+        ],
+        "research_score": 81,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "600163",
+      "name": "中闽能源",
+      "exchange": "SH",
+      "industry": "电力",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 10.53359,
+        "fcf_5_total": 4802554777.22,
+        "interest_coverage_latest": 10.588288,
+        "gross_margin_avg_5": 59.179549,
+        "ocf_ni_avg_5": 1.903024,
+        "net_margin_avg_10": 34.101709,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 5.37,
+        "change_pct": -0.74,
+        "turnover_pct": 0.61,
+        "pe_ttm": 13.01,
+        "pb": 1.4,
+        "market_cap": 10219089288.0,
+        "free_float_market_cap": 10219089288.0,
+        "name": "中闽能源",
+        "industry_quote": "电力"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 5.37,
+        "tencent_price": 5.38,
+        "difference_pct": 0.185874,
+        "provider_timestamp": "20260804135713"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.46995918,
+        "quality_score": 53,
+        "valuation_score": 27,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 17
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "发电资产、项目资源与电力运营经验",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 17,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 86,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10；同业需优先研究得分更高者"
+    },
+    {
+      "code": "600167",
+      "name": "联美控股",
+      "exchange": "SH",
+      "industry": "电力",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 15.541,
+        "fcf_5_total": 5930831929.0,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 36.664538,
+        "ocf_ni_avg_5": 1.733482,
+        "net_margin_avg_10": 33.255699,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 6.0,
+        "change_pct": -0.33,
+        "turnover_pct": 0.22,
+        "pe_ttm": 6.37,
+        "pb": 1.17,
+        "market_cap": 13577042778.0,
+        "free_float_market_cap": 13577042778.0,
+        "name": "联美控股",
+        "industry_quote": "电力"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 6.0,
+        "tencent_price": 6.0,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135710"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.43682796,
+        "quality_score": 55,
+        "valuation_score": 30,
+        "composite_score": 85,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 3
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "区域供热管网、特许经营和长期客户关系",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 3,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 85,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 93,
+        "main_risk": "区域供热政策、区域集中度、项目资本开支",
+        "rank": 3
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "600380",
+      "name": "健康元",
+      "exchange": "SH",
+      "industry": "化学制药",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 12.487,
+        "fcf_5_total": 12452137271.79,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 62.976267,
+        "ocf_ni_avg_5": 2.567188,
+        "net_margin_avg_10": 8.986739,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 10.25,
+        "change_pct": -0.1,
+        "turnover_pct": 0.66,
+        "pe_ttm": 11.3,
+        "pb": 1.23,
+        "market_cap": 18751897207.0,
+        "free_float_market_cap": 18751897207.0,
+        "name": "健康元",
+        "industry_quote": "化学制药"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 10.25,
+        "tencent_price": 10.25,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.6640468,
+        "quality_score": 50,
+        "valuation_score": 30,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 20
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "药品注册、成熟产品和医药商业化能力",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 20,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 86,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10；同业需优先研究得分更高者"
+    },
+    {
+      "code": "600398",
+      "name": "海澜之家",
+      "exchange": "SH",
+      "industry": "服装家纺",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 20.916,
+        "fcf_5_total": 17079450504.52,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 43.478591,
+        "ocf_ni_avg_5": 1.624214,
+        "net_margin_avg_10": 13.72877,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 6.16,
+        "change_pct": -2.84,
+        "turnover_pct": 0.69,
+        "pe_ttm": 7.79,
+        "pb": 1.71,
+        "market_cap": 29585065023.0,
+        "free_float_market_cap": 29585065023.0,
+        "name": "海澜之家",
+        "industry_quote": "服装家纺"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 6.16,
+        "tencent_price": 6.16,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.57729975,
+        "quality_score": 56,
+        "valuation_score": 28,
+        "composite_score": 84,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 4
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "大众服饰品牌、渠道与供应链规模",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 4,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 84,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 90,
+        "main_risk": "服饰消费、品牌折扣、加盟/库存管理",
+        "rank": 5
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "600566",
+      "name": "济川药业",
+      "exchange": "SH",
+      "industry": "中药Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 24.061,
+        "fcf_5_total": 10290038481.37,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 81.1814,
+        "ocf_ni_avg_5": 1.01402,
+        "net_margin_avg_10": 24.523813,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 26.48,
+        "change_pct": -1.38,
+        "turnover_pct": 0.46,
+        "pe_ttm": 15.25,
+        "pb": 1.82,
+        "market_cap": 24407443765.0,
+        "free_float_market_cap": 24325093613.0,
+        "name": "济川药业",
+        "industry_quote": "中药Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 26.48,
+        "tencent_price": 26.48,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135705"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.42159427,
+        "quality_score": 54,
+        "valuation_score": 25,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 25
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "核心产品品牌、注册壁垒和渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 25,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "PE>15"
+        ],
+        "research_score": 83,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "600809",
+      "name": "山西汾酒",
+      "exchange": "SH",
+      "industry": "白酒Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 32.223,
+        "fcf_5_total": 43067391053.05,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 75.325782,
+        "ocf_ni_avg_5": 1.026946,
+        "net_margin_avg_10": 23.904203,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 121.98,
+        "change_pct": -1.43,
+        "turnover_pct": 0.83,
+        "pe_ttm": 6.91,
+        "pb": 4.02,
+        "market_cap": 148811235800.0,
+        "free_float_market_cap": 148811235800.0,
+        "name": "山西汾酒",
+        "industry_quote": "白酒Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 121.98,
+        "tencent_price": 121.98,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.28940954,
+        "quality_score": 54,
+        "valuation_score": 25,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 24
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "白酒品牌、产品升级和经销商网络",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 24,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 87,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10；同业需优先研究得分更高者"
+    },
+    {
+      "code": "600887",
+      "name": "伊利股份",
+      "exchange": "SH",
+      "industry": "饮料乳品",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 22.939,
+        "fcf_5_total": 56022456940.84,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 32.78242,
+        "ocf_ni_avg_5": 1.754556,
+        "net_margin_avg_10": 8.231393,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 26.43,
+        "change_pct": -2.54,
+        "turnover_pct": 0.84,
+        "pe_ttm": 7.75,
+        "pb": 3.1,
+        "market_cap": 167179282429.0,
+        "free_float_market_cap": 166348562526.0,
+        "name": "伊利股份",
+        "industry_quote": "饮料乳品"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 26.43,
+        "tencent_price": 26.43,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135713"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.33510406,
+        "quality_score": 54,
+        "valuation_score": 25,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 23
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "乳品品牌、冷链渠道和规模采购",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 23,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 87,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "601019",
+      "name": "山东出版",
+      "exchange": "SH",
+      "industry": "出版",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 14.871,
+        "fcf_5_total": 7153883462.05,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 37.407934,
+        "ocf_ni_avg_5": 1.201523,
+        "net_margin_avg_10": 14.438542,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 7.48,
+        "change_pct": -1.32,
+        "turnover_pct": 0.33,
+        "pe_ttm": 11.88,
+        "pb": 1.02,
+        "market_cap": 15610012000.0,
+        "free_float_market_cap": 15610012000.0,
+        "name": "山东出版",
+        "industry_quote": "出版"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 7.48,
+        "tencent_price": 7.48,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135711"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.45828815,
+        "quality_score": 49,
+        "valuation_score": 30,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 30
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "出版发行资质、内容版权和渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 29,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 85,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "601156",
+      "name": "东航物流",
+      "exchange": "SH",
+      "industry": "物流",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 33.781,
+        "fcf_5_total": 19684063060.73,
+        "interest_coverage_latest": 28.217226,
+        "gross_margin_avg_5": 23.221311,
+        "ocf_ni_avg_5": 1.781076,
+        "net_margin_avg_10": 11.256817,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": false,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 17.05,
+        "change_pct": -0.64,
+        "turnover_pct": 0.63,
+        "pe_ttm": 11.7,
+        "pb": 1.41,
+        "market_cap": 27067822230.0,
+        "free_float_market_cap": 16105354230.0,
+        "name": "东航物流",
+        "industry_quote": "物流"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 17.05,
+        "tencent_price": 17.05,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135711"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.72721266,
+        "quality_score": 57,
+        "valuation_score": 30,
+        "composite_score": 87,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 1
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "航空货运网络、机场资源与客户认证形成规模/网络壁垒",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 1,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 87,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 95,
+        "main_risk": "航空货运价格与贸易周期、客户集中度、资产利用率",
+        "rank": 2
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "601827",
+      "name": "三峰环境",
+      "exchange": "SH",
+      "industry": "环境治理",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 12.296,
+        "fcf_5_total": 3360385733.31,
+        "interest_coverage_latest": 5.804292,
+        "gross_margin_avg_5": 33.020055,
+        "ocf_ni_avg_5": 1.781918,
+        "net_margin_avg_10": 17.088213,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 8.43,
+        "change_pct": -0.24,
+        "turnover_pct": 0.45,
+        "pe_ttm": 8.2,
+        "pb": 1.17,
+        "market_cap": 14094397719.0,
+        "free_float_market_cap": 14094397719.0,
+        "name": "三峰环境",
+        "industry_quote": "环境治理"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 8.43,
+        "tencent_price": 8.43,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135711"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.23841996,
+        "quality_score": 49,
+        "valuation_score": 30,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 31
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "垃圾焚烧项目特许经营、运营和规模",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 30,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 4,
+        "penalties": [
+          "5年FCF/市值<25%"
+        ],
+        "research_score": 81,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "601877",
+      "name": "正泰电器",
+      "exchange": "SH",
+      "industry": "电网设备",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 14.579,
+        "fcf_5_total": 22675985512.47,
+        "interest_coverage_latest": 4.110964,
+        "gross_margin_avg_5": 23.748658,
+        "ocf_ni_avg_5": 2.711933,
+        "net_margin_avg_10": 10.525667,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": false,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 25.93,
+        "change_pct": 0.19,
+        "turnover_pct": 0.74,
+        "pe_ttm": 10.99,
+        "pb": 1.26,
+        "market_cap": 55722765548.0,
+        "free_float_market_cap": 55722765548.0,
+        "name": "正泰电器",
+        "industry_quote": "电网设备"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 25.93,
+        "tencent_price": 25.93,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.40694293,
+        "quality_score": 50,
+        "valuation_score": 30,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 19
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "低压电器品牌、渠道和制造规模",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 19,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 88,
+        "main_risk": "低压电器价格竞争、海外经营、资本配置",
+        "rank": 10
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "601900",
+      "name": "南方传媒",
+      "exchange": "SH",
+      "industry": "出版",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 13.031,
+        "fcf_5_total": 5709065453.55,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 32.969629,
+        "ocf_ni_avg_5": 1.697973,
+        "net_margin_avg_10": 11.075819,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 11.86,
+        "change_pct": -1.5,
+        "turnover_pct": 0.67,
+        "pe_ttm": 8.71,
+        "pb": 1.21,
+        "market_cap": 10460165315.0,
+        "free_float_market_cap": 10460165315.0,
+        "name": "南方传媒",
+        "industry_quote": "出版"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 11.86,
+        "tencent_price": 11.86,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.54579113,
+        "quality_score": 51,
+        "valuation_score": 30,
+        "composite_score": 81,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 14
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "出版发行资质、内容版权和区域渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 14,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 81,
+        "moat_weighted_score": 6,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 87,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "603233",
+      "name": "大参林",
+      "exchange": "SH",
+      "industry": "医药商业",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 20.466,
+        "fcf_5_total": 10854864070.97,
+        "interest_coverage_latest": 12.495525,
+        "gross_margin_avg_5": 36.098721,
+        "ocf_ni_avg_5": 3.208034,
+        "net_margin_avg_10": 5.514308,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 18.69,
+        "change_pct": 1.03,
+        "turnover_pct": 0.46,
+        "pe_ttm": 10.41,
+        "pb": 2.99,
+        "market_cap": 21285190979.0,
+        "free_float_market_cap": 21285190979.0,
+        "name": "大参林",
+        "industry_quote": "医药商业"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 18.69,
+        "tencent_price": 18.69,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135712"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.50997259,
+        "quality_score": 54,
+        "valuation_score": 28,
+        "composite_score": 82,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 9
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 4,
+        "rating": "4/5",
+        "basis": "连锁药房规模、选址网络和经营资质",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 9,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 82,
+        "moat_weighted_score": 8,
+        "penalty_points": 0,
+        "penalties": [],
+        "research_score": 90,
+        "main_risk": "门店扩张效率、并购整合、应付与库存周转",
+        "rank": 7
+      },
+      "decision_10": "入选10家",
+      "decision_reason_10": "第三层研究分靠前，护城河初评达到3/5，且未触发行业集中上限"
+    },
+    {
+      "code": "603387",
+      "name": "基蛋生物",
+      "exchange": "SH",
+      "industry": "医疗器械",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 20.331,
+        "fcf_5_total": 1101981846.98,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 67.207356,
+        "ocf_ni_avg_5": 1.382667,
+        "net_margin_avg_10": 29.223821,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 9.02,
+        "change_pct": 1.35,
+        "turnover_pct": 1.48,
+        "pe_ttm": 14.99,
+        "pb": 1.66,
+        "market_cap": 4574524723.0,
+        "free_float_market_cap": 4574524723.0,
+        "name": "基蛋生物",
+        "industry_quote": "医疗器械"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 9.02,
+        "tencent_price": 9.02,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135713"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.24089537,
+        "quality_score": 54,
+        "valuation_score": 25,
+        "composite_score": 79,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 27
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "体外诊断产品注册、渠道和客户验证",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 27,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 79,
+        "moat_weighted_score": 6,
+        "penalty_points": 6,
+        "penalties": [
+          "5年FCF/市值<25%",
+          "市值<100亿"
+        ],
+        "research_score": 79,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    },
+    {
+      "code": "603587",
+      "name": "地素时尚",
+      "exchange": "SH",
+      "industry": "服装家纺",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 22.082,
+        "fcf_5_total": 2760824672.82,
+        "interest_coverage_latest": null,
+        "gross_margin_avg_5": 75.230783,
+        "ocf_ni_avg_5": 1.432359,
+        "net_margin_avg_10": 21.591775,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "无净财务费用"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": "无净财务费用",
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 11.7,
+        "change_pct": -1.02,
+        "turnover_pct": 0.31,
+        "pe_ttm": 13.74,
+        "pb": 1.56,
+        "market_cap": 5530622608.0,
+        "free_float_market_cap": 5530622608.0,
+        "name": "地素时尚",
+        "industry_quote": "服装家纺"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 11.7,
+        "tencent_price": 11.7,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135711"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.49918877,
+        "quality_score": 56,
+        "valuation_score": 25,
+        "composite_score": 81,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 11
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "中高端女装品牌、设计与渠道",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 11,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 81,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 85,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10；同业需优先研究得分更高者"
+    },
+    {
+      "code": "920003",
+      "name": "中诚咨询",
+      "exchange": "BJ",
+      "industry": "工程咨询服务Ⅱ",
+      "scope": "保留",
+      "scope_reason": "",
+      "financial_window_years": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "cashflow_window_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "values": {
+        "roe_avg_10": 40.811,
+        "fcf_5_total": 399201137.14,
+        "interest_coverage_latest": 197.658707,
+        "gross_margin_avg_5": 45.488566,
+        "ocf_ni_avg_5": 1.092722,
+        "net_margin_avg_10": 18.211231,
+        "share_inflation_5": 0.0,
+        "interest_coverage_basis": "经营利润/财务费用代理"
+      },
+      "checks": {
+        "roe": true,
+        "fcf": true,
+        "interest_coverage": true,
+        "gross_margin": true,
+        "ocf_ni": true,
+        "net_margin": true,
+        "share_inflation": true
+      },
+      "missing_fields": [],
+      "failed_fields": [],
+      "exemptions": {
+        "strategic_A_candidate": false,
+        "margin_B_candidate": true,
+        "high_turnover_C_manual_review": false
+      },
+      "result": "通过",
+      "quote": {
+        "price": 16.65,
+        "change_pct": 0.06,
+        "turnover_pct": 0.44,
+        "pe_ttm": 8.98,
+        "pb": 2.56,
+        "market_cap": 1508490000.0,
+        "free_float_market_cap": 324115893.0,
+        "name": "中诚咨询",
+        "industry_quote": "工程咨询服务Ⅱ"
+      },
+      "quote_cross_check": {
+        "status": "一致",
+        "eastmoney_price": 16.65,
+        "tencent_price": 16.65,
+        "difference_pct": 0.0,
+        "provider_timestamp": "20260804135645"
+      },
+      "derived": {
+        "fcf_to_market_cap_5y": 0.26463625,
+        "quality_score": 52,
+        "valuation_score": 28,
+        "composite_score": 80,
+        "current_valuation_usable": true,
+        "price_cross_check": "一致",
+        "global_rank": 18
+      },
+      "eligibility": "可比估值",
+      "secondary_scope": "保留",
+      "moat_quick": {
+        "score": 3,
+        "rating": "3/5",
+        "basis": "工程咨询资质、专业经验和客户关系；小市值需复核",
+        "status": "初评达到★★★"
+      },
+      "selection_rank": 18,
+      "decision": "入选30家",
+      "decision_reason": "综合得分靠前，且满足估值可比门槛与行业分散上限",
+      "third_stage": {
+        "old_composite_score": 80,
+        "moat_weighted_score": 6,
+        "penalty_points": 2,
+        "penalties": [
+          "市值<100亿"
+        ],
+        "research_score": 84,
+        "main_risk": "需在公司年报研究中补充失败路径"
+      },
+      "decision_10": "淘汰",
+      "decision_reason_10": "第三层研究分未进入前10"
+    }
+  ],
+  "json_path": "E:\\ai-berkshire\\data\\A股市场\\industry-funnel-ashare-10-20260804.json",
+  "csv_path": "E:\\ai-berkshire\\data\\A股市场\\industry-funnel-ashare-10-20260804.csv",
+  "report_path": "E:\\ai-berkshire\\reports\\A股去金融周期三次漏斗10家\\ashare-quality-funnel-10-20260804.md"
+}
