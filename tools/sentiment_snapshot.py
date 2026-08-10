@@ -45,6 +45,7 @@ DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
 EASTMONEY_SEARCH_URL = "https://search-api-web.eastmoney.com/search/jsonp"
+EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
 TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q="
 ZZSHARE_BASE_URL = "https://api.zizizaizai.com"
 USER_AGENT = "ai-berkshire-sentiment-snapshot/1.0"
@@ -331,6 +332,50 @@ def fetch_provider_names(universe: list[dict[str, str]]) -> dict[str, str]:
     return names
 
 
+def eastmoney_secid(ticker: str, market: str) -> str | None:
+    """Convert an A/H ticker to Eastmoney's security identifier."""
+    raw = ticker.strip().upper()
+    if market == "港股" or raw.endswith(".HK"):
+        code = raw.removesuffix(".HK")
+        return f"116.{code.zfill(5)}" if code.isdigit() else None
+    if raw.endswith(".SH"):
+        code = raw.removesuffix(".SH")
+        return f"1.{code}" if code.isdigit() else None
+    if raw.endswith((".SZ", ".BJ")):
+        code = raw.rsplit(".", 1)[0]
+        return f"0.{code}" if code.isdigit() else None
+    return None
+
+
+def fetch_provider_industries(
+    universe: list[dict[str, str]], workers: int = 6
+) -> tuple[dict[str, str], list[str]]:
+    """Resolve Eastmoney's primary industry classification for each A/H ticker."""
+    def fetch_one(item: dict[str, str]) -> tuple[str, str]:
+        secid = eastmoney_secid(item["ticker"], item["market"])
+        if not secid:
+            return item["ticker"], ""
+        query = urlencode({"secid": secid, "fields": "f57,f58,f127"})
+        payload = http_json(f"{EASTMONEY_QUOTE_URL}?{query}")
+        data = payload.get("data") or {}
+        return item["ticker"], clean_text(data.get("f127"))
+
+    industries: dict[str, str] = {}
+    failures = 0
+    with ThreadPoolExecutor(max_workers=max(1, min(workers, 8))) as executor:
+        futures = [executor.submit(fetch_one, item) for item in universe]
+        for future in as_completed(futures):
+            try:
+                ticker, industry = future.result()
+            except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+                failures += 1
+                continue
+            if industry:
+                industries[ticker] = industry
+    warnings = [f"industry lookup failed for {failures} ticker(s)"] if failures else []
+    return industries, warnings
+
+
 def load_registry_names(path: Path) -> dict[str, str]:
     """Build a ticker-to-canonical-name fallback from the routing registry."""
     if not path.exists():
@@ -380,6 +425,7 @@ def parse_eastmoney_search(
     market: str,
     cutoff: datetime,
     lookback_days: int,
+    scope: str = "company",
 ) -> list[dict[str, Any]]:
     """Parse both known Eastmoney JSONP response shapes."""
     match = re.search(r"^[^(]+\((.*)\)\s*;?\s*$", payload, re.DOTALL)
@@ -416,6 +462,7 @@ def parse_eastmoney_search(
                 "display_name": display_name,
                 "ticker": ticker,
                 "market": market,
+                "scope": scope,
                 "title": title,
                 "summary": clean_text(item.get("content") or item.get("digest"), 360),
                 "publisher": clean_text(item.get("mediaName") or "东方财富"),
@@ -448,6 +495,30 @@ def fetch_company_news(
         market=company["market"],
         cutoff=cutoff,
         lookback_days=lookback_days,
+        scope="company",
+    )
+
+
+def fetch_industry_news(
+    industry: str,
+    *,
+    cutoff: datetime,
+    lookback_days: int,
+    news_limit: int,
+) -> list[dict[str, Any]]:
+    """Fetch one shared news set per primary industry classification."""
+    query_name = re.sub(r"\s+", "", industry)
+    url = build_eastmoney_search_url(f"{query_name} 行业", news_limit)
+    payload = http_text(url)
+    return parse_eastmoney_search(
+        payload,
+        company=f"行业:{industry}",
+        display_name=industry,
+        ticker=f"industry:{industry}",
+        market="行业",
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        scope="industry",
     )
 
 
@@ -487,6 +558,29 @@ def lexical_score(article: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def apply_company_relevance_guard(article: dict[str, Any], score: dict[str, Any]) -> None:
+    """Cap company-news relevance when the headline has no company identifier.
+
+    Search feeds occasionally return a roundup article for a neighboring
+    company.  A model may still assign it high relevance, so company-name or
+    ticker matching is enforced locally before aggregation.  Industry news is
+    intentionally exempt because an industry headline need not name every
+    constituent company.
+    """
+    if article.get("scope", "company") != "company":
+        return
+    text = f"{article.get('title', '')} {article.get('summary', '')}".casefold()
+    display_name = clean_text(article.get("display_name")).casefold()
+    company_name = clean_text(article.get("company")).casefold()
+    ticker_digits = re.sub(r"\D", "", clean_text(article.get("ticker")))
+    direct_match = any(
+        term and term in text for term in (display_name, company_name, ticker_digits)
+    )
+    if not direct_match:
+        score["relevance"] = min(float(score.get("relevance", 0)), 0.15)
+        score["confidence"] = min(float(score.get("confidence", 0)), 0.35)
+
+
 def parse_json_block(content: str) -> Any:
     stripped = content.strip()
     fenced = re.search(r"```(?:json)?\s*(.*?)\s*```", stripped, re.DOTALL | re.IGNORECASE)
@@ -514,7 +608,7 @@ def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, 
         for item in batch
     ]
     system_prompt = (
-        "你是证券新闻分类器，只评估新闻对指定上市公司未来基本面和风险的增量影响。"
+        "你是证券新闻分类器，只评估新闻对指定公司或行业未来基本面和风险的增量影响。"
         "返回严格 JSON 对象，格式必须为{\"items\":[...]}; 每项必须含 id、direction(-1到1)、"
         "impact(1到3)、relevance(0到1)、confidence(0到1)、event_type。不要输出投资建议。"
     )
@@ -605,6 +699,8 @@ def score_articles(
             remaining_count = sum(1 for article in missing_articles if article["id"] not in by_id or by_id[article["id"]]["scoring_method"] == "lexicon-v1")
             if remaining_count:
                 warnings.append(f"LLM omitted {remaining_count} article(s); lexicon fallback retained")
+    for article in by_id.values():
+        apply_company_relevance_guard(article, article)
     return list(by_id.values()), warnings
 
 
@@ -632,13 +728,14 @@ def sentiment_state(score: float) -> str:
 
 def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str, Any]:
     """Aggregate scored headlines with impact, relevance, confidence and decay."""
+    relevant_articles = [article for article in articles if float(article.get("relevance", 0)) >= 0.5]
     numerator = 0.0
     denominator = 0.0
     classified_count = 0
     high_impact_negative = 0
     methods: set[str] = set()
     rendered_items: list[dict[str, Any]] = []
-    for article in sorted(articles, key=lambda item: item.get("published_at") or "", reverse=True):
+    for article in sorted(relevant_articles, key=lambda item: item.get("published_at") or "", reverse=True):
         decay = time_decay(article, cutoff)
         weight = (
             float(article["impact"])
@@ -669,13 +766,14 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
                 "scoring_method": article["scoring_method"],
             }
         )
-    if not articles or denominator <= 0:
+    if not relevant_articles or denominator <= 0:
         return {
             "status": "unavailable",
             "score_0_100": None,
             "state": "无数据",
             "confidence": "无数据",
             "article_count": len(articles),
+            "relevant_article_count": len(relevant_articles),
             "classified_count": 0,
             "high_impact_negative_count": 0,
             "scoring_methods": [],
@@ -683,9 +781,9 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
         }
     normalized = clamp(numerator / denominator, -1, 1)
     score = round(50 + normalized * 50, 2)
-    if len(articles) >= 4 and classified_count >= 2 and any(method.startswith("llm:") for method in methods):
+    if len(relevant_articles) >= 4 and classified_count >= 2 and any(method.startswith("llm:") for method in methods):
         confidence = "较高"
-    elif len(articles) >= 3 and classified_count >= 1:
+    elif len(relevant_articles) >= 3 and classified_count >= 1:
         confidence = "中等"
     else:
         confidence = "较低"
@@ -695,6 +793,7 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
         "state": sentiment_state(score),
         "confidence": confidence,
         "article_count": len(articles),
+        "relevant_article_count": len(relevant_articles),
         "classified_count": classified_count,
         "high_impact_negative_count": high_impact_negative,
         "scoring_methods": sorted(methods),
@@ -852,17 +951,23 @@ def crowding_snapshot(ticker: str, market: str, hot_by_code: dict[str, dict[str,
 
 
 def combined_company_score(
-    market: str, news: dict[str, Any], market_sentiment: dict[str, Any]
+    market: str,
+    news: dict[str, Any],
+    industry: dict[str, Any] | None,
+    market_sentiment: dict[str, Any],
 ) -> dict[str, Any]:
     news_score = news.get("score_0_100")
     if news_score is None:
         return {"status": "unavailable", "score_0_100": None, "state": "无数据"}
+    components: list[tuple[str, float, float]] = [("个股新闻", 0.70 if market == "A股" else 0.80, float(news_score))]
+    if industry and industry.get("score_0_100") is not None:
+        components.append(("行业新闻", 0.20, float(industry["score_0_100"])))
     if market == "A股" and market_sentiment.get("score_0_100") is not None:
-        score = round(0.80 * float(news_score) + 0.20 * float(market_sentiment["score_0_100"]), 2)
-        method = "80%个股新闻 + 20%A股市场温度；关注度不计入方向分"
-    else:
-        score = round(float(news_score), 2)
-        method = "港股暂以个股新闻情绪为方向分"
+        components.append(("A股市场温度", 0.10, float(market_sentiment["score_0_100"])))
+    total_weight = sum(weight for _, weight, _ in components)
+    score = round(sum(weight * value for _, weight, value in components) / total_weight, 2)
+    method = " + ".join(f"{name}{weight / total_weight:.0%}" for name, weight, _ in components)
+    method += "；关注度不计入方向分"
     return {
         "status": "ok",
         "score_0_100": score,
@@ -908,6 +1013,16 @@ def build_snapshot(
         or item["company"]
         for item in universe
     }
+    try:
+        provider_industries, industry_warnings = fetch_provider_industries(universe, workers)
+        warnings.extend(industry_warnings)
+    except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+        provider_industries = {}
+        warnings.append(f"industry lookup failed: {exc}")
+    industries_by_ticker = {
+        item["ticker"]: provider_industries.get(item["ticker"], "") for item in universe
+    }
+    industry_names = sorted({industry for industry in industries_by_ticker.values() if industry})
 
     try:
         market_sentiment, hot_by_code = fetch_market_context(as_of)
@@ -937,28 +1052,79 @@ def build_snapshot(
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
                 warnings.append(f"news failed for {item['ticker']}: {exc}")
 
+    industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
+        industry: [] for industry in industry_names
+    }
+    with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
+        futures = {
+            executor.submit(
+                fetch_industry_news,
+                industry,
+                cutoff=cutoff,
+                lookback_days=lookback_days,
+                news_limit=news_limit,
+            ): industry
+            for industry in industry_names
+        }
+        for future in as_completed(futures):
+            industry = futures[future]
+            try:
+                industry_articles_by_name[industry] = future.result()
+            except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+                warnings.append(f"industry news failed for {industry}: {exc}")
+
     all_articles = [article for items in articles_by_ticker.values() for article in items]
+    all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
     scored_articles, scoring_warnings = score_articles(all_articles, llm_config)
     warnings.extend(scoring_warnings)
     scored_by_ticker: dict[str, list[dict[str, Any]]] = {item["ticker"]: [] for item in universe}
+    scored_by_industry: dict[str, list[dict[str, Any]]] = {industry: [] for industry in industry_names}
     for article in scored_articles:
-        scored_by_ticker[article["ticker"]].append(article)
+        if article.get("scope") == "industry":
+            scored_by_industry.setdefault(article["display_name"], []).append(article)
+        else:
+            scored_by_ticker[article["ticker"]].append(article)
+
+    industry_details: dict[str, dict[str, Any]] = {}
+    for industry in industry_names:
+        full_sentiment = aggregate_news(scored_by_industry[industry], cutoff)
+        industry_details[industry] = {
+            "industry": industry,
+            "company_count": sum(1 for value in industries_by_ticker.values() if value == industry),
+            "sentiment": full_sentiment,
+        }
 
     companies = []
     for item in universe:
         news = aggregate_news(scored_by_ticker[item["ticker"]], cutoff)
         crowding = crowding_snapshot(item["ticker"], item["market"], hot_by_code)
+        industry = industries_by_ticker[item["ticker"]]
+        industry_sentiment = industry_details.get(industry, {}).get("sentiment")
+        industry_summary = None
+        if industry_sentiment:
+            industry_summary = {
+                key: value for key, value in industry_sentiment.items() if key != "items"
+            }
         companies.append(
             {
                 **item,
                 "display_name": display_names[item["ticker"]],
-                "combined_sentiment": combined_company_score(item["market"], news, market_sentiment),
+                "industry": industry or None,
+                "industry_sentiment": industry_summary,
+                "combined_sentiment": combined_company_score(
+                    item["market"], news, industry_sentiment, market_sentiment
+                ),
                 "news_sentiment": news,
                 "crowding": crowding,
             }
         )
 
     successful_news = sum(1 for company in companies if company["news_sentiment"]["status"] == "ok")
+    successful_industry_news = sum(
+        1
+        for detail in industry_details.values()
+        if detail["sentiment"]["status"] == "ok"
+    )
     return {
         "schema_version": 1,
         "generated_at": now.astimezone(SHANGHAI_TIMEZONE).isoformat(),
@@ -969,12 +1135,16 @@ def build_snapshot(
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
         "company_count": len(companies),
         "company_news_available_count": successful_news,
+        "industry_count": len(industry_names),
+        "industry_news_available_count": successful_industry_news,
         "scoring_mode": f"remote-llm:{llm_config.model}+lexicon-fallback" if llm_config else "lexicon-v1",
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
+        "industry_sentiments": industry_details,
         "companies": companies,
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
+            "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
             "同花顺热度只表示关注/拥挤，不作为方向性利好。",
             "该快照是研究辅助数据，不构成投资建议。",

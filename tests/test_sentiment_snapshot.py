@@ -113,6 +113,36 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(negative["impact"], 3)
         self.assertEqual(negative["event_type"], "监管合规")
 
+    def test_company_relevance_guard_excludes_unrelated_roundup_headlines(self):
+        article = {
+            "scope": "company",
+            "display_name": "申洲国际",
+            "company": "申洲国际",
+            "ticker": "02313.HK",
+            "title": "港股评级汇总：中信建投维持百融云买入评级",
+            "summary": "",
+        }
+        score = {
+            "relevance": 1.0,
+            "confidence": 0.9,
+            "direction": -0.8,
+            "impact": 2,
+            "scoring_method": "llm:deepseek-v4-flash",
+        }
+        sentiment_snapshot.apply_company_relevance_guard(article, score)
+        self.assertEqual(score["relevance"], 0.15)
+        self.assertEqual(score["confidence"], 0.35)
+
+    def test_combined_score_adds_industry_component(self):
+        result = sentiment_snapshot.combined_company_score(
+            "A股",
+            {"score_0_100": 70},
+            {"score_0_100": 50},
+            {"score_0_100": 80},
+        )
+        self.assertEqual(result["score_0_100"], 67.0)
+        self.assertIn("行业新闻20%", result["method"])
+
     def test_news_aggregation_applies_direction_and_time_decay(self):
         cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
         common = {
