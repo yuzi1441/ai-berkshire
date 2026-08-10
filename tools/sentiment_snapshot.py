@@ -350,28 +350,35 @@ def eastmoney_secid(ticker: str, market: str) -> str | None:
 def fetch_provider_industries(
     universe: list[dict[str, str]], workers: int = 6
 ) -> tuple[dict[str, str], list[str]]:
-    """Resolve Eastmoney's primary industry classification for each A/H ticker."""
-    def fetch_one(item: dict[str, str]) -> tuple[str, str]:
-        secid = eastmoney_secid(item["ticker"], item["market"])
-        if not secid:
-            return item["ticker"], ""
-        query = urlencode({"secid": secid, "fields": "f57,f58,f127"})
-        payload = http_json(f"{EASTMONEY_QUOTE_URL}?{query}")
-        data = payload.get("data") or {}
-        return item["ticker"], clean_text(data.get("f127"))
-
+    """Resolve industries with Eastmoney's batched security-list endpoint."""
+    ticker_by_secid = {
+        secid: item["ticker"]
+        for item in universe
+        if (secid := eastmoney_secid(item["ticker"], item["market"]))
+    }
     industries: dict[str, str] = {}
     failures = 0
-    with ThreadPoolExecutor(max_workers=max(1, min(workers, 8))) as executor:
-        futures = [executor.submit(fetch_one, item) for item in universe]
-        for future in as_completed(futures):
-            try:
-                ticker, industry = future.result()
-            except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
-                failures += 1
-                continue
-            if industry:
-                industries[ticker] = industry
+    for secid_batch in chunks(list(ticker_by_secid), 50):
+        try:
+            query = urlencode(
+                {
+                    "secids": ",".join(secid_batch),
+                    "fields": "f12,f14,f100",
+                    "fltt": "2",
+                    "invt": "2",
+                }
+            )
+            payload = http_json(f"https://push2.eastmoney.com/api/qt/ulist/get?{query}")
+            diff = (payload.get("data") or {}).get("diff") or {}
+            rows = diff.values() if isinstance(diff, dict) else diff
+            rows_by_code = {clean_text(row.get("f12")): row for row in rows if isinstance(row, dict)}
+            for secid in secid_batch:
+                code = secid.split(".", 1)[1]
+                industry = clean_text((rows_by_code.get(code) or {}).get("f100"))
+                if industry:
+                    industries[ticker_by_secid[secid]] = industry
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+            failures += len(secid_batch)
     warnings = [f"industry lookup failed for {failures} ticker(s)"] if failures else []
     return industries, warnings
 
