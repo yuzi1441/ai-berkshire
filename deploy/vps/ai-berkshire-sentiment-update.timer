@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh A-share and Hong Kong sentiment after close
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 18:10:00 Asia/Shanghai
+Persistent=true
+RandomizedDelaySec=5min
+Unit=ai-berkshire-sentiment-update.service
+
+[Install]
+WantedBy=timers.target

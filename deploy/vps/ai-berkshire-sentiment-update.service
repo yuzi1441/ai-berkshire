@@ -1,0 +1,15 @@
+[Unit]
+Description=AI Berkshire A/H sentiment snapshot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/ai-berkshire
+Environment=TZ=Asia/Shanghai
+EnvironmentFile=-/etc/ai-berkshire/sentiment.env
+ExecStart=/usr/local/sbin/ai-berkshire-sentiment-update
+Nice=10
+MemoryMax=700M
+TimeoutStartSec=30min

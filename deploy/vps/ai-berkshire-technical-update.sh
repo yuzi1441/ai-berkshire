@@ -4,7 +4,9 @@ IFS=$'\n\t'
 
 REPO_ROOT="${REPO_ROOT:-/opt/ai-berkshire}"
 PYTHON="${REPO_ROOT}/.venv/bin/python"
-LOCK_PATH="/run/lock/ai-berkshire-technical-update.lock"
+# Technical and sentiment jobs both pull/commit/push the same checkout.  A
+# shared repository lock prevents two timers from racing through Git at once.
+LOCK_PATH="/run/lock/ai-berkshire-repo-update.lock"
 
 export TZ="Asia/Shanghai"
 
