@@ -41,6 +41,7 @@ DEFAULT_BOARD = ROOT / "data" / "investment-dashboard" / "decision_board.json"
 DEFAULT_REGISTRY = ROOT / "data" / "report-routing" / "company_registry.json"
 DEFAULT_OUTPUT = ROOT / "data" / "sentiment" / "latest.json"
 DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
+DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 
@@ -791,6 +792,32 @@ def aggregate_news(
     fallback_articles = [
         article for article in articles if article.get("retrieval_window_type") == "fallback"
     ]
+    relevant_identity = {id(article) for article in relevant_articles}
+
+    def render_news_item(article: dict[str, Any], included: bool) -> dict[str, Any]:
+        decay = time_decay(article, cutoff)
+        return {
+            "title": article["title"],
+            "summary": article.get("summary", ""),
+            "publisher": article["publisher"],
+            "url": article["url"],
+            "published_at": article["published_at"],
+            "event_type": article["event_type"],
+            "direction": article["direction"],
+            "impact": article["impact"],
+            "relevance": article["relevance"],
+            "confidence": article["confidence"],
+            "time_weight": round(decay, 4),
+            "retrieval_window_days": article.get("retrieval_window_days", primary_lookback_days),
+            "scoring_method": article["scoring_method"],
+            "included": included,
+            "filter_reason": None if included else "相关性低于评分阈值 0.5",
+        }
+
+    sorted_articles = sorted(articles, key=lambda item: item.get("published_at") or "", reverse=True)
+    captured_items = [
+        render_news_item(article, id(article) in relevant_identity) for article in sorted_articles
+    ]
     for article in sorted(relevant_articles, key=lambda item: item.get("published_at") or "", reverse=True):
         decay = time_decay(article, cutoff)
         weight = (
@@ -814,22 +841,7 @@ def aggregate_news(
         if direction <= -0.35 and int(article["impact"]) >= 3:
             high_impact_negative += 1
         methods.add(str(article["scoring_method"]))
-        rendered_items.append(
-            {
-                "title": article["title"],
-                "publisher": article["publisher"],
-                "url": article["url"],
-                "published_at": article["published_at"],
-                "event_type": article["event_type"],
-                "direction": article["direction"],
-                "impact": article["impact"],
-                "relevance": article["relevance"],
-                "confidence": article["confidence"],
-                "time_weight": round(decay, 4),
-                "retrieval_window_days": article.get("retrieval_window_days", primary_lookback_days),
-                "scoring_method": article["scoring_method"],
-            }
-        )
+        rendered_items.append(render_news_item(article, True))
     if not relevant_articles or denominator <= 0:
         if not articles:
             recency_state = "无可用新闻"
@@ -850,6 +862,7 @@ def aggregate_news(
             "high_impact_negative_count": 0,
             "scoring_methods": [],
             "items": rendered_items,
+            "captured_items": captured_items,
         }
     normalized = clamp(numerator / denominator, -1, 1)
     freshness_factor = None
@@ -887,6 +900,7 @@ def aggregate_news(
         "high_impact_negative_count": high_impact_negative,
         "scoring_methods": sorted(methods),
         "items": rendered_items,
+        "captured_items": captured_items,
     }
 
 
@@ -1264,6 +1278,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
+    parser.add_argument("--site-output", type=Path, default=DEFAULT_SITE_OUTPUT)
     parser.add_argument("--as-of", type=date.fromisoformat, help="end-of-day cutoff (YYYY-MM-DD)")
     parser.add_argument("--lookback-days", type=int, default=DEFAULT_PRIMARY_LOOKBACK_DAYS)
     parser.add_argument(
@@ -1307,6 +1322,7 @@ def main(argv: list[str] | None = None) -> int:
         llm_config=LLMConfig.from_environment(),
     )
     write_json(args.output.resolve(), snapshot)
+    write_json(args.site_output.resolve(), snapshot)
     if not args.no_archive:
         archive_path = args.archive_dir.resolve() / f"{as_of.isoformat()}.json"
         write_json(archive_path, snapshot)

@@ -24,7 +24,7 @@ git pull --ff-only origin main
     --news-limit 8 \
     --workers 3
 
-git add -- data/sentiment
+git add -- data/sentiment site/data/sentiment.json
 
 if git diff --cached --quiet; then
     echo "No sentiment changes to commit."
