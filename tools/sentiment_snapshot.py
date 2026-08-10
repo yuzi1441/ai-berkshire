@@ -138,6 +138,10 @@ class LLMConfig:
     api_key: str
     model: str
     batch_size: int = 20
+    workers: int = 4
+    thinking_mode: str | None = None
+    json_mode: bool = False
+    max_tokens: int | None = None
 
     @classmethod
     def from_environment(cls) -> LLMConfig | None:
@@ -153,7 +157,34 @@ class LLMConfig:
             batch_size = min(50, max(1, int(batch_size_text)))
         except ValueError:
             batch_size = 20
-        return cls(endpoint=endpoint, api_key=api_key, model=model, batch_size=batch_size)
+        workers_text = os.environ.get("SENTIMENT_LLM_WORKERS", "4").strip()
+        try:
+            workers = min(12, max(1, int(workers_text)))
+        except ValueError:
+            workers = 4
+        thinking_mode = os.environ.get("SENTIMENT_LLM_THINKING", "").strip().lower()
+        if thinking_mode not in {"enabled", "disabled"}:
+            thinking_mode = None
+        json_mode = os.environ.get("SENTIMENT_LLM_JSON_MODE", "").strip().lower() in {
+            "1",
+            "true",
+            "yes",
+        }
+        max_tokens_text = os.environ.get("SENTIMENT_LLM_MAX_TOKENS", "").strip()
+        try:
+            max_tokens = min(8192, max(256, int(max_tokens_text))) if max_tokens_text else None
+        except ValueError:
+            max_tokens = None
+        return cls(
+            endpoint=endpoint,
+            api_key=api_key,
+            model=model,
+            batch_size=batch_size,
+            workers=workers,
+            thinking_mode=thinking_mode,
+            json_mode=json_mode,
+            max_tokens=max_tokens,
+        )
 
 
 def clean_text(value: Any, limit: int | None = None) -> str:
@@ -484,8 +515,8 @@ def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, 
     ]
     system_prompt = (
         "你是证券新闻分类器，只评估新闻对指定上市公司未来基本面和风险的增量影响。"
-        "返回严格 JSON 数组；每项必须含 id、direction(-1到1)、impact(1到3)、"
-        "relevance(0到1)、confidence(0到1)、event_type。不要输出投资建议。"
+        "返回严格 JSON 对象，格式必须为{\"items\":[...]}; 每项必须含 id、direction(-1到1)、"
+        "impact(1到3)、relevance(0到1)、confidence(0到1)、event_type。不要输出投资建议。"
     )
     request_payload = {
         "model": config.model,
@@ -494,6 +525,12 @@ def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, 
             {"role": "user", "content": json.dumps(compact_articles, ensure_ascii=False)},
         ],
     }
+    if config.thinking_mode:
+        request_payload["thinking"] = {"type": config.thinking_mode}
+    if config.json_mode:
+        request_payload["response_format"] = {"type": "json_object"}
+    if config.max_tokens:
+        request_payload["max_tokens"] = config.max_tokens
     body = json.dumps(request_payload, ensure_ascii=False).encode("utf-8")
     response = http_json(
         config.endpoint,
@@ -542,17 +579,21 @@ def score_articles(
     if config is None or not scored:
         return scored, warnings
     by_id = {article["id"]: article for article in scored}
-    for batch in chunks(scored, config.batch_size):
-        try:
-            llm_scores = score_with_llm(batch, config)
-        except (SentimentError, json.JSONDecodeError, KeyError) as exc:
-            warnings.append(f"LLM batch failed; lexicon fallback used: {exc}")
-            continue
-        for article_id, llm_score in llm_scores.items():
-            by_id[article_id].update(llm_score)
-        missing_count = len(batch) - len(llm_scores)
-        if missing_count:
-            warnings.append(f"LLM omitted {missing_count} article(s); lexicon fallback retained")
+    batches = list(chunks(scored, config.batch_size))
+    with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
+        futures = {executor.submit(score_with_llm, batch, config): batch for batch in batches}
+        for future in as_completed(futures):
+            batch = futures[future]
+            try:
+                llm_scores = future.result()
+            except (SentimentError, json.JSONDecodeError, KeyError) as exc:
+                warnings.append(f"LLM batch failed; lexicon fallback used: {exc}")
+                continue
+            for article_id, llm_score in llm_scores.items():
+                by_id[article_id].update(llm_score)
+            missing_count = len(batch) - len(llm_scores)
+            if missing_count:
+                warnings.append(f"LLM omitted {missing_count} article(s); lexicon fallback retained")
     return list(by_id.values()), warnings
 
 

@@ -1,9 +1,11 @@
 import json
+import os
 import sys
 import tempfile
 import unittest
 from datetime import date, datetime
 from pathlib import Path
+from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
 
@@ -17,6 +19,25 @@ SHANGHAI = ZoneInfo("Asia/Shanghai")
 
 
 class SentimentSnapshotTests(unittest.TestCase):
+    def test_llm_config_reads_bounded_parallel_json_settings(self):
+        environment = {
+            "SENTIMENT_LLM_API_KEY": "test-key",
+            "SENTIMENT_LLM_MODEL": "deepseek-v4-flash",
+            "SENTIMENT_LLM_ENDPOINT": "https://api.deepseek.com/chat/completions",
+            "SENTIMENT_LLM_BATCH_SIZE": "20",
+            "SENTIMENT_LLM_WORKERS": "6",
+            "SENTIMENT_LLM_THINKING": "disabled",
+            "SENTIMENT_LLM_JSON_MODE": "true",
+            "SENTIMENT_LLM_MAX_TOKENS": "1800",
+        }
+        with patch.dict(os.environ, environment, clear=True):
+            config = sentiment_snapshot.LLMConfig.from_environment()
+        self.assertIsNotNone(config)
+        self.assertEqual(config.workers, 6)
+        self.assertEqual(config.thinking_mode, "disabled")
+        self.assertTrue(config.json_mode)
+        self.assertEqual(config.max_tokens, 1800)
+
     def test_load_universe_keeps_only_unique_a_h_tickers(self):
         board = {
             "decisions": [
