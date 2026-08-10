@@ -13,6 +13,7 @@ const state = {
   decisions: [],
   sentimentSnapshot: null,
   sentiments: new Map(),
+  sentimentStatus: null,
   sentimentError: null,
   quotes: new Map(),
   selectedKey: null,
@@ -34,6 +35,7 @@ const els = {
   decisionTable: document.querySelector("#decision-table"),
   decisionHead: document.querySelector("#decision-head"),
   summary: document.querySelector("#summary"),
+  sentimentAlert: document.querySelector("#sentiment-alert"),
   status: document.querySelector("#data-status"),
   companyFilter: document.querySelector("#company-filter"),
   sortSelect: document.querySelector("#sort-select"),
@@ -150,6 +152,18 @@ function sentimentRecencyText(news) {
   return news?.recency_state || news?.state || "暂无新闻时效信息";
 }
 
+function updateSentimentAlert() {
+  if (!els.sentimentAlert) return;
+  const status = state.sentimentStatus;
+  if (status?.status !== "error") {
+    els.sentimentAlert.hidden = true;
+    els.sentimentAlert.textContent = "";
+    return;
+  }
+  els.sentimentAlert.hidden = false;
+  els.sentimentAlert.textContent = `情绪数据更新失败：${status.error || "模型未完成复核"}。当前显示上一份成功快照，不生成不完整结果。`;
+}
+
 function renderSentimentBadge(sentiment, label = "综合") {
   const badge = document.createElement("span");
   const score = sentiment?.score_0_100;
@@ -171,7 +185,9 @@ function renderSentimentCell(item) {
   cell.append(stateLine);
   const freshness = document.createElement("div");
   freshness.className = "sentiment-freshness";
-  freshness.textContent = record ? sentimentRecencyText(record.news_sentiment) : "情绪快照未加载";
+  freshness.textContent = state.sentimentStatus?.status === "error"
+    ? `更新失败 · 上次快照 ${state.sentimentSnapshot?.data_cutoff || "未知"}`
+    : record ? sentimentRecencyText(record.news_sentiment) : "情绪快照未加载";
   cell.append(freshness);
   return cell;
 }
@@ -1476,6 +1492,12 @@ function renderSentimentDetail(item) {
     els.detailBody.append(card);
     return;
   }
+  if (state.sentimentStatus?.status === "error") {
+    const warning = document.createElement("p");
+    warning.className = "sentiment-warning-note";
+    warning.textContent = `本次更新失败：${state.sentimentStatus.error || "模型未完成复核"}。以下内容来自上一份成功快照。`;
+    card.append(warning);
+  }
   const summary = document.createElement("dl");
   summary.className = "kv-grid sentiment-summary";
   const industry = record.industry_sentiment || record.industry_detail;
@@ -2216,6 +2238,10 @@ function bindEvents() {
 }
 
 async function loadSentimentSnapshot() {
+  const statusResponse = await fetch(`./data/sentiment_status.json?t=${Date.now()}`, { cache: "no-store" });
+  state.sentimentStatus = statusResponse.ok
+    ? await statusResponse.json()
+    : {status: "unknown"};
   const response = await fetch(`./data/sentiment.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("无法加载 sentiment.json");
   const snapshot = await response.json();
@@ -2228,6 +2254,7 @@ async function loadSentimentSnapshot() {
         industry_detail: snapshot.industry_sentiments?.[item.industry]?.sentiment || null,
       }]),
   );
+  updateSentimentAlert();
 }
 
 async function loadDashboard() {
@@ -2240,8 +2267,10 @@ async function loadDashboard() {
     await loadSentimentSnapshot();
   } catch (error) {
     state.sentimentError = error;
+    state.sentimentStatus = {status: "error", error: error.message};
     state.sentimentSnapshot = null;
     state.sentiments = new Map();
+    updateSentimentAlert();
   }
   const activeTracking = Number(board.post_buy_tracking?.active_count || 0);
   if (els.trackingCount) els.trackingCount.textContent = activeTracking ? String(activeTracking) : "0";

@@ -37,6 +37,55 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.thinking_mode, "disabled")
         self.assertTrue(config.json_mode)
         self.assertEqual(config.max_tokens, 1800)
+        self.assertEqual(config.timeout_seconds, 180)
+
+    def test_review_model_config_uses_separate_environment_prefix(self):
+        environment = {
+            "SENTIMENT_REVIEW_API_KEY": "review-key",
+            "SENTIMENT_REVIEW_MODEL": "relay-model",
+            "SENTIMENT_REVIEW_ENDPOINT": "https://relay.example.com/v1/chat/completions",
+            "SENTIMENT_REVIEW_TIMEOUT": "240",
+        }
+        with patch.dict(os.environ, environment, clear=True):
+            config = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
+        self.assertIsNotNone(config)
+        self.assertEqual(config.endpoint, "https://relay.example.com/v1/chat/completions")
+        self.assertEqual(config.timeout_seconds, 240)
+
+    def test_dual_model_scoring_blocks_snapshot_when_review_model_fails(self):
+        article = {
+            "id": "article-1",
+            "scope": "company",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "title": "示例公司发布公告",
+            "summary": "公司公告",
+        }
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="test-model",
+        )
+        with patch.object(
+            sentiment_snapshot,
+            "score_with_llm",
+            side_effect=sentiment_snapshot.SentimentError("review unavailable"),
+        ), self.assertRaises(sentiment_snapshot.SentimentError):
+            sentiment_snapshot.score_articles([article], config, config)
+
+    def test_main_writes_error_status_when_dual_model_configuration_is_missing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            status_path = Path(directory) / "sentiment_status.json"
+            with patch.dict(os.environ, {}, clear=True):
+                result = sentiment_snapshot.main(
+                    ["--status-output", str(status_path), "--no-archive"]
+                )
+            self.assertEqual(result, 1)
+            status = json.loads(status_path.read_text(encoding="utf-8"))
+            self.assertEqual(status["status"], "error")
+            self.assertIn("双模型配置不完整", status["error"])
 
     def test_load_universe_keeps_only_unique_a_h_tickers(self):
         board = {

@@ -44,11 +44,17 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 定时器默认在工作日北京时间 18:10 后加 0–5 分钟随机延迟执行。脚本与技术面任务
 共用 Git 仓库锁，避免同时 pull/commit/push。
 
-## 可选远程模型
+## 双模型复核配置
 
-默认使用无需额外 Python 依赖的规则评分。若要提升标题语义判断，可编辑
-`/etc/ai-berkshire/sentiment.env`，填入 OpenAI-compatible Chat Completions
-接口的 key、model 和 endpoint。密钥文件权限为 `0600`，不会写入仓库。
+当前快照要求两个 OpenAI-compatible Chat Completions 模型都配置成功：
+`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek Flash），`SENTIMENT_REVIEW_*` 为中转站复核模型。
+请编辑 `/etc/ai-berkshire/sentiment.env`，填写复核模型的 key、model 和 endpoint。
+两组模型的单次请求超时默认均为 180 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
+`SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。
+
+任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，本次快照不会生成；
+看板保留上一份成功快照，并通过 `site/data/sentiment_status.json` 显示更新失败。
+密钥文件权限为 `0600`，不会写入仓库。
 
 检查定时器和最近日志：
 

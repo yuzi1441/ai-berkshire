@@ -42,6 +42,7 @@ DEFAULT_REGISTRY = ROOT / "data" / "report-routing" / "company_registry.json"
 DEFAULT_OUTPUT = ROOT / "data" / "sentiment" / "latest.json"
 DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
 DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
+DEFAULT_STATUS_OUTPUT = ROOT / "site" / "data" / "sentiment_status.json"
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 
@@ -146,39 +147,45 @@ class LLMConfig:
     thinking_mode: str | None = None
     json_mode: bool = False
     max_tokens: int | None = None
+    timeout_seconds: int = 180
 
     @classmethod
-    def from_environment(cls) -> LLMConfig | None:
-        api_key = os.environ.get("SENTIMENT_LLM_API_KEY", "").strip()
-        model = os.environ.get("SENTIMENT_LLM_MODEL", "").strip()
+    def from_environment(cls, prefix: str = "SENTIMENT_LLM_") -> LLMConfig | None:
+        api_key = os.environ.get(f"{prefix}API_KEY", "").strip()
+        model = os.environ.get(f"{prefix}MODEL", "").strip()
         if not api_key or not model:
             return None
         endpoint = os.environ.get(
-            "SENTIMENT_LLM_ENDPOINT", "https://api.openai.com/v1/chat/completions"
+            f"{prefix}ENDPOINT", "https://api.openai.com/v1/chat/completions"
         ).strip()
-        batch_size_text = os.environ.get("SENTIMENT_LLM_BATCH_SIZE", "20").strip()
+        batch_size_text = os.environ.get(f"{prefix}BATCH_SIZE", "20").strip()
         try:
             batch_size = min(50, max(1, int(batch_size_text)))
         except ValueError:
             batch_size = 20
-        workers_text = os.environ.get("SENTIMENT_LLM_WORKERS", "4").strip()
+        workers_text = os.environ.get(f"{prefix}WORKERS", "4").strip()
         try:
             workers = min(12, max(1, int(workers_text)))
         except ValueError:
             workers = 4
-        thinking_mode = os.environ.get("SENTIMENT_LLM_THINKING", "").strip().lower()
+        thinking_mode = os.environ.get(f"{prefix}THINKING", "").strip().lower()
         if thinking_mode not in {"enabled", "disabled"}:
             thinking_mode = None
-        json_mode = os.environ.get("SENTIMENT_LLM_JSON_MODE", "").strip().lower() in {
+        json_mode = os.environ.get(f"{prefix}JSON_MODE", "").strip().lower() in {
             "1",
             "true",
             "yes",
         }
-        max_tokens_text = os.environ.get("SENTIMENT_LLM_MAX_TOKENS", "").strip()
+        max_tokens_text = os.environ.get(f"{prefix}MAX_TOKENS", "").strip()
         try:
             max_tokens = min(8192, max(256, int(max_tokens_text))) if max_tokens_text else None
         except ValueError:
             max_tokens = None
+        timeout_text = os.environ.get(f"{prefix}TIMEOUT", "180").strip()
+        try:
+            timeout_seconds = min(600, max(30, int(timeout_text)))
+        except ValueError:
+            timeout_seconds = 180
         return cls(
             endpoint=endpoint,
             api_key=api_key,
@@ -188,6 +195,7 @@ class LLMConfig:
             thinking_mode=thinking_mode,
             json_mode=json_mode,
             max_tokens=max_tokens,
+            timeout_seconds=timeout_seconds,
         )
 
 
@@ -634,7 +642,9 @@ def parse_json_block(content: str) -> Any:
     return json.loads(stripped)
 
 
-def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, dict[str, Any]]:
+def score_with_llm(
+    batch: list[dict[str, Any]], config: LLMConfig, provider_label: str = "primary"
+) -> dict[str, dict[str, Any]]:
     """Score a bounded headline batch using an OpenAI-compatible chat API."""
     compact_articles = [
         {
@@ -669,7 +679,7 @@ def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, 
         config.endpoint,
         headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
         body=body,
-        timeout=60,
+        timeout=config.timeout_seconds,
         attempts=2,
     )
     choices = response.get("choices") or []
@@ -698,49 +708,89 @@ def score_with_llm(batch: list[dict[str, Any]], config: LLMConfig) -> dict[str, 
             "relevance": round(relevance, 4),
             "confidence": round(confidence, 4),
             "event_type": clean_text(row.get("event_type")) or "一般新闻",
-            "scoring_method": f"llm:{config.model}",
+            "scoring_method": f"llm:{provider_label}:{config.model}",
         }
     return scores
 
 
 def score_articles(
-    articles: list[dict[str, Any]], config: LLMConfig | None
+    articles: list[dict[str, Any]],
+    primary_config: LLMConfig | None,
+    review_config: LLMConfig | None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Score all articles, falling back per batch or per missing LLM result."""
-    scored = [{**article, **lexical_score(article)} for article in articles]
-    warnings: list[str] = []
-    if config is None or not scored:
-        return scored, warnings
-    by_id = {article["id"]: article for article in scored}
-    batches = list(chunks(scored, config.batch_size))
-    with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
-        futures = {executor.submit(score_with_llm, batch, config): batch for batch in batches}
-        for future in as_completed(futures):
-            batch = futures[future]
-            try:
-                llm_scores = future.result()
-            except (SentimentError, json.JSONDecodeError, KeyError) as exc:
-                warnings.append(f"LLM batch failed; lexicon fallback used: {exc}")
-                continue
-            for article_id, llm_score in llm_scores.items():
-                by_id[article_id].update(llm_score)
-            missing_articles = [article for article in batch if article["id"] not in llm_scores]
-            # A constrained retry is useful when a model truncates or skips a
-            # long response.  Small groups are much less likely to be omitted
-            # and keep the fallback reserved for genuine provider failures.
-            for retry_batch in chunks(missing_articles, min(5, config.batch_size)):
+    """Score all articles with two required models; fail closed on any mismatch."""
+    if primary_config is None or review_config is None:
+        raise SentimentError("dual-model sentiment scoring requires both model configurations")
+    if not articles:
+        return [], []
+
+    def collect_scores(config: LLMConfig, provider_label: str) -> dict[str, dict[str, Any]]:
+        batches = list(chunks(articles, config.batch_size))
+        scores: dict[str, dict[str, Any]] = {}
+        failures: list[str] = []
+        with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
+            futures = {
+                executor.submit(score_with_llm, batch, config, provider_label): batch
+                for batch in batches
+            }
+            for future in as_completed(futures):
+                batch = futures[future]
                 try:
-                    retry_scores = score_with_llm(retry_batch, config)
-                except (SentimentError, json.JSONDecodeError, KeyError):
+                    batch_scores = future.result()
+                except Exception as exc:  # noqa: BLE001 - fail closed for every provider error
+                    failures.append(f"batch {batch[0]['id']}: {exc}")
                     continue
-                for article_id, llm_score in retry_scores.items():
-                    by_id[article_id].update(llm_score)
-            remaining_count = sum(1 for article in missing_articles if article["id"] not in by_id or by_id[article["id"]]["scoring_method"] == "lexicon-v1")
-            if remaining_count:
-                warnings.append(f"LLM omitted {remaining_count} article(s); lexicon fallback retained")
-    for article in by_id.values():
-        apply_company_relevance_guard(article, article)
-    return list(by_id.values()), warnings
+                scores.update(batch_scores)
+                missing = {item["id"] for item in batch} - set(batch_scores)
+                if missing:
+                    failures.append(f"batch {batch[0]['id']}: missing ids {sorted(missing)}")
+        if failures:
+            raise SentimentError(
+                f"{provider_label} model failed; snapshot generation blocked: {'; '.join(failures[:3])}"
+            )
+        expected = {article["id"] for article in articles}
+        missing = expected - set(scores)
+        if missing:
+            raise SentimentError(
+                f"{provider_label} model returned incomplete results; missing {len(missing)} article(s)"
+            )
+        return scores
+
+    primary_scores = collect_scores(primary_config, "primary")
+    review_scores = collect_scores(review_config, "review")
+    scored: list[dict[str, Any]] = []
+    for article in articles:
+        primary = dict(primary_scores[article["id"]])
+        review = dict(review_scores[article["id"]])
+        apply_company_relevance_guard(article, primary)
+        apply_company_relevance_guard(article, review)
+        direction_gap = abs(float(primary["direction"]) - float(review["direction"]))
+        direction_sign_agrees = (
+            float(primary["direction"]) == 0
+            or float(review["direction"]) == 0
+            or (float(primary["direction"]) > 0) == (float(review["direction"]) > 0)
+        )
+        event_type = primary["event_type"] if primary["event_type"] == review["event_type"] else "模型分歧"
+        combined = {
+            **article,
+            "direction": round((float(primary["direction"]) + float(review["direction"])) / 2, 4),
+            "impact": int(round((int(primary["impact"]) + int(review["impact"])) / 2)),
+            "relevance": round(min(float(primary["relevance"]), float(review["relevance"])), 4),
+            "confidence": round(min(float(primary["confidence"]), float(review["confidence"])), 4),
+            "event_type": event_type,
+            "scoring_method": f"llm:dual:{primary_config.model}+{review_config.model}",
+            "model_review": {
+                "primary_direction": primary["direction"],
+                "review_direction": review["direction"],
+                "direction_gap": round(direction_gap, 4),
+                "direction_sign_agrees": direction_sign_agrees,
+                "primary_event_type": primary["event_type"],
+                "review_event_type": review["event_type"],
+            },
+        }
+        apply_company_relevance_guard(combined, combined)
+        scored.append(combined)
+    return scored, []
 
 
 def time_decay(article: dict[str, Any], cutoff: datetime) -> float:
@@ -1101,6 +1151,7 @@ def build_snapshot(
     workers: int,
     company_limit: int | None = None,
     llm_config: LLMConfig | None = None,
+    review_llm_config: LLMConfig | None = None,
 ) -> dict[str, Any]:
     universe = load_universe(board_path)
     if company_limit is not None:
@@ -1185,7 +1236,9 @@ def build_snapshot(
 
     all_articles = [article for items in articles_by_ticker.values() for article in items]
     all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
-    scored_articles, scoring_warnings = score_articles(all_articles, llm_config)
+    scored_articles, scoring_warnings = score_articles(
+        all_articles, llm_config, review_llm_config
+    )
     warnings.extend(scoring_warnings)
     scored_by_ticker: dict[str, list[dict[str, Any]]] = {item["ticker"]: [] for item in universe}
     scored_by_industry: dict[str, list[dict[str, Any]]] = {industry: [] for industry in industry_names}
@@ -1217,7 +1270,9 @@ def build_snapshot(
         industry_summary = None
         if industry_sentiment:
             industry_summary = {
-                key: value for key, value in industry_sentiment.items() if key != "items"
+                key: value
+                for key, value in industry_sentiment.items()
+                if key not in {"items", "captured_items"}
             }
         companies.append(
             {
@@ -1245,13 +1300,17 @@ def build_snapshot(
         "data_cutoff": as_of.isoformat(),
         "scope": ["A股", "港股"],
         "status": "ok" if not warnings else "partial",
-        "dashboard_integration": False,
+        "dashboard_integration": True,
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
         "company_count": len(companies),
         "company_news_available_count": successful_news,
         "industry_count": len(industry_names),
         "industry_news_available_count": successful_industry_news,
-        "scoring_mode": f"remote-llm:{llm_config.model}+lexicon-fallback" if llm_config else "lexicon-v1",
+        "scoring_mode": (
+            f"remote-dual-llm:{llm_config.model}+{review_llm_config.model}"
+            if llm_config and review_llm_config
+            else "invalid-dual-model-configuration"
+        ),
         "news_policy": {
             "primary_lookback_days": lookback_days,
             "fallback_lookback_days": fallback_lookback_days,
@@ -1263,6 +1322,7 @@ def build_snapshot(
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
+            "主模型和复核模型都必须返回完整结果；任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -1279,6 +1339,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
     parser.add_argument("--site-output", type=Path, default=DEFAULT_SITE_OUTPUT)
+    parser.add_argument("--status-output", type=Path, default=DEFAULT_STATUS_OUTPUT)
     parser.add_argument("--as-of", type=date.fromisoformat, help="end-of-day cutoff (YYYY-MM-DD)")
     parser.add_argument("--lookback-days", type=int, default=DEFAULT_PRIMARY_LOOKBACK_DAYS)
     parser.add_argument(
@@ -1298,53 +1359,67 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = datetime.now(tz=SHANGHAI_TIMEZONE)
     as_of = effective_as_of(now, args.as_of)
-    if (
-        args.lookback_days < 1
-        or args.fallback_lookback_days < 1
-        or args.news_limit < 1
-        or args.workers < 1
-    ):
-        raise SentimentError(
-            "lookback-days, fallback-lookback-days, news-limit and workers must be positive"
+    try:
+        if (
+            args.lookback_days < 1
+            or args.fallback_lookback_days < 1
+            or args.news_limit < 1
+            or args.workers < 1
+        ):
+            raise SentimentError(
+                "lookback-days, fallback-lookback-days, news-limit and workers must be positive"
+            )
+        if args.fallback_lookback_days < args.lookback_days:
+            raise SentimentError("fallback-lookback-days must be >= lookback-days")
+        primary_config = LLMConfig.from_environment("SENTIMENT_LLM_")
+        review_config = LLMConfig.from_environment("SENTIMENT_REVIEW_")
+        if primary_config is None or review_config is None:
+            raise SentimentError(
+                "双模型配置不完整：请同时填写 SENTIMENT_LLM_* 和 SENTIMENT_REVIEW_* 的 API_KEY、MODEL、ENDPOINT"
+            )
+        snapshot = build_snapshot(
+            board_path=args.board.resolve(),
+            registry_path=args.registry.resolve(),
+            as_of=as_of,
+            now=now,
+            lookback_days=args.lookback_days,
+            fallback_lookback_days=args.fallback_lookback_days,
+            news_limit=args.news_limit,
+            workers=args.workers,
+            company_limit=args.company_limit,
+            llm_config=primary_config,
+            review_llm_config=review_config,
         )
-    if args.fallback_lookback_days < args.lookback_days:
-        raise SentimentError("fallback-lookback-days must be >= lookback-days")
-    snapshot = build_snapshot(
-        board_path=args.board.resolve(),
-        registry_path=args.registry.resolve(),
-        as_of=as_of,
-        now=now,
-        lookback_days=args.lookback_days,
-        fallback_lookback_days=args.fallback_lookback_days,
-        news_limit=args.news_limit,
-        workers=args.workers,
-        company_limit=args.company_limit,
-        llm_config=LLMConfig.from_environment(),
-    )
-    write_json(args.output.resolve(), snapshot)
-    write_json(args.site_output.resolve(), snapshot)
-    if not args.no_archive:
-        archive_path = args.archive_dir.resolve() / f"{as_of.isoformat()}.json"
-        write_json(archive_path, snapshot)
-    print(
-        json.dumps(
-            {
-                "status": snapshot["status"],
-                "data_cutoff": snapshot["data_cutoff"],
-                "company_count": snapshot["company_count"],
-                "company_news_available_count": snapshot["company_news_available_count"],
-                "warning_count": len(snapshot["warnings"]),
-                "output": str(args.output.resolve()),
-            },
-            ensure_ascii=False,
-        )
-    )
-    return 0
+        write_json(args.output.resolve(), snapshot)
+        write_json(args.site_output.resolve(), snapshot)
+        status = {
+            "status": "ok",
+            "generated_at": snapshot["generated_at"],
+            "data_cutoff": snapshot["data_cutoff"],
+            "scoring_mode": snapshot["scoring_mode"],
+            "company_count": snapshot["company_count"],
+        }
+        write_json(args.status_output.resolve(), status)
+        if not args.no_archive:
+            archive_path = args.archive_dir.resolve() / f"{as_of.isoformat()}.json"
+            write_json(archive_path, snapshot)
+        print(json.dumps({**status, "output": str(args.output.resolve())}, ensure_ascii=False))
+        return 0
+    except Exception as exc:  # noqa: BLE001 - status must be published for every failed run
+        status = {
+            "status": "error",
+            "generated_at": now.isoformat(),
+            "data_cutoff": as_of.isoformat(),
+            "error": str(exc),
+            "message": "情绪更新失败；看板继续显示上一份成功快照。",
+        }
+        try:
+            write_json(args.status_output.resolve(), status)
+        except OSError:
+            pass
+        print(json.dumps(status, ensure_ascii=False), file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except (SentimentError, OSError, json.JSONDecodeError) as exc:
-        print(f"sentiment snapshot failed: {exc}", file=sys.stderr)
-        raise SystemExit(1) from exc
+    raise SystemExit(main())
