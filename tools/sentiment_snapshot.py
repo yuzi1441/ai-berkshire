@@ -591,9 +591,20 @@ def score_articles(
                 continue
             for article_id, llm_score in llm_scores.items():
                 by_id[article_id].update(llm_score)
-            missing_count = len(batch) - len(llm_scores)
-            if missing_count:
-                warnings.append(f"LLM omitted {missing_count} article(s); lexicon fallback retained")
+            missing_articles = [article for article in batch if article["id"] not in llm_scores]
+            # A constrained retry is useful when a model truncates or skips a
+            # long response.  Small groups are much less likely to be omitted
+            # and keep the fallback reserved for genuine provider failures.
+            for retry_batch in chunks(missing_articles, min(5, config.batch_size)):
+                try:
+                    retry_scores = score_with_llm(retry_batch, config)
+                except (SentimentError, json.JSONDecodeError, KeyError):
+                    continue
+                for article_id, llm_score in retry_scores.items():
+                    by_id[article_id].update(llm_score)
+            remaining_count = sum(1 for article in missing_articles if article["id"] not in by_id or by_id[article["id"]]["scoring_method"] == "lexicon-v1")
+            if remaining_count:
+                warnings.append(f"LLM omitted {remaining_count} article(s); lexicon fallback retained")
     return list(by_id.values()), warnings
 
 
