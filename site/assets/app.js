@@ -11,6 +11,10 @@ const SNAPSHOT_INTERVAL_MS = 180_000;
 
 const state = {
   decisions: [],
+  sentimentSnapshot: null,
+  sentiments: new Map(),
+  sentimentStatus: null,
+  sentimentError: null,
   quotes: new Map(),
   selectedKey: null,
   view: "decision",
@@ -31,6 +35,7 @@ const els = {
   decisionTable: document.querySelector("#decision-table"),
   decisionHead: document.querySelector("#decision-head"),
   summary: document.querySelector("#summary"),
+  sentimentAlert: document.querySelector("#sentiment-alert"),
   status: document.querySelector("#data-status"),
   companyFilter: document.querySelector("#company-filter"),
   sortSelect: document.querySelector("#sort-select"),
@@ -121,6 +126,70 @@ function marketBadgeClass(market) {
     "港股": "mkt-hk",
     "美股": "mkt-us",
   }[market] || "mkt-unknown";
+}
+
+function sentimentForItem(item) {
+  return item?.ticker ? state.sentiments.get(item.ticker) || null : null;
+}
+
+function sentimentTone(score) {
+  if (!Number.isFinite(Number(score))) return "sentiment-muted";
+  const value = Number(score);
+  if (value >= 70) return "sentiment-positive";
+  if (value <= 45) return "sentiment-negative";
+  return "sentiment-neutral";
+}
+
+function sentimentScoreText(score) {
+  return Number.isFinite(Number(score)) ? Number(score).toFixed(1) : "—";
+}
+
+function sentimentStateText(sentiment) {
+  return sentiment?.state || "无有效分数";
+}
+
+function sentimentRecencyText(news) {
+  return news?.recency_state || news?.state || "暂无新闻时效信息";
+}
+
+function updateSentimentAlert() {
+  if (!els.sentimentAlert) return;
+  const status = state.sentimentStatus;
+  if (status?.status !== "error") {
+    els.sentimentAlert.hidden = true;
+    els.sentimentAlert.textContent = "";
+    return;
+  }
+  els.sentimentAlert.hidden = false;
+  els.sentimentAlert.textContent = `情绪数据更新失败：${status.error || "模型未完成复核"}。当前显示上一份成功快照，不生成不完整结果。`;
+}
+
+function renderSentimentBadge(sentiment, label = "综合") {
+  const badge = document.createElement("span");
+  const score = sentiment?.score_0_100;
+  badge.className = `sentiment-badge ${sentimentTone(score)}`;
+  badge.textContent = `${label} ${sentimentScoreText(score)}`;
+  return badge;
+}
+
+function renderSentimentCell(item) {
+  const cell = document.createElement("td");
+  cell.className = "sentiment-cell";
+  cell.dataset.label = "情绪";
+  const record = sentimentForItem(item);
+  const combined = record?.combined_sentiment;
+  cell.append(renderSentimentBadge(combined));
+  const stateLine = document.createElement("div");
+  stateLine.className = "sentiment-state";
+  stateLine.textContent = sentimentStateText(combined);
+  cell.append(stateLine);
+  const freshness = document.createElement("div");
+  freshness.className = "sentiment-freshness";
+  freshness.textContent = state.sentimentStatus?.status === "error"
+    ? `更新失败 · 上次快照 ${state.sentimentSnapshot?.data_cutoff || "未知"}`
+    : record ? sentimentRecencyText(record.news_sentiment) : "情绪快照未加载";
+  cell.append(freshness);
+  return cell;
 }
 
 function decisionClass(action) {
@@ -1348,6 +1417,119 @@ function renderTechnicalDetail(item) {
   els.detailBody.append(card);
 }
 
+function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
+  const card = document.createElement("section");
+  card.className = "card sentiment-news-card";
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  card.append(heading);
+  const items = news?.captured_items || news?.items || [];
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "sentiment-empty";
+    empty.textContent = emptyText;
+    card.append(empty);
+    return card;
+  }
+  const list = document.createElement("div");
+  list.className = "sentiment-news-list";
+  for (const item of items) {
+    const row = document.createElement("article");
+    row.className = `sentiment-news-item ${item.included === false ? "filtered" : "included"}`;
+    const header = document.createElement("div");
+    header.className = "sentiment-news-head";
+    const titleNode = item.url ? document.createElement("a") : document.createElement("strong");
+    titleNode.textContent = item.title || "无标题新闻";
+    if (item.url) {
+      titleNode.href = item.url;
+      titleNode.target = "_blank";
+      titleNode.rel = "noreferrer";
+    }
+    header.append(titleNode);
+    const inclusion = document.createElement("span");
+    inclusion.className = `sentiment-news-tag ${item.included === false ? "filtered" : "included"}`;
+    inclusion.textContent = item.included === false ? "未纳入评分" : "已纳入评分";
+    header.append(inclusion);
+    row.append(header);
+
+    const meta = document.createElement("div");
+    meta.className = "sentiment-news-meta";
+    const dateText = item.published_at ? String(item.published_at).replace("T", " ").slice(0, 16) : "日期未知";
+    meta.textContent = `${dateText} · ${item.publisher || "未知来源"} · ${item.event_type || "一般新闻"}`;
+    row.append(meta);
+
+    if (item.summary) {
+      const summary = document.createElement("p");
+      summary.className = "sentiment-news-summary";
+      summary.textContent = item.summary;
+      row.append(summary);
+    }
+
+    const metrics = document.createElement("div");
+    metrics.className = "sentiment-news-metrics";
+    metrics.textContent = item.included === false
+      ? `${item.filter_reason || "未达到相关性阈值"} · 相关性 ${sentimentScoreText(Number(item.relevance) * 100)}%`
+      : `方向 ${Number(item.direction || 0) > 0 ? "正面" : Number(item.direction || 0) < 0 ? "负面" : "中性"} · 相关性 ${sentimentScoreText(Number(item.relevance) * 100)}% · 时间权重 ${sentimentScoreText(Number(item.time_weight) * 100)}%`;
+    row.append(metrics);
+    list.append(row);
+  }
+  card.append(list);
+  return card;
+}
+
+function renderSentimentDetail(item) {
+  const record = sentimentForItem(item);
+  const card = document.createElement("section");
+  card.className = "card sentiment-detail";
+  const title = document.createElement("h3");
+  title.textContent = "情绪摘要";
+  card.append(title);
+  if (!record) {
+    const empty = document.createElement("p");
+    empty.className = "sentiment-empty";
+    empty.textContent = state.sentimentError ? "情绪快照暂时无法加载" : "该股票暂无情绪快照";
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
+  if (state.sentimentStatus?.status === "error") {
+    const warning = document.createElement("p");
+    warning.className = "sentiment-warning-note";
+    warning.textContent = `本次更新失败：${state.sentimentStatus.error || "模型未完成复核"}。以下内容来自上一份成功快照。`;
+    card.append(warning);
+  }
+  const summary = document.createElement("dl");
+  summary.className = "kv-grid sentiment-summary";
+  const industry = record.industry_sentiment || record.industry_detail;
+  const rows = [
+    ["综合情绪", `${sentimentScoreText(record.combined_sentiment?.score_0_100)} · ${sentimentStateText(record.combined_sentiment)}`],
+    ["个股新闻", `${sentimentScoreText(record.news_sentiment?.score_0_100)} · ${sentimentStateText(record.news_sentiment)}`],
+    ["行业情绪", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
+    ["新闻时效", sentimentRecencyText(record.news_sentiment)],
+    ["情绪数据截止", state.sentimentSnapshot?.data_cutoff || "待复核"],
+  ];
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  card.append(summary);
+  const note = document.createElement("p");
+  note.className = "source-note";
+  note.textContent = "综合情绪仅作为研究辅助；旧闻会按时间衰减，未纳入评分的新闻仅供核查，不会影响分数。";
+  card.append(note);
+  els.detailBody.append(card);
+
+  els.detailBody.append(renderNewsList("个股新闻 · 全部抓取结果", record.news_sentiment, {
+    emptyText: record.news_sentiment?.state || "暂无个股新闻",
+  }));
+  els.detailBody.append(renderNewsList("行业新闻 · 全部抓取结果", record.industry_detail, {
+    emptyText: industry?.state || "暂无行业新闻",
+  }));
+}
+
 function renderSummary(visible) {
   if (state.view === "tracking") {
     const tracked = visible.map((item) => trackingForItem(item)).filter(Boolean);
@@ -1379,6 +1561,7 @@ function renderSummary(visible) {
     ["当前个股", visible.length],
     ["A股", visible.filter((i) => i.market === "A股").length],
     ["港股", visible.filter((i) => i.market === "港股").length],
+    ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.score_0_100 != null).length}/${visible.length}`],
     ["买入/试探区", (counts.buy || 0) + (counts.trial || 0)],
     ["观察/减仓", (counts.watch || 0) + (counts.no || 0)],
   ];
@@ -1507,6 +1690,7 @@ function renderRows() {
   setTableHeader([
     "公司",
     "市场 / 代码",
+    "情绪",
     "报告价格行动表",
     "现价",
     "综合操作归类",
@@ -1530,6 +1714,8 @@ function renderRows() {
     const marketTd = document.createElement("td");
     marketTd.innerHTML = `<span class="market-badge ${marketBadgeClass(item.market)}">${item.market || "未识别"}</span><div class="ticker-code">${item.ticker || "无代码"}</div>`;
     tr.append(marketTd);
+
+    tr.append(renderSentimentCell(item));
 
     const quote = state.quotes.get(item.ticker);
     const actionTd = document.createElement("td");
@@ -1793,6 +1979,11 @@ function renderDetail() {
     return;
   }
 
+  if (state.detailTab === "sentiment") {
+    renderSentimentDetail(item);
+    return;
+  }
+
   // history
   const history = item.report_history?.length ? item.report_history : [];
   if (!history.length) {
@@ -2046,12 +2237,41 @@ function bindEvents() {
   });
 }
 
+async function loadSentimentSnapshot() {
+  const statusResponse = await fetch(`./data/sentiment_status.json?t=${Date.now()}`, { cache: "no-store" });
+  state.sentimentStatus = statusResponse.ok
+    ? await statusResponse.json()
+    : {status: "unknown"};
+  const response = await fetch(`./data/sentiment.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) throw new Error("无法加载 sentiment.json");
+  const snapshot = await response.json();
+  state.sentimentSnapshot = snapshot;
+  state.sentiments = new Map(
+    (snapshot.companies || [])
+      .filter((item) => item?.ticker)
+      .map((item) => [item.ticker, {
+        ...item,
+        industry_detail: snapshot.industry_sentiments?.[item.industry]?.sentiment || null,
+      }]),
+  );
+  updateSentimentAlert();
+}
+
 async function loadDashboard() {
   setLiveStatus("idle", "加载决策数据…");
   const response = await fetch(`./data/decision_board.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("无法加载 decision_board.json");
   const board = await response.json();
   state.decisions = board.decisions || [];
+  try {
+    await loadSentimentSnapshot();
+  } catch (error) {
+    state.sentimentError = error;
+    state.sentimentStatus = {status: "error", error: error.message};
+    state.sentimentSnapshot = null;
+    state.sentiments = new Map();
+    updateSentimentAlert();
+  }
   const activeTracking = Number(board.post_buy_tracking?.active_count || 0);
   if (els.trackingCount) els.trackingCount.textContent = activeTracking ? String(activeTracking) : "0";
   renderAll();
