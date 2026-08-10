@@ -145,6 +145,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         result = sentiment_snapshot.aggregate_news([article], cutoff)
         self.assertEqual(result["news_recency"], "fallback")
         self.assertIn("近7日无新消息", result["recency_state"])
+        self.assertLessEqual(result["score_0_100"], 62.5)
 
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {

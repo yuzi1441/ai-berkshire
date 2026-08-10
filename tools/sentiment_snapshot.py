@@ -748,7 +748,15 @@ def time_decay(article: dict[str, Any], cutoff: datetime) -> float:
         age_days = 1.0
     else:
         age_days = max(0.0, (cutoff - published).total_seconds() / 86400)
-    half_life = EVENT_HALF_LIFE_DAYS.get(article.get("event_type"), 2.0)
+    event_type = article.get("event_type") or "一般新闻"
+    half_life = EVENT_HALF_LIFE_DAYS.get(event_type)
+    if half_life is None:
+        # Remote models may return a more specific label such as "股份回购";
+        # map it back to the canonical event family before using the default.
+        half_life = EVENT_HALF_LIFE_DAYS.get(
+            detect_event_type(f"{article.get('title', '')} {article.get('summary', '')}"),
+            2.0,
+        )
     return 0.5 ** (age_days / half_life)
 
 
@@ -774,6 +782,8 @@ def aggregate_news(
     relevant_articles = [article for article in articles if float(article.get("relevance", 0)) >= 0.5]
     numerator = 0.0
     denominator = 0.0
+    freshness_numerator = 0.0
+    freshness_denominator = 0.0
     classified_count = 0
     high_impact_negative = 0
     methods: set[str] = set()
@@ -789,9 +799,16 @@ def aggregate_news(
             * float(article["confidence"])
             * decay
         )
+        base_weight = (
+            float(article["impact"])
+            * float(article["relevance"])
+            * float(article["confidence"])
+        )
         direction = float(article["direction"])
         numerator += direction * weight
         denominator += weight
+        freshness_numerator += base_weight * decay
+        freshness_denominator += base_weight
         if abs(direction) >= 0.15:
             classified_count += 1
         if direction <= -0.35 and int(article["impact"]) >= 3:
@@ -835,6 +852,15 @@ def aggregate_news(
             "items": rendered_items,
         }
     normalized = clamp(numerator / denominator, -1, 1)
+    freshness_factor = None
+    if fallback_articles and freshness_denominator > 0:
+        # A fallback headline should inform the direction, but cannot produce
+        # the same conviction as a fresh headline. Keep a small floor so one
+        # old article does not become artificially neutral.
+        freshness_factor = round(
+            clamp(freshness_numerator / freshness_denominator, 0.25, 1.0), 4
+        )
+        normalized = clamp(normalized * freshness_factor, -1, 1)
     score = round(50 + normalized * 50, 2)
     if len(relevant_articles) >= 4 and classified_count >= 2 and any(method.startswith("llm:") for method in methods):
         confidence = "较高"
@@ -853,6 +879,7 @@ def aggregate_news(
         "state": sentiment_state(score),
         "news_recency": "fallback" if fallback_articles else "recent",
         "recency_state": recency_state,
+        "freshness_factor": freshness_factor,
         "confidence": confidence,
         "article_count": len(articles),
         "relevant_article_count": len(relevant_articles),
