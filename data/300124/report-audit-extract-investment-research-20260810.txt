@@ -1,0 +1,214 @@
+======================================================================
+报告数据抽检清单
+文件：reports\汇川技术\汇川技术-investment-research-20260810.md
+总提取数据点：97  |  抽样比例：15%  |  抽检数量：15
+随机种子：20260810（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  1     10  收盘价 · 数据截止日快照                               64.34  
+  6     15  TTM PS · 数据截止日快照                             3.77  倍
+  7     41  营业收入（亿元） · 2021                            179.43  
+ 13     42  归母净利润（亿元） · 2022                            43.20  
+ 15     42  归母净利润（亿元） · 2024                            42.85  
+ 35     46  现金资本开支（亿元） · 2024                           21.12  
+ 42     62  新能源汽车动力系统 · 毛利率                             16.10  %
+ 40     62  新能源汽车动力系统 · 收入                             203.23  亿元
+ 46     64  其他 · 收入                                      7.42  亿元
+ 50     73  归母净利润 · 数值                                  10.13  亿元
+ 54     77  广义净现金 · 数值                                  66.30  亿元
+ 61    189  汇川技术 · PB MRQ                                4.79  倍
+ 74    204  乐观 · 三年目标价                                 127.20  
+ 77    205  中性 · 三年目标 PE                                30.00  倍
+ 85    231  稳健型 · 建议                                    48.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 1,
+    "label": "收盘价 · 数据截止日快照",
+    "reported_value": 64.34,
+    "unit": "",
+    "line_number": 10,
+    "raw_text": "| 收盘价 | 64.34 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 6,
+    "label": "TTM PS · 数据截止日快照",
+    "reported_value": 3.77,
+    "unit": "倍",
+    "line_number": 15,
+    "raw_text": "| TTM PS | 3.77 倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "营业收入（亿元） · 2021",
+    "reported_value": 179.43,
+    "unit": "",
+    "line_number": 41,
+    "raw_text": "| 营业收入（亿元） | 179.43 | 230.08 | 304.20 | 370.41 | 451.05 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 13,
+    "label": "归母净利润（亿元） · 2022",
+    "reported_value": 43.2,
+    "unit": "",
+    "line_number": 42,
+    "raw_text": "| 归母净利润（亿元） | 35.73 | 43.20 | 47.42 | 42.85 | 50.50 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "归母净利润（亿元） · 2024",
+    "reported_value": 42.85,
+    "unit": "",
+    "line_number": 42,
+    "raw_text": "| 归母净利润（亿元） | 35.73 | 43.20 | 47.42 | 42.85 | 50.50 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 35,
+    "label": "现金资本开支（亿元） · 2024",
+    "reported_value": 21.12,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 现金资本开支（亿元） | 7.79 | 16.62 | 15.09 | 21.12 | 30.24 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 42,
+    "label": "新能源汽车动力系统 · 毛利率",
+    "reported_value": 16.1,
+    "unit": "%",
+    "line_number": 62,
+    "raw_text": "| 新能源汽车动力系统 | 203.23 亿元 | 45.06% | 16.10% | 高增长但低毛利、强议价压力 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 40,
+    "label": "新能源汽车动力系统 · 收入",
+    "reported_value": 203.23,
+    "unit": "亿元",
+    "line_number": 62,
+    "raw_text": "| 新能源汽车动力系统 | 203.23 亿元 | 45.06% | 16.10% | 高增长但低毛利、强议价压力 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 46,
+    "label": "其他 · 收入",
+    "reported_value": 7.42,
+    "unit": "亿元",
+    "line_number": 64,
+    "raw_text": "| 其他 | 7.42 亿元 | 1.64% | 41.76% | 体量小，含轨交等业务 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 50,
+    "label": "归母净利润 · 数值",
+    "reported_value": 10.13,
+    "unit": "亿元",
+    "line_number": 73,
+    "raw_text": "| 归母净利润 | 10.13 亿元 | -23.39% | 收入与利润背离 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 54,
+    "label": "广义净现金 · 数值",
+    "reported_value": 66.3,
+    "unit": "亿元",
+    "line_number": 77,
+    "raw_text": "| 广义净现金 | 66.30 亿元 | 不适用 | 货币资金加交易性金融资产减宽口径有息负债 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 61,
+    "label": "汇川技术 · PB MRQ",
+    "reported_value": 4.79,
+    "unit": "倍",
+    "line_number": 189,
+    "raw_text": "| 汇川技术 | 36.75 倍 | 4.79 倍 | 3.77 倍 | 大规模平台和增长质量溢价 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 74,
+    "label": "乐观 · 三年目标价",
+    "reported_value": 127.2,
+    "unit": "",
+    "line_number": 204,
+    "raw_text": "| 乐观 | 22% | 40 倍 | 127.20 元 | +97.70% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 77,
+    "label": "中性 · 三年目标 PE",
+    "reported_value": 30.0,
+    "unit": "倍",
+    "line_number": 205,
+    "raw_text": "| 中性 | 15% | 30 倍 | 79.90 元 | +24.20% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 85,
+    "label": "稳健型 · 建议",
+    "reported_value": 48.0,
+    "unit": "",
+    "line_number": 231,
+    "raw_text": "| 稳健型 | 48-55 元分批买入，以中性情景折现后价值为约束 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

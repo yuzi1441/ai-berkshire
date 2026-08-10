@@ -1,0 +1,103 @@
+三花智控 002050.SZ / 02050.HK financial rigor record
+Research date and data cutoff: 2026-08-10
+
+1. Share count and market value
+
+- Total shares: 4,208,013,935
+- A shares: 3,731,477,535
+- H shares: 476,536,400
+- A close: CNY 38.53
+- H close: HKD 26.10
+- HKD/CNY: 0.860528
+- A-page implied total market cap:
+  38.53 x 4,208,013,935 = CNY 162,134,776,915.55
+- A class value:
+  38.53 x 3,731,477,535 = CNY 143,773,829,423.55
+- H class value in CNY:
+  26.10 x 476,536,400 x 0.860528 = CNY 10,702,903,087.22
+- Mixed-class aggregate market value:
+  CNY 154,476,732,510.77
+- H-share CNY-equivalent price: CNY 22.4597808
+- H discount to A price: 41.71%
+
+financial_rigor.py verify-market-cap:
+  Price CNY 38.53 x 4,208,013,935 shares = CNY 162.13B
+  Reported market cap = CNY 162.135B
+  Deviation = 0.00%, PASS
+
+2. TTM earnings and current valuation
+
+- TTM parent profit:
+  2025A parent profit - 2025Q1 parent profit + 2026Q1 parent profit
+  = 4,062,891,412.10 - 903,416,215.84 + 927,621,853.77
+  = CNY 4,087,097,050.03
+- TTM EPS on current total shares:
+  4,087,097,050.03 / 4,208,013,935 = CNY 0.9712650940
+- 2026Q1 BVPS: CNY 7.7537480370
+- 2025 cash capex: CNY 3,152,387,105.49
+- 2025 FCF proxy:
+  OCF 5,090,762,717.98 - cash capex 3,152,387,105.49
+  = CNY 1,938,375,612.49, or CNY 0.4606390669 per share
+- 2025 total DPS: CNY 0.40 (interim CNY 0.12 + final proposed CNY 0.28)
+
+financial_rigor.py verify-valuation, A share:
+  PE TTM = 39.67x
+  PB on 2026Q1 BVPS = 4.97x
+  P/FCF = 83.64x
+  FCF yield = 1.20%
+  Dividend yield = 1.04%
+
+financial_rigor.py verify-valuation, H share at CNY-equivalent price:
+  PE TTM = 23.12x
+  PB on 2026Q1 BVPS = 2.90x
+  P/FCF = 48.76x
+  FCF yield = 2.05%
+  Dividend yield = 1.78%
+
+3. Balance-sheet cash buffer
+
+- 2025 net-cash proxy:
+  14,911,985,101.20 - 1,391,778,829.30 - 1,591,564,158.13
+  - 862,696,972.22 - 205,928,260.04
+  = CNY 10,860,016,881.51
+- 2026Q1 net-cash proxy:
+  14,336,265,980.68 - 1,392,779,492.07 - 1,786,558,301.41
+  - 635,000,000.00 - 211,838,266.20
+  = CNY 10,310,089,921.00
+
+4. Cross-source checks
+
+- 2025 revenue: CNINFO CNY 31,011,744,510.27; Eastmoney same; 0.00%, PASS
+- 2025 parent profit: CNINFO CNY 4,062,891,412.10; Eastmoney same; 0.00%, PASS
+- 2025 monetary funds: CNINFO CNY 14,911,985,101.20; Eastmoney same; 0.00%, PASS
+- Total shares: CNINFO 4,208,013,935; Tencent 4,208,013,935; 0.00%, PASS
+- A close: Tencent CNY 38.53; Sina CNY 38.53; 0.00%, PASS
+- H close: Tencent HKD 26.10; Sina HKD 26.10; 0.00%, PASS
+
+5. Three-scenario valuation
+
+Starting EPS: CNY 0.9712650940; forecast period: three years; present-value discount rate: 10%.
+
+- Bull: EPS growth 20%, terminal PE 40x, year-3 EPS 1.68,
+  year-3 price CNY 67.10, present value CNY 50.44.
+- Base: EPS growth 12%, terminal PE 28x, year-3 EPS 1.36,
+  year-3 price CNY 38.20, present value CNY 28.71.
+- Bear: EPS growth 3%, terminal PE 20x, year-3 EPS 1.06,
+  year-3 price CNY 21.20, present value CNY 15.95.
+
+At a 10% required return, the A price of CNY 38.53 requires about 23.55% EPS CAGR
+if the exit PE is 28x, or about 14.69% EPS CAGR if the exit PE remains 35x.
+At the H-share CNY-equivalent price of CNY 22.4597808, the same 28x exit PE requires
+about 3.20% EPS CAGR.
+
+6. Capital return and dilution
+
+- 2025 interim plus proposed final cash dividends:
+  CNY 1,680,651,801.60 / CNY 4,062,891,412.10 = 41.37% payout.
+- 2025 buyback spend: CNY 331,029,625.80 for 7,150,100 shares.
+  The stated use was equity incentives or employee ownership, not automatic cancellation.
+- H-share issuance raised net proceeds of CNY 9,650,676,343.33 and increased total shares
+  by 12.74% versus the pre-H-share base.
+
+All arithmetic above was run through tools/financial_rigor.py. Values are retained at
+full precision in research-snapshot-20260810.json.

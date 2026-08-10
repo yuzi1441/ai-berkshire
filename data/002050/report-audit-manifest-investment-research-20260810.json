@@ -1,0 +1,49 @@
+{
+  "company": "浙江三花智能控制股份有限公司",
+  "ticker": "002050.SZ",
+  "report_date": "2026-08-10",
+  "data_cutoff": "2026-08-10",
+  "report": {
+    "path": "reports/三花智控/三花智控-investment-research-20260810.md",
+    "absolute_path": "E:\\ai-berkshire\\reports\\三花智控\\三花智控-investment-research-20260810.md",
+    "size_bytes": 28529,
+    "line_count": 370,
+    "sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e"
+  },
+  "audit": {
+    "status": "PASS",
+    "sample_ratio": 0.15,
+    "seed": 42,
+    "total_extracted_points": 117,
+    "sample_count": 18,
+    "pass_count": 18,
+    "warn_count": 0,
+    "fail_count": 0,
+    "results_path": "data/002050/report-audit-results-investment-research-20260810.json",
+    "results_sha256": "111fcddd8e6549de3a1c3cdec0254db89944a2effc20f8f8b3daad9963c19a18",
+    "verdict_path": "data/002050/report-audit-verdict-investment-research-20260810.json"
+  },
+  "calculation_evidence": {
+    "snapshot_path": "data/002050/research-snapshot-20260810.json",
+    "snapshot_sha256": "cd1765e6b132e512aee3b552f37ee9eba051c79407d6e833f8c0d3f44a8f7589",
+    "financial_rigor_path": "data/002050/financial-rigor-20260810.txt",
+    "financial_rigor_sha256": "cc68d83c86df8a24fcbc9853c323e1c730fe1d674d57b18edede4ce74a390cc2"
+  },
+  "dashboard_readback": {
+    "ticker": "002050.SZ",
+    "market": "A股",
+    "action": "观察",
+    "decision_source": "看板决策契约",
+    "data_cutoff": "2026-08-10",
+    "aggressive_band": "28-32元",
+    "steady_band": "23-28元",
+    "conservative_band": "16-23元",
+    "history_count": 1
+  },
+  "tests": {
+    "investment_dashboard": "49/49 PASS",
+    "financial_rigor_report_audit_routing_library": "34/34 PASS",
+    "agent_reach": "v1.5.0, latest"
+  },
+  "bound_at": "2026-08-10T10:59:08-05:00"
+}

@@ -1,0 +1,34 @@
+金禾实业（002597.SZ）投资研究计算记录
+数据截止日：2026-08-10
+
+1. 市值
+price = 20.24 CNY
+shares = 568,319,878
+market_cap = price * shares = 11,502,794,330.72 CNY = 115.0279433072 亿元
+financial_rigor.py verify-market-cap: 偏差 0.00%，通过。
+
+2. TTM
+TTM net income = 347,060,858.52 - 241,943,306.17 + 95,938,344.64 = 201,055,896.99 CNY
+TTM EPS = 0.3537724172125474 CNY
+TTM revenue/share = 9.017862284890905 CNY
+TTM FCF/share = -0.3478198242082251 CNY
+Q1 BVPS = 13.911659525694 CNY
+
+3. 精确估值（financial_rigor.py verify-valuation）
+PE(TTM) = 20.24 / 0.3537724172125474 = 57.21x
+PB = 20.24 / 13.911659525694 = 1.45x
+P/FCF = 20.24 / -0.3478198242082251 = -58.19x
+FCF yield = -1.72%
+PS = 20.24 / 9.017862284890905 = 2.24x
+Dividend yield = 0.20 / 20.24 = 0.99%
+
+4. 三情景（2025 EPS 0.63，3年）
+Bull: growth 25%, PE 28x, target price 34.5 CNY, return +70.2%
+Base: growth 12%, PE 22x, target price 19.5 CNY, return -3.8%
+Bear: growth -5%, PE 16x, target price 8.6 CNY, return -57.3%
+
+5. 现金流
+2025 OCF = 561,173,893.34 CNY
+2025 capex proxy = 973,697,264.35 CNY
+2025 FCF proxy = -412,523,371.01 CNY
+口径说明：capex 取年报现金流附注中购建长期资产及相关扩产支出代理值；不同平台可能把理财和租赁项目分类不同，正文标注为 proxy。

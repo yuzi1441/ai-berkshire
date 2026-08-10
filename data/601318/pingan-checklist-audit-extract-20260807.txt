@@ -1,0 +1,253 @@
+======================================================================
+报告数据抽检清单
+文件：reports\平安集团\平安集团-checklist-20260807.md
+总提取数据点：114  |  抽样比例：15%  |  抽检数量：18
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     24  H股盘中价 · 口径与来源                             2026.00  
+  5     25  总股本 · 数值                                   181.08  亿
+ 12     28  A股市值 · 口径与来源                                53.30  
+ 14     29  H股市值 · 口径与来源                                57.05  
+ 15     30  A/H合计总市值 · 数值                             9651.37  亿元
+ 18     32  Q1每股归母权益 · 数值                               56.24  
+ 32     46  归母营运利润（亿元） · 2025                         1344.15  
+ 29     46  归母营运利润（亿元） · 2022                         1483.65  
+ 28     46  归母营运利润（亿元） · 2021                         1479.61  
+ 30     46  归母营运利润（亿元） · 2023                         1179.89  
+ 36     47  营运ROE · 2024                                12.70  %
+ 55     51  集团综合偿付能力充足率 · 2023                         208.00  %
+ 65     66  综合投资收益率（非年化） · 2026Q1                        0.20  %
+ 70     70  集团归母权益 · 解释                                 56.24  
+ 76    105  3. 护城河 · 判断                                  2.51  亿
+ 82    132  长端利率长期下行导致利差损 · 可观察指标                        4.00  %
+ 87    174  乐观 · 营运EPS增速                                 8.00  %
+ 95    176  悲观 · 营运EPS增速                                -5.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "H股盘中价 · 口径与来源",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 24,
+    "raw_text": "| H股盘中价 | 57.05港元 | 腾讯行情，2026-08-07 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "总股本 · 数值",
+    "reported_value": 181.0764,
+    "unit": "亿",
+    "line_number": 25,
+    "raw_text": "| 总股本 | 181.0764亿股 | 2025年报，回购注销后 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "A股市值 · 口径与来源",
+    "reported_value": 53.3,
+    "unit": "",
+    "line_number": 28,
+    "raw_text": "| A股市值 | 5,681.81亿元 | 东方财富接口；`53.30 × 106.6007亿`，工具验算偏差0.00% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "H股市值 · 口径与来源",
+    "reported_value": 57.05,
+    "unit": "",
+    "line_number": 29,
+    "raw_text": "| H股市值 | 4,248.84亿港元 | 腾讯行情；`57.05 × 74.4758亿`，工具验算偏差0.00% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "A/H合计总市值 · 数值",
+    "reported_value": 9651.37,
+    "unit": "亿元",
+    "line_number": 30,
+    "raw_text": "| A/H合计总市值 | 约9,651.37亿元人民币 | 东方财富人民币总市值口径；A/H合计不直接使用单一汇率手算 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "Q1每股归母权益 · 数值",
+    "reported_value": 56.24,
+    "unit": "",
+    "line_number": 32,
+    "raw_text": "| Q1每股归母权益 | 56.24元 | 2026Q1归母权益10,183.10亿元 ÷ 181.0764亿股 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "归母营运利润（亿元） · 2025",
+    "reported_value": 1344.15,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 归母营运利润（亿元） | 1,479.61 | 1,483.65 | 1,179.89 | 1,218.62 | 1,344.15 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "归母营运利润（亿元） · 2022",
+    "reported_value": 1483.65,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 归母营运利润（亿元） | 1,479.61 | 1,483.65 | 1,179.89 | 1,218.62 | 1,344.15 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 28,
+    "label": "归母营运利润（亿元） · 2021",
+    "reported_value": 1479.61,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 归母营运利润（亿元） | 1,479.61 | 1,483.65 | 1,179.89 | 1,218.62 | 1,344.15 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 30,
+    "label": "归母营运利润（亿元） · 2023",
+    "reported_value": 1179.89,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 归母营运利润（亿元） | 1,479.61 | 1,483.65 | 1,179.89 | 1,218.62 | 1,344.15 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "营运ROE · 2024",
+    "reported_value": 12.7,
+    "unit": "%",
+    "line_number": 47,
+    "raw_text": "| 营运ROE | 18.9% | 17.9% | 13.2% | 12.7% | 12.7% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "集团综合偿付能力充足率 · 2023",
+    "reported_value": 208.0,
+    "unit": "%",
+    "line_number": 51,
+    "raw_text": "| 集团综合偿付能力充足率 | 233.5% | 217.6% | 208.0% | 204.1% | 193.3% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 65,
+    "label": "综合投资收益率（非年化） · 2026Q1",
+    "reported_value": 0.2,
+    "unit": "%",
+    "line_number": 66,
+    "raw_text": "| 综合投资收益率（非年化） | 0.2% | -1.1个百分点 | 当前最大反向信号 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "集团归母权益 · 解释",
+    "reported_value": 56.24,
+    "unit": "",
+    "line_number": 70,
+    "raw_text": "| 集团归母权益 | 10,183.10亿元 | 较年初+1.8% | 每股账面值约56.24元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "3. 护城河 · 判断",
+    "reported_value": 2.51,
+    "unit": "亿",
+    "line_number": 105,
+    "raw_text": "| 3. 护城河 | ★★★★☆ | 全牌照、2.51亿客户、99%多产品留存、服务网络构成组合壁垒；网络效应和客户转换成本并非不可攻破 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "长端利率长期下行导致利差损 · 可观察指标",
+    "reported_value": 4.0,
+    "unit": "%",
+    "line_number": 132,
+    "raw_text": "| 长端利率长期下行导致利差损 | 中 | 高 | 净投资收益率持续低于EV 4.0%长期假设；保证型产品占比和准备金压力上升 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 87,
+    "label": "乐观 · 营运EPS增速",
+    "reported_value": 8.0,
+    "unit": "%",
+    "line_number": 174,
+    "raw_text": "| 乐观 | +8% | 9.5倍 | 78.6元 | +47.5% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 95,
+    "label": "悲观 · 营运EPS增速",
+    "reported_value": -5.0,
+    "unit": "%",
+    "line_number": 176,
+    "raw_text": "| 悲观 | -5% | 6.5倍 | 47.3元 | -11.3% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

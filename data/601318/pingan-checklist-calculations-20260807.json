@@ -1,0 +1,57 @@
+{
+  "company": "中国平安保险（集团）股份有限公司",
+  "ticker": "601318.SH",
+  "market": "A股/H股",
+  "report_date": "2026-08-07",
+  "data_cutoff": "2026-08-07",
+  "quote": {
+    "a_share_price_cny": 53.30,
+    "h_share_price_hkd": 57.05,
+    "total_shares": 181.07641995,
+    "a_shares": 106.60065083,
+    "h_shares": 74.47576912,
+    "a_market_cap_cny_yuan": 568181468923.9,
+    "h_market_cap_hkd_yuan": 424884260000.0,
+    "total_market_cap_cny_yuan_eastmoney": 965137318333.5,
+    "sources": [
+      "https://qt.gtimg.cn/q=sh601318",
+      "https://qt.gtimg.cn/q=hk02318",
+      "https://push2.eastmoney.com/api/qt/stock/get?secid=1.601318&fields=f43,f57,f58,f116,f117,f162,f163,f164,f167,f168,f169,f170"
+    ]
+  },
+  "valuation": {
+    "ttm_net_profit_cny_yuan": 132784000000.0,
+    "ttm_eps_cny": 7.3330365178,
+    "q1_2026_bvps_cny": 56.2364774100,
+    "pe_ttm": 7.2684760087,
+    "pb": 0.9477834042,
+    "dividend_per_share_cny": 2.70,
+    "dividend_yield": 0.0506566604,
+    "group_ev_2025_cny_yuan": 1504288000000.0,
+    "price_to_group_ev": 0.6415907847,
+    "operating_eps_ttm_cny": 7.5817712786,
+    "sources": [
+      "https://group.pingan.com/resource/pingan/IR-Docs/2026/pingan-ar25-report.pdf",
+      "https://www.pingan.com/app_upload/images/info/upload/e63117e6-98df-4bac-b7e3-27a69e94ab22.pdf",
+      "https://static.cninfo.com.cn/finalpage/2026-03-27/1225038287.PDF"
+    ]
+  },
+  "scenario": {
+    "tool": "python3 tools/financial_rigor.py three-scenario",
+    "current_eps_operating_cny": 7.66,
+    "years": 1,
+    "bull": {"growth": 0.08, "pe": 9.5, "target_eps": 8.27, "target_price_cny": 78.6, "return": 0.475},
+    "base": {"growth": 0.05, "pe": 8.0, "target_eps": 8.04, "target_price_cny": 64.3, "return": 0.207},
+    "bear": {"growth": -0.05, "pe": 6.5, "target_eps": 7.28, "target_price_cny": 47.3, "return": -0.113}
+  },
+  "reconciliation": {
+    "a_market_cap_deviation": 0.0,
+    "h_market_cap_deviation": 0.0,
+    "notes": [
+      "总市值采用东方财富接口的人民币口径；A/H分别用交易币种验算。",
+      "TTM净利润=2025年归母净利润1347.78亿元+2026Q1 250.22亿元-2025Q1 270.16亿元。",
+      "自由现金流、毛利率和有息负债/净利润不适用于保险银行综合金融集团，未强行计算。",
+      "集团EV为2025年12月31日年报值，Q1未披露新集团EV，因此P/EV不是同日估值。"
+    ]
+  }
+}

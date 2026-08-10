@@ -1,0 +1,67 @@
+{
+  "company": "顺丰控股股份有限公司",
+  "ticker": "002352.SZ",
+  "market": "A股",
+  "data_as_of": "2026-08-10",
+  "quote": {
+    "a_close_cny": 33.80,
+    "h_close_hkd": 33.26,
+    "hkd_cny": 0.859906656719,
+    "h_close_cny_equivalent": 28.60049540247394,
+    "registered_shares": 5265308078,
+    "economic_shares": 5097984478,
+    "registered_market_cap_cny": 177967413036.40,
+    "economic_a_market_cap_cny": 172311875356.40,
+    "h_discount_to_a": -0.15383149696822662,
+    "sources": ["data/002352/tencent-quotes-20260810.txt", "data/002352/sina-quotes-20260810.txt", "data/002352/eastmoney-main-annual-20260810.json"]
+  },
+  "annual_financials_cny": [
+    {"year": 2023, "revenue": 258409403000, "parent_net_profit": 8234493000, "deducted_parent_net_profit": 7133730000, "ocf": 26569819000, "gross_margin": 12.82, "eps_reported": 1.70, "roe": 9.19, "debt_ratio": 53.37},
+    {"year": 2024, "revenue": 284420059000, "parent_net_profit": 10170427000, "deducted_parent_net_profit": 9145506000, "ocf": 32186373000, "gross_margin": 13.93, "eps_reported": 2.11, "roe": 11.16, "debt_ratio": 52.14},
+    {"year": 2025, "revenue": 308226647000, "parent_net_profit": 11117216000, "deducted_parent_net_profit": 9263786000, "ocf": 27555275000, "gross_margin": 13.32, "eps_reported": 2.23, "roe": 11.51, "debt_ratio": 49.03}
+  ],
+  "latest_annual": {
+    "revenue_cny": 308226647000,
+    "parent_net_profit_cny": 11117216000,
+    "deducted_parent_net_profit_cny": 9263786000,
+    "ocf_cny": 27555275000,
+    "company_fcf_cny": 17933348000,
+    "gross_margin": 13.32,
+    "roe": 11.51,
+    "debt_ratio": 49.03,
+    "reported_eps": 2.23,
+    "reported_bvps": 19.698526817517,
+    "normalized_dividend_total_cny": 4460000000,
+    "economic_eps_adjusted": 2.180708091202627,
+    "economic_fcf_per_share": 3.517732954541177,
+    "normalized_dividend_per_share": 0.8748555471768935
+  },
+  "q1_2026": {
+    "revenue_cny": 74142121000,
+    "revenue_yoy": 6.14,
+    "parent_net_profit_cny": 2525728000,
+    "parent_net_profit_yoy": 13.05,
+    "deducted_parent_net_profit_cny": 2317341000,
+    "deducted_parent_net_profit_yoy": 17.42,
+    "gross_margin": 13.74,
+    "parent_equity_cny": 100410330000,
+    "cash_and_equivalents_cny": 15972294000
+  },
+  "june_2026": {
+    "express_revenue_cny": 20017000000,
+    "parcel_volume_billion": 1.389,
+    "parcel_volume_yoy": -4.86,
+    "revenue_per_parcel_cny": 14.41,
+    "revenue_per_parcel_yoy": 5.41,
+    "supply_chain_international_revenue_cny": 7863000000,
+    "supply_chain_international_yoy": 24.97,
+    "combined_revenue_cny": 27880000000,
+    "combined_revenue_yoy": 6.19
+  },
+  "network": {"managed_freighters": 111, "owned_freighters": 90, "freighter_routes": 69, "international_destinations": 63, "domestic_touchpoints": 340000, "parcel_hubs": 196, "large_item_hubs": 144, "patents": 4315},
+  "segments_2025_revenue_cny": {"time_definite_express": 131050000000, "economy_express": 32050000000, "freight": 42130000000, "cold_chain_pharma": 10610000000, "intra_city": 12720000000, "supply_chain_international": 72940000000, "other": 6730000000},
+  "valuation_a": {"pe": 15.50, "pb": 1.72, "p_fcf": 9.61, "fcf_yield": 10.41, "dividend_yield": 2.59},
+  "valuation_h_rmb_equivalent": {"pe": 13.12, "pb": 1.45, "p_fcf": 8.13, "fcf_yield": 12.30, "dividend_yield": 3.06},
+  "scenarios": {"bull": {"growth": 0.12, "exit_pe": 16, "target_cny": 49.0}, "base": {"growth": 0.07, "exit_pe": 14, "target_cny": 37.4}, "bear": {"growth": -0.02, "exit_pe": 10, "target_cny": 20.5}},
+  "validation": {"market_cap_registered": "PASS 0.00%", "cross_validate_revenue": "PASS 0.00%", "cross_validate_parent_net_profit": "PASS 0.00%", "cross_validate_cash": "PASS 0.00%", "cross_validate_registered_shares": "PASS 0.00%", "valuation": "PASS"}
+}

@@ -1,0 +1,57 @@
+{
+  "company": "汇川技术",
+  "ticker": "300124.SZ",
+  "currency": "CNY",
+  "data_cutoff": "2026-08-10",
+  "market": {
+    "close_price": "64.34",
+    "shares": "2707603944",
+    "market_cap": "174207237756.96",
+    "market_cap_yi": "1742.0723775696",
+    "pe_ttm": "36.75",
+    "pe_2025a": "34.50",
+    "pb_dividend_adjusted": "4.97",
+    "ps_ttm": "3.7650"
+  },
+  "financials": {
+    "2025_revenue": "45104844200.13",
+    "2025_parent_net_profit": "5050002089.89",
+    "2025_operating_cash_flow": "6681025417.16",
+    "2026q1_revenue": "10143223378.12",
+    "2026q1_parent_net_profit": "1013451151.58",
+    "2026q1_operating_cash_flow": "94051224.97",
+    "2026q1_cash": "4781433359.08",
+    "2026q1_trading_financial_assets": "4927871959.57",
+    "2026q1_broad_interest_bearing_debt": "3079143271.12",
+    "2026q1_broad_net_cash": "6630152047.53"
+  },
+  "ttm": {
+    "period": "2025Q2-2026Q1",
+    "parent_net_profit": "4740628196.12",
+    "eps": "1.7508573241020515",
+    "operating_cash_flow": "6512525661.54",
+    "operating_cash_flow_per_share": "2.405272630796552"
+  },
+  "scenarios": {
+    "years": 3,
+    "bull": {"eps_growth": "0.22", "terminal_pe": "40", "target_price": "127.2"},
+    "base": {"eps_growth": "0.15", "terminal_pe": "30", "target_price": "79.9"},
+    "bear": {"eps_growth": "0.05", "terminal_pe": "22", "target_price": "44.6"}
+  },
+  "methods": {
+    "market_cap": "64.34 * 2707603944",
+    "ttm_eps": "(5050002089.89 + 1013451151.58 - 1322825045.35) / 2707603944",
+    "net_cash": "4781433359.08 + 4927871959.57 - 3079143271.12"
+  },
+  "sources": {
+    "primary_annual": "research/source_docs/汇川技术/cninfo-2025-annual-report-1225208488.pdf",
+    "primary_q1": "research/source_docs/汇川技术/cninfo-2026-q1-report-1225208497.pdf",
+    "market_and_third_party": "data/300124/market-thirdparty-evidence-20260810.md",
+    "calculation_record": "data/300124/financial_rigor_market_20260810.txt"
+  },
+  "audit_status": "PASS",
+  "audit_report": "data/300124/report-audit-verdict-investment-research-20260810.txt",
+  "audit_sample_count": 15,
+  "audit_warning_count": 0,
+  "audit_fail_count": 0
+}

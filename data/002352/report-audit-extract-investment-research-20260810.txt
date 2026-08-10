@@ -1,0 +1,175 @@
+======================================================================
+报告数据抽检清单
+文件：reports\顺丰控股\顺丰控股研究报告-20260810.md
+总提取数据点：74  |  抽样比例：15%  |  抽检数量：12
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     46  经济快递 · 占总收入                                 10.40  %
+  5     47  快运 · 收入（亿元）                                421.30  
+  6     47  快运 · 占总收入                                   13.67  %
+ 12     50  供应链及国际 · 收入（亿元）                            729.40  
+ 15     51  其他 · 占总收入                                    2.18  %
+ 14     51  其他 · 收入（亿元）                                 67.30  
+ 18     67  2025货币资金2096.94亿元 · 来源一                   2025.00  
+ 29    152  2026-06-09 · 决策                             82.99  亿港元
+ 32    183  调整后PE · A股33.80元                            15.50  倍
+ 36    185  P/FCF · A股33.80元                             9.61  倍
+ 55    209  A股 · 稳健型                                    27.00  
+ 73    285  买入失效条件 · 内容                                 12.50  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "经济快递 · 占总收入",
+    "reported_value": 10.4,
+    "unit": "%",
+    "line_number": 46,
+    "raw_text": "| 经济快递 | 320.5 | 10.40% | 规模增长快，价格竞争更强 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "快运 · 收入（亿元）",
+    "reported_value": 421.3,
+    "unit": "",
+    "line_number": 47,
+    "raw_text": "| 快运 | 421.3 | 13.67% | 零担网络和产品升级驱动 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 6,
+    "label": "快运 · 占总收入",
+    "reported_value": 13.67,
+    "unit": "%",
+    "line_number": 47,
+    "raw_text": "| 快运 | 421.3 | 13.67% | 零担网络和产品升级驱动 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "供应链及国际 · 收入（亿元）",
+    "reported_value": 729.4,
+    "unit": "",
+    "line_number": 50,
+    "raw_text": "| 供应链及国际 | 729.4 | 23.66% | KLN基数较大，顺丰自身国际业务增长更快 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "其他 · 占总收入",
+    "reported_value": 2.18,
+    "unit": "%",
+    "line_number": 51,
+    "raw_text": "| 其他 | 67.3 | 2.18% | 非核心辅助业务 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "其他 · 收入（亿元）",
+    "reported_value": 67.3,
+    "unit": "",
+    "line_number": 51,
+    "raw_text": "| 其他 | 67.3 | 2.18% | 非核心辅助业务 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2025货币资金2096.94亿元 · 来源一",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 67,
+    "raw_text": "| 2025货币资金2096.94亿元 | 2025年年度报告 | 东方财富资产负债表JSON | 0.00%偏差，PASS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "2026-06-09 · 决策",
+    "reported_value": 82.99,
+    "unit": "亿港元",
+    "line_number": 152,
+    "raw_text": "| 2026-06-09 | 以约82.99亿港元买入极兔B股，同时发行2.258亿股新H股 | 获得战略协同，也带来稀释和互持风险 | 战略合理但回报取决于协同兑现 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "调整后PE · A股33.80元",
+    "reported_value": 15.5,
+    "unit": "倍",
+    "line_number": 183,
+    "raw_text": "| 调整后PE | 15.50倍 | 13.12倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "P/FCF · A股33.80元",
+    "reported_value": 9.61,
+    "unit": "倍",
+    "line_number": 185,
+    "raw_text": "| P/FCF | 9.61倍 | 8.13倍 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "A股 · 稳健型",
+    "reported_value": 27.0,
+    "unit": "",
+    "line_number": 209,
+    "raw_text": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 73,
+    "label": "买入失效条件 · 内容",
+    "reported_value": 12.5,
+    "unit": "%",
+    "line_number": 285,
+    "raw_text": "| 买入失效条件 | 连续两个报告期毛利率低于12.5%且扣非利润同比转负、经营现金流低于资本支出 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "report": "reports/招商南油/招商南油-investment-research-20260810.md",
+  "audit_run_date": "2026-08-10",
+  "sampling_ratio": 0.15,
+  "random_seed": 42,
+  "extracted_data_points": 116,
+  "sampling_count": 18,
+  "report_sha256": "D405E2898D9F9D63075A478AC47D8E9E12FB3406E599E120DA4E9E3F28E1DFCB",
+  "results_sha256": "B8706CC0FDE7581EE9C92772A5F3F40614560EBE3A636230BE77406A72F740E9",
+  "verdict": "PASS",
+  "total": 18,
+  "pass_count": 18,
+  "warn_count": 0,
+  "fail_count": 0,
+  "fail_items": [],
+  "warn_items": [],
+  "notes": [
+    "固定随机种子42抽取15%数据点，18项均提供两个核验来源或两个独立计算链。",
+    "公司财务与运营数据采用东方财富F10及上交所或巨潮披露交叉核验。",
+    "情景估值和风险阈值属于研究模型输出，使用financial_rigor复算或报告内独立规则交叉复核。",
+    "审计判决后未修改报告正文；SHA256绑定本次准出版本。"
+  ]
+}

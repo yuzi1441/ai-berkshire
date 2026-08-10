@@ -1,0 +1,110 @@
+{
+  "company": "海天味业",
+  "company_full_name": "佛山市海天调味食品股份有限公司",
+  "tickers": ["603288.SH", "03288.HK"],
+  "research_date": "2026-08-10",
+  "reporting_cutoff": "2026-03-31",
+  "quote_cutoff": "2026-08-10",
+  "quotes": {
+    "a_share": {
+      "currency": "CNY",
+      "close": 36.78,
+      "shares": 5851045044,
+      "market_cap_cny": 215201436718.32,
+      "sources": ["Tencent", "Sina", "Eastmoney"]
+    },
+    "h_share": {
+      "currency": "HKD",
+      "tencent_close": 32.74,
+      "sina_close": 32.58,
+      "hkd_cny": 0.85966,
+      "cny_equivalent_using_tencent": 28.1452684,
+      "discount_to_a_share_pct": 23.47670364,
+      "sources": ["Tencent", "Sina", "Frankfurter"]
+    }
+  },
+  "financials": {
+    "2025": {
+      "revenue_cny": 28873380466.76,
+      "revenue_growth_pct": 7.32,
+      "net_profit_parent_cny": 7038465194.15,
+      "net_profit_growth_pct": 10.95,
+      "operating_cash_flow_cny": 7745950953.79,
+      "operating_cash_flow_growth_pct": 13.24,
+      "capex_cny": 1283601482.19,
+      "simplified_fcf_cny": 6462349471.60,
+      "gross_margin_pct": 40.22,
+      "cash_cny": 24603677724.73,
+      "trading_financial_assets_cny": 10105463050.02,
+      "short_term_borrowings_cny": 140850000.00,
+      "cash_distributions_cny": 7949988216.08,
+      "payout_ratio_pct": 112.95
+    },
+    "2026q1": {
+      "revenue_cny": 9028967209.89,
+      "revenue_growth_pct": 8.57,
+      "net_profit_parent_cny": 2443715832.21,
+      "net_profit_growth_pct": 10.97,
+      "operating_cash_flow_cny": -467096320.49,
+      "parent_equity_cny": 42022448518.89,
+      "bvps_cny": 7.181084349
+    },
+    "ttm": {
+      "revenue_cny": 29585761230.75,
+      "net_profit_parent_cny": 7280005363.94,
+      "eps_cny": 1.2442230933
+    }
+  },
+  "business_mix": {
+    "soy_sauce_revenue_cny": 14933723263.80,
+    "soy_sauce_growth_pct": 8.55,
+    "oyster_sauce_revenue_cny": 4868203700.76,
+    "oyster_sauce_growth_pct": 5.48,
+    "sauce_revenue_cny": 2917010525.19,
+    "sauce_growth_pct": 9.29,
+    "other_revenue_cny": 4680376982.27,
+    "other_growth_pct": 14.55,
+    "online_revenue_cny": 1638956662.48,
+    "online_growth_pct": 31.87,
+    "dealers_2025": 6702,
+    "dealers_2026q1": 6690
+  },
+  "valuation": {
+    "pe_ttm": 29.56061513,
+    "pb_mrq": 5.12110656,
+    "ps_ttm": 7.27381780,
+    "p_fcf_2025": 33.3008,
+    "trailing_dps_cny": 1.36,
+    "trailing_dividend_yield_pct": 3.6977,
+    "three_year_pe_observations": 726,
+    "three_year_pe_median": 34.35524129,
+    "three_year_pe_percentile_pct": 7.1625,
+    "peer_valuation": [
+      {"name": "海天味业", "ticker": "603288.SH", "pe_ttm": 29.5606, "pb_mrq": 5.1211, "ps_ttm": 7.2738},
+      {"name": "中炬高新", "ticker": "600872.SH", "pe_ttm": 24.4768, "pb_mrq": 2.5494, "ps_ttm": 3.4274},
+      {"name": "千禾味业", "ticker": "603027.SH", "pe_ttm": 30.1779, "pb_mrq": 2.8783, "ps_ttm": 3.9524}
+    ]
+  },
+  "scenarios": {
+    "years": 3,
+    "discount_rate_pct": 10,
+    "bull": {"eps_growth_pct": 10, "exit_pe": 32, "year3_price_cny": 53.0, "present_value_cny": 39.82},
+    "base": {"eps_growth_pct": 7, "exit_pe": 28, "year3_price_cny": 42.7, "present_value_cny": 32.08},
+    "bear": {"eps_growth_pct": 0, "exit_pe": 22, "year3_price_cny": 27.4, "present_value_cny": 20.59}
+  },
+  "capital_allocation": {
+    "actual_controllers_combined_ownership_pct": 52.58,
+    "h_listing_net_proceeds_hkd_billion": 10.01,
+    "buyback_plan_cny_billion": [1.0, 2.0],
+    "minimum_cancellation_share_pct": 70,
+    "shares_bought_back_through_2026_07": 1810507,
+    "buyback_paid_cny": 65799496.36,
+    "buyback_price_range_cny": [36.02, 37.37]
+  },
+  "limitations": [
+    "2026Q1 is unaudited and 2026H1 had not been published by the cutoff.",
+    "2025 special dividend is non-recurring and is not extrapolated.",
+    "H-share comparison ignores investor-specific taxes, account access, FX, liquidity, and settlement costs.",
+    "Simplified FCF is operating cash flow minus capex, not management-defined owner earnings."
+  ]
+}

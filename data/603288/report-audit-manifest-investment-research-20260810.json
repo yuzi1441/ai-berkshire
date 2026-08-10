@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "company": "海天味业",
+  "ticker": "603288.SH",
+  "research_date": "2026-08-10",
+  "report_path": "reports/海天味业/海天味业-investment-research-20260810.md",
+  "report_size_bytes": 18111,
+  "report_sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+  "audit": {
+    "tool": "tools/report_audit.py",
+    "ratio": 0.15,
+    "seed": 42,
+    "extracted_data_points": 72,
+    "sample_count": 11,
+    "sample_ids": [2, 3, 4, 12, 15, 14, 18, 29, 32, 36, 55],
+    "verdict": "PASS",
+    "pass_count": 11,
+    "warn_count": 0,
+    "fail_count": 0,
+    "results_path": "data/603288/report-audit-results-investment-research-20260810.json",
+    "verdict_path": "data/603288/report-audit-verdict-investment-research-20260810.json"
+  },
+  "dashboard": {
+    "company": "海天味业",
+    "ticker": "603288.SH",
+    "market": "A股",
+    "data_cutoff": "2026-08-10",
+    "action": "观察",
+    "decision_source": "看板决策契约",
+    "current_decision_count": 1
+  },
+  "tests": {
+    "command": "py -3 -m unittest tests.test_investment_dashboard tests.test_report_routing tests.test_report_library tests.test_report_audit tests.test_dashboard_action_classifier",
+    "result": "78 tests passed"
+  }
+}

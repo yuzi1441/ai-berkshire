@@ -1,0 +1,190 @@
+{
+  "company": "中国平安保险（集团）股份有限公司",
+  "canonical_company": "中国平安",
+  "tickers": ["601318.SH", "02318.HK"],
+  "report_date": "2026-08-10",
+  "data_cutoff": "2026-08-10",
+  "latest_operating_filing": "2026Q1",
+  "next_scheduled_filing": "2026-08-21 2026H1",
+  "quote": {
+    "a_share_price_cny": 53.32,
+    "h_share_price_hkd": 56.75,
+    "quote_time_a": "2026-08-10 15:34:59 CST",
+    "quote_time_h": "2026-08-10 16:08:07 HKT",
+    "total_shares": 18107641995,
+    "a_shares": 10660065083,
+    "h_shares": 7447576912,
+    "hkd_cny": 0.8594,
+    "a_market_cap_cny_yuan": 568394670225.56,
+    "h_market_cap_hkd_yuan": 422649990000.0,
+    "h_market_cap_cny_yuan": 363225401406.0,
+    "combined_market_cap_cny_yuan": 931620071631.56,
+    "eastmoney_all_shares_at_a_price_cny_yuan": 965499471173.4,
+    "eastmoney_field_note": "f116 equals A-share price times all A+H shares; it is not the true combined A/H market value",
+    "sources": {
+      "tencent": "https://qt.gtimg.cn/q=sh601318,hk02318",
+      "sina": "https://hq.sinajs.cn/list=sh601318,rt_hk02318",
+      "eastmoney": "https://push2.eastmoney.com/api/qt/stock/get?secid=1.601318&fields=f43,f57,f58,f116,f117,f162,f163,f164,f167,f168,f169,f170",
+      "fx_tencent": "https://qt.gtimg.cn/q=whHKDCNY",
+      "fx_sina": "https://hq.sinajs.cn/list=fx_shkdcny"
+    }
+  },
+  "valuation": {
+    "ttm_net_profit_cny_yuan": 132784000000.0,
+    "ttm_net_profit_formula": "2025 parent net profit 134.778bn + 2026Q1 25.022bn - 2025Q1 27.016bn",
+    "ttm_eps_cny": 7.3330365178,
+    "q1_parent_equity_cny_yuan": 1018310000000.0,
+    "q1_bvps_cny": 56.2364774100,
+    "a_pe_ttm": 7.2710023327,
+    "a_pb": 0.9481357462,
+    "dividend_per_share_cny": 2.70,
+    "a_dividend_yield": 0.0506376594,
+    "h_price_cny_equivalent": 48.77095,
+    "h_pe_ttm_normalized": 6.6508420155,
+    "h_pb_normalized": 0.8672390053,
+    "h_dividend_yield_normalized": 0.0553608170,
+    "group_ev_2025_cny_yuan": 1504288000000.0,
+    "price_to_group_ev": 0.6193096479,
+    "ev_date": "2025-12-31",
+    "market_value_date": "2026-08-10"
+  },
+  "reverse_dividend_model": {
+    "formula": "P=D0*(1+g)/(r-g), solved as g=(r*P-D0)/(P+D0)",
+    "price_cny": 53.32,
+    "base_dps_cny": 2.70,
+    "implied_growth_at_9pct_required_return": 0.0374651910,
+    "implied_growth_at_10pct_required_return": 0.0469832203,
+    "warning": "This is a reverse DDM intuition check, not a forecast or a free-cash-flow DCF."
+  },
+  "annual_2025": {
+    "revenue_prc_gaap_cny_yuan": 1050506000000.0,
+    "revenue_ifrs_cny_yuan": 1140324000000.0,
+    "parent_net_profit_cny_yuan": 134778000000.0,
+    "parent_operating_profit_cny_yuan": 134415000000.0,
+    "group_ev_cny_yuan": 1504288000000.0,
+    "life_health_nbv_cny_yuan": 36897000000.0,
+    "nbv_margin_anp": 0.285,
+    "pc_combined_ratio": 0.968,
+    "insurance_comprehensive_investment_yield": 0.063,
+    "dps_cny": 2.70,
+    "total_dividend_cny_yuan": 48890633386.5,
+    "group_core_solvency": 1.607,
+    "group_comprehensive_solvency": 1.933,
+    "ifrs_cash_and_cash_equivalents_cny_yuan": 650224000000.0
+  },
+  "five_year_summary_latest_comparable_basis": {
+    "basis": "2025 annual report Five-Year Summary; older years may be restated versus original annual reports",
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "parent_operating_profit_cny_100m": [1479.61, 1468.95, 1117.28, 1218.62, 1344.15],
+    "parent_net_profit_cny_100m": [1016.18, 1110.08, 856.65, 1266.07, 1347.78],
+    "operating_roe_pct": [18.9, 17.9, 12.5, 12.7, 12.7],
+    "dps_cny": [2.38, 2.42, 2.43, 2.55, 2.70],
+    "retail_customers_100m": [2.2191, 2.2664, 2.3157, 2.4247, 2.5097],
+    "group_comprehensive_solvency_pct": [233.5, 217.6, 208.0, 204.1, 193.3],
+    "visual_verification": "PDF file page 4 rendered and checked at tmp/pdfs/pingan-2025-five-year-summary-page4.png"
+  },
+  "q1_2026": {
+    "revenue_prc_gaap_cny_yuan": 218405000000.0,
+    "revenue_yoy": -0.062,
+    "parent_net_profit_cny_yuan": 25022000000.0,
+    "parent_net_profit_yoy": -0.074,
+    "parent_operating_profit_cny_yuan": 40780000000.0,
+    "parent_operating_profit_yoy": 0.076,
+    "life_health_nbv_cny_yuan": 15574000000.0,
+    "life_health_nbv_yoy": 0.208,
+    "nbv_margin_first_year_premium": 0.235,
+    "nbv_margin_yoy_change_pct_points": -4.8,
+    "pc_combined_ratio": 0.958,
+    "comprehensive_investment_yield_nonannualized": 0.002,
+    "net_investment_yield_nonannualized": 0.008,
+    "insurance_investment_portfolio_cny_yuan": 6550000000000.0,
+    "real_estate_investment_cny_yuan": 201818000000.0,
+    "real_estate_share": 0.031,
+    "parent_equity_cny_yuan": 1018310000000.0
+  },
+  "management_and_capital": {
+    "ma_mingzhe_direct_a_shares": 3404028,
+    "ma_mingzhe_direct_ownership": 0.0001879885,
+    "employee_plan_a_shares": 189703374,
+    "employee_plan_h_shares": 382305500,
+    "employee_plan_total_ownership": 0.0315893629,
+    "cancelled_repurchase_a_shares_2025": 102592612,
+    "controlling_shareholder": null,
+    "de_facto_controller": null,
+    "governance_change": "No supervisory board from 2026-05-13; audit and risk management committee assumes relevant duties",
+    "dilution_warning": "Outstanding convertible bonds may create future H-share dilution"
+  },
+  "historical_valuation": {
+    "provider": "Eastmoney",
+    "start_date": "2018-01-02",
+    "end_date": "2026-08-10",
+    "sessions": 2087,
+    "current_pe_percentile": 0.0589,
+    "current_pb_percentile": 0.1883,
+    "confidence": "medium",
+    "limitation": "Single-vendor series; reproducible locally but not independently cross-validated."
+  },
+  "scenario_valuation": {
+    "tool": "py -3 tools/financial_rigor.py three-scenario",
+    "current_price_cny": 53.32,
+    "base_operating_eps_cny": 7.66,
+    "years": 3,
+    "flat_annual_dividend_assumption_cny": 2.70,
+    "bull": {
+      "growth": 0.08,
+      "target_pe": 9.5,
+      "target_eps": 9.65,
+      "target_price_cny": 91.7,
+      "price_return": 0.719,
+      "total_return_with_flat_dividends": 0.8717179295,
+      "annualized_total_return": 0.2323861252
+    },
+    "base": {
+      "growth": 0.04,
+      "target_pe": 8.0,
+      "target_eps": 8.62,
+      "target_price_cny": 68.9,
+      "price_return": 0.293,
+      "total_return_with_flat_dividends": 0.4441110278,
+      "annualized_total_return": 0.1303168318
+    },
+    "bear": {
+      "growth": -0.03,
+      "target_pe": 6.5,
+      "target_eps": 6.99,
+      "target_price_cny": 45.4,
+      "price_return": -0.148,
+      "total_return_with_flat_dividends": 0.0033758440,
+      "annualized_total_return": 0.0011240174
+    }
+  },
+  "action_bands": {
+    "fundamental_action": "观察",
+    "aggressive_a_cny": "47-50",
+    "steady_a_cny": "43-47",
+    "conservative_a_cny": "<=40",
+    "aggressive_h_hkd_equivalent_at_cutoff_fx": "54.69-58.18",
+    "steady_h_hkd_equivalent_at_cutoff_fx": "50.03-54.69",
+    "conservative_h_hkd_equivalent_at_cutoff_fx": "<=46.54",
+    "next_review_date": "2026-08-24"
+  },
+  "tool_validations": {
+    "a_market_cap_deviation_pct": 0.0,
+    "h_market_cap_deviation_pct": 0.0,
+    "annual_revenue_cross_source_deviation_pct": 0.0,
+    "annual_parent_net_profit_cross_source_deviation_pct": 0.0,
+    "q1_parent_net_profit_cross_source_deviation_pct": 0.0,
+    "notes": [
+      "A and H market values were verified separately in their trading currencies before FX conversion.",
+      "Eastmoney f116 was rejected as true combined market value because it applies the A-share price to all shares.",
+      "Free cash flow and net cash are not treated as decision metrics for an insurer-bank group.",
+      "The 2025 annual report comparable five-year table supersedes mixed original-report series for trend analysis."
+    ]
+  },
+  "primary_sources": [
+    "https://group.pingan.com/resource/pingan/IR-Docs/2026/pingan-ar25-report.pdf",
+    "https://www.pingan.com/app_upload/images/info/upload/e63117e6-98df-4bac-b7e3-27a69e94ab22.pdf",
+    "https://static.cninfo.com.cn/finalpage/2026-04-29/1225235613.PDF",
+    "https://static.cninfo.com.cn/finalpage/2026-03-27/1225038287.PDF"
+  ]
+}
