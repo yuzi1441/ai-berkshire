@@ -20,6 +20,7 @@ git pull --ff-only origin main
 
 "${PYTHON}" tools/sentiment_snapshot.py \
     --lookback-days 7 \
+    --fallback-lookback-days 30 \
     --news-limit 8 \
     --workers 3
 

@@ -95,6 +95,57 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(articles[0]["publisher"], "测试媒体")
         self.assertEqual(articles[0]["ticker"], "00700.HK")
 
+    def test_company_news_falls_back_to_thirty_days_when_recent_window_is_empty(self):
+        response = {
+            "result": {
+                "cmsArticleWebOld": [
+                    {
+                        "date": "2026-07-20 09:30:00",
+                        "title": "腾讯控股发布经营消息",
+                        "content": "测试摘要",
+                    }
+                ]
+            }
+        }
+        payload = f"sentimentCallback({json.dumps(response, ensure_ascii=False)})"
+        company = {
+            "company": "腾讯控股",
+            "ticker": "00700.HK",
+            "market": "港股",
+        }
+        with patch.object(sentiment_snapshot, "http_text", return_value=payload) as fetch:
+            articles = sentiment_snapshot.fetch_company_news(
+                company,
+                display_name="腾讯控股",
+                cutoff=datetime(2026, 8, 11, tzinfo=SHANGHAI),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+            )
+        self.assertEqual(fetch.call_count, 2)
+        self.assertEqual(articles[0]["retrieval_window_type"], "fallback")
+        self.assertEqual(articles[0]["retrieval_window_days"], 30)
+
+    def test_aggregate_news_exposes_recency_state(self):
+        cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
+        article = {
+            "title": "测试公司发布经营消息",
+            "publisher": "测试",
+            "url": "",
+            "published_at": "2026-07-20T20:00:00+08:00",
+            "event_type": "经营事件",
+            "direction": 0.5,
+            "impact": 2,
+            "relevance": 1.0,
+            "confidence": 0.8,
+            "scoring_method": "lexicon-v1",
+            "retrieval_window_days": 30,
+            "retrieval_window_type": "fallback",
+        }
+        result = sentiment_snapshot.aggregate_news([article], cutoff)
+        self.assertEqual(result["news_recency"], "fallback")
+        self.assertIn("近7日无新消息", result["recency_state"])
+
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {
             "display_name": "示例公司",

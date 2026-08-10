@@ -41,6 +41,8 @@ DEFAULT_BOARD = ROOT / "data" / "investment-dashboard" / "decision_board.json"
 DEFAULT_REGISTRY = ROOT / "data" / "report-routing" / "company_registry.json"
 DEFAULT_OUTPUT = ROOT / "data" / "sentiment" / "latest.json"
 DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
+DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
+DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
@@ -493,22 +495,35 @@ def fetch_company_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
+    fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     # Exchange display names occasionally contain layout spaces (for example
     # "五 粮 液"); removing them materially improves exact company searches.
     query_name = re.sub(r"\s+", "", display_name)
-    url = build_eastmoney_search_url(query_name, news_limit)
-    payload = http_text(url)
-    return parse_eastmoney_search(
-        payload,
-        company=company["company"],
-        display_name=display_name,
-        ticker=company["ticker"],
-        market=company["market"],
-        cutoff=cutoff,
-        lookback_days=lookback_days,
-        scope="company",
-    )
+    def fetch_window(window_days: int, window_type: str) -> list[dict[str, Any]]:
+        url = build_eastmoney_search_url(query_name, news_limit)
+        payload = http_text(url)
+        rows = parse_eastmoney_search(
+            payload,
+            company=company["company"],
+            display_name=display_name,
+            ticker=company["ticker"],
+            market=company["market"],
+            cutoff=cutoff,
+            lookback_days=window_days,
+            scope="company",
+        )
+        for row in rows:
+            row["retrieval_window_days"] = window_days
+            row["retrieval_window_type"] = window_type
+        return rows
+
+    rows = fetch_window(lookback_days, "recent")
+    if rows or fallback_lookback_days <= lookback_days:
+        return rows
+    # A wider second query is only made when the primary window is empty. This
+    # keeps normal runs cheap while still finding the latest usable headline.
+    return fetch_window(fallback_lookback_days, "fallback")
 
 
 def fetch_industry_news(
@@ -517,21 +532,32 @@ def fetch_industry_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
+    fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch one shared news set per primary industry classification."""
     query_name = re.sub(r"\s+", "", industry)
-    url = build_eastmoney_search_url(f"{query_name} 行业", news_limit)
-    payload = http_text(url)
-    return parse_eastmoney_search(
-        payload,
-        company=f"行业:{industry}",
-        display_name=industry,
-        ticker=f"industry:{industry}",
-        market="行业",
-        cutoff=cutoff,
-        lookback_days=lookback_days,
-        scope="industry",
-    )
+    def fetch_window(window_days: int, window_type: str) -> list[dict[str, Any]]:
+        url = build_eastmoney_search_url(f"{query_name} 行业", news_limit)
+        payload = http_text(url)
+        rows = parse_eastmoney_search(
+            payload,
+            company=f"行业:{industry}",
+            display_name=industry,
+            ticker=f"industry:{industry}",
+            market="行业",
+            cutoff=cutoff,
+            lookback_days=window_days,
+            scope="industry",
+        )
+        for row in rows:
+            row["retrieval_window_days"] = window_days
+            row["retrieval_window_type"] = window_type
+        return rows
+
+    rows = fetch_window(lookback_days, "recent")
+    if rows or fallback_lookback_days <= lookback_days:
+        return rows
+    return fetch_window(fallback_lookback_days, "fallback")
 
 
 def detect_event_type(text: str) -> str:
@@ -738,7 +764,12 @@ def sentiment_state(score: float) -> str:
     return "显著正面"
 
 
-def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str, Any]:
+def aggregate_news(
+    articles: list[dict[str, Any]],
+    cutoff: datetime,
+    *,
+    primary_lookback_days: int = DEFAULT_PRIMARY_LOOKBACK_DAYS,
+) -> dict[str, Any]:
     """Aggregate scored headlines with impact, relevance, confidence and decay."""
     relevant_articles = [article for article in articles if float(article.get("relevance", 0)) >= 0.5]
     numerator = 0.0
@@ -747,6 +778,9 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
     high_impact_negative = 0
     methods: set[str] = set()
     rendered_items: list[dict[str, Any]] = []
+    fallback_articles = [
+        article for article in articles if article.get("retrieval_window_type") == "fallback"
+    ]
     for article in sorted(relevant_articles, key=lambda item: item.get("published_at") or "", reverse=True):
         decay = time_decay(article, cutoff)
         weight = (
@@ -775,14 +809,23 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
                 "relevance": article["relevance"],
                 "confidence": article["confidence"],
                 "time_weight": round(decay, 4),
+                "retrieval_window_days": article.get("retrieval_window_days", primary_lookback_days),
                 "scoring_method": article["scoring_method"],
             }
         )
     if not relevant_articles or denominator <= 0:
+        if not articles:
+            recency_state = "无可用新闻"
+        elif fallback_articles:
+            recency_state = f"近{primary_lookback_days}日无新消息，近{max(int(article.get('retrieval_window_days', primary_lookback_days)) for article in fallback_articles)}日无有效相关新闻"
+        else:
+            recency_state = "抓到新闻但无有效相关新闻"
         return {
             "status": "unavailable",
             "score_0_100": None,
-            "state": "无数据",
+            "state": recency_state,
+            "news_recency": "none" if not articles else "no_relevant_news",
+            "recency_state": recency_state,
             "confidence": "无数据",
             "article_count": len(articles),
             "relevant_article_count": len(relevant_articles),
@@ -799,10 +842,17 @@ def aggregate_news(articles: list[dict[str, Any]], cutoff: datetime) -> dict[str
         confidence = "中等"
     else:
         confidence = "较低"
+    recency_state = (
+        f"近{primary_lookback_days}日无新消息，参考近{max(int(article.get('retrieval_window_days', primary_lookback_days)) for article in fallback_articles)}日"
+        if fallback_articles
+        else f"近{primary_lookback_days}日有新消息"
+    )
     return {
         "status": "ok",
         "score_0_100": score,
         "state": sentiment_state(score),
+        "news_recency": "fallback" if fallback_articles else "recent",
+        "recency_state": recency_state,
         "confidence": confidence,
         "article_count": len(articles),
         "relevant_article_count": len(relevant_articles),
@@ -970,7 +1020,11 @@ def combined_company_score(
 ) -> dict[str, Any]:
     news_score = news.get("score_0_100")
     if news_score is None:
-        return {"status": "unavailable", "score_0_100": None, "state": "无数据"}
+        return {
+            "status": "unavailable",
+            "score_0_100": None,
+            "state": news.get("recency_state") or news.get("state") or "无数据",
+        }
     components: list[tuple[str, float, float]] = [("个股新闻", 0.70 if market == "A股" else 0.80, float(news_score))]
     if industry and industry.get("score_0_100") is not None:
         components.append(("行业新闻", 0.20, float(industry["score_0_100"])))
@@ -1001,6 +1055,7 @@ def build_snapshot(
     as_of: date,
     now: datetime,
     lookback_days: int,
+    fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
     workers: int,
     company_limit: int | None = None,
@@ -1054,6 +1109,7 @@ def build_snapshot(
                 cutoff=cutoff,
                 lookback_days=lookback_days,
                 news_limit=news_limit,
+                fallback_lookback_days=fallback_lookback_days,
             ): item
             for item in universe
         }
@@ -1075,6 +1131,7 @@ def build_snapshot(
                 cutoff=cutoff,
                 lookback_days=lookback_days,
                 news_limit=news_limit,
+                fallback_lookback_days=fallback_lookback_days,
             ): industry
             for industry in industry_names
         }
@@ -1099,7 +1156,9 @@ def build_snapshot(
 
     industry_details: dict[str, dict[str, Any]] = {}
     for industry in industry_names:
-        full_sentiment = aggregate_news(scored_by_industry[industry], cutoff)
+        full_sentiment = aggregate_news(
+            scored_by_industry[industry], cutoff, primary_lookback_days=lookback_days
+        )
         industry_details[industry] = {
             "industry": industry,
             "company_count": sum(1 for value in industries_by_ticker.values() if value == industry),
@@ -1108,7 +1167,9 @@ def build_snapshot(
 
     companies = []
     for item in universe:
-        news = aggregate_news(scored_by_ticker[item["ticker"]], cutoff)
+        news = aggregate_news(
+            scored_by_ticker[item["ticker"]], cutoff, primary_lookback_days=lookback_days
+        )
         crowding = crowding_snapshot(item["ticker"], item["market"], hot_by_code)
         industry = industries_by_ticker[item["ticker"]]
         industry_sentiment = industry_details.get(industry, {}).get("sentiment")
@@ -1150,12 +1211,18 @@ def build_snapshot(
         "industry_count": len(industry_names),
         "industry_news_available_count": successful_industry_news,
         "scoring_mode": f"remote-llm:{llm_config.model}+lexicon-fallback" if llm_config else "lexicon-v1",
+        "news_policy": {
+            "primary_lookback_days": lookback_days,
+            "fallback_lookback_days": fallback_lookback_days,
+            "fallback_only_when_primary_window_is_empty": True,
+        },
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
         "industry_sentiments": industry_details,
         "companies": companies,
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
+            f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
             "同花顺热度只表示关注/拥挤，不作为方向性利好。",
@@ -1171,7 +1238,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
     parser.add_argument("--as-of", type=date.fromisoformat, help="end-of-day cutoff (YYYY-MM-DD)")
-    parser.add_argument("--lookback-days", type=int, default=7)
+    parser.add_argument("--lookback-days", type=int, default=DEFAULT_PRIMARY_LOOKBACK_DAYS)
+    parser.add_argument(
+        "--fallback-lookback-days",
+        type=int,
+        default=DEFAULT_FALLBACK_LOOKBACK_DAYS,
+        help="fallback news window when the primary window has no results",
+    )
     parser.add_argument("--news-limit", type=int, default=8)
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--company-limit", type=int, help="bounded smoke-test universe")
@@ -1183,14 +1256,24 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = datetime.now(tz=SHANGHAI_TIMEZONE)
     as_of = effective_as_of(now, args.as_of)
-    if args.lookback_days < 1 or args.news_limit < 1 or args.workers < 1:
-        raise SentimentError("lookback-days, news-limit and workers must be positive")
+    if (
+        args.lookback_days < 1
+        or args.fallback_lookback_days < 1
+        or args.news_limit < 1
+        or args.workers < 1
+    ):
+        raise SentimentError(
+            "lookback-days, fallback-lookback-days, news-limit and workers must be positive"
+        )
+    if args.fallback_lookback_days < args.lookback_days:
+        raise SentimentError("fallback-lookback-days must be >= lookback-days")
     snapshot = build_snapshot(
         board_path=args.board.resolve(),
         registry_path=args.registry.resolve(),
         as_of=as_of,
         now=now,
         lookback_days=args.lookback_days,
+        fallback_lookback_days=args.fallback_lookback_days,
         news_limit=args.news_limit,
         workers=args.workers,
         company_limit=args.company_limit,
