@@ -362,10 +362,15 @@ def fetch_provider_industries(
         try:
             query = urlencode(
                 {
+                    "pn": "1",
+                    "pz": "100",
+                    "po": "1",
+                    "np": "1",
                     "secids": ",".join(secid_batch),
                     "fields": "f12,f14,f100",
                     "fltt": "2",
                     "invt": "2",
+                    "fid": "f3",
                 }
             )
             payload = http_json(f"https://push2.eastmoney.com/api/qt/ulist/get?{query}")
