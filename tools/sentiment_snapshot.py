@@ -50,6 +50,7 @@ SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
 EASTMONEY_SEARCH_URL = "https://search-api-web.eastmoney.com/search/jsonp"
 EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
+EASTMONEY_GUBA_URL = "https://guba.eastmoney.com/list,{symbol}.html"
 CNINFO_TOPSEARCH_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
 CNINFO_ANNOUNCEMENT_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
 CNINFO_STATIC_BASE = "https://static.cninfo.com.cn"
@@ -783,6 +784,128 @@ def fetch_cninfo_company_news(
     )
 
 
+def guba_symbol(ticker: str, market: str) -> str | None:
+    """Build the public Eastmoney Guba board symbol for a listed stock."""
+    if market != "A股":
+        return None
+    raw = ticker.strip().upper()
+    if not raw.endswith((".SH", ".SZ", ".BJ")):
+        return None
+    code, exchange = raw.rsplit(".", 1)
+    return f"{exchange}{code.zfill(6)}"
+
+
+def parse_guba_html(
+    payload: str,
+    *,
+    company: str,
+    display_name: str,
+    ticker: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Parse the public article_list embedded in an Eastmoney Guba page."""
+    match = re.search(r"var\s+article_list\s*=\s*(\{.*?\});", payload, re.DOTALL)
+    if not match:
+        raise SentimentError("Eastmoney Guba page has no article_list payload")
+    try:
+        parsed = json.loads(match.group(1))
+    except json.JSONDecodeError as exc:
+        raise SentimentError("Eastmoney Guba article_list is malformed JSON") from exc
+    articles = parsed.get("re") or []
+    if not isinstance(articles, list):
+        return []
+    earliest = cutoff - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for item in articles:
+        if not isinstance(item, dict):
+            continue
+        post_id = clean_text(item.get("post_id"))
+        title = clean_text(item.get("post_title"), 240)
+        if not post_id or not title or post_id in seen_ids:
+            continue
+        published = parse_datetime(
+            item.get("post_publish_time") or item.get("post_display_time")
+        )
+        if published and (published < earliest or published > cutoff + timedelta(hours=1)):
+            continue
+        seen_ids.add(post_id)
+        post_type = clean_text(item.get("post_type")) or "0"
+        nickname = clean_text(item.get("user_nickname")) or "匿名用户"
+        is_user_post = post_type == "0"
+        source_tier = "D" if is_user_post else "C"
+        source_label = "社区讨论" if is_user_post else "平台资讯/自媒体"
+        source_status = "community_unverified" if is_user_post else "platform_unverified"
+        url = f"https://guba.eastmoney.com/news,{ticker.split('.', 1)[0]},{post_id}.html"
+        read_count = int(item.get("post_click_count") or 0)
+        comment_count = int(item.get("post_comment_count") or 0)
+        rows.append(
+            {
+                "id": hashlib.sha256(
+                    f"{ticker}|guba|{post_id}".encode()
+                ).hexdigest()[:20],
+                "company": company,
+                "display_name": display_name,
+                "ticker": ticker,
+                "market": "A股",
+                "scope": "company",
+                "title": title,
+                "summary": (
+                    f"东方财富股吧帖子；作者：{nickname}；阅读：{read_count}；"
+                    f"评论：{comment_count}。社区内容未经核验。"
+                ),
+                "publisher": f"东方财富股吧·{nickname}",
+                "url": url,
+                "published_at": published.isoformat() if published else None,
+                "source": "Eastmoney Guba public board",
+                "source_tier": source_tier,
+                "source_tier_label": source_label,
+                "score_eligible": False,
+                "verification_status": source_status,
+                "source_via": "eastmoney_guba",
+                "retrieval_window_days": lookback_days,
+                "retrieval_window_type": retrieval_window_type,
+                "guba_post_id": post_id,
+                "guba_post_type": post_type,
+            }
+        )
+        if len(rows) >= max(1, limit):
+            break
+    return rows
+
+
+def fetch_guba_company_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Fetch low-confidence community signals from a public A-share board."""
+    symbol = guba_symbol(company["ticker"], company.get("market", ""))
+    if not symbol:
+        return []
+    payload = http_text(
+        EASTMONEY_GUBA_URL.format(symbol=symbol),
+        headers={"Referer": "https://guba.eastmoney.com/"},
+    )
+    return parse_guba_html(
+        payload,
+        company=company["company"],
+        display_name=display_name,
+        ticker=company["ticker"],
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        limit=limit,
+        retrieval_window_type=retrieval_window_type,
+    )
+
+
 def source_priority(article: dict[str, Any]) -> int:
     """Prefer direct official disclosures when feeds contain the same title."""
     if article.get("source_via") == "cninfo_direct":
@@ -807,6 +930,16 @@ def merge_news_sources(articles: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if source_priority(article) > source_priority(current):
             by_title[key] = article
     return [by_title[key] for key in order]
+
+
+def cap_auxiliary_news(
+    articles: list[dict[str, Any]], auxiliary_news_limit: int
+) -> list[dict[str, Any]]:
+    """Keep the scoreable pool intact and cap only auxiliary context rows."""
+    scoreable = [article for article in articles if article.get("score_eligible", True)]
+    auxiliary = [article for article in articles if not article.get("score_eligible", True)]
+    auxiliary.sort(key=lambda item: item.get("published_at") or "", reverse=True)
+    return scoreable + auxiliary[: max(1, auxiliary_news_limit)]
 
 
 def fetch_company_news_result(
@@ -879,7 +1012,21 @@ def fetch_company_news_result(
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             if company.get("market") == "A股":
                 source_errors.append(f"CNINFO: {exc}")
-        return merge_news_sources(rows), source_errors
+        try:
+            rows.extend(
+                fetch_guba_company_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    limit=auxiliary_news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"Eastmoney Guba: {exc}")
+        return cap_auxiliary_news(merge_news_sources(rows), auxiliary_news_limit), source_errors
 
     rows, source_errors = fetch_window(lookback_days, "recent")
     if rows or fallback_lookback_days <= lookback_days:
@@ -1794,7 +1941,7 @@ def build_snapshot(
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
             "B": "专业媒体：需视为二手来源，当前可进入评分但明确标注单一来源；重要事件建议人工核对一手公告",
             "C": "聚合/其他媒体：仅作为辅助，不计入评分",
-            "D": "社区/传闻：仅作为辅助，不计入评分",
+            "D": "社区/传闻：东方财富股吧普通用户帖子等，仅作为辅助，不计入评分",
             "company_score_rule": "只使用个股新闻；行业新闻、A股市场温度和关注度只在看板展示，不计入个股综合分",
         },
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},

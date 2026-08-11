@@ -275,6 +275,45 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertTrue(articles[0]["score_eligible"])
         self.assertIn("static.cninfo.com.cn/finalpage", articles[0]["url"])
 
+    def test_parse_guba_separates_user_posts_and_platform_content(self):
+        payload = {
+            "re": [
+                {
+                    "post_id": 1001,
+                    "post_title": "连续下跌，投资者开始讨论后续走势",
+                    "post_type": 0,
+                    "user_nickname": "股友甲",
+                    "post_click_count": 12,
+                    "post_comment_count": 3,
+                    "post_publish_time": "2026-08-11 10:00:00",
+                },
+                {
+                    "post_id": 1002,
+                    "post_title": "国电南瑞相关资讯汇总",
+                    "post_type": 20,
+                    "user_nickname": "国电南瑞资讯",
+                    "post_click_count": 100,
+                    "post_comment_count": 5,
+                    "post_publish_time": "2026-08-11 09:00:00",
+                },
+            ]
+        }
+        articles = sentiment_snapshot.parse_guba_html(
+            f"<script>var article_list={json.dumps(payload, ensure_ascii=False)};</script>",
+            company="国电南瑞",
+            display_name="国电南瑞",
+            ticker="600406.SH",
+            cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+            lookback_days=7,
+            limit=20,
+        )
+        self.assertEqual(len(articles), 2)
+        self.assertEqual(articles[0]["source_tier"], "D")
+        self.assertEqual(articles[1]["source_tier"], "C")
+        self.assertFalse(articles[0]["score_eligible"])
+        self.assertEqual(articles[0]["source_via"], "eastmoney_guba")
+        self.assertIn("guba.eastmoney.com/news,600406,1001.html", articles[0]["url"])
+
     def test_company_news_prefers_direct_cninfo_duplicate(self):
         response = {
             "result": {
@@ -307,6 +346,8 @@ class SentimentSnapshotTests(unittest.TestCase):
             return_value=f"sentimentCallback({json.dumps(response, ensure_ascii=False)})",
         ), patch.object(
             sentiment_snapshot, "fetch_cninfo_company_news", return_value=[official]
+        ), patch.object(
+            sentiment_snapshot, "fetch_guba_company_news", return_value=[]
         ):
             articles = sentiment_snapshot.fetch_company_news(
                 company,
