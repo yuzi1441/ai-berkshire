@@ -1179,15 +1179,19 @@ def build_snapshot(
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
     workers: int,
+    markets: set[str] | None = None,
     company_limit: int | None = None,
     llm_config: LLMConfig | None = None,
     review_llm_config: LLMConfig | None = None,
 ) -> dict[str, Any]:
-    universe = load_universe(board_path)
+    selected_markets = markets or SUPPORTED_MARKETS
+    universe = load_universe(board_path, selected_markets)
     if company_limit is not None:
         universe = universe[:company_limit]
     if not universe:
-        raise SentimentError("no A-share or Hong Kong companies found in the decision board")
+        raise SentimentError(
+            f"no companies found for markets: {', '.join(sorted(selected_markets))}"
+        )
 
     warnings: list[str] = []
     registry_names = load_registry_names(registry_path)
@@ -1328,7 +1332,7 @@ def build_snapshot(
         "schema_version": 1,
         "generated_at": now.astimezone(SHANGHAI_TIMEZONE).isoformat(),
         "data_cutoff": as_of.isoformat(),
-        "scope": ["A股", "港股"],
+        "scope": sorted({item["market"] for item in universe}),
         "status": "ok" if not warnings else "partial",
         "dashboard_integration": True,
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
@@ -1354,7 +1358,7 @@ def build_snapshot(
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股新闻由主模型和复核模型共同评分；港股及行业新闻使用主模型。A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股新闻由主模型和复核模型共同评分；其他市场及行业新闻使用主模型。A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -1382,6 +1386,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument("--news-limit", type=int, default=8)
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument(
+        "--markets",
+        nargs="+",
+        choices=sorted(SUPPORTED_MARKETS),
+        default=sorted(SUPPORTED_MARKETS),
+        help="markets to include in the sentiment snapshot",
+    )
     parser.add_argument("--company-limit", type=int, help="bounded smoke-test universe")
     parser.add_argument("--no-archive", action="store_true")
     return parser.parse_args(argv)
@@ -1418,6 +1429,7 @@ def main(argv: list[str] | None = None) -> int:
             fallback_lookback_days=args.fallback_lookback_days,
             news_limit=args.news_limit,
             workers=args.workers,
+            markets=set(args.markets),
             company_limit=args.company_limit,
             llm_config=primary_config,
             review_llm_config=review_config,
@@ -1434,7 +1446,8 @@ def main(argv: list[str] | None = None) -> int:
         write_json(args.status_output.resolve(), status)
         if not args.no_archive:
             archive_path = args.archive_dir.resolve() / f"{as_of.isoformat()}.json"
-            write_json(archive_path, snapshot)
+            if not archive_path.exists():
+                write_json(archive_path, snapshot)
         print(json.dumps({**status, "output": str(args.output.resolve())}, ensure_ascii=False))
         return 0
     except Exception as exc:  # noqa: BLE001 - status must be published for every failed run

@@ -185,6 +185,10 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(len(universe), 2)
         self.assertEqual({item["ticker"] for item in universe}, {"00700.HK", "600519.SH"})
 
+    def test_parse_args_can_limit_snapshot_to_a_shares(self):
+        args = sentiment_snapshot.parse_args(["--markets", "A股"])
+        self.assertEqual(args.markets, ["A股"])
+
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
         evening = datetime(2026, 8, 10, 18, 0, tzinfo=SHANGHAI)

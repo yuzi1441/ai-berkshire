@@ -23,7 +23,8 @@ set +e
     --lookback-days 7 \
     --fallback-lookback-days 30 \
     --news-limit 8 \
-    --workers 3
+    --workers 3 \
+    --markets A股
 SNAPSHOT_EXIT=$?
 set -e
 
@@ -32,7 +33,7 @@ if (( SNAPSHOT_EXIT != 0 )); then
     # snapshot. Publish that status so the dashboard can show the failure.
     git add -- site/data/sentiment_status.json
     if ! git diff --cached --quiet; then
-        git commit -m "chore: report A/H sentiment failure $(date +%F)"
+        git commit -m "chore: report A-share sentiment failure $(date +%F)"
         git push origin main
     fi
     exit "${SNAPSHOT_EXIT}"
@@ -45,5 +46,5 @@ if git diff --cached --quiet; then
     exit 0
 fi
 
-git commit -m "chore: refresh A/H sentiment $(date +%F)"
+git commit -m "chore: refresh A-share sentiment $(date +%F)"
 git push origin main
