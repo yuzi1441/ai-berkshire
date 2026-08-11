@@ -816,6 +816,7 @@ def fetch_company_news_result(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
+    auxiliary_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     # Exchange display names occasionally contain layout spaces (for example
@@ -842,6 +843,23 @@ def fetch_company_news_result(
                     scope="company",
                 )
             )
+            if auxiliary_news_limit > news_limit:
+                auxiliary_payload = http_text(
+                    build_eastmoney_search_url(query_name, auxiliary_news_limit)
+                )
+                auxiliary_rows = parse_eastmoney_search(
+                    auxiliary_payload,
+                    company=company["company"],
+                    display_name=display_name,
+                    ticker=company["ticker"],
+                    market=company["market"],
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    scope="company",
+                )
+                rows.extend(
+                    row for row in auxiliary_rows if not row.get("score_eligible", True)
+                )
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             source_errors.append(f"Eastmoney: {exc}")
         for row in rows:
@@ -879,6 +897,7 @@ def fetch_company_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
+    auxiliary_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch company news while preserving the legacy list-returning API."""
@@ -888,6 +907,7 @@ def fetch_company_news(
         cutoff=cutoff,
         lookback_days=lookback_days,
         news_limit=news_limit,
+        auxiliary_news_limit=auxiliary_news_limit,
         fallback_lookback_days=fallback_lookback_days,
     )
     return rows
@@ -899,6 +919,7 @@ def fetch_industry_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
+    auxiliary_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch one shared news set per primary industry classification."""
@@ -916,6 +937,21 @@ def fetch_industry_news(
             lookback_days=window_days,
             scope="industry",
         )
+        if auxiliary_news_limit > news_limit:
+            auxiliary_payload = http_text(
+                build_eastmoney_search_url(f"{query_name} 行业", auxiliary_news_limit)
+            )
+            auxiliary_rows = parse_eastmoney_search(
+                auxiliary_payload,
+                company=f"行业:{industry}",
+                display_name=industry,
+                ticker=f"industry:{industry}",
+                market="行业",
+                cutoff=cutoff,
+                lookback_days=window_days,
+                scope="industry",
+            )
+            rows.extend(row for row in auxiliary_rows if not row.get("score_eligible", True))
         for row in rows:
             row["retrieval_window_days"] = window_days
             row["retrieval_window_type"] = window_type
@@ -1570,6 +1606,7 @@ def build_snapshot(
     lookback_days: int,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
+    auxiliary_news_limit: int = 20,
     workers: int,
     markets: set[str] | None = None,
     company_limit: int | None = None,
@@ -1627,6 +1664,7 @@ def build_snapshot(
                 cutoff=cutoff,
                 lookback_days=lookback_days,
                 news_limit=news_limit,
+                auxiliary_news_limit=auxiliary_news_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): item
             for item in universe
@@ -1653,6 +1691,7 @@ def build_snapshot(
                 cutoff=cutoff,
                 lookback_days=lookback_days,
                 news_limit=news_limit,
+                auxiliary_news_limit=auxiliary_news_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): industry
             for industry in industry_names
@@ -1747,6 +1786,9 @@ def build_snapshot(
             "primary_lookback_days": lookback_days,
             "fallback_lookback_days": fallback_lookback_days,
             "fallback_only_when_primary_window_is_empty": True,
+            "score_news_limit": news_limit,
+            "auxiliary_news_limit": auxiliary_news_limit,
+            "auxiliary_news_sources": "C/D only; extra auxiliary items are not sent to models",
         },
         "source_policy": {
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
@@ -1788,6 +1830,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="fallback news window when the primary window has no results",
     )
     parser.add_argument("--news-limit", type=int, default=8)
+    parser.add_argument(
+        "--auxiliary-news-limit",
+        type=int,
+        default=20,
+        help="C/D auxiliary-news pool size; extra items are displayed but never scored",
+    )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument(
         "--markets",
@@ -1810,13 +1858,16 @@ def main(argv: list[str] | None = None) -> int:
             args.lookback_days < 1
             or args.fallback_lookback_days < 1
             or args.news_limit < 1
+            or args.auxiliary_news_limit < 1
             or args.workers < 1
         ):
             raise SentimentError(
-                "lookback-days, fallback-lookback-days, news-limit and workers must be positive"
+                "lookback-days, fallback-lookback-days, news limits and workers must be positive"
             )
         if args.fallback_lookback_days < args.lookback_days:
             raise SentimentError("fallback-lookback-days must be >= lookback-days")
+        if args.auxiliary_news_limit < args.news_limit:
+            raise SentimentError("auxiliary-news-limit must be >= news-limit")
         primary_config = LLMConfig.from_environment("SENTIMENT_LLM_")
         review_config = LLMConfig.from_environment("SENTIMENT_REVIEW_")
         if primary_config is None:
@@ -1831,6 +1882,7 @@ def main(argv: list[str] | None = None) -> int:
             lookback_days=args.lookback_days,
             fallback_lookback_days=args.fallback_lookback_days,
             news_limit=args.news_limit,
+            auxiliary_news_limit=args.auxiliary_news_limit,
             workers=args.workers,
             markets=set(args.markets),
             company_limit=args.company_limit,

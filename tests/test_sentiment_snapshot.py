@@ -188,6 +188,7 @@ class SentimentSnapshotTests(unittest.TestCase):
     def test_parse_args_can_limit_snapshot_to_a_shares(self):
         args = sentiment_snapshot.parse_args(["--markets", "A股"])
         self.assertEqual(args.markets, ["A股"])
+        self.assertEqual(args.auxiliary_news_limit, 20)
 
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
@@ -345,10 +346,67 @@ class SentimentSnapshotTests(unittest.TestCase):
                 lookback_days=7,
                 fallback_lookback_days=30,
                 news_limit=8,
+                auxiliary_news_limit=8,
             )
         self.assertEqual(fetch.call_count, 2)
         self.assertEqual(articles[0]["retrieval_window_type"], "fallback")
         self.assertEqual(articles[0]["retrieval_window_days"], 30)
+
+    def test_auxiliary_pool_fetches_more_c_d_news_without_expanding_score_pool(self):
+        primary = {
+            "result": {
+                "cmsArticleWebOld": [
+                    {
+                        "date": "2026-08-10 09:30:00",
+                        "title": "腾讯控股业绩改善",
+                        "content": "专业媒体报道",
+                        "mediaName": "财联社",
+                        "url": "https://finance.eastmoney.com/a/1.html",
+                    }
+                ]
+            }
+        }
+        auxiliary = {
+            "result": {
+                "cmsArticleWebOld": [
+                    {
+                        "date": "2026-08-10 10:30:00",
+                        "title": "市场传闻腾讯控股将出现重大利空",
+                        "content": "社区线索",
+                        "mediaName": "雪球",
+                        "url": "https://xueqiu.com/1",
+                    },
+                    {
+                        "date": "2026-08-10 11:30:00",
+                        "title": "腾讯控股相关市场观察",
+                        "content": "其他媒体",
+                        "mediaName": "测试媒体",
+                        "url": "https://example.com/2",
+                    },
+                ]
+            }
+        }
+        company = {"company": "腾讯控股", "ticker": "00700.HK", "market": "港股"}
+        with patch.object(
+            sentiment_snapshot,
+            "http_text",
+            side_effect=[
+                f"sentimentCallback({json.dumps(primary, ensure_ascii=False)})",
+                f"sentimentCallback({json.dumps(auxiliary, ensure_ascii=False)})",
+            ],
+        ) as fetch:
+            articles = sentiment_snapshot.fetch_company_news(
+                company,
+                display_name="腾讯控股",
+                cutoff=datetime(2026, 8, 11, tzinfo=SHANGHAI),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=1,
+                auxiliary_news_limit=3,
+            )
+        self.assertEqual(fetch.call_count, 2)
+        self.assertEqual(len(articles), 3)
+        self.assertEqual(sum(not item["score_eligible"] for item in articles), 2)
 
     def test_aggregate_news_exposes_recency_state(self):
         cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
