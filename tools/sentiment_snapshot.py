@@ -158,25 +158,26 @@ class LLMConfig:
         endpoint = os.environ.get(
             f"{prefix}ENDPOINT", "https://api.openai.com/v1/chat/completions"
         ).strip()
-        batch_size_text = os.environ.get(f"{prefix}BATCH_SIZE", "20").strip()
+        default_batch_size = "5" if prefix == "SENTIMENT_REVIEW_" else "20"
+        batch_size_text = os.environ.get(f"{prefix}BATCH_SIZE", default_batch_size).strip()
         try:
             batch_size = min(50, max(1, int(batch_size_text)))
         except ValueError:
             batch_size = 20
-        workers_text = os.environ.get(f"{prefix}WORKERS", "4").strip()
+        workers_text = os.environ.get(f"{prefix}WORKERS", "6").strip()
         try:
             workers = min(12, max(1, int(workers_text)))
         except ValueError:
             workers = 4
-        thinking_mode = os.environ.get(f"{prefix}THINKING", "").strip().lower()
+        thinking_mode = os.environ.get(f"{prefix}THINKING", "disabled").strip().lower()
         if thinking_mode not in {"enabled", "disabled"}:
             thinking_mode = None
-        json_mode = os.environ.get(f"{prefix}JSON_MODE", "").strip().lower() in {
+        json_mode = os.environ.get(f"{prefix}JSON_MODE", "true").strip().lower() in {
             "1",
             "true",
             "yes",
         }
-        max_tokens_text = os.environ.get(f"{prefix}MAX_TOKENS", "").strip()
+        max_tokens_text = os.environ.get(f"{prefix}MAX_TOKENS", "1800").strip()
         try:
             max_tokens = min(8192, max(256, int(max_tokens_text))) if max_tokens_text else None
         except ValueError:
@@ -718,14 +719,19 @@ def score_articles(
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Score all articles with two required models; fail closed on any mismatch."""
-    if primary_config is None or review_config is None:
-        raise SentimentError("dual-model sentiment scoring requires both model configurations")
+    """Score A-share articles with two models and other articles with the primary model."""
+    if primary_config is None:
+        raise SentimentError("primary model configuration is required")
     if not articles:
         return [], []
+    review_articles = [article for article in articles if article.get("market") == "A股"]
+    if review_articles and review_config is None:
+        raise SentimentError("A-share dual-model scoring requires the review model configuration")
 
-    def collect_scores(config: LLMConfig, provider_label: str) -> dict[str, dict[str, Any]]:
-        batches = list(chunks(articles, config.batch_size))
+    def collect_scores(
+        target_articles: list[dict[str, Any]], config: LLMConfig, provider_label: str
+    ) -> dict[str, dict[str, Any]]:
+        batches = list(chunks(target_articles, config.batch_size))
         scores: dict[str, dict[str, Any]] = {}
         failures: list[str] = []
         with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
@@ -743,12 +749,29 @@ def score_articles(
                 scores.update(batch_scores)
                 missing = {item["id"] for item in batch} - set(batch_scores)
                 if missing:
-                    failures.append(f"batch {batch[0]['id']}: missing ids {sorted(missing)}")
+                    # Some compatible gateways occasionally omit one or two items
+                    # from a large structured response. Retry only those items in
+                    # a smaller request; if the retry is still incomplete we keep
+                    # the fail-closed behavior and do not publish a snapshot.
+                    missing_items = [item for item in batch if item["id"] in missing]
+                    try:
+                        retry_scores = score_with_llm(missing_items, config, provider_label)
+                    except Exception as exc:  # noqa: BLE001 - preserve fail-closed semantics
+                        failures.append(
+                            f"batch {batch[0]['id']}: missing ids {sorted(missing)}; retry failed: {exc}"
+                        )
+                        continue
+                    scores.update(retry_scores)
+                    remaining = missing - set(retry_scores)
+                    if remaining:
+                        failures.append(
+                            f"batch {batch[0]['id']}: missing ids after retry {sorted(remaining)}"
+                        )
         if failures:
             raise SentimentError(
                 f"{provider_label} model failed; snapshot generation blocked: {'; '.join(failures[:3])}"
             )
-        expected = {article["id"] for article in articles}
+        expected = {article["id"] for article in target_articles}
         missing = expected - set(scores)
         if missing:
             raise SentimentError(
@@ -756,11 +779,18 @@ def score_articles(
             )
         return scores
 
-    primary_scores = collect_scores(primary_config, "primary")
-    review_scores = collect_scores(review_config, "review")
+    primary_scores = collect_scores(articles, primary_config, "primary")
+    review_scores = (
+        collect_scores(review_articles, review_config, "review") if review_articles else {}
+    )
     scored: list[dict[str, Any]] = []
     for article in articles:
         primary = dict(primary_scores[article["id"]])
+        if article.get("market") != "A股":
+            combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
+            apply_company_relevance_guard(combined, combined)
+            scored.append(combined)
+            continue
         review = dict(review_scores[article["id"]])
         apply_company_relevance_guard(article, primary)
         apply_company_relevance_guard(article, review)
@@ -1307,9 +1337,11 @@ def build_snapshot(
         "industry_count": len(industry_names),
         "industry_news_available_count": successful_industry_news,
         "scoring_mode": (
-            f"remote-dual-llm:{llm_config.model}+{review_llm_config.model}"
+            f"remote-mixed-llm:{llm_config.model}+A股复核:{review_llm_config.model}"
             if llm_config and review_llm_config
-            else "invalid-dual-model-configuration"
+            else f"remote-primary-llm:{llm_config.model}"
+            if llm_config
+            else "invalid-primary-model-configuration"
         ),
         "news_policy": {
             "primary_lookback_days": lookback_days,
@@ -1322,7 +1354,7 @@ def build_snapshot(
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "主模型和复核模型都必须返回完整结果；任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股新闻由主模型和复核模型共同评分；港股及行业新闻使用主模型。A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -1373,9 +1405,9 @@ def main(argv: list[str] | None = None) -> int:
             raise SentimentError("fallback-lookback-days must be >= lookback-days")
         primary_config = LLMConfig.from_environment("SENTIMENT_LLM_")
         review_config = LLMConfig.from_environment("SENTIMENT_REVIEW_")
-        if primary_config is None or review_config is None:
+        if primary_config is None:
             raise SentimentError(
-                "双模型配置不完整：请同时填写 SENTIMENT_LLM_* 和 SENTIMENT_REVIEW_* 的 API_KEY、MODEL、ENDPOINT"
+                "主模型配置不完整：请填写 SENTIMENT_LLM_* 的 API_KEY、MODEL、ENDPOINT"
             )
         snapshot = build_snapshot(
             board_path=args.board.resolve(),

@@ -75,6 +75,87 @@ class SentimentSnapshotTests(unittest.TestCase):
         ), self.assertRaises(sentiment_snapshot.SentimentError):
             sentiment_snapshot.score_articles([article], config, config)
 
+    def test_only_a_shares_use_review_model(self):
+        articles = [
+            {
+                "id": "a-1",
+                "scope": "company",
+                "company": "A股公司",
+                "display_name": "A股公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "title": "A股新闻",
+                "summary": "",
+            },
+            {
+                "id": "hk-1",
+                "scope": "company",
+                "company": "港股公司",
+                "display_name": "港股公司",
+                "ticker": "00001.HK",
+                "market": "港股",
+                "title": "港股新闻",
+                "summary": "",
+            },
+        ]
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        calls = []
+
+        def fake_score(batch, _config, provider_label):
+            calls.append((provider_label, [item["id"] for item in batch]))
+            return {
+                item["id"]: {
+                    "direction": 0.4,
+                    "impact": 2,
+                    "relevance": 0.9,
+                    "confidence": 0.8,
+                    "event_type": "一般新闻",
+                    "scoring_method": "test",
+                }
+                for item in batch
+            }
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
+            scored, _ = sentiment_snapshot.score_articles(articles, config, config)
+        self.assertEqual(sorted(calls), [("primary", ["a-1", "hk-1"]), ("review", ["a-1"])])
+        by_id = {item["id"]: item for item in scored}
+        self.assertIn("model_review", by_id["a-1"])
+        self.assertNotIn("model_review", by_id["hk-1"])
+        self.assertEqual(by_id["hk-1"]["scoring_method"], "llm:single:test-model")
+
+    def test_hong_kong_scoring_does_not_require_review_model(self):
+        article = {
+            "id": "hk-1",
+            "scope": "company",
+            "company": "港股公司",
+            "display_name": "港股公司",
+            "ticker": "00001.HK",
+            "market": "港股",
+            "title": "港股新闻",
+            "summary": "",
+        }
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        with patch.object(
+            sentiment_snapshot,
+            "score_with_llm",
+            return_value={
+                "hk-1": {
+                    "direction": 0.2,
+                    "impact": 1,
+                    "relevance": 0.8,
+                    "confidence": 0.7,
+                    "event_type": "一般新闻",
+                    "scoring_method": "test",
+                }
+            },
+        ):
+            scored, _ = sentiment_snapshot.score_articles([article], config, None)
+        self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
+
     def test_main_writes_error_status_when_dual_model_configuration_is_missing(self):
         with tempfile.TemporaryDirectory() as directory:
             status_path = Path(directory) / "sentiment_status.json"
@@ -85,7 +166,7 @@ class SentimentSnapshotTests(unittest.TestCase):
             self.assertEqual(result, 1)
             status = json.loads(status_path.read_text(encoding="utf-8"))
             self.assertEqual(status["status"], "error")
-            self.assertIn("双模型配置不完整", status["error"])
+            self.assertIn("主模型配置不完整", status["error"])
 
     def test_load_universe_keeps_only_unique_a_h_tickers(self):
         board = {
