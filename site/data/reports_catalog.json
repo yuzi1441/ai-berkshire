@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-11T14:44:35+08:00",
-  "record_count": 2011,
-  "checklist_count": 21,
+  "generated_at": "2026-08-11T02:19:07-05:00",
+  "record_count": 2012,
+  "checklist_count": 23,
   "records": [
     {
       "company": "Accenture",
@@ -37308,6 +37308,65 @@
       "report_path": "reports/平高电气/平高电气-earnings-2026Q1.md",
       "report_link": "平高电气/平高电气-earnings-2026Q1.md",
       "price_status": "价格未给出",
+      "data_status": "已标注"
+    },
+    {
+      "company": "平高电气",
+      "entity_kind": "company",
+      "entity_directory": "平高电气",
+      "ticker": "600312.SH",
+      "market": "A股",
+      "data_cutoff": "2026-08-11",
+      "report_completed_at": null,
+      "action": "未提取",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "16元以下再复核后小仓研究",
+          "price_range": "16元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "14元以下且现金流改善后分批研究",
+          "price_range": "14元"
+        },
+        {
+          "stance": "保守型",
+          "action": "见报告",
+          "price_range": "11元"
+        }
+      ],
+      "conclusion_summary": "激进型：16元以下再复核后小仓研究（16元）；稳健型：14元以下且现金流改善后分批研究（14元）；保守型：见报告（11元）",
+      "buy_price": "20 元",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "26.4 元",
+          "target_eps": "1.32 元"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "18.5 元",
+          "target_eps": "1.15 元"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "8.7 元",
+          "target_eps": "0.87 元"
+        }
+      ],
+      "valuation_section": {
+        "heading": "三情景估值",
+        "start_line": 140,
+        "end_line": 159,
+        "markdown": "#### 三情景估值\n\n假设 3 年期，乐观/中性/悲观 EPS 年增速为 +15%/+10%/0%，期末 PE 为 20x/16x/10x。\n\n| 情景 | 3 年后 EPS | 3 年后目标价 | 相对 20 元涨跌 | 以 10%必要回报率折现至今 |\n|---|---:|---:|---:|---:|\n| 乐观 | 1.32 元 | 26.4 元 | +31.8% | 19.80 元 |\n| 中性 | 1.15 元 | 18.5 元 | -7.7% | 13.87 元 |\n| 悲观 | 0.87 元 | 8.7 元 | -56.7% | 6.51 元 |\n\n按乐观/中性/悲观 25%/50%/25% 粗略加权并按 10%折现，当前价值约 **13.51 元**。概率不是事实，但它揭示一件事：**20 元只有在乐观情景兑现时才勉强合理，没有错误容忍空间。**\n\n本报告采用的基本面观察价格：\n\n- **激进型：16 元以下**，仍需接受现金流和周期波动。\n- **稳健型：14 元以下**，接近中性情景折现值。\n- **保守型：11 元以下**，为订单兑现或估值判断错误预留更大缓冲。\n\n**评分：★★☆☆☆。价格关不通过。**"
+      },
+      "recommendation": "平高电气（600312.SH）买入前 Checklist 研究报告",
+      "title": "平高电气（600312.SH）买入前 Checklist 研究报告",
+      "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+      "report_link": "平高电气/平高电气-investment-checklist-20260811.md",
+      "price_status": "已提取三情景",
       "data_status": "已标注"
     },
     {

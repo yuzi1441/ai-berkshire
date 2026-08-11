@@ -1,10 +1,10 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-11T14:44:35+08:00",
+  "generated_at": "2026-08-11T02:19:07-05:00",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 250,
-  "checklist_count": 21,
+  "checklist_count": 23,
   "post_buy_tracking": {
     "registered_count": 1,
     "active_count": 1,
@@ -16571,108 +16571,147 @@
       "entity_directory": "平高电气",
       "ticker": "600312.SH",
       "market": "A股",
-      "data_cutoff": "2026-07-07",
+      "data_cutoff": "2026-08-11",
       "report_completed_at": null,
-      "action": "观察",
+      "action": "未提取",
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "未给出",
-          "price_range": ""
+          "action": "16元以下再复核后小仓研究",
+          "price_range": "16元"
         },
         {
           "stance": "稳健型",
-          "action": "未给出",
-          "price_range": ""
+          "action": "14元以下且现金流改善后分批研究",
+          "price_range": "14元"
         },
         {
           "stance": "保守型",
-          "action": "未给出",
-          "price_range": ""
+          "action": "见报告",
+          "price_range": "11元"
         }
       ],
-      "conclusion_summary": "结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。",
-      "buy_price": "12-14 元",
-      "price_plan": [
-        {
-          "profile": "可以列为积极买入区，但需确认利润未结构性下滑。",
-          "price_range": "≤ 12 元",
-          "action": "可以列为积极买入区，但需确认利润未结构性下滑。"
-        },
-        {
-          "profile": "分批建仓区，适合愿意承受项目周期波动的投资者。",
-          "price_range": "12-14 元",
-          "action": "分批建仓区，适合愿意承受项目周期波动的投资者。"
-        },
-        {
-          "profile": "观察/小仓位，等待订单或现金流验证。",
-          "price_range": "14-17 元",
-          "action": "观察/小仓位，等待订单或现金流验证。"
-        },
-        {
-          "profile": "持仓者可持有，空仓者不宜追高。",
-          "price_range": "17-22 元",
-          "action": "持仓者可持有，空仓者不宜追高。"
-        },
-        {
-          "profile": "若基本面未显著上修，应考虑减仓。",
-          "price_range": "≥ 25 元",
-          "action": "若基本面未显著上修，应考虑减仓。"
-        }
-      ],
+      "conclusion_summary": "激进型：16元以下再复核后小仓研究（16元）；稳健型：14元以下且现金流改善后分批研究（14元）；保守型：见报告（11元）",
+      "buy_price": "20 元",
+      "price_plan": [],
       "scenario_valuation": [
         {
           "scenario": "乐观",
-          "target_price": "25.5 元",
-          "eps_growth": "+12%",
-          "target_pe": "22x",
-          "target_eps": "1.16"
+          "target_price": "26.4 元",
+          "target_eps": "1.32 元"
         },
         {
           "scenario": "中性",
-          "target_price": "16.7 元",
-          "eps_growth": "+6%",
-          "target_pe": "17x",
-          "target_eps": "0.98"
+          "target_price": "18.5 元",
+          "target_eps": "1.15 元"
         },
         {
           "scenario": "悲观",
-          "target_price": "9.3 元",
-          "eps_growth": "-2%",
-          "target_pe": "12x",
-          "target_eps": "0.78"
+          "target_price": "8.7 元",
+          "target_eps": "0.87 元"
         }
       ],
       "valuation_section": {
         "heading": "第七步：估值与安全边际",
         "start_line": 220,
         "end_line": 311,
-        "markdown": "## 第七步：估值与安全边际\n\n### 7.1 当前估值验算\n\n| 指标 | 数值 | 说明 |\n|---|---:|---|\n| 股价 | 17.64 元 | 2026-07-06 收盘。 |\n| 总股本 | 13.5692 亿股 | 2025 年报与腾讯行情一致。 |\n| 总市值 | 239.36 亿元 | 工具验算偏差 0.00%。 |\n| PE（基于 2025 EPS 0.8253） | 21.37x | 17.64 / 0.8253。 |\n| PB（基于 2025 BVPS 8.288862） | 2.13x | 17.64 / 8.288862。 |\n| PS（基于 2025 每股收入 9.2245） | 1.91x | 17.64 / 9.2245。 |\n| 自由现金流/股 | 0.377 元 | 2025 CFO 8.11 亿元 - 购建固定/无形等现金 2.99 亿元，再除以总股本。 |\n| P/FCF | 46.80x | 2025 现金流偏弱，所以 FCF 估值明显高于 PE。 |\n| FCF Yield | 2.14% | 低于利润收益率。 |\n| 2025 年度每股派息 | 0.331 元 | 年报预案/中期合计，每 10 股 3.31 元。 |\n| 股息率 | 1.88% | 0.331 / 17.64。 |\n\n### 7.2 反向 DCF 直觉\n\n当前 21x 左右利润估值，隐含市场认为：\n- 2025 的 11.20 亿元归母净利润不是周期高点，而是新平台；\n- 未来 3-5 年利润仍能保持中个位数到低双位数增长；\n- 毛利率至少能维持在 23%-25% 附近；\n- 现金流波动只是项目节奏，不是利润质量恶化。\n\n如果其中任一条被证伪，21x PE 的容错率不高。\n\n### 7.3 三情景估值（工具精确计算）\n\n以 2025 EPS 0.8253 元为基准，预测期 3 年：\n\n| 情景 | 年增速 | 目标 PE | 3 年后 EPS | 目标股价 | 相对 17.64 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 22x | 1.16 | **25.5 元** | +44.6% |\n| 中性 | +6% | 17x | 0.98 | **16.7 元** | -5.3% |\n| 悲观 | -2% | 12x | 0.78 | **9.3 元** | -47.2% |\n\n### 7.4 安全边际与操作价格带\n\n| 价格区间 | 对应含义 | 建议 |\n|---|---|---|\n| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |\n| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |\n| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |\n| **17-22 元** | 接近当前区间，赔率一般；需公司继续超预期。 | 持仓者可持有，空仓者不宜追高。 |\n| **≥ 25 元** | 接近乐观 3 年目标价提前兑现。 | 若基本面未显著上修，应考虑减仓。 |\n\n> **段永平式追问**：如果股市明天关闭 5 年，你愿意以 17.64 元持有吗？——如果已经持有且成本较低，可以；如果空仓新买，我更希望在 14 元以下开始认真买，而不是用当前价格赌估值继续扩张。\n\n---\n\n## 第八步：最终决策与行动清单\n\n### 8.1 综合评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 关键输配电设备制造商，需求长期存在，但招标制与项目制使定价权有限。 | 中高 |\n| 护城河（巴菲特） | 技术、资质、可靠性、服务网络构成中等偏强护城河；不是不可撼动垄断。 | 中高 |\n| 管理层（段永平+巴菲特） | 央企体系稳定，主业聚焦和分红改善是加分；个人持股激励弱。 | 中 |\n| 最大风险（芒格） | 利润率改善已被外推，现金流与招标价格可能低于市场预期。 | 高 |\n| 文明趋势（李录） | 新型电力系统、电网升级和电气化长期利好确定。 | 高 |\n| 估值（巴菲特+段永平） | 当前价格不贵到离谱，但缺少足够安全边际；14 元以下吸引力明显提高。 | 中高 |\n\n### 8.2 明确结论\n\n**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**\n\n这是一家值得长期跟踪的电网设备公司，但不是“任何价格都值得买”的复利型垄断。当前股价对应约 21x 2025 PE 和 46.8x 2025 FCF，投资胜率依赖未来订单、毛利率和现金流继续验证。\n\n### 8.3 行动表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |\n| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |\n| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |\n| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |\n\n### 8.4 四位大师的模拟点评\n\n> **巴菲特**：我喜欢关键基础设施设备的可靠性需求，但我不会为一个招标制制造商支付消费垄断型企业的价格。安全边际来自价格，而不是故事。\n\n> **芒格**：先问它怎么失败。最明显的失败方式不是技术突然没了，而是大家都知道电网要投资，于是竞争、招标和估值一起把回报吃掉。\n\n> **段永平**：这是对的生意吗？部分是。客户刚需、产品重要、公司有积累；但价格也要对。17.64 元让我没那么兴奋，14 元以下才更像“对的价格”。\n\n> **李录**：电气化和新型电力系统是长期文明趋势，但趋势不自动等于股东回报。要看公司在价值链中能不能持续留住利润池。\n\n---"
+        "markdown": "## 第七步：估值与安全边际\n\n### 7.1 当前估值验算\n\n| 指标 | 数值 | 说明 |\n|---|---:|---|\n| 股价 | 17.64 元 | 2026-07-06 收盘。 |\n| 总股本 | 13.5692 亿股 | 2025 年报与腾讯行情一致。 |\n| 总市值 | 239.36 亿元 | 工具验算偏差 0.00%。 |\n| PE（基于 2025 EPS 0.8253） | 21.37x | 17.64 / 0.8253。 |\n| PB（基于 2025 BVPS 8.288862） | 2.13x | 17.64 / 8.288862。 |\n| PS（基于 2025 每股收入 9.2245） | 1.91x | 17.64 / 9.2245。 |\n| 自由现金流/股 | 0.377 元 | 2025 CFO 8.11 亿元 - 购建固定/无形等现金 2.99 亿元，再除以总股本。 |\n| P/FCF | 46.80x | 2025 现金流偏弱，所以 FCF 估值明显高于 PE。 |\n| FCF Yield | 2.14% | 低于利润收益率。 |\n| 2025 年度每股派息 | 0.331 元 | 年报预案/中期合计，每 10 股 3.31 元。 |\n| 股息率 | 1.88% | 0.331 / 17.64。 |\n\n### 7.2 反向 DCF 直觉\n\n当前 21x 左右利润估值，隐含市场认为：\n- 2025 的 11.20 亿元归母净利润不是周期高点，而是新平台；\n- 未来 3-5 年利润仍能保持中个位数到低双位数增长；\n- 毛利率至少能维持在 23%-25% 附近；\n- 现金流波动只是项目节奏，不是利润质量恶化。\n\n如果其中任一条被证伪，21x PE 的容错率不高。\n\n### 7.3 三情景估值（工具精确计算）\n\n以 2025 EPS 0.8253 元为基准，预测期 3 年：\n\n| 情景 | 年增速 | 目标 PE | 3 年后 EPS | 目标股价 | 相对 17.64 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 22x | 1.16 | **25.5 元** | +44.6% |\n| 中性 | +6% | 17x | 0.98 | **16.7 元** | -5.3% |\n| 悲观 | -2% | 12x | 0.78 | **9.3 元** | -47.2% |\n\n### 7.4 安全边际与操作价格带\n\n| 价格区间 | 对应含义 | 建议 |\n|---|---|---|\n| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |\n| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |\n| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |\n| **17-22 元** | 接近当前区间，赔率一般；需公司继续超预期。 | 持仓者可持有，空仓者不宜追高。 |\n| **≥ 25 元** | 接近乐观 3 年目标价提前兑现。 | 若基本面未显著上修，应考虑减仓。 |\n\n> **段永平式追问**：如果股市明天关闭 5 年，你愿意以 17.64 元持有吗？——如果已经持有且成本较低，可以；如果空仓新买，我更希望在 14 元以下开始认真买，而不是用当前价格赌估值继续扩张。\n\n---\n\n## 第八步：最终决策与行动清单\n\n### 8.1 综合评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 关键输配电设备制造商，需求长期存在，但招标制与项目制使定价权有限。 | 中高 |\n| 护城河（巴菲特） | 技术、资质、可靠性、服务网络构成中等偏强护城河；不是不可撼动垄断。 | 中高 |\n| 管理层（段永平+巴菲特） | 央企体系稳定，主业聚焦和分红改善是加分；个人持股激励弱。 | 中 |\n| 最大风险（芒格） | 利润率改善已被外推，现金流与招标价格可能低于市场预期。 | 高 |\n| 文明趋势（李录） | 新型电力系统、电网升级和电气化长期利好确定。 | 高 |\n| 估值（巴菲特+段永平） | 当前价格不贵到离谱，但缺少足够安全边际；14 元以下吸引力明显提高。 | 中高 |\n\n### 8.2 明确结论\n\n**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**\n\n这是一家值得长期跟踪的电网设备公司，但不是“任何价格都值得买”的复利型垄断。当前股价对应约 21x 2025 PE 和 46.8x 2025 FCF，投资胜率依赖未来订单、毛利率和现金流继续验证。\n\n### 8.3 行动表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |\n| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |\n| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |\n| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |\n\n### 8.4 四位大师的模拟点评\n\n> **巴菲特**：我喜欢关键基础设施设备的可靠性需求，但我不会为一个招标制制造商支付消费垄断型企业的价格。安全边际来自价格，而不是故事。\n\n> **芒格**：先问它怎么失败。最明显的失败方式不是技术突然没了，而是大家都知道电网要投资，于是竞争、招标和估值一起把回报吃掉。\n\n> **段永平**：这是对的生意吗？部分是。客户刚需、产品重要、公司有积累；但价格也要对。17.64 元让我没那么兴奋，14 元以下才更像“对的价格”。\n\n> **李录**：电气化和新型电力系统是长期文明趋势，但趋势不自动等于股东回报。要看公司在价值链中能不能持续留住利润池。\n\n---",
+        "source_report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+        "source_note": "当前结论来自较新跟踪稿；估值原文取自更完整报告：reports/平高电气/平高电气研究报告-20260707.md"
       },
-      "recommendation": "结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。",
-      "title": "平高电气研究报告-20260707",
-      "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
-      "report_link": "平高电气/平高电气研究报告-20260707.md",
-      "decision_source": "看板决策契约",
-      "decision_contract": {
-        "version": "1",
-        "report_type": "company-fundamental",
-        "company": "平高电气",
-        "ticker": "600312.SH",
-        "market": "A股",
-        "report_completed_at": null,
-        "data_cutoff": "2026-07-07",
-        "action": "观察",
-        "summary": "结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。",
-        "investor_stances": [],
-        "invalidation_triggers": "未给出",
-        "next_review_date": null,
-        "confidence": "待复核"
-      },
-      "price_status": "已提取价格计划",
+      "recommendation": "平高电气（600312.SH）买入前 Checklist 研究报告",
+      "title": "平高电气（600312.SH）买入前 Checklist 研究报告",
+      "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+      "report_link": "平高电气/平高电气-investment-checklist-20260811.md",
+      "price_status": "历史价格参照",
       "data_status": "已标注",
+      "historical_price_reference": {
+        "source_report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+        "source_report_link": "平高电气/平高电气研究报告-20260707.md",
+        "source_title": "平高电气研究报告-20260707",
+        "source_data_cutoff": "2026-07-07",
+        "price_plan": [
+          {
+            "profile": "可以列为积极买入区，但需确认利润未结构性下滑。",
+            "price_range": "≤ 12 元",
+            "action": "可以列为积极买入区，但需确认利润未结构性下滑。"
+          },
+          {
+            "profile": "分批建仓区，适合愿意承受项目周期波动的投资者。",
+            "price_range": "12-14 元",
+            "action": "分批建仓区，适合愿意承受项目周期波动的投资者。"
+          },
+          {
+            "profile": "观察/小仓位，等待订单或现金流验证。",
+            "price_range": "14-17 元",
+            "action": "观察/小仓位，等待订单或现金流验证。"
+          },
+          {
+            "profile": "持仓者可持有，空仓者不宜追高。",
+            "price_range": "17-22 元",
+            "action": "持仓者可持有，空仓者不宜追高。"
+          },
+          {
+            "profile": "若基本面未显著上修，应考虑减仓。",
+            "price_range": "≥ 25 元",
+            "action": "若基本面未显著上修，应考虑减仓。"
+          }
+        ],
+        "usage": "display_only"
+      },
       "selection_basis": "报告数据截止日",
       "report_history": [
+        {
+          "data_cutoff": "2026-08-11",
+          "action": "未提取",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "16元以下再复核后小仓研究",
+              "price_range": "16元"
+            },
+            {
+              "stance": "稳健型",
+              "action": "14元以下且现金流改善后分批研究",
+              "price_range": "14元"
+            },
+            {
+              "stance": "保守型",
+              "action": "见报告",
+              "price_range": "11元"
+            }
+          ],
+          "conclusion_summary": "激进型：16元以下再复核后小仓研究（16元）；稳健型：14元以下且现金流改善后分批研究（14元）；保守型：见报告（11元）",
+          "buy_price": "20 元",
+          "price_plan": [],
+          "scenario_valuation": [
+            {
+              "scenario": "乐观",
+              "target_price": "26.4 元",
+              "target_eps": "1.32 元"
+            },
+            {
+              "scenario": "中性",
+              "target_price": "18.5 元",
+              "target_eps": "1.15 元"
+            },
+            {
+              "scenario": "悲观",
+              "target_price": "8.7 元",
+              "target_eps": "0.87 元"
+            }
+          ],
+          "valuation_section": {
+            "heading": "三情景估值",
+            "start_line": 140,
+            "end_line": 159,
+            "markdown": "#### 三情景估值\n\n假设 3 年期，乐观/中性/悲观 EPS 年增速为 +15%/+10%/0%，期末 PE 为 20x/16x/10x。\n\n| 情景 | 3 年后 EPS | 3 年后目标价 | 相对 20 元涨跌 | 以 10%必要回报率折现至今 |\n|---|---:|---:|---:|---:|\n| 乐观 | 1.32 元 | 26.4 元 | +31.8% | 19.80 元 |\n| 中性 | 1.15 元 | 18.5 元 | -7.7% | 13.87 元 |\n| 悲观 | 0.87 元 | 8.7 元 | -56.7% | 6.51 元 |\n\n按乐观/中性/悲观 25%/50%/25% 粗略加权并按 10%折现，当前价值约 **13.51 元**。概率不是事实，但它揭示一件事：**20 元只有在乐观情景兑现时才勉强合理，没有错误容忍空间。**\n\n本报告采用的基本面观察价格：\n\n- **激进型：16 元以下**，仍需接受现金流和周期波动。\n- **稳健型：14 元以下**，接近中性情景折现值。\n- **保守型：11 元以下**，为订单兑现或估值判断错误预留更大缓冲。\n\n**评分：★★☆☆☆。价格关不通过。**"
+          },
+          "price_status": "已提取三情景",
+          "title": "平高电气（600312.SH）买入前 Checklist 研究报告",
+          "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+          "report_link": "平高电气/平高电气-investment-checklist-20260811.md"
+        },
         {
           "data_cutoff": "2026-07-07",
           "action": "观察",
@@ -16881,68 +16920,71 @@
           "report_link": "平高电气/平高电气-earnings-2026Q1-李录.md"
         }
       ],
-      "report_history_count": 6,
+      "report_history_count": 7,
       "checklist": {
         "company": "平高电气",
         "ticker": "600312.SH",
         "market": "A股",
-        "report_path": "reports/平高电气/巴菲特Checklist-平高电气.md",
-        "report_link": "reports/平高电气/巴菲特Checklist-平高电气.md",
-        "title": "巴菲特价值投资买入前 Checklist：平高电气（600312.SH）",
+        "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+        "report_link": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+        "title": "平高电气（600312.SH）买入前 Checklist 研究报告",
         "source_type": "standalone",
         "decision_contract": null,
         "status": "灰色地带",
-        "passed_count": 2,
+        "passed_count": 4,
         "total_gates": 6,
         "gates": [
           {
             "name": "好生意",
             "score": "★★★☆☆",
-            "result": "经济特征改善，但 ROE、毛利率、FCF 稳定性都不到“伟大生意”。",
-            "reason": ""
+            "result": "勉强通过",
+            "reason": "利润率改善、负债低；ROE 和现金流稳定性不够优秀。"
           },
           {
             "name": "护城河",
             "score": "★★★☆☆",
-            "result": "有技术资质、工程经验、央企体系协同与转换成本，但客户集中、招投标压价和同业竞争限制定价权。",
-            "reason": ""
+            "result": "勉强通过",
+            "reason": "资质、技术、工程记录和客户信任构成壁垒，但缺乏强定价权。"
           },
           {
             "name": "管理层",
             "score": "★★★☆☆",
-            "result": "国资央企体系，诚信/治理未见红线；但非创始人所有者心态，关联交易与集团体系需长期盯。",
-            "reason": ""
-          },
-          {
-            "name": "安全边际",
-            "score": "★★☆☆☆",
-            "result": "当前约20x TTM PE、2.05x PB、FCF yield 2.14%，不便宜。三情景中性目标价低于现价。",
-            "reason": ""
-          },
-          {
-            "name": "仓位纪律",
-            "score": "★★★☆☆",
-            "result": "若只是押特高压景气，容易 FOMO；只能作为观察/小仓研究对象，不能重仓“拍脑袋买”。",
-            "reason": ""
+            "result": "通过",
+            "reason": "治理未见诚信红线，分红改善；央企治理、关联交易和同业竞争仍需盯。"
           },
           {
             "name": "能力圈",
             "score": "★★★★☆",
             "result": "待复核",
-            "reason": "评分：★★★★☆。 生意能看懂，但不是“傻瓜都能经营”的简单消费品。"
+            "reason": "评分：★★★★☆。 不触发能力圈硬性否决。"
+          },
+          {
+            "name": "仓位纪律",
+            "score": "★★★☆☆",
+            "result": "待复核",
+            "reason": "评分：★★★☆☆。纪律关不通过。 问题不在公司马上会坏，而在投资者可能为好消息支付过高价格。"
           }
         ],
         "hard_veto": false,
         "hard_veto_label": "未触发/未发现",
-        "mirror_test": "待复核",
+        "mirror_test": "未通过",
         "action": "待复核",
-        "summary": "❓ 灰色地带 — 不通过买入 Checklist，但可以进入观察/深度研究阶段",
-        "data_cutoff": "2026-07-07",
+        "summary": "❓ 灰色地带——未通过买入 Checklist，可以继续深度跟踪",
+        "data_cutoff": "2026-08-11",
         "report_date": null,
         "next_review_date": null,
         "confidence": "待复核",
         "invalidation_triggers": "",
         "history": [
+          {
+            "status": "灰色地带",
+            "action": "待复核",
+            "data_cutoff": "2026-08-11",
+            "report_date": null,
+            "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+            "report_link": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+            "source_type": "standalone"
+          },
           {
             "status": "灰色地带",
             "action": "待复核",
@@ -32344,9 +32386,106 @@
       ],
       "report_history_count": 1,
       "checklist": {
-        "status": "missing",
-        "gates": [],
-        "history": []
+        "company": "顺丰控股股份有限公司",
+        "ticker": "002352.SZ",
+        "market": "A股",
+        "report_path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+        "report_link": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+        "title": "顺丰控股（002352.SZ）巴菲特买入前 Checklist",
+        "source_type": "standalone",
+        "decision_contract": {
+          "version": "1",
+          "report_type": "company-checklist",
+          "company": "顺丰控股股份有限公司",
+          "ticker": "002352.SZ",
+          "market": "A股",
+          "report_completed_at": "2026-08-11",
+          "data_cutoff": "2026-08-10",
+          "action": "观察",
+          "summary": "灰色地带，护城河较强但当前A股安全边际一般",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "30至34元小额试探",
+              "price_range": "30至34元"
+            },
+            {
+              "stance": "稳健型",
+              "action": "27至30元分批研究买入",
+              "price_range": "27至30元"
+            },
+            {
+              "stance": "保守型",
+              "action": "23至26元重点研究买入",
+              "price_range": "23至26元"
+            }
+          ],
+          "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负，经营现金流低于资本支出",
+          "next_review_date": "2026-08-31",
+          "confidence": "中"
+        },
+        "status": "否决",
+        "passed_count": 5,
+        "total_gates": 6,
+        "gates": [
+          {
+            "name": "能力圈",
+            "score": "★★★★☆",
+            "result": "通过",
+            "reason": ""
+          },
+          {
+            "name": "好生意",
+            "score": "★★☆☆☆",
+            "result": "未完全通过",
+            "reason": ""
+          },
+          {
+            "name": "护城河",
+            "score": "★★★★☆",
+            "result": "通过",
+            "reason": ""
+          },
+          {
+            "name": "管理层",
+            "score": "★★★☆☆",
+            "result": "通过但保留意见",
+            "reason": ""
+          },
+          {
+            "name": "安全边际",
+            "score": "★★★☆☆",
+            "result": "勉强通过",
+            "reason": ""
+          },
+          {
+            "name": "仓位纪律",
+            "score": "★★★☆☆",
+            "result": "待个人确认",
+            "reason": ""
+          }
+        ],
+        "hard_veto": true,
+        "hard_veto_label": "已触发",
+        "mirror_test": "通过",
+        "action": "观察",
+        "summary": "灰色地带，护城河较强但当前A股安全边际一般",
+        "data_cutoff": "2026-08-10",
+        "report_date": "2026-08-11",
+        "next_review_date": "2026-08-31",
+        "confidence": "中",
+        "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负，经营现金流低于资本支出",
+        "history": [
+          {
+            "status": "否决",
+            "action": "观察",
+            "data_cutoff": "2026-08-10",
+            "report_date": "2026-08-11",
+            "report_path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+            "report_link": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+            "source_type": "standalone"
+          }
+        ]
       },
       "technical_analysis": {
         "status": "missing",
