@@ -1454,8 +1454,10 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
   const list = document.createElement("div");
   list.className = "sentiment-news-list";
   for (const item of items) {
+    const scoreEligible = item.score_eligible !== false;
+    const included = item.included !== false && scoreEligible;
     const row = document.createElement("article");
-    row.className = `sentiment-news-item ${item.included === false ? "filtered" : "included"}`;
+    row.className = `sentiment-news-item ${included ? "included" : "filtered"}`;
     const header = document.createElement("div");
     header.className = "sentiment-news-head";
     const titleNode = item.url ? document.createElement("a") : document.createElement("strong");
@@ -1467,15 +1469,19 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
     }
     header.append(titleNode);
     const inclusion = document.createElement("span");
-    inclusion.className = `sentiment-news-tag ${item.included === false ? "filtered" : "included"}`;
-    inclusion.textContent = item.included === false ? "未纳入评分" : "已纳入评分";
+    inclusion.className = `sentiment-news-tag ${included ? "included" : "filtered"}`;
+    inclusion.textContent = !scoreEligible
+      ? "仅辅助"
+      : item.included === false
+      ? "相关性不足"
+      : "已纳入评分";
     header.append(inclusion);
     row.append(header);
 
     const meta = document.createElement("div");
     meta.className = "sentiment-news-meta";
     const dateText = item.published_at ? String(item.published_at).replace("T", " ").slice(0, 16) : "日期未知";
-    meta.textContent = `${dateText} · ${item.publisher || "未知来源"} · ${item.event_type || "一般新闻"}`;
+    meta.textContent = `${dateText} · ${item.publisher || "未知来源"} · 来源${item.source_tier || "?"} ${item.source_tier_label || "待复核"} · ${item.event_type || "一般新闻"}`;
     row.append(meta);
 
     if (item.summary) {
@@ -1487,7 +1493,9 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
 
     const metrics = document.createElement("div");
     metrics.className = "sentiment-news-metrics";
-    metrics.textContent = item.included === false
+    metrics.textContent = !scoreEligible
+      ? `${item.filter_reason || "来源等级不进入评分"} · 核验状态：${item.verification_status || "待复核"}`
+      : item.included === false
       ? `${item.filter_reason || "未达到相关性阈值"} · 相关性 ${sentimentScoreText(Number(item.relevance) * 100)}%`
       : `方向 ${Number(item.direction || 0) > 0 ? "正面" : Number(item.direction || 0) < 0 ? "负面" : "中性"} · 相关性 ${sentimentScoreText(Number(item.relevance) * 100)}% · 时间权重 ${sentimentScoreText(Number(item.time_weight) * 100)}%`;
     row.append(metrics);
@@ -1648,9 +1656,10 @@ function renderSentimentDetail(item) {
   summary.className = "kv-grid sentiment-summary";
   const industry = record.industry_sentiment || record.industry_detail;
   const rows = [
-    ["综合情绪", `${sentimentScoreText(record.combined_sentiment?.score_0_100)} · ${sentimentStateText(record.combined_sentiment)}`],
+    ["综合情绪（个股评分）", `${sentimentScoreText(record.combined_sentiment?.score_0_100)} · ${sentimentStateText(record.combined_sentiment)}`],
     ["个股新闻", `${sentimentScoreText(record.news_sentiment?.score_0_100)} · ${sentimentStateText(record.news_sentiment)}`],
-    ["行业情绪", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
+    ["行业情绪（辅助）", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
+    ["新闻池", `可评分 ${record.news_sentiment?.score_article_count || 0} · 辅助 ${record.news_sentiment?.auxiliary_article_count || 0}`],
     ["新闻时效", sentimentRecencyText(record.news_sentiment)],
     ["情绪数据截止", state.sentimentSnapshot?.data_cutoff || "待复核"],
   ];
@@ -1664,14 +1673,14 @@ function renderSentimentDetail(item) {
   card.append(summary);
   const note = document.createElement("p");
   note.className = "source-note";
-  note.textContent = "综合情绪仅作为研究辅助；旧闻会按时间衰减，未纳入评分的新闻仅供核查，不会影响分数。";
+  note.textContent = "综合情绪只使用个股可评分新闻；行业新闻、市场温度、聚合资讯和社区线索均为辅助，不会影响分数。";
   card.append(note);
   els.detailBody.append(card);
 
   els.detailBody.append(renderNewsList("个股新闻 · 全部抓取结果", record.news_sentiment, {
     emptyText: record.news_sentiment?.state || "暂无个股新闻",
   }));
-  els.detailBody.append(renderNewsList("行业新闻 · 全部抓取结果", record.industry_detail, {
+  els.detailBody.append(renderNewsList("行业/相关新闻 · 全部抓取结果（仅辅助）", record.industry_detail, {
     emptyText: industry?.state || "暂无行业新闻",
   }));
 }

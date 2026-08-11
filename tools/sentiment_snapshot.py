@@ -50,9 +50,74 @@ SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
 EASTMONEY_SEARCH_URL = "https://search-api-web.eastmoney.com/search/jsonp"
 EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
+CNINFO_TOPSEARCH_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
+CNINFO_ANNOUNCEMENT_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
+CNINFO_STATIC_BASE = "https://static.cninfo.com.cn"
 TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q="
 ZZSHARE_BASE_URL = "https://api.zizizaizai.com"
 USER_AGENT = "ai-berkshire-sentiment-snapshot/1.0"
+CNINFO_HEADERS = {
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Origin": "https://www.cninfo.com.cn",
+    "Referer": "https://www.cninfo.com.cn/",
+}
+
+OFFICIAL_SOURCE_TERMS = (
+    "巨潮资讯",
+    "上海证券交易所",
+    "上交所",
+    "深圳证券交易所",
+    "深交所",
+    "北京证券交易所",
+    "北交所",
+    "香港交易所",
+    "港交所",
+    "中国证监会",
+    "证监会",
+    "公司公告",
+    "上市公司公告",
+    "公司官网",
+    "投资者关系",
+)
+OFFICIAL_SOURCE_DOMAINS = (
+    "cninfo.com.cn",
+    "sse.com.cn",
+    "szse.cn",
+    "bse.cn",
+    "hkexnews.hk",
+)
+PROFESSIONAL_SOURCE_TERMS = (
+    "财联社",
+    "证券时报",
+    "中国证券报",
+    "上海证券报",
+    "第一财经",
+    "21世纪",
+    "南方财经",
+    "每日经济新闻",
+    "界面新闻",
+    "经济观察",
+    "新华财经",
+    "人民日报",
+    "新华社",
+    "央广财经",
+    "中国基金报",
+    "金融时报",
+    "证券日报",
+    "中国经营报",
+    "澎湃新闻",
+)
+COMMUNITY_SOURCE_TERMS = (
+    "雪球",
+    "股吧",
+    "微博",
+    "微信公众号",
+    "论坛",
+    "自媒体",
+    "抖音",
+    "快手",
+    "小红书",
+)
 
 POSITIVE_TERMS: dict[str, float] = {
     "上调": 1.5,
@@ -207,6 +272,67 @@ def clean_text(value: Any, limit: int | None = None) -> str:
     return text[:limit] if limit else text
 
 
+def classify_news_source(article: dict[str, Any]) -> dict[str, Any]:
+    """Assign a source tier and an explicit scoring permission.
+
+    Eastmoney is treated as a discovery/aggregation channel. A professional
+    publisher surfaced through Eastmoney is still secondary evidence; it may
+    enter the score, but it is labelled as a single-source secondary report.
+    Unknown aggregators and community posts remain visible as auxiliary context
+    and never enter the score.
+    """
+    publisher = clean_text(article.get("publisher"))
+    url = clean_text(article.get("url")).casefold()
+    publisher_folded = publisher.casefold()
+    if any(domain in url for domain in OFFICIAL_SOURCE_DOMAINS) or any(
+        term.casefold() in publisher_folded for term in OFFICIAL_SOURCE_TERMS
+    ):
+        return {
+            "source_tier": "A",
+            "source_tier_label": "一手披露",
+            "score_eligible": True,
+            "verification_status": "official_source",
+            "source_via": "official_or_exchange",
+        }
+    if any(term.casefold() in publisher_folded for term in PROFESSIONAL_SOURCE_TERMS):
+        return {
+            "source_tier": "B",
+            "source_tier_label": "专业媒体",
+            "score_eligible": True,
+            "verification_status": "single_source_secondary",
+            "source_via": "eastmoney_aggregator" if "eastmoney.com" in url else "publisher_direct",
+        }
+    if any(term.casefold() in publisher_folded for term in COMMUNITY_SOURCE_TERMS):
+        return {
+            "source_tier": "D",
+            "source_tier_label": "社区/传闻",
+            "score_eligible": False,
+            "verification_status": "unverified",
+            "source_via": "community_or_social",
+        }
+    return {
+        "source_tier": "C",
+        "source_tier_label": "聚合/其他媒体",
+        "score_eligible": False,
+        "verification_status": "single_source_unverified",
+        "source_via": "eastmoney_aggregator" if "eastmoney.com" in url else "unknown_channel",
+    }
+
+
+def mark_auxiliary_article(article: dict[str, Any]) -> dict[str, Any]:
+    """Keep a non-scoreable article visible without asking a model to score it."""
+    return {
+        **article,
+        "direction": None,
+        "impact": None,
+        "relevance": None,
+        "confidence": None,
+        "event_type": detect_event_type(f"{article.get('title', '')} {article.get('summary', '')}"),
+        "scoring_method": "not_scored:source_policy",
+        "score_exclusion_reason": f"来源等级{article.get('source_tier', 'C')}：仅作为辅助，不计入评分",
+    }
+
+
 def clamp(value: float, lower: float, upper: float) -> float:
     return min(upper, max(lower, value))
 
@@ -253,6 +379,28 @@ def http_json(
     if not isinstance(payload, dict):
         raise SentimentError(f"provider returned non-object JSON: {url}")
     return payload
+
+
+def http_form_json(
+    url: str,
+    fields: dict[str, Any],
+    *,
+    timeout: int = 20,
+    attempts: int = 3,
+) -> Any:
+    """POST form fields to a fixed provider and decode its JSON response."""
+    body = urlencode({key: str(value) for key, value in fields.items()}).encode()
+    text = http_text(
+        url,
+        headers=CNINFO_HEADERS,
+        body=body,
+        timeout=timeout,
+        attempts=attempts,
+    )
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise SentimentError(f"provider returned malformed JSON: {url}") from exc
 
 
 def parse_datetime(value: Any) -> datetime | None:
@@ -479,23 +627,249 @@ def parse_eastmoney_search(
             continue
         seen_titles.add(normalized_title)
         article_id = hashlib.sha256(f"{ticker}|{normalized_title}".encode()).hexdigest()[:20]
+        row = {
+            "id": article_id,
+            "company": company,
+            "display_name": display_name,
+            "ticker": ticker,
+            "market": market,
+            "scope": scope,
+            "title": title,
+            "summary": clean_text(item.get("content") or item.get("digest"), 360),
+            "publisher": clean_text(item.get("mediaName") or "东方财富"),
+            "url": clean_text(item.get("url")),
+            "published_at": published.isoformat() if published else None,
+            "source": "Eastmoney search",
+        }
+        row.update(classify_news_source(row))
+        rows.append(row)
+    return rows
+
+
+def fetch_cninfo_stock_identity(ticker: str) -> dict[str, Any] | None:
+    """Resolve CNINFO's internal issuer id for an A-share ticker."""
+    raw = ticker.strip().upper()
+    if not raw.endswith((".SH", ".SZ", ".BJ")):
+        return None
+    code = raw.rsplit(".", 1)[0]
+    payload = http_form_json(
+        CNINFO_TOPSEARCH_URL,
+        {"keyWord": code, "maxNum": 10, "plate": ""},
+    )
+    if not isinstance(payload, list):
+        return None
+    for item in payload:
+        if not isinstance(item, dict) or clean_text(item.get("code")) != code:
+            continue
+        if clean_text(item.get("category")) not in {"A股", ""}:
+            continue
+        org_id = clean_text(item.get("orgId"))
+        if org_id:
+            return item
+    return None
+
+
+def parse_cninfo_announcements(
+    payload: dict[str, Any],
+    *,
+    company: str,
+    display_name: str,
+    ticker: str,
+    cutoff: datetime,
+    lookback_days: int,
+    retrieval_window_type: str,
+) -> list[dict[str, Any]]:
+    """Convert CNINFO's official announcement response to the common article shape."""
+    announcements = payload.get("announcements") or []
+    if not isinstance(announcements, list):
+        return []
+    earliest = cutoff - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for item in announcements:
+        if not isinstance(item, dict):
+            continue
+        title = clean_text(item.get("announcementTitle") or item.get("shortTitle"), 240)
+        announcement_id = clean_text(item.get("announcementId"))
+        if not title or not announcement_id or announcement_id in seen_ids:
+            continue
+        published = parse_datetime(item.get("announcementTime"))
+        if published and (published < earliest or published > cutoff + timedelta(hours=1)):
+            continue
+        adjunct_url = clean_text(item.get("adjunctUrl"))
+        if not adjunct_url:
+            continue
+        seen_ids.add(announcement_id)
+        url = f"{CNINFO_STATIC_BASE.rstrip('/')}/{adjunct_url.lstrip('/')}"
+        article_id = hashlib.sha256(
+            f"{ticker}|cninfo|{announcement_id}".encode()
+        ).hexdigest()[:20]
         rows.append(
             {
                 "id": article_id,
                 "company": company,
                 "display_name": display_name,
                 "ticker": ticker,
-                "market": market,
-                "scope": scope,
+                "market": "A股",
+                "scope": "company",
                 "title": title,
-                "summary": clean_text(item.get("content") or item.get("digest"), 360),
-                "publisher": clean_text(item.get("mediaName") or "东方财富"),
-                "url": clean_text(item.get("url")),
+                "summary": (
+                    f"巨潮资讯官方公告，公告编号 {announcement_id}；"
+                    "原文为官方披露附件。"
+                ),
+                "publisher": "巨潮资讯",
+                "url": url,
                 "published_at": published.isoformat() if published else None,
-                "source": "Eastmoney search",
+                "source": "CNINFO official disclosure",
+                "source_tier": "A",
+                "source_tier_label": "一手披露",
+                "score_eligible": True,
+                "verification_status": "official_source",
+                "source_via": "cninfo_direct",
+                "retrieval_window_days": lookback_days,
+                "retrieval_window_type": retrieval_window_type,
+                "official_announcement_id": announcement_id,
             }
         )
     return rows
+
+
+def fetch_cninfo_company_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    news_limit: int,
+    retrieval_window_type: str,
+) -> list[dict[str, Any]]:
+    """Fetch first-party A-share disclosures directly from CNINFO."""
+    if company.get("market") != "A股":
+        return []
+    identity = fetch_cninfo_stock_identity(company["ticker"])
+    if not identity:
+        return []
+    end_date = (cutoff - timedelta(microseconds=1)).date()
+    start_date = end_date - timedelta(days=lookback_days)
+    payload = http_form_json(
+        CNINFO_ANNOUNCEMENT_URL,
+        {
+            "pageNum": 1,
+            "pageSize": max(1, news_limit),
+            "column": "szse",
+            "tabName": "fulltext",
+            "plate": "",
+            "stock": f"{clean_text(identity.get('code'))},{clean_text(identity.get('orgId'))}",
+            "searchkey": "",
+            "secid": "",
+            "category": "",
+            "trade": "",
+            "seDate": f"{start_date.isoformat()}~{end_date.isoformat()}",
+            "sortName": "",
+            "sortType": "",
+            "isHLtitle": "true",
+        },
+    )
+    if not isinstance(payload, dict):
+        raise SentimentError("CNINFO announcement response is not an object")
+    return parse_cninfo_announcements(
+        payload,
+        company=company["company"],
+        display_name=display_name,
+        ticker=company["ticker"],
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        retrieval_window_type=retrieval_window_type,
+    )
+
+
+def source_priority(article: dict[str, Any]) -> int:
+    """Prefer direct official disclosures when feeds contain the same title."""
+    if article.get("source_via") == "cninfo_direct":
+        return 5
+    return {"A": 4, "B": 3, "C": 2, "D": 1}.get(article.get("source_tier"), 0)
+
+
+def merge_news_sources(articles: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Deduplicate identical headlines across official and discovery feeds."""
+    by_title: dict[str, dict[str, Any]] = {}
+    order: list[str] = []
+    for article in articles:
+        title_key = re.sub(r"\W+", "", clean_text(article.get("title"))).casefold()
+        key = title_key or clean_text(article.get("id"))
+        if not key:
+            continue
+        current = by_title.get(key)
+        if current is None:
+            by_title[key] = article
+            order.append(key)
+            continue
+        if source_priority(article) > source_priority(current):
+            by_title[key] = article
+    return [by_title[key] for key in order]
+
+
+def fetch_company_news_result(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    news_limit: int,
+    fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
+) -> tuple[list[dict[str, Any]], list[str]]:
+    # Exchange display names occasionally contain layout spaces (for example
+    # "五 粮 液"); removing them materially improves exact company searches.
+    query_name = re.sub(r"\s+", "", display_name)
+
+    def fetch_window(
+        window_days: int, window_type: str
+    ) -> tuple[list[dict[str, Any]], list[str]]:
+        rows: list[dict[str, Any]] = []
+        source_errors: list[str] = []
+        try:
+            url = build_eastmoney_search_url(query_name, news_limit)
+            payload = http_text(url)
+            rows.extend(
+                parse_eastmoney_search(
+                    payload,
+                    company=company["company"],
+                    display_name=display_name,
+                    ticker=company["ticker"],
+                    market=company["market"],
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    scope="company",
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            source_errors.append(f"Eastmoney: {exc}")
+        for row in rows:
+            row["retrieval_window_days"] = window_days
+            row["retrieval_window_type"] = window_type
+        try:
+            rows.extend(
+                fetch_cninfo_company_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    news_limit=news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"CNINFO: {exc}")
+        return merge_news_sources(rows), source_errors
+
+    rows, source_errors = fetch_window(lookback_days, "recent")
+    if rows or fallback_lookback_days <= lookback_days:
+        return rows, source_errors
+    # A wider second query is only made when the primary window is empty. This
+    # keeps normal runs cheap while still finding the latest usable headline.
+    fallback_rows, fallback_errors = fetch_window(fallback_lookback_days, "fallback")
+    return fallback_rows, source_errors + fallback_errors
 
 
 def fetch_company_news(
@@ -507,33 +881,16 @@ def fetch_company_news(
     news_limit: int,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
-    # Exchange display names occasionally contain layout spaces (for example
-    # "五 粮 液"); removing them materially improves exact company searches.
-    query_name = re.sub(r"\s+", "", display_name)
-    def fetch_window(window_days: int, window_type: str) -> list[dict[str, Any]]:
-        url = build_eastmoney_search_url(query_name, news_limit)
-        payload = http_text(url)
-        rows = parse_eastmoney_search(
-            payload,
-            company=company["company"],
-            display_name=display_name,
-            ticker=company["ticker"],
-            market=company["market"],
-            cutoff=cutoff,
-            lookback_days=window_days,
-            scope="company",
-        )
-        for row in rows:
-            row["retrieval_window_days"] = window_days
-            row["retrieval_window_type"] = window_type
-        return rows
-
-    rows = fetch_window(lookback_days, "recent")
-    if rows or fallback_lookback_days <= lookback_days:
-        return rows
-    # A wider second query is only made when the primary window is empty. This
-    # keeps normal runs cheap while still finding the latest usable headline.
-    return fetch_window(fallback_lookback_days, "fallback")
+    """Fetch company news while preserving the legacy list-returning API."""
+    rows, _ = fetch_company_news_result(
+        company,
+        display_name=display_name,
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        news_limit=news_limit,
+        fallback_lookback_days=fallback_lookback_days,
+    )
+    return rows
 
 
 def fetch_industry_news(
@@ -719,12 +1076,22 @@ def score_articles(
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Score A-share articles with two models and other articles with the primary model."""
+    """Score eligible articles and preserve ineligible news as auxiliary context."""
     if primary_config is None:
         raise SentimentError("primary model configuration is required")
     if not articles:
         return [], []
-    review_articles = [article for article in articles if article.get("market") == "A股"]
+    scoreable_articles = [
+        article for article in articles if article.get("score_eligible", True)
+    ]
+    auxiliary_articles = [
+        mark_auxiliary_article(article)
+        for article in articles
+        if not article.get("score_eligible", True)
+    ]
+    if not scoreable_articles:
+        return auxiliary_articles, []
+    review_articles = [article for article in scoreable_articles if article.get("market") == "A股"]
     if review_articles and review_config is None:
         raise SentimentError("A-share dual-model scoring requires the review model configuration")
 
@@ -779,12 +1146,12 @@ def score_articles(
             )
         return scores
 
-    primary_scores = collect_scores(articles, primary_config, "primary")
+    primary_scores = collect_scores(scoreable_articles, primary_config, "primary")
     review_scores = (
         collect_scores(review_articles, review_config, "review") if review_articles else {}
     )
     scored: list[dict[str, Any]] = []
-    for article in articles:
+    for article in scoreable_articles:
         primary = dict(primary_scores[article["id"]])
         if article.get("market") != "A股":
             combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
@@ -820,6 +1187,7 @@ def score_articles(
         }
         apply_company_relevance_guard(combined, combined)
         scored.append(combined)
+    scored.extend(auxiliary_articles)
     return scored, []
 
 
@@ -860,7 +1228,17 @@ def aggregate_news(
     primary_lookback_days: int = DEFAULT_PRIMARY_LOOKBACK_DAYS,
 ) -> dict[str, Any]:
     """Aggregate scored headlines with impact, relevance, confidence and decay."""
-    relevant_articles = [article for article in articles if float(article.get("relevance", 0)) >= 0.5]
+    scoreable_articles = [
+        article for article in articles if article.get("score_eligible", True)
+    ]
+    auxiliary_articles = [
+        article for article in articles if not article.get("score_eligible", True)
+    ]
+    relevant_articles = [
+        article
+        for article in scoreable_articles
+        if float(article.get("relevance", 0)) >= 0.5
+    ]
     numerator = 0.0
     denominator = 0.0
     freshness_numerator = 0.0
@@ -870,12 +1248,15 @@ def aggregate_news(
     methods: set[str] = set()
     rendered_items: list[dict[str, Any]] = []
     fallback_articles = [
-        article for article in articles if article.get("retrieval_window_type") == "fallback"
+        article
+        for article in scoreable_articles
+        if article.get("retrieval_window_type") == "fallback"
     ]
     relevant_identity = {id(article) for article in relevant_articles}
 
     def render_news_item(article: dict[str, Any], included: bool) -> dict[str, Any]:
-        decay = time_decay(article, cutoff)
+        is_scoreable = bool(article.get("score_eligible", True))
+        decay = time_decay(article, cutoff) if is_scoreable else None
         return {
             "title": article["title"],
             "summary": article.get("summary", ""),
@@ -883,15 +1264,26 @@ def aggregate_news(
             "url": article["url"],
             "published_at": article["published_at"],
             "event_type": article["event_type"],
-            "direction": article["direction"],
-            "impact": article["impact"],
-            "relevance": article["relevance"],
-            "confidence": article["confidence"],
-            "time_weight": round(decay, 4),
+            "direction": article.get("direction") if is_scoreable else None,
+            "impact": article.get("impact") if is_scoreable else None,
+            "relevance": article.get("relevance") if is_scoreable else None,
+            "confidence": article.get("confidence") if is_scoreable else None,
+            "time_weight": round(decay, 4) if decay is not None else None,
             "retrieval_window_days": article.get("retrieval_window_days", primary_lookback_days),
             "scoring_method": article["scoring_method"],
             "included": included,
-            "filter_reason": None if included else "相关性低于评分阈值 0.5",
+            "source_tier": article.get("source_tier", "未知"),
+            "source_tier_label": article.get("source_tier_label", "来源等级待复核"),
+            "score_eligible": is_scoreable,
+            "verification_status": article.get("verification_status", "待复核"),
+            "source_via": article.get("source_via", "未知渠道"),
+            "filter_reason": (
+                None
+                if included
+                else article.get("score_exclusion_reason")
+                if not is_scoreable
+                else "相关性低于评分阈值 0.5"
+            ),
         }
 
     sorted_articles = sorted(articles, key=lambda item: item.get("published_at") or "", reverse=True)
@@ -925,10 +1317,12 @@ def aggregate_news(
     if not relevant_articles or denominator <= 0:
         if not articles:
             recency_state = "无可用新闻"
+        elif auxiliary_articles and not scoreable_articles:
+            recency_state = "抓到相关新闻，但来源仅供辅助，未计入评分"
         elif fallback_articles:
             recency_state = f"近{primary_lookback_days}日无新消息，近{max(int(article.get('retrieval_window_days', primary_lookback_days)) for article in fallback_articles)}日无有效相关新闻"
         else:
-            recency_state = "抓到新闻但无有效相关新闻"
+            recency_state = "抓到新闻但没有可评分的有效相关新闻"
         return {
             "status": "unavailable",
             "score_0_100": None,
@@ -937,6 +1331,8 @@ def aggregate_news(
             "recency_state": recency_state,
             "confidence": "无数据",
             "article_count": len(articles),
+            "score_article_count": len(scoreable_articles),
+            "auxiliary_article_count": len(auxiliary_articles),
             "relevant_article_count": len(relevant_articles),
             "classified_count": 0,
             "high_impact_negative_count": 0,
@@ -975,6 +1371,8 @@ def aggregate_news(
         "freshness_factor": freshness_factor,
         "confidence": confidence,
         "article_count": len(articles),
+        "score_article_count": len(scoreable_articles),
+        "auxiliary_article_count": len(auxiliary_articles),
         "relevant_article_count": len(relevant_articles),
         "classified_count": classified_count,
         "high_impact_negative_count": high_impact_negative,
@@ -1139,6 +1537,7 @@ def combined_company_score(
     industry: dict[str, Any] | None,
     market_sentiment: dict[str, Any],
 ) -> dict[str, Any]:
+    """Use direct company news only; industry/market news stays contextual."""
     news_score = news.get("score_0_100")
     if news_score is None:
         return {
@@ -1146,15 +1545,8 @@ def combined_company_score(
             "score_0_100": None,
             "state": news.get("recency_state") or news.get("state") or "无数据",
         }
-    components: list[tuple[str, float, float]] = [("个股新闻", 0.70 if market == "A股" else 0.80, float(news_score))]
-    if industry and industry.get("score_0_100") is not None:
-        components.append(("行业新闻", 0.20, float(industry["score_0_100"])))
-    if market == "A股" and market_sentiment.get("score_0_100") is not None:
-        components.append(("A股市场温度", 0.10, float(market_sentiment["score_0_100"])))
-    total_weight = sum(weight for _, weight, _ in components)
-    score = round(sum(weight * value for _, weight, value in components) / total_weight, 2)
-    method = " + ".join(f"{name}{weight / total_weight:.0%}" for name, weight, _ in components)
-    method += "；关注度不计入方向分"
+    score = round(float(news_score), 2)
+    method = "个股新闻100%；行业新闻、市场温度和关注度仅辅助，不计入个股分"
     return {
         "status": "ok",
         "score_0_100": score,
@@ -1229,7 +1621,7 @@ def build_snapshot(
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
             executor.submit(
-                fetch_company_news,
+                fetch_company_news_result,
                 item,
                 display_name=display_names[item["ticker"]],
                 cutoff=cutoff,
@@ -1242,7 +1634,11 @@ def build_snapshot(
         for future in as_completed(futures):
             item = futures[future]
             try:
-                articles_by_ticker[item["ticker"]] = future.result()
+                rows, source_warnings = future.result()
+                articles_by_ticker[item["ticker"]] = rows
+                warnings.extend(
+                    f"{item['ticker']} source warning: {warning}" for warning in source_warnings
+                )
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
                 warnings.append(f"news failed for {item['ticker']}: {exc}")
 
@@ -1352,15 +1748,22 @@ def build_snapshot(
             "fallback_lookback_days": fallback_lookback_days,
             "fallback_only_when_primary_window_is_empty": True,
         },
+        "source_policy": {
+            "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
+            "B": "专业媒体：需视为二手来源，当前可进入评分但明确标注单一来源；重要事件建议人工核对一手公告",
+            "C": "聚合/其他媒体：仅作为辅助，不计入评分",
+            "D": "社区/传闻：仅作为辅助，不计入评分",
+            "company_score_rule": "只使用个股新闻；行业新闻、A股市场温度和关注度只在看板展示，不计入个股综合分",
+        },
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
         "industry_sentiments": industry_details,
         "companies": companies,
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股新闻由主模型和复核模型共同评分；其他市场及行业新闻使用主模型。A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股可评分新闻由主模型和复核模型共同评分；来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
-            "个股综合分默认使用：A股=个股新闻70%+行业新闻20%+市场温度10%；港股=个股新闻80%+行业新闻20%。",
+            "个股综合分只使用个股新闻100%；行业新闻、A股市场温度和同花顺热度只作为辅助，不计入个股分。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
             "同花顺热度只表示关注/拥挤，不作为方向性利好。",
             "该快照是研究辅助数据，不构成投资建议。",

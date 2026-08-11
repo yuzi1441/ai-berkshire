@@ -228,6 +228,96 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(len(articles), 1)
         self.assertEqual(articles[0]["publisher"], "测试媒体")
         self.assertEqual(articles[0]["ticker"], "00700.HK")
+        self.assertEqual(articles[0]["source_tier"], "C")
+        self.assertFalse(articles[0]["score_eligible"])
+
+    def test_source_policy_separates_official_professional_and_auxiliary_sources(self):
+        official = sentiment_snapshot.classify_news_source(
+            {"publisher": "巨潮资讯", "url": "https://www.cninfo.com.cn/notice/1"}
+        )
+        professional = sentiment_snapshot.classify_news_source(
+            {"publisher": "财联社", "url": "https://finance.eastmoney.com/a/1.html"}
+        )
+        community = sentiment_snapshot.classify_news_source(
+            {"publisher": "雪球", "url": "https://xueqiu.com/1"}
+        )
+        self.assertEqual(official["source_tier"], "A")
+        self.assertTrue(official["score_eligible"])
+        self.assertEqual(professional["source_tier"], "B")
+        self.assertTrue(professional["score_eligible"])
+        self.assertEqual(community["source_tier"], "D")
+        self.assertFalse(community["score_eligible"])
+
+    def test_parse_cninfo_official_announcement(self):
+        payload = {
+            "announcements": [
+                {
+                    "announcementId": "1225450021",
+                    "announcementTitle": "国电南瑞关于公司职工董事辞职的公告",
+                    "announcementTime": 1785513600000,
+                    "adjunctUrl": "finalpage/2026-08-01/1225450021.PDF",
+                }
+            ]
+        }
+        articles = sentiment_snapshot.parse_cninfo_announcements(
+            payload,
+            company="国电南瑞",
+            display_name="国电南瑞",
+            ticker="600406.SH",
+            cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+            lookback_days=30,
+            retrieval_window_type="recent",
+        )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_tier"], "A")
+        self.assertEqual(articles[0]["source_via"], "cninfo_direct")
+        self.assertTrue(articles[0]["score_eligible"])
+        self.assertIn("static.cninfo.com.cn/finalpage", articles[0]["url"])
+
+    def test_company_news_prefers_direct_cninfo_duplicate(self):
+        response = {
+            "result": {
+                "cmsArticleWebOld": [
+                    {
+                        "date": "2026-08-10 09:30:00",
+                        "title": "示例公司关于回购股份的公告",
+                        "content": "媒体转载",
+                        "mediaName": "财联社",
+                        "url": "https://finance.eastmoney.com/a/1.html",
+                    }
+                ]
+            }
+        }
+        official = {
+            "title": "示例公司关于回购股份的公告",
+            "publisher": "巨潮资讯",
+            "url": "https://static.cninfo.com.cn/finalpage/2026-08-10/1.PDF",
+            "published_at": "2026-08-10T00:00:00+08:00",
+            "source_tier": "A",
+            "source_tier_label": "一手披露",
+            "score_eligible": True,
+            "source_via": "cninfo_direct",
+            "scoring_method": "not_scored:pending",
+        }
+        company = {"company": "示例公司", "ticker": "600000.SH", "market": "A股"}
+        with patch.object(
+            sentiment_snapshot,
+            "http_text",
+            return_value=f"sentimentCallback({json.dumps(response, ensure_ascii=False)})",
+        ), patch.object(
+            sentiment_snapshot, "fetch_cninfo_company_news", return_value=[official]
+        ):
+            articles = sentiment_snapshot.fetch_company_news(
+                company,
+                display_name="示例公司",
+                cutoff=datetime(2026, 8, 11, tzinfo=SHANGHAI),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+            )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_via"], "cninfo_direct")
+        self.assertEqual(articles[0]["source_tier"], "A")
 
     def test_company_news_falls_back_to_thirty_days_when_recent_window_is_empty(self):
         response = {
@@ -281,6 +371,65 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertIn("近7日无新消息", result["recency_state"])
         self.assertLessEqual(result["score_0_100"], 62.5)
 
+    def test_auxiliary_news_is_visible_but_does_not_change_score(self):
+        cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
+        scoreable = {
+            "title": "公司业绩改善",
+            "publisher": "财联社",
+            "url": "https://finance.eastmoney.com/a/1.html",
+            "published_at": "2026-08-10T20:00:00+08:00",
+            "event_type": "业绩财报",
+            "direction": 0.6,
+            "impact": 2,
+            "relevance": 1.0,
+            "confidence": 0.8,
+            "scoring_method": "llm:primary:test",
+            "score_eligible": True,
+            "source_tier": "B",
+            "source_tier_label": "专业媒体",
+        }
+        auxiliary = sentiment_snapshot.mark_auxiliary_article(
+            {
+                "title": "市场传闻公司将遭遇重大利空",
+                "publisher": "雪球",
+                "url": "https://xueqiu.com/1",
+                "published_at": "2026-08-10T21:00:00+08:00",
+                "source_tier": "D",
+                "source_tier_label": "社区/传闻",
+                "score_eligible": False,
+            }
+        )
+        result = sentiment_snapshot.aggregate_news([scoreable, auxiliary], cutoff)
+        baseline = sentiment_snapshot.aggregate_news([scoreable], cutoff)
+        self.assertEqual(result["score_0_100"], baseline["score_0_100"])
+        self.assertEqual(result["auxiliary_article_count"], 1)
+        self.assertEqual(len(result["captured_items"]), 2)
+        self.assertFalse(result["captured_items"][0]["score_eligible"])
+
+    def test_auxiliary_news_is_not_sent_to_llm(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        article = {
+            "id": "auxiliary-1",
+            "market": "A股",
+            "title": "社区传闻",
+            "summary": "未经证实的消息",
+            "publisher": "雪球",
+            "url": "https://xueqiu.com/1",
+            "published_at": "2026-08-10T21:00:00+08:00",
+            "source_tier": "D",
+            "source_tier_label": "社区/传闻",
+            "score_eligible": False,
+        }
+        with patch.object(sentiment_snapshot, "score_with_llm") as score_with_llm:
+            scored, failures = sentiment_snapshot.score_articles([article], config, config)
+        score_with_llm.assert_not_called()
+        self.assertEqual(failures, [])
+        self.assertEqual(len(scored), 1)
+        self.assertFalse(scored[0]["score_eligible"])
+        self.assertEqual(scored[0]["scoring_method"], "not_scored:source_policy")
+
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {
             "display_name": "示例公司",
@@ -319,15 +468,16 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(score["relevance"], 0.15)
         self.assertEqual(score["confidence"], 0.35)
 
-    def test_combined_score_adds_industry_component(self):
+    def test_combined_score_uses_company_news_only(self):
         result = sentiment_snapshot.combined_company_score(
             "A股",
             {"score_0_100": 70},
             {"score_0_100": 50},
             {"score_0_100": 80},
         )
-        self.assertEqual(result["score_0_100"], 67.0)
-        self.assertIn("行业新闻20%", result["method"])
+        self.assertEqual(result["score_0_100"], 70.0)
+        self.assertIn("个股新闻100%", result["method"])
+        self.assertIn("行业新闻", result["method"])
 
     def test_news_aggregation_applies_direction_and_time_decay(self):
         cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
