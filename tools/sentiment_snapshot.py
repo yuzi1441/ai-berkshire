@@ -55,6 +55,9 @@ EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
 EASTMONEY_GUBA_URL = "https://guba.eastmoney.com/list,{symbol}.html"
 GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search"
 BING_NEWS_RSS_URL = "https://www.bing.com/news/search"
+BAIDU_NEWS_URL = "http://news.baidu.com/ns"
+JINA_READER_PREFIX = "https://r.jina.ai/http://"
+SINA_STOCK_NEWS_URL = "https://vip.stock.finance.sina.com.cn/corp/go.php/vCB_AllNewsStock/symbol/{symbol}.phtml"
 CNINFO_TOPSEARCH_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
 CNINFO_ANNOUNCEMENT_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
 CNINFO_STATIC_BASE = "https://static.cninfo.com.cn"
@@ -910,6 +913,245 @@ def fetch_guba_company_news(
     )
 
 
+def sina_symbol(ticker: str, market: str) -> str | None:
+    """Build Sina Finance's public stock-news symbol for an A-share."""
+    if market != "A股":
+        return None
+    raw = ticker.strip().upper()
+    if raw.endswith(".SH"):
+        return f"sh{raw.removesuffix('.SH').zfill(6)}"
+    if raw.endswith(".SZ"):
+        return f"sz{raw.removesuffix('.SZ').zfill(6)}"
+    if raw.endswith(".BJ"):
+        return f"bj{raw.removesuffix('.BJ').zfill(6)}"
+    return None
+
+
+def parse_sina_stock_news(
+    payload: str,
+    *,
+    company: str,
+    display_name: str,
+    ticker: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Parse Sina's server-rendered individual-stock news list as C-level context."""
+    block_match = re.search(
+        r'<div[^>]+class=["\']tagmain["\'][^>]*>.*?'
+        r'<div[^>]+class=["\']datelist["\'][^>]*>.*?'
+        r'<ul>(.*?)</ul>',
+        payload,
+        re.IGNORECASE | re.DOTALL,
+    )
+    if not block_match:
+        return []
+    block = html.unescape(block_match.group(1)).replace("&nbsp;", " ")
+    item_pattern = re.compile(
+        r"(?P<date>\d{4}[-/]\d{2}[-/]\d{2})\s*"
+        r"(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s*"
+        r"<a\b[^>]*href=[\"'](?P<url>[^\"']+)[\"'][^>]*>"
+        r"(?P<title>.*?)</a>",
+        re.IGNORECASE | re.DOTALL,
+    )
+    earliest = cutoff - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for match in item_pattern.finditer(block):
+        title = clean_text(match.group("title"), 240)
+        url = clean_text(match.group("url"))
+        if not title or not url:
+            continue
+        published = parse_datetime(f"{match.group('date')} {match.group('time')}")
+        if published and (published < earliest or published > cutoff + timedelta(hours=1)):
+            continue
+        key = url or title
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            {
+                "id": hashlib.sha256(f"{ticker}|sina|{key}".encode()).hexdigest()[:20],
+                "company": company,
+                "display_name": display_name,
+                "ticker": ticker,
+                "market": "A股",
+                "scope": "company",
+                "title": title,
+                "summary": "新浪财经个股资讯页面收录；仅作辅助线索，未对内容进行一手核验。",
+                "publisher": "新浪财经",
+                "url": url,
+                "published_at": published.isoformat() if published else None,
+                "source": "Sina Finance individual-stock news",
+                "source_tier": "C",
+                "source_tier_label": "新浪财经辅助资讯",
+                "score_eligible": False,
+                "verification_status": "publisher_auxiliary_unverified",
+                "source_via": "sina_stock_news",
+                "retrieval_window_days": lookback_days,
+                "retrieval_window_type": retrieval_window_type,
+            }
+        )
+        if len(rows) >= max(1, limit):
+            break
+    return rows
+
+
+def fetch_sina_company_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Fetch Sina's public individual-stock news page without model scoring."""
+    symbol = sina_symbol(company["ticker"], company.get("market", ""))
+    if not symbol:
+        return []
+    payload = http_text(
+        SINA_STOCK_NEWS_URL.format(symbol=symbol),
+        headers={"Referer": "https://finance.sina.com.cn/"},
+        timeout=30,
+        encoding="gb18030",
+    )
+    return parse_sina_stock_news(
+        payload,
+        company=company["company"],
+        display_name=display_name,
+        ticker=company["ticker"],
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        limit=limit,
+        retrieval_window_type=retrieval_window_type,
+    )
+
+
+def baidu_news_search_url(query: str) -> str:
+    return f"https://news.baidu.com/ns?{urlencode({'word': query, 'tn': 'news', 'from': 'news', 'cl': '2', 'rn': '20', 'ct': '1'})}"
+
+
+def parse_relative_reader_datetime(value: Any, cutoff: datetime) -> datetime | None:
+    """Parse absolute or relative dates emitted by a text-reader proxy."""
+    text = clean_text(value)
+    if not text:
+        return None
+    absolute = re.search(r"\d{4}[-/]\d{2}[-/]\d{2}(?:\s+\d{1,2}:\d{2})?", text)
+    if absolute:
+        parsed = parse_datetime(absolute.group(0))
+        if parsed:
+            return parsed
+    if "刚刚" in text:
+        return cutoff
+    relative_units = (("分钟", "minutes"), ("小时", "hours"), ("天", "days"))
+    for unit, keyword in relative_units:
+        match = re.search(rf"(\d+)\s*{unit}前", text)
+        if match:
+            return cutoff - timedelta(**{keyword: int(match.group(1))})
+    return None
+
+
+def parse_baidu_reader_news(
+    payload: str,
+    *,
+    company: str,
+    display_name: str,
+    ticker: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    source_page_url: str,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Parse Baidu News markdown returned by a read-only text proxy."""
+    earliest = cutoff - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    pattern = re.compile(r"^\s*###\s+\[([^\]]+)\]\((https?://[^)]+)\)\s*(.*)$")
+    for line in payload.splitlines():
+        match = pattern.match(line)
+        if not match:
+            continue
+        title = clean_text(match.group(1), 240)
+        url = clean_text(match.group(2))
+        metadata = clean_text(match.group(3), 480)
+        if not title or not url:
+            continue
+        published = parse_relative_reader_datetime(metadata, cutoff)
+        if published and (published < earliest or published > cutoff + timedelta(hours=1)):
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        source_links = re.findall(r"\[([^\]]+)\]\(https?://[^)]+\)", metadata)
+        publisher = clean_text(source_links[-1]) if source_links else "百度资讯搜索"
+        rows.append(
+            {
+                "id": hashlib.sha256(f"{ticker}|baidu|{url}".encode()).hexdigest()[:20],
+                "company": company,
+                "display_name": display_name,
+                "ticker": ticker,
+                "market": "A股",
+                "scope": "company",
+                "title": title,
+                "summary": metadata or "百度资讯搜索结果；仅作辅助线索，未对内容进行一手核验。",
+                "publisher": publisher,
+                "url": url,
+                "published_at": published.isoformat() if published else None,
+                "source": "Baidu News search",
+                "source_tier": "C",
+                "source_tier_label": "百度资讯辅助搜索",
+                "score_eligible": False,
+                "verification_status": "reader_proxy_unverified",
+                "source_via": "baidu_news_reader_proxy",
+                "source_page_url": source_page_url,
+                "retrieval_proxy": "r.jina.ai",
+                "retrieval_window_days": lookback_days,
+                "retrieval_window_type": retrieval_window_type,
+            }
+        )
+        if len(rows) >= max(1, limit):
+            break
+    return rows
+
+
+def fetch_baidu_company_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Fetch Baidu News through a read-only text proxy when direct access is challenged."""
+    if company.get("market") != "A股":
+        return []
+    code = company["ticker"].split(".", 1)[0]
+    source_page_url = baidu_news_search_url(f'"{display_name}" {code}')
+    reader_url = f"{JINA_READER_PREFIX}{source_page_url.removeprefix('https://')}"
+    payload = http_text(
+        reader_url,
+        headers={"Accept": "text/plain"},
+        timeout=45,
+        attempts=2,
+    )
+    return parse_baidu_reader_news(
+        payload,
+        company=company["company"],
+        display_name=display_name,
+        ticker=company["ticker"],
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        limit=limit,
+        source_page_url=source_page_url,
+        retrieval_window_type=retrieval_window_type,
+    )
+
+
 def rss_child_text(item: ElementTree.Element, child_name: str) -> str:
     """Read an RSS child while tolerating provider-specific XML namespaces."""
     for child in list(item):
@@ -1055,6 +1297,52 @@ def fetch_rss_company_news(
     return rows
 
 
+def fetch_xueqiu_indexed_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Collect publicly indexed Xueqiu pages without bypassing Xueqiu's WAF."""
+    if company.get("market") != "A股":
+        return []
+    code = company["ticker"].split(".", 1)[0]
+    query = f'"{display_name}" {code} site:xueqiu.com'
+    payload = http_text(
+        rss_search_url("google", query),
+        headers={"Accept": "application/rss+xml,application/xml,text/xml"},
+    )
+    rows = parse_rss_news(
+        payload,
+        company=company["company"],
+        display_name=display_name,
+        ticker=company["ticker"],
+        cutoff=cutoff,
+        lookback_days=lookback_days,
+        source_via="xueqiu_google_index",
+        channel_name="雪球公开索引",
+        limit=limit,
+        retrieval_window_type=retrieval_window_type,
+    )
+    for row in rows:
+        row.update(
+            {
+                "source": "Google News indexed Xueqiu pages",
+                "source_tier": "D",
+                "source_tier_label": "雪球社区/公开索引",
+                "score_eligible": False,
+                "verification_status": "indexed_community_unverified",
+                "source_via": "xueqiu_google_index",
+                "source_page_url": "https://xueqiu.com/",
+                "retrieval_proxy": "Google News RSS",
+            }
+        )
+    return rows
+
+
 def source_priority(article: dict[str, Any]) -> int:
     """Prefer direct official disclosures when feeds contain the same title."""
     if article.get("source_via") == "cninfo_direct":
@@ -1084,11 +1372,34 @@ def merge_news_sources(articles: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def cap_auxiliary_news(
     articles: list[dict[str, Any]], auxiliary_news_limit: int
 ) -> list[dict[str, Any]]:
-    """Keep the scoreable pool intact and cap only auxiliary context rows."""
+    """Keep scoring intact while giving every auxiliary channel coverage."""
     scoreable = [article for article in articles if article.get("score_eligible", True)]
     auxiliary = [article for article in articles if not article.get("score_eligible", True)]
-    auxiliary.sort(key=lambda item: item.get("published_at") or "", reverse=True)
-    return scoreable + auxiliary[: max(1, auxiliary_news_limit)]
+    limit = max(1, auxiliary_news_limit)
+    by_channel: dict[str, list[dict[str, Any]]] = {}
+    for article in auxiliary:
+        channel = clean_text(article.get("source_via")) or "unknown_channel"
+        by_channel.setdefault(channel, []).append(article)
+    for channel_rows in by_channel.values():
+        channel_rows.sort(key=lambda item: item.get("published_at") or "", reverse=True)
+
+    # Round-robin selection prevents a fast, high-volume community feed from
+    # consuming the whole auxiliary budget and hiding Baidu/Sina/RSS signals.
+    selected: list[dict[str, Any]] = []
+    channels = sorted(by_channel)
+    while len(selected) < limit and channels:
+        next_channels: list[str] = []
+        for channel in channels:
+            channel_rows = by_channel[channel]
+            if channel_rows:
+                selected.append(channel_rows.pop(0))
+                if len(selected) >= limit:
+                    break
+            if channel_rows:
+                next_channels.append(channel)
+        channels = next_channels
+    selected.sort(key=lambda item: item.get("published_at") or "", reverse=True)
+    return scoreable + selected
 
 
 def fetch_company_news_result(
@@ -1098,8 +1409,8 @@ def fetch_company_news_result(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
-    auxiliary_news_limit: int = 20,
-    rss_news_limit: int = 10,
+    auxiliary_news_limit: int = 60,
+    rss_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     # Exchange display names occasionally contain layout spaces (for example
@@ -1164,6 +1475,34 @@ def fetch_company_news_result(
                 source_errors.append(f"CNINFO: {exc}")
         try:
             rows.extend(
+                fetch_sina_company_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    limit=auxiliary_news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"Sina Finance: {exc}")
+        try:
+            rows.extend(
+                fetch_baidu_company_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    limit=auxiliary_news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"Baidu News: {exc}")
+        try:
+            rows.extend(
                 fetch_guba_company_news(
                     company,
                     display_name=display_name,
@@ -1190,6 +1529,20 @@ def fetch_company_news_result(
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             if company.get("market") == "A股":
                 source_errors.append(f"RSS: {exc}")
+        try:
+            rows.extend(
+                fetch_xueqiu_indexed_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    limit=rss_news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"Xueqiu indexed search: {exc}")
         return cap_auxiliary_news(merge_news_sources(rows), auxiliary_news_limit), source_errors
 
     rows, source_errors = fetch_window(lookback_days, "recent")
@@ -1208,8 +1561,8 @@ def fetch_company_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
-    auxiliary_news_limit: int = 20,
-    rss_news_limit: int = 10,
+    auxiliary_news_limit: int = 60,
+    rss_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch company news while preserving the legacy list-returning API."""
@@ -1232,7 +1585,7 @@ def fetch_industry_news(
     cutoff: datetime,
     lookback_days: int,
     news_limit: int,
-    auxiliary_news_limit: int = 20,
+    auxiliary_news_limit: int = 60,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch one shared news set per primary industry classification."""
@@ -1919,8 +2272,8 @@ def build_snapshot(
     lookback_days: int,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
-    auxiliary_news_limit: int = 20,
-    rss_news_limit: int = 10,
+    auxiliary_news_limit: int = 60,
+    rss_news_limit: int = 20,
     workers: int,
     markets: set[str] | None = None,
     company_limit: int | None = None,
@@ -2105,13 +2458,17 @@ def build_snapshot(
             "auxiliary_news_limit": auxiliary_news_limit,
             "auxiliary_news_sources": "C/D only; extra auxiliary items are not sent to models",
             "rss_news_limit_per_channel": rss_news_limit,
-            "rss_channels": ["Google News RSS", "Bing News RSS"],
+            "rss_channels": ["Google News RSS", "Bing News RSS", "Google News indexed Xueqiu pages"],
+            "direct_auxiliary_channels": [
+                "Sina Finance individual-stock news",
+                "Baidu News via read-only text proxy",
+            ],
         },
         "source_policy": {
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
             "B": "专业媒体：需视为二手来源，当前可进入评分但明确标注单一来源；重要事件建议人工核对一手公告",
-            "C": "聚合/其他媒体：Google News RSS、Bing News RSS、东方财富平台资讯等，仅作为辅助，不计入评分",
-            "D": "社区/传闻：东方财富股吧普通用户帖子等，仅作为辅助，不计入评分",
+            "C": "聚合/其他媒体：Google/Bing RSS、百度资讯搜索、新浪财经个股资讯、东方财富平台资讯等，仅作为辅助，不计入评分",
+            "D": "社区/传闻：东方财富股吧普通用户帖子、雪球公开索引页面等，仅作为辅助，不计入评分",
             "company_score_rule": "只使用个股新闻；行业新闻、A股市场温度和关注度只在看板展示，不计入个股综合分",
         },
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
@@ -2120,7 +2477,7 @@ def build_snapshot(
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、百度、新浪、雪球公开索引、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分只使用个股新闻100%；行业新闻、A股市场温度和同花顺热度只作为辅助，不计入个股分。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -2150,13 +2507,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--auxiliary-news-limit",
         type=int,
-        default=20,
+        default=60,
         help="C/D auxiliary-news pool size; extra items are displayed but never scored",
     )
     parser.add_argument(
         "--rss-news-limit",
         type=int,
-        default=10,
+        default=20,
         help="per-channel RSS result limit for C-level auxiliary context",
     )
     parser.add_argument("--workers", type=int, default=3)

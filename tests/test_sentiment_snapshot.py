@@ -188,8 +188,8 @@ class SentimentSnapshotTests(unittest.TestCase):
     def test_parse_args_can_limit_snapshot_to_a_shares(self):
         args = sentiment_snapshot.parse_args(["--markets", "A股"])
         self.assertEqual(args.markets, ["A股"])
-        self.assertEqual(args.auxiliary_news_limit, 20)
-        self.assertEqual(args.rss_news_limit, 10)
+        self.assertEqual(args.auxiliary_news_limit, 60)
+        self.assertEqual(args.rss_news_limit, 20)
 
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
@@ -342,6 +342,70 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(articles[0]["source_via"], "google_news_rss")
         self.assertEqual(articles[0]["publisher"], "示例媒体")
 
+    def test_parse_sina_stock_news_marks_items_as_unscored_c_level(self):
+        payload = """
+        <div class="tagmain"><div class="datelist"><ul>
+          &nbsp;&nbsp;2026-08-11&nbsp;15:03&nbsp;
+          <a target='_blank' href='https://finance.sina.com.cn/article/1.shtml'>国电南瑞相关资讯</a>
+        </ul></div></div>
+        """
+        articles = sentiment_snapshot.parse_sina_stock_news(
+            payload,
+            company="国电南瑞",
+            display_name="国电南瑞",
+            ticker="600406.SH",
+            cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+            lookback_days=7,
+            limit=20,
+        )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_via"], "sina_stock_news")
+        self.assertEqual(articles[0]["source_tier"], "C")
+        self.assertFalse(articles[0]["score_eligible"])
+        self.assertIn("finance.sina.com.cn/article/1.shtml", articles[0]["url"])
+
+    def test_parse_baidu_reader_news_marks_items_as_unscored_c_level(self):
+        payload = """
+        Title: 百度资讯搜索_国电南瑞
+        ### [国电南瑞相关报道](https://news.example.com/1) 2天前 [示例媒体](https://news.example.com)
+        """
+        articles = sentiment_snapshot.parse_baidu_reader_news(
+            payload,
+            company="国电南瑞",
+            display_name="国电南瑞",
+            ticker="600406.SH",
+            cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+            lookback_days=7,
+            limit=20,
+            source_page_url="https://news.baidu.com/ns?word=国电南瑞",
+        )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_via"], "baidu_news_reader_proxy")
+        self.assertEqual(articles[0]["source_tier"], "C")
+        self.assertFalse(articles[0]["score_eligible"])
+        self.assertEqual(articles[0]["publisher"], "示例媒体")
+
+    def test_xueqiu_indexed_news_is_d_level_and_unscored(self):
+        rss_payload = """<?xml version="1.0"?><rss version="2.0"><channel>
+          <item><title>国电南瑞雪球讨论</title>
+          <link>https://news.google.com/rss/articles/example</link>
+          <pubDate>Tue, 11 Aug 2026 08:00:00 GMT</pubDate>
+          <source url="https://xueqiu.com">雪球</source>
+          </item>
+        </channel></rss>"""
+        with patch.object(sentiment_snapshot, "http_text", return_value=rss_payload):
+            articles = sentiment_snapshot.fetch_xueqiu_indexed_news(
+                {"company": "国电南瑞", "ticker": "600406.SH", "market": "A股"},
+                display_name="国电南瑞",
+                cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+                lookback_days=7,
+                limit=20,
+            )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_tier"], "D")
+        self.assertFalse(articles[0]["score_eligible"])
+        self.assertEqual(articles[0]["source_via"], "xueqiu_google_index")
+
     def test_company_news_prefers_direct_cninfo_duplicate(self):
         response = {
             "result": {
@@ -378,6 +442,12 @@ class SentimentSnapshotTests(unittest.TestCase):
             sentiment_snapshot, "fetch_guba_company_news", return_value=[]
         ), patch.object(
             sentiment_snapshot, "fetch_rss_company_news", return_value=[]
+        ), patch.object(
+            sentiment_snapshot, "fetch_sina_company_news", return_value=[]
+        ), patch.object(
+            sentiment_snapshot, "fetch_baidu_company_news", return_value=[]
+        ), patch.object(
+            sentiment_snapshot, "fetch_xueqiu_indexed_news", return_value=[]
         ):
             articles = sentiment_snapshot.fetch_company_news(
                 company,
