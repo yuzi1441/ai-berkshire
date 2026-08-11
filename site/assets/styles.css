@@ -334,6 +334,42 @@ tbody tr:last-child td { border-bottom: none; }
 .company-cell { min-width: 120px; }
 .company-name { font-weight: 750; color: var(--ink); }
 .company-meta { color: var(--ink-soft); font-size: 12px; margin-top: 3px; }
+.checklist-badge {
+  display: inline-flex;
+  margin-top: 5px;
+  padding: 2px 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 750;
+}
+.checklist-pass { background: #e4f4ef; color: #0f6b57; border-color: #b7d9cc; }
+.checklist-gray, .checklist-pending { background: #f8f0d8; color: #8a6d1f; border-color: #e2cb85; }
+.checklist-fail, .checklist-veto { background: #f8e6e2; color: #a33e2d; border-color: #e3b1a8; }
+.checklist-summary-card.checklist-fail,
+.checklist-summary-card.checklist-veto { border-left: 4px solid #a33e2d; }
+.checklist-summary-card.checklist-gray,
+.checklist-summary-card.checklist-pending { border-left: 4px solid #c49a32; }
+.checklist-summary-card.checklist-pass { border-left: 4px solid #0f6b57; }
+.checklist-conclusion { margin: 12px 0 0; color: #34453c; line-height: 1.5; }
+.checklist-warning {
+  margin: 12px 0 0;
+  padding: 8px 9px;
+  border-radius: 8px;
+  background: #fff5f2;
+  color: #8e3529;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.checklist-gate-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.checklist-gate { padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fffefb; }
+.checklist-gate-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.checklist-gate-head strong { color: var(--ink); font-size: 12px; }
+.checklist-score { color: var(--brand-deep); font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+.checklist-result { margin-top: 5px; color: var(--ink-soft); font-size: 11px; font-weight: 700; }
+.checklist-gate p { margin: 6px 0 0; color: #34453c; font-size: 11.5px; line-height: 1.4; }
+.checklist-history-list { display: grid; gap: 6px; }
+.checklist-history-row { padding: 7px 8px; border-radius: 7px; background: #f7f3ea; color: #34453c; font-size: 11.5px; }
 .ticker-code { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 
 .ticker-code {
@@ -846,6 +882,7 @@ tbody tr.active .valuation-chip.ready {
 .technical-light-card > span { color: var(--ink-soft); font-size: 11px; }
 .technical-light-card strong { display: inline-flex; margin-left: 6px; padding: 2px 6px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; }
 .technical-light-card p { margin: 7px 0 0; color: #34453c; font-size: 12px; line-height: 1.45; }
+.checklist-empty { border-left: 4px solid #c49a32; }
 
 .valuation-card {
   padding: 0;
@@ -1078,6 +1115,7 @@ tbody tr.active .valuation-chip.ready {
   .app-shell { width: min(100% - 12px, 1440px); }
   .topbar { align-items: flex-start; flex-direction: column; }
   .advice-filter-row { gap: 5px; }
+  .checklist-gate-grid { grid-template-columns: 1fr; }
   .filter-label { width: 100%; margin-bottom: 1px; }
   thead th:nth-child(5),
   tbody td:nth-child(5) { max-width: 140px; }

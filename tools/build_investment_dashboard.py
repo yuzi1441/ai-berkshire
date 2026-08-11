@@ -754,6 +754,156 @@ def extract_decision_contract(lines: list[str]) -> dict[str, Any] | None:
     return None
 
 
+CHECKLIST_GATE_NAMES = (
+    ("能力圈", ("能力圈", "生意是否容易理解", "生意能否理解")),
+    ("好生意", ("好生意", "经济特征")),
+    ("护城河", ("护城河", "竞争优势")),
+    ("管理层", ("管理层", "人的因素")),
+    ("安全边际", ("安全边际", "价格是否足够便宜", "价格与安全边际")),
+    ("仓位纪律", ("仓位纪律", "决策纪律")),
+)
+
+
+def extract_checklist_gates(lines: list[str]) -> list[dict[str, str]]:
+    """Extract the compact six-gate score table from a Checklist report."""
+    gates: list[dict[str, str]] = []
+    for line in lines:
+        cells = markdown_cells(line)
+        if not cells or len(cells) < 2:
+            continue
+        label = clean_markdown(cells[0]).strip()
+        score = clean_markdown(cells[1]).replace(" ", "")
+        if not re.fullmatch(r"[★☆]{5}", score):
+            continue
+        matched_name = None
+        for name, aliases in CHECKLIST_GATE_NAMES:
+            if any(alias in label for alias in aliases):
+                matched_name = name
+                break
+        if not matched_name or any(item["name"] == matched_name for item in gates):
+            continue
+        result = clean_markdown(cells[2]) if len(cells) >= 3 else "待复核"
+        reason = clean_markdown(cells[3]) if len(cells) >= 4 else ""
+        gates.append({"name": matched_name, "score": score, "result": result, "reason": reason})
+    return gates
+
+
+def extract_checklist_status(
+    lines: list[str], contract: dict[str, Any], gates: list[dict[str, str]]
+) -> dict[str, Any]:
+    """Build a display-only Checklist summary without changing the main decision."""
+    text = "\n".join(lines) + "\n" + str(contract.get("summary") or "")
+    hard_veto = bool(
+        re.search(r"(?<!未)触发硬性否决|硬性否决[^\n]{0,40}(?:触发|[1-9]\s*项)", text)
+    )
+    if hard_veto:
+        status = "否决"
+    elif re.search(r"未通过\s*Checklist|Checklist[^\n]{0,20}未通过", text):
+        status = "未通过"
+    elif "灰色地带" in text:
+        status = "灰色地带"
+    elif re.search(r"通过\s*Checklist|Checklist[^\n]{0,20}通过", text):
+        status = "通过"
+    else:
+        status = "待复核"
+
+    passed_match = re.search(r"Checklist[^\n]{0,20}[（(]\s*(\d+)\s*/\s*6", text)
+    passed_count = int(passed_match.group(1)) if passed_match else None
+    if passed_count is None:
+        passed_count = sum(
+            1
+            for gate in gates
+            if "通过" in gate["result"] and "不通过" not in gate["result"]
+        ) or None
+    mirror_match = re.search(r"镜子测试[：:]\s*(通过|未通过|不通过)", text)
+    mirror_status = mirror_match.group(1) if mirror_match else "待复核"
+    return {
+        "status": status,
+        "passed_count": passed_count,
+        "total_gates": 6,
+        "gates": gates,
+        "hard_veto": hard_veto,
+        "hard_veto_label": "已触发" if hard_veto else "未触发/未发现",
+        "mirror_test": mirror_status,
+        "action": contract.get("action") or "待复核",
+        "summary": contract.get("summary") or "",
+        "data_cutoff": contract.get("data_cutoff"),
+        "report_date": contract.get("report_completed_at"),
+        "next_review_date": contract.get("next_review_date"),
+        "confidence": contract.get("confidence") or "待复核",
+        "invalidation_triggers": contract.get("invalidation_triggers") or "",
+    }
+
+
+def checklist_record(
+    report_path: Path, repo_root: Path, registry: list[dict[str, Any]]
+) -> dict[str, Any] | None:
+    """Read a Checklist report as an auxiliary layer, never as a decision candidate."""
+    text = report_path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+    contract = extract_decision_contract(lines)
+    if not contract or contract.get("report_type") != "company-checklist":
+        return None
+    company = normalize_company_name(str(contract.get("company") or ""))
+    ticker = contract.get("ticker")
+    registry_entry = registry_company(registry, company, ticker)
+    if registry_entry:
+        company = str(registry_entry["canonical_name"])
+    relative = report_path.relative_to(repo_root)
+    market = contract.get("market") or market_for_ticker(ticker, None)
+    gates = extract_checklist_gates(lines)
+    return {
+        "company": company,
+        "ticker": ticker,
+        "market": market,
+        "report_path": relative.as_posix(),
+        "report_link": relative.as_posix(),
+        "title": extract_title(lines, report_path.stem),
+        "decision_contract": contract,
+        **extract_checklist_status(lines, contract, gates),
+    }
+
+
+def checklist_rank(record: dict[str, Any]) -> tuple[str, str, str]:
+    return (
+        record.get("data_cutoff") or "0000-00-00",
+        record.get("report_date") or "0000-00-00",
+        record.get("report_path") or "",
+    )
+
+
+def attach_checklists(
+    decisions: list[dict[str, Any]], records: list[dict[str, Any]]
+) -> None:
+    """Attach the latest Checklist and its compact history by canonical company."""
+    grouped: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        grouped[str(record["company"])].append(record)
+    for decision in decisions:
+        candidates = grouped.get(str(decision["company"]), [])
+        if not candidates and decision.get("ticker"):
+            candidates = [
+                record for record in records if record.get("ticker") == decision.get("ticker")
+            ]
+        if not candidates:
+            decision["checklist"] = {"status": "missing", "gates": [], "history": []}
+            continue
+        ordered = sorted(candidates, key=checklist_rank, reverse=True)
+        latest = ordered[0].copy()
+        latest["history"] = [
+            {
+                "status": item.get("status"),
+                "action": item.get("action"),
+                "data_cutoff": item.get("data_cutoff"),
+                "report_date": item.get("report_date"),
+                "report_path": item.get("report_path"),
+                "report_link": item.get("report_link"),
+            }
+            for item in ordered
+        ]
+        decision["checklist"] = latest
+
+
 def is_markdown_table_separator(line: str) -> bool:
     """Return True only for a Markdown table's header separator row."""
     stripped = line.strip()
@@ -3103,8 +3253,8 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
         "> 买入后论文追踪和异动报告仅进入持仓跟踪层，不替换基本面结论、分层价格或技术面快照。",
         "> 仅供学习与研究，不构成投资建议。",
         "",
-        "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 技术面 | 历史研报数 | 报告 |",
-        "|---|---|---|---|---|---|---:|---|",
+        "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 技术面 | Checklist | 历史研报数 | 报告 |",
+        "|---|---|---|---|---|---|---|---:|---|",
     ]
     for item in decisions:
         market_ticker = " / ".join(part for part in (item["market"], item.get("ticker")) if part)
@@ -3117,15 +3267,23 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
             technical_label = "待复核技术报告"
         else:
             technical_label = "未生成技术面报告"
+        checklist = item.get("checklist") or {}
+        if checklist.get("status") == "missing":
+            checklist_label = "未生成"
+        else:
+            checklist_label = checklist.get("status", "待复核")
+            if checklist.get("passed_count") is not None:
+                checklist_label += f"（{checklist['passed_count']}/6）"
         layered = item.get("conclusion_summary") or investor_stances_summary(item.get("investor_stances") or []) or item.get("action")
         lines.append(
-            "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {technical} | {history} | [[{link}|{title}]] |".format(
+            "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {technical} | {checklist} | {history} | [[{link}|{title}]] |".format(
                 company=markdown_cell(str(item["company"])),
                 market_ticker=markdown_cell(market_ticker),
                 cutoff=markdown_cell(item.get("data_cutoff") or "待复核"),
                 layered=markdown_cell(layered),
                 action=markdown_cell(item["action"]),
                 technical=markdown_cell(technical_label),
+                checklist=markdown_cell(checklist_label),
                 history=item.get("report_history_count", len(item.get("report_history", []))),
                 link=link,
                 title=markdown_cell(item["title"]),
@@ -3164,6 +3322,37 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
                 ) + " |",
             ]
         )
+
+    lines.extend(["", "## 买入前 Checklist 附录", ""])
+    lines.append("> Checklist 是买入前筛选闸门，不覆盖基本面主报告的结论、价格计划或综合操作归类。")
+    for item in decisions:
+        checklist = item.get("checklist") or {}
+        lines.extend(["", f"### {item['company']}", ""])
+        if checklist.get("status") == "missing":
+            lines.append("未生成 Checklist 报告。")
+            continue
+        passed = checklist.get("passed_count")
+        passed_text = f"{passed}/6" if passed is not None else "待复核"
+        lines.append(
+            f"结论：**{checklist.get('status', '待复核')}**（{passed_text}）；"
+            f"硬性否决：{checklist.get('hard_veto_label', '待复核')}；"
+            f"镜子测试：{checklist.get('mirror_test', '待复核')}；"
+            f"数据截止：{checklist.get('data_cutoff') or '待复核'}；"
+            f"下次复核：{checklist.get('next_review_date') or '未安排'}。"
+        )
+        lines.extend(["", "| 关卡 | 评分 | 结果 | 核心理由 |", "|---|---|---|---|"])
+        for gate in checklist.get("gates") or []:
+            lines.append(
+                "| {name} | {score} | {result} | {reason} |".format(
+                    name=markdown_cell(gate.get("name")),
+                    score=markdown_cell(gate.get("score")),
+                    result=markdown_cell(gate.get("result")),
+                    reason=markdown_cell(gate.get("reason")),
+                )
+            )
+        if checklist.get("report_path"):
+            link = str(checklist["report_path"]).rsplit(".", 1)[0].removeprefix("reports/")
+            lines.append(f"\n来源：[[{link}|打开 Checklist 报告]]")
 
     lines.extend(["", "## 历史研报结论", ""])
     lines.append("> 每家公司按数据截止日从新到旧列出历次基本面研报结论。价格细节见各期报告原文；旧报告价格不会自动延续到新报告。")
@@ -3322,7 +3511,13 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         for report_path in report_paths
         if (record := candidate_record(report_path, repo_root, registry, overrides)) is not None
     ]
+    checklist_records = [
+        record
+        for report_path in report_paths
+        if (record := checklist_record(report_path, repo_root, registry)) is not None
+    ]
     decisions = select_decisions(records, overrides)
+    attach_checklists(decisions, checklist_records)
     technical_snapshots = [
         snapshot
         for report_path in report_paths
@@ -3335,14 +3530,16 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "schema_version": 1,
         "generated_at": generated_at,
         "record_count": len(records),
+        "checklist_count": len(checklist_records),
         "records": records,
     }
     board = {
-        "schema_version": 5,
+        "schema_version": 6,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
+        "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,
         "decisions": decisions,
     }
