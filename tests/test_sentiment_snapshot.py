@@ -189,6 +189,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         args = sentiment_snapshot.parse_args(["--markets", "A股"])
         self.assertEqual(args.markets, ["A股"])
         self.assertEqual(args.auxiliary_news_limit, 20)
+        self.assertEqual(args.rss_news_limit, 10)
 
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
@@ -314,6 +315,33 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(articles[0]["source_via"], "eastmoney_guba")
         self.assertIn("guba.eastmoney.com/news,600406,1001.html", articles[0]["url"])
 
+    def test_parse_rss_news_marks_google_or_bing_results_as_c_level(self):
+        payload = """<?xml version="1.0"?><rss version="2.0"><channel>
+        <item>
+          <title>国电南瑞相关市场资讯</title>
+          <link>https://news.example.com/1</link>
+          <pubDate>Tue, 11 Aug 2026 08:00:00 GMT</pubDate>
+          <source url="https://news.example.com">示例媒体</source>
+          <description>搜索聚合摘要</description>
+        </item>
+        </channel></rss>"""
+        articles = sentiment_snapshot.parse_rss_news(
+            payload,
+            company="国电南瑞",
+            display_name="国电南瑞",
+            ticker="600406.SH",
+            cutoff=datetime(2026, 8, 12, tzinfo=SHANGHAI),
+            lookback_days=7,
+            source_via="google_news_rss",
+            channel_name="Google News",
+            limit=10,
+        )
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0]["source_tier"], "C")
+        self.assertFalse(articles[0]["score_eligible"])
+        self.assertEqual(articles[0]["source_via"], "google_news_rss")
+        self.assertEqual(articles[0]["publisher"], "示例媒体")
+
     def test_company_news_prefers_direct_cninfo_duplicate(self):
         response = {
             "result": {
@@ -348,6 +376,8 @@ class SentimentSnapshotTests(unittest.TestCase):
             sentiment_snapshot, "fetch_cninfo_company_news", return_value=[official]
         ), patch.object(
             sentiment_snapshot, "fetch_guba_company_news", return_value=[]
+        ), patch.object(
+            sentiment_snapshot, "fetch_rss_company_news", return_value=[]
         ):
             articles = sentiment_snapshot.fetch_company_news(
                 company,

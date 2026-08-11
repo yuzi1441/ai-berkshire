@@ -27,12 +27,14 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date, datetime, time as clock_time, timedelta
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Iterable
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
+from xml.etree import ElementTree
 from zoneinfo import ZoneInfo
 
 
@@ -51,6 +53,8 @@ SUPPORTED_MARKETS = {"A股", "港股"}
 EASTMONEY_SEARCH_URL = "https://search-api-web.eastmoney.com/search/jsonp"
 EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
 EASTMONEY_GUBA_URL = "https://guba.eastmoney.com/list,{symbol}.html"
+GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search"
+BING_NEWS_RSS_URL = "https://www.bing.com/news/search"
 CNINFO_TOPSEARCH_URL = "https://www.cninfo.com.cn/new/information/topSearch/query"
 CNINFO_ANNOUNCEMENT_URL = "https://www.cninfo.com.cn/new/hisAnnouncement/query"
 CNINFO_STATIC_BASE = "https://static.cninfo.com.cn"
@@ -906,6 +910,151 @@ def fetch_guba_company_news(
     )
 
 
+def rss_child_text(item: ElementTree.Element, child_name: str) -> str:
+    """Read an RSS child while tolerating provider-specific XML namespaces."""
+    for child in list(item):
+        if child.tag.rsplit("}", 1)[-1] == child_name:
+            return clean_text(child.text)
+    return ""
+
+
+def parse_rss_datetime(value: Any) -> datetime | None:
+    text = clean_text(value)
+    if not text:
+        return None
+    try:
+        parsed = parsedate_to_datetime(text)
+    except (TypeError, ValueError, OverflowError):
+        return parse_datetime(text)
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=SHANGHAI_TIMEZONE)
+    return parsed.astimezone(SHANGHAI_TIMEZONE)
+
+
+def parse_rss_news(
+    payload: str,
+    *,
+    company: str,
+    display_name: str,
+    ticker: str,
+    cutoff: datetime,
+    lookback_days: int,
+    source_via: str,
+    channel_name: str,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Parse Google/Bing News RSS items as unscored C-level context."""
+    try:
+        root = ElementTree.fromstring(payload)
+    except ElementTree.ParseError as exc:
+        raise SentimentError(f"{channel_name} RSS is malformed XML") from exc
+    earliest = cutoff - timedelta(days=lookback_days)
+    rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in root.iter():
+        if item.tag.rsplit("}", 1)[-1] != "item":
+            continue
+        title = rss_child_text(item, "title")
+        link = rss_child_text(item, "link")
+        if not title or not link:
+            continue
+        published = parse_rss_datetime(rss_child_text(item, "pubDate"))
+        if published and (published < earliest or published > cutoff + timedelta(hours=1)):
+            continue
+        key = link or title
+        if key in seen:
+            continue
+        seen.add(key)
+        publisher = rss_child_text(item, "source") or channel_name
+        summary = rss_child_text(item, "description")
+        rows.append(
+            {
+                "id": hashlib.sha256(
+                    f"{ticker}|{source_via}|{key}".encode()
+                ).hexdigest()[:20],
+                "company": company,
+                "display_name": display_name,
+                "ticker": ticker,
+                "market": "A股",
+                "scope": "company",
+                "title": title,
+                "summary": clean_text(summary, 360),
+                "publisher": publisher,
+                "url": link,
+                "published_at": published.isoformat() if published else None,
+                "source": f"{channel_name} RSS",
+                "source_tier": "C",
+                "source_tier_label": "RSS聚合资讯",
+                "score_eligible": False,
+                "verification_status": "rss_aggregator_unverified",
+                "source_via": source_via,
+                "retrieval_window_days": lookback_days,
+                "retrieval_window_type": retrieval_window_type,
+                "rss_channel": channel_name,
+            }
+        )
+        if len(rows) >= max(1, limit):
+            break
+    return rows
+
+
+def rss_search_url(provider: str, query: str) -> str:
+    encoded = quote(query)
+    if provider == "google":
+        return (
+            f"{GOOGLE_NEWS_RSS_URL}?q={encoded}&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"
+        )
+    return f"{BING_NEWS_RSS_URL}?q={encoded}&format=rss&setlang=zh-CN"
+
+
+def fetch_rss_company_news(
+    company: dict[str, str],
+    *,
+    display_name: str,
+    cutoff: datetime,
+    lookback_days: int,
+    limit: int,
+    retrieval_window_type: str = "recent",
+) -> list[dict[str, Any]]:
+    """Fetch multi-provider RSS search results for C-level auxiliary context."""
+    if company.get("market") != "A股":
+        return []
+    code = company["ticker"].split(".", 1)[0]
+    query = f'"{display_name}" {code}'
+    providers = (
+        ("google", "Google News"),
+        ("bing", "Bing News"),
+    )
+    rows: list[dict[str, Any]] = []
+    errors: list[str] = []
+    for provider, channel_name in providers:
+        try:
+            payload = http_text(
+                rss_search_url(provider, query),
+                headers={"Accept": "application/rss+xml,application/xml,text/xml"},
+            )
+            rows.extend(
+                parse_rss_news(
+                    payload,
+                    company=company["company"],
+                    display_name=display_name,
+                    ticker=company["ticker"],
+                    cutoff=cutoff,
+                    lookback_days=lookback_days,
+                    source_via=f"{provider}_news_rss",
+                    channel_name=channel_name,
+                    limit=limit,
+                    retrieval_window_type=retrieval_window_type,
+                )
+            )
+        except (SentimentError, HTTPError, URLError, json.JSONDecodeError, ValueError) as exc:
+            errors.append(f"{channel_name}: {exc}")
+    if not rows and errors:
+        raise SentimentError("; ".join(errors))
+    return rows
+
+
 def source_priority(article: dict[str, Any]) -> int:
     """Prefer direct official disclosures when feeds contain the same title."""
     if article.get("source_via") == "cninfo_direct":
@@ -950,6 +1099,7 @@ def fetch_company_news_result(
     lookback_days: int,
     news_limit: int,
     auxiliary_news_limit: int = 20,
+    rss_news_limit: int = 10,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     # Exchange display names occasionally contain layout spaces (for example
@@ -1026,6 +1176,20 @@ def fetch_company_news_result(
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             if company.get("market") == "A股":
                 source_errors.append(f"Eastmoney Guba: {exc}")
+        try:
+            rows.extend(
+                fetch_rss_company_news(
+                    company,
+                    display_name=display_name,
+                    cutoff=cutoff,
+                    lookback_days=window_days,
+                    limit=rss_news_limit,
+                    retrieval_window_type=window_type,
+                )
+            )
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            if company.get("market") == "A股":
+                source_errors.append(f"RSS: {exc}")
         return cap_auxiliary_news(merge_news_sources(rows), auxiliary_news_limit), source_errors
 
     rows, source_errors = fetch_window(lookback_days, "recent")
@@ -1045,6 +1209,7 @@ def fetch_company_news(
     lookback_days: int,
     news_limit: int,
     auxiliary_news_limit: int = 20,
+    rss_news_limit: int = 10,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch company news while preserving the legacy list-returning API."""
@@ -1055,6 +1220,7 @@ def fetch_company_news(
         lookback_days=lookback_days,
         news_limit=news_limit,
         auxiliary_news_limit=auxiliary_news_limit,
+        rss_news_limit=rss_news_limit,
         fallback_lookback_days=fallback_lookback_days,
     )
     return rows
@@ -1754,6 +1920,7 @@ def build_snapshot(
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
     auxiliary_news_limit: int = 20,
+    rss_news_limit: int = 10,
     workers: int,
     markets: set[str] | None = None,
     company_limit: int | None = None,
@@ -1812,6 +1979,7 @@ def build_snapshot(
                 lookback_days=lookback_days,
                 news_limit=news_limit,
                 auxiliary_news_limit=auxiliary_news_limit,
+                rss_news_limit=rss_news_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): item
             for item in universe
@@ -1936,11 +2104,13 @@ def build_snapshot(
             "score_news_limit": news_limit,
             "auxiliary_news_limit": auxiliary_news_limit,
             "auxiliary_news_sources": "C/D only; extra auxiliary items are not sent to models",
+            "rss_news_limit_per_channel": rss_news_limit,
+            "rss_channels": ["Google News RSS", "Bing News RSS"],
         },
         "source_policy": {
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
             "B": "专业媒体：需视为二手来源，当前可进入评分但明确标注单一来源；重要事件建议人工核对一手公告",
-            "C": "聚合/其他媒体：仅作为辅助，不计入评分",
+            "C": "聚合/其他媒体：Google News RSS、Bing News RSS、东方财富平台资讯等，仅作为辅助，不计入评分",
             "D": "社区/传闻：东方财富股吧普通用户帖子等，仅作为辅助，不计入评分",
             "company_score_rule": "只使用个股新闻；行业新闻、A股市场温度和关注度只在看板展示，不计入个股综合分",
         },
@@ -1950,7 +2120,7 @@ def build_snapshot(
         "warnings": warnings,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股可评分新闻由主模型和复核模型共同评分；来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分只使用个股新闻100%；行业新闻、A股市场温度和同花顺热度只作为辅助，不计入个股分。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -1983,6 +2153,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default=20,
         help="C/D auxiliary-news pool size; extra items are displayed but never scored",
     )
+    parser.add_argument(
+        "--rss-news-limit",
+        type=int,
+        default=10,
+        help="per-channel RSS result limit for C-level auxiliary context",
+    )
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument(
         "--markets",
@@ -2006,6 +2182,7 @@ def main(argv: list[str] | None = None) -> int:
             or args.fallback_lookback_days < 1
             or args.news_limit < 1
             or args.auxiliary_news_limit < 1
+            or args.rss_news_limit < 1
             or args.workers < 1
         ):
             raise SentimentError(
@@ -2030,6 +2207,7 @@ def main(argv: list[str] | None = None) -> int:
             fallback_lookback_days=args.fallback_lookback_days,
             news_limit=args.news_limit,
             auxiliary_news_limit=args.auxiliary_news_limit,
+            rss_news_limit=args.rss_news_limit,
             workers=args.workers,
             markets=set(args.markets),
             company_limit=args.company_limit,
