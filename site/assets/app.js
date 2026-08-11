@@ -202,6 +202,26 @@ function decisionClass(action) {
   }[action] || "";
 }
 
+function checklistForItem(item) {
+  const checklist = item?.checklist;
+  return checklist && checklist.status !== "missing" ? checklist : null;
+}
+
+function checklistStatusClass(status) {
+  return {
+    "通过": "checklist-pass",
+    "灰色地带": "checklist-gray",
+    "未通过": "checklist-fail",
+    "否决": "checklist-veto",
+  }[status] || "checklist-pending";
+}
+
+function checklistBadgeText(checklist) {
+  if (!checklist) return "未检查";
+  const count = checklist.passed_count == null ? "待复核" : `${checklist.passed_count}/6`;
+  return `${checklist.status || "待复核"} · ${count}`;
+}
+
 
 function stanceActionLabel(stance) {
   const blob = `${stance?.action || ""} ${stance?.price_range || ""} ${stance?.note || ""}`;
@@ -1477,6 +1497,132 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
   return card;
 }
 
+function renderChecklistDetail(item) {
+  const checklist = checklistForItem(item);
+  if (!checklist) {
+    const card = document.createElement("section");
+    card.className = "card checklist-empty";
+    card.innerHTML = "<h3>尚未生成买入前 Checklist</h3>";
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "该公司当前没有可识别的 company-checklist 报告；这不会改变基本面主报告的结论。";
+    card.append(note);
+    els.detailBody.append(card);
+    return;
+  }
+
+  const summaryCard = document.createElement("section");
+  summaryCard.className = `card checklist-summary-card ${checklistStatusClass(checklist.status)}`;
+  const heading = document.createElement("h3");
+  heading.textContent = "买入前 Checklist";
+  summaryCard.append(heading);
+  const summary = document.createElement("dl");
+  summary.className = "kv-grid checklist-summary";
+  const passed = checklist.passed_count == null ? "待复核" : `${checklist.passed_count}/${checklist.total_gates || 6} 关`;
+  const fields = [
+    ["Checklist结论", checklist.status || "待复核"],
+    ["通过关数", passed],
+    ["硬性否决", checklist.hard_veto_label || "待复核"],
+    ["镜子测试", checklist.mirror_test || "待复核"],
+    ["研究置信度", checklist.confidence || "待复核"],
+    ["数据截止", checklist.data_cutoff || "待复核"],
+    ["下次复核", checklist.next_review_date || "未安排"],
+  ];
+  for (const [label, value] of fields) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  summaryCard.append(summary);
+  if (checklist.summary) {
+    const note = document.createElement("p");
+    note.className = "checklist-conclusion";
+    note.textContent = checklist.summary;
+    summaryCard.append(note);
+  }
+  if (checklist.hard_veto) {
+    const warning = document.createElement("p");
+    warning.className = "checklist-warning";
+    warning.textContent = "已识别硬性否决信号：Checklist 只允许把该标的挡在新增买入流程外，不会自动改写主研报动作。";
+    summaryCard.append(warning);
+  }
+  els.detailBody.append(summaryCard);
+
+  const gateCard = document.createElement("section");
+  gateCard.className = "card";
+  const gateTitle = document.createElement("h3");
+  gateTitle.textContent = "六关评分";
+  gateCard.append(gateTitle);
+  const grid = document.createElement("div");
+  grid.className = "checklist-gate-grid";
+  for (const gate of checklist.gates || []) {
+    const row = document.createElement("article");
+    row.className = "checklist-gate";
+    const head = document.createElement("div");
+    head.className = "checklist-gate-head";
+    const name = document.createElement("strong");
+    name.textContent = gate.name || "未命名关卡";
+    const score = document.createElement("span");
+    score.className = "checklist-score";
+    score.textContent = gate.score || "待复核";
+    head.append(name, score);
+    row.append(head);
+    const result = document.createElement("div");
+    result.className = "checklist-result";
+    result.textContent = gate.result || "待复核";
+    row.append(result);
+    if (gate.reason) {
+      const reason = document.createElement("p");
+      reason.textContent = gate.reason;
+      row.append(reason);
+    }
+    grid.append(row);
+  }
+  if (!grid.childElementCount) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "报告未提供可结构化的六关评分表，请打开原报告复核。";
+    gateCard.append(empty);
+  } else {
+    gateCard.append(grid);
+  }
+  els.detailBody.append(gateCard);
+
+  const history = checklist.history || [];
+  if (history.length > 1) {
+    const historyCard = document.createElement("section");
+    historyCard.className = "card";
+    const historyTitle = document.createElement("h3");
+    historyTitle.textContent = "Checklist历史";
+    historyCard.append(historyTitle);
+    const list = document.createElement("div");
+    list.className = "checklist-history-list";
+    for (const entry of history) {
+      const line = document.createElement("div");
+      line.className = "checklist-history-row";
+      line.textContent = `${entry.data_cutoff || "待复核"} · ${entry.status || "待复核"} · ${entry.action || "未给出"}`;
+      list.append(line);
+    }
+    historyCard.append(list);
+    els.detailBody.append(historyCard);
+  }
+
+  const footer = document.createElement("p");
+  footer.className = "source-note";
+  footer.textContent = "Checklist 是买入前筛选闸门，不覆盖基本面主研报、技术面或情绪面的独立结论。";
+  if (checklist.report_path) {
+    const link = document.createElement("a");
+    link.href = `${repositoryUrl}${checklist.report_path}`;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "打开完整 Checklist 报告";
+    footer.append(" ", link);
+  }
+  els.detailBody.append(footer);
+}
+
 function renderSentimentDetail(item) {
   const record = sentimentForItem(item);
   const card = document.createElement("section");
@@ -1709,6 +1855,11 @@ function renderRows() {
     const companyTd = document.createElement("td");
     companyTd.className = "company-cell";
     companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.technical_analysis?.status === "ready" ? "已接入技术面" : "技术面待补"}</div>`;
+    const checklist = item.checklist;
+    const checklistBadge = document.createElement("span");
+    checklistBadge.className = `checklist-badge ${checklistStatusClass(checklist?.status)}`;
+    checklistBadge.textContent = checklistBadgeText(checklistForItem(item));
+    companyTd.append(checklistBadge);
     tr.append(companyTd);
 
     const marketTd = document.createElement("td");
@@ -1900,6 +2051,12 @@ function renderDetail() {
     trackingTab.hidden = !tracking;
     if (!tracking && state.detailTab === "tracking") state.detailTab = "overview";
   }
+  const checklistTab = document.querySelector(".checklist-tab");
+  const hasChecklist = Boolean(checklistForItem(item));
+  if (checklistTab) {
+    checklistTab.hidden = !hasChecklist;
+    if (!hasChecklist && state.detailTab === "checklist") state.detailTab = "overview";
+  }
   document.querySelectorAll(".detail-tabs .tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === state.detailTab);
   });
@@ -1981,6 +2138,11 @@ function renderDetail() {
 
   if (state.detailTab === "sentiment") {
     renderSentimentDetail(item);
+    return;
+  }
+
+  if (state.detailTab === "checklist") {
+    renderChecklistDetail(item);
     return;
   }
 

@@ -55,6 +55,40 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(selected["buy_price"], None)
             self.assertEqual(selected["price_status"], "价格未给出")
 
+    def test_extracts_checklist_summary_without_replacing_main_decision(self):
+        lines = """## 六关总览
+
+| 关卡 | 评分 | 结果 | 核心理由 |
+|---|---|---|---|
+| 能力圈 | ★★★★☆ | 通过 | 生意清晰 |
+| 好生意 | ★★★☆☆ | 条件通过 | 现金流待验证 |
+| 护城河 | ★★★★☆ | 通过 | 规模优势 |
+| 管理层 | ★★★☆☆ | 条件通过 | 记录尚短 |
+| 安全边际 | ★★★☆☆ | 不通过 | 估值合理但不便宜 |
+| 仓位纪律 | ★★★★☆ | 通过 | 可执行 |
+
+## 镜子测试
+
+**镜子测试：通过。**
+
+**硬性否决：0 项。**
+""".splitlines()
+        contract = {
+            "action": "观察",
+            "summary": "灰色地带：安全边际仍待验证",
+            "data_cutoff": "2026-08-10",
+            "report_completed_at": "2026-08-11",
+            "next_review_date": "2026-09-01",
+            "confidence": "中",
+            "invalidation_triggers": "现金流恶化",
+        }
+        gates = dashboard.extract_checklist_gates(lines)
+        summary = dashboard.extract_checklist_status(lines, contract, gates)
+        self.assertEqual(len(gates), 6)
+        self.assertEqual(summary["status"], "灰色地带")
+        self.assertFalse(summary["hard_veto"])
+        self.assertEqual(summary["mirror_test"], "通过")
+
     def test_writes_obsidian_table_and_static_data_without_report_rewrites(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
