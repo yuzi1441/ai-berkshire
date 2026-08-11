@@ -89,6 +89,54 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertFalse(summary["hard_veto"])
         self.assertEqual(summary["mirror_test"], "通过")
 
+    def test_recognizes_legacy_standalone_checklist_without_contract(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            checklist = root / "reports" / "示例公司" / "巴菲特Checklist-示例公司.md"
+            checklist.write_text(
+                "# 巴菲特价值投资买入前 Checklist：示例公司（600000.SH）\n\n"
+                "数据截止：2026-07-20\n\n"
+                "| 关卡 | 评分 | 结论 | 说明 |\n|---|---|---|---|\n"
+                "| 能力圈 | ★★★★☆ | 通过 | 生意清楚 |\n"
+                "| 好生意 | ★★★☆☆ | 通过 | 现金流尚可 |\n"
+                "| 护城河 | ★★★★☆ | 通过 | 有规模优势 |\n"
+                "| 管理层 | ★★★☆☆ | 条件通过 | 仍需跟踪 |\n"
+                "| 安全边际 | ★★☆☆☆ | 不通过 | 价格偏高 |\n"
+                "| 仓位纪律 | ★★★☆☆ | 通过 | 小仓观察 |\n\n"
+                "**最终判定：灰色地带，4/6关通过。**\n",
+                encoding="utf-8",
+            )
+            record = dashboard.checklist_record(checklist, root, [])
+            self.assertIsNotNone(record)
+            self.assertEqual(record["source_type"], "standalone")
+            self.assertEqual(record["status"], "灰色地带")
+            self.assertEqual(record["passed_count"], 4)
+            self.assertEqual(len(record["gates"]), 6)
+
+    def test_attaches_embedded_checklist_without_replacing_main_report(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "main.md"
+            report.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察，等待验证。\n\n"
+                "## 巴菲特买入前 Checklist\n\n"
+                "| # | 检查项 | 结论 | 说明 |\n|---:|---|---|---|\n"
+                "| 1 | 生意能否理解 | 通过 | 清楚 |\n"
+                "| 2 | 是否有护城河 | 通过 | 有 |\n"
+                "| 3 | 价格是否便宜 | 未通过 | 偏贵 |\n\n"
+                "**Checklist结论：当前价格未通过。**\n",
+                encoding="utf-8",
+            )
+            board = dashboard.build_dashboard(root)
+            selected = board["decisions"][0]
+            self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
+            self.assertEqual(selected["checklist"]["source_type"], "embedded")
+            self.assertEqual(selected["checklist"]["total_gates"], 3)
+            self.assertEqual(selected["checklist"]["status"], "未通过")
+
     def test_writes_obsidian_table_and_static_data_without_report_rewrites(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

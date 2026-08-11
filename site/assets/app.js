@@ -218,7 +218,7 @@ function checklistStatusClass(status) {
 
 function checklistBadgeText(checklist) {
   if (!checklist) return "未检查";
-  const count = checklist.passed_count == null ? "待复核" : `${checklist.passed_count}/6`;
+  const count = checklist.passed_count == null ? "待复核" : `${checklist.passed_count}/${checklist.total_gates || 6}`;
   return `${checklist.status || "待复核"} · ${count}`;
 }
 
@@ -1505,7 +1505,7 @@ function renderChecklistDetail(item) {
     card.innerHTML = "<h3>尚未生成买入前 Checklist</h3>";
     const note = document.createElement("p");
     note.className = "source-note";
-    note.textContent = "该公司当前没有可识别的 company-checklist 报告；这不会改变基本面主报告的结论。";
+    note.textContent = "该公司当前没有可识别的独立或内嵌买入前 Checklist；这不会改变基本面主报告的结论。";
     card.append(note);
     els.detailBody.append(card);
     return;
@@ -1553,7 +1553,7 @@ function renderChecklistDetail(item) {
   const gateCard = document.createElement("section");
   gateCard.className = "card";
   const gateTitle = document.createElement("h3");
-  gateTitle.textContent = "六关评分";
+  gateTitle.textContent = `${checklist.total_gates || 6}项检查`;
   gateCard.append(gateTitle);
   const grid = document.createElement("div");
   grid.className = "checklist-gate-grid";
@@ -1583,7 +1583,7 @@ function renderChecklistDetail(item) {
   if (!grid.childElementCount) {
     const empty = document.createElement("p");
     empty.className = "source-note";
-    empty.textContent = "报告未提供可结构化的六关评分表，请打开原报告复核。";
+    empty.textContent = "报告未提供可结构化的检查表，请打开原报告复核。";
     gateCard.append(empty);
   } else {
     gateCard.append(grid);

@@ -763,28 +763,133 @@ CHECKLIST_GATE_NAMES = (
     ("仓位纪律", ("仓位纪律", "决策纪律")),
 )
 
+CHECKLIST_HEADING_PATTERN = re.compile(
+    r"(?:巴菲特\s*)?(?:价值投资\s*)?买入前\s*checklist|"
+    r"(?:巴菲特\s*)?checklist\s*(?:买入前)?",
+    flags=re.IGNORECASE,
+)
+
+
+def checklist_gate_name(text: str) -> str | None:
+    """Map a table label or nearby heading to one of the six standard gates."""
+    for name, aliases in CHECKLIST_GATE_NAMES:
+        if any(alias in text for alias in aliases):
+            return name
+    return None
+
+
+def checklist_section(lines: list[str]) -> list[str] | None:
+    """Return the latest explicitly headed Checklist section from a report."""
+    starts: list[tuple[int, int]] = []
+    for index, line in enumerate(lines):
+        if not line.lstrip().startswith("#") or not CHECKLIST_HEADING_PATTERN.search(line):
+            continue
+        level = heading_level(line) or 2
+        starts.append((index, level))
+    if not starts:
+        return None
+    start, level = starts[-1]
+    end = len(lines)
+    for index in range(start + 1, len(lines)):
+        next_level = heading_level(lines[index])
+        if next_level is not None and next_level <= level:
+            end = index
+            break
+    section = lines[start:end]
+    return section if len(section) >= 3 else None
+
+
+def extract_checklist_summary(lines: list[str]) -> str:
+    """Extract a concise conclusion from a legacy or embedded Checklist."""
+    preferred_markers = (
+        "最终判定",
+        "总判定",
+        "Checklist 结果",
+        "Checklist结果",
+        "Checklist 结论",
+        "Checklist结论",
+        "Checklist通过率",
+        "Checklist通过",
+        "灰色地带",
+    )
+    candidates = [
+        clean_markdown(line)
+        for line in lines
+        if any(marker.casefold() in line.casefold() for marker in preferred_markers)
+    ]
+    for candidate in reversed(candidates):
+        if len(candidate) >= 8:
+            return candidate[:360]
+    return ""
+
 
 def extract_checklist_gates(lines: list[str]) -> list[dict[str, str]]:
-    """Extract the compact six-gate score table from a Checklist report."""
+    """Extract standard six-gate rows and legacy numbered Checklist rows."""
     gates: list[dict[str, str]] = []
     for line in lines:
         cells = markdown_cells(line)
         if not cells or len(cells) < 2:
             continue
-        label = clean_markdown(cells[0]).strip()
-        score = clean_markdown(cells[1]).replace(" ", "")
-        if not re.fullmatch(r"[★☆]{5}", score):
+        score_index = next(
+            (
+                index
+                for index, cell in enumerate(cells)
+                if re.fullmatch(r"[★☆]{1,5}", cell.replace(" ", ""))
+            ),
+            None,
+        )
+        if score_index is None:
             continue
-        matched_name = None
-        for name, aliases in CHECKLIST_GATE_NAMES:
-            if any(alias in label for alias in aliases):
-                matched_name = name
-                break
+        score = cells[score_index].replace(" ", "")
+        label = " ".join(cells[:score_index]).strip()
+        matched_name = checklist_gate_name(label)
         if not matched_name or any(item["name"] == matched_name for item in gates):
             continue
-        result = clean_markdown(cells[2]) if len(cells) >= 3 else "待复核"
-        reason = clean_markdown(cells[3]) if len(cells) >= 4 else ""
+        result = clean_markdown(cells[score_index + 1]) if len(cells) > score_index + 1 else "待复核"
+        reason = clean_markdown(cells[score_index + 2]) if len(cells) > score_index + 2 else ""
         gates.append({"name": matched_name, "score": score, "result": result, "reason": reason})
+
+    # Some older reports put the score in prose below a gate heading instead of
+    # in the summary table. Keep this conservative and only use the nearest
+    # preceding gate heading, so unrelated stars in valuation text are ignored.
+    if len(gates) < len(CHECKLIST_GATE_NAMES):
+        for index, line in enumerate(lines):
+            score_match = re.search(r"评分[：:]?\s*([★☆]{1,5})", line)
+            if not score_match:
+                continue
+            nearby = " ".join(lines[max(0, index - 12) : index + 1])
+            matched_name = checklist_gate_name(nearby)
+            if not matched_name or any(item["name"] == matched_name for item in gates):
+                continue
+            result = "待复核"
+            result_match = re.search(r"(?:评分[：:]?\s*[★☆]{1,5}[。；,，、\s]*)((?:不|未)?通过|灰色|条件通过|待验证)", line)
+            if result_match:
+                result = result_match.group(1)
+            gates.append(
+                {
+                    "name": matched_name,
+                    "score": score_match.group(1),
+                    "result": result,
+                    "reason": clean_markdown(line),
+                }
+            )
+
+    # A number of legacy reports use a 10-item table without star scores. It is
+    # still useful in the board as an auditable pre-buy check, so preserve those
+    # rows as generic gates when no six-gate score table was found.
+    if not gates:
+        generic: list[dict[str, str]] = []
+        for line in lines:
+            cells = markdown_cells(line)
+            if not cells or len(cells) < 3 or not re.fullmatch(r"\d+\.?", cells[0].strip()):
+                continue
+            label = clean_markdown(cells[1])
+            if not label or label in {"检查项", "项目"}:
+                continue
+            result = clean_markdown(cells[2]) or "待复核"
+            reason = clean_markdown(cells[3]) if len(cells) >= 4 else ""
+            generic.append({"name": label, "score": "", "result": result, "reason": reason})
+        gates = generic
     return gates
 
 
@@ -794,33 +899,46 @@ def extract_checklist_status(
     """Build a display-only Checklist summary without changing the main decision."""
     text = "\n".join(lines) + "\n" + str(contract.get("summary") or "")
     hard_veto = bool(
-        re.search(r"(?<!未)触发硬性否决|硬性否决[^\n]{0,40}(?:触发|[1-9]\s*项)", text)
+        re.search(r"(?<![未有不])触发硬性否决|硬性否决[：: ]{0,10}(?:已触发|[1-9]\s*项)", text)
     )
+    summary_text = str(contract.get("summary") or "")
     if hard_veto:
         status = "否决"
-    elif re.search(r"未通过\s*Checklist|Checklist[^\n]{0,20}未通过", text):
+    elif "灰色地带" in summary_text and not re.search(r"❌|否决|未通过\s*Checklist", summary_text):
+        status = "灰色地带"
+    elif re.search(r"未通过[^\n]{0,12}Checklist|Checklist[^\n]{0,25}(?:未通过|不通过)", summary_text):
         status = "未通过"
     elif "灰色地带" in text:
         status = "灰色地带"
-    elif re.search(r"通过\s*Checklist|Checklist[^\n]{0,20}通过", text):
+    elif re.search(r"未通过[^\n]{0,12}Checklist|Checklist[^\n]{0,25}(?:未通过|不通过)", text):
+        status = "未通过"
+    elif re.search(r"通过[^\n]{0,25}Checklist|Checklist[^\n]{0,25}通过", text):
         status = "通过"
     else:
         status = "待复核"
 
-    passed_match = re.search(r"Checklist[^\n]{0,20}[（(]\s*(\d+)\s*/\s*6", text)
+    ratio_matches = [
+        match
+        for line in lines
+        if re.search(r"Checklist|判定|结论|通过率", line, flags=re.IGNORECASE)
+        for match in re.finditer(r"(?<!\d)(\d+)\s*/\s*(6|10)(?!\d)", line)
+    ]
+    passed_match = ratio_matches[-1] if ratio_matches else None
     passed_count = int(passed_match.group(1)) if passed_match else None
+    total_gates = int(passed_match.group(2)) if passed_match else (len(gates) or 6)
     if passed_count is None:
         passed_count = sum(
             1
             for gate in gates
-            if "通过" in gate["result"] and "不通过" not in gate["result"]
+            if re.search(r"(?:通过|基本是|^是$|✅)", gate["result"])
+            and not re.search(r"不通过|未通过|否", gate["result"])
         ) or None
-    mirror_match = re.search(r"镜子测试[：:]\s*(通过|未通过|不通过)", text)
+    mirror_match = re.search(r"镜子测试[：:]?\s*(通过|未通过|不通过)", text)
     mirror_status = mirror_match.group(1) if mirror_match else "待复核"
     return {
         "status": status,
         "passed_count": passed_count,
-        "total_gates": 6,
+        "total_gates": total_gates,
         "gates": gates,
         "hard_veto": hard_veto,
         "hard_veto_label": "已触发" if hard_veto else "未触发/未发现",
@@ -838,20 +956,63 @@ def extract_checklist_status(
 def checklist_record(
     report_path: Path, repo_root: Path, registry: list[dict[str, Any]]
 ) -> dict[str, Any] | None:
-    """Read a Checklist report as an auxiliary layer, never as a decision candidate."""
+    """Read standalone or embedded Checklist content as an auxiliary layer."""
     text = report_path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
-    contract = extract_decision_contract(lines)
-    if not contract or contract.get("report_type") != "company-checklist":
+    relative = report_path.relative_to(repo_root)
+    if any(part in SKIPPED_PATH_PARTS for part in relative.parts):
         return None
-    company = normalize_company_name(str(contract.get("company") or ""))
-    ticker = contract.get("ticker")
+    path_company, entity_kind, path_market, _ = entity_from_path(relative)
+    if entity_kind != "company" or re.search(r"多公司|对比|筛选|行业", path_company):
+        return None
+
+    contract = extract_decision_contract(lines)
+    is_standalone = bool(re.search(r"checklist", report_path.stem, flags=re.IGNORECASE))
+    section = checklist_section(lines)
+    if contract and contract.get("report_type") == "company-checklist":
+        checklist_lines = lines
+        source_type = "standalone"
+    elif is_standalone:
+        checklist_lines = lines
+        source_type = "standalone"
+    elif section:
+        checklist_lines = section
+        source_type = "embedded"
+    else:
+        return None
+
+    gates = extract_checklist_gates(checklist_lines)
+    summary = extract_checklist_summary(checklist_lines)
+    if not gates and not summary:
+        return None
+
+    metadata_contract = contract if contract and contract.get("report_type") == "company-checklist" else None
+    company = normalize_company_name(str((contract or {}).get("company") or path_company))
+    ticker = (contract or {}).get("ticker") or extract_ticker("\n".join(lines[:180]))
     registry_entry = registry_company(registry, company, ticker)
     if registry_entry:
         company = str(registry_entry["canonical_name"])
-    relative = report_path.relative_to(repo_root)
-    market = contract.get("market") or market_for_ticker(ticker, None)
-    gates = extract_checklist_gates(lines)
+    market = (contract or {}).get("market") or market_for_ticker(ticker, path_market)
+    data_cutoff = (contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
+    report_date = (contract or {}).get("report_completed_at") or extract_report_completed_date(lines)
+    checklist_contract = metadata_contract or {
+        "report_type": "embedded-checklist" if source_type == "embedded" else "legacy-checklist",
+        "company": company,
+        "ticker": ticker,
+        "market": market,
+        "data_cutoff": data_cutoff,
+        "report_completed_at": report_date,
+        "action": "待复核",
+        "summary": summary or None,
+        "confidence": "待复核",
+        "invalidation_triggers": "",
+        "next_review_date": None,
+    }
+    if not checklist_contract.get("summary") and summary:
+        checklist_contract["summary"] = summary
+    status = extract_checklist_status(checklist_lines, checklist_contract, gates)
+    if summary and not status.get("summary"):
+        status["summary"] = summary
     return {
         "company": company,
         "ticker": ticker,
@@ -859,15 +1020,17 @@ def checklist_record(
         "report_path": relative.as_posix(),
         "report_link": relative.as_posix(),
         "title": extract_title(lines, report_path.stem),
-        "decision_contract": contract,
-        **extract_checklist_status(lines, contract, gates),
+        "source_type": source_type,
+        "decision_contract": metadata_contract,
+        **status,
     }
 
 
-def checklist_rank(record: dict[str, Any]) -> tuple[str, str, str]:
+def checklist_rank(record: dict[str, Any]) -> tuple[str, str, int, str]:
     return (
         record.get("data_cutoff") or "0000-00-00",
         record.get("report_date") or "0000-00-00",
+        1 if record.get("source_type") == "standalone" else 0,
         record.get("report_path") or "",
     )
 
@@ -898,6 +1061,7 @@ def attach_checklists(
                 "report_date": item.get("report_date"),
                 "report_path": item.get("report_path"),
                 "report_link": item.get("report_link"),
+                "source_type": item.get("source_type"),
             }
             for item in ordered
         ]
