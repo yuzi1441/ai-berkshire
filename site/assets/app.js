@@ -1505,7 +1505,7 @@ function renderChecklistDetail(item) {
     card.innerHTML = "<h3>尚未生成买入前 Checklist</h3>";
     const note = document.createElement("p");
     note.className = "source-note";
-    note.textContent = "该公司当前没有可识别的独立或内嵌买入前 Checklist；这不会改变基本面主报告的结论。";
+    note.textContent = "该公司当前没有可识别的 investment-checklist 独立报告；这不会改变基本面主报告的结论。";
     card.append(note);
     els.detailBody.append(card);
     return;

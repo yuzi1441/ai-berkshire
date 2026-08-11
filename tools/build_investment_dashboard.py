@@ -763,13 +763,6 @@ CHECKLIST_GATE_NAMES = (
     ("仓位纪律", ("仓位纪律", "决策纪律")),
 )
 
-CHECKLIST_HEADING_PATTERN = re.compile(
-    r"(?:巴菲特\s*)?(?:价值投资\s*)?买入前\s*checklist|"
-    r"(?:巴菲特\s*)?checklist\s*(?:买入前)?",
-    flags=re.IGNORECASE,
-)
-
-
 def checklist_gate_name(text: str) -> str | None:
     """Map a table label or nearby heading to one of the six standard gates."""
     for name, aliases in CHECKLIST_GATE_NAMES:
@@ -778,29 +771,8 @@ def checklist_gate_name(text: str) -> str | None:
     return None
 
 
-def checklist_section(lines: list[str]) -> list[str] | None:
-    """Return the latest explicitly headed Checklist section from a report."""
-    starts: list[tuple[int, int]] = []
-    for index, line in enumerate(lines):
-        if not line.lstrip().startswith("#") or not CHECKLIST_HEADING_PATTERN.search(line):
-            continue
-        level = heading_level(line) or 2
-        starts.append((index, level))
-    if not starts:
-        return None
-    start, level = starts[-1]
-    end = len(lines)
-    for index in range(start + 1, len(lines)):
-        next_level = heading_level(lines[index])
-        if next_level is not None and next_level <= level:
-            end = index
-            break
-    section = lines[start:end]
-    return section if len(section) >= 3 else None
-
-
 def extract_checklist_summary(lines: list[str]) -> str:
-    """Extract a concise conclusion from a legacy or embedded Checklist."""
+    """Extract a concise conclusion from a standalone Checklist report."""
     preferred_markers = (
         "最终判定",
         "总判定",
@@ -956,28 +928,25 @@ def extract_checklist_status(
 def checklist_record(
     report_path: Path, repo_root: Path, registry: list[dict[str, Any]]
 ) -> dict[str, Any] | None:
-    """Read standalone or embedded Checklist content as an auxiliary layer."""
+    """Read only a standalone investment-checklist report as an auxiliary layer."""
     text = report_path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
     relative = report_path.relative_to(repo_root)
     if any(part in SKIPPED_PATH_PARTS for part in relative.parts):
         return None
-    path_company, entity_kind, path_market, _ = entity_from_path(relative)
+    entity_relative = report_path.relative_to(repo_root / "reports")
+    path_company, entity_kind, path_market, _ = entity_from_path(entity_relative)
     if entity_kind != "company" or re.search(r"多公司|对比|筛选|行业", path_company):
         return None
 
     contract = extract_decision_contract(lines)
     is_standalone = bool(re.search(r"checklist", report_path.stem, flags=re.IGNORECASE))
-    section = checklist_section(lines)
     if contract and contract.get("report_type") == "company-checklist":
         checklist_lines = lines
         source_type = "standalone"
     elif is_standalone:
         checklist_lines = lines
         source_type = "standalone"
-    elif section:
-        checklist_lines = section
-        source_type = "embedded"
     else:
         return None
 
@@ -996,7 +965,7 @@ def checklist_record(
     data_cutoff = (contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
     report_date = (contract or {}).get("report_completed_at") or extract_report_completed_date(lines)
     checklist_contract = metadata_contract or {
-        "report_type": "embedded-checklist" if source_type == "embedded" else "legacy-checklist",
+        "report_type": "legacy-checklist",
         "company": company,
         "ticker": ticker,
         "market": market,

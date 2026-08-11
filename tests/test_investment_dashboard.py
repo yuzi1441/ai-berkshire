@@ -114,7 +114,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(record["passed_count"], 4)
             self.assertEqual(len(record["gates"]), 6)
 
-    def test_attaches_embedded_checklist_without_replacing_main_report(self):
+    def test_ignores_checklist_section_embedded_in_main_report(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             self.setup_repository(root)
@@ -133,9 +133,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             board = dashboard.build_dashboard(root)
             selected = board["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
-            self.assertEqual(selected["checklist"]["source_type"], "embedded")
-            self.assertEqual(selected["checklist"]["total_gates"], 3)
-            self.assertEqual(selected["checklist"]["status"], "未通过")
+            self.assertEqual(selected["checklist"]["status"], "missing")
 
     def test_writes_obsidian_table_and_static_data_without_report_rewrites(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
