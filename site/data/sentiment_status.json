@@ -1,7 +1,7 @@
 {
   "status": "error",
-  "generated_at": "2026-08-12T18:15:03.086880+08:00",
+  "generated_at": "2026-08-13T00:31:04.247157+08:00",
   "data_cutoff": "2026-08-12",
-  "error": "review model failed; snapshot generation blocked: batch 29db8a857cde0072e12c: request failed after 2 attempts: https://api.byeapi.top/v1/chat/completions: HTTP Error 502: Bad Gateway; batch 2bd353eca1d6bfe25065: request failed after 2 attempts: https://api.byeapi.top/v1/chat/completions: HTTP Error 502: Bad Gateway; batch a951274a828fa3921ba2: request failed after 2 attempts: https://api.byeapi.top/v1/chat/completions: HTTP Error 502: Bad Gateway",
+  "error": "primary model failed; snapshot generation blocked: batch 3637e83c5070cfbfed6f: missing ids after retry ['196adf4958e5f3ddbc18']",
   "message": "情绪更新失败；看板继续显示上一份成功快照。"
 }
