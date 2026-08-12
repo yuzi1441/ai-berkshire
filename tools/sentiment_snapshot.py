@@ -50,6 +50,7 @@ DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 DEFAULT_LLM_TIMEOUT_SECONDS = 600
 DEFAULT_LLM_RETRIES = 4
 DEFAULT_LLM_RETRY_BACKOFF_SECONDS = 5.0
+DEFAULT_LLM_MISSING_RESULT_RETRIES = 3
 TRANSIENT_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
@@ -227,6 +228,7 @@ class LLMConfig:
     timeout_seconds: int = DEFAULT_LLM_TIMEOUT_SECONDS
     max_retries: int = DEFAULT_LLM_RETRIES
     retry_backoff_seconds: float = DEFAULT_LLM_RETRY_BACKOFF_SECONDS
+    missing_result_retries: int = DEFAULT_LLM_MISSING_RESULT_RETRIES
 
     @classmethod
     def from_environment(cls, prefix: str = "SENTIMENT_LLM_") -> LLMConfig | None:
@@ -282,6 +284,13 @@ class LLMConfig:
             retry_backoff_seconds = min(60.0, max(0.5, float(backoff_text)))
         except ValueError:
             retry_backoff_seconds = DEFAULT_LLM_RETRY_BACKOFF_SECONDS
+        missing_result_retries_text = os.environ.get(
+            f"{prefix}MISSING_RESULT_RETRIES", str(DEFAULT_LLM_MISSING_RESULT_RETRIES)
+        ).strip()
+        try:
+            missing_result_retries = min(6, max(0, int(missing_result_retries_text)))
+        except ValueError:
+            missing_result_retries = DEFAULT_LLM_MISSING_RESULT_RETRIES
         return cls(
             endpoint=endpoint,
             api_key=api_key,
@@ -294,6 +303,7 @@ class LLMConfig:
             timeout_seconds=timeout_seconds,
             max_retries=max_retries,
             retry_backoff_seconds=retry_backoff_seconds,
+            missing_result_retries=missing_result_retries,
         )
 
 
@@ -1845,6 +1855,51 @@ def score_articles(
         batches = list(chunks(target_articles, config.batch_size))
         scores: dict[str, dict[str, Any]] = {}
         failures: list[str] = []
+
+        def recover_items(
+            items: list[dict[str, Any]], reason: str
+        ) -> None:
+            """Retry unresolved items one at a time to avoid gateway omissions."""
+            remaining = list(items)
+            for retry_round in range(config.missing_result_retries):
+                if not remaining:
+                    break
+                if retry_round:
+                    time.sleep(
+                        min(
+                            60.0,
+                            config.retry_backoff_seconds * (2 ** (retry_round - 1)),
+                        )
+                    )
+                next_remaining: list[dict[str, Any]] = []
+                with ThreadPoolExecutor(
+                    max_workers=min(config.workers, len(remaining))
+                ) as retry_executor:
+                    retry_futures = {
+                        retry_executor.submit(
+                            score_with_llm, [item], config, provider_label
+                        ): item
+                        for item in remaining
+                    }
+                    for retry_future in as_completed(retry_futures):
+                        item = retry_futures[retry_future]
+                        try:
+                            retry_scores = retry_future.result()
+                        except Exception:  # noqa: BLE001 - fail closed after recovery attempts
+                            next_remaining.append(item)
+                            continue
+                        item_score = retry_scores.get(item["id"])
+                        if item_score is None:
+                            next_remaining.append(item)
+                        else:
+                            scores[item["id"]] = item_score
+                remaining = next_remaining
+            if remaining:
+                failures.append(
+                    f"{reason}; missing ids after {config.missing_result_retries} "
+                    f"single-item retries {[item['id'] for item in remaining]}"
+                )
+
         with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
             futures = {
                 executor.submit(score_with_llm, batch, config, provider_label): batch
@@ -1855,29 +1910,16 @@ def score_articles(
                 try:
                     batch_scores = future.result()
                 except Exception as exc:  # noqa: BLE001 - fail closed for every provider error
-                    failures.append(f"batch {batch[0]['id']}: {exc}")
+                    recover_items(batch, f"batch {batch[0]['id']} failed: {exc}")
                     continue
                 scores.update(batch_scores)
                 missing = {item["id"] for item in batch} - set(batch_scores)
                 if missing:
-                    # Some compatible gateways occasionally omit one or two items
-                    # from a large structured response. Retry only those items in
-                    # a smaller request; if the retry is still incomplete we keep
-                    # the fail-closed behavior and do not publish a snapshot.
                     missing_items = [item for item in batch if item["id"] in missing]
-                    try:
-                        retry_scores = score_with_llm(missing_items, config, provider_label)
-                    except Exception as exc:  # noqa: BLE001 - preserve fail-closed semantics
-                        failures.append(
-                            f"batch {batch[0]['id']}: missing ids {sorted(missing)}; retry failed: {exc}"
-                        )
-                        continue
-                    scores.update(retry_scores)
-                    remaining = missing - set(retry_scores)
-                    if remaining:
-                        failures.append(
-                            f"batch {batch[0]['id']}: missing ids after retry {sorted(remaining)}"
-                        )
+                    recover_items(
+                        missing_items,
+                        f"batch {batch[0]['id']} returned incomplete results",
+                    )
         if failures:
             raise SentimentError(
                 f"{provider_label} model failed; snapshot generation blocked: {'; '.join(failures[:3])}"

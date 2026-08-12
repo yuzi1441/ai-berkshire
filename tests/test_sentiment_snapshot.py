@@ -31,6 +31,7 @@ class SentimentSnapshotTests(unittest.TestCase):
             "SENTIMENT_LLM_MAX_TOKENS": "1800",
             "SENTIMENT_LLM_RETRIES": "5",
             "SENTIMENT_LLM_RETRY_BACKOFF": "7",
+            "SENTIMENT_LLM_MISSING_RESULT_RETRIES": "4",
         }
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment()
@@ -42,6 +43,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.timeout_seconds, 600)
         self.assertEqual(config.max_retries, 5)
         self.assertEqual(config.retry_backoff_seconds, 7.0)
+        self.assertEqual(config.missing_result_retries, 4)
 
     def test_review_model_config_uses_separate_environment_prefix(self):
         environment = {
@@ -51,6 +53,7 @@ class SentimentSnapshotTests(unittest.TestCase):
             "SENTIMENT_REVIEW_TIMEOUT": "240",
             "SENTIMENT_REVIEW_RETRIES": "3",
             "SENTIMENT_REVIEW_RETRY_BACKOFF": "2.5",
+            "SENTIMENT_REVIEW_MISSING_RESULT_RETRIES": "2",
         }
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
@@ -59,6 +62,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.timeout_seconds, 240)
         self.assertEqual(config.max_retries, 3)
         self.assertEqual(config.retry_backoff_seconds, 2.5)
+        self.assertEqual(config.missing_result_retries, 2)
 
     def test_http_text_retries_transient_gateway_errors(self):
         class FakeResponse:
@@ -144,6 +148,63 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(request.call_args.kwargs["timeout"], 600)
         self.assertEqual(request.call_args.kwargs["attempts"], 5)
         self.assertEqual(request.call_args.kwargs["retry_backoff_seconds"], 8)
+
+    def test_missing_model_items_are_retried_one_at_a_time(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="test-model",
+            batch_size=2,
+            workers=1,
+            missing_result_retries=2,
+        )
+        articles = [
+            {
+                "id": "complete-1",
+                "market": "港股",
+                "display_name": "示例公司",
+                "ticker": "00001.HK",
+                "title": "示例公司新闻一",
+                "summary": "",
+            },
+            {
+                "id": "missing-1",
+                "market": "港股",
+                "display_name": "示例公司",
+                "ticker": "00001.HK",
+                "title": "示例公司新闻二",
+                "summary": "",
+            },
+        ]
+
+        def score(item_id):
+            return {
+                item_id: {
+                    "direction": 0,
+                    "impact": 1,
+                    "relevance": 1,
+                    "confidence": 1,
+                    "event_type": "一般新闻",
+                    "scoring_method": "test",
+                }
+            }
+
+        calls = []
+
+        def fake_score(batch, _config, _provider):
+            ids = [item["id"] for item in batch]
+            calls.append(ids)
+            if ids == ["complete-1", "missing-1"]:
+                return score("complete-1")
+            if ids == ["missing-1"] and calls.count(["missing-1"]) == 1:
+                return {}
+            return score("missing-1")
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
+            scored, failures = sentiment_snapshot.score_articles(articles, config, None)
+        self.assertEqual(failures, [])
+        self.assertEqual({item["id"] for item in scored}, {"complete-1", "missing-1"})
+        self.assertEqual(calls, [["complete-1", "missing-1"], ["missing-1"], ["missing-1"]])
 
     def test_dual_model_scoring_blocks_snapshot_when_review_model_fails(self):
         article = {

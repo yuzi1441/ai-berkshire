@@ -76,7 +76,9 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 `SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。遇到 408、425、429、500、502、503、
 504 或连接超时等瞬时错误时，每个模型默认额外重试 4 次，采用指数退避（默认 5、10、20、40 秒）；
 可分别用 `SENTIMENT_LLM_RETRIES`、`SENTIMENT_REVIEW_RETRIES` 和对应的
-`*_RETRY_BACKOFF` 调整。任务整体超时上限为 90 分钟，给完整 A 股任务留下足够的重试空间。
+`*_RETRY_BACKOFF` 调整。如果模型返回 JSON 但漏掉某些新闻条目，还会把缺失条目拆成单条请求，
+默认额外重试 3 轮，可用 `SENTIMENT_LLM_MISSING_RESULT_RETRIES` 和
+`SENTIMENT_REVIEW_MISSING_RESULT_RETRIES` 调整。任务整体超时上限为 90 分钟，给完整 A 股任务留下足够的重试空间。
 
 对于 A股新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，本次快照不会生成；
 看板保留上一份成功快照，并通过 `site/data/sentiment_status.json` 显示更新失败。
