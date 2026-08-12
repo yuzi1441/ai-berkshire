@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:48:00+08:00",
+  "company": "恒瑞医疗",
+  "ticker": "600276.SH",
+  "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+  "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "现价不急于买，优先等待2026半年报、CRL整改路径和股价进入43-46元区间三者至少满足其二。",
+    "holder_action": "低成本持仓者可持有，核对关键指标；高成本或重仓持仓者应主动降集中度；任何持仓者遇重大负面事件应重审论文。",
+    "trigger_condition": "股价进入43-46元区间同时等待2026半年报和CRL整改路径，三者至少满足其二。",
+    "summary": "空仓者现价不追高，需等股价进入43-46元区间且半年报/CRL整改至少满足二者；稳健型分批建仓在43-46元。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约动作字段为'分批买入'，但正文明确要求空仓者等待价格区间和事件验证，冲突。",
+    "evidence": [
+      {
+        "line_start": 355,
+        "line_end": 355,
+        "quote": "现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。",
+        "supports": "明确空仓者当前不买，需等价格和事件验证。"
+      },
+      {
+        "line_start": 373,
+        "line_end": 373,
+        "quote": "结论是：**公司值得长期跟踪，现价适合持有验证，不适合空仓追高；43-46 元开始具备稳健研究价值，37-40 元才接近保守安全区。**",
+        "supports": "最终结论强调空仓者不适合追高，要等待价格和验证。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 50.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 47.0,
+      "max": 50.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "现价不急于买，优先等待2026半年报、CRL整改路径和股价进入43-46元区间三者至少满足其二。",
+        "holder_action": "低成本持仓者可持有，核对关键指标；高成本或重仓持仓者应主动降集中度；任何持仓者遇重大负面事件应重审论文。",
+        "trigger_condition": "股价进入43-46元区间同时等待2026半年报和CRL整改路径，三者至少满足其二。",
+        "summary": "空仓者现价不追高，需等股价进入43-46元区间且半年报/CRL整改至少满足二者；稳健型分批建仓在43-46元。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约动作字段为'分批买入'，但正文明确要求空仓者等待价格区间和事件验证，冲突。",
+        "evidence": [
+          {
+            "line_start": 355,
+            "line_end": 355,
+            "quote": "现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。",
+            "supports": "明确空仓者当前不买，需等价格和事件验证。"
+          },
+          {
+            "line_start": 373,
+            "line_end": 373,
+            "quote": "结论是：**公司值得长期跟踪，现价适合持有验证，不适合空仓追高；43-46 元开始具备稳健研究价值，37-40 元才接近保守安全区。**",
+            "supports": "最终结论强调空仓者不适合追高，要等待价格和验证。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "现价不急于买，等待2026年半年报、CRL整改路径和股价进入43-46元区间三者至少满足其二。",
+        "holder_action": "持仓者可持有并验证，重点跟踪半年报、销售增速、现金流、许可收入确认及FDA整改。",
+        "trigger_condition": "2026年半年报、CRL整改路径和股价进入43-46元区间三者至少满足其二；37-40元接近保守安全区。",
+        "summary": "现价适合持有验证，不适合空仓追高，43-46元开始具备稳健研究价值。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约将基本面建议动作标为“分批买入”，但正文明确要求空仓者现价不急于买并等待价格与经营验证，按正文判断。",
+        "evidence": [
+          {
+            "line_start": 355,
+            "line_end": 355,
+            "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。",
+            "supports": "明确说明空仓者当前应等待，而非立即买入。"
+          },
+          {
+            "line_start": 373,
+            "line_end": 373,
+            "quote": "恒瑞医药的稀缺性来自平台，而不是某个爆款：它已经把国内创新药销售、强现金研发体系和全球 BD 连成闭环。真正需要付折价的，是许可收入的年度波动、热门赛道拥挤、海外 CMC 执行以及创始人依赖。55.75 元对应 45.57x TTM PE，中性三年目标价只有 60.2 元，赔率不足以补偿这些风险。结论是：**公司值得长期跟踪，现价适合持有验证，不适合空仓追高；43-46 元开始具备稳健研究价值，37-40 元才接近保守安全区。**",
+            "supports": "最终结论确认空仓不应追高，并给出43-46元和37-40元价格触发区间。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

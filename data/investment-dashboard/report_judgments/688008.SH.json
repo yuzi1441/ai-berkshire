@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:49:43+08:00",
+  "company": "montage-tech",
+  "ticker": "688008.SH",
+  "report_path": "reports/montage-tech/montage-tech-investment-research-20260623.md",
+  "report_sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者等待回调，暂不买入，目标买入区间为120-150元；若出现周期性暴跌则视为长期买入机会。",
+    "holder_action": "持仓者可继续持有，但当前价格不具备投资价值，应等待回调。",
+    "trigger_condition": "价格回调至120-150元区间（对应2026E PE 44-55x），或在DDR6切换期出现类似2023年的周期性暴跌。",
+    "summary": "报告明确空仓者等待回调，当前258元不具备投资价值，目标买入区间120-150元。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 366,
+        "line_end": 366,
+        "quote": "空仓者 等待回调。当前258元不具备投资价值。 目标买入区间：CNY 120-150（对应2026E PE 44-55x），此时安全边际较充足。如果在DDR6切换期（~2028-2029年）出现类似2023年的周期性暴跌，将是极佳的长期买入机会",
+        "supports": "空仓者应等待价格回调，当前不买入，且给出了具体的价格触发区间。"
+      },
+      {
+        "line_start": 365,
+        "line_end": 365,
+        "quote": "基本面建议动作 观察",
+        "supports": "报告结论为观察而非买入，印证空仓者不应立即行动。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待回调，暂不买入，目标买入区间为120-150元；若出现周期性暴跌则视为长期买入机会。",
+        "holder_action": "持仓者可继续持有，但当前价格不具备投资价值，应等待回调。",
+        "trigger_condition": "价格回调至120-150元区间（对应2026E PE 44-55x），或在DDR6切换期出现类似2023年的周期性暴跌。",
+        "summary": "报告明确空仓者等待回调，当前258元不具备投资价值，目标买入区间120-150元。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 366,
+            "line_end": 366,
+            "quote": "空仓者 等待回调。当前258元不具备投资价值。 目标买入区间：CNY 120-150（对应2026E PE 44-55x），此时安全边际较充足。如果在DDR6切换期（~2028-2029年）出现类似2023年的周期性暴跌，将是极佳的长期买入机会",
+            "supports": "空仓者应等待价格回调，当前不买入，且给出了具体的价格触发区间。"
+          },
+          {
+            "line_start": 365,
+            "line_end": 365,
+            "quote": "基本面建议动作 观察",
+            "supports": "报告结论为观察而非买入，印证空仓者不应立即行动。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待回调，当前258元不行动；目标买入区间为CNY 120-150。",
+        "holder_action": "报告片段未给出持仓者动作。",
+        "trigger_condition": "股价回调至CNY 120-150；或DDR6切换期（约2028-2029年）出现类似2023年的周期性暴跌。",
+        "summary": "当前258元不具投资价值，空仓者等待回调至120-150元再考虑买入。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：看板契约“观察”与结论摘要中空仓者等待回调、给出目标买入区间一致。",
+        "evidence": [
+          {
+            "line_start": 365,
+            "line_end": 365,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持当前不立即买入、处于观察状态。"
+          },
+          {
+            "line_start": 366,
+            "line_end": 366,
+            "quote": "| 结论摘要 | 空仓者 等待回调。当前258元不具备投资价值。 目标买入区间：CNY 120-150（对应2026E PE 44-55x），此时安全边际较充足。如果在DDR6切换期（~2028-2029年）出现类似2023年的周期性暴跌，将是极佳的长期买入机会 |",
+            "supports": "直接支持空仓者等待价格回调，以及最终结论和价格触发条件。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

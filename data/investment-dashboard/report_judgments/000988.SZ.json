@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:51:54+08:00",
+  "company": "hgtech",
+  "ticker": "000988.SZ",
+  "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+  "report_sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
+  "judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "空仓者应回避，不应在当前价格买入",
+    "holder_action": "未明确持仓者动作，但隐含应卖出或不再持有",
+    "trigger_condition": "价格回调至CNY 70-80（2026E PE ~30-35x）以下",
+    "summary": "报告认为当前价格不具备投资价值，空仓者应回避，需等待价格回落至CNY 70-80区间再考虑买入。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约摘要中既有'空仓者 回避'，又有'等待回调至CNY 70-80'，正文明确要求等待更低价格，按规则应归为等待价格/watch，但契约摘要以'回避'为主导，故标记冲突。",
+    "evidence": [
+      {
+        "line_start": 349,
+        "line_end": 349,
+        "quote": "| 结论摘要 | 空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |",
+        "supports": "报告明确要求空仓者回避，并给出了等待更低价格的触发条件"
+      },
+      {
+        "line_start": 348,
+        "line_end": 348,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约中的基本面建议动作为'观察'，但总结中明确为'回避'，进一步支持回避/卖出分类"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者应回避，不应在当前价格买入",
+        "holder_action": "未明确持仓者动作，但隐含应卖出或不再持有",
+        "trigger_condition": "价格回调至CNY 70-80（2026E PE ~30-35x）以下",
+        "summary": "报告认为当前价格不具备投资价值，空仓者应回避，需等待价格回落至CNY 70-80区间再考虑买入。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约摘要中既有'空仓者 回避'，又有'等待回调至CNY 70-80'，正文明确要求等待更低价格，按规则应归为等待价格/watch，但契约摘要以'回避'为主导，故标记冲突。",
+        "evidence": [
+          {
+            "line_start": 349,
+            "line_end": 349,
+            "quote": "| 结论摘要 | 空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |",
+            "supports": "报告明确要求空仓者回避，并给出了等待更低价格的触发条件"
+          },
+          {
+            "line_start": 348,
+            "line_end": 348,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约中的基本面建议动作为'观察'，但总结中明确为'回避'，进一步支持回避/卖出分类"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者当前应回避；报告仅在非要买入时建议等待回调至CNY 70-80以下。",
+        "holder_action": "未给出持仓者操作建议。",
+        "trigger_condition": "如非要买入华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下。",
+        "summary": "空仓者回避，当前价格不具投资价值；若坚持买入，等待回调至CNY 70-80以下。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板“基本面建议动作”为“观察”，但结论摘要明确写明“空仓者 回避”，且给出低价等待条件；按空仓者明确动作优先，采用回避/卖出。",
+        "evidence": [
+          {
+            "line_start": 348,
+            "line_end": 348,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板粗标签为“观察”，与结论摘要中的明确空仓动作存在冲突。"
+          },
+          {
+            "line_start": 349,
+            "line_end": 349,
+            "quote": "| 结论摘要 | 空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |",
+            "supports": "明确支持空仓者当前“回避”及最终结论；同时给出坚持买入时的价格触发条件。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

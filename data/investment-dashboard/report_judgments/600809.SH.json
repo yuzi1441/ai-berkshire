@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:54:44+08:00",
+  "company": "汾酒",
+  "ticker": "600809.SH",
+  "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+  "report_sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "报告未给出持仓者明确动作，但从“不追反弹”及等待更低价格分档买入的表述看，持仓者应继续持有等待更高价位或按计划卖出",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告认为当前116元可建1/4观察仓，但明确要求110元以下分批买入，属于等待价格类型",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约标签为‘观察’，但正文摘要明确给出价格触发点和建仓动作，故正文优先，归为等待价格/watch",
+    "evidence": [
+      {
+        "line_start": 301,
+        "line_end": 301,
+        "quote": "| 结论摘要 | 空仓者 110 元以下分批买入（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |",
+        "supports": "报告明确给出价格触发条件（110元以下分批买入），且当前116元仅可建1/4观察仓，因此空仓者应等待价格达到110元以下再分批买入，属于等待价格/watch"
+      },
+      {
+        "line_start": 300,
+        "line_end": 300,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约标签为‘观察’，与正文摘要给出的‘110元以下分批买入’一致，且未要求完全回避，故归为等待价格/watch而非回避/卖出/no"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者可在110元以下分批买入（如3批：110/100/92），当前116元可先建1/4观察仓，不追反弹",
+        "holder_action": "报告未给出持仓者明确动作，但从“不追反弹”及等待更低价格分档买入的表述看，持仓者应继续持有等待更高价位或按计划卖出",
+        "trigger_condition": "价格触发条件为110元以下（分批110/100/92），当前116元仅可建1/4观察仓",
+        "summary": "报告认为当前116元可建1/4观察仓，但明确要求110元以下分批买入，属于等待价格类型",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约标签为‘观察’，但正文摘要明确给出价格触发点和建仓动作，故正文优先，归为等待价格/watch",
+        "evidence": [
+          {
+            "line_start": 301,
+            "line_end": 301,
+            "quote": "| 结论摘要 | 空仓者 110 元以下分批买入（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |",
+            "supports": "报告明确给出价格触发条件（110元以下分批买入），且当前116元仅可建1/4观察仓，因此空仓者应等待价格达到110元以下再分批买入，属于等待价格/watch"
+          },
+          {
+            "line_start": 300,
+            "line_end": 300,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约标签为‘观察’，与正文摘要给出的‘110元以下分批买入’一致，且未要求完全回避，故归为等待价格/watch而非回避/卖出/no"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "小仓验证",
+        "action_kind": "trial",
+        "empty_position_action": "空仓者当前116元可先建1/4观察仓；110元以下分批买入，不追反弹。",
+        "holder_action": "未给出。",
+        "trigger_condition": "110元以下分批买入；当前116元仅可先建1/4观察仓。",
+        "summary": "空仓者当前可建1/4观察仓，110元以下分批买入，不追反弹。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "看板“基本面建议动作”为“观察”，但结论摘要明确空仓者当前116元可先建1/4观察仓，二者对当前是否可行动存在冲突；依正文式结论摘要采用小仓验证。",
+        "evidence": [
+          {
+            "line_start": 300,
+            "line_end": 300,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约粗标签要求观察。"
+          },
+          {
+            "line_start": 301,
+            "line_end": 301,
+            "quote": "| 结论摘要 | 空仓者 110 元以下分批买入（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |",
+            "supports": "明确规定空仓者当前可建1/4观察仓，并给出后续价格触发；同时构成最终结论。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": true
+  }
+}

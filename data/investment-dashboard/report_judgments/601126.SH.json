@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:40+08:00",
+  "company": "四方股份",
+  "ticker": "601126.SH",
+  "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+  "report_sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者观望，不要在60元以上追高；保守型可在35-45元区间分批研究买点",
+    "holder_action": "报告未明确给出持仓者动作，但基本面建议为观察",
+    "trigger_condition": "保守型分批买入的价格区间为35-45元，激进型避免60元以上",
+    "summary": "空仓者观望，不追高；保守型可在35-45元分批研究买点",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约中基本面动作标注为'观察'，但保守型动作明确给出35-45元买入区间，且结论摘要要求等待价格，正文隐含价格触发，故按正文归为等待价格/watch，与契约'观察'标签存在冲突",
+    "evidence": [
+      {
+        "line_start": 349,
+        "line_end": 349,
+        "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
+        "supports": "表明空仓者当前不应行动，但未禁止在低价时买入，归类为等待价格/watch"
+      },
+      {
+        "line_start": 355,
+        "line_end": 355,
+        "quote": "| 保守型价格区间 | 35-45 元 |",
+        "supports": "给出明确的价格触发区间，符合等待价格/watch的定义"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 45.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望，不要在60元以上追高；保守型可在35-45元区间分批研究买点",
+        "holder_action": "报告未明确给出持仓者动作，但基本面建议为观察",
+        "trigger_condition": "保守型分批买入的价格区间为35-45元，激进型避免60元以上",
+        "summary": "空仓者观望，不追高；保守型可在35-45元分批研究买点",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约中基本面动作标注为'观察'，但保守型动作明确给出35-45元买入区间，且结论摘要要求等待价格，正文隐含价格触发，故按正文归为等待价格/watch，与契约'观察'标签存在冲突",
+        "evidence": [
+          {
+            "line_start": 349,
+            "line_end": 349,
+            "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
+            "supports": "表明空仓者当前不应行动，但未禁止在低价时买入，归类为等待价格/watch"
+          },
+          {
+            "line_start": 355,
+            "line_end": 355,
+            "quote": "| 保守型价格区间 | 35-45 元 |",
+            "supports": "给出明确的价格触发区间，符合等待价格/watch的定义"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望，60元以上不追高；在35-45元区间分批研究买点。",
+        "holder_action": "未给出",
+        "trigger_condition": "避免在60元以上追高，关注35-45元的分批研究买点。",
+        "summary": "空仓观望，60元以上不追高，35-45元分批研究买点。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "正文片段仅含看板决策契约，契约内“观察”与空仓观望、价格区间建议一致，未见冲突。",
+        "evidence": [
+          {
+            "line_start": 349,
+            "line_end": 349,
+            "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
+            "supports": "支持空仓者当前观望及最终结论。"
+          },
+          {
+            "line_start": 354,
+            "line_end": 355,
+            "quote": "| 保守型动作 | 分批研究买点 | | 保守型价格区间 | 35-45 元 |",
+            "supports": "支持以35-45元作为等待价格后的分批研究买点。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:52:12+08:00",
+  "company": "skyverse-tech",
+  "ticker": "688361.SH",
+  "report_path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+  "report_sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "持仓者应回避或考虑卖出，因当前价格严重透支未来增长，投资论文已不具吸引力。",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告建议空仓者回避，因当前价格严重透支未来5-7年增长，等待回调至57-86元再考虑。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文与契约一致，均明确建议回避。",
+    "evidence": [
+      {
+        "line_start": 346,
+        "line_end": 346,
+        "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+        "supports": "明确给出空仓者回避的动作，且等待回调价格是回避后的后续条件，而非当前可行动价格。"
+      },
+      {
+        "line_start": 345,
+        "line_end": 345,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约中动作虽为观察，但结论摘要详细说明空仓者回避，且条件为等待更低价格，故整体判断为回避/卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者回避，当前价格严重透支未来5-7年增长，不应入场；等待回调至CNY 57-86（PS 10-15x）再考虑。",
+        "holder_action": "持仓者应回避或考虑卖出，因当前价格严重透支未来增长，投资论文已不具吸引力。",
+        "trigger_condition": "价格回调至CNY 57-86（PS 10-15x）区间。",
+        "summary": "报告建议空仓者回避，因当前价格严重透支未来5-7年增长，等待回调至57-86元再考虑。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均明确建议回避。",
+        "evidence": [
+          {
+            "line_start": 346,
+            "line_end": 346,
+            "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+            "supports": "明确给出空仓者回避的动作，且等待回调价格是回避后的后续条件，而非当前可行动价格。"
+          },
+          {
+            "line_start": 345,
+            "line_end": 345,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约中动作虽为观察，但结论摘要详细说明空仓者回避，且条件为等待更低价格，故整体判断为回避/卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前不入场，等待回调至CNY 57-86（PS 10-15x）再入场。",
+        "holder_action": "未给出。",
+        "trigger_condition": "回调至CNY 57-86（PS 10-15x）。",
+        "summary": "当前价格严重透支增长，空仓者等待回调至CNY 57-86再入场。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "看板粗标签为“观察”，但结论摘要同时写“空仓者 回避”及“等待回调至CNY 57-86再入场”。按空仓者明确的价格触发动作，归为等待价格/watch，而非回避/卖出。",
+        "evidence": [
+          {
+            "line_start": 345,
+            "line_end": 345,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约的粗标签为观察。"
+          },
+          {
+            "line_start": 346,
+            "line_end": 346,
+            "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+            "supports": "覆盖空仓建议和最终结论；明确给出等待更低价格后再入场的价格触发动作。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  }
+}

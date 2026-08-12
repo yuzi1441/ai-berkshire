@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:09+08:00",
+  "company": "五粮液",
+  "ticker": "000858.SZ",
+  "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+  "report_sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者可在60元以下分批试探，58元以下赔率明显改善时再行动",
+    "holder_action": "未给出持仓者明确动作，报告仅聚焦激进型观察仓/小仓位",
+    "trigger_condition": "股价跌至60元以下分批试探，58元以下赔率明显改善",
+    "summary": "报告对空仓者给出激进型等待价格60元以下分批试探，58元以下赔率明显改善，稳健型未给，保守型回避",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突",
+    "evidence": [
+      {
+        "line_start": 198,
+        "line_end": 198,
+        "quote": "| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |",
+        "supports": "明确空仓者等待价格60元以下分批试探，58元以下赔率改善"
+      },
+      {
+        "line_start": 199,
+        "line_end": 199,
+        "quote": "| 激进型动作 | 60元以下分批试探 |",
+        "supports": "最终结论为等待价格触发点，非回避或立即买入"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 60.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者可在60元以下分批试探，58元以下赔率明显改善时再行动",
+        "holder_action": "未给出持仓者明确动作，报告仅聚焦激进型观察仓/小仓位",
+        "trigger_condition": "股价跌至60元以下分批试探，58元以下赔率明显改善",
+        "summary": "报告对空仓者给出激进型等待价格60元以下分批试探，58元以下赔率明显改善，稳健型未给，保守型回避",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 198,
+            "quote": "| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |",
+            "supports": "明确空仓者等待价格60元以下分批试探，58元以下赔率改善"
+          },
+          {
+            "line_start": 199,
+            "line_end": 199,
+            "quote": "| 激进型动作 | 60元以下分批试探 |",
+            "supports": "最终结论为等待价格触发点，非回避或立即买入"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待股价低于60元后分批试探，且仅以观察仓/小仓位（≤3%）参与。",
+        "holder_action": "未给出持仓者具体操作建议。",
+        "trigger_condition": "股价60元以下分批试探；逐季验证信号后再加仓。",
+        "summary": "激进型仅在60元以下以≤3%观察仓分批试探，验证后再加仓；保守型回避。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：结论摘要、激进型动作及基本面建议动作均指向观察并等待60元以下的价格触发。",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 198,
+            "quote": "| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |",
+            "supports": "支持最终结论，以及空仓者应等待60元以下再以小仓位分批试探。"
+          },
+          {
+            "line_start": 199,
+            "line_end": 199,
+            "quote": "| 激进型动作 | 60元以下分批试探 |",
+            "supports": "支持空仓者的明确价格触发动作。"
+          },
+          {
+            "line_start": 203,
+            "line_end": 203,
+            "quote": "| 保守型动作 | 回避 |",
+            "supports": "补充说明保守型的明确动作，但不改变激进型空仓者等待价格的判断。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

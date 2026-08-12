@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:03+08:00",
+  "company": "中远海控",
+  "ticker": "601919.SH",
+  "report_path": "reports/中远海控/中远海控-research-20260707.md",
+  "report_sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者观望为主，不追高；若极度看重股息且能承受周期波动，可用H股建试探性底仓（≤3成）",
+    "holder_action": "持仓者继续持有但不宜加仓追高",
+    "trigger_condition": "无明确价格触发点，需等待运价回落或基本面验证",
+    "summary": "空仓者观望为主，不追高，若有股息偏好可小仓位试探H股，不宜重仓。",
+    "confidence": "medium",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突",
+    "evidence": [
+      {
+        "line_start": 337,
+        "line_end": 337,
+        "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
+        "supports": "报告明确建议空仓者观望为主，不追高，属于等待价格/验证的范畴。"
+      },
+      {
+        "line_start": 337,
+        "line_end": 337,
+        "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
+        "supports": "报告指出不宜在当前价格重仓，隐含等待价格回落，因此归为等待价格而非回避/卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望为主，不追高；若极度看重股息且能承受周期波动，可用H股建试探性底仓（≤3成）",
+        "holder_action": "持仓者继续持有但不宜加仓追高",
+        "trigger_condition": "无明确价格触发点，需等待运价回落或基本面验证",
+        "summary": "空仓者观望为主，不追高，若有股息偏好可小仓位试探H股，不宜重仓。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突",
+        "evidence": [
+          {
+            "line_start": 337,
+            "line_end": 337,
+            "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
+            "supports": "报告明确建议空仓者观望为主，不追高，属于等待价格/验证的范畴。"
+          },
+          {
+            "line_start": 337,
+            "line_end": 337,
+            "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
+            "supports": "报告指出不宜在当前价格重仓，隐含等待价格回落，因此归为等待价格而非回避/卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待验证",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者以观望、不追高为主；仅在极度看重股息且能承受周期波动时，可用H股建不超过3成的试探性底仓。",
+        "holder_action": "报告片段未给出持仓者具体动作。",
+        "trigger_condition": "极度看重股息且能承受周期波动时，可考虑H股试探性底仓（≤3成）；当前不宜在运价受红海托高时重仓。",
+        "summary": "空仓以观望为主、不追高；高股息偏好者仅可H股小仓试探。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文式结论摘要与看板粗标签“观察”一致，均以观望为主；摘要补充了H股小仓试探的例外条件。",
+        "evidence": [
+          {
+            "line_start": 336,
+            "line_end": 336,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约的基本面粗标签支持当前以观察、等待为主。"
+          },
+          {
+            "line_start": 337,
+            "line_end": 337,
+            "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
+            "supports": "明确给出空仓者以观望为主的建议、H股小仓试探的例外条件，以及最终不宜重仓的结论。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

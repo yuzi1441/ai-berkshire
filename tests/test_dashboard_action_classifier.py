@@ -79,3 +79,35 @@ class DashboardActionClassifierTests(unittest.TestCase):
             ]"""
         )
         self.assertEqual(result, ["no", "no"])
+
+    def test_primary_judgment_keeps_report_decision_ahead_of_price_auxiliary(self):
+        result = self.run_classifier(
+            """[
+              classifier.primaryJudgmentAuxiliary({
+                primary_judgment: {
+                  enabled: true,
+                  label: "等待价格",
+                  empty_position_action: "等待，不追价",
+                  trigger_condition: "价格进入约9.5元附近",
+                  currency: "CNY",
+                  entry_ceiling: 10.5,
+                  trial_range: {min: 9.5, max: 10.5}
+                }
+              }, {price: 13.13, currency: "CNY"}),
+              classifier.primaryJudgmentAuxiliary({
+                primary_judgment: {
+                  enabled: true,
+                  label: "等待价格",
+                  empty_position_action: "等待，不追价",
+                  trigger_condition: "价格进入约9.5元附近",
+                  currency: "CNY",
+                  entry_ceiling: 10.5,
+                  trial_range: {min: 9.5, max: 10.5}
+                }
+              }, {price: 10.0, currency: "CNY"})
+            ]"""
+        )
+        self.assertEqual(result[0]["label"], "尚未进入报告买入区")
+        self.assertEqual(result[0]["state"], "above_entry")
+        self.assertEqual(result[1]["label"], "小仓试错区")
+        self.assertEqual(result[1]["state"], "trial")

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:35+08:00",
+  "company": "江波龙",
+  "ticker": "301308.SZ",
+  "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+  "report_sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
+  "judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "空仓者应回避，不买入",
+    "holder_action": "持仓者应卖出或减仓",
+    "trigger_condition": "无明确价格触发点，因投资论文已破裂",
+    "summary": "报告认为江波龙是好周期股但当前不是好买点，空仓者回避，持仓者应卖出或减仓。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约摘要明确空仓者回避，与正文一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 307,
+        "line_end": 307,
+        "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+        "supports": "明确建议空仓者回避，且指出买点在历史低点，当前不是买入时机。"
+      },
+      {
+        "line_start": 306,
+        "line_end": 306,
+        "quote": "| 基本面建议动作 | 待复核 |",
+        "supports": "契约中基本面建议为待复核，但摘要已明确回避，表明实际判断为回避。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者应回避，不买入",
+        "holder_action": "持仓者应卖出或减仓",
+        "trigger_condition": "无明确价格触发点，因投资论文已破裂",
+        "summary": "报告认为江波龙是好周期股但当前不是好买点，空仓者回避，持仓者应卖出或减仓。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "契约摘要明确空仓者回避，与正文一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 307,
+            "line_end": 307,
+            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+            "supports": "明确建议空仓者回避，且指出买点在历史低点，当前不是买入时机。"
+          },
+          {
+            "line_start": 306,
+            "line_end": 306,
+            "quote": "| 基本面建议动作 | 待复核 |",
+            "supports": "契约中基本面建议为待复核，但摘要已明确回避，表明实际判断为回避。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者回避，当前不采取买入行动。",
+        "holder_action": "报告片段未给出持仓者动作。",
+        "trigger_condition": "报告仅以2024年9月“PB 3.9倍、59元”的历史买点作对比，未给出当前可执行触发条件。",
+        "summary": "空仓者回避；认为公司是好周期股，但当前中报预增新闻时点不是好买点。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "看板“基本面建议动作”为“待复核”，但“结论摘要”明确写明“空仓者 回避”。按正文明确动作优先，采用回避/卖出。",
+        "evidence": [
+          {
+            "line_start": 307,
+            "line_end": 307,
+            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+            "supports": "直接支持空仓者当前应回避，分类为回避/卖出。"
+          },
+          {
+            "line_start": 307,
+            "line_end": 307,
+            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+            "supports": "支持最终结论：当前并非报告认定的合适买点。"
+          },
+          {
+            "line_start": 306,
+            "line_end": 306,
+            "quote": "| 基本面建议动作 | 待复核 |",
+            "supports": "与结论摘要中的明确回避动作存在看板字段冲突。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:59:30+08:00",
+  "company": "长江电力",
+  "ticker": "600900.SH",
+  "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+  "report_sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "持仓者可继续持有，因为报告给出分批买入建议，未要求卖出或减仓",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告建议分批买入，但给出具体的价格触发区间，要求等价格回落至区间内方可行动。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 358,
+        "line_end": 358,
+        "quote": "| 契约版本 | 1 |",
+        "supports": "报告有明确的结构化契约信息。"
+      },
+      {
+        "line_start": 365,
+        "line_end": 365,
+        "quote": "| 基本面建议动作 | 分批买入 |",
+        "supports": "报告建议分批买入，但需要结合价格区间判断执行时机。"
+      },
+      {
+        "line_start": 366,
+        "line_end": 366,
+        "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
+        "supports": "报告看好公司基本面，但支持在价格区间内分批买入，暗示需等待价格。"
+      },
+      {
+        "line_start": 368,
+        "line_end": 368,
+        "quote": "| 激进型价格区间 | 25-26 元 |",
+        "supports": "给出具体价格触发区间，未到达该区间前不买入，等待价格。"
+      },
+      {
+        "line_start": 370,
+        "line_end": 370,
+        "quote": "| 稳健型价格区间 | 23-25 元 |",
+        "supports": "同样给出稳健型价格触发区间，进一步强调等待价格条件。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 26.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 25.0,
+      "max": 26.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应等待价格回落至激进型或稳健型价格区间（25-26元或23-25元）后再行动",
+        "holder_action": "持仓者可继续持有，因为报告给出分批买入建议，未要求卖出或减仓",
+        "trigger_condition": "价格进入25-26元（激进）或23-25元（稳健）区间",
+        "summary": "报告建议分批买入，但给出具体的价格触发区间，要求等价格回落至区间内方可行动。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 358,
+            "line_end": 358,
+            "quote": "| 契约版本 | 1 |",
+            "supports": "报告有明确的结构化契约信息。"
+          },
+          {
+            "line_start": 365,
+            "line_end": 365,
+            "quote": "| 基本面建议动作 | 分批买入 |",
+            "supports": "报告建议分批买入，但需要结合价格区间判断执行时机。"
+          },
+          {
+            "line_start": 366,
+            "line_end": 366,
+            "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
+            "supports": "报告看好公司基本面，但支持在价格区间内分批买入，暗示需等待价格。"
+          },
+          {
+            "line_start": 368,
+            "line_end": 368,
+            "quote": "| 激进型价格区间 | 25-26 元 |",
+            "supports": "给出具体价格触发区间，未到达该区间前不买入，等待价格。"
+          },
+          {
+            "line_start": 370,
+            "line_end": 370,
+            "quote": "| 稳健型价格区间 | 23-25 元 |",
+            "supports": "同样给出稳健型价格触发区间，进一步强调等待价格条件。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "激进型可小仓试建，稳健型可分批建仓，并保留回撤加仓空间。",
+        "holder_action": "报告未明确给出持仓者动作。",
+        "trigger_condition": "稳健型要求基本面未坏；契约列示激进型价格区间25-26元、稳健型价格区间23-25元。",
+        "summary": "契约建议小仓试建或分批建仓，核心前提是基本面未坏。",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "未提供正文与最终结论段落，现有片段未显示正文和契约冲突；研究置信度标注为待复核。",
+        "evidence": [
+          {
+            "line_start": 367,
+            "line_end": 369,
+            "quote": "| 激进型动作 | 小仓试建，保留回撤加仓空间 | | 激进型价格区间 | 25-26 元 | | 稳健型动作 | 分批建仓，要求基本面未坏 |",
+            "supports": "支持空仓投资者当前可以小仓试建或分批建仓。"
+          },
+          {
+            "line_start": 365,
+            "line_end": 366,
+            "quote": "| 基本面建议动作 | 分批买入 | | 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
+            "supports": "支持报告契约层面的最终判断为分批买入，且基本面评价积极。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": true
+  }
+}

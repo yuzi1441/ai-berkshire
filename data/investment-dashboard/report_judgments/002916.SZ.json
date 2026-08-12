@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T02:02:41+08:00",
+  "company": "深南电路",
+  "ticker": "002916.SZ",
+  "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+  "report_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "报告未给出明确动作，需待复核",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告结论摘要待复核，仅给出观察建议，无明确行动指令",
+    "confidence": "low",
+    "report_field_conflict": true,
+    "conflict_note": "无冲突",
+    "evidence": [
+      {
+        "line_start": 383,
+        "line_end": 383,
+        "quote": "| 结论摘要 | 待复核 |",
+        "supports": "报告结论未明确，无法判断空仓者动作"
+      },
+      {
+        "line_start": 382,
+        "line_end": 382,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "报告仅建议观察，未提供具体买入或卖出指令"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "待人工复核",
+        "action_kind": "unknown",
+        "empty_position_action": "报告未给出明确动作，需待复核",
+        "holder_action": "报告未给出明确动作，需待复核",
+        "trigger_condition": "未给出",
+        "summary": "报告结论摘要待复核，仅给出观察建议，无明确行动指令",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突",
+        "evidence": [
+          {
+            "line_start": 383,
+            "line_end": 383,
+            "quote": "| 结论摘要 | 待复核 |",
+            "supports": "报告结论未明确，无法判断空仓者动作"
+          },
+          {
+            "line_start": 382,
+            "line_end": 382,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "报告仅建议观察，未提供具体买入或卖出指令"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观察，不追高，等待价格进入250-300元区间后再复核",
+        "holder_action": "小仓位跟踪，不把它当低估值投资",
+        "trigger_condition": "保守型价格区间为250-300元，且不追高",
+        "summary": "空仓观察不追高，持仓仅小仓跟踪，结论待复核",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约动作已给出观察和小仓跟踪，但结论摘要仍标为待复核，存在字段不一致；按明确动作判断。",
+        "evidence": [
+          {
+            "line_start": 388,
+            "line_end": 389,
+            "quote": "| 保守型动作 | 观察，不追高 | | 保守型价格区间 | 250-300 元 |",
+            "supports": "支持空仓者当前应观察、不追高，并关注250-300元价格区间。"
+          },
+          {
+            "line_start": 382,
+            "line_end": 384,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 待复核 | | 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
+            "supports": "支持最终契约结论为观察且待复核，持仓者仅小仓位跟踪。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  }
+}

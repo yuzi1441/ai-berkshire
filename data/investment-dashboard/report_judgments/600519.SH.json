@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:58:59+08:00",
+  "company": "茅台",
+  "ticker": "600519.SH",
+  "report_path": "reports/茅台/贵州茅台-investment-research-20260627.md",
+  "report_sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
+  "judgment": {
+    "label": "可分批买入",
+    "action_kind": "buy",
+    "empty_position_action": "可以分批建仓，不要一次打满；1168元已进入可接受区间，在900-1300元区间均可分批买入",
+    "holder_action": "1100元以下可条件加仓，1100-1300元持有不追高加仓，1300元以上持有不加仓，需等待利润确认",
+    "trigger_condition": "900-1100元区间加仓需2026Q2/Q3利润恢复至+5%以上；1300元以下可分批次买入",
+    "summary": "报告认为1168元已进入可接受区间，空仓者可分批建仓，不要一次打满；基本面建议为分批买入。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，均支持空仓者分批买入，无冲突",
+    "evidence": [
+      {
+        "line_start": 296,
+        "line_end": 296,
+        "quote": "| 结论摘要 | 空仓者 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |",
+        "supports": "明确指示空仓者可分批买入，且1168元已进入可接受区间"
+      },
+      {
+        "line_start": 295,
+        "line_end": 295,
+        "quote": "| 基本面建议动作 | 分批买入 |",
+        "supports": "看板契约动作明确为分批买入，与最终结论一致"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 1300.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "可以分批建仓，不要一次打满；1168元已进入可接受区间，在900-1300元区间均可分批买入",
+        "holder_action": "1100元以下可条件加仓，1100-1300元持有不追高加仓，1300元以上持有不加仓，需等待利润确认",
+        "trigger_condition": "900-1100元区间加仓需2026Q2/Q3利润恢复至+5%以上；1300元以下可分批次买入",
+        "summary": "报告认为1168元已进入可接受区间，空仓者可分批建仓，不要一次打满；基本面建议为分批买入。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与看板契约一致，均支持空仓者分批买入，无冲突",
+        "evidence": [
+          {
+            "line_start": 296,
+            "line_end": 296,
+            "quote": "| 结论摘要 | 空仓者 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |",
+            "supports": "明确指示空仓者可分批买入，且1168元已进入可接受区间"
+          },
+          {
+            "line_start": 295,
+            "line_end": 295,
+            "quote": "| 基本面建议动作 | 分批买入 |",
+            "supports": "看板契约动作明确为分批买入，与最终结论一致"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "空仓者可在当前区间分批建仓，不要一次打满",
+        "holder_action": "1100-1300元区间持有，不追高加仓",
+        "trigger_condition": "1168元已进入可接受区间；1100-1300元可分批建仓",
+        "summary": "空仓者可分批建仓，1168元进入可接受区间，不宜一次打满",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文片段未提供与看板契约冲突的相反结论，契约与行动价格带一致",
+        "evidence": [
+          {
+            "line_start": 295,
+            "line_end": 296,
+            "quote": "| 基本面建议动作 | 分批买入 | | 结论摘要 | 空仓者 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |",
+            "supports": "明确支持空仓者当前可分批建仓及最终结论"
+          },
+          {
+            "line_start": 315,
+            "line_end": 315,
+            "quote": "| 1100-1300 元 | 分批建仓 | 持有，不追高加仓 | 合理偏低，可分批 |",
+            "supports": "支持当前价格区间对应的空仓者和持仓者动作"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

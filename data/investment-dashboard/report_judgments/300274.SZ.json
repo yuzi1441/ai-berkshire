@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:58:11+08:00",
+  "company": "阳光电源",
+  "ticker": "300274.SZ",
+  "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+  "report_sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前不追价，103.55元以下可建立不超过目标仓位1/3的观察仓；92.04元以下且基本面未进一步恶化时分批建立有意义仓位；80.54元以下为深度价值区。",
+    "holder_action": "报告未明确给出持仓者动作，但隐含继续持有，等待价格回落后加仓。",
+    "trigger_condition": "触发价格：103.55元（18x）以下；92.04元（16x）以下且基本面未进一步恶化；80.54元（14x）以下。",
+    "summary": "空仓者当前不追价，等待股价回落至指定市盈率区间分批建仓，低至14x为深度价值区。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约中基本面建议动作写为‘观察’，但正文明确给出具体买入价格触发点，根据规则应归为‘等待价格/watch’，因此标记冲突。",
+    "evidence": [
+      {
+        "line_start": 813,
+        "line_end": 813,
+        "quote": "空仓者 当前不追价。103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓；92.04 元（16x）以下、且基本面未进一步恶化时，分批建立有意义仓位；80.54 元（14x）以下为深度价值区。",
+        "supports": "明确给出空仓者动作：不追价，等待价格触发点买入，支持‘等待价格’分类。"
+      },
+      {
+        "line_start": 812,
+        "line_end": 812,
+        "quote": "基本面建议动作 | 观察",
+        "supports": "契约字段写‘观察’，但正文有具体价位，故冲突，需以正文为准。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 103.55,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不追价，103.55元以下可建立不超过目标仓位1/3的观察仓；92.04元以下且基本面未进一步恶化时分批建立有意义仓位；80.54元以下为深度价值区。",
+        "holder_action": "报告未明确给出持仓者动作，但隐含继续持有，等待价格回落后加仓。",
+        "trigger_condition": "触发价格：103.55元（18x）以下；92.04元（16x）以下且基本面未进一步恶化；80.54元（14x）以下。",
+        "summary": "空仓者当前不追价，等待股价回落至指定市盈率区间分批建仓，低至14x为深度价值区。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约中基本面建议动作写为‘观察’，但正文明确给出具体买入价格触发点，根据规则应归为‘等待价格/watch’，因此标记冲突。",
+        "evidence": [
+          {
+            "line_start": 813,
+            "line_end": 813,
+            "quote": "空仓者 当前不追价。103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓；92.04 元（16x）以下、且基本面未进一步恶化时，分批建立有意义仓位；80.54 元（14x）以下为深度价值区。",
+            "supports": "明确给出空仓者动作：不追价，等待价格触发点买入，支持‘等待价格’分类。"
+          },
+          {
+            "line_start": 812,
+            "line_end": 812,
+            "quote": "基本面建议动作 | 观察",
+            "supports": "契约字段写‘观察’，但正文有具体价位，故冲突，需以正文为准。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前不追价；103.55元（18x）以下可建立不超过目标仓位1/3的观察仓，92.04元（16x）以下且基本面未进一步恶化时分批建仓。",
+        "holder_action": "未给出",
+        "trigger_condition": "103.55元（18x）以下可建立观察仓；92.04元（16x）以下且基本面未进一步恶化时分批建立有意义仓位。",
+        "summary": "空仓者当前不追价，等待103.55元以下的价格触发后建立观察仓。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "看板基本面建议为“观察”，与结论摘要中空仓者等待明确价格触发后建仓一致。",
+        "evidence": [
+          {
+            "line_start": 812,
+            "line_end": 812,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持看板契约的观察/等待类建议。"
+          },
+          {
+            "line_start": 813,
+            "line_end": 813,
+            "quote": "| 结论摘要 | 空仓者 当前不追价。103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓；92.04 元（16x）以下、且基本面未进一步恶化时，分批建立有意义仓位；80.54 元（14x）以下为深度价值区。 |",
+            "supports": "直接支持空仓者当前不追价、以明确价格档位作为建仓触发条件，以及报告最终结论。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

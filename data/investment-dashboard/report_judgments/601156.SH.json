@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:52:36+08:00",
+  "company": "东方航空物流股份有限公司",
+  "ticker": "601156.SH",
+  "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+  "report_sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前不追价，在17.35元观察；等待价格回落至14.5-16.0元才小额分批，12.5-14.5元稳健买入。",
+    "holder_action": "持仓者持有，不在当前价加仓，将2026半年报作为第一复核点。",
+    "trigger_condition": "价格回落至14.5-16.0元开始小额分批；或等待2026半年报验证新增运力、油价传导和租赁现金流。",
+    "summary": "当前价17.35元不提供足够安全边际，建议观察；空仓者等待价格回落或半年报验证后再行动。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均建议‘观察’，无冲突。",
+    "evidence": [
+      {
+        "line_start": 298,
+        "line_end": 298,
+        "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。",
+        "supports": "报告明确建议空仓者不追价，当前观察，等待验证。"
+      },
+      {
+        "line_start": 302,
+        "line_end": 302,
+        "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |",
+        "supports": "给出具体价格触发点，空仓者需等待价格回落。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 16.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不追价，在17.35元观察；等待价格回落至14.5-16.0元才小额分批，12.5-14.5元稳健买入。",
+        "holder_action": "持仓者持有，不在当前价加仓，将2026半年报作为第一复核点。",
+        "trigger_condition": "价格回落至14.5-16.0元开始小额分批；或等待2026半年报验证新增运力、油价传导和租赁现金流。",
+        "summary": "当前价17.35元不提供足够安全边际，建议观察；空仓者等待价格回落或半年报验证后再行动。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均建议‘观察’，无冲突。",
+        "evidence": [
+          {
+            "line_start": 298,
+            "line_end": 298,
+            "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。",
+            "supports": "报告明确建议空仓者不追价，当前观察，等待验证。"
+          },
+          {
+            "line_start": 302,
+            "line_end": 302,
+            "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |",
+            "supports": "给出具体价格触发点，空仓者需等待价格回落。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前在17.35元观察、不追价；待股价进入14.5-16.0元后才开始小额分批。",
+        "holder_action": "持有，不在当前价加仓；以2026半年报作为第一复核点。",
+        "trigger_condition": "股价降至14.5-16.0元，才开始小额分批；加仓还需价格不高于14.5元并满足FCF及EPS条件。",
+        "summary": "公司质量较好但当前安全边际不足，空仓不追价，等待更低价格后小额分批。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文的空仓策略为17.35元观察、在14.5-16.0元开始小额分批，与契约的观察及价格区间一致。",
+        "evidence": [
+          {
+            "line_start": 298,
+            "line_end": 298,
+            "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。",
+            "supports": "最终结论：当前观察，空仓者不追价，持仓者可持有。"
+          },
+          {
+            "line_start": 302,
+            "line_end": 302,
+            "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |",
+            "supports": "空仓者明确动作及价格触发点，故归为等待价格。"
+          },
+          {
+            "line_start": 303,
+            "line_end": 304,
+            "quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 | | 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |",
+            "supports": "持仓者动作及进一步加仓所需的价格和经营条件。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

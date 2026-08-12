@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:52:13+08:00",
+  "company": "东方电子",
+  "ticker": "000682.SZ",
+  "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+  "report_sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者不建议追逐情绪买入，可在12元附近建观察仓，若基本面未坏，10-11元性价比更好，可待价格到位后行动。",
+    "holder_action": "未明确给出持仓者具体动作，仅建议不追高，对持仓者未作明确指示。",
+    "trigger_condition": "价格触发点：12元附近可建观察仓；10-11元若基本面未坏则性价比更好。",
+    "summary": "报告建议空仓者不追高，等待12元附近或10-11元价格区间再考虑建仓，属于等待价格类。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，契约摘要亦为等待价格，无冲突。",
+    "evidence": [
+      {
+        "line_start": 416,
+        "line_end": 416,
+        "quote": "| 结论摘要 | 空仓者 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |",
+        "supports": "该证据明确给出空仓者动作：不追逐情绪买入，等待价格触发点12元或10-11元，属于等待价格类。"
+      },
+      {
+        "line_start": 415,
+        "line_end": 415,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约字段标明动作为观察，支持等待价格而非回避或卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 13.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 10.0,
+      "max": 13.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者不建议追逐情绪买入，可在12元附近建观察仓，若基本面未坏，10-11元性价比更好，可待价格到位后行动。",
+        "holder_action": "未明确给出持仓者具体动作，仅建议不追高，对持仓者未作明确指示。",
+        "trigger_condition": "价格触发点：12元附近可建观察仓；10-11元若基本面未坏则性价比更好。",
+        "summary": "报告建议空仓者不追高，等待12元附近或10-11元价格区间再考虑建仓，属于等待价格类。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，契约摘要亦为等待价格，无冲突。",
+        "evidence": [
+          {
+            "line_start": 416,
+            "line_end": 416,
+            "quote": "| 结论摘要 | 空仓者 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |",
+            "supports": "该证据明确给出空仓者动作：不追逐情绪买入，等待价格触发点12元或10-11元，属于等待价格类。"
+          },
+          {
+            "line_start": 415,
+            "line_end": 415,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约字段标明动作为观察，支持等待价格而非回避或卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不建议追逐“AI+电网”情绪买入；12元附近可建观察仓，10-11元且基本面未坏时性价比更好。",
+        "holder_action": "未给出。",
+        "trigger_condition": "12元附近可建观察仓；10-11元且基本面未坏时性价比更好。",
+        "summary": "空仓者不追逐情绪买入，等待12元附近观察仓或10-11元且基本面未坏。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：看板“观察”与结论摘要中按明确价格区间等待建仓的表述一致。",
+        "evidence": [
+          {
+            "line_start": 415,
+            "line_end": 415,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约将基本面建议动作定为观察。"
+          },
+          {
+            "line_start": 416,
+            "line_end": 416,
+            "quote": "| 结论摘要 | 空仓者 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |",
+            "supports": "明确给出空仓者当前不追逐买入、等待价格区间建观察仓的建议，也是最终结论摘要。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

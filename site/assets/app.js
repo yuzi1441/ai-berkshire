@@ -2,7 +2,9 @@ import {
   currentActionKind,
   fallbackActionKind,
   parseReportPriceBand,
-} from "./action-classifier.mjs?v=20260730-a-share-audit2";
+  primaryJudgmentAuxiliary,
+  primaryJudgmentForItem,
+} from "./action-classifier.mjs?v=20260813-dual-model-judgment";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
@@ -312,6 +314,84 @@ function reportPriceRows(item, { historicalFallback = true } = {}) {
       source: "historical_price_reference",
       index,
     }));
+}
+
+function renderPrimaryJudgment(item, { compact = true } = {}) {
+  const judgment = primaryJudgmentForItem(item);
+  if (!judgment) return null;
+  const wrap = document.createElement("div");
+  wrap.className = `primary-judgment${compact ? " primary-judgment-compact" : ""}`;
+
+  const eyebrow = document.createElement("div");
+  eyebrow.className = "primary-judgment-eyebrow";
+  eyebrow.textContent = "主报告判断";
+  const label = document.createElement("strong");
+  label.className = "primary-judgment-label";
+  label.textContent = judgment.label;
+  const emptyAction = document.createElement("p");
+  emptyAction.className = "primary-judgment-action";
+  emptyAction.textContent = `空仓者：${judgment.empty_position_action}`;
+  const trigger = document.createElement("p");
+  trigger.className = "primary-judgment-trigger";
+  trigger.textContent = `触发条件：${judgment.trigger_condition}`;
+  const summary = document.createElement("p");
+  summary.className = "primary-judgment-summary";
+  summary.textContent = judgment.summary;
+  wrap.append(eyebrow, label, emptyAction, trigger, summary);
+
+  if (judgment.model_consensus === true) {
+    const consensus = document.createElement("p");
+    consensus.className = "primary-judgment-consensus";
+    const modelNames = Object.values(judgment.models || {}).filter(Boolean).join(" + ");
+    consensus.textContent = `双模型一致${modelNames ? ` · ${modelNames}` : ""}`;
+    wrap.append(consensus);
+  }
+
+  if (judgment.report_field_conflict) {
+    const conflict = document.createElement("p");
+    conflict.className = "primary-judgment-conflict";
+    conflict.textContent = `字段冲突：${judgment.conflict_note || "粗粒度字段与报告正文不一致"}`;
+    wrap.append(conflict);
+  }
+  if (!compact) {
+    const source = document.createElement("p");
+    source.className = "primary-judgment-source";
+    source.textContent = `判断依据：${judgment.source_basis}`;
+    wrap.append(source);
+    if (Array.isArray(judgment.evidence) && judgment.evidence.length) {
+      const evidenceTitle = document.createElement("p");
+      evidenceTitle.className = "primary-judgment-evidence-title";
+      evidenceTitle.textContent = "报告原文证据";
+      const evidenceList = document.createElement("ul");
+      evidenceList.className = "primary-judgment-evidence";
+      for (const item of judgment.evidence) {
+        const li = document.createElement("li");
+        li.textContent = `L${item.line_start}${item.line_end !== item.line_start ? `–${item.line_end}` : ""}：${item.quote}`;
+        evidenceList.append(li);
+      }
+      wrap.append(evidenceTitle, evidenceList);
+    }
+  }
+  return wrap;
+}
+
+function renderPrimaryJudgmentAuxiliary(item, quote, { compact = true } = {}) {
+  const auxiliary = primaryJudgmentAuxiliary(item, quote);
+  if (!auxiliary) return null;
+  const wrap = document.createElement("div");
+  wrap.className = `primary-judgment-aux primary-judgment-aux-${auxiliary.state}`;
+  const label = document.createElement("strong");
+  label.textContent = auxiliary.label;
+  const detail = document.createElement("p");
+  detail.textContent = auxiliary.detail;
+  wrap.append(label, detail);
+  if (!compact) {
+    const note = document.createElement("p");
+    note.className = "primary-judgment-aux-note";
+    note.textContent = "该提示只反映现价与报告价格档的关系，不能覆盖主报告判断。";
+    wrap.append(note);
+  }
+  return wrap;
 }
 
 function reportPriceRowText(row) {
@@ -702,6 +782,19 @@ function staleBuyAnchorAdvice(item, price, ceiling) {
 }
 
 function buyAdviceForItem(item, quote) {
+  const primaryJudgment = primaryJudgmentForItem(item);
+  if (primaryJudgment) {
+    const meta = actionMeta(primaryJudgment.action_kind || "watch");
+    return {
+      key: meta.key,
+      label: primaryJudgment.label,
+      detail: `按主报告判断归类 · ${primaryJudgment.source_basis}`,
+      sourceAction: primaryJudgment.empty_position_action,
+      rank: meta.rank,
+      className: meta.className,
+      basis: "primary_report_judgment",
+    };
+  }
   const rows = reportPriceRows(item, { historicalFallback: false });
   if (!rows.length) {
     const fallback = reportFallbackAdvice(item, "无结构化价格档");
@@ -796,8 +889,10 @@ function formatChange(quote) {
   };
 }
 
-function actionRank(action) {
-  return { 买入: 5, 分批买入: 4, 持有: 3, 观察: 2, "减仓/卖出": 1 }[action] || 0;
+function researchJudgmentRank(item) {
+  const judgment = primaryJudgmentForItem(item);
+  if (judgment) return actionMeta(judgment.action_kind || "unknown").rank;
+  return { 买入: 5, 分批买入: 4, 持有: 3, 观察: 2, "减仓/卖出": 1 }[item?.action] || 0;
 }
 
 function filteredDecisions() {
@@ -830,7 +925,7 @@ function filteredDecisions() {
       return String(aa?.next_review_date || "9999-12-31").localeCompare(String(bb?.next_review_date || "9999-12-31"));
     }
     if (state.sort === "action") {
-      const d = actionRank(b.action) - actionRank(a.action);
+      const d = researchJudgmentRank(b) - researchJudgmentRank(a);
       if (d) return d;
       return a.company.localeCompare(b.company, "zh");
     }
@@ -1880,7 +1975,10 @@ function renderRows() {
     const quote = state.quotes.get(item.ticker);
     const actionTd = document.createElement("td");
     actionTd.className = "conclusion-cell";
-    actionTd.append(renderPriceActionTable(item, quote, { compact: true }));
+    actionTd.append(
+      renderPrimaryJudgment(item, { compact: true })
+      || renderPriceActionTable(item, quote, { compact: true }),
+    );
     tr.append(actionTd);
 
     const change = formatChange(quote);
@@ -1894,7 +1992,10 @@ function renderRows() {
 
     const adviceTd = document.createElement("td");
     adviceTd.className = "buy-advice-cell";
-    adviceTd.append(renderBuyAdviceCell(item, quote));
+    adviceTd.append(
+      renderPrimaryJudgmentAuxiliary(item, quote, { compact: true })
+      || renderBuyAdviceCell(item, quote),
+    );
     tr.append(adviceTd);
 
     tr.append(renderTechnicalCell(item));
@@ -2049,7 +2150,7 @@ function renderDetail() {
   const tableBrief = priceRows.length
     ? `${priceRows.length} 档${historicalReference ? "历史价格参照" : "报告价格"}`
     : "未提取价格表";
-  const adviceBrief = buyAdviceForItem(item, quote).label;
+  const adviceBrief = primaryJudgmentForItem(item)?.label || buyAdviceForItem(item, quote).label;
   els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
   els.detailReport.href = `${repositoryUrl}${item.report_path}`;
 
@@ -2076,6 +2177,20 @@ function renderDetail() {
   }
 
   if (state.detailTab === "overview") {
+    const primaryJudgment = renderPrimaryJudgment(item, { compact: false });
+    if (primaryJudgment) {
+      const primaryCard = document.createElement("div");
+      primaryCard.className = "card primary-judgment-card";
+      primaryCard.append(primaryJudgment);
+      els.detailBody.append(primaryCard);
+
+      const auxiliaryCard = document.createElement("div");
+      auxiliaryCard.className = "card primary-judgment-aux-card";
+      auxiliaryCard.innerHTML = "<h3>现价辅助位置</h3>";
+      auxiliaryCard.append(renderPrimaryJudgmentAuxiliary(item, quote, { compact: false }));
+      els.detailBody.append(auxiliaryCard);
+    }
+
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
     const advice = buyAdviceForItem(item, quote);
@@ -2098,7 +2213,7 @@ function renderDetail() {
     p.textContent = advice.detail + "。规则：优先用实时价格匹配报告价格档；暂时无法比价时退回最新报告结论，并明确标注归类依据。报告结论只反映报告截止日的研究判断。仅供研究，不构成投资建议。";
     adviceBody.append(p);
     adviceCard.append(adviceBody);
-    els.detailBody.append(adviceCard);
+    if (!primaryJudgment) els.detailBody.append(adviceCard);
 
     const overview = document.createElement("div");
     overview.className = "card";
@@ -2118,7 +2233,7 @@ function renderDetail() {
     const dl = document.createElement("dl");
     dl.className = "kv-grid";
     const rows = [
-      ["粗粒度标签", item.action || "-"],
+      [primaryJudgment ? "原契约粗标签" : "粗粒度标签", item.action || "-"],
       ["现价", `${formatPrice(quote)} ${change.text}`],
       ["数据截止", item.data_cutoff || "待复核"],
       ["推荐摘要", item.recommendation || item.title || "-"],
@@ -2135,7 +2250,9 @@ function renderDetail() {
 
     const tip = document.createElement("div");
     tip.className = "card";
-    tip.innerHTML = `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。技术面不会改变上述筛选结果，完整基本面上下文请打开主报告。</p>`;
+    tip.innerHTML = primaryJudgment
+      ? `<h3>筛选依据</h3><p class="source-note">本条预览以最新主报告的空仓行动与最终结论为首要判断；现价只用于说明所处价格档，不会覆盖主报告判断。Checklist、技术面和情绪面均保持独立辅助展示。</p>`
+      : `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。技术面不会改变上述筛选结果，完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;
   }

@@ -551,6 +551,102 @@ tbody tr:last-child td { border-bottom: none; }
   background: var(--bg-soft);
   color: var(--ink-soft);
 }
+
+/* Opt-in preview: main-report judgment leads; live-price matching is secondary. */
+.primary-judgment {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #d8c895;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #fffdf7, #faf4df);
+}
+.primary-judgment-eyebrow {
+  color: #7e6a2f;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.primary-judgment-label {
+  color: var(--watch);
+  font-size: 18px;
+  line-height: 1.15;
+}
+.primary-judgment p { margin: 0; }
+.primary-judgment-action {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 750;
+}
+.primary-judgment-trigger,
+.primary-judgment-summary,
+.primary-judgment-source {
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.primary-judgment-conflict {
+  padding-top: 5px;
+  border-top: 1px dashed #ddca91;
+  color: #8a5a22;
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+.primary-judgment-consensus {
+  width: fit-content;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: #e6f2eb;
+  color: #376d55;
+  font-size: 10px;
+  font-weight: 750;
+}
+.primary-judgment-evidence-title {
+  padding-top: 7px;
+  border-top: 1px solid #e8debf;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+}
+.primary-judgment-evidence {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.primary-judgment-compact .primary-judgment-summary,
+.primary-judgment-compact .primary-judgment-conflict {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.primary-judgment-card { padding: 0; overflow: hidden; }
+.primary-judgment-card .primary-judgment {
+  border: 0;
+  border-radius: 0;
+  padding: 16px;
+}
+.primary-judgment-aux {
+  display: grid;
+  gap: 5px;
+  padding: 9px 10px;
+  border: 1px solid #dde3e5;
+  border-radius: 9px;
+  background: #f4f6f6;
+  color: #59686c;
+}
+.primary-judgment-aux strong { font-size: 12px; color: #4f5e62; }
+.primary-judgment-aux p { margin: 0; font-size: 10.5px; line-height: 1.4; }
+.primary-judgment-aux-note { color: #788689; }
+.primary-judgment-aux-card h3 { margin-top: 0; }
+.primary-judgment-aux-trial {
+  border-color: #cfddd2;
+  background: #f0f5f1;
+}
 .zone-badge.buy-zone { background: #dff5ea; color: var(--buy); }
 .zone-badge.trial-zone { background: #e8f3e7; color: #4e7444; }
 .zone-badge.hold-zone { background: #f4efe4; color: var(--hold); }

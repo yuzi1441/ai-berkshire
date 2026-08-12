@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:51:30+08:00",
+  "company": "Jereh",
+  "ticker": "002353.SZ",
+  "report_path": "reports/Jereh/Jereh-research-20260624.md",
+  "report_sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "回避当前价位，设置观察价位80-100元，到达后重新评估",
+    "holder_action": "未明确给出持仓者动作，但建议回避当前价位",
+    "trigger_condition": "价格到达80-100元（对应25-35倍PE）",
+    "summary": "空仓者回避当前价位，建议观察价位80-100元，到达后重新评估",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约契约标签为'观察'，但结论摘要明确'空仓者 回避当前价位'并提供价格触发点，正文与契约'观察'的宽松标签冲突，按正文分类为等待价格",
+    "evidence": [
+      {
+        "line_start": 486,
+        "line_end": 486,
+        "quote": "| 结论摘要 | 空仓者 回避当前价位。 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |",
+        "supports": "明确空仓者当前不行动，并给出等待价格触发点80-100元，属于等待价格"
+      },
+      {
+        "line_start": 485,
+        "line_end": 485,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "看板契约标签为观察，但正文具体化为等待价格，需按正文执行"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "回避当前价位，设置观察价位80-100元，到达后重新评估",
+        "holder_action": "未明确给出持仓者动作，但建议回避当前价位",
+        "trigger_condition": "价格到达80-100元（对应25-35倍PE）",
+        "summary": "空仓者回避当前价位，建议观察价位80-100元，到达后重新评估",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约契约标签为'观察'，但结论摘要明确'空仓者 回避当前价位'并提供价格触发点，正文与契约'观察'的宽松标签冲突，按正文分类为等待价格",
+        "evidence": [
+          {
+            "line_start": 486,
+            "line_end": 486,
+            "quote": "| 结论摘要 | 空仓者 回避当前价位。 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |",
+            "supports": "明确空仓者当前不行动，并给出等待价格触发点80-100元，属于等待价格"
+          },
+          {
+            "line_start": 485,
+            "line_end": 485,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约标签为观察，但正文具体化为等待价格，需按正文执行"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者回避当前159元价位，等待股价到80-100元后重新评估。",
+        "holder_action": "未给出持仓者动作。",
+        "trigger_condition": "股价到达80-100元（对应25-35x PE）后重新评估。",
+        "summary": "当前159元风险收益比极差；空仓者等待80-100元观察价位。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：契约“观察”与结论中设置80-100元观察价位后重新评估一致。",
+        "evidence": [
+          {
+            "line_start": 486,
+            "line_end": 486,
+            "quote": "| 结论摘要 | 空仓者 回避当前价位。 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |",
+            "supports": "支持空仓者当前不在现价采取买入行动。"
+          },
+          {
+            "line_start": 486,
+            "line_end": 486,
+            "quote": "| 结论摘要 | 空仓者 回避当前价位。 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |",
+            "supports": "支持以明确更低价格为主触发条件，归类为等待价格。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

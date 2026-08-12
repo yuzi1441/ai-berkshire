@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:43+08:00",
+  "company": "浙江三花智能控制股份有限公司",
+  "ticker": "002050.SZ",
+  "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+  "report_sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者暂不买入，等待股价进入不同风险偏好对应的价格区间（激进28-32元、稳健23-28元、保守16-23元）或以新业务兑现为触发条件再行动。",
+    "holder_action": "持仓者继续持有，但需关注买入失效条件（核心业务毛利率连续两个报告期低于25%或经营现金流持续弱于利润），若触发则应考虑回避或卖出。",
+    "trigger_condition": "股价回落至28-32元（激进）、23-28元（稳健）或16-23元（保守），或新业务经营兑现。",
+    "summary": "报告认为公司质量高但A股估值偏贵，建议等待更好价格或新业务兑现，不同风险偏好有不同买入价格区间。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均强调等待价格区间，无冲突。",
+    "evidence": [
+      {
+        "line_start": 360,
+        "line_end": 360,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约明确动作为观察，非直接买入，支持空仓者等待。"
+      },
+      {
+        "line_start": 361,
+        "line_end": 361,
+        "quote": "| 结论摘要 | 公司质量高但A股估值偏贵，等待更好价格或新业务兑现 |",
+        "supports": "最终结论明确要求等待更好价格或新业务兑现，符合等待价格/watch。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 37.2,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者暂不买入，等待股价进入不同风险偏好对应的价格区间（激进28-32元、稳健23-28元、保守16-23元）或以新业务兑现为触发条件再行动。",
+        "holder_action": "持仓者继续持有，但需关注买入失效条件（核心业务毛利率连续两个报告期低于25%或经营现金流持续弱于利润），若触发则应考虑回避或卖出。",
+        "trigger_condition": "股价回落至28-32元（激进）、23-28元（稳健）或16-23元（保守），或新业务经营兑现。",
+        "summary": "报告认为公司质量高但A股估值偏贵，建议等待更好价格或新业务兑现，不同风险偏好有不同买入价格区间。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均强调等待价格区间，无冲突。",
+        "evidence": [
+          {
+            "line_start": 360,
+            "line_end": 360,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约明确动作为观察，非直接买入，支持空仓者等待。"
+          },
+          {
+            "line_start": 361,
+            "line_end": 361,
+            "quote": "| 结论摘要 | 公司质量高但A股估值偏贵，等待更好价格或新业务兑现 |",
+            "supports": "最终结论明确要求等待更好价格或新业务兑现，符合等待价格/watch。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "等待更好价格；激进型、稳健型和保守型分别在报告列示的价格区间内分批买入。",
+        "holder_action": "报告片段未明确给出持仓者动作。",
+        "trigger_condition": "等待更好价格或新业务兑现。",
+        "summary": "公司质量高但A股估值偏贵，当前观察，等待更好价格或新业务兑现。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "片段未提供正文与看板契约相冲突的表述；“观察”与等待更好价格的结论一致。",
+        "evidence": [
+          {
+            "line_start": 360,
+            "line_end": 360,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持空仓者当前不立即建仓、保持观察的判断。"
+          },
+          {
+            "line_start": 361,
+            "line_end": 361,
+            "quote": "| 结论摘要 | 公司质量高但A股估值偏贵，等待更好价格或新业务兑现 |",
+            "supports": "支持最终结论为等待价格，并给出价格或新业务兑现的触发方向。"
+          },
+          {
+            "line_start": 362,
+            "line_end": 367,
+            "quote": "| 激进型动作 | 小额分批买入 | | 激进型价格区间 | 28-32元 | | 稳健型动作 | 分批买入 | | 稳健型价格区间 | 23-28元 | | 保守型动作 | 重点研究并分批买入 | | 保守型价格区间 | 16-23元 |",
+            "supports": "说明各风险偏好下的买入动作均以报告列示价格区间为前提。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

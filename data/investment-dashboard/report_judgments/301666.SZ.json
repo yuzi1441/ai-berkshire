@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:51:37+08:00",
+  "company": "DapuStor",
+  "ticker": "301666.SZ",
+  "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+  "report_sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
+  "judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "空仓者坚决回避，不要买入；等待2027年解禁潮后或股价大幅回调后再评估",
+    "holder_action": "报告未明确给出持仓者动作，但从上下文推断为回避/卖出",
+    "trigger_condition": "等待2027年解禁潮后，届时股价可能大幅回调且盈利数据更充分",
+    "summary": "当前705元价格无安全边际，空仓者坚决回避，等待2027年解禁潮后再评估。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文与契约一致，均要求回避。",
+    "evidence": [
+      {
+        "line_start": 389,
+        "line_end": 389,
+        "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+        "supports": "空仓者应回避，无安全边际。"
+      },
+      {
+        "line_start": 389,
+        "line_end": 389,
+        "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+        "supports": "需等待未来事件，当前回避。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者坚决回避，不要买入；等待2027年解禁潮后或股价大幅回调后再评估",
+        "holder_action": "报告未明确给出持仓者动作，但从上下文推断为回避/卖出",
+        "trigger_condition": "等待2027年解禁潮后，届时股价可能大幅回调且盈利数据更充分",
+        "summary": "当前705元价格无安全边际，空仓者坚决回避，等待2027年解禁潮后再评估。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均要求回避。",
+        "evidence": [
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+            "supports": "空仓者应回避，无安全边际。"
+          },
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+            "supports": "需等待未来事件，当前回避。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者坚决回避，当前不应买入；如看好赛道，等2027年解禁潮后再评估。",
+        "holder_action": "报告片段未给出持仓者动作。",
+        "trigger_condition": "等2027年解禁潮后再评估，届时以更多季度盈利数据验证。",
+        "summary": "空仓者应坚决回避，当前705元无安全边际，待2027年解禁潮后复核。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板“基本面建议动作”为“观察”，但结论摘要明确要求“空仓者 坚决回避”，按空仓者明确动作优先，采用回避/卖出。",
+        "evidence": [
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+            "supports": "直接支持空仓者当前应回避，action_kind为no。"
+          },
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |",
+            "supports": "支持最终结论及后续复核触发条件。"
+          },
+          {
+            "line_start": 388,
+            "line_end": 388,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "表明看板粗标签与正文明确回避建议存在冲突。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

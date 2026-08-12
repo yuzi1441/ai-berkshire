@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:27+08:00",
+  "company": "汇川技术",
+  "ticker": "300124.SZ",
+  "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+  "report_sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "当前观察，不因机器人或AI叙事追高",
+    "holder_action": "自动化增长和汽车利润率未恶化时持有，不追涨加仓",
+    "trigger_condition": "价格触发点为56-62元（激进型）或48-55元（稳健型）或不高于45元（保守型）；事件触发点为2026H1自动化订单和收入、汽车毛利率及客户集中度等验证",
+    "summary": "汇川技术为高质量自动化平台，但估值不便宜，当前空仓者应观察，等待更低价位或基本面验证后再行动。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "无冲突",
+    "evidence": [
+      {
+        "line_start": 229,
+        "line_end": 229,
+        "quote": "| 空仓者 | 当前观察，不因机器人或 AI 叙事追高 |",
+        "supports": "空仓者当前应观察，不追高，体现等待价格或等待验证的基调"
+      },
+      {
+        "line_start": 225,
+        "line_end": 225,
+        "quote": "**基本面建议动作：观察。** 汇川是一家值得持续跟踪的高质量制造业公司，但不是在当前盈利压力下可以忽略价格的公司。",
+        "supports": "最终结论为观察，支持等待价格/等待验证的归类"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 62.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 56.0,
+      "max": 62.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前观察，不因机器人或AI叙事追高",
+        "holder_action": "自动化增长和汽车利润率未恶化时持有，不追涨加仓",
+        "trigger_condition": "价格触发点为56-62元（激进型）或48-55元（稳健型）或不高于45元（保守型）；事件触发点为2026H1自动化订单和收入、汽车毛利率及客户集中度等验证",
+        "summary": "汇川技术为高质量自动化平台，但估值不便宜，当前空仓者应观察，等待更低价位或基本面验证后再行动。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突",
+        "evidence": [
+          {
+            "line_start": 229,
+            "line_end": 229,
+            "quote": "| 空仓者 | 当前观察，不因机器人或 AI 叙事追高 |",
+            "supports": "空仓者当前应观察，不追高，体现等待价格或等待验证的基调"
+          },
+          {
+            "line_start": 225,
+            "line_end": 225,
+            "quote": "**基本面建议动作：观察。** 汇川是一家值得持续跟踪的高质量制造业公司，但不是在当前盈利压力下可以忽略价格的公司。",
+            "supports": "最终结论为观察，支持等待价格/等待验证的归类"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前观察，不因机器人或 AI 叙事追高；仅在对应风险偏好的价格区间考虑分批买入。",
+        "holder_action": "自动化增长和汽车利润率未恶化时持有，不追涨加仓。",
+        "trigger_condition": "价格回落至对应风险偏好区间：激进型56-62元、稳健型48-55元、保守型不高于45元，且基本面未进一步恶化。",
+        "summary": "公司质量较高但当前估值不便宜，空仓者应观察并等待价格安全边际。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文最终决策、空仓者建议与看板契约的“观察”一致；价格区间进一步明确了等待价格的行动条件。",
+        "evidence": [
+          {
+            "line_start": 225,
+            "line_end": 225,
+            "quote": "**基本面建议动作：观察。** 汇川是一家值得持续跟踪的高质量制造业公司，但不是在当前盈利压力下可以忽略价格的公司。",
+            "supports": "支持最终结论为观察，且明确投资决策受价格约束。"
+          },
+          {
+            "line_start": 229,
+            "line_end": 232,
+            "quote": "| 空仓者 | 当前观察，不因机器人或 AI 叙事追高 | | 激进型 | 56-62 元可小仓分批，前提是基本面未进一步恶化 | | 稳健型 | 48-55 元分批买入，以中性情景折现后价值为约束 | | 保守型 | 不高于 45 元才考虑，要求更充分的汽车与周期安全边际 |",
+            "supports": "直接规定空仓者当前观察，并给出以价格为主的分批买入触发区间，故归类为等待价格。"
+          },
+          {
+            "line_start": 233,
+            "line_end": 233,
+            "quote": "| 持仓者 | 自动化增长和汽车利润率未恶化时持有，不追涨加仓 |",
+            "supports": "支持持仓者动作为持有但不追涨加仓。"
+          },
+          {
+            "line_start": 283,
+            "line_end": 290,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 高质量自动化平台但估值仍要求较高盈利恢复，暂观察。 | | 激进型动作 | 小仓分批 | | 激进型价格区间 | 56-62元 | | 稳健型动作 | 分批买入 | | 稳健型价格区间 | 48-55元 | | 保守型动作 | 仅在明显安全边际下考虑 | | 保守型价格区间 | 不高于45元 |",
+            "supports": "看板契约与正文一致，确认暂观察及各类价格触发条件。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

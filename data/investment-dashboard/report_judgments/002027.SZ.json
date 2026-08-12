@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:51:15+08:00",
+  "company": "分众传媒",
+  "ticker": "002027.SZ",
+  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+  "report_sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
+  "judgment": {
+    "label": "可分批买入",
+    "action_kind": "buy",
+    "empty_position_action": "现价附近可分批买入，激进型现价小仓分批，稳健型可等待更低安全边际（4.3-4.8元），保守型仅在深度折价时买入。",
+    "holder_action": "可持有，若触发买入失效条件（如楼宇收入连续降幅超10%、经济FCF低于35亿元等）需重新评估。",
+    "trigger_condition": "激进型价格区间4.8-5.3元，稳健型4.3-4.8元，保守型3.8-4.2元；失效条件为楼宇收入连续两个半年降幅超10%等。",
+    "summary": "核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均支持分批买入。",
+    "evidence": [
+      {
+        "line_start": 374,
+        "line_end": 374,
+        "quote": "基本面建议动作 | 分批买入",
+        "supports": "契约明确给出空仓者可分批买入的动作。"
+      },
+      {
+        "line_start": 375,
+        "line_end": 375,
+        "quote": "结论摘要 | 核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。",
+        "supports": "最终结论强调‘现价可分批’，支持买入判断。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 5.3,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 4.8,
+      "max": 5.3
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "现价附近可分批买入，激进型现价小仓分批，稳健型可等待更低安全边际（4.3-4.8元），保守型仅在深度折价时买入。",
+        "holder_action": "可持有，若触发买入失效条件（如楼宇收入连续降幅超10%、经济FCF低于35亿元等）需重新评估。",
+        "trigger_condition": "激进型价格区间4.8-5.3元，稳健型4.3-4.8元，保守型3.8-4.2元；失效条件为楼宇收入连续两个半年降幅超10%等。",
+        "summary": "核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均支持分批买入。",
+        "evidence": [
+          {
+            "line_start": 374,
+            "line_end": 374,
+            "quote": "基本面建议动作 | 分批买入",
+            "supports": "契约明确给出空仓者可分批买入的动作。"
+          },
+          {
+            "line_start": 375,
+            "line_end": 375,
+            "quote": "结论摘要 | 核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。",
+            "supports": "最终结论强调‘现价可分批’，支持买入判断。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "空仓者现价可分批买入；激进型可在现价附近小仓分批。",
+        "holder_action": "报告片段未明确持仓者动作。",
+        "trigger_condition": "激进型在4.8-5.3元现价附近小仓分批；稳健型等待4.3-4.8元更厚安全边际。",
+        "summary": "核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "所给片段仅含看板决策契约，未提供相冲突的正文或独立最终结论；契约内“分批买入”与“现价可分批”一致。",
+        "evidence": [
+          {
+            "line_start": 374,
+            "line_end": 374,
+            "quote": "| 基本面建议动作 | 分批买入 |",
+            "supports": "支持空仓者当前可采取分批买入动作，并对应“可分批买入”标签。"
+          },
+          {
+            "line_start": 375,
+            "line_end": 375,
+            "quote": "| 结论摘要 | 核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。 |",
+            "supports": "支持最终结论为现价可分批，同时说明确定性受风险因素压低。"
+          },
+          {
+            "line_start": 376,
+            "line_end": 377,
+            "quote": "| 激进型动作 | 现价附近小仓分批 | | 激进型价格区间 | 4.8-5.3 元 |",
+            "supports": "支持空仓激进型在指定价格区间附近小仓分批的具体执行方式。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

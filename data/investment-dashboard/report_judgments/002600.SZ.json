@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:59:44+08:00",
+  "company": "领益智造",
+  "ticker": "002600.SZ",
+  "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+  "report_sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b",
+  "judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "回避，不因跌停/破发/创新低而抄底；等待扣非利润重回增长且估值回落至30x以下再评估。",
+    "holder_action": "未明确给出持仓者卖出或减仓指令，但报告结论摘要建议回避，隐含持有者亦应回避或考虑卖出。",
+    "trigger_condition": "扣非利润重回增长且估值回落至30x以下。",
+    "summary": "空仓者回避，不因跌停/破发/创新低而抄底；静态PE 57x、扣非PE 74.8x、PB 93%分位，估值贵；扣非利润萎缩、2026Q1净利-30.7%，基本面向下估值向上背离；等待扣非利润重回增长+估值回落至30x以下再评估。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "无冲突，正文与看板契约同义，均建议回避。",
+    "evidence": [
+      {
+        "line_start": 276,
+        "line_end": 276,
+        "quote": "| 结论摘要 | 空仓者 回避。不因\"跌停/破发/创新低\"而抄底——静态PE 57x、扣非PE 74.8x、PB 93%分位，绝对估值不便宜；扣非利润萎缩、2026Q1净利−30.7%，基本面向下、估值向上背离。等待\"扣非利润重回增长 + 估值回落至30x以下\"再评估。 |",
+        "supports": "明确给出空仓者动作：回避，且等待条件为扣非利润重回增长与估值回落至30x以下。"
+      },
+      {
+        "line_start": 275,
+        "line_end": 275,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "看板契约契约给出基本面建议动作‘观察’，但结论摘要明确‘回避’，因优先级策略，以正文‘回避’为准，故判为回避/卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "回避，不因跌停/破发/创新低而抄底；等待扣非利润重回增长且估值回落至30x以下再评估。",
+        "holder_action": "未明确给出持仓者卖出或减仓指令，但报告结论摘要建议回避，隐含持有者亦应回避或考虑卖出。",
+        "trigger_condition": "扣非利润重回增长且估值回落至30x以下。",
+        "summary": "空仓者回避，不因跌停/破发/创新低而抄底；静态PE 57x、扣非PE 74.8x、PB 93%分位，估值贵；扣非利润萎缩、2026Q1净利-30.7%，基本面向下估值向上背离；等待扣非利润重回增长+估值回落至30x以下再评估。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突，正文与看板契约同义，均建议回避。",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "| 结论摘要 | 空仓者 回避。不因\"跌停/破发/创新低\"而抄底——静态PE 57x、扣非PE 74.8x、PB 93%分位，绝对估值不便宜；扣非利润萎缩、2026Q1净利−30.7%，基本面向下、估值向上背离。等待\"扣非利润重回增长 + 估值回落至30x以下\"再评估。 |",
+            "supports": "明确给出空仓者动作：回避，且等待条件为扣非利润重回增长与估值回落至30x以下。"
+          },
+          {
+            "line_start": 275,
+            "line_end": 275,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约契约给出基本面建议动作‘观察’，但结论摘要明确‘回避’，因优先级策略，以正文‘回避’为准，故判为回避/卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者回避，不因跌停、破发或创新低而抄底",
+        "holder_action": "报告未给出持仓者动作",
+        "trigger_condition": "等待扣非利润重回增长且估值回落至30倍以下再评估",
+        "summary": "空仓回避，等待扣非利润增长且估值降至30倍以下",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板基本面建议动作为“观察”，但结论摘要明确要求空仓者回避；按正文结论判定。",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 275,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "该契约字段给出观察标签，与正文结论存在冲突"
+          },
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "| 结论摘要 | 空仓者 回避。不因\"跌停/破发/创新低\"而抄底——静态PE 57x、扣非PE 74.8x、PB 93%分位，绝对估值不便宜；扣非利润萎缩、2026Q1净利−30.7%，基本面向下、估值向上背离。等待\"扣非利润重回增长 + 估值回落至30x以下\"再评估。 |",
+            "supports": "明确给出空仓者回避，并列明后续经营与估值复核条件"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

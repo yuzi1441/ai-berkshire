@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T02:02:22+08:00",
+  "company": "guangdong-hongda",
+  "ticker": "002683.SZ",
+  "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+  "report_sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应保持观察，等待股价回到24元以下或21元以下的安全边际，或等待经营现金流、订单等验证信号出现后再考虑买入",
+    "holder_action": "有持仓者审慎持有，若出现减仓/重新审视信号则应减仓或重新评估",
+    "trigger_condition": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
+    "summary": "生意质量中上但估值偏充分，安全边际不足，空仓者应等待股价回落至24元以下或21元以下再行动，有持仓者审慎持有",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约中稳健型动作标注为'观察'且价格区间为24-25元，保守型为'等待'且价格为21元，但定性判断研究动作为'观察/有持仓则审慎持有'，正文加仓信号明确给出股价触发点，契约与正文在动作表述上不一致，正文更具体，按优先级采用正文并标记冲突",
+    "evidence": [
+      {
+        "line_start": 264,
+        "line_end": 264,
+        "quote": "| 研究动作 | **观察 / 有持仓则审慎持有** |",
+        "supports": "空仓者建议为观察，不急于买入"
+      },
+      {
+        "line_start": 272,
+        "line_end": 272,
+        "quote": "5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。",
+        "supports": "给出明确的等待价格触发条件，空仓者需等待更低价格"
+      },
+      {
+        "line_start": 331,
+        "line_end": 338,
+        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 中上：高门槛、强监管、客户粘性，但辛苦、重资产、定价权有限 | | 激进型动作 | 小仓位跟踪 | | 激进型价格区间 | 未给出 | | 稳健型动作 | 观察池 | | 稳健型价格区间 | 24-25 元 | | 保守型动作 | 等待 | | 保守型价格区间 | 21 元 |",
+        "supports": "契约中稳健型为观察池且价格区间24-25元，保守型为等待且价格21元，进一步印证空仓者应等待价格"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应保持观察，等待股价回到24元以下或21元以下的安全边际，或等待经营现金流、订单等验证信号出现后再考虑买入",
+        "holder_action": "有持仓者审慎持有，若出现减仓/重新审视信号则应减仓或重新评估",
+        "trigger_condition": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
+        "summary": "生意质量中上但估值偏充分，安全边际不足，空仓者应等待股价回落至24元以下或21元以下再行动，有持仓者审慎持有",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约中稳健型动作标注为'观察'且价格区间为24-25元，保守型为'等待'且价格为21元，但定性判断研究动作为'观察/有持仓则审慎持有'，正文加仓信号明确给出股价触发点，契约与正文在动作表述上不一致，正文更具体，按优先级采用正文并标记冲突",
+        "evidence": [
+          {
+            "line_start": 264,
+            "line_end": 264,
+            "quote": "| 研究动作 | **观察 / 有持仓则审慎持有** |",
+            "supports": "空仓者建议为观察，不急于买入"
+          },
+          {
+            "line_start": 272,
+            "line_end": 272,
+            "quote": "5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。",
+            "supports": "给出明确的等待价格触发条件，空仓者需等待更低价格"
+          },
+          {
+            "line_start": 331,
+            "line_end": 338,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 中上：高门槛、强监管、客户粘性，但辛苦、重资产、定价权有限 | | 激进型动作 | 小仓位跟踪 | | 激进型价格区间 | 未给出 | | 稳健型动作 | 观察池 | | 稳健型价格区间 | 24-25 元 | | 保守型动作 | 等待 | | 保守型价格区间 | 21 元 |",
+            "supports": "契约中稳健型为观察池且价格区间24-25元，保守型为等待且价格21元，进一步印证空仓者应等待价格"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待股价回到24元以下且基本面未恶化，或21元以下形成明显安全边际后再考虑行动",
+        "holder_action": "有持仓则审慎持有，不建议当前加仓",
+        "trigger_condition": "股价低于24元且基本面未恶化，或低于21元形成明显安全边际；同时关注经营现金流、应收及并购协同验证",
+        "summary": "现价估值偏充分，空仓等待更低价格，有持仓审慎持有",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文研究动作与看板契约均指向观察或等待，未发现冲突",
+        "evidence": [
+          {
+            "line_start": 264,
+            "line_end": 264,
+            "quote": "| 研究动作 | **观察 / 有持仓则审慎持有** |",
+            "supports": "支持最终结论为观察，持仓者审慎持有，未给出当前积极买入建议"
+          },
+          {
+            "line_start": 272,
+            "line_end": 272,
+            "quote": "5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。",
+            "supports": "支持空仓者等待明确的更低价格触发点，因此分类为等待价格"
+          },
+          {
+            "line_start": 337,
+            "line_end": 338,
+            "quote": "| 保守型动作 | 等待 | | 保守型价格区间 | 21 元 |",
+            "supports": "进一步支持保守型投资者等待21元价格触发"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

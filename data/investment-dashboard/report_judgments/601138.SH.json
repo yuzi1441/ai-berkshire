@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:29+08:00",
+  "company": "工业富联",
+  "ticker": "601138.SH",
+  "report_path": "reports/工业富联/工业富联-research-20260726.md",
+  "report_sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者继续等待，保守型在价格≤43元时再考虑介入，激进型可在≤55元小仓试错；当前未到触发价，不应行动。",
+    "holder_action": "持仓者继续持有，不加仓，等待价格或盈利确定性上修。",
+    "trigger_condition": "保守型触发价格≤43元（PE 18.13x，≈上市以来均值）；激进型触发价格≤55元；或盈利确定性显著上修。",
+    "summary": "报告对工业富联建议观察，空仓保守型继续等待≤43元，激进型可≤55元小仓试错；当前未到触发价，空仓者应以等待为主。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，契约明确给出保守型等待价格≤43元，符合等待价格/watch分类。",
+    "evidence": [
+      {
+        "line_start": 1026,
+        "line_end": 1026,
+        "quote": "空仓·保守型 继续等待 ≤ 43 元（PE 18.13x，≈上市以来均值），或盈利确定性显著上修",
+        "supports": "明确空仓保守型需等待价格触发，属于等待价格/watch。"
+      },
+      {
+        "line_start": 1027,
+        "line_end": 1028,
+        "quote": "激进型动作 | 可小仓试错 | 激进型价格区间 | ≤ 55 元",
+        "supports": "激进型虽有试错但需价格≤55元，当前未达触发，整体仍是等待为主。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 50.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者继续等待，保守型在价格≤43元时再考虑介入，激进型可在≤55元小仓试错；当前未到触发价，不应行动。",
+        "holder_action": "持仓者继续持有，不加仓，等待价格或盈利确定性上修。",
+        "trigger_condition": "保守型触发价格≤43元（PE 18.13x，≈上市以来均值）；激进型触发价格≤55元；或盈利确定性显著上修。",
+        "summary": "报告对工业富联建议观察，空仓保守型继续等待≤43元，激进型可≤55元小仓试错；当前未到触发价，空仓者应以等待为主。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，契约明确给出保守型等待价格≤43元，符合等待价格/watch分类。",
+        "evidence": [
+          {
+            "line_start": 1026,
+            "line_end": 1026,
+            "quote": "空仓·保守型 继续等待 ≤ 43 元（PE 18.13x，≈上市以来均值），或盈利确定性显著上修",
+            "supports": "明确空仓保守型需等待价格触发，属于等待价格/watch。"
+          },
+          {
+            "line_start": 1027,
+            "line_end": 1028,
+            "quote": "激进型动作 | 可小仓试错 | 激进型价格区间 | ≤ 55 元",
+            "supports": "激进型虽有试错但需价格≤55元，当前未达触发，整体仍是等待为主。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "保守型空仓者继续等待，待股价≤43元后再观察；若盈利确定性显著上修亦可重新评估。",
+        "holder_action": "未给出持仓者操作建议。",
+        "trigger_condition": "保守型价格触发为≤43元；或盈利确定性显著上修。",
+        "summary": "保守型空仓继续等待≤43元或盈利确定性显著上修。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：看板基本面建议为“观察”，结论摘要明确空仓保守型等待并给出价格触发。",
+        "evidence": [
+          {
+            "line_start": 1026,
+            "line_end": 1026,
+            "quote": "| 结论摘要 | 空仓·保守型 继续等待 ≤ 43 元（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |",
+            "supports": "覆盖空仓者建议及结论摘要，明确当前应等待并给出价格与盈利验证条件。"
+          },
+          {
+            "line_start": 1031,
+            "line_end": 1032,
+            "quote": "| 保守型动作 | 继续等待 | | 保守型价格区间 | ≤ 43 元 |",
+            "supports": "确认保守型空仓者的具体动作为继续等待，价格触发点为≤43元。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

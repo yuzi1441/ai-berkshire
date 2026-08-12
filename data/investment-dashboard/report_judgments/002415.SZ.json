@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:58+08:00",
+  "company": "海康威视",
+  "ticker": "002415.SZ",
+  "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+  "report_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "观望，不追37.95元；30-34元进入分批研究区；若跌到30元以下且现金流、库存没有恶化，可提高关注度",
+    "holder_action": "持有并跟踪，重点看H2经营现金流、存货、应收账款、国内主业和创新业务利润；不因单季利润增长盲目加仓",
+    "trigger_condition": "股价进入30-34元；或连续两个季度经营现金流/净利润≥1、存货增速低于收入增速、主业毛利率稳定",
+    "summary": "37.95元合理偏贵，空仓不追高，等待30-34元或现金转换进一步验证",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约中基本面建议动作为观察，但正文要求等待价格触发，与契约粗标签冲突，按正文归为等待价格",
+    "evidence": [
+      {
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "| 空仓者 | **观望，不追 37.95 元。** 30-34 元进入分批研究区；若跌到 30 元以下且现金流、库存没有恶化，可提高关注度。 |",
+        "supports": "报告明确要求空仓者观望，并给出价格触发点，因此归为等待价格"
+      },
+      {
+        "line_start": 328,
+        "line_end": 329,
+        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 37.95元合理偏贵，空仓不追高，等待30-34元或现金转换进一步验证。 |",
+        "supports": "最终结论为等待价格而非回避，故不归为回避/卖出"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 34.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 30.0,
+      "max": 34.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望，不追37.95元；30-34元进入分批研究区；若跌到30元以下且现金流、库存没有恶化，可提高关注度",
+        "holder_action": "持有并跟踪，重点看H2经营现金流、存货、应收账款、国内主业和创新业务利润；不因单季利润增长盲目加仓",
+        "trigger_condition": "股价进入30-34元；或连续两个季度经营现金流/净利润≥1、存货增速低于收入增速、主业毛利率稳定",
+        "summary": "37.95元合理偏贵，空仓不追高，等待30-34元或现金转换进一步验证",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约中基本面建议动作为观察，但正文要求等待价格触发，与契约粗标签冲突，按正文归为等待价格",
+        "evidence": [
+          {
+            "line_start": 269,
+            "line_end": 269,
+            "quote": "| 空仓者 | **观望，不追 37.95 元。** 30-34 元进入分批研究区；若跌到 30 元以下且现金流、库存没有恶化，可提高关注度。 |",
+            "supports": "报告明确要求空仓者观望，并给出价格触发点，因此归为等待价格"
+          },
+          {
+            "line_start": 328,
+            "line_end": 329,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 37.95元合理偏贵，空仓不追高，等待30-34元或现金转换进一步验证。 |",
+            "supports": "最终结论为等待价格而非回避，故不归为回避/卖出"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望，不追37.95元；30-34元进入分批研究区，30元以下且现金流、库存未恶化时提高关注度。",
+        "holder_action": "持有并跟踪，不因单季利润增长盲目加仓。",
+        "trigger_condition": "股价进入30-34元；若跌至30元以下且现金流、库存未恶化，可提高关注度。",
+        "summary": "37.95元合理偏贵，空仓不追高，等待30-34元或经营现金流验证。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文对空仓者的价格等待建议与看板“观察”及结论摘要一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 269,
+            "line_end": 269,
+            "quote": "| 空仓者 | **观望，不追 37.95 元。** 30-34 元进入分批研究区；若跌到 30 元以下且现金流、库存没有恶化，可提高关注度。 |",
+            "supports": "明确规定空仓者当前观望，并以30-34元和30元以下作为价格触发条件，支持“等待价格/watch”。"
+          },
+          {
+            "line_start": 270,
+            "line_end": 270,
+            "quote": "| 持仓者 | **持有并跟踪。** 重点看 H2 经营现金流、存货、应收账款、国内主业和创新业务利润；不因单季利润增长盲目加仓。 |",
+            "supports": "明确规定持仓者持有并跟踪，且不应盲目加仓。"
+          },
+          {
+            "line_start": 329,
+            "line_end": 329,
+            "quote": "| 结论摘要 | 37.95元合理偏贵，空仓不追高，等待30-34元或现金转换进一步验证。 |",
+            "supports": "最终结论再次确认空仓不追高，等待价格区间或现金转换验证。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

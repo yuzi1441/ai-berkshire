@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:48:00+08:00",
+  "company": "招商银行",
+  "ticker": "600036.SH",
+  "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+  "report_sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓投资者当前不应在38.80元价位买入，应等待价格回落至34-36元或33.60元以下，或等待半年报验证信用风险后再行动。",
+    "holder_action": "持仓者可继续持有，但需关注买入失效条件，如信用风险扩散或资本缓冲不足，则需考虑减仓或卖出。",
+    "trigger_condition": "价格触发点：激进型36.65元以下，稳健型34-36元，保守型33.60元以下；事件触发点：半年报验证信用风险不恶化。",
+    "summary": "报告认为当前价位38.80元收益率偏低，建议等待价格回落至34-36元或33.60元以下，或等待半年报验证信用风险后再考虑买入。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 272,
+        "line_end": 272,
+        "quote": "基本面建议动作 | 观察",
+        "supports": "契约明确建议'观察'，对应空仓者不立即买入。"
+      },
+      {
+        "line_start": 273,
+        "line_end": 273,
+        "quote": "分红覆盖和资本缓冲较强，但38.80元仅有5.20%税前静态收益率，等待半年报验证信用风险或34-36元价格带。",
+        "supports": "最终结论明确要求等待价格或事件，空仓者应等待。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓投资者当前不应在38.80元价位买入，应等待价格回落至34-36元或33.60元以下，或等待半年报验证信用风险后再行动。",
+        "holder_action": "持仓者可继续持有，但需关注买入失效条件，如信用风险扩散或资本缓冲不足，则需考虑减仓或卖出。",
+        "trigger_condition": "价格触发点：激进型36.65元以下，稳健型34-36元，保守型33.60元以下；事件触发点：半年报验证信用风险不恶化。",
+        "summary": "报告认为当前价位38.80元收益率偏低，建议等待价格回落至34-36元或33.60元以下，或等待半年报验证信用风险后再考虑买入。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 272,
+            "line_end": 272,
+            "quote": "基本面建议动作 | 观察",
+            "supports": "契约明确建议'观察'，对应空仓者不立即买入。"
+          },
+          {
+            "line_start": 273,
+            "line_end": 273,
+            "quote": "分红覆盖和资本缓冲较强，但38.80元仅有5.20%税前静态收益率，等待半年报验证信用风险或34-36元价格带。",
+            "supports": "最终结论明确要求等待价格或事件，空仓者应等待。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待半年报验证信用风险，或等待股价进入34-36元价格带后再研究",
+        "holder_action": "报告未明确持仓者动作",
+        "trigger_condition": "半年报信用风险验证，或股价进入34-36元价格带；更保守关注33.60元以下",
+        "summary": "等待半年报验证信用风险或股价回落至34-36元价格带",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文契约内容一致，基本面建议为观察，结论明确要求等待验证或价格触发",
+        "evidence": [
+          {
+            "line_start": 273,
+            "line_end": 273,
+            "quote": "分红覆盖和资本缓冲较强，但38.80元仅有5.20%税前静态收益率，等待半年报验证信用风险或34-36元价格带。",
+            "supports": "支持最终结论为等待信用风险验证或等待价格进入34-36元区间"
+          },
+          {
+            "line_start": 278,
+            "line_end": 279,
+            "quote": "| 保守型动作 | 等待更高收益率与更厚安全边际 | | 保守型价格区间 | 33.60元以下 |",
+            "supports": "支持空仓者当前应等待更高收益率和更厚安全边际，而非立即行动"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

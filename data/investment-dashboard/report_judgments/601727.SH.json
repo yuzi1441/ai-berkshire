@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:52:18+08:00",
+  "company": "上海电气",
+  "ticker": "601727.SH",
+  "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+  "report_sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "A股持有者不因订单创新高加仓，若仓位显著，利用主题情绪评估降低仓位；H股持有者不追涨、不用PB低于1倍作为唯一持有理由，等待基本面验证。",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "A股回避，H股观望；空仓者A股不买，H股等待低价或基本面改善；持仓者不加仓，若仓位显著可降低。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文要求A股回避、H股观望等待，契约标签为观察，正文与契约不一致，按正文处理。",
+    "evidence": [
+      {
+        "line_start": 423,
+        "line_end": 423,
+        "quote": "- **空仓者：** A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。",
+        "supports": "空仓者明确动作：A股不买，H股等待价格触发或基本面改善，因此整体为回避/卖出，但H股有等待价格触发。"
+      },
+      {
+        "line_start": 441,
+        "line_end": 443,
+        "quote": "**A 股 601727.SH：回避。** 当前价格同时要求高增长、高退出估值和治理稳定，三项安全垫都不足。 **H 股 02727.HK：观望。** 相对 A 股便宜，绝对估值仍未达到深度价值标准；保守买入线为 **1.55 港元**，或等待核心经营指标显著改善后重新估值。",
+        "supports": "最终结论：A股回避，H股观望，但等待价格或基本面改善，因此整体为回避/卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 2.1,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "A股不买；H股加入观察清单，等待不高于1.55港元或基本面出现可验证的结构性改善。",
+        "holder_action": "A股持有者不因订单创新高加仓，若仓位显著，利用主题情绪评估降低仓位；H股持有者不追涨、不用PB低于1倍作为唯一持有理由，等待基本面验证。",
+        "trigger_condition": "H股价格不高于1.55港元，或核心经营指标显著改善；A股回避，无买入触发条件。",
+        "summary": "A股回避，H股观望；空仓者A股不买，H股等待低价或基本面改善；持仓者不加仓，若仓位显著可降低。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "正文要求A股回避、H股观望等待，契约标签为观察，正文与契约不一致，按正文处理。",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "- **空仓者：** A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。",
+            "supports": "空仓者明确动作：A股不买，H股等待价格触发或基本面改善，因此整体为回避/卖出，但H股有等待价格触发。"
+          },
+          {
+            "line_start": 441,
+            "line_end": 443,
+            "quote": "**A 股 601727.SH：回避。** 当前价格同时要求高增长、高退出估值和治理稳定，三项安全垫都不足。 **H 股 02727.HK：观望。** 相对 A 股便宜，绝对估值仍未达到深度价值标准；保守买入线为 **1.55 港元**，或等待核心经营指标显著改善后重新估值。",
+            "supports": "最终结论：A股回避，H股观望，但等待价格或基本面改善，因此整体为回避/卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "A股不买；H股加入观察清单，等待价格不高于1.55港元，或基本面出现可验证的结构性改善。",
+        "holder_action": "A股持有者不因订单创新高加仓，仓位显著时评估降低仓位；H股持有者不追涨。",
+        "trigger_condition": "H股价格不高于1.55港元；或核心经营指标出现可验证的结构性改善。",
+        "summary": "A股回避；H股观望，等待不高于1.55港元或经营改善。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "正文最终结论明确A股回避、H股等待1.55港元或经营改善；契约虽写基本面建议动作为观察，但又列出“基本面通过验证后分批买入”及2.1元价格区间，与正文针对A股的回避结论及H股1.55港元买入线不一致。按正文优先。",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "- **空仓者：** A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。",
+            "supports": "直接支持空仓者对A股不买、对H股等待价格或基本面验证的当前动作。"
+          },
+          {
+            "line_start": 441,
+            "line_end": 443,
+            "quote": "**A 股 601727.SH：回避。** 当前价格同时要求高增长、高退出估值和治理稳定，三项安全垫都不足。 **H 股 02727.HK：观望。** 相对 A 股便宜，绝对估值仍未达到深度价值标准；保守买入线为 **1.55 港元**，或等待核心经营指标显著改善后重新估值。",
+            "supports": "直接支持最终结论：A股回避，H股观望并以1.55港元或经营改善为触发。"
+          },
+          {
+            "line_start": 514,
+            "line_end": 515,
+            "quote": "| 保守型动作 | 基本面通过验证后分批买入 | | 保守型价格区间 | 不高于 2.1 元 |",
+            "supports": "支持正文与看板契约存在动作和价格口径不一致，需以正文结论为准。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": true
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:52:14+08:00",
+  "company": "三一重工",
+  "ticker": "600031.SH",
+  "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+  "report_sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者可等待股价回落至价格触发区间（如激进者17-18元，稳健者14.5-16元，保守者12-13.5元）再分批买入，当前不应追高。",
+    "holder_action": "已持仓者可继续持有，但应关注估值透支风险，等待安全边际显现。",
+    "trigger_condition": "股价回落至激进型价格区间17.0-18.0元，或稳健型14.5-16.0元，或保守型12.0-13.5元",
+    "summary": "基本面认可，但估值已透支部分复苏，需等待价格回落至安全边际区间再分批介入。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约中‘基本面建议动作’为‘观察’，但稳健型和保守型动作均明确为‘分批买入’且给出价格区间，属于等待更低价格触发，正文与契约标签冲突，依正文归为等待价格/watch。",
+    "evidence": [
+      {
+        "line_start": 293,
+        "line_end": 293,
+        "quote": "| 结论摘要 | 全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。 |",
+        "supports": "报告明确要求等待安全边际，即等待更低价格，属于等待价格而非立即买入。"
+      },
+      {
+        "line_start": 296,
+        "line_end": 299,
+        "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 14.5-16.0元 | | 保守型动作 | 分批买入 | | 保守型价格区间 | 12.0-13.5元 |",
+        "supports": "对不同风险偏好给出明确价格触发点，未达到价格区间前不应行动，空仓者应等待价格回落。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 31.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 17.0,
+      "max": 18.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者可等待股价回落至价格触发区间（如激进者17-18元，稳健者14.5-16元，保守者12-13.5元）再分批买入，当前不应追高。",
+        "holder_action": "已持仓者可继续持有，但应关注估值透支风险，等待安全边际显现。",
+        "trigger_condition": "股价回落至激进型价格区间17.0-18.0元，或稳健型14.5-16.0元，或保守型12.0-13.5元",
+        "summary": "基本面认可，但估值已透支部分复苏，需等待价格回落至安全边际区间再分批介入。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约中‘基本面建议动作’为‘观察’，但稳健型和保守型动作均明确为‘分批买入’且给出价格区间，属于等待更低价格触发，正文与契约标签冲突，依正文归为等待价格/watch。",
+        "evidence": [
+          {
+            "line_start": 293,
+            "line_end": 293,
+            "quote": "| 结论摘要 | 全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。 |",
+            "supports": "报告明确要求等待安全边际，即等待更低价格，属于等待价格而非立即买入。"
+          },
+          {
+            "line_start": 296,
+            "line_end": 299,
+            "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 14.5-16.0元 | | 保守型动作 | 分批买入 | | 保守型价格区间 | 12.0-13.5元 |",
+            "supports": "对不同风险偏好给出明确价格触发点，未达到价格区间前不应行动，空仓者应等待价格回落。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "等待安全边际，暂不按当前估值行动；不同风险类型对应价格区间后分批买入",
+        "holder_action": "报告未明确说明持仓者当前动作",
+        "trigger_condition": "等待估值回落至报告列示的相应价格区间，以获得安全边际",
+        "summary": "全球化与盈利修复成立，但估值透支部分复苏，等待安全边际。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "正文结论要求等待安全边际，契约基本面建议为观察；但激进、稳健和保守型动作均列为分批买入，存在动作口径冲突。按正文结论及价格触发条件归类为等待价格。",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 293,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。 |",
+            "supports": "支持空仓者当前应观察并等待更具安全边际的价格，而非立即行动。"
+          },
+          {
+            "line_start": 294,
+            "line_end": 299,
+            "quote": "| 激进型动作 | 小仓分批买入 | | 激进型价格区间 | 17.0-18.0元 | | 稳健型动作 | 分批买入 | | 稳健型价格区间 | 14.5-16.0元 | | 保守型动作 | 分批买入 | | 保守型价格区间 | 12.0-13.5元 |",
+            "supports": "支持报告以不同价格区间作为后续分批买入触发条件，并说明与契约观察建议存在口径差异。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

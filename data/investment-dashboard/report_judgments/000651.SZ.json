@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:54:23+08:00",
+  "company": "格力电器",
+  "ticker": "000651.SZ",
+  "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+  "report_sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "持仓者维持观察，不急于卖出。",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告认为格力是好生意但已成熟，整体建议观察；不同风格触发价格各异，空仓者需等待更低价格或基本面改善。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文与契约一致，均给出价格触发条件，不冲突。",
+    "evidence": [
+      {
+        "line_start": 288,
+        "line_end": 288,
+        "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
+        "supports": "明确指出空仓稳健型应等待价格或信号，属于等待类型。"
+      },
+      {
+        "line_start": 284,
+        "line_end": 285,
+        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
+        "supports": "最终结论为观察，表示当前不行动，支持等待判断。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 55.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不应买入；稳健型须等待股价跌至32-35元，激进型可在38元以下分批建仓但上限受控。",
+        "holder_action": "持仓者维持观察，不急于卖出。",
+        "trigger_condition": "价格触发：稳健型32-35元，激进型38元以下；或基本面改善信号。",
+        "summary": "报告认为格力是好生意但已成熟，整体建议观察；不同风格触发价格各异，空仓者需等待更低价格或基本面改善。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均给出价格触发条件，不冲突。",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 288,
+            "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
+            "supports": "明确指出空仓稳健型应等待价格或信号，属于等待类型。"
+          },
+          {
+            "line_start": 284,
+            "line_end": 285,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
+            "supports": "最终结论为观察，表示当前不行动，支持等待判断。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "激进型空仓者可在38元以下分批建仓，并控制总仓位上限；稳健及保守型投资者仍需等待各自条件。",
+        "holder_action": "报告片段未给出持仓者的明确操作建议。",
+        "trigger_condition": "激进型在38元以下；稳健型等待32-35元或基本面改善信号；保守型在30元以下且分红政策未恶化。",
+        "summary": "生意质量较好但已成熟；激进型可在38元以下分批建仓，其他风格等待条件。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "契约粗标签“基本面建议动作”为“观察”，但同一契约明确给出激进型空仓者“38元以下分批建仓”的具体买入动作；按优先级采用明确空仓动作。",
+        "evidence": [
+          {
+            "line_start": 285,
+            "line_end": 285,
+            "quote": "| 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
+            "supports": "支持最终结论：公司生意质量较好但已成熟，关注重点偏向中央空调。"
+          },
+          {
+            "line_start": 286,
+            "line_end": 286,
+            "quote": "| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 |",
+            "supports": "支持空仓激进型投资者当前可执行分批买入动作。"
+          },
+          {
+            "line_start": 284,
+            "line_end": 284,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持存在与具体激进型建仓动作相冲突的看板粗标签。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  }
+}

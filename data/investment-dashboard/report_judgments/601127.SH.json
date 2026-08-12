@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:59:09+08:00",
+  "company": "赛力斯",
+  "ticker": "601127.SH",
+  "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+  "report_sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "观望为主，不建议现价大举买入；等待催化剂或股价回调至45-50元区间再考虑建仓",
+    "holder_action": "未明确建议，报告聚焦空仓者",
+    "trigger_condition": "2026年中报显示扣非净利改善、经营现金流转正；赛豆品牌首款车型上市反馈良好；股价回调至45-50元区间（对应PE 13-15x）",
+    "summary": "空仓者观望，等待中报改善、赛豆反馈或股价回调至45-50元再建仓",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "无冲突",
+    "evidence": [
+      {
+        "line_start": 482,
+        "line_end": 482,
+        "quote": "| 结论摘要 | 空仓者 观望为主，不建议现价大举买入。 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |",
+        "supports": "空仓者观望不建议买入，等待价格或催化条件"
+      },
+      {
+        "line_start": 481,
+        "line_end": 481,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "观察，无当前买入动作"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望为主，不建议现价大举买入；等待催化剂或股价回调至45-50元区间再考虑建仓",
+        "holder_action": "未明确建议，报告聚焦空仓者",
+        "trigger_condition": "2026年中报显示扣非净利改善、经营现金流转正；赛豆品牌首款车型上市反馈良好；股价回调至45-50元区间（对应PE 13-15x）",
+        "summary": "空仓者观望，等待中报改善、赛豆反馈或股价回调至45-50元再建仓",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突",
+        "evidence": [
+          {
+            "line_start": 482,
+            "line_end": 482,
+            "quote": "| 结论摘要 | 空仓者 观望为主，不建议现价大举买入。 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |",
+            "supports": "空仓者观望不建议买入，等待价格或催化条件"
+          },
+          {
+            "line_start": 481,
+            "line_end": 481,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "观察，无当前买入动作"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望为主，不建议现价大举买入，等待催化剂后再考虑建仓",
+        "holder_action": "报告未给出持仓者动作",
+        "trigger_condition": "2026年中报扣非净利改善且经营现金流转正、赛豆首款车型上市反馈良好，或股价回调至45-50元区间",
+        "summary": "空仓观望，等待经营催化或股价回调至45-50元再考虑建仓",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文片段未提供独立于看板契约的正文结论；契约中的基本面建议动作“观察”与结论摘要一致，无明显冲突",
+        "evidence": [
+          {
+            "line_start": 481,
+            "line_end": 482,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 空仓者 观望为主，不建议现价大举买入。 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |",
+            "supports": "支持当前不立即行动、以观望为主的判断"
+          },
+          {
+            "line_start": 482,
+            "line_end": 482,
+            "quote": "| 结论摘要 | 空仓者 观望为主，不建议现价大举买入。 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |",
+            "supports": "直接支持空仓者等待经营验证或价格触发后再建仓；因存在明确价格触发点，归类为等待价格"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

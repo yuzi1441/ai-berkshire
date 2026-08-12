@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T02:02:23+08:00",
+  "company": "东方电缆",
+  "ticker": "603606.SH",
+  "report_path": "reports/东方电缆/东方电缆-research-20260726.md",
+  "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "持有",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告契约仅给出持有建议，空仓者无明确动作，研究置信度待复核。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "无",
+    "evidence": [
+      {
+        "line_start": 964,
+        "line_end": 964,
+        "quote": "| 基本面建议动作 | 持有 |",
+        "supports": "契约仅对持仓者给出持有动作，未涉及空仓者。"
+      },
+      {
+        "line_start": 966,
+        "line_end": 973,
+        "quote": "| 激进型动作 | 未给出 | | 激进型价格区间 | 未给出 | | 稳健型动作 | 未给出 | | 稳健型价格区间 | 未给出 | | 保守型动作 | 未给出 | | 保守型价格区间 | 未给出 | | 买入失效条件 | 未给出 | | 下次复核日期 | 未给出 |",
+        "supports": "报告未提供空仓者任何买入或等待条件，无法确定动作。"
+      },
+      {
+        "line_start": 974,
+        "line_end": 974,
+        "quote": "| 研究置信度 | 待复核 |",
+        "supports": "研究置信度待复核，增加不确定性。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "待人工复核",
+        "action_kind": "unknown",
+        "empty_position_action": "未给出",
+        "holder_action": "持有",
+        "trigger_condition": "未给出",
+        "summary": "报告契约仅给出持有建议，空仓者无明确动作，研究置信度待复核。",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "无",
+        "evidence": [
+          {
+            "line_start": 964,
+            "line_end": 964,
+            "quote": "| 基本面建议动作 | 持有 |",
+            "supports": "契约仅对持仓者给出持有动作，未涉及空仓者。"
+          },
+          {
+            "line_start": 966,
+            "line_end": 973,
+            "quote": "| 激进型动作 | 未给出 | | 激进型价格区间 | 未给出 | | 稳健型动作 | 未给出 | | 稳健型价格区间 | 未给出 | | 保守型动作 | 未给出 | | 保守型价格区间 | 未给出 | | 买入失效条件 | 未给出 | | 下次复核日期 | 未给出 |",
+            "supports": "报告未提供空仓者任何买入或等待条件，无法确定动作。"
+          },
+          {
+            "line_start": 974,
+            "line_end": 974,
+            "quote": "| 研究置信度 | 待复核 |",
+            "supports": "研究置信度待复核，增加不确定性。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "持有但不加仓",
+        "action_kind": "hold",
+        "empty_position_action": "未明确给出空仓者买入或建仓动作；契约仅建议持有",
+        "holder_action": "持有",
+        "trigger_condition": "7.7价格区间为研究结论，片段未提供具体触发条件",
+        "summary": "契约建议持有，结论为7.7价格区间，未明确空仓买入动作",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "正文片段未提供可与契约比较的空仓建议或最终结论，无法确认是否存在冲突",
+        "evidence": [
+          {
+            "line_start": 964,
+            "line_end": 964,
+            "quote": "| 基本面建议动作 | 持有 |",
+            "supports": "支持持仓者继续持有，但未提供空仓者买入或建仓指示"
+          },
+          {
+            "line_start": 965,
+            "line_end": 965,
+            "quote": "| 结论摘要 | 7.7 价格区间（研究结论，非个人操作建议） |",
+            "supports": "支持报告结论仅给出价格区间，且明确不是个人操作建议"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": true
+  }
+}

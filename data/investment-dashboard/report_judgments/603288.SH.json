@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:54:51+08:00",
+  "company": "海天味业",
+  "ticker": "603288.SH",
+  "report_path": "reports/海天味业/海天味业-investment-research-20260810.md",
+  "report_sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应等待价格回落至32元以下再考虑分批买入；当前价位不具备足够安全边际，不宜立即行动。",
+    "holder_action": "持仓者可继续持有，关注基本面变化，若触发失效条件则考虑回避。",
+    "trigger_condition": "价格触发：A股价格回落至32元以下（激进型区间32-35元，稳健型28-32元，保守型不高于28元）。",
+    "summary": "公司质量优秀，但A股现价高于Base折现价值，建议空仓者等待价格回落至32元以下再分批买入，当前不宜行动。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 236,
+        "line_end": 236,
+        "quote": "| 结论摘要 | 公司质量优秀，但A股现价高于Base折现价值，等待更厚安全边际 |",
+        "supports": "支持空仓者当前不应立即行动，需等待价格回调。"
+      },
+      {
+        "line_start": 235,
+        "line_end": 235,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "支持当前整体动作应为观察，即等待价格或验证，而非立即买入。"
+      },
+      {
+        "line_start": 239,
+        "line_end": 240,
+        "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 28-32元 |",
+        "supports": "支持存在价格触发条件，需等待价格进入区间才可买入。"
+      },
+      {
+        "line_start": 244,
+        "line_end": 244,
+        "quote": "| 下次复核日期 | 2026-09-05 |",
+        "supports": "支持当前是等待验证阶段，后续需复核。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 35.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应等待价格回落至32元以下再考虑分批买入；当前价位不具备足够安全边际，不宜立即行动。",
+        "holder_action": "持仓者可继续持有，关注基本面变化，若触发失效条件则考虑回避。",
+        "trigger_condition": "价格触发：A股价格回落至32元以下（激进型区间32-35元，稳健型28-32元，保守型不高于28元）。",
+        "summary": "公司质量优秀，但A股现价高于Base折现价值，建议空仓者等待价格回落至32元以下再分批买入，当前不宜行动。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与看板契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 236,
+            "line_end": 236,
+            "quote": "| 结论摘要 | 公司质量优秀，但A股现价高于Base折现价值，等待更厚安全边际 |",
+            "supports": "支持空仓者当前不应立即行动，需等待价格回调。"
+          },
+          {
+            "line_start": 235,
+            "line_end": 235,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持当前整体动作应为观察，即等待价格或验证，而非立即买入。"
+          },
+          {
+            "line_start": 239,
+            "line_end": 240,
+            "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 28-32元 |",
+            "supports": "支持存在价格触发条件，需等待价格进入区间才可买入。"
+          },
+          {
+            "line_start": 244,
+            "line_end": 244,
+            "quote": "| 下次复核日期 | 2026-09-05 |",
+            "supports": "支持当前是等待验证阶段，后续需复核。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前观察，等待更厚安全边际；不同风险偏好在相应价格区间分批买入或重点关注。",
+        "holder_action": "报告片段未提供持仓者具体动作。",
+        "trigger_condition": "等待A股价格进入报告列示的相应风险偏好价格区间，获得更厚安全边际。",
+        "summary": "公司质量优秀，但A股现价高于Base折现价值，当前等待更厚安全边际。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "所给片段仅含看板决策契约，未提供与其冲突的正文或最终结论段落。",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 235,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持空仓者当前不立即买入、保持观察的动作判断。"
+          },
+          {
+            "line_start": 236,
+            "line_end": 236,
+            "quote": "| 结论摘要 | 公司质量优秀，但A股现价高于Base折现价值，等待更厚安全边际 |",
+            "supports": "支持最终结论为等待更低价格和更厚安全边际，归类为等待价格。"
+          },
+          {
+            "line_start": 237,
+            "line_end": 242,
+            "quote": "| 激进型动作 | 小额分批买入 | | 激进型价格区间 | 32-35元 | | 稳健型动作 | 分批买入 | | 稳健型价格区间 | 28-32元 | | 保守型动作 | 重点关注 | | 保守型价格区间 | 不高于28元 |",
+            "supports": "支持价格进入不同风险偏好对应区间后可采取分批买入或重点关注。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

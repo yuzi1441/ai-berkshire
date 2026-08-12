@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:47:45+08:00",
+  "company": "平高电气",
+  "ticker": "600312.SH",
+  "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+  "report_sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "不建议在17.64元附近追高，应放入观察池，等待价格回落至14元以下再分批建仓。",
+    "holder_action": "若成本低于14元，可继续持有，关注2026半年报现金流和高压板块毛利率；若仓位过重，可在22-25元区间逐步降低预期收益率。",
+    "trigger_condition": "股价回落至12-14元（加仓信号之一），尤其是14元以下。",
+    "summary": "报告结论为观望偏持有，不建议空仓者在17.64元追高，合理买入区间12-14元，等待价格触发。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，均明确建议等待更低价格，无冲突。",
+    "evidence": [
+      {
+        "line_start": 287,
+        "line_end": 287,
+        "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**",
+        "supports": "报告最终结论明确建议空仓者等待12-14元区间，而非当前追高，支持‘等待价格’分类。"
+      },
+      {
+        "line_start": 295,
+        "line_end": 295,
+        "quote": "空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。",
+        "supports": "行动表对空仓者明确给出等待价格触发的动作，进一步确认‘等待价格/watch’分类。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 17.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 14.0,
+      "max": 17.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不建议在17.64元附近追高，应放入观察池，等待价格回落至14元以下再分批建仓。",
+        "holder_action": "若成本低于14元，可继续持有，关注2026半年报现金流和高压板块毛利率；若仓位过重，可在22-25元区间逐步降低预期收益率。",
+        "trigger_condition": "股价回落至12-14元（加仓信号之一），尤其是14元以下。",
+        "summary": "报告结论为观望偏持有，不建议空仓者在17.64元追高，合理买入区间12-14元，等待价格触发。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与看板契约一致，均明确建议等待更低价格，无冲突。",
+        "evidence": [
+          {
+            "line_start": 287,
+            "line_end": 287,
+            "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**",
+            "supports": "报告最终结论明确建议空仓者等待12-14元区间，而非当前追高，支持‘等待价格’分类。"
+          },
+          {
+            "line_start": 295,
+            "line_end": 295,
+            "quote": "空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。",
+            "supports": "行动表对空仓者明确给出等待价格触发的动作，进一步确认‘等待价格/watch’分类。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "放入观察池，等待股价低于14元后再分批建仓，不在17.64元附近追高。",
+        "holder_action": "成本低于14元可继续持有，关注现金流和高压板块毛利率；仓位过重可在22-25元区间逐步减仓。",
+        "trigger_condition": "股价回落至12-14元；同时关注订单、现金流及高压板块毛利率等经营指标。",
+        "summary": "当前观望，空仓者等待14元以下分批建仓。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文明确要求空仓者等待14元以下，契约仅标注“观察”，不存在实质冲突。",
+        "evidence": [
+          {
+            "line_start": 287,
+            "line_end": 289,
+            "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**",
+            "supports": "支持最终结论为当前不宜追高，应等待更低价格。"
+          },
+          {
+            "line_start": 293,
+            "line_end": 297,
+            "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |",
+            "supports": "明确支持空仓者当前等待14元以下价格触发。"
+          },
+          {
+            "line_start": 359,
+            "line_end": 360,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。 |",
+            "supports": "看板契约的“观察”标签与正文的等待价格判断一致。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

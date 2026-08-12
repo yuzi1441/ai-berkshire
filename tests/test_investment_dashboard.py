@@ -1,4 +1,5 @@
 import json
+import hashlib
 import os
 import sys
 import tempfile
@@ -134,6 +135,25 @@ class InvestmentDashboardTests(unittest.TestCase):
             selected = board["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
             self.assertEqual(selected["checklist"]["status"], "missing")
+
+    def test_legacy_standalone_checklist_never_becomes_main_report(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            main_report = root / "reports" / "示例公司" / "main.md"
+            main_report.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            checklist = root / "reports" / "示例公司" / "示例公司-checklist-20260811.md"
+            checklist.write_text(
+                "# 示例公司 Checklist\n\n数据截止：2026-08-11\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n价格未通过，等待10元。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
 
     def test_writes_obsidian_table_and_static_data_without_report_rewrites(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -670,6 +690,128 @@ class InvestmentDashboardTests(unittest.TestCase):
             )
             selected_after_checklist = dashboard.build_dashboard(root)["decisions"][0]
             self.assertEqual(selected_after_checklist["report_path"], "reports/示例公司/contract.md")
+
+    def test_primary_judgment_preview_is_opt_in_and_company_scoped(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            first = root / "reports" / "示例公司" / "first.md"
+            first.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n当前等待价格，不追价。\n",
+                encoding="utf-8",
+            )
+            second_dir = root / "reports" / "对照公司"
+            second_dir.mkdir()
+            (second_dir / "second.md").write_text(
+                "# 对照公司研究\n\n数据截止：2026-07-20\n股票代码：600001.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            override_path = root / "data" / "investment-dashboard" / "overrides.json"
+            override_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "reports": {},
+                        "companies": {
+                            "示例公司": {
+                                "action": "观察",
+                                "primary_judgment": {
+                                    "enabled": True,
+                                    "label": "等待价格",
+                                    "action_kind": "watch",
+                                    "empty_position_action": "等待，不追价",
+                                    "trigger_condition": "价格进入约 9.5 元附近",
+                                    "summary": "当前不是高赔率买点。",
+                                    "source_basis": "主报告空仓行动表与最终结论",
+                                    "report_field_conflict": True,
+                                    "conflict_note": "粗粒度字段与正文不一致。",
+                                    "currency": "CNY",
+                                    "entry_ceiling": 10.5,
+                                    "trial_range": {"min": 9.5, "max": 10.5},
+                                },
+                            }
+                        },
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            decisions = dashboard.build_dashboard(root)["decisions"]
+            previewed = next(item for item in decisions if item["company"] == "示例公司")
+            untouched = next(item for item in decisions if item["company"] == "对照公司")
+            self.assertEqual(previewed["action"], "观察")
+            self.assertEqual(previewed["primary_judgment"]["label"], "等待价格")
+            self.assertTrue(previewed["primary_judgment"]["report_field_conflict"])
+            self.assertEqual(untouched["primary_judgment"]["label"], "待人工复核")
+
+    def test_attaches_only_current_ready_model_judgment(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "report.md"
+            report.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n等待价格，不追价。\n",
+                encoding="utf-8",
+            )
+            judgment_dir = root / "data" / "investment-dashboard" / "report_judgments"
+            judgment_dir.mkdir()
+            (judgment_dir / "600000.SH.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "status": "ready",
+                        "generated_at": "2026-08-13T12:00:00+08:00",
+                        "company": "示例公司",
+                        "ticker": "600000.SH",
+                        "report_path": "reports/示例公司/report.md",
+                        "report_sha256": hashlib.sha256(report.read_bytes()).hexdigest(),
+                        "judgment": {
+                            "enabled": True,
+                            "label": "等待价格",
+                            "action_kind": "watch",
+                            "empty_position_action": "等待，不追价",
+                            "trigger_condition": "价格进入10元附近",
+                            "summary": "当前不是买点。",
+                            "source_basis": "双模型核对主报告",
+                            "model_consensus": True,
+                            "currency": "CNY",
+                            "entry_ceiling": 10.5,
+                            "trial_range": {"min": 9.5, "max": 10.5},
+                        },
+                        "models": {"primary": {"model": "a"}, "review": {"model": "b"}},
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected["primary_judgment"]["label"], "等待价格")
+            self.assertTrue(selected["primary_judgment"]["source_matches"])
+            self.assertEqual(selected["primary_judgment"]["models"], {"primary": "a", "review": "b"})
+
+            report.write_text(report.read_text(encoding="utf-8") + "\n更新。\n", encoding="utf-8")
+            stale = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(stale["primary_judgment"]["label"], "待人工复核")
+            self.assertFalse(stale["primary_judgment"]["source_matches"])
+
+    def test_a_share_without_model_artifact_fails_closed(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            (root / "reports" / "示例公司" / "report.md").write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertEqual(selected["market"], "A股")
+            self.assertEqual(selected["primary_judgment"]["label"], "待人工复核")
+            self.assertEqual(selected["primary_judgment"]["artifact_status"], "missing")
+            self.assertNotEqual(selected["primary_judgment"]["action_kind"], "buy")
 
     def test_incomplete_decision_contract_falls_back_to_legacy_parser(self):
         lines = """# 示例公司研究

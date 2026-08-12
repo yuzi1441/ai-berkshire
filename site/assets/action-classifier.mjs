@@ -115,3 +115,65 @@ export function fallbackActionKind(item) {
   if (/估值有吸引力|具有吸引力/.test(recommendation)) return "trial";
   return currentActionKind({ action: recommendation });
 }
+
+export function primaryJudgmentForItem(item) {
+  const judgment = item?.primary_judgment;
+  if (!judgment || judgment.enabled !== true) return null;
+  if (!judgment.label || !judgment.empty_position_action || !judgment.trigger_condition) return null;
+  return judgment;
+}
+
+export function primaryJudgmentAuxiliary(item, quote) {
+  const judgment = primaryJudgmentForItem(item);
+  if (!judgment) return null;
+  if (judgment.action_kind === "unknown" || judgment.model_consensus === false) {
+    return {
+      label: "暂停自动价格归类",
+      detail: "模型结果待人工复核 · 主报告判断暂不进入可买筛选",
+      state: "unavailable",
+    };
+  }
+  const price = Number(quote?.price);
+  if (!Number.isFinite(price) || quote?.currency !== judgment.currency) {
+    return {
+      label: "行情暂不可比",
+      detail: "看板辅助推导 · 主报告判断不变",
+      state: "unavailable",
+    };
+  }
+
+  const ceiling = Number(judgment.entry_ceiling);
+  const trialMin = Number(judgment.trial_range?.min);
+  const trialMax = Number(judgment.trial_range?.max);
+  if (!Number.isFinite(ceiling)) {
+    return {
+      label: "报告未给出可执行价格档",
+      detail: "看板辅助推导不可用 · 主报告判断保持不变",
+      state: "unavailable",
+    };
+  }
+  if (Number.isFinite(ceiling) && price > ceiling) {
+    return {
+      label: "尚未进入报告买入区",
+      detail: `现价 ${price.toFixed(2)}，高于报告最高候选价 ${ceiling.toFixed(2)} · 看板辅助推导`,
+      state: "above_entry",
+    };
+  }
+  if (
+    Number.isFinite(trialMin)
+    && Number.isFinite(trialMax)
+    && price >= trialMin
+    && price <= trialMax
+  ) {
+    return {
+      label: "小仓试错区",
+      detail: `现价 ${price.toFixed(2)}，进入报告 ${trialMin.toFixed(2)}–${trialMax.toFixed(2)} 区间 · 看板辅助推导`,
+      state: "trial",
+    };
+  }
+  return {
+    label: "已进入报告价格区",
+    detail: `现价 ${price.toFixed(2)} · 请按报告价格行动表复核 · 看板辅助推导`,
+    state: "inside_entry",
+  };
+}

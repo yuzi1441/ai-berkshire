@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:45:47+08:00",
+  "company": "guodian-power",
+  "ticker": "600795.SH",
+  "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+  "report_sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者可在当前价位以5-10%小仓位试探性买入，但最好等待价格跌至4.50美元以下（接近52周低点）再行买入。",
+    "holder_action": "持有者建议维持仓位，但不宜追加投资，因报告建议仅小仓位配置，且需关注风险因素。",
+    "trigger_condition": "价格低于4.50美元（接近52周低点）时加仓买入。",
+    "summary": "报告建议空仓者可小仓位配置（5-10%）作为高股息防御标的，但优先等待4.50美元以下再买，并提示风险。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约结论摘要中虽提及可小仓位配置，但明确说“优先等$4.50以下再买”，因此实际动作更接近等待价格。",
+    "evidence": [
+      {
+        "line_start": 395,
+        "line_end": 395,
+        "quote": "空仓者 可小仓位配置（5-10%），定位为高股息防御标的。 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。",
+        "supports": "空仓者可小仓位试探，但优先等待更低价格，故属于等待价格类别。"
+      },
+      {
+        "line_start": 395,
+        "line_end": 395,
+        "quote": "优先等$4.50以下（接近52周低点）再买。",
+        "supports": "明确指出等待价格触发点4.50美元，因此归为等待价格。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 4.5,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者可在当前价位以5-10%小仓位试探性买入，但最好等待价格跌至4.50美元以下（接近52周低点）再行买入。",
+        "holder_action": "持有者建议维持仓位，但不宜追加投资，因报告建议仅小仓位配置，且需关注风险因素。",
+        "trigger_condition": "价格低于4.50美元（接近52周低点）时加仓买入。",
+        "summary": "报告建议空仓者可小仓位配置（5-10%）作为高股息防御标的，但优先等待4.50美元以下再买，并提示风险。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板契约结论摘要中虽提及可小仓位配置，但明确说“优先等$4.50以下再买”，因此实际动作更接近等待价格。",
+        "evidence": [
+          {
+            "line_start": 395,
+            "line_end": 395,
+            "quote": "空仓者 可小仓位配置（5-10%），定位为高股息防御标的。 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。",
+            "supports": "空仓者可小仓位试探，但优先等待更低价格，故属于等待价格类别。"
+          },
+          {
+            "line_start": 395,
+            "line_end": 395,
+            "quote": "优先等$4.50以下（接近52周低点）再买。",
+            "supports": "明确指出等待价格触发点4.50美元，因此归为等待价格。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者可小仓位配置，但优先等待股价低于4.50元再买，不建议重仓",
+        "holder_action": "未给出持仓者具体动作",
+        "trigger_condition": "股价低于4.50元，接近52周低点",
+        "summary": "空仓者可小仓配置，但优先等4.50元以下，且不建议重仓。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "契约基本面建议为“观察”，结论摘要又称空仓者可小仓位配置并给出4.50元以下价格触发条件；按正文动作归类为等待价格。",
+        "evidence": [
+          {
+            "line_start": 394,
+            "line_end": 395,
+            "quote": "基本面建议动作 | 观察",
+            "supports": "支持当前不宜直接行动、应观察的看板标签"
+          },
+          {
+            "line_start": 395,
+            "line_end": 395,
+            "quote": "空仓者 可小仓位配置（5-10%），定位为高股息防御标的。 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。",
+            "supports": "明确空仓者可小仓位配置，但优先等待4.50元以下，构成等待价格判断"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

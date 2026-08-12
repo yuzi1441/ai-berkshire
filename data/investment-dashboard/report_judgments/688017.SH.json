@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:51:58+08:00",
+  "company": "leaderdrive",
+  "ticker": "688017.SH",
+  "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+  "report_sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应回避当前建仓，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。",
+    "holder_action": "持仓者应关注估值风险，概念泡沫状态下需警惕回调，可考虑减持或持有观察。",
+    "trigger_condition": "股价回落至100-120元区间（PE 60-80倍）",
+    "summary": "报告认为当前估值处于概念泡沫，三情景估值均显示高估，空仓者应回避，等待股价回落至100-120元区间再建仓。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约摘要中'空仓者回避'看似为no，但正文明确给出价格触发点（100-120元），按规则应归为等待价格/watch，故冲突。",
+    "evidence": [
+      {
+        "line_start": 396,
+        "line_end": 396,
+        "quote": "| 结论摘要 | 空仓者 回避。 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |",
+        "supports": "该证据明确要求空仓者回避当前建仓，但给出了具体价格触发区间（100-120元），支持等待价格动作。"
+      },
+      {
+        "line_start": 395,
+        "line_end": 395,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "报告结论摘要给出空仓者回避，但基本面建议动作为观察，且正文有价格触发条件，整体体现等待观察意图，支持watch标签。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应回避当前建仓，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。",
+        "holder_action": "持仓者应关注估值风险，概念泡沫状态下需警惕回调，可考虑减持或持有观察。",
+        "trigger_condition": "股价回落至100-120元区间（PE 60-80倍）",
+        "summary": "报告认为当前估值处于概念泡沫，三情景估值均显示高估，空仓者应回避，等待股价回落至100-120元区间再建仓。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约摘要中'空仓者回避'看似为no，但正文明确给出价格触发点（100-120元），按规则应归为等待价格/watch，故冲突。",
+        "evidence": [
+          {
+            "line_start": 396,
+            "line_end": 396,
+            "quote": "| 结论摘要 | 空仓者 回避。 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |",
+            "supports": "该证据明确要求空仓者回避当前建仓，但给出了具体价格触发区间（100-120元），支持等待价格动作。"
+          },
+          {
+            "line_start": 395,
+            "line_end": 395,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "报告结论摘要给出空仓者回避，但基本面建议动作为观察，且正文有价格触发条件，整体体现等待观察意图，支持watch标签。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不建仓，等待股价回落至100-120元区间后再考虑建仓。",
+        "holder_action": "未给出。",
+        "trigger_condition": "股价回落至100-120元区间（PE 60-80倍）后再考虑建仓。",
+        "summary": "当前估值被判断为概念泡沫，空仓者等待回落至100-120元再考虑建仓。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无正文与看板契约冲突。契约“基本面建议动作”为“观察”，且结论摘要明确给出以100-120元为主触发的等待价格动作。",
+        "evidence": [
+          {
+            "line_start": 395,
+            "line_end": 395,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板粗标签支持当前观察、暂不行动。"
+          },
+          {
+            "line_start": 396,
+            "line_end": 396,
+            "quote": "| 结论摘要 | 空仓者 回避。 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |",
+            "supports": "覆盖空仓建议和最终结论；明确以100-120元价格区间为再考虑建仓的触发点，因此归类为等待价格。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T02:01:34+08:00",
+  "company": "万华化学",
+  "ticker": "600309.SH",
+  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+  "report_sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前观望，等待价格回落至61-69元区间方可分批买入；激进者可在70-75元小仓试买，但不得追高",
+    "holder_action": "现有持仓者维持观察，不主动加仓；若价格进入保守区间（55-60元）可考虑扩大仓位",
+    "trigger_condition": "激进型触发价70-75元；稳健型触发价63-69元；保守型触发价55-60元；买入失效条件为聚氨酯毛利率连续低于20%、净债务/EBITDA>4.5或自由现金流连续为负",
+    "summary": "报告认为基本面建议为观察，当前价不追高，激进者可小仓试买，稳健者等63-69元分批买入，保守者等55-60元再加仓。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约标签与正文冲突：契约中基本面建议为'观察'，但稳健型动作要求'分批买入'且给出价格区间，按正文应归为等待价格。",
+    "evidence": [
+      {
+        "line_start": 263,
+        "line_end": 263,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约明确给出'观察'，但并非要求回避或卖出，结合价格区间属于等待价格"
+      },
+      {
+        "line_start": 267,
+        "line_end": 268,
+        "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 63—69 元 |",
+        "supports": "正文要求等待价格回落至63-69元才分批买入，符合'等待价格'定义，且说明空仓者当前不可在现价行动"
+      },
+      {
+        "line_start": 265,
+        "line_end": 266,
+        "quote": "| 激进型动作 | 小仓试买，不追高 | | 激进型价格区间 | 70—75 元 |",
+        "supports": "激进者需等价格进入70-75元才可小仓试买，表明当前价高于触发区间，应等待更低价格"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 75.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 70.0,
+      "max": 75.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前观望，等待价格回落至61-69元区间方可分批买入；激进者可在70-75元小仓试买，但不得追高",
+        "holder_action": "现有持仓者维持观察，不主动加仓；若价格进入保守区间（55-60元）可考虑扩大仓位",
+        "trigger_condition": "激进型触发价70-75元；稳健型触发价63-69元；保守型触发价55-60元；买入失效条件为聚氨酯毛利率连续低于20%、净债务/EBITDA>4.5或自由现金流连续为负",
+        "summary": "报告认为基本面建议为观察，当前价不追高，激进者可小仓试买，稳健者等63-69元分批买入，保守者等55-60元再加仓。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约标签与正文冲突：契约中基本面建议为'观察'，但稳健型动作要求'分批买入'且给出价格区间，按正文应归为等待价格。",
+        "evidence": [
+          {
+            "line_start": 263,
+            "line_end": 263,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约明确给出'观察'，但并非要求回避或卖出，结合价格区间属于等待价格"
+          },
+          {
+            "line_start": 267,
+            "line_end": 268,
+            "quote": "| 稳健型动作 | 分批买入 | | 稳健型价格区间 | 63—69 元 |",
+            "supports": "正文要求等待价格回落至63-69元才分批买入，符合'等待价格'定义，且说明空仓者当前不可在现价行动"
+          },
+          {
+            "line_start": 265,
+            "line_end": 266,
+            "quote": "| 激进型动作 | 小仓试买，不追高 | | 激进型价格区间 | 70—75 元 |",
+            "supports": "激进者需等价格进入70-75元才可小仓试买，表明当前价高于触发区间，应等待更低价格"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前价观察；到对应价格区间再按风险偏好小仓试买或分批买入",
+        "holder_action": "报告未明确持仓者动作",
+        "trigger_condition": "70—75元小仓试买；63—69元分批买入；55—60元扩大仓位",
+        "summary": "MDI护城河强但周期与杠杆削弱确定性，当前价观察",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文片段未提供与看板契约冲突的其他正文结论",
+        "evidence": [
+          {
+            "line_start": 263,
+            "line_end": 269,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | MDI 成本与技术护城河强，但周期利润与高杠杆削弱确定性，当前价观察 | | 激进型动作 | 小仓试买，不追高 | | 激进型价格区间 | 70—75 元 | | 稳健型动作 | 分批买入 | | 稳健型价格区间 | 63—69 元 | | 保守型动作 | 扩大仓位 |",
+            "supports": "支持空仓者当前不宜直接按当前价扩大仓位，应等待价格区间并按风险偏好行动"
+          },
+          {
+            "line_start": 264,
+            "line_end": 264,
+            "quote": "| 结论摘要 | MDI 成本与技术护城河强，但周期利润与高杠杆削弱确定性，当前价观察 |",
+            "supports": "支持最终结论为当前价观察，而非立即全面买入"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": false
+  }
+}

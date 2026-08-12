@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:32+08:00",
+  "company": "厦门钨业",
+  "ticker": "600549.SH",
+  "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+  "report_sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者不建仓，等待价格跌至33.5元以下，或等待半年报验证经营现金流显著改善等条件",
+    "holder_action": "持有",
+    "trigger_condition": "价格跌至33.5元以下，或半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于45万以上",
+    "summary": "报告要求空仓者回避，不因股价下跌而认为便宜，需等待价格或基本面验证条件满足后再行动，持仓者继续持有。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "无冲突",
+    "evidence": [
+      {
+        "line_start": 904,
+        "line_end": 904,
+        "quote": "| 结论摘要 | 空仓者 回避。 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：(a) 价格跌至 33.5 元以下；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上。两者都不满足前，不建仓。 |",
+        "supports": "明确给出空仓者等待条件，包括价格触发点33.5元，因此归为等待价格而非回避/卖出。"
+      },
+      {
+        "line_start": 903,
+        "line_end": 903,
+        "quote": "| 基本面建议动作 | 持有 |",
+        "supports": "最终结论为持有，而非明确回避或卖出，进一步支持等待价格和逻辑。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 42.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 33.5,
+      "max": 42.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者不建仓，等待价格跌至33.5元以下，或等待半年报验证经营现金流显著改善等条件",
+        "holder_action": "持有",
+        "trigger_condition": "价格跌至33.5元以下，或半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于45万以上",
+        "summary": "报告要求空仓者回避，不因股价下跌而认为便宜，需等待价格或基本面验证条件满足后再行动，持仓者继续持有。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突",
+        "evidence": [
+          {
+            "line_start": 904,
+            "line_end": 904,
+            "quote": "| 结论摘要 | 空仓者 回避。 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：(a) 价格跌至 33.5 元以下；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上。两者都不满足前，不建仓。 |",
+            "supports": "明确给出空仓者等待条件，包括价格触发点33.5元，因此归为等待价格而非回避/卖出。"
+          },
+          {
+            "line_start": 903,
+            "line_end": 903,
+            "quote": "| 基本面建议动作 | 持有 |",
+            "supports": "最终结论为持有，而非明确回避或卖出，进一步支持等待价格和逻辑。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者暂不建仓，等待股价跌至33.5元以下，或半年报验证经营改善后再行动。",
+        "holder_action": "持有。",
+        "trigger_condition": "价格跌至33.5元以下；或半年报证明经营现金流显著改善、存货和短债至少一项下降且钨价企稳于45万以上。",
+        "summary": "空仓者两项条件均未满足前不建仓，优先等待价格或半年报经营验证。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "“基本面建议动作”为持有，适用于持仓者；结论摘要单列空仓者动作，二者面向不同对象，不构成冲突。",
+        "evidence": [
+          {
+            "line_start": 903,
+            "line_end": 903,
+            "quote": "| 基本面建议动作 | 持有 |",
+            "supports": "支持持仓者动作为持有。"
+          },
+          {
+            "line_start": 904,
+            "line_end": 904,
+            "quote": "| 结论摘要 | 空仓者 回避。 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：(a) 价格跌至 33.5 元以下；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上。两者都不满足前，不建仓。 |",
+            "supports": "覆盖空仓者建议及最终结论；虽使用“回避”，但明确给出价格触发点和验证条件，空仓当前应等待而非永久回避。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

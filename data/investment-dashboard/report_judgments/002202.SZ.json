@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:49:10+08:00",
+  "company": "Goldwind",
+  "ticker": "002202.SZ",
+  "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+  "report_sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者观望为主，等待更好买点，建议在15-17元区间分批建仓",
+    "holder_action": "持仓者未明确建议，但整体建议观察等待",
+    "trigger_condition": "价格达到15-17元区间，或Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+）",
+    "summary": "报告认为当前股价缺乏安全边际，建议空仓者观望，等待15-17元区间或业绩超预期后再分批买入",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，均为观察等待",
+    "evidence": [
+      {
+        "line_start": 390,
+        "line_end": 390,
+        "quote": "空仓者 观望为主，等待更好买点。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间",
+        "supports": "空仓者当前应观望，并给出了明确的价格触发条件"
+      },
+      {
+        "line_start": 389,
+        "line_end": 389,
+        "quote": "基本面建议动作：观察",
+        "supports": "最终结论为观察，符合等待价格标签"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望为主，等待更好买点，建议在15-17元区间分批建仓",
+        "holder_action": "持仓者未明确建议，但整体建议观察等待",
+        "trigger_condition": "价格达到15-17元区间，或Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+）",
+        "summary": "报告认为当前股价缺乏安全边际，建议空仓者观望，等待15-17元区间或业绩超预期后再分批买入",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与看板契约一致，均为观察等待",
+        "evidence": [
+          {
+            "line_start": 390,
+            "line_end": 390,
+            "quote": "空仓者 观望为主，等待更好买点。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间",
+            "supports": "空仓者当前应观望，并给出了明确的价格触发条件"
+          },
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "基本面建议动作：观察",
+            "supports": "最终结论为观察，符合等待价格标签"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望为主，等待更好买点；在15-17元区间分批建仓。",
+        "holder_action": "未给出。",
+        "trigger_condition": "价格回落至15-17元区间；若Q2-Q3业绩持续超预期且海外毛利率维持24%+，可提高买入价格区间。",
+        "summary": "当前估值缺乏安全边际，空仓者等待15-17元区间后分批建仓。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：看板粗标签“观察”与正文对空仓者等待更低买点的具体动作一致。",
+        "evidence": [
+          {
+            "line_start": 389,
+            "line_end": 389,
+            "quote": "基本面建议动作 | 观察",
+            "supports": "支持看板契约的观察类判断。"
+          },
+          {
+            "line_start": 390,
+            "line_end": 390,
+            "quote": "空仓者 观望为主，等待更好买点。",
+            "supports": "直接支持空仓者当前应等待价格。"
+          },
+          {
+            "line_start": 390,
+            "line_end": 390,
+            "quote": "当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。",
+            "supports": "支持最终结论及15-17元的价格触发条件。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

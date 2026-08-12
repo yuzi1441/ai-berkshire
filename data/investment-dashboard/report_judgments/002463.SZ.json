@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:48:44+08:00",
+  "company": "沪电股份",
+  "ticker": "002463.SZ",
+  "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+  "report_sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者观望，不买入，将87–101元设为关注区，70–87元设为分批建仓区，等待价格跌入这些区间再行动",
+    "holder_action": "报告未给持仓者明确动作，但当前价位无安全边际，建议持有但不加仓",
+    "trigger_condition": "股价进入87–101元关注区或70–87元分批建仓区",
+    "summary": "报告明确空仓者观望不买入，当前112.22元无安全边际，关注区87–101元，建仓区70–87元，今天不是买点。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 1077,
+        "line_end": 1077,
+        "quote": "空仓者 观望，不买入。 把 87–101元 设为关注区（对应2026E PE 25–29x，历史中位），70–87元 设为分批建仓区。当前 112.22 元位于\"无安全边际\"区间的中部。这是一家值得在自己的能力圈里长期跟踪的公司，但今天不是买点。",
+        "supports": "明确空仓者当前动作是观望不买入，且给出价格触发点，应归为等待价格"
+      },
+      {
+        "line_start": 1077,
+        "line_end": 1077,
+        "quote": "把 87–101元 设为关注区（对应2026E PE 25–29x，历史中位），70–87元 设为分批建仓区",
+        "supports": "设置明确的价格触发条件，报告等待更低价格而非回避或卖出"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 101.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 87.0,
+      "max": 101.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望，不买入，将87–101元设为关注区，70–87元设为分批建仓区，等待价格跌入这些区间再行动",
+        "holder_action": "报告未给持仓者明确动作，但当前价位无安全边际，建议持有但不加仓",
+        "trigger_condition": "股价进入87–101元关注区或70–87元分批建仓区",
+        "summary": "报告明确空仓者观望不买入，当前112.22元无安全边际，关注区87–101元，建仓区70–87元，今天不是买点。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 1077,
+            "line_end": 1077,
+            "quote": "空仓者 观望，不买入。 把 87–101元 设为关注区（对应2026E PE 25–29x，历史中位），70–87元 设为分批建仓区。当前 112.22 元位于\"无安全边际\"区间的中部。这是一家值得在自己的能力圈里长期跟踪的公司，但今天不是买点。",
+            "supports": "明确空仓者当前动作是观望不买入，且给出价格触发点，应归为等待价格"
+          },
+          {
+            "line_start": 1077,
+            "line_end": 1077,
+            "quote": "把 87–101元 设为关注区（对应2026E PE 25–29x，历史中位），70–87元 设为分批建仓区",
+            "supports": "设置明确的价格触发条件，报告等待更低价格而非回避或卖出"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者观望，当前不买入；将87–101元设为关注区，70–87元作为分批建仓区。",
+        "holder_action": "报告片段未给出持仓者动作。",
+        "trigger_condition": "价格回落至87–101元关注区；70–87元为分批建仓区。",
+        "summary": "当前112.22元无安全边际，空仓者观望不买入，等待更低价格。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文结论摘要明确要求空仓者观望并给出价格触发区间，与契约“基本面建议动作：观察”一致。",
+        "evidence": [
+          {
+            "line_start": 1077,
+            "line_end": 1077,
+            "quote": "空仓者 观望，不买入。",
+            "supports": "明确规定空仓者当前不买入。"
+          },
+          {
+            "line_start": 1077,
+            "line_end": 1077,
+            "quote": "把 87–101元 设为关注区（对应2026E PE 25–29x，历史中位），70–87元 设为分批建仓区。",
+            "supports": "给出以更低价格为核心的后续行动触发点，属于等待价格。"
+          },
+          {
+            "line_start": 1077,
+            "line_end": 1077,
+            "quote": "当前 112.22 元位于\"无安全边际\"区间的中部。这是一家值得在自己的能力圈里长期跟踪的公司，但今天不是买点。",
+            "supports": "最终结论确认当前不是买点。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

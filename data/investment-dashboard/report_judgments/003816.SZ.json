@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:50:21+08:00",
+  "company": "中国广核",
+  "ticker": "003816.SZ",
+  "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+  "report_sha256": "19959c035e90135a56505c16c12ffb62b23fe1351a42cfb4c4b97e8df247add4",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "不在4.06元追买A股；优先等待A股不高于3.20元，或在H股不高于2.90港元时小仓分批",
+    "holder_action": "A股持仓者：只要电价、项目进度和分红未恶化可继续持有，但4.30元以上且盈利未上修时逐步降低机会成本；H股持仓者：当前可持有，2.50港元以下且基本面未恶化可分批加仓，3.30港元以上重新评估赔率",
+    "trigger_condition": "A股价格不高于3.20元，或H股价格不高于2.90港元",
+    "summary": "A股观望，H股可小仓研究；A股等待价格不高于3.20元，H股不高于2.90港元时小仓分批",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "",
+    "evidence": [
+      {
+        "line_start": 246,
+        "line_end": 246,
+        "quote": "空仓者 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。",
+        "supports": "空仓者应等待价格触发，而非立即买入"
+      },
+      {
+        "line_start": 242,
+        "line_end": 242,
+        "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。",
+        "supports": "最终结论是观望和小仓研究，故归类为等待价格"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 3.6,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 3.2,
+      "max": 3.6
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不在4.06元追买A股；优先等待A股不高于3.20元，或在H股不高于2.90港元时小仓分批",
+        "holder_action": "A股持仓者：只要电价、项目进度和分红未恶化可继续持有，但4.30元以上且盈利未上修时逐步降低机会成本；H股持仓者：当前可持有，2.50港元以下且基本面未恶化可分批加仓，3.30港元以上重新评估赔率",
+        "trigger_condition": "A股价格不高于3.20元，或H股价格不高于2.90港元",
+        "summary": "A股观望，H股可小仓研究；A股等待价格不高于3.20元，H股不高于2.90港元时小仓分批",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "",
+        "evidence": [
+          {
+            "line_start": 246,
+            "line_end": 246,
+            "quote": "空仓者 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。",
+            "supports": "空仓者应等待价格触发，而非立即买入"
+          },
+          {
+            "line_start": 242,
+            "line_end": 242,
+            "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。",
+            "supports": "最终结论是观望和小仓研究，故归类为等待价格"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不在4.06元追买A股；等待A股不高于3.20元，或H股不高于2.90港元时小仓分批。",
+        "holder_action": "A股持仓者在电价、项目进度和分红未恶化时继续持有；H股持仓者当前可持有。",
+        "trigger_condition": "A股不高于3.20元，或H股不高于2.90港元时小仓分批。",
+        "summary": "公司值得长期跟踪；A股当前观望，H股可小仓研究。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文对空仓者给出明确价格触发的等待及小仓分批动作，与契约“观察”一致，未构成冲突。",
+        "evidence": [
+          {
+            "line_start": 242,
+            "line_end": 242,
+            "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。",
+            "supports": "支持最终结论为A股观望、H股可小仓研究。"
+          },
+          {
+            "line_start": 246,
+            "line_end": 246,
+            "quote": "空仓者 | 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。",
+            "supports": "支持空仓者以价格为主触发条件等待，并在触发后对H股小仓分批。"
+          },
+          {
+            "line_start": 316,
+            "line_end": 317,
+            "quote": "基本面建议动作 | 观察 | | 结论摘要 | 空仓者 不在 4.06 元追买 A 股；优先等待 A 股不高于 3.20 元，或在 H 股不高于 2.90 港元时小仓分批。 |",
+            "supports": "支持看板契约的观察标签与正文价格等待动作一致。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

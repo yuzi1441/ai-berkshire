@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:52:44+08:00",
+  "company": "中国西电",
+  "ticker": "601179.SH",
+  "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+  "report_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应等待价格回到8.0-9.0元且行业逻辑未破坏后才具备较好安全边际，当前不急于买入。",
+    "holder_action": "持仓者暂持，等待价格或逻辑变化，激进者可设退出小仓交易。",
+    "trigger_condition": "价格回到8.0-9.0元且行业逻辑未破坏。",
+    "summary": "空仓保守型等待，价格回到8.0-9.0元且行业逻辑未破坏才具安全边际；稳健型小仓观察，激进型主题小仓设退出。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 420,
+        "line_end": 420,
+        "quote": "| 结论摘要 | 空仓、保守型 等待 若价格回到 8.0-9.0 元且行业逻辑未破坏，才开始具备较好安全边际。 |",
+        "supports": "空仓者明确等待，价格触发点明确。"
+      },
+      {
+        "line_start": 425,
+        "line_end": 426,
+        "quote": "| 保守型动作 | 等待 | | 保守型价格区间 | 8.0-9.0 元 |",
+        "supports": "保守型等待，区间8-9元，支持等待价格标签。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 12.93,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应等待价格回到8.0-9.0元且行业逻辑未破坏后才具备较好安全边际，当前不急于买入。",
+        "holder_action": "持仓者暂持，等待价格或逻辑变化，激进者可设退出小仓交易。",
+        "trigger_condition": "价格回到8.0-9.0元且行业逻辑未破坏。",
+        "summary": "空仓保守型等待，价格回到8.0-9.0元且行业逻辑未破坏才具安全边际；稳健型小仓观察，激进型主题小仓设退出。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 420,
+            "line_end": 420,
+            "quote": "| 结论摘要 | 空仓、保守型 等待 若价格回到 8.0-9.0 元且行业逻辑未破坏，才开始具备较好安全边际。 |",
+            "supports": "空仓者明确等待，价格触发点明确。"
+          },
+          {
+            "line_start": 425,
+            "line_end": 426,
+            "quote": "| 保守型动作 | 等待 | | 保守型价格区间 | 8.0-9.0 元 |",
+            "supports": "保守型等待，区间8-9元，支持等待价格标签。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓、保守型等待价格回到8.0-9.0元且行业逻辑未破坏后再考虑行动",
+        "holder_action": "未给出",
+        "trigger_condition": "价格回到8.0-9.0元且行业逻辑未破坏",
+        "summary": "空仓保守型需等待价格回到8.0-9.0元并确认行业逻辑未破坏。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突：看板基本面建议为观察，结论摘要明确空仓保守型等待价格触发。",
+        "evidence": [
+          {
+            "line_start": 419,
+            "line_end": 419,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持当前不立即建仓、处于观察状态。"
+          },
+          {
+            "line_start": 420,
+            "line_end": 420,
+            "quote": "| 结论摘要 | 空仓、保守型 等待 若价格回到 8.0-9.0 元且行业逻辑未破坏，才开始具备较好安全边际。 |",
+            "supports": "直接支持空仓者等待价格触发，并构成最终结论。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

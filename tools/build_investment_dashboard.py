@@ -14,6 +14,7 @@ Each company also keeps a historical report-conclusion trail from prior company 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -1035,6 +1036,87 @@ def attach_checklists(
             for item in ordered
         ]
         decision["checklist"] = latest
+
+
+def load_report_judgments(directory: Path) -> list[dict[str, Any]]:
+    """Load model-reviewed main-report judgments from durable JSON artifacts."""
+    if not directory.is_dir():
+        return []
+    artifacts: list[dict[str, Any]] = []
+    for path in sorted(directory.glob("*.json")):
+        artifact = load_json(path, {})
+        if artifact.get("schema_version") != 1:
+            raise ValueError(f"Unsupported report judgment schema: {path}")
+        if not artifact.get("ticker") or not isinstance(artifact.get("judgment"), dict):
+            raise ValueError(f"Incomplete report judgment artifact: {path}")
+        artifacts.append(artifact)
+    return artifacts
+
+
+def attach_report_judgments(
+    decisions: list[dict[str, Any]], artifacts: list[dict[str, Any]], repo_root: Path
+) -> None:
+    """Attach only judgments that match the currently selected report byte-for-byte."""
+    by_ticker = {str(item.get("ticker") or "").upper(): item for item in artifacts}
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        artifact = by_ticker.get(ticker)
+        if not artifact:
+            if isinstance(decision.get("primary_judgment"), dict):
+                continue
+            if decision.get("market") == "A股":
+                decision["primary_judgment"] = {
+                    "enabled": True,
+                    "label": "待人工复核",
+                    "action_kind": "unknown",
+                    "empty_position_action": "尚未生成双模型主报告判断",
+                    "trigger_condition": "完成主报告双模型复核后再自动归类",
+                    "summary": "缺少判断缓存，不能沿用原契约粗标签进入可买筛选。",
+                    "source_basis": "报告判断缓存状态检查",
+                    "model_consensus": False,
+                    "report_field_conflict": False,
+                    "conflict_note": "当前主报告尚无可用的双模型判断结果。",
+                    "artifact_status": "missing",
+                    "source_matches": False,
+                    "models": {},
+                }
+            continue
+        report_path = str(decision.get("report_path") or "")
+        source_path = repo_root / report_path
+        expected_hash = str(artifact.get("report_sha256") or "")
+        actual_hash = (
+            hashlib.sha256(source_path.read_bytes()).hexdigest() if source_path.is_file() else ""
+        )
+        source_matches = (
+            artifact.get("report_path") == report_path
+            and bool(expected_hash)
+            and expected_hash == actual_hash
+        )
+        judgment = dict(artifact["judgment"])
+        if artifact.get("status") != "ready" or not source_matches:
+            judgment.update(
+                {
+                    "enabled": True,
+                    "label": "待人工复核",
+                    "action_kind": "unknown",
+                    "empty_position_action": "模型结果不可用，暂停自动归类",
+                    "trigger_condition": "重新解析当前主报告并完成人工复核",
+                    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+                    "source_basis": "报告判断缓存状态检查",
+                    "model_consensus": False,
+                    "report_field_conflict": False,
+                    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+                }
+            )
+        judgment["artifact_status"] = artifact.get("status")
+        judgment["source_matches"] = source_matches
+        judgment["generated_at"] = artifact.get("generated_at")
+        judgment["models"] = {
+            name: value.get("model")
+            for name, value in (artifact.get("models") or {}).items()
+            if isinstance(value, dict)
+        }
+        decision["primary_judgment"] = judgment
 
 
 def is_markdown_table_separator(line: str) -> bool:
@@ -3026,6 +3108,10 @@ def candidate_record(
     lines = text.splitlines()
     if parse_frontmatter(lines).get("type") == "technical-analysis":
         return None
+    # Standalone Checklist reports are an auxiliary pre-buy layer even when an
+    # older file lacks a typed contract. They must never become the main report.
+    if re.search(r"checklist", report_path.stem, re.IGNORECASE):
+        return None
     decision_contract = extract_decision_contract(lines)
     # A Checklist is a screening gate, not a replacement for a full investment
     # recommendation. Its typed contract prevents it from superseding the main report.
@@ -3298,6 +3384,61 @@ def historical_price_reference(
     return None
 
 
+def normalize_primary_judgment(value: Any, company: str) -> dict[str, Any] | None:
+    """Validate an opt-in, reviewed main-report judgment used by the UI preview."""
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ValueError(f"primary_judgment override must be an object: {company}")
+    if value.get("enabled") is not True:
+        return None
+
+    required_text = (
+        "label",
+        "action_kind",
+        "empty_position_action",
+        "trigger_condition",
+        "summary",
+        "source_basis",
+        "currency",
+    )
+    normalized = {key: clean_markdown(str(value.get(key) or "")) for key in required_text}
+    if any(not normalized[key] for key in required_text):
+        raise ValueError(f"primary_judgment override is incomplete: {company}")
+    if normalized["action_kind"] not in {"buy", "trial", "hold", "watch", "no", "unknown"}:
+        raise ValueError(f"primary_judgment action_kind is invalid: {company}")
+    if normalized["currency"] not in {"CNY", "HKD", "USD", "KRW"}:
+        raise ValueError(f"primary_judgment currency is invalid: {company}")
+
+    entry_ceiling = value.get("entry_ceiling")
+    trial_range = value.get("trial_range")
+    if not isinstance(entry_ceiling, (int, float)) or entry_ceiling <= 0:
+        raise ValueError(f"primary_judgment entry_ceiling is invalid: {company}")
+    if not isinstance(trial_range, dict):
+        raise ValueError(f"primary_judgment trial_range must be an object: {company}")
+    trial_min = trial_range.get("min")
+    trial_max = trial_range.get("max")
+    if (
+        not isinstance(trial_min, (int, float))
+        or not isinstance(trial_max, (int, float))
+        or trial_min <= 0
+        or trial_max < trial_min
+        or trial_max > entry_ceiling
+    ):
+        raise ValueError(f"primary_judgment trial_range is invalid: {company}")
+
+    normalized.update(
+        {
+            "enabled": True,
+            "report_field_conflict": value.get("report_field_conflict") is True,
+            "conflict_note": clean_markdown(str(value.get("conflict_note") or "")),
+            "entry_ceiling": float(entry_ceiling),
+            "trial_range": {"min": float(trial_min), "max": float(trial_max)},
+        }
+    )
+    return normalized
+
+
 def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -> list[dict[str, Any]]:
     """Select one latest stock conclusion per company and attach historical report conclusions."""
     groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -3313,6 +3454,13 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
         if not isinstance(company_override, dict):
             raise ValueError(f"Company override must be an object: {company}")
         selected.update(company_override)
+        primary_judgment = normalize_primary_judgment(
+            company_override.get("primary_judgment"), company
+        )
+        if primary_judgment:
+            selected["primary_judgment"] = primary_judgment
+        else:
+            selected.pop("primary_judgment", None)
         # Prefer original valuation tables (第七步：估值与安全边际) for display.
         preferred_section = prefer_valuation_section(selected, ordered)
         if preferred_section:
@@ -3650,6 +3798,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         if (record := checklist_record(report_path, repo_root, registry)) is not None
     ]
     decisions = select_decisions(records, overrides)
+    report_judgments = load_report_judgments(data_directory / "report_judgments")
+    attach_report_judgments(decisions, report_judgments, repo_root)
     attach_checklists(decisions, checklist_records)
     technical_snapshots = [
         snapshot

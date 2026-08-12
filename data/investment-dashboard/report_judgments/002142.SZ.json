@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:58+08:00",
+  "company": "宁波银行",
+  "ticker": "002142.SZ",
+  "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+  "report_sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "在32元观察，等待29-31元的首档安全边际，或等待半年报证明NIM、个人资产质量和CET1没有恶化",
+    "holder_action": "若持仓逻辑是高质量城商行，可持有；不建议因PE低机械加仓",
+    "trigger_condition": "价格触发29-31元，或半年报验证NIM稳定在1.70%以上、个人贷款不良率不再上行、重组贷款占比受控、CET1回升或风险加权资产增速收敛",
+    "summary": "优质城商行但32元安全边际有限，空仓者等待29-31元或半年报验证，持仓者可持有但不加仓",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均要求等待价格或验证，无冲突",
+    "evidence": [
+      {
+        "line_start": 263,
+        "line_end": 263,
+        "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |",
+        "supports": "空仓者需等待价格或验证，不是立即买入"
+      },
+      {
+        "line_start": 259,
+        "line_end": 259,
+        "quote": "**总体结论：观察。** 这是一家值得进入高质量银行候选池的公司，但不是“看到低 PE 就立刻买”的标的。报告区分“好生意”和“好价格”：前者成立，后者在 32 元尚不充分。",
+        "supports": "最终结论为观察，而非行动买入"
+      },
+      {
+        "line_start": 312,
+        "line_end": 312,
+        "quote": "| 结论摘要 | 优质城商行但32元安全边际有限，等待息差资产质量资本验证或更低价格 |",
+        "supports": "支持等待价格或验证的结论"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 31.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 29.0,
+      "max": 31.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "在32元观察，等待29-31元的首档安全边际，或等待半年报证明NIM、个人资产质量和CET1没有恶化",
+        "holder_action": "若持仓逻辑是高质量城商行，可持有；不建议因PE低机械加仓",
+        "trigger_condition": "价格触发29-31元，或半年报验证NIM稳定在1.70%以上、个人贷款不良率不再上行、重组贷款占比受控、CET1回升或风险加权资产增速收敛",
+        "summary": "优质城商行但32元安全边际有限，空仓者等待29-31元或半年报验证，持仓者可持有但不加仓",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均要求等待价格或验证，无冲突",
+        "evidence": [
+          {
+            "line_start": 263,
+            "line_end": 263,
+            "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |",
+            "supports": "空仓者需等待价格或验证，不是立即买入"
+          },
+          {
+            "line_start": 259,
+            "line_end": 259,
+            "quote": "**总体结论：观察。** 这是一家值得进入高质量银行候选池的公司，但不是“看到低 PE 就立刻买”的标的。报告区分“好生意”和“好价格”：前者成立，后者在 32 元尚不充分。",
+            "supports": "最终结论为观察，而非行动买入"
+          },
+          {
+            "line_start": 312,
+            "line_end": 312,
+            "quote": "| 结论摘要 | 优质城商行但32元安全边际有限，等待息差资产质量资本验证或更低价格 |",
+            "supports": "支持等待价格或验证的结论"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "在32元观察，等待29-31元首档安全边际；也可等待半年报证明关键指标未恶化。",
+        "holder_action": "若逻辑为高质量城商行可持有；未知成本和仓位下不因低PE机械加仓。",
+        "trigger_condition": "价格降至29-31元的首档安全边际；或半年报证明NIM、个人资产质量和CET1没有恶化。",
+        "summary": "优质城商行但32元安全边际不足，空仓者等待更低价格或半年报验证。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文空仓建议、总体结论与看板契约均为观察，且均要求更低价格或经营验证，无冲突。",
+        "evidence": [
+          {
+            "line_start": 259,
+            "line_end": 259,
+            "quote": "**总体结论：观察。** 这是一家值得进入高质量银行候选池的公司，但不是“看到低 PE 就立刻买”的标的。报告区分“好生意”和“好价格”：前者成立，后者在 32 元尚不充分。",
+            "supports": "支持最终结论为观察，32元不构成立即买入条件。"
+          },
+          {
+            "line_start": 263,
+            "line_end": 263,
+            "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |",
+            "supports": "直接支持空仓者当前等待价格，并以半年报指标验证作为替代触发。"
+          },
+          {
+            "line_start": 312,
+            "line_end": 316,
+            "quote": "| 结论摘要 | 优质城商行但32元安全边际有限，等待息差资产质量资本验证或更低价格 | | 激进型动作 | 半年报未恶化时小仓分批 | | 激进型价格区间 | 29.0-31.0元 | | 稳健型动作 | 风险指标稳定时分批买入 | | 稳健型价格区间 | 26.5-29.0元 |",
+            "supports": "看板契约与正文一致，确认当前应等待价格或验证，而非立即买入。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

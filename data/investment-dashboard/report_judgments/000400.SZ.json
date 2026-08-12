@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:59:08+08:00",
+  "company": "许继电气",
+  "ticker": "000400.SZ",
+  "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+  "report_sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应等待更低价格，稳健型等待约16-18元，保守型等待约13-15元，激进型可小仓观察但不追高",
+    "holder_action": "持仓者继续持有，不追加仓位",
+    "trigger_condition": "价格进入约16-18元（稳健型）或13-15元（保守型）区间",
+    "summary": "报告建议观察，激进小仓不追高，稳健等待安全边际，保守暂不买入",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，无冲突",
+    "evidence": [
+      {
+        "line_start": 250,
+        "line_end": 250,
+        "quote": "| 激进型动作 | 小仓观察，不追高 |",
+        "supports": "空仓者当前不应立即买入，需等待或小仓观察"
+      },
+      {
+        "line_start": 252,
+        "line_end": 252,
+        "quote": "| 稳健型动作 | 等待安全边际 |",
+        "supports": "空仓者需等待更低价格，对应等待价格类别"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 22.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 20.0,
+      "max": 22.0
+    }
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应等待更低价格，稳健型等待约16-18元，保守型等待约13-15元，激进型可小仓观察但不追高",
+        "holder_action": "持仓者继续持有，不追加仓位",
+        "trigger_condition": "价格进入约16-18元（稳健型）或13-15元（保守型）区间",
+        "summary": "报告建议观察，激进小仓不追高，稳健等待安全边际，保守暂不买入",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，无冲突",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 250,
+            "quote": "| 激进型动作 | 小仓观察，不追高 |",
+            "supports": "空仓者当前不应立即买入，需等待或小仓观察"
+          },
+          {
+            "line_start": 252,
+            "line_end": 252,
+            "quote": "| 稳健型动作 | 等待安全边际 |",
+            "supports": "空仓者需等待更低价格，对应等待价格类别"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者暂不买入，等待更低价格和安全边际；激进型仅可小仓观察且不追高",
+        "holder_action": "报告未明确说明持仓者动作",
+        "trigger_condition": "激进型约20-22元可小仓观察，稳健型约16-18元等待安全边际，保守型约13-15元暂不买入",
+        "summary": "空仓暂不买入，等待更低价格和安全边际；激进型仅小仓观察不追高",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "所给片段未提供正文或独立最终结论，无法核对与看板契约是否冲突；当前依据看板契约字段判断",
+        "evidence": [
+          {
+            "line_start": 252,
+            "line_end": 255,
+            "quote": "| 稳健型动作 | 等待安全边际 | | 稳健型价格区间 | 约16-18元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 约13-15元 |",
+            "supports": "支持空仓者当前暂不买入，并以更低价格区间作为参考"
+          },
+          {
+            "line_start": 249,
+            "line_end": 253,
+            "quote": "| 结论摘要 | 7.2 分层操作建议（非投资建议，仅框架演练） | | 激进型动作 | 小仓观察，不追高 | | 激进型价格区间 | 约20-22元 | | 稳健型动作 | 等待安全边际 | | 稳健型价格区间 | 约16-18元 |",
+            "supports": "支持报告的分层最终判断：激进型小仓观察，稳健型等待安全边际，且存在明确价格区间"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:58:55+08:00",
+  "company": "英维克",
+  "ticker": "002837.SZ",
+  "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+  "report_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "报告未明确给出持仓者的具体卖出或减仓动作，但结论称'空仓者回避'并强调'错误的价格'，隐含当前价格不具持有价值，持仓者应审视风险",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "报告认为英维克好行业+好卡位，但当前价格错误，投资价值不足，空仓者应回避，等待30元以下才考虑安全边际",
+    "confidence": "medium",
+    "report_field_conflict": true,
+    "conflict_note": "无冲突",
+    "evidence": [
+      {
+        "line_start": 334,
+        "line_end": 334,
+        "quote": "| 结论摘要 | 空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
+        "supports": "报告明确要求空仓者回避，并给出等待更低价格30元以下的触发条件，因此属于回避/卖出"
+      },
+      {
+        "line_start": 333,
+        "line_end": 333,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "契约中的基本面动作是'观察'，但正文结论是明确'回避'，正文优先级更高，支持回避/卖出判断"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者应回避，不参与；若坚持参与，需等待价格低于30元以下再考虑安全边际，30-50元区间只可观察不可重仓",
+        "holder_action": "报告未明确给出持仓者的具体卖出或减仓动作，但结论称'空仓者回避'并强调'错误的价格'，隐含当前价格不具持有价值，持仓者应审视风险",
+        "trigger_condition": "价格跌至30元以下（市值380亿以下）才谈安全边际；30-50元区间仅可观察不可重仓",
+        "summary": "报告认为英维克好行业+好卡位，但当前价格错误，投资价值不足，空仓者应回避，等待30元以下才考虑安全边际",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突",
+        "evidence": [
+          {
+            "line_start": 334,
+            "line_end": 334,
+            "quote": "| 结论摘要 | 空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
+            "supports": "报告明确要求空仓者回避，并给出等待更低价格30元以下的触发条件，因此属于回避/卖出"
+          },
+          {
+            "line_start": 333,
+            "line_end": 333,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "契约中的基本面动作是'观察'，但正文结论是明确'回避'，正文优先级更高，支持回避/卖出判断"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者等待股价跌至30元以下后再考虑参与，30-50元区间仅观察不可重仓",
+        "holder_action": "未给出",
+        "trigger_condition": "股价低于30元（市值低于380亿元）",
+        "summary": "当前不宜行动，等待跌破30元后再谈安全边际",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约中的“基本面建议动作”为“观察”，但结论明确要求空仓者回避并等待30元以下；按正文明确动作及价格触发条件归为等待价格。",
+        "evidence": [
+          {
+            "line_start": 334,
+            "line_end": 334,
+            "quote": "| 结论摘要 | 空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
+            "supports": "明确说明空仓者当前回避，并给出30元以下的价格触发点，支持等待价格判断。"
+          },
+          {
+            "line_start": 333,
+            "line_end": 334,
+            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
+            "supports": "显示看板粗标签为观察，但最终结论要求空仓者回避并等待更低价格，构成字段冲突。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  }
+}

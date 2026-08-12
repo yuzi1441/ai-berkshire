@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:11+08:00",
+  "company": "伊利股份",
+  "ticker": "600887.SH",
+  "report_path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+  "report_sha256": "259a2cfd325dd08b522483ac629e01840860f404728f08c4bd598b8e3220bcc9",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前不追高，等待价格回落至明确触发点后再行动",
+    "holder_action": "持仓者继续持有，不加仓，等待价格或业绩确认",
+    "trigger_condition": "价格低于24元或21元，或业绩确认（如收入、现金流等指标改善）",
+    "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "",
+    "evidence": [
+      {
+        "line_start": 270,
+        "line_end": 270,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "报告对当前整体的基本动作是观察，不支持立即买入。"
+      },
+      {
+        "line_start": 271,
+        "line_end": 271,
+        "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
+        "supports": "明确要求空仓者等待价格触发点（24元以下）或业绩确认，归为等待价格/watch。"
+      },
+      {
+        "line_start": 272,
+        "line_end": 274,
+        "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
+        "supports": "具体建仓价格均低于当前价格，强化需要等待更低价格的观点。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不追高，等待价格回落至明确触发点后再行动",
+        "holder_action": "持仓者继续持有，不加仓，等待价格或业绩确认",
+        "trigger_condition": "价格低于24元或21元，或业绩确认（如收入、现金流等指标改善）",
+        "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 270,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "报告对当前整体的基本动作是观察，不支持立即买入。"
+          },
+          {
+            "line_start": 271,
+            "line_end": 271,
+            "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
+            "supports": "明确要求空仓者等待价格触发点（24元以下）或业绩确认，归为等待价格/watch。"
+          },
+          {
+            "line_start": 272,
+            "line_end": 274,
+            "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
+            "supports": "具体建仓价格均低于当前价格，强化需要等待更低价格的观点。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前观察不追高，等待24元以下；业绩确认亦可作为后续条件。",
+        "holder_action": "未明确持仓者动作。",
+        "trigger_condition": "价格降至24元以下。",
+        "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "片段仅含看板决策契约，基本面建议动作与结论摘要一致，未见正文冲突。",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 270,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持空仓者当前采取观察、暂不行动。"
+          },
+          {
+            "line_start": 271,
+            "line_end": 271,
+            "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
+            "supports": "支持最终结论为不追高，并以24元以下作为价格等待触发点。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:53:50+08:00",
+  "company": "国药现代",
+  "ticker": "600420.SH",
+  "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+  "report_sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "不必急，等待价格跌到足够便宜（如7元以下）或2026Q2/Q3基本面验证后再考虑买入",
+    "holder_action": "可以持有观察，但不要机械加仓，重点看2026半年报的原料药毛利率、经营现金流、制剂收入是否止跌",
+    "trigger_condition": "价格跌至7元以下且基本面没有进一步破坏，或2026Q2/Q3显示API毛利率、现金流和利润下滑开始收敛",
+    "summary": "公司生意质量中等，估值不贵但不够便宜，当前缺少明显安全边际，建议观望/小仓跟踪，空仓者不必急，等待更好买点",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均建议观望",
+    "evidence": [
+      {
+        "line_start": 302,
+        "line_end": 302,
+        "quote": "**对空仓投资者**：不必急。更好的买点来自两个条件之一：价格跌到足够便宜，或 2026Q2/Q3 证明 API 毛利率、现金流和利润下滑开始收敛。",
+        "supports": "空仓者当前不应买入，应等待价格或业绩验证"
+      },
+      {
+        "line_start": 276,
+        "line_end": 276,
+        "quote": "| 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 |",
+        "supports": "当前价格缺乏安全边际，支持等待"
+      },
+      {
+        "line_start": 300,
+        "line_end": 300,
+        "quote": "| 当前动作 | **观望 / 小仓跟踪，不建议作为核心买入。** |",
+        "supports": "最终建议为观望，而非买入"
+      },
+      {
+        "line_start": 313,
+        "line_end": 313,
+        "quote": "| 加仓信号 4 | 股价回落至 7 元以下，同时基本面没有进一步破坏。 |",
+        "supports": "给出明确价格触发点，属于等待价格"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 9.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不必急，等待价格跌到足够便宜（如7元以下）或2026Q2/Q3基本面验证后再考虑买入",
+        "holder_action": "可以持有观察，但不要机械加仓，重点看2026半年报的原料药毛利率、经营现金流、制剂收入是否止跌",
+        "trigger_condition": "价格跌至7元以下且基本面没有进一步破坏，或2026Q2/Q3显示API毛利率、现金流和利润下滑开始收敛",
+        "summary": "公司生意质量中等，估值不贵但不够便宜，当前缺少明显安全边际，建议观望/小仓跟踪，空仓者不必急，等待更好买点",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均建议观望",
+        "evidence": [
+          {
+            "line_start": 302,
+            "line_end": 302,
+            "quote": "**对空仓投资者**：不必急。更好的买点来自两个条件之一：价格跌到足够便宜，或 2026Q2/Q3 证明 API 毛利率、现金流和利润下滑开始收敛。",
+            "supports": "空仓者当前不应买入，应等待价格或业绩验证"
+          },
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "| 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 |",
+            "supports": "当前价格缺乏安全边际，支持等待"
+          },
+          {
+            "line_start": 300,
+            "line_end": 300,
+            "quote": "| 当前动作 | **观望 / 小仓跟踪，不建议作为核心买入。** |",
+            "supports": "最终建议为观望，而非买入"
+          },
+          {
+            "line_start": 313,
+            "line_end": 313,
+            "quote": "| 加仓信号 4 | 股价回落至 7 元以下，同时基本面没有进一步破坏。 |",
+            "supports": "给出明确价格触发点，属于等待价格"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "不必急，等待股价跌至足够便宜（加仓信号为7元以下且基本面未进一步破坏），或等待2026Q2/Q3基本面下滑收敛后再行动。",
+        "holder_action": "可以持有观察，但不要因PB<1机械加仓，关注2026半年报经营指标。",
+        "trigger_condition": "股价回落至7元以下且基本面没有进一步破坏；或2026Q2/Q3证明API毛利率、现金流和利润下滑开始收敛。",
+        "summary": "当前观望或小仓跟踪；空仓者等待更低价格或经营修复验证。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文最终建议为“观望 / 小仓跟踪”，与看板契约“基本面建议动作：观察”“保守型动作：观望为主”一致。",
+        "evidence": [
+          {
+            "line_start": 300,
+            "line_end": 300,
+            "quote": "| 当前动作 | **观望 / 小仓跟踪，不建议作为核心买入。** |",
+            "supports": "支持最终结论为观望/小仓跟踪，当前不作为核心买入。"
+          },
+          {
+            "line_start": 302,
+            "line_end": 302,
+            "quote": "**对空仓投资者**：不必急。更好的买点来自两个条件之一：价格跌到足够便宜，或 2026Q2/Q3 证明 API 毛利率、现金流和利润下滑开始收敛。",
+            "supports": "直接说明空仓者应等待更低价格或基本面验证。"
+          },
+          {
+            "line_start": 313,
+            "line_end": 313,
+            "quote": "| 加仓信号 4 | 股价回落至 7 元以下，同时基本面没有进一步破坏。 |",
+            "supports": "给出等待价格的明确价格触发点。"
+          },
+          {
+            "line_start": 303,
+            "line_end": 303,
+            "quote": "**对已有持仓者**：可以持有观察，但不要因为 PB < 1 就机械加仓。重点看 2026 半年报：原料药毛利率、经营现金流、制剂收入是否止跌。",
+            "supports": "直接说明已有持仓者的持有观察及不机械加仓动作。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

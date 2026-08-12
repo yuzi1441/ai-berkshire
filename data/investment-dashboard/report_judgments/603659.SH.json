@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "generated_at": "2026-08-13T01:55:16+08:00",
+  "company": "璞泰来",
+  "ticker": "603659.SH",
+  "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+  "report_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+  "judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "观望为主，等待更好的买入时机；若股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位。",
+    "holder_action": "报告未明确给出持仓者动作，仅建议空仓者观望；持仓者无操作建议。",
+    "trigger_condition": "股价回到25元以下，且Q2/Q3业绩持续向好。",
+    "summary": "当前29元对应2026E约20x PE，不贵也不便宜；建议空仓者观望，理想买入区间22-25元，若回调至25元以下且业绩向好可小仓建立。",
+    "confidence": "medium",
+    "report_field_conflict": false,
+    "conflict_note": "无冲突；看板契约与正文均为观望等待价格，归类为等待价格。",
+    "evidence": [
+      {
+        "line_start": 522,
+        "line_end": 522,
+        "quote": "| 结论摘要 | 空仓者 观望为主，等待更好的买入时机。 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |",
+        "supports": "明确建议空仓者观望，并给出价格触发条件（25元以下）和业绩验证条件，属于等待价格/watch。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望为主，等待更好的买入时机；若股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位。",
+        "holder_action": "报告未明确给出持仓者动作，仅建议空仓者观望；持仓者无操作建议。",
+        "trigger_condition": "股价回到25元以下，且Q2/Q3业绩持续向好。",
+        "summary": "当前29元对应2026E约20x PE，不贵也不便宜；建议空仓者观望，理想买入区间22-25元，若回调至25元以下且业绩向好可小仓建立。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突；看板契约与正文均为观望等待价格，归类为等待价格。",
+        "evidence": [
+          {
+            "line_start": 522,
+            "line_end": 522,
+            "quote": "| 结论摘要 | 空仓者 观望为主，等待更好的买入时机。 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |",
+            "supports": "明确建议空仓者观望，并给出价格触发条件（25元以下）和业绩验证条件，属于等待价格/watch。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望为主，等待更好的买入时机；股价回到25元以下且Q2/Q3业绩持续向好时，可考虑建立小仓位。",
+        "holder_action": "报告未给出持仓者动作。",
+        "trigger_condition": "理想买入区间22-25元；股价回到25元以下且Q2/Q3业绩持续向好。",
+        "summary": "空仓者观望，等待股价回落至25元以下并验证业绩向好后小仓建仓。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "看板粗标签“观察”与结论摘要中的空仓观望、等待价格回落后小仓建仓一致，不存在冲突。",
+        "evidence": [
+          {
+            "line_start": 521,
+            "line_end": 521,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持当前不立即行动、处于观察状态。"
+          },
+          {
+            "line_start": 522,
+            "line_end": 522,
+            "quote": "| 结论摘要 | 空仓者 观望为主，等待更好的买入时机。 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |",
+            "supports": "直接支持空仓者等待价格的建议，以及价格和业绩触发后小仓建仓的最终结论。"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "review",
+  "generated_at": "2026-08-13T01:59:08+08:00",
+  "company": "藏格矿业",
+  "ticker": "000408.SZ",
+  "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+  "report_sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
+  "judgment": {
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
+    "holder_action": "原文未明确给出持仓者操作，但指出安全边际为负，暗示持仓者应谨慎或考虑减仓",
+    "trigger_condition": "人工核对主报告原文后再恢复筛选",
+    "summary": "藏格矿业基本面改善，但74.72元价格已price in三重利好，中性情景亏37%，安全边际为负，不建议新建仓，等待回调至35–40元再评估。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "契约标签为‘回避/卖出’，正文建议空仓者回避或观望，并等待回调，两者一致，无冲突。",
+    "evidence": [
+      {
+        "line_start": 318,
+        "line_end": 318,
+        "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+        "supports": "报告明确建议空仓者回避或观望，不支持当前买入，因此归类为回避/卖出。"
+      },
+      {
+        "line_start": 318,
+        "line_end": 318,
+        "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+        "supports": "报告要求等待更低的触发价格，但主要动作建议明确为回避/观望，且未等到价格前不采取行动，因此仍为回避/卖出。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档"
+  },
+  "models": {
+    "primary": {
+      "model": "deepseek-v4-flash",
+      "result": {
+        "label": "回避/卖出",
+        "action_kind": "no",
+        "empty_position_action": "空仓者回避或观望，不建议在74.72元附近新建仓，等待回调至35–40元区间再评估",
+        "holder_action": "原文未明确给出持仓者操作，但指出安全边际为负，暗示持仓者应谨慎或考虑减仓",
+        "trigger_condition": "股价回调至35–40元附近（对应PB约3x、中性情景合理值）",
+        "summary": "藏格矿业基本面改善，但74.72元价格已price in三重利好，中性情景亏37%，安全边际为负，不建议新建仓，等待回调至35–40元再评估。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "契约标签为‘回避/卖出’，正文建议空仓者回避或观望，并等待回调，两者一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 318,
+            "line_end": 318,
+            "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+            "supports": "报告明确建议空仓者回避或观望，不支持当前买入，因此归类为回避/卖出。"
+          },
+          {
+            "line_start": 318,
+            "line_end": 318,
+            "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+            "supports": "报告要求等待更低的触发价格，但主要动作建议明确为回避/观望，且未等到价格前不采取行动，因此仍为回避/卖出。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "gpt-5.6-terra",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前不建议新建仓，等待回调至35–40元附近后再评估",
+        "holder_action": "报告未明确给出持仓者动作",
+        "trigger_condition": "股价回调至35–40元附近，对应PB约3x后再评估",
+        "summary": "当前估值安全边际为负，等待回调至35–40元附近再评估",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "未发现正文与看板契约冲突；契约中的“观察”与等待价格触发条件一致",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持当前不立即行动、维持观察的判断"
+          },
+          {
+            "line_start": 318,
+            "line_end": 318,
+            "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+            "supports": "明确说明空仓者不应在当前价位建仓，并给出35–40元的价格触发条件，因此归类为等待价格"
+          },
+          {
+            "line_start": 318,
+            "line_end": 318,
+            "quote": "| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |",
+            "supports": "支持空仓者当前应观望，而非立即买入"
+          }
+        ]
+      }
+    }
+  },
+  "consensus": {
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": true
+  }
+}
