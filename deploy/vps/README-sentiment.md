@@ -72,8 +72,11 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 `SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek Flash），负责 A股可评分个股新闻和行业
 辅助新闻。`SENTIMENT_REVIEW_*` 为中转站复核模型，只复核 A股可评分个股新闻。
 请编辑 `/etc/ai-berkshire/sentiment.env`，填写 A股复核模型的 key、model 和 endpoint。
-两组模型的单次请求超时默认均为 180 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
-`SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。
+两组模型的单次请求超时默认均为 600 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
+`SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。遇到 408、425、429、500、502、503、
+504 或连接超时等瞬时错误时，每个模型默认额外重试 4 次，采用指数退避（默认 5、10、20、40 秒）；
+可分别用 `SENTIMENT_LLM_RETRIES`、`SENTIMENT_REVIEW_RETRIES` 和对应的
+`*_RETRY_BACKOFF` 调整。任务整体超时上限为 90 分钟，给完整 A 股任务留下足够的重试空间。
 
 对于 A股新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，本次快照不会生成；
 看板保留上一份成功快照，并通过 `site/data/sentiment_status.json` 显示更新失败。

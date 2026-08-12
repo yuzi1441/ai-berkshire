@@ -29,6 +29,8 @@ class SentimentSnapshotTests(unittest.TestCase):
             "SENTIMENT_LLM_THINKING": "disabled",
             "SENTIMENT_LLM_JSON_MODE": "true",
             "SENTIMENT_LLM_MAX_TOKENS": "1800",
+            "SENTIMENT_LLM_RETRIES": "5",
+            "SENTIMENT_LLM_RETRY_BACKOFF": "7",
         }
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment()
@@ -37,7 +39,9 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.thinking_mode, "disabled")
         self.assertTrue(config.json_mode)
         self.assertEqual(config.max_tokens, 1800)
-        self.assertEqual(config.timeout_seconds, 180)
+        self.assertEqual(config.timeout_seconds, 600)
+        self.assertEqual(config.max_retries, 5)
+        self.assertEqual(config.retry_backoff_seconds, 7.0)
 
     def test_review_model_config_uses_separate_environment_prefix(self):
         environment = {
@@ -45,12 +49,101 @@ class SentimentSnapshotTests(unittest.TestCase):
             "SENTIMENT_REVIEW_MODEL": "relay-model",
             "SENTIMENT_REVIEW_ENDPOINT": "https://relay.example.com/v1/chat/completions",
             "SENTIMENT_REVIEW_TIMEOUT": "240",
+            "SENTIMENT_REVIEW_RETRIES": "3",
+            "SENTIMENT_REVIEW_RETRY_BACKOFF": "2.5",
         }
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
         self.assertIsNotNone(config)
         self.assertEqual(config.endpoint, "https://relay.example.com/v1/chat/completions")
         self.assertEqual(config.timeout_seconds, 240)
+        self.assertEqual(config.max_retries, 3)
+        self.assertEqual(config.retry_backoff_seconds, 2.5)
+
+    def test_http_text_retries_transient_gateway_errors(self):
+        class FakeResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self):
+                return b'{"ok": true}'
+
+        errors = [
+            sentiment_snapshot.HTTPError("https://example.com", 502, "Bad Gateway", {}, None),
+            sentiment_snapshot.HTTPError("https://example.com", 503, "Service Unavailable", {}, None),
+        ]
+        with patch.object(
+            sentiment_snapshot,
+            "urlopen",
+            side_effect=[errors[0], errors[1], FakeResponse()],
+        ), patch.object(sentiment_snapshot.time, "sleep") as sleep:
+            result = sentiment_snapshot.http_text(
+                "https://example.com",
+                attempts=3,
+                retry_backoff_seconds=2,
+            )
+        self.assertEqual(result, '{"ok": true}')
+        self.assertEqual(sleep.call_args_list[0].args, (2,))
+        self.assertEqual(sleep.call_args_list[1].args, (4,))
+
+    def test_http_text_does_not_retry_non_transient_http_errors(self):
+        error = sentiment_snapshot.HTTPError(
+            "https://example.com", 401, "Unauthorized", {}, None
+        )
+        with patch.object(sentiment_snapshot, "urlopen", side_effect=error) as urlopen:
+            with self.assertRaises(sentiment_snapshot.SentimentError) as raised:
+                sentiment_snapshot.http_text("https://example.com", attempts=5)
+        self.assertIn("non-retryable HTTP 401", str(raised.exception))
+        urlopen.assert_called_once()
+
+    def test_score_with_llm_passes_configured_retry_policy(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="test-model",
+            timeout_seconds=600,
+            max_retries=4,
+            retry_backoff_seconds=8,
+        )
+        article = {
+            "id": "retry-1",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "title": "示例公司发布公告",
+            "summary": "公司公告",
+        }
+        response = {
+            "choices": [
+                {
+                    "message": {
+                        "content": json.dumps(
+                            {
+                                "items": [
+                                    {
+                                        "id": "retry-1",
+                                        "direction": 0,
+                                        "impact": 1,
+                                        "relevance": 1,
+                                        "confidence": 1,
+                                        "event_type": "一般新闻",
+                                    }
+                                ]
+                            }
+                        )
+                    }
+                }
+            ]
+        }
+        with patch.object(sentiment_snapshot, "http_json", return_value=response) as request:
+            scored = sentiment_snapshot.score_with_llm([article], config)
+        self.assertIn("retry-1", scored)
+        request.assert_called_once()
+        self.assertEqual(request.call_args.kwargs["timeout"], 600)
+        self.assertEqual(request.call_args.kwargs["attempts"], 5)
+        self.assertEqual(request.call_args.kwargs["retry_backoff_seconds"], 8)
 
     def test_dual_model_scoring_blocks_snapshot_when_review_model_fails(self):
         article = {

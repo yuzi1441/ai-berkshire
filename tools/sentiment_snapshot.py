@@ -47,6 +47,10 @@ DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
 DEFAULT_STATUS_OUTPUT = ROOT / "site" / "data" / "sentiment_status.json"
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
+DEFAULT_LLM_TIMEOUT_SECONDS = 600
+DEFAULT_LLM_RETRIES = 4
+DEFAULT_LLM_RETRY_BACKOFF_SECONDS = 5.0
+TRANSIENT_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
@@ -220,7 +224,9 @@ class LLMConfig:
     thinking_mode: str | None = None
     json_mode: bool = False
     max_tokens: int | None = None
-    timeout_seconds: int = 180
+    timeout_seconds: int = DEFAULT_LLM_TIMEOUT_SECONDS
+    max_retries: int = DEFAULT_LLM_RETRIES
+    retry_backoff_seconds: float = DEFAULT_LLM_RETRY_BACKOFF_SECONDS
 
     @classmethod
     def from_environment(cls, prefix: str = "SENTIMENT_LLM_") -> LLMConfig | None:
@@ -255,11 +261,27 @@ class LLMConfig:
             max_tokens = min(8192, max(256, int(max_tokens_text))) if max_tokens_text else None
         except ValueError:
             max_tokens = None
-        timeout_text = os.environ.get(f"{prefix}TIMEOUT", "180").strip()
+        timeout_text = os.environ.get(
+            f"{prefix}TIMEOUT", str(DEFAULT_LLM_TIMEOUT_SECONDS)
+        ).strip()
         try:
             timeout_seconds = min(600, max(30, int(timeout_text)))
         except ValueError:
-            timeout_seconds = 180
+            timeout_seconds = DEFAULT_LLM_TIMEOUT_SECONDS
+        retries_text = os.environ.get(
+            f"{prefix}RETRIES", str(DEFAULT_LLM_RETRIES)
+        ).strip()
+        try:
+            max_retries = min(6, max(0, int(retries_text)))
+        except ValueError:
+            max_retries = DEFAULT_LLM_RETRIES
+        backoff_text = os.environ.get(
+            f"{prefix}RETRY_BACKOFF", str(DEFAULT_LLM_RETRY_BACKOFF_SECONDS)
+        ).strip()
+        try:
+            retry_backoff_seconds = min(60.0, max(0.5, float(backoff_text)))
+        except ValueError:
+            retry_backoff_seconds = DEFAULT_LLM_RETRY_BACKOFF_SECONDS
         return cls(
             endpoint=endpoint,
             api_key=api_key,
@@ -270,6 +292,8 @@ class LLMConfig:
             json_mode=json_mode,
             max_tokens=max_tokens,
             timeout_seconds=timeout_seconds,
+            max_retries=max_retries,
+            retry_backoff_seconds=retry_backoff_seconds,
         )
 
 
@@ -357,9 +381,10 @@ def http_text(
     body: bytes | None = None,
     timeout: int = 20,
     attempts: int = 3,
+    retry_backoff_seconds: float = 0.6,
     encoding: str = "utf-8",
 ) -> str:
-    """Fetch text with bounded retries for transient provider failures."""
+    """Fetch text with bounded exponential retries for transient provider failures."""
     request_headers = {"User-Agent": USER_AGENT, **(headers or {})}
     last_error: Exception | None = None
     for attempt in range(attempts):
@@ -367,10 +392,18 @@ def http_text(
             request = Request(url, data=body, headers=request_headers)
             with urlopen(request, timeout=timeout) as response:  # noqa: S310 - fixed/configured providers
                 return response.read().decode(encoding, errors="replace")
-        except (HTTPError, URLError, TimeoutError, OSError) as exc:
+        except HTTPError as exc:
+            if exc.code not in TRANSIENT_HTTP_STATUS_CODES:
+                raise SentimentError(
+                    f"request failed with non-retryable HTTP {exc.code}: {url}: {exc}"
+                ) from exc
             last_error = exc
             if attempt + 1 < attempts:
-                time.sleep(0.6 * (2**attempt))
+                time.sleep(min(60.0, retry_backoff_seconds * (2**attempt)))
+        except (URLError, TimeoutError, OSError) as exc:
+            last_error = exc
+            if attempt + 1 < attempts:
+                time.sleep(min(60.0, retry_backoff_seconds * (2**attempt)))
     raise SentimentError(f"request failed after {attempts} attempts: {url}: {last_error}")
 
 
@@ -381,8 +414,16 @@ def http_json(
     body: bytes | None = None,
     timeout: int = 20,
     attempts: int = 3,
+    retry_backoff_seconds: float = 0.6,
 ) -> dict[str, Any]:
-    text = http_text(url, headers=headers, body=body, timeout=timeout, attempts=attempts)
+    text = http_text(
+        url,
+        headers=headers,
+        body=body,
+        timeout=timeout,
+        attempts=attempts,
+        retry_backoff_seconds=retry_backoff_seconds,
+    )
     payload = json.loads(text)
     if not isinstance(payload, dict):
         raise SentimentError(f"provider returned non-object JSON: {url}")
@@ -1740,7 +1781,8 @@ def score_with_llm(
         headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
         body=body,
         timeout=config.timeout_seconds,
-        attempts=2,
+        attempts=config.max_retries + 1,
+        retry_backoff_seconds=config.retry_backoff_seconds,
     )
     choices = response.get("choices") or []
     if not choices:
