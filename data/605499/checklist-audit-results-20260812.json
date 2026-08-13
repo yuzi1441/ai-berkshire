@@ -1,0 +1,122 @@
+[
+  {
+    "id": 4,
+    "label": "最新收盘价 / A股口径市值 · 口径",
+    "reported_value": 127.9,
+    "unit": "",
+    "fetched_value": 127.9,
+    "fetched_source": "Yahoo Finance 605499.SS 2026-08-12 close",
+    "fetched_value2": 127.9,
+    "fetched_source2": "Tencent quote sh605499 cross-check"
+  },
+  {
+    "id": 5,
+    "label": "当前估值 · 口径",
+    "reported_value": 19.14,
+    "unit": "倍",
+    "fetched_value": 19.14,
+    "fetched_source": "financial_rigor.py: 127.9 / TTM EPS 6.6838992544",
+    "fetched_value2": 19.14,
+    "fetched_source2": "2026H1 filing plus 2025 annual report TTM reconstruction"
+  },
+  {
+    "id": 12,
+    "label": "2021-2025收入CAGR · 时间与来源",
+    "reported_value": 2021.0,
+    "unit": "",
+    "fetched_value": 2021.0,
+    "fetched_source": "Dongpeng 2021-2025 annual-report series start year",
+    "fetched_value2": 2021.0,
+    "fetched_source2": "Audited 2026-08-10 fundamental report trend table"
+  },
+  {
+    "id": 15,
+    "label": "2026H1收入 / 归母净利 · Checklist解读",
+    "reported_value": 15.89,
+    "unit": "%",
+    "fetched_value": 15.89,
+    "fetched_source": "Dongpeng 2026 interim report A-share version p. operating results",
+    "fetched_value2": 15.89,
+    "fetched_source2": "HKEX 2026 interim report synchronized disclosure"
+  },
+  {
+    "id": 14,
+    "label": "2026H1收入 / 归母净利 · 时间与来源",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "Dongpeng 2026 interim report reporting period",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "HKEX disclosure dated 2026-07-30"
+  },
+  {
+    "id": 18,
+    "label": "TTM自由现金流 · 数值",
+    "reported_value": 45.34,
+    "unit": "亿元",
+    "fetched_value": 45.34,
+    "fetched_source": "2025 annual plus 2026H1 minus 2025H1 OCF and capex reconstruction",
+    "fetched_value2": 45.34,
+    "fetched_source2": "data/605499/research-snapshot-20260810.json"
+  },
+  {
+    "id": 29,
+    "label": "毛利率 · 公司表现",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "Dongpeng 2025 annual report reporting year",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "Eastmoney 2025 financial-data cross-check"
+  },
+  {
+    "id": 32,
+    "label": "资本开支强度 · 公司表现",
+    "reported_value": 10.6,
+    "unit": "%",
+    "fetched_value": 10.59,
+    "fetched_source": "TTM capex 2.39228130985bn / TTM revenue 22.58168181436bn",
+    "fetched_value2": 10.6,
+    "fetched_source2": "financial_rigor.py inputs from audited research snapshot"
+  },
+  {
+    "id": 36,
+    "label": "成本 / 规模优势 · 具体证据",
+    "reported_value": 3742.0,
+    "unit": "",
+    "fetched_value": 3742.0,
+    "fetched_source": "Dongpeng 2026 interim report distributor count",
+    "fetched_value2": 3742.0,
+    "fetched_source2": "Audited 2026-08-10 fundamental report operating map"
+  },
+  {
+    "id": 55,
+    "label": "悲观 · EPS年增速",
+    "reported_value": 3.0,
+    "unit": "%",
+    "fetched_value": 3.0,
+    "fetched_source": "Checklist disclosed bear-scenario assumption",
+    "fetched_value2": 3.0,
+    "fetched_source2": "financial_rigor.py three-scenario invocation and output"
+  },
+  {
+    "id": 74,
+    "label": "东方财富",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "Eastmoney 2025 annual financial-data page",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "Dongpeng 2025 annual report comparison period"
+  },
+  {
+    "id": 68,
+    "label": "激进型价格区间 · 内容",
+    "reported_value": 127.0,
+    "unit": "",
+    "fetched_value": 127.0,
+    "fetched_source": "Checklist valuation band lower bound at about 19x TTM EPS",
+    "fetched_value2": 127.0,
+    "fetched_source2": "Audited 2026-08-10 fundamental report aggressive band"
+  }
+]
