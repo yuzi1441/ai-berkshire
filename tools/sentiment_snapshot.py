@@ -233,6 +233,11 @@ class LLMConfig:
     @classmethod
     def from_environment(cls, prefix: str = "SENTIMENT_LLM_") -> LLMConfig | None:
         api_key = os.environ.get(f"{prefix}API_KEY", "").strip()
+        if not api_key:
+            # OpenCode Go uses one workspace key for both model roles. Keep
+            # role-specific keys as an override so existing deployments remain
+            # compatible while a single OPENCODE_GO_API_KEY is sufficient.
+            api_key = os.environ.get("OPENCODE_GO_API_KEY", "").strip()
         model = os.environ.get(f"{prefix}MODEL", "").strip()
         if not api_key or not model:
             return None
@@ -1797,7 +1802,8 @@ def score_with_llm(
     choices = response.get("choices") or []
     if not choices:
         raise SentimentError("LLM response has no choices")
-    content = choices[0].get("message", {}).get("content", "")
+    message = choices[0].get("message", {})
+    content = message.get("content") or message.get("reasoning_content", "")
     parsed = parse_json_block(content)
     rows = parsed.get("items", []) if isinstance(parsed, dict) else parsed
     if not isinstance(rows, list):

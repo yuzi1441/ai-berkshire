@@ -18,7 +18,7 @@ from report_judgment import (
     combine_model_judgments,
     derive_price_bounds,
     failed_artifact,
-    load_env_file,
+    load_model_environment,
 )
 
 
@@ -64,8 +64,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
-    load_env_file(ROOT / ".env.sentiment")
-    load_env_file(ROOT / ".env.sentiment-review")
+    load_model_environment()
     primary = LLMConfig.from_environment("SENTIMENT_LLM_")
     review = LLMConfig.from_environment("SENTIMENT_REVIEW_")
     if primary is None or review is None:

@@ -50,6 +50,13 @@ def load_env_file(path: Path) -> None:
         os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 
+def load_model_environment() -> None:
+    """Prefer the shared OpenCode Go file, then retain legacy env fallbacks."""
+    load_env_file(ROOT / "local" / "opencodego-sentiment.env")
+    load_env_file(ROOT / ".env.sentiment")
+    load_env_file(ROOT / ".env.sentiment-review")
+
+
 def decision_excerpt(lines: list[str]) -> tuple[str, set[int]]:
     """Return numbered decision evidence from final-action and contract sections."""
     selected: set[int] = set()
@@ -133,7 +140,8 @@ def call_model(config: LLMConfig, excerpt: str, provider: str) -> dict[str, Any]
     choices = response.get("choices") or []
     if not choices:
         raise JudgmentError(f"{provider} model response has no choices")
-    content = choices[0].get("message", {}).get("content", "")
+    message = choices[0].get("message", {})
+    content = message.get("content") or message.get("reasoning_content", "")
     parsed = parse_json_block(content)
     if not isinstance(parsed, dict):
         raise JudgmentError(f"{provider} model response is not a JSON object")
@@ -449,8 +457,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
-    load_env_file(ROOT / ".env.sentiment")
-    load_env_file(ROOT / ".env.sentiment-review")
+    load_model_environment()
     primary = LLMConfig.from_environment("SENTIMENT_LLM_")
     review = LLMConfig.from_environment("SENTIMENT_REVIEW_")
     if primary is None or review is None:

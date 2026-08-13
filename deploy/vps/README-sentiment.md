@@ -69,9 +69,10 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 
 ## A股双模型复核配置
 
-`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek Flash），负责 A股可评分个股新闻和行业
-辅助新闻。`SENTIMENT_REVIEW_*` 为中转站复核模型，只复核 A股可评分个股新闻。
-请编辑 `/etc/ai-berkshire/sentiment.env`，填写 A股复核模型的 key、model 和 endpoint。
+`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek V4 Flash），负责 A股可评分个股新闻和行业
+辅助新闻。`SENTIMENT_REVIEW_*` 为复核模型（当前使用 MiMo-V2.5-Pro），只复核 A股可评分
+个股新闻。两者可以共用 `OPENCODE_GO_API_KEY`；请编辑 `/etc/ai-berkshire/sentiment.env`，
+填写统一密钥及两个模型的 endpoint。
 两组模型的单次请求超时默认均为 600 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
 `SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。遇到 408、425、429、500、502、503、
 504 或连接超时等瞬时错误时，每个模型默认额外重试 4 次，采用指数退避（默认 5、10、20、40 秒）；
@@ -83,6 +84,10 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 对于 A股新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，本次快照不会生成；
 看板保留上一份成功快照，并通过 `site/data/sentiment_status.json` 显示更新失败。
 密钥文件权限为 `0600`，不会写入仓库。
+
+本地运行主报告双模型判断工具时，它会优先读取仓库 `local/opencodego-sentiment.env`，因此
+主报告判断和情绪新闻会使用同一组 Flash + MiMo-V2.5-Pro 模型；旧的 `.env.sentiment*`
+文件仅作为没有新配置时的兼容回退。
 
 检查定时器和最近日志：
 

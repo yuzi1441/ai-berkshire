@@ -1,6 +1,8 @@
+import json
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,6 +12,53 @@ import report_judgment  # noqa: E402
 
 
 class ReportJudgmentTests(unittest.TestCase):
+    def test_call_model_accepts_json_in_reasoning_content(self):
+        config = report_judgment.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="mimo-v2.5-pro",
+        )
+        response = {
+            "choices": [
+                {
+                    "message": {
+                        "content": "",
+                        "reasoning_content": json.dumps(
+                            {
+                                "label": "等待价格",
+                                "action_kind": "watch",
+                                "empty_position_action": "等待，不追价",
+                                "holder_action": "继续观察",
+                                "trigger_condition": "价格进入买入区",
+                                "summary": "当前等待价格",
+                                "confidence": "high",
+                                "report_field_conflict": False,
+                                "conflict_note": "",
+                                "evidence": [
+                                    {
+                                        "line_start": 2,
+                                        "line_end": 2,
+                                        "quote": "空仓者等待，不追价",
+                                        "supports": "空仓动作",
+                                    },
+                                    {
+                                        "line_start": 3,
+                                        "line_end": 3,
+                                        "quote": "最终结论：等待价格",
+                                        "supports": "最终结论",
+                                    },
+                                ],
+                            },
+                            ensure_ascii=False,
+                        ),
+                    }
+                }
+            ]
+        }
+        with patch.object(report_judgment, "http_json", return_value=response):
+            result = report_judgment.call_model(config, "L2: 空仓者等待，不追价\nL3: 最终结论：等待价格", "test")
+        self.assertEqual(result["action_kind"], "watch")
+
     def test_excerpt_accepts_plain_final_decision_heading(self):
         lines = ["# 报告", "### 最终决策", "| 空仓者 | 观望，不追。 |"]
         excerpt, allowed = report_judgment.decision_excerpt(lines)

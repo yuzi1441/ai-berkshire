@@ -64,6 +64,20 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.retry_backoff_seconds, 2.5)
         self.assertEqual(config.missing_result_retries, 2)
 
+    def test_both_model_roles_can_share_opencode_go_key(self):
+        environment = {
+            "OPENCODE_GO_API_KEY": "shared-opencode-key",
+            "SENTIMENT_LLM_MODEL": "deepseek-v4-pro",
+            "SENTIMENT_REVIEW_MODEL": "glm-5.2",
+        }
+        with patch.dict(os.environ, environment, clear=True):
+            primary = sentiment_snapshot.LLMConfig.from_environment()
+            review = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
+        self.assertIsNotNone(primary)
+        self.assertIsNotNone(review)
+        self.assertEqual(primary.api_key, "shared-opencode-key")
+        self.assertEqual(review.api_key, "shared-opencode-key")
+
     def test_http_text_retries_transient_gateway_errors(self):
         class FakeResponse:
             def __enter__(self):
@@ -148,6 +162,46 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(request.call_args.kwargs["timeout"], 600)
         self.assertEqual(request.call_args.kwargs["attempts"], 5)
         self.assertEqual(request.call_args.kwargs["retry_backoff_seconds"], 8)
+
+    def test_score_with_llm_accepts_json_in_reasoning_content(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="glm-5.2",
+        )
+        article = {
+            "id": "reasoning-1",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "title": "示例公司发布公告",
+            "summary": "公告摘要",
+        }
+        response = {
+            "choices": [
+                {
+                    "message": {
+                        "content": "",
+                        "reasoning_content": json.dumps(
+                            {
+                                "items": [
+                                    {
+                                        "id": "reasoning-1",
+                                        "direction": 0,
+                                        "impact": 1,
+                                        "relevance": 1,
+                                        "confidence": 1,
+                                        "event_type": "一般新闻",
+                                    }
+                                ]
+                            }
+                        ),
+                    }
+                }
+            ]
+        }
+        with patch.object(sentiment_snapshot, "http_json", return_value=response):
+            scored = sentiment_snapshot.score_with_llm([article], config)
+        self.assertEqual(scored["reasoning-1"]["event_type"], "一般新闻")
 
     def test_missing_model_items_are_retried_one_at_a_time(self):
         config = sentiment_snapshot.LLMConfig(
