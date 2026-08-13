@@ -111,3 +111,89 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result[0]["state"], "above_entry")
         self.assertEqual(result[1]["label"], "小仓试错区")
         self.assertEqual(result[1]["state"], "trial")
+
+    def test_execution_filter_uses_price_and_event_gates(self):
+        result = self.run_classifier(
+            """[
+              classifier.currentExecutionState({market: "A股", execution_policy: {
+                main_action_kind: "watch",
+                condition_mode: "price_only",
+                reliability: "high",
+                price_rules: [{
+                  action_kind: "buy", action: "分批建仓", price_range: "9-10元",
+                  ceiling: 10, currency: "CNY", requires_validation: false
+                }]
+              }}, {price: 9.8, currency: "CNY"}),
+              classifier.currentExecutionState({market: "A股", execution_policy: {
+                main_action_kind: "watch",
+                condition_mode: "price_and_event",
+                event_condition: "半年报确认现金流改善",
+                reliability: "high",
+                price_rules: [{
+                  action_kind: "trial", action: "小仓试错", price_range: "9-10元",
+                  ceiling: 10, currency: "CNY", requires_validation: true,
+                  validation_condition: "半年报确认现金流改善"
+                }]
+              }}, {price: 9.8, currency: "CNY"}),
+              classifier.currentExecutionState({market: "A股", execution_policy: {
+                main_action_kind: "watch",
+                condition_mode: "price_only",
+                reliability: "high",
+                price_rules: [{
+                  action_kind: "buy", action: "分批建仓", price_range: "9-10元",
+                  ceiling: 10, currency: "CNY", requires_validation: false
+                }]
+              }}, {price: 12, currency: "CNY"})
+            ]"""
+        )
+        self.assertEqual(result[0]["key"], "actionable")
+        self.assertTrue(result[0]["actionable"])
+        self.assertEqual(result[1]["key"], "validation")
+        self.assertFalse(result[1]["actionable"])
+        self.assertEqual(result[2]["key"], "wait_price")
+
+    def test_current_action_is_not_reused_above_report_reference_price(self):
+        result = self.run_classifier(
+            """classifier.currentExecutionState({market: "A股", execution_policy: {
+              main_action_kind: "buy",
+              condition_mode: "current_action",
+              reliability: "high",
+              price_rules: [],
+              current_action: {
+                action_kind: "buy", action: "当前价可分批", currency: "CNY",
+                reference_price: 100
+              }
+            }}, {price: 108, currency: "CNY"})"""
+        )
+        self.assertEqual(result["key"], "review")
+        self.assertEqual(result["label"], "高于报告判断基准价")
+
+    def test_model_review_never_enters_buy_filter(self):
+        result = self.run_classifier(
+            """classifier.currentExecutionState({market: "A股", execution_policy: {
+              main_action_kind: "unknown",
+              condition_mode: "review",
+              reliability: "review",
+              price_rules: []
+            }}, {price: 8, currency: "CNY"})"""
+        )
+        self.assertEqual(result["key"], "review")
+        self.assertFalse(result["actionable"])
+
+    def test_dashboard_controls_filter_current_executability(self):
+        html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('aria-label="当前可执行筛选"', html)
+        for key in (
+            "actionable",
+            "trial",
+            "validation",
+            "wait_price",
+            "wait_event",
+            "hold",
+            "no",
+            "review",
+        ):
+            self.assertIn(f'data-action="{key}"', html)
+        self.assertIn('value="execution"', html)
+        self.assertNotIn("综合操作筛选", html)
+        self.assertNotIn("按综合操作", html)

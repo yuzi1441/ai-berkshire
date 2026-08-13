@@ -235,6 +235,74 @@ def extract_data_cutoff(lines: list[str]) -> str | None:
     return max(secondary) if secondary else None
 
 
+def extract_report_reference_price(
+    lines: list[str], market: str | None
+) -> dict[str, Any] | None:
+    """Extract the explicitly labelled price on which the report decision was made.
+
+    This is not a buy threshold. It is used only to prevent a report saying
+    "current price can buy" from remaining actionable after the quote has risen
+    above the price that the author actually assessed.
+    """
+    if market not in {"A股", "港股", "美股"}:
+        return None
+    currency = {"A股": "CNY", "港股": "HKD", "美股": "USD"}[market]
+    labels = (
+        "当前股价",
+        "当前A股股价",
+        "A股股价",
+        "A 股收盘价",
+        "A股收盘价",
+        "最新收盘价",
+        "最新股价",
+        "当前价",
+        "收盘价",
+        "参考股价",
+        "行情基准",
+        "数据基准",
+        "股价",
+    )
+    number_pattern = re.compile(
+        r"(?P<prefix>CNY|RMB|HKD|USD|HK\$|US\$|¥|￥|\$)?\s*"
+        r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>港元|美元|人民币|元|CNY|HKD|USD)?",
+        re.I,
+    )
+    for line_number, raw_line in enumerate(lines[:140], start=1):
+        text = clean_markdown(raw_line)
+        if not text or not any(label.casefold() in text.casefold() for label in labels):
+            continue
+        if re.search(r"目标价|合理股价|股价区间|52\s*周|历史高位|历史低位|跌至|涨至", text):
+            continue
+        # Start at the matched label so earlier dates/table row numbers cannot
+        # become the report reference price.
+        positions = [text.casefold().find(label.casefold()) for label in labels]
+        positions = [position for position in positions if position >= 0]
+        if not positions:
+            continue
+        tail = text[min(positions) :]
+        for match in number_pattern.finditer(tail):
+            prefix = (match.group("prefix") or "").upper()
+            unit = (match.group("unit") or "").upper()
+            if not prefix and not unit:
+                continue
+            value = float(match.group("value"))
+            before = tail[max(0, match.start() - 8) : match.start()].upper()
+            if market == "A股" and (unit in {"港元", "HKD", "美元", "USD"} or "HK$" in before or "US$" in before):
+                continue
+            if market == "港股" and not (unit in {"港元", "HKD"} or "HK$" in before):
+                continue
+            if market == "美股" and not (unit in {"美元", "USD"} or "US$" in before or "$" in before):
+                continue
+            if 0 < value < 1_000_000:
+                return {
+                    "price": value,
+                    "currency": currency,
+                    "line": line_number,
+                    "source": "主报告明确标注的分析基准价",
+                }
+    return None
+
+
 def parse_frontmatter(lines: list[str]) -> dict[str, str]:
     """Parse the small YAML frontmatter subset used by generated reports."""
     if not lines or lines[0].strip() != "---":
@@ -1093,7 +1161,14 @@ def attach_report_judgments(
             and expected_hash == actual_hash
         )
         judgment = dict(artifact["judgment"])
-        if artifact.get("status") != "ready" or not source_matches:
+        conservative = (
+            conservative_screening_judgment(artifact, decision.get("market"))
+            if artifact.get("status") == "review" and source_matches
+            else None
+        )
+        if conservative:
+            judgment = conservative
+        elif artifact.get("status") != "ready" or not source_matches:
             judgment.update(
                 {
                     "enabled": True,
@@ -1764,6 +1839,7 @@ def extract_price_plan(
                     for token in (
                         "建议",
                         "动作",
+                        "策略",
                         "空仓",
                         "新资金",
                         "适合",
@@ -1776,8 +1852,15 @@ def extract_price_plan(
                 for header in headers
             )
         ) and not (
-            any(token in header for header in headers for token in ("策略", "维度", "类别"))
-            and any("建议" in header for header in headers)
+            (
+                any(token in header for header in headers for token in ("策略", "维度", "类别"))
+                and any("价格" in header or "区间" in header for header in headers)
+            )
+            or (
+                any("策略" in header for header in headers)
+                and any("建议" in header for header in headers)
+                and any("投资策略" in clean_markdown(item) for item in lines[max(0, index - 5) : index])
+            )
         ):
             continue
         rows: list[list[str]] = []
@@ -1846,6 +1929,7 @@ def extract_price_plan(
                 "具体建议",
                 "动作",
                 "建议",
+                "策略",
                 "新资金动作",
                 "行动",
                 "适合",
@@ -2225,6 +2309,12 @@ def _stances_from_table_rows(headers: list[str], rows: list[list[str]]) -> dict[
             continue
         price = _price_from_cells(cells, headers)
         action = _action_label_from_cells(cells, stance)
+        # Decision-contract placeholder rows (for example "激进型动作 | 未给出")
+        # are schema scaffolding, not real strategy layers. Keeping them here
+        # prevents the parser from reaching usable price/action tables later in
+        # the report.
+        if is_contract_null(action) and not price:
+            continue
         used = {stance_cell, action}
         if price:
             used.add(price)
@@ -2297,6 +2387,8 @@ def stances_from_price_plan(price_plan: list[dict[str, str]]) -> list[dict[str, 
     for item in price_plan or []:
         profile = item.get("profile") or ""
         action = item.get("action") or ""
+        if is_contract_null(action) and is_contract_null(item.get("price_range") or ""):
+            continue
         stance = normalize_investor_stance(profile) or normalize_investor_stance(action)
         if stance is None:
             continue
@@ -2379,8 +2471,8 @@ def _price_plan_action_kind(action: str) -> str | None:
         text,
     )
     positive_action = re.sub(
-        r"分批[^，。；;]{0,4}(?:减仓|卖出|退出)|"
-        r"(?:减仓|卖出|退出)[^，。；;]{0,4}分批",
+        r"分批[^，。；;]{0,4}(?:减仓|卖出|退出|兑现)|"
+        r"(?:减仓|卖出|退出|兑现)[^，。；;]{0,4}分批",
         "",
         positive_action,
     )
@@ -2401,7 +2493,7 @@ def _price_plan_action_kind(action: str) -> str | None:
     )
     is_exit = bool(
         re.search(
-            r"减仓|卖出|清仓|降低仓位|回避|不建议买入|不宜买入",
+            r"减仓|卖出|清仓|降低仓位|回避|不建议买入|不宜买入|分批兑现|兑现利润",
             text,
         )
     )
@@ -2974,6 +3066,462 @@ def investor_stances_summary(stances: list[dict[str, str]]) -> str | None:
     return "；".join(parts)
 
 
+EXECUTION_ACTIONABLE_KINDS = {"buy", "trial"}
+EXECUTION_NON_ACTIONABLE_KINDS = {"watch", "hold", "no"}
+EXECUTION_EVENT_PATTERN = re.compile(
+    r"财报|中报|季报|年报|业绩|利润|收入|现金流|毛利率|订单|政策|关税|"
+    r"落地|兑现|验证|确认|改善|转正|拐点|上修|恢复|企稳|客户|产能|销量|"
+    r"份额|ROE|ROIC|TCE|分红|运价|景气|认证|产销率|基本面|红线",
+    re.I,
+)
+EXECUTION_GUARD_PATTERN = re.compile(
+    r"失效|红线|未恶化|不恶化|未坏|不下滑|没有进一步破坏|基本面未损|"
+    r"减仓|卖出|清仓|异常|减值|确认负增长|分红下调|论文破裂",
+    re.I,
+)
+EXECUTION_PRICE_PATTERN = re.compile(
+    r"(?P<operator>不高于|不超过|不低于|低于|高于|跌至|回落至|进入|达到|约|≤|≥|<=|>=|<|>)?\s*"
+    r"(?P<prefix>CNY|RMB|HKD|USD|HK\$|US\$|¥|￥|\$)?\s*"
+    r"(?P<first>\d+(?:\.\d+)?)"
+    r"(?:\s*[-—–~至到]\s*(?P<second>\d+(?:\.\d+)?))?\s*"
+    r"(?P<unit>港元|美元|人民币|元)?\s*(?P<suffix>以下|以上|以内|附近|左右)?",
+    re.I,
+)
+
+
+def execution_action_kind(action: str, note: str = "") -> str:
+    """Normalize only what the report explicitly permits at one price tier."""
+    text = clean_markdown(f"{action} {note}")
+    if not text or is_contract_null(text):
+        return "unknown"
+    positive = re.sub(
+        r"(?:不|勿|停止|暂停|暂缓|无需|无须|不建议|不宜|不急于|不必|避免|不适合)"
+        r"[^，。；;]{0,8}(?:买入|建仓|加仓|配置|重仓)",
+        "",
+        text,
+    )
+    positive = re.sub(r"分批[^，。；;]{0,4}(?:减仓|卖出|退出|兑现)", "", positive)
+    has_entry = bool(
+        re.search(
+            r"买入|买点|建仓|加仓|配置|介入|积累|首批|扩大仓位|建立仓位|"
+            r"重仓区|重仓候选|观察仓|小仓|轻仓|少量|小比例|试探|试错|研究性|"
+            r"分批|主题交易",
+            positive,
+        )
+    )
+    hard_exit = bool(
+        re.search(
+            r"回避|卖出|清仓|减仓|不建议买入|不宜买入|不参与|坚决不买|分批兑现|兑现利润",
+            text,
+        )
+    )
+    if hard_exit and not has_entry:
+        return "no"
+    if has_entry and re.search(
+        r"观察仓|小仓|轻仓|少量|小比例|试探|试错|研究性|首批|主题交易|"
+        r"不超过[^，。；;]{0,8}(?:仓位|目标仓位)|1\s*/\s*[234]\s*仓",
+        positive,
+    ):
+        return "trial"
+    if has_entry:
+        return "buy"
+    if re.search(r"持有|收息|不加仓", text) and not re.search(r"空仓|新资金|未持有", text):
+        return "hold"
+    if re.search(r"等待|观望|观察|不追|暂停|重新评估|再评估|暂不|关注", text):
+        return "watch"
+    return "unknown"
+
+
+def execution_requires_validation(action: str, note: str = "") -> bool:
+    """Return whether a price tier has an explicit non-price prerequisite."""
+    text = clean_markdown(f"{action} {note}")
+    if not EXECUTION_EVENT_PATTERN.search(text):
+        return False
+    return bool(
+        re.search(
+            r"(?:等待|等|需|需要|必须|且|同时|并且|前提|条件|只有|若|在)"
+            r"[^，。；;]{0,42}(?:验证|确认|改善|转正|落地|兑现|维持|增长|"
+            r"财报|中报|季报|订单|现金流|毛利率|ROE|ROIC|基本面未|红线未)",
+            text,
+        )
+        or re.search(
+            r"(?:验证|确认|改善|转正|落地|兑现|企稳|未恶化|不恶化|未坏|未触发)"
+            r"[^，。；;]{0,12}(?:后|时|才|为前提)",
+            text,
+        )
+    )
+
+
+def execution_price_band(price_range: str, market: str | None) -> dict[str, Any] | None:
+    """Parse one report price expression into a deterministic comparison band."""
+    text = clean_markdown(price_range or "").replace(",", "")
+    if not text or re.search(r"(?:PE|PB|PS|倍|x\b|%|股息率)", text, re.I):
+        return None
+    match = EXECUTION_PRICE_PATTERN.search(text)
+    if not match or not (match.group("prefix") or match.group("unit")):
+        return None
+    prefix = (match.group("prefix") or "").upper()
+    unit = match.group("unit") or ""
+    if unit == "港元" or prefix in {"HKD", "HK$"}:
+        currency = "HKD"
+    elif unit == "美元" or prefix in {"USD", "US$", "$"}:
+        currency = "USD"
+    else:
+        currency = "CNY" if market == "A股" or unit in {"元", "人民币"} else None
+    expected = {"A股": "CNY", "港股": "HKD", "美股": "USD"}.get(str(market or ""))
+    if not currency or (expected and currency != expected):
+        return None
+    first = float(match.group("first"))
+    second = float(match.group("second")) if match.group("second") else None
+    operator = match.group("operator") or ""
+    suffix = match.group("suffix") or ""
+    if second is not None:
+        low, high = sorted((first, second))
+        mode = "range"
+    elif operator in {"不高于", "不超过", "低于", "跌至", "回落至", "≤", "<=", "<"} or suffix in {"以下", "以内"}:
+        low, high, mode = None, first, "ceiling"
+    elif operator in {"不低于", "高于", "≥", ">=", ">"} or suffix == "以上":
+        low, high, mode = first, None, "floor"
+    else:
+        low, high, mode = first, first, "point"
+    return {"min": low, "max": high, "mode": mode, "currency": currency}
+
+
+def _execution_rule_from_row(
+    row: dict[str, Any], market: str | None, *, source: str
+) -> dict[str, Any] | None:
+    action = clean_markdown(str(row.get("action") or row.get("profile") or ""))
+    note = clean_markdown(str(row.get("note") or row.get("rationale") or ""))
+    kind = execution_action_kind(action, note)
+    if kind not in EXECUTION_ACTIONABLE_KINDS:
+        return None
+    price_range = clean_markdown(str(row.get("price_range") or ""))
+    band = execution_price_band(price_range, market)
+    if not band or band["mode"] == "floor" or not isinstance(band.get("max"), (int, float)):
+        return None
+    validation = execution_requires_validation(action, note)
+    return {
+        "action_kind": kind,
+        "action": action or "按报告价格档执行",
+        "price_range": price_range,
+        "min": band.get("min"),
+        "ceiling": band["max"],
+        "mode": band["mode"],
+        "currency": band["currency"],
+        "requires_validation": validation,
+        "validation_condition": (note or action) if validation else None,
+        "source": source,
+    }
+
+
+def report_price_execution_rules(decision: dict[str, Any]) -> list[dict[str, Any]]:
+    """Keep report-specific actionable tiers without inventing investor profiles."""
+    rules: list[dict[str, Any]] = []
+    for row in decision.get("price_plan") or []:
+        if not isinstance(row, dict) or not _price_plan_matches_market(row, decision.get("market")):
+            continue
+        rule = _execution_rule_from_row(row, decision.get("market"), source="report_price_plan")
+        if rule:
+            rules.append(rule)
+    unique: dict[tuple[Any, ...], dict[str, Any]] = {}
+    for rule in rules:
+        key = (rule["ceiling"], rule["action_kind"], rule["action"], rule["price_range"])
+        unique.setdefault(key, rule)
+    return sorted(unique.values(), key=lambda item: float(item["ceiling"]))
+
+
+def _evidence_numbers(judgment: dict[str, Any]) -> list[float]:
+    evidence = judgment.get("evidence") if isinstance(judgment.get("evidence"), list) else []
+    values: list[float] = []
+    for item in evidence:
+        if not isinstance(item, dict):
+            continue
+        for value in re.findall(r"\d+(?:\.\d+)?", str(item.get("quote") or "").replace(",", "")):
+            values.append(float(value))
+    return values
+
+
+def trigger_price_execution_rules(
+    judgment: dict[str, Any], market: str | None
+) -> list[dict[str, Any]]:
+    """Extract model-interpreted price triggers only when report evidence contains the numbers."""
+    trigger = clean_markdown(str(judgment.get("trigger_condition") or ""))
+    if not trigger:
+        return []
+    evidence_values = _evidence_numbers(judgment)
+    empty_action = clean_markdown(str(judgment.get("empty_position_action") or ""))
+    default_kind = execution_action_kind(empty_action)
+    if default_kind not in EXECUTION_ACTIONABLE_KINDS:
+        default_kind = "trial" if re.search(r"再考虑|重新评估|观察价位", trigger) else "buy"
+    rules: list[dict[str, Any]] = []
+    for clause in re.split(r"[；;。]", trigger):
+        clause = clean_markdown(clause)
+        if not clause:
+            continue
+        if re.search(r"减仓|卖出|止盈|失效|回避", clause) and not re.search(r"买入|建仓|介入", clause):
+            continue
+        for match in EXECUTION_PRICE_PATTERN.finditer(clause.replace(",", "")):
+            expression = clean_markdown(match.group(0))
+            if not (match.group("prefix") or match.group("unit")):
+                continue
+            band = execution_price_band(expression, market)
+            if not band or band["mode"] == "floor" or not isinstance(band.get("max"), (int, float)):
+                continue
+            numbers = [float(match.group("first"))]
+            if match.group("second"):
+                numbers.append(float(match.group("second")))
+            if evidence_values and any(
+                not any(abs(number - evidence) <= 0.011 for evidence in evidence_values)
+                for number in numbers
+            ):
+                continue
+            local_start = max(0, match.start() - 34)
+            local_end = min(len(clause), match.end() + 46)
+            local = clean_markdown(clause[local_start:local_end])
+            local_kind = execution_action_kind(f"{local} {empty_action}")
+            if local_kind not in EXECUTION_ACTIONABLE_KINDS:
+                local_kind = default_kind
+            rules.append(
+                {
+                    "action_kind": local_kind,
+                    "action": empty_action or clause,
+                    "price_range": expression,
+                    "min": band.get("min"),
+                    "ceiling": band["max"],
+                    "mode": band["mode"],
+                    "currency": band["currency"],
+                    "requires_validation": False,
+                    "validation_condition": None,
+                    "source": "validated_judgment_trigger",
+                }
+            )
+    unique: dict[tuple[Any, ...], dict[str, Any]] = {}
+    for rule in rules:
+        key = (rule["ceiling"], rule["price_range"], rule["action_kind"])
+        unique.setdefault(key, rule)
+    return sorted(unique.values(), key=lambda item: float(item["ceiling"]))
+
+
+def execution_condition_contract(
+    judgment: dict[str, Any], price_rules: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Describe how report price and operating conditions combine."""
+    trigger = clean_markdown(str(judgment.get("trigger_condition") or ""))
+    clauses = [clean_markdown(item) for item in re.split(r"[；;。]", trigger) if clean_markdown(item)]
+    guard_clauses = [item for item in clauses if EXECUTION_GUARD_PATTERN.search(item)]
+    event_clauses = [
+        item
+        for item in clauses
+        if EXECUTION_EVENT_PATTERN.search(item)
+        and not (
+            EXECUTION_GUARD_PATTERN.search(item)
+            and not re.search(r"验证|确认|改善|转正|上修|恢复|企稳|兑现|落地", item)
+        )
+    ]
+    has_price = bool(price_rules)
+    has_event = bool(event_clauses)
+    main_kind = str(judgment.get("action_kind") or "unknown")
+    if main_kind in EXECUTION_ACTIONABLE_KINDS:
+        mode = "current_action"
+    elif main_kind == "no":
+        mode = "no_buy"
+    elif main_kind == "hold":
+        mode = "hold_only"
+    elif main_kind == "unknown":
+        mode = "review"
+    elif has_price and has_event:
+        if re.search(r"至少.{0,8}(?:其二|两项|2项)", trigger):
+            mode = "compound"
+        elif re.search(r"(?:两者|价格.{0,24}事件).{0,8}(?:需|要)?同时|且需|并且|均需", trigger):
+            mode = "price_and_event"
+        elif "或" in trigger:
+            mode = "price_or_event"
+        else:
+            mode = "price_and_event"
+    elif has_price:
+        mode = "price_only"
+    elif has_event or trigger:
+        mode = "event_only"
+    else:
+        mode = "review"
+    return {
+        "mode": mode,
+        "event_condition": "；".join(event_clauses) or None,
+        "guard_condition": "；".join(guard_clauses) or None,
+        "source_trigger": trigger or None,
+    }
+
+
+def conservative_screening_judgment(
+    artifact: dict[str, Any], market: str | None
+) -> dict[str, Any] | None:
+    """Resolve only what two valid model outputs safely agree about for screening.
+
+    A disagreement about whether *current* buying is allowed remains review. If
+    both outputs reject current buying but disagree between wait/avoid/hold, the
+    board may safely keep the stock out of the buy list and use the more useful
+    waiting trigger. API failure, missing output, and stale report hashes are not
+    resolved here.
+    """
+    models = artifact.get("models") if isinstance(artifact.get("models"), dict) else {}
+    results = [
+        item.get("result")
+        for item in models.values()
+        if isinstance(item, dict) and isinstance(item.get("result"), dict)
+    ]
+    if len(results) != 2:
+        return None
+    kinds = [str(item.get("action_kind") or "unknown") for item in results]
+    known = [kind for kind in kinds if kind != "unknown"]
+    if all(kind in EXECUTION_ACTIONABLE_KINDS for kind in kinds):
+        safe_kind = "trial" if "trial" in kinds else "buy"
+    elif all(kind in EXECUTION_NON_ACTIONABLE_KINDS | {"unknown"} for kind in kinds) and known:
+        if "unknown" in kinds and all(str(item.get("confidence") or "") == "low" for item in results):
+            return None
+        if market == "A股" and all("A股不买" in str(item.get("empty_position_action") or "") for item in results):
+            safe_kind = "no"
+        elif "watch" in known:
+            safe_kind = "watch"
+        elif set(known) == {"no"}:
+            safe_kind = "no"
+        elif set(known) == {"hold"}:
+            safe_kind = "hold"
+        else:
+            return None
+    else:
+        return None
+
+    preference = {
+        "buy": ("buy", "trial"),
+        "trial": ("trial", "buy"),
+        "watch": ("watch", "no", "hold", "unknown"),
+        "hold": ("hold", "watch", "unknown"),
+        "no": ("no", "watch", "unknown"),
+    }[safe_kind]
+    chosen = next(
+        item for preferred in preference for item in results if item.get("action_kind") == preferred
+    )
+    trigger = clean_markdown(str(chosen.get("trigger_condition") or ""))
+    if safe_kind == "watch":
+        label = "等待价格" if re.search(r"价格|股价|价位|回调|跌至|低于|区间|元", trigger) else "等待验证"
+    else:
+        label = {
+            "buy": "可分批买入",
+            "trial": "小仓验证",
+            "hold": "持有但不加仓",
+            "no": "回避/卖出",
+        }[safe_kind]
+    resolved = dict(chosen)
+    resolved.update(
+        {
+            "label": label,
+            "action_kind": safe_kind,
+            "enabled": True,
+            "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+            "model_consensus": False,
+            "screening_consensus": True,
+            "screening_resolution": "conservative_intersection",
+            "report_field_conflict": any(item.get("report_field_conflict") is True for item in results),
+            "confidence": "medium",
+        }
+    )
+    for key in ("currency", "entry_ceiling", "trial_range", "price_source"):
+        if key in artifact.get("judgment", {}):
+            resolved[key] = artifact["judgment"][key]
+    return resolved
+
+
+def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
+    """Build the universal current-executability contract observed across A reports."""
+    judgment = decision.get("primary_judgment") if isinstance(decision.get("primary_judgment"), dict) else {}
+    main_kind = str(judgment.get("action_kind") or "unknown")
+    report_rules = report_price_execution_rules(decision)
+    trigger_rules = trigger_price_execution_rules(judgment, decision.get("market"))
+    conflict_note = clean_markdown(str(judgment.get("conflict_note") or ""))
+    explicit_action_conflict = bool(
+        judgment.get("report_field_conflict")
+        and re.search(
+            r"以正文为准|契约.{0,24}允许.{0,24}冲突|正文.{0,28}(?:不鼓励|要求等待).{0,28}契约",
+            conflict_note,
+        )
+    )
+    if explicit_action_conflict and report_rules:
+        accepted_ceilings = [float(rule["ceiling"]) for rule in trigger_rules]
+        artifact_ceiling = judgment.get("entry_ceiling")
+        if isinstance(artifact_ceiling, (int, float)) and artifact_ceiling > 0:
+            accepted_ceilings.append(float(artifact_ceiling))
+        if accepted_ceilings:
+            accepted_ceiling = max(accepted_ceilings)
+            report_rules = [
+                rule for rule in report_rules if float(rule["ceiling"]) <= accepted_ceiling + 1e-9
+            ]
+        else:
+            # The reviewed正文 explicitly rejects the contract tier, and no
+            # evidence-backed replacement threshold is available. Keeping the
+            # contract row would recreate the exact conflict the models found.
+            report_rules = []
+    # A current-buy conclusion is anchored to the report's then-current price;
+    # an "ideal add" trigger must not be misread as its maximum allowed price.
+    if main_kind in EXECUTION_ACTIONABLE_KINDS:
+        price_rules = report_rules
+    else:
+        price_rules = report_rules or trigger_rules
+    conditions = execution_condition_contract(judgment, price_rules)
+    if conditions["mode"] in {"price_and_event", "compound"}:
+        for rule in price_rules:
+            rule["requires_validation"] = True
+            rule["validation_condition"] = conditions["event_condition"] or conditions["source_trigger"]
+
+    reference = decision.get("report_reference_price")
+    current_action: dict[str, Any] | None = None
+    if main_kind in EXECUTION_ACTIONABLE_KINDS:
+        current_action = {
+            "action_kind": main_kind,
+            "action": judgment.get("empty_position_action") or judgment.get("summary"),
+            "currency": judgment.get("currency") or "CNY",
+            "reference_price": reference.get("price") if isinstance(reference, dict) else None,
+            "reference_source": reference.get("source") if isinstance(reference, dict) else None,
+            "requires_validation": False,
+        }
+
+    trusted = bool(
+        judgment.get("enabled") is True
+        and judgment.get("source_matches") is not False
+        and main_kind != "unknown"
+        and (judgment.get("model_consensus") is True or judgment.get("screening_consensus") is True)
+    )
+    if not trusted:
+        conditions["mode"] = "review"
+        price_rules = []
+        current_action = None
+    return {
+        "schema_version": 1,
+        "main_action_kind": main_kind,
+        "main_label": judgment.get("label") or "待人工复核",
+        "condition_mode": conditions["mode"],
+        "event_condition": conditions["event_condition"],
+        "guard_condition": conditions["guard_condition"],
+        "price_rules": price_rules,
+        "current_action": current_action,
+        "report_rule_count": len(report_rules),
+        "reliability": (
+            "high"
+            if judgment.get("model_consensus") is True
+            else "conservative"
+            if judgment.get("screening_consensus") is True
+            else "review"
+        ),
+        "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格",
+    }
+
+
+def attach_execution_policies(decisions: list[dict[str, Any]]) -> None:
+    """Attach executable-condition contracts only to A shares."""
+    for decision in decisions:
+        if decision.get("market") == "A股":
+            decision["execution_policy"] = build_execution_policy(decision)
+
+
 
 def preferred_buy_price(price_plan: list[dict[str, str]]) -> str | None:
     """Choose the explicit priority-buy band while retaining the full plan elsewhere."""
@@ -3194,6 +3742,9 @@ def candidate_record(
         "market": effective_market,
         "data_cutoff": report_override.get(
             "data_cutoff", (decision_contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
+        ),
+        "report_reference_price": report_override.get(
+            "report_reference_price", extract_report_reference_price(lines, effective_market)
         ),
         "report_completed_at": report_override.get(
             "report_completed_at",
@@ -3800,6 +4351,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     decisions = select_decisions(records, overrides)
     report_judgments = load_report_judgments(data_directory / "report_judgments")
     attach_report_judgments(decisions, report_judgments, repo_root)
+    attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
     technical_snapshots = [
         snapshot

@@ -1,10 +1,11 @@
 import {
+  currentExecutionState,
   currentActionKind,
+  executionFilterKey,
   fallbackActionKind,
   parseReportPriceBand,
-  primaryJudgmentAuxiliary,
   primaryJudgmentForItem,
-} from "./action-classifier.mjs?v=20260813-dual-model-judgment";
+} from "./action-classifier.mjs?v=20260813-execution-gates";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
@@ -23,7 +24,7 @@ const state = {
   market: "all",
   action: "all",
   trackingFilter: "all",
-  sort: "buy_advice",
+  sort: "execution",
   detailTab: "technical",
   quoteMode: "idle", // live | snapshot | idle | error
   quoteUpdatedAt: null,
@@ -345,6 +346,11 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
     const modelNames = Object.values(judgment.models || {}).filter(Boolean).join(" + ");
     consensus.textContent = `双模型一致${modelNames ? ` · ${modelNames}` : ""}`;
     wrap.append(consensus);
+  } else if (judgment.screening_consensus === true) {
+    const consensus = document.createElement("p");
+    consensus.className = "primary-judgment-consensus";
+    consensus.textContent = "双模型均不支持当前直接买入 · 细分口径按保守交集展示";
+    wrap.append(consensus);
   }
 
   if (judgment.report_field_conflict) {
@@ -375,20 +381,41 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
   return wrap;
 }
 
-function renderPrimaryJudgmentAuxiliary(item, quote, { compact = true } = {}) {
-  const auxiliary = primaryJudgmentAuxiliary(item, quote);
-  if (!auxiliary) return null;
+function renderExecutionState(item, quote, { compact = true } = {}) {
+  const execution = currentExecutionState(item, quote, reportFallbackKind(item));
   const wrap = document.createElement("div");
-  wrap.className = `primary-judgment-aux primary-judgment-aux-${auxiliary.state}`;
+  const tone = {
+    actionable: "inside_entry",
+    trial: "trial",
+    validation: "unavailable",
+    wait_price: "above_entry",
+    wait_event: "unavailable",
+    hold: "unavailable",
+    no: "unavailable",
+    review: "unavailable",
+  }[execution.key] || "unavailable";
+  wrap.className = `primary-judgment-aux primary-judgment-aux-${tone}`;
   const label = document.createElement("strong");
-  label.textContent = auxiliary.label;
+  label.textContent = execution.label;
   const detail = document.createElement("p");
-  detail.textContent = auxiliary.detail;
+  detail.textContent = execution.detail;
   wrap.append(label, detail);
+  if (execution.policy?.reliability === "conservative") {
+    const consensus = document.createElement("p");
+    consensus.className = "primary-judgment-aux-note";
+    consensus.textContent = "双模型细分口径有分歧；本状态只采用两者对“当前不可直接买入”的安全交集。";
+    wrap.append(consensus);
+  }
   if (!compact) {
+    if (execution.policy?.guard_condition) {
+      const guard = document.createElement("p");
+      guard.className = "primary-judgment-aux-note";
+      guard.textContent = `买入前仍须核对报告红线/保护条件：${execution.policy.guard_condition}`;
+      wrap.append(guard);
+    }
     const note = document.createElement("p");
     note.className = "primary-judgment-aux-note";
-    note.textContent = "该提示只反映现价与报告价格档的关系，不能覆盖主报告判断。";
+    note.textContent = "当前可执行状态由主报告动作许可、报告价格档、经营前提和现价共同生成；Checklist、技术面与情绪面不参与该归类。";
     wrap.append(note);
   }
   return wrap;
@@ -900,8 +927,9 @@ function filteredDecisions() {
   let list = state.decisions.filter((item) => {
     const marketMatch = state.market === "all" || item.market === state.market;
     const tracking = trackingForItem(item);
+    const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
     const adviceMatch = state.action === "all"
-      || buyAdviceForItem(item, state.quotes.get(item.ticker)).key === state.action;
+      || executionFilterKey(item, state.quotes.get(item.ticker), advice.key) === state.action;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -923,6 +951,13 @@ function filteredDecisions() {
       const alertDelta = (alertRank[trackingAlertLevel(bb)] || 0) - (alertRank[trackingAlertLevel(aa)] || 0);
       if (alertDelta) return alertDelta;
       return String(aa?.next_review_date || "9999-12-31").localeCompare(String(bb?.next_review_date || "9999-12-31"));
+    }
+    if (state.sort === "execution") {
+      const aa = currentExecutionState(a, state.quotes.get(a.ticker), buyAdviceForItem(a, state.quotes.get(a.ticker)).key);
+      const bb = currentExecutionState(b, state.quotes.get(b.ticker), buyAdviceForItem(b, state.quotes.get(b.ticker)).key);
+      const d = (bb.rank || 0) - (aa.rank || 0);
+      if (d) return d;
+      return a.company.localeCompare(b.company, "zh");
     }
     if (state.sort === "action") {
       const d = researchJudgmentRank(b) - researchJudgmentRank(a);
@@ -1460,7 +1495,7 @@ function renderTechnicalDetail(item) {
 
   const disclaimer = document.createElement("p");
   disclaimer.className = "technical-disclaimer";
-  disclaimer.textContent = "技术面仅辅助观察，不参与综合操作归类、筛选或买入建议。";
+  disclaimer.textContent = "技术面仅辅助观察，不参与当前可执行筛选或买入建议。";
   card.append(disclaimer);
 
   if (technical.status === "missing") {
@@ -1804,7 +1839,8 @@ function renderSummary(visible) {
   }
   const counts = visible.reduce((acc, item) => {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
-    acc[advice.key] = (acc[advice.key] || 0) + 1;
+    const key = executionFilterKey(item, state.quotes.get(item.ticker), advice.key);
+    acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
   const metrics = [
@@ -1812,8 +1848,10 @@ function renderSummary(visible) {
     ["A股", visible.filter((i) => i.market === "A股").length],
     ["港股", visible.filter((i) => i.market === "港股").length],
     ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.score_0_100 != null).length}/${visible.length}`],
-    ["买入/试探区", (counts.buy || 0) + (counts.trial || 0)],
-    ["观察/减仓", (counts.watch || 0) + (counts.no || 0)],
+    ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
+    ["价格已到待验证", counts.validation || 0],
+    ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
+    ["待人工复核", counts.review || 0],
   ];
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {
@@ -1941,9 +1979,9 @@ function renderRows() {
     "公司",
     "市场 / 代码",
     "情绪",
-    "报告价格行动表",
+    "主报告判断",
     "现价",
-    "综合操作归类",
+    "当前可执行状态",
     "技术面（辅助）",
     "技术价 / 基本面交叉",
   ]);
@@ -1992,10 +2030,7 @@ function renderRows() {
 
     const adviceTd = document.createElement("td");
     adviceTd.className = "buy-advice-cell";
-    adviceTd.append(
-      renderPrimaryJudgmentAuxiliary(item, quote, { compact: true })
-      || renderBuyAdviceCell(item, quote),
-    );
+    adviceTd.append(renderExecutionState(item, quote, { compact: true }));
     tr.append(adviceTd);
 
     tr.append(renderTechnicalCell(item));
@@ -2150,7 +2185,9 @@ function renderDetail() {
   const tableBrief = priceRows.length
     ? `${priceRows.length} 档${historicalReference ? "历史价格参照" : "报告价格"}`
     : "未提取价格表";
-  const adviceBrief = primaryJudgmentForItem(item)?.label || buyAdviceForItem(item, quote).label;
+  const fallbackAdvice = buyAdviceForItem(item, quote);
+  const execution = currentExecutionState(item, quote, fallbackAdvice.key);
+  const adviceBrief = execution.label;
   els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
   els.detailReport.href = `${repositoryUrl}${item.report_path}`;
 
@@ -2186,15 +2223,15 @@ function renderDetail() {
 
       const auxiliaryCard = document.createElement("div");
       auxiliaryCard.className = "card primary-judgment-aux-card";
-      auxiliaryCard.innerHTML = "<h3>现价辅助位置</h3>";
-      auxiliaryCard.append(renderPrimaryJudgmentAuxiliary(item, quote, { compact: false }));
+      auxiliaryCard.innerHTML = "<h3>当前可执行状态</h3>";
+      auxiliaryCard.append(renderExecutionState(item, quote, { compact: false }));
       els.detailBody.append(auxiliaryCard);
     }
 
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
-    const advice = buyAdviceForItem(item, quote);
-    adviceCard.innerHTML = `<h3>综合操作归类</h3>`;
+    const advice = fallbackAdvice;
+    adviceCard.innerHTML = `<h3>旧报告兼容归类</h3>`;
     const adviceBody = document.createElement("div");
     adviceBody.className = "buy-advice buy-advice-detail-card";
     const badge = document.createElement("span");
@@ -2251,8 +2288,8 @@ function renderDetail() {
     const tip = document.createElement("div");
     tip.className = "card";
     tip.innerHTML = primaryJudgment
-      ? `<h3>筛选依据</h3><p class="source-note">本条预览以最新主报告的空仓行动与最终结论为首要判断；现价只用于说明所处价格档，不会覆盖主报告判断。Checklist、技术面和情绪面均保持独立辅助展示。</p>`
-      : `<h3>筛选依据</h3><p class="source-note">“综合操作筛选”优先采用实时价格所在的报告档位；无法可靠比价时采用最新报告结论。技术面不会改变上述筛选结果，完整基本面上下文请打开主报告。</p>`;
+      ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；“当前可执行状态”只在报告明确允许的价格档已经命中、且报告要求的经营前提无需再等待时，才进入可买筛选。价格已到但事件未验证会单独列出，模型分歧则不进入可买列表。Checklist、技术面和情绪面均保持独立辅助展示。</p>`
+      : `<h3>筛选依据</h3><p class="source-note">尚无双模型主报告判断的非 A 股，暂按旧报告结论兼容归类；完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;
   }
@@ -2419,9 +2456,9 @@ function bindEvents() {
     state.market = "all";
     state.action = "all";
     state.trackingFilter = "all";
-    state.sort = "buy_advice";
+    state.sort = "execution";
     els.companyFilter.value = "";
-    els.sortSelect.value = "buy_advice";
+    els.sortSelect.value = "execution";
     els.marketChips.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.market === "all");
     });

@@ -1530,6 +1530,87 @@ valid_buy_candidate: "是（候选）"
             table = (root / "reports" / "00-index" / "投资决策总表.md").read_text(encoding="utf-8")
             self.assertIn("待复核技术报告", table)
 
+    def test_execution_policy_keeps_report_layers_but_requires_event_gate(self):
+        decision = {
+            "market": "A股",
+            "price_plan": [
+                {"action": "小仓试错", "price_range": "9-10元"},
+                {"action": "分批买入", "price_range": "8-9元"},
+            ],
+            "primary_judgment": {
+                "enabled": True,
+                "label": "等待价格",
+                "action_kind": "watch",
+                "empty_position_action": "等待价格和半年报验证",
+                "trigger_condition": "价格进入9-10元，且半年报确认现金流改善",
+                "model_consensus": True,
+                "source_matches": True,
+                "currency": "CNY",
+            },
+        }
+        policy = dashboard.build_execution_policy(decision)
+        self.assertEqual(policy["condition_mode"], "price_and_event")
+        self.assertEqual(len(policy["price_rules"]), 2)
+        self.assertTrue(all(rule["requires_validation"] for rule in policy["price_rules"]))
+        self.assertNotIn("profiles", policy)
+
+    def test_conservative_model_intersection_reduces_safe_non_buy_reviews(self):
+        artifact = {
+            "judgment": {"currency": "CNY"},
+            "models": {
+                "primary": {"result": {
+                    "label": "回避/卖出",
+                    "action_kind": "no",
+                    "empty_position_action": "当前不买，等待7-11元再评估",
+                    "trigger_condition": "价格回到7-11元",
+                    "summary": "当前不买",
+                    "confidence": "high",
+                    "report_field_conflict": False,
+                    "evidence": [],
+                }},
+                "review": {"result": {
+                    "label": "等待价格",
+                    "action_kind": "watch",
+                    "empty_position_action": "当前不买，等待7-11元",
+                    "trigger_condition": "价格回到7-11元",
+                    "summary": "等待价格",
+                    "confidence": "high",
+                    "report_field_conflict": False,
+                    "evidence": [],
+                }},
+            },
+        }
+        resolved = dashboard.conservative_screening_judgment(artifact, "A股")
+        self.assertEqual(resolved["action_kind"], "watch")
+        self.assertEqual(resolved["label"], "等待价格")
+        self.assertTrue(resolved["screening_consensus"])
+        self.assertFalse(resolved["model_consensus"])
+
+    def test_current_buy_reference_price_is_not_a_buy_threshold(self):
+        reference = dashboard.extract_report_reference_price(
+            [
+                "# 示例公司",
+                "行情基准：2026-08-01 16:00，A股收盘价 15.05 元",
+                "目标价 30 元",
+            ],
+            "A股",
+        )
+        self.assertEqual(reference["price"], 15.05)
+        self.assertEqual(reference["currency"], "CNY")
+
+    def test_contract_null_stance_does_not_hide_real_price_table(self):
+        lines = """| 字段 | 内容 |
+|---|---|
+| 激进型动作 | 未给出 |
+| 激进型价格区间 | 未给出 |
+
+| 价格区间 | 策略 |
+|---|---|
+| 9-10元 | 小仓试错 |
+| 8-9元 | 分批买入 |""".splitlines()
+        plan = dashboard.extract_price_plan(lines, market="A股")
+        self.assertEqual([item["price_range"] for item in plan], ["9-10元", "8-9元"])
+
 
 if __name__ == "__main__":
     unittest.main()

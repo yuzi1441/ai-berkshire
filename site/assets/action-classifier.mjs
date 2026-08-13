@@ -123,6 +123,187 @@ export function primaryJudgmentForItem(item) {
   return judgment;
 }
 
+export function judgmentFilterKey(item, fallbackKind = "unknown") {
+  const judgment = primaryJudgmentForItem(item);
+  if (judgment) return judgment.label;
+  return {
+    buy: "可分批买入",
+    trial: "小仓验证",
+    watch: "等待验证",
+    hold: "持有但不加仓",
+    no: "回避/卖出",
+    unknown: "待人工复核",
+  }[fallbackKind] || "待人工复核";
+}
+
+function executionRank(key) {
+  return {
+    actionable: 80,
+    trial: 70,
+    validation: 60,
+    wait_price: 45,
+    wait_event: 35,
+    hold: 25,
+    no: 15,
+    review: 0,
+  }[key] ?? 0;
+}
+
+function executionResult(key, label, detail, extra = {}) {
+  return {
+    key,
+    label,
+    detail,
+    actionable: key === "actionable" || key === "trial",
+    rank: executionRank(key),
+    ...extra,
+  };
+}
+
+function legacyExecutionState(fallbackKind) {
+  return {
+    buy: executionResult("actionable", "当前可分批", "非 A 股沿用主报告动作"),
+    trial: executionResult("trial", "当前可小仓", "非 A 股沿用主报告动作"),
+    hold: executionResult("hold", "持有但不新买", "非 A 股沿用主报告动作"),
+    watch: executionResult("wait_event", "等待报告条件", "非 A 股沿用主报告动作"),
+    no: executionResult("no", "回避/不买", "非 A 股沿用主报告动作"),
+    unknown: executionResult("review", "待人工复核", "主报告尚未形成可执行判断"),
+  }[fallbackKind] || executionResult("review", "待人工复核", "主报告尚未形成可执行判断");
+}
+
+function comparableExecutionRules(policy, quote) {
+  const currency = String(quote?.currency || "");
+  return (Array.isArray(policy?.price_rules) ? policy.price_rules : [])
+    .filter((rule) => Number.isFinite(Number(rule?.ceiling)) && rule?.currency === currency)
+    .sort((a, b) => Number(a.ceiling) - Number(b.ceiling));
+}
+
+function matchedExecutionRule(rules, price) {
+  return rules.find((rule) => price <= Number(rule.ceiling) + 1e-9) || null;
+}
+
+function executionRuleDetail(price, rule) {
+  const action = String(rule?.action || "按报告价格档执行");
+  return `现价 ${price.toFixed(2)}，已进入 ${rule.price_range} · 报告动作：${action}`;
+}
+
+function conditionWaitState(policy, price, rules) {
+  const mode = policy?.condition_mode;
+  if (!rules.length) {
+    if (["event_only", "price_or_event", "price_and_event", "compound"].includes(mode)) {
+      return executionResult(
+        "wait_event",
+        "等待事件/经营验证",
+        policy?.event_condition || "报告未给出可由行情自动核对的价格门槛",
+        { policy },
+      );
+    }
+    return executionResult("review", "待人工复核", "报告未形成可自动比较的执行条件", { policy });
+  }
+  const highest = Number(rules[rules.length - 1].ceiling);
+  const suffix = mode === "price_or_event"
+    ? "，或等待报告列明的经营事件"
+    : mode === "price_and_event" || mode === "compound"
+      ? "，且后续仍需完成经营验证"
+      : "";
+  return executionResult(
+    "wait_price",
+    mode === "price_or_event" ? "等待价格或经营信号" : "等待价格",
+    `现价 ${price.toFixed(2)}，高于报告最高可执行价 ${highest.toFixed(2)}${suffix}`,
+    { policy, ceiling: highest },
+  );
+}
+
+export function currentExecutionState(item, quote, fallbackKind = "unknown") {
+  const policy = item?.execution_policy;
+  if (!policy || item?.market !== "A股") return legacyExecutionState(fallbackKind);
+  const mode = String(policy.condition_mode || "review");
+  if (mode === "review" || policy.main_action_kind === "unknown") {
+    return executionResult(
+      "review",
+      "待人工复核",
+      "双模型未共同确认当前动作，或报告证据仍不完整",
+      { policy },
+    );
+  }
+  if (mode === "no_buy" || policy.main_action_kind === "no") {
+    return executionResult("no", "回避/不买", "主报告明确不允许空仓者买入", { policy });
+  }
+  if (mode === "hold_only" || policy.main_action_kind === "hold") {
+    return executionResult("hold", "持有但不新买", "报告动作只适用于已有持仓", { policy });
+  }
+
+  const policyRules = Array.isArray(policy.price_rules) ? policy.price_rules : [];
+  if (!policyRules.length && ["event_only", "price_or_event", "price_and_event", "compound"].includes(mode)) {
+    return executionResult(
+      "wait_event",
+      "等待事件/经营验证",
+      policy.event_condition || "报告未给出可由行情自动核对的价格门槛",
+      { policy },
+    );
+  }
+
+  const price = Number(quote?.price);
+  if (!Number.isFinite(price)) {
+    return executionResult("review", "行情暂不可比", "没有可用于执行判断的当前价格", { policy });
+  }
+  const rules = comparableExecutionRules(policy, quote);
+  const hasRules = policyRules.length > 0;
+  if (hasRules && !rules.length) {
+    return executionResult("review", "行情暂不可比", "当前行情币种与报告价格门槛不一致", { policy });
+  }
+
+  if (mode === "current_action" && !hasRules) {
+    const current = policy.current_action || {};
+    const reference = Number(current.reference_price);
+    if (!Number.isFinite(reference) || current.currency !== quote?.currency) {
+      return executionResult(
+        "review",
+        "缺少可沿用的报告基准价",
+        "报告虽允许当时行动，但无法确认现价仍处于同一价格条件",
+        { policy },
+      );
+    }
+    if (price > reference + 1e-9) {
+      return executionResult(
+        "review",
+        "高于报告判断基准价",
+        `现价 ${price.toFixed(2)} 高于报告作出“当前可行动”时的 ${reference.toFixed(2)}，暂停沿用原买入判断`,
+        { policy, reference },
+      );
+    }
+    const trial = current.action_kind === "trial";
+    return executionResult(
+      trial ? "trial" : "actionable",
+      trial ? "当前可小仓" : "当前可分批",
+      `现价 ${price.toFixed(2)} 未高于报告判断基准价 ${reference.toFixed(2)} · ${current.action || "按主报告执行"}`,
+      { policy, reference },
+    );
+  }
+
+  const rule = matchedExecutionRule(rules, price);
+  if (!rule) return conditionWaitState(policy, price, rules);
+  if (rule.requires_validation || ["price_and_event", "compound"].includes(mode)) {
+    return executionResult(
+      "validation",
+      "价格已到，等待验证",
+      `${executionRuleDetail(price, rule)} · 尚需：${rule.validation_condition || policy.event_condition || "报告列明的经营条件"}`,
+      { policy, rule },
+    );
+  }
+  const trial = rule.action_kind === "trial";
+  return executionResult(
+    trial ? "trial" : "actionable",
+    trial ? "当前可小仓" : "当前可分批",
+    executionRuleDetail(price, rule),
+    { policy, rule },
+  );
+}
+
+export function executionFilterKey(item, quote, fallbackKind = "unknown") {
+  return currentExecutionState(item, quote, fallbackKind).key;
+}
+
 export function primaryJudgmentAuxiliary(item, quote) {
   const judgment = primaryJudgmentForItem(item);
   if (!judgment) return null;
