@@ -1121,6 +1121,60 @@ def load_report_judgments(directory: Path) -> list[dict[str, Any]]:
     return artifacts
 
 
+def load_main_report_resolutions(path: Path) -> list[dict[str, Any]]:
+    """Load durable human resolutions for model disagreements on one exact report.
+
+    A resolution is deliberately tied to both the report path and SHA-256.  A
+    newer or edited main report therefore falls back to the normal model/review
+    path instead of silently inheriting an old human decision.
+    """
+    if not path.is_file():
+        return []
+    payload = load_json(path, {})
+    if payload.get("schema_version") != 1:
+        raise ValueError(f"Unsupported main-report resolution schema: {path}")
+    resolutions = payload.get("resolutions")
+    if not isinstance(resolutions, list):
+        raise ValueError(f"Main-report resolutions must be a list: {path}")
+    seen: set[str] = set()
+    required = {
+        "label",
+        "action_kind",
+        "empty_position_action",
+        "trigger_condition",
+        "summary",
+        "source_basis",
+        "currency",
+    }
+    normalized: list[dict[str, Any]] = []
+    for item in resolutions:
+        if not isinstance(item, dict):
+            raise ValueError(f"Main-report resolution must be an object: {path}")
+        ticker = str(item.get("ticker") or "").upper()
+        report_path = str(item.get("report_path") or "")
+        report_sha256 = str(item.get("report_sha256") or "")
+        judgment = item.get("judgment")
+        if (
+            not ticker
+            or ticker in seen
+            or not report_path
+            or not re.fullmatch(r"[0-9a-f]{64}", report_sha256)
+            or not isinstance(judgment, dict)
+            or any(not clean_markdown(str(judgment.get(key) or "")) for key in required)
+        ):
+            raise ValueError(f"Incomplete main-report resolution for {ticker or 'unknown'}: {path}")
+        if judgment.get("action_kind") not in {"buy", "trial", "hold", "watch", "no"}:
+            raise ValueError(f"Invalid human-reviewed action for {ticker}: {path}")
+        if judgment.get("currency") not in {"CNY", "HKD", "USD", "KRW"}:
+            raise ValueError(f"Invalid human-reviewed currency for {ticker}: {path}")
+        evidence = judgment.get("evidence")
+        if not isinstance(evidence, list) or not evidence:
+            raise ValueError(f"Human-reviewed judgment needs report evidence for {ticker}: {path}")
+        seen.add(ticker)
+        normalized.append(item)
+    return normalized
+
+
 def attach_report_judgments(
     decisions: list[dict[str, Any]], artifacts: list[dict[str, Any]], repo_root: Path
 ) -> None:
@@ -1191,6 +1245,52 @@ def attach_report_judgments(
             for name, value in (artifact.get("models") or {}).items()
             if isinstance(value, dict)
         }
+        decision["primary_judgment"] = judgment
+
+
+def attach_main_report_resolutions(
+    decisions: list[dict[str, Any]], resolutions: list[dict[str, Any]], repo_root: Path
+) -> None:
+    """Let an exact, source-hashed main-report review adjudicate model disagreement."""
+    by_ticker = {str(item.get("ticker") or "").upper(): item for item in resolutions}
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        resolution = by_ticker.get(ticker)
+        if not resolution:
+            continue
+        report_path = str(decision.get("report_path") or "")
+        source_path = repo_root / report_path
+        expected_hash = str(resolution.get("report_sha256") or "")
+        actual_hash = (
+            hashlib.sha256(source_path.read_bytes()).hexdigest() if source_path.is_file() else ""
+        )
+        source_matches = (
+            resolution.get("report_path") == report_path
+            and bool(expected_hash)
+            and expected_hash == actual_hash
+        )
+        if not source_matches:
+            # Keep the model/stale-report safety result already attached above.
+            continue
+        previous = (
+            decision.get("primary_judgment")
+            if isinstance(decision.get("primary_judgment"), dict)
+            else {}
+        )
+        judgment = dict(resolution["judgment"])
+        judgment.update(
+            {
+                "enabled": True,
+                "human_reviewed": True,
+                "human_reviewed_at": resolution.get("reviewed_at"),
+                "model_consensus": False,
+                "screening_consensus": False,
+                "artifact_status": "human_reviewed",
+                "source_matches": True,
+                "generated_at": resolution.get("reviewed_at"),
+                "models": previous.get("models") if isinstance(previous.get("models"), dict) else {},
+            }
+        )
         decision["primary_judgment"] = judgment
 
 
@@ -3197,6 +3297,18 @@ def _execution_rule_from_row(
         return None
     price_range = clean_markdown(str(row.get("price_range") or ""))
     band = execution_price_band(price_range, market)
+    # Some decision contracts store only "38 元" in the price column while
+    # the adjacent action retains the operative direction ("38 元以下").
+    # Preserve that report meaning instead of treating the tier as one exact
+    # price point.
+    if band and band["mode"] == "point":
+        contextual_band = execution_price_band(f"{action} {note}", market)
+        if (
+            contextual_band
+            and contextual_band["mode"] != "point"
+            and contextual_band.get("max") == band.get("max")
+        ):
+            band = contextual_band
     if not band or band["mode"] == "floor" or not isinstance(band.get("max"), (int, float)):
         return None
     validation = execution_requires_validation(action, note)
@@ -3278,20 +3390,21 @@ def trigger_price_execution_rules(
             local_start = max(0, match.start() - 34)
             local_end = min(len(clause), match.end() + 46)
             local = clean_markdown(clause[local_start:local_end])
-            local_kind = execution_action_kind(f"{local} {empty_action}")
+            local_kind = execution_action_kind(local)
             if local_kind not in EXECUTION_ACTIONABLE_KINDS:
                 local_kind = default_kind
+            validation = execution_requires_validation(clause, local)
             rules.append(
                 {
                     "action_kind": local_kind,
-                    "action": empty_action or clause,
+                    "action": clause,
                     "price_range": expression,
                     "min": band.get("min"),
                     "ceiling": band["max"],
                     "mode": band["mode"],
                     "currency": band["currency"],
-                    "requires_validation": False,
-                    "validation_condition": None,
+                    "requires_validation": validation,
+                    "validation_condition": clause if validation else None,
                     "source": "validated_judgment_trigger",
                 }
             )
@@ -3437,6 +3550,7 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
     main_kind = str(judgment.get("action_kind") or "unknown")
     report_rules = report_price_execution_rules(decision)
     trigger_rules = trigger_price_execution_rules(judgment, decision.get("market"))
+    human_reviewed = judgment.get("human_reviewed") is True
     conflict_note = clean_markdown(str(judgment.get("conflict_note") or ""))
     explicit_action_conflict = bool(
         judgment.get("report_field_conflict")
@@ -3462,7 +3576,24 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
             report_rules = []
     # A current-buy conclusion is anchored to the report's then-current price;
     # an "ideal add" trigger must not be misread as its maximum allowed price.
-    if main_kind in EXECUTION_ACTIONABLE_KINDS:
+    if human_reviewed:
+        combined: dict[tuple[Any, ...], dict[str, Any]] = {}
+        for rule in report_rules + trigger_rules:
+            key = (rule.get("ceiling"), rule.get("action_kind"))
+            existing = combined.get(key)
+            if existing is None or (
+                rule.get("requires_validation") is True
+                and existing.get("requires_validation") is not True
+            ):
+                combined[key] = rule
+        price_rules = sorted(
+            combined.values(),
+            key=lambda item: (
+                float(item["ceiling"]),
+                0 if item.get("action_kind") == "trial" else 1,
+            ),
+        )
+    elif main_kind in EXECUTION_ACTIONABLE_KINDS:
         price_rules = report_rules
     else:
         price_rules = report_rules or trigger_rules
@@ -3488,7 +3619,11 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
         judgment.get("enabled") is True
         and judgment.get("source_matches") is not False
         and main_kind != "unknown"
-        and (judgment.get("model_consensus") is True or judgment.get("screening_consensus") is True)
+        and (
+            judgment.get("human_reviewed") is True
+            or judgment.get("model_consensus") is True
+            or judgment.get("screening_consensus") is True
+        )
     )
     if not trusted:
         conditions["mode"] = "review"
@@ -3506,7 +3641,7 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
         "report_rule_count": len(report_rules),
         "reliability": (
             "high"
-            if judgment.get("model_consensus") is True
+            if judgment.get("human_reviewed") is True or judgment.get("model_consensus") is True
             else "conservative"
             if judgment.get("screening_consensus") is True
             else "review"
@@ -4351,6 +4486,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     decisions = select_decisions(records, overrides)
     report_judgments = load_report_judgments(data_directory / "report_judgments")
     attach_report_judgments(decisions, report_judgments, repo_root)
+    main_report_resolutions = load_main_report_resolutions(
+        data_directory / "main_report_resolutions.json"
+    )
+    attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
     attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
     technical_snapshots = [
@@ -4372,7 +4511,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "schema_version": 6,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
         "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,

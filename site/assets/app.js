@@ -5,7 +5,7 @@ import {
   fallbackActionKind,
   parseReportPriceBand,
   primaryJudgmentForItem,
-} from "./action-classifier.mjs?v=20260813-execution-gates";
+} from "./action-classifier.mjs?v=20260813-main-report-review";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
@@ -340,7 +340,12 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
   summary.textContent = judgment.summary;
   wrap.append(eyebrow, label, emptyAction, trigger, summary);
 
-  if (judgment.model_consensus === true) {
+  if (judgment.human_reviewed === true) {
+    const reviewed = document.createElement("p");
+    reviewed.className = "primary-judgment-consensus";
+    reviewed.textContent = "已人工核对主报告原文 · 主报告结论优先于模型标签分歧";
+    wrap.append(reviewed);
+  } else if (judgment.model_consensus === true) {
     const consensus = document.createElement("p");
     consensus.className = "primary-judgment-consensus";
     const modelNames = Object.values(judgment.models || {}).filter(Boolean).join(" + ");

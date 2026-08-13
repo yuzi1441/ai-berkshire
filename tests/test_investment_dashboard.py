@@ -798,6 +798,66 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(stale["primary_judgment"]["label"], "待人工复核")
             self.assertFalse(stale["primary_judgment"]["source_matches"])
 
+    def test_source_hashed_main_report_resolution_overrides_model_disagreement(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "report.md"
+            report.write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n"
+                "现价：10.00元\n\n## 最终建议\n\n空仓者可先建小仓，8元以下再加仓。\n",
+                encoding="utf-8",
+            )
+            resolution_path = (
+                root / "data" / "investment-dashboard" / "main_report_resolutions.json"
+            )
+            resolution_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "resolutions": [
+                            {
+                                "ticker": "600000.SH",
+                                "report_path": "reports/示例公司/report.md",
+                                "report_sha256": hashlib.sha256(report.read_bytes()).hexdigest(),
+                                "reviewed_at": "2026-08-13T12:00:00+08:00",
+                                "judgment": {
+                                    "label": "小仓验证",
+                                    "action_kind": "trial",
+                                    "empty_position_action": "当前可先建小仓",
+                                    "holder_action": "继续持有",
+                                    "trigger_condition": "8元以下再加仓",
+                                    "summary": "当前小仓和低价加仓是两个层级。",
+                                    "source_basis": "人工逐行核对主报告",
+                                    "currency": "CNY",
+                                    "evidence": [
+                                        {
+                                            "line_start": 8,
+                                            "line_end": 8,
+                                            "quote": "空仓者可先建小仓，8元以下再加仓。",
+                                            "supports": "明确当前动作",
+                                        }
+                                    ],
+                                },
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            selected = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertTrue(selected["primary_judgment"]["human_reviewed"])
+            self.assertEqual(selected["primary_judgment"]["action_kind"], "trial")
+            self.assertEqual(selected["execution_policy"]["condition_mode"], "current_action")
+            self.assertEqual(selected["execution_policy"]["reliability"], "high")
+
+            report.write_text(report.read_text(encoding="utf-8") + "\n报告更新。\n", encoding="utf-8")
+            stale = dashboard.build_dashboard(root)["decisions"][0]
+            self.assertFalse(stale["primary_judgment"].get("human_reviewed", False))
+            self.assertEqual(stale["execution_policy"]["condition_mode"], "review")
+
     def test_a_share_without_model_artifact_fails_closed(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -1553,6 +1613,32 @@ valid_buy_candidate: "是（候选）"
         self.assertEqual(len(policy["price_rules"]), 2)
         self.assertTrue(all(rule["requires_validation"] for rule in policy["price_rules"]))
         self.assertNotIn("profiles", policy)
+
+    def test_price_rule_uses_direction_from_adjacent_action_text(self):
+        rule = dashboard._execution_rule_from_row(
+            {
+                "action": "可在38元以下分批建仓",
+                "price_range": "38元",
+            },
+            "A股",
+            source="test",
+        )
+        self.assertEqual(rule["mode"], "ceiling")
+        self.assertEqual(rule["ceiling"], 38.0)
+
+    def test_trigger_price_rule_preserves_operating_validation(self):
+        judgment = {
+            "action_kind": "watch",
+            "empty_position_action": "等待经营验证",
+            "trigger_condition": "中报四项转正后可在36-45元分批建仓",
+            "evidence": [
+                {"quote": "中报四项转正后可在36-45元分批建仓"},
+            ],
+        }
+        rules = dashboard.trigger_price_execution_rules(judgment, "A股")
+        self.assertEqual(len(rules), 1)
+        self.assertTrue(rules[0]["requires_validation"])
+        self.assertIn("中报四项转正", rules[0]["validation_condition"])
 
     def test_conservative_model_intersection_reduces_safe_non_buy_reviews(self):
         artifact = {

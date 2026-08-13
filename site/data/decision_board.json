@@ -1,8 +1,8 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-13T10:50:13+08:00",
+  "generated_at": "2026-08-13T11:14:42+08:00",
   "scope": "individual-stocks-only",
-  "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
+  "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 250,
   "checklist_count": 23,
   "post_buy_tracking": {
@@ -585,39 +585,40 @@
       ],
       "report_history_count": 1,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "持仓者继续持有并设置跟踪止损，若成本高于25元考虑部分减仓",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "label": "小仓验证",
+        "action_kind": "trial",
+        "empty_position_action": "可先建3%-5%观察仓并分批执行，不在当前位置一次性重仓",
+        "holder_action": "继续持有并设置跟踪止损；高成本持仓按报告条件考虑减仓",
+        "trigger_condition": "股价回调至15-17元可再加仓；跌至13-15元为进一步加仓信号",
+        "summary": "主报告同时允许当前小仓和回调后加仓，两者是仓位层级而非互斥结论。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "conflict_note": "主报告的第一笔小仓许可与后续回调加仓条件并不冲突。",
+        "source_basis": "人工逐行核对主报告空仓者策略、加仓信号与看板契约",
+        "currency": "CNY",
+        "price_source": "主报告第427行与第430行",
         "evidence": [
           {
             "line_start": 427,
             "line_end": 427,
-            "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |",
-            "supports": "该证据表明空仓者当前动作是等待价格回调至触发条件再行动，因此归类为等待价格。"
+            "quote": "空仓者可适度建仓（3-5%仓位），但分批买入；股价回调至15-17元后再加仓更安全，不建议一次性重仓。",
+            "supports": "明确允许当前先建立小仓，而非必须等到15-17元才允许第一笔。"
           },
           {
-            "line_start": 495,
-            "line_end": 495,
-            "quote": "| 结论摘要 | 空仓者 可适度建仓（3-5%仓位），但分批买入。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |",
-            "supports": "该证据显示契约结论与正文一致，强调等待回调，支持等待价格的label。"
+            "line_start": 430,
+            "line_end": 430,
+            "quote": "股价跌至13-15元区间属于加仓信号。",
+            "supports": "更低价格对应后续加仓层级。"
           }
         ],
         "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
         "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T02:02:23+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -625,15 +626,47 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
+        "main_action_kind": "trial",
+        "main_label": "小仓验证",
+        "condition_mode": "current_action",
         "event_condition": null,
         "guard_condition": null,
-        "price_rules": [],
-        "current_action": null,
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "跌至13-15元为进一步加仓信号",
+            "price_range": "跌至13-15元",
+            "min": 13.0,
+            "ceiling": 15.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "股价回调至15-17元可再加仓",
+            "price_range": "15-17元",
+            "min": 15.0,
+            "ceiling": 17.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          }
+        ],
+        "current_action": {
+          "action_kind": "trial",
+          "action": "可先建3%-5%观察仓并分批执行，不在当前位置一次性重仓",
+          "currency": "CNY",
+          "reference_price": 19.49,
+          "reference_source": "主报告明确标注的分析基准价",
+          "requires_validation": false
+        },
         "report_rule_count": 0,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -1079,7 +1112,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者观望为主，等待更好买点，建议在15-17元区间分批建仓",
+            "action": "价格达到15-17元区间，或Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+）",
             "price_range": "达到15-17元",
             "min": 15.0,
             "ceiling": 17.0,
@@ -1324,7 +1357,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "回避当前价位，设置观察价位80-100元，到达后重新评估",
+            "action": "价格到达80-100元（对应25-35倍PE）",
             "price_range": "80-100元",
             "min": 80.0,
             "ceiling": 100.0,
@@ -1563,7 +1596,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "当前不买入，等待估值回归至7-11元区间后再考虑",
+            "action": "股价回落至7-11元区间（PB 2.5-3倍）",
             "price_range": "回落至7-11元",
             "min": 7.0,
             "ceiling": 11.0,
@@ -2189,7 +2222,7 @@
         "price_rules": [
           {
             "action_kind": "trial",
-            "action": "空仓者等待回调至CNY 70-80元区间再考虑建仓；若2026Q2-Q3继续高增长且禁令影响有限，可在CNY 85-95元区间建5%观察仓",
+            "action": "价格触发条件为CNY 70-80元区间（2026E PE 13-15x）",
             "price_range": "CNY 70-80元",
             "min": 70.0,
             "ceiling": 80.0,
@@ -2530,26 +2563,26 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者应保持观察，等待股价回到24元以下或21元以下的安全边际，或等待经营现金流、订单等验证信号出现后再考虑买入",
+            "action": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
             "price_range": "21元以下",
             "min": null,
             "ceiling": 21.0,
             "mode": "ceiling",
             "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
+            "requires_validation": true,
+            "validation_condition": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
             "source": "validated_judgment_trigger"
           },
           {
             "action_kind": "buy",
-            "action": "空仓者应保持观察，等待股价回到24元以下或21元以下的安全边际，或等待经营现金流、订单等验证信号出现后再考虑买入",
+            "action": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
             "price_range": "24元以下",
             "min": null,
             "ceiling": 24.0,
             "mode": "ceiling",
             "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
+            "requires_validation": true,
+            "validation_condition": "股价回到24元以下且基本面未恶化，或回到21元以下形成明显安全边际",
             "source": "validated_judgment_trigger"
           }
         ],
@@ -3141,7 +3174,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者应回避，不应在当前价格买入",
+            "action": "价格回调至CNY 70-80（2026E PE ~30-35x）以下",
             "price_range": "CNY 70-80",
             "min": 70.0,
             "ceiling": 80.0,
@@ -3427,7 +3460,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者观望，等待价格回落至23-29元区间或2026年后续季报验证增长持续性后再做决策",
+            "action": "股价回落至23-29元（对应PE 40-50倍）或2026年后续季报验证增长持续性",
             "price_range": "回落至23-29元",
             "min": 23.0,
             "ceiling": 29.0,
@@ -3666,7 +3699,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者应回避当前建仓，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。",
+            "action": "股价回落至100-120元区间（PE 60-80倍）",
             "price_range": "回落至100-120元",
             "min": 100.0,
             "ceiling": 120.0,
@@ -3911,7 +3944,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者等待回调，暂不买入，目标买入区间为120-150元；若出现周期性暴跌则视为长期买入机会。",
+            "action": "价格回调至120-150元区间（对应2026E PE 44-55x），或在DDR6切换期出现类似2023年的周期性暴跌",
             "price_range": "120-150元",
             "min": 120.0,
             "ceiling": 150.0,
@@ -4156,7 +4189,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "当前不入场，等待回调至CNY 57-86（PS 10-15x）再入场。",
+            "action": "回调至CNY 57-86（PS 10-15x）",
             "price_range": "CNY 57-86",
             "min": 57.0,
             "ceiling": 86.0,
@@ -6465,45 +6498,40 @@
       ],
       "report_history_count": 3,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "持有",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-        "confidence": "low",
-        "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "label": "等待验证",
+        "action_kind": "watch",
+        "empty_position_action": "等待中报经营指标验证；报告明确要求验证前不建仓",
+        "holder_action": "持有但不加仓，等待中报判决",
+        "trigger_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+        "summary": "低估值不能单独触发买入，空仓者必须先核对中报经营动能。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "看板粗字段写持有，但正文分别明确了空仓者等待验证与持仓者持有不加仓。",
+        "source_basis": "人工逐行核对主报告最终结论及空仓者、持仓者行动表",
+        "currency": "CNY",
+        "price_source": "主报告第818至820行",
         "evidence": [
           {
-            "line_start": 964,
-            "line_end": 964,
-            "quote": "| 基本面建议动作 | 持有 |",
-            "supports": "契约仅对持仓者给出持有动作，未涉及空仓者。"
+            "line_start": 764,
+            "line_end": 764,
+            "quote": "观望；等待2026年中报判决，不必在判决前抢跑。",
+            "supports": "主报告最终结论明确为等待经营验证。"
           },
           {
-            "line_start": 966,
-            "line_end": 973,
-            "quote": "| 激进型动作 | 未给出 | | 激进型价格区间 | 未给出 | | 稳健型动作 | 未给出 | | 稳健型价格区间 | 未给出 | | 保守型动作 | 未给出 | | 保守型价格区间 | 未给出 | | 买入失效条件 | 未给出 | | 下次复核日期 | 未给出 |",
-            "supports": "报告未提供空仓者任何买入或等待条件，无法确定动作。"
-          },
-          {
-            "line_start": 974,
-            "line_end": 974,
-            "quote": "| 研究置信度 | 待复核 |",
-            "supports": "研究置信度待复核，增加不确定性。"
+            "line_start": 818,
+            "line_end": 820,
+            "quote": "空仓者在中报前不建仓；四项及以上转正面后在36-45元分批，30-36元也要求中报未转负面。",
+            "supports": "价格条件不能脱离中报验证单独触发买入。"
           }
         ],
         "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
         "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T02:02:23+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -6511,15 +6539,40 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
-        "event_condition": null,
+        "main_action_kind": "watch",
+        "main_label": "等待验证",
+        "condition_mode": "price_and_event",
+        "event_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
         "guard_condition": null,
-        "price_rules": [],
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "股价30-36元时仍需中报未转负面",
+            "price_range": "30-36元",
+            "min": 30.0,
+            "ceiling": 36.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓",
+            "price_range": "36-45元",
+            "min": 36.0,
+            "ceiling": 45.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+            "source": "validated_judgment_trigger"
+          }
+        ],
         "current_action": null,
         "report_rule_count": 0,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -9976,19 +10029,19 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者当前不应追买，A 股需在 36 元以下或 H 股 39 港元以下再分批买入；稳健型应等正式半年报验证，且 A 股 33 元以下、H 股 36 港元以下更合适。",
+            "action": "稳健型需等待正式半年报验证 OCF、ROIC 和分部利润，且 A 股 33 元以下、H 股 36 港元以下",
             "price_range": "33 元以下",
             "min": null,
             "ceiling": 33.0,
             "mode": "ceiling",
             "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
+            "requires_validation": true,
+            "validation_condition": "稳健型需等待正式半年报验证 OCF、ROIC 和分部利润，且 A 股 33 元以下、H 股 36 港元以下",
             "source": "validated_judgment_trigger"
           },
           {
             "action_kind": "buy",
-            "action": "空仓者当前不应追买，A 股需在 36 元以下或 H 股 39 港元以下再分批买入；稳健型应等正式半年报验证，且 A 股 33 元以下、H 股 36 港元以下更合适。",
+            "action": "A 股跌至 36 元以下，或 H 股跌至 39 港元以下（激进型）",
             "price_range": "跌至 36 元以下",
             "min": null,
             "ceiling": 36.0,
@@ -12635,9 +12688,9 @@
             "action_kind": "trial",
             "action": "60元以下分批试探",
             "price_range": "60元",
-            "min": 60.0,
+            "min": null,
             "ceiling": 60.0,
-            "mode": "point",
+            "mode": "ceiling",
             "currency": "CNY",
             "requires_validation": true,
             "validation_condition": "股价跌至60元以下分批试探，58元以下赔率明显改善",
@@ -17956,7 +18009,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "不必急，等待价格跌到足够便宜（如7元以下）或2026Q2/Q3基本面验证后再考虑买入",
+            "action": "价格跌至7元以下且基本面没有进一步破坏，或2026Q2/Q3显示API毛利率、现金流和利润下滑开始收敛",
             "price_range": "跌至7元以下",
             "min": null,
             "ceiling": 7.0,
@@ -23504,44 +23557,45 @@
       ],
       "report_history_count": 7,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "报告未明确持仓者动作，仅按风险偏好区分操作",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-        "confidence": "medium",
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "整体等待更大安全边际；24-26元仅允许不超过5%的轻仓观察",
+        "holder_action": "主报告未单列持仓者动作，按价格层级控制仓位",
+        "trigger_condition": "24-26元只允许不超过5%的轻仓观察；20-23元再考虑正式建仓",
+        "summary": "主结论是等待20-23元，24-26元只是激进型极小观察仓，不应被放大为普通买入。",
+        "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-        "evidence": [
-          {
-            "line_start": 216,
-            "line_end": 216,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "报告无明确买入或回避动作，整体态度为观察"
-          },
-          {
-            "line_start": 218,
-            "line_end": 223,
-            "quote": "| 激进型动作 | 轻仓观察 | | 激进型价格区间 | 24-26元 | | 稳健型动作 | 等待 | | 稳健型价格区间 | 20-23元 | | 保守型动作 | 回避 | | 保守型价格区间 | 18元 |",
-            "supports": "空仓者操作按风险偏好分档，激进型可轻仓试探，稳健型等待，保守型回避"
-          }
-        ],
-        "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
-        "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
+        "conflict_note": "观察、轻仓和正式建仓是同一主报告中的不同价格层级。",
+        "source_basis": "人工逐行核对一句话结论与最终分层操作建议",
         "currency": "CNY",
         "entry_ceiling": 26.0,
-        "price_source": "本地程序从主报告价格行动表确定性提取",
         "trial_range": {
           "min": 24.0,
           "max": 26.0
         },
-        "artifact_status": "review",
+        "price_source": "主报告第10行与第158至160行",
+        "evidence": [
+          {
+            "line_start": 10,
+            "line_end": 10,
+            "quote": "当前价格放入观察名单，建议等待PE跌至12-13倍（约20-23元）再考虑建仓。",
+            "supports": "报告总体动作是等待价格。"
+          },
+          {
+            "line_start": 158,
+            "line_end": 160,
+            "quote": "激进型24-26元轻仓观察且上限5%；稳健型20-23元等待；保守型回避。",
+            "supports": "保留报告自己的分层，不把激进型轻仓扩大为普遍买入。"
+          }
+        ],
+        "enabled": true,
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
+        "model_consensus": false,
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T02:02:39+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -23549,15 +23603,40 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
+        "main_action_kind": "watch",
+        "main_label": "等待价格",
+        "condition_mode": "price_only",
         "event_condition": null,
         "guard_condition": null,
-        "price_rules": [],
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "20-23元再考虑正式建仓",
+            "price_range": "20-23元",
+            "min": 20.0,
+            "ceiling": 23.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "trial",
+            "action": "轻仓观察",
+            "price_range": "24-26元",
+            "min": 24.0,
+            "ceiling": 26.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "report_price_plan"
+          }
+        ],
         "current_action": null,
         "report_rule_count": 1,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -23843,40 +23922,45 @@
       ],
       "report_history_count": 1,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "持仓者维持观察，不急于卖出。",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "高于38元继续观察；低于38元才进入报告允许的分批区",
+        "holder_action": "38-52元可持有观察或小额定投，高于55元降低新增买入",
+        "trigger_condition": "低于38元可分批买入；32-35元为优先买入区；或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
+        "summary": "粗标签是观察，但主报告给出了明确的价格动作表；分类应随现价跨越38、35和30元而变化。",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "report_field_conflict": true,
+        "conflict_note": "粗粒度观察与具体价格动作并存，执行时采用主报告更具体的价格层级。",
+        "source_basis": "人工逐行核对价格区间建议与最终操作建议",
+        "currency": "CNY",
+        "entry_ceiling": 38.0,
+        "trial_range": {
+          "min": 35.0,
+          "max": 38.0
+        },
+        "price_source": "主报告第121至125行与第200至202行",
         "evidence": [
           {
-            "line_start": 288,
-            "line_end": 288,
-            "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
-            "supports": "明确指出空仓稳健型应等待价格或信号，属于等待类型。"
+            "line_start": 121,
+            "line_end": 125,
+            "quote": "低于38元可分批，32-35元优先买入，低于30元为有条件的重仓候选；38-52元持有观察。",
+            "supports": "主报告已经提供可直接用于现价分类的完整价格动作表。"
           },
           {
-            "line_start": 284,
-            "line_end": 285,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
-            "supports": "最终结论为观察，表示当前不行动，支持等待判断。"
+            "line_start": 200,
+            "line_end": 202,
+            "quote": "激进型38元以下分批；稳健型等32-35元或改善信号；保守型30元以下且分红未恶化才考虑重仓。",
+            "supports": "最终操作建议与价格表一致。"
           }
         ],
         "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
         "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": false,
-        "currency": "CNY",
-        "entry_ceiling": 55.0,
-        "price_source": "本地程序从主报告价格行动表确定性提取",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T01:54:23+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -23884,15 +23968,52 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
-        "event_condition": null,
+        "main_action_kind": "watch",
+        "main_label": "等待价格",
+        "condition_mode": "price_or_event",
+        "event_condition": "或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
         "guard_condition": null,
-        "price_rules": [],
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "低于30元且基本面未永久恶化时才考虑较高仓位",
+            "price_range": "低于30元",
+            "min": null,
+            "ceiling": 30.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "低于30元且基本面未永久恶化时才考虑较高仓位",
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "32-35元为优先买入区",
+            "price_range": "32-35元",
+            "min": 32.0,
+            "ceiling": 35.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+            "price_range": "38 元",
+            "min": null,
+            "ceiling": 38.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "report_price_plan"
+          }
+        ],
         "current_action": null,
         "report_rule_count": 1,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -24469,7 +24590,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者等待价格回落至3.3-3.7元区间再考虑买入，当前不行动。",
+            "action": "股价进入3.3-3.7元区间",
             "price_range": "进入3.3-3.7元",
             "min": 3.3,
             "ceiling": 3.7,
@@ -24981,39 +25102,45 @@
       ],
       "report_history_count": 1,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "报告未给出持仓者明确动作，但从“不追反弹”及等待更低价格分档买入的表述看，持仓者应继续持有等待更高价位或按计划卖出",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "label": "小仓验证",
+        "action_kind": "trial",
+        "empty_position_action": "报告基准价116元附近可先建1/4观察仓，但反弹后不追价",
+        "holder_action": "持有收息，按批价与合同负债跟踪，不在反弹时补仓",
+        "trigger_condition": "116元附近只可先建1/4观察仓；110元以下积极分批买入；90-100元分批加仓",
+        "summary": "最终结论明确为分批买入：116元是观察仓，110元以下才升级为积极分批。",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "report_field_conflict": true,
+        "conflict_note": "粗字段写观察，但正文最终结论明确允许116元起建立观察仓。",
+        "source_basis": "人工逐行核对空仓者策略与最终结论",
+        "currency": "CNY",
+        "entry_ceiling": 116.24,
+        "trial_range": {
+          "min": 110.0,
+          "max": 116.24
+        },
+        "price_source": "主报告第235行与第250行",
         "evidence": [
           {
-            "line_start": 301,
-            "line_end": 301,
-            "quote": "| 结论摘要 | 空仓者 110 元以下分批买入（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |",
-            "supports": "报告明确给出价格触发条件（110元以下分批买入），且当前116元仅可建1/4观察仓，因此空仓者应等待价格达到110元以下再分批买入，属于等待价格/watch"
+            "line_start": 235,
+            "line_end": 235,
+            "quote": "空仓者110元以下分批买入，当前116元可先建1/4观察仓，不追反弹。",
+            "supports": "明确区分当前小仓许可与更低价格的积极买入。"
           },
           {
-            "line_start": 300,
-            "line_end": 300,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "契约标签为‘观察’，与正文摘要给出的‘110元以下分批买入’一致，且未要求完全回避，故归为等待价格/watch而非回避/卖出/no"
+            "line_start": 250,
+            "line_end": 250,
+            "quote": "最终结论为买入（分批、控节奏）：116元起观察仓，110元以下积极分批，90-100元重注。",
+            "supports": "最终结论优先于粗粒度观察字段。"
           }
         ],
         "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
         "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T01:54:44+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -25021,15 +25148,59 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
+        "main_action_kind": "trial",
+        "main_label": "小仓验证",
+        "condition_mode": "current_action",
         "event_condition": null,
         "guard_condition": null,
-        "price_rules": [],
-        "current_action": null,
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "90-100元分批加仓",
+            "price_range": "90-100元",
+            "min": 90.0,
+            "ceiling": 100.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "110元以下积极分批买入",
+            "price_range": "110元以下",
+            "min": null,
+            "ceiling": 110.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "trial",
+            "action": "116元附近只可先建1/4观察仓",
+            "price_range": "116元附近",
+            "min": 116.0,
+            "ceiling": 116.0,
+            "mode": "point",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          }
+        ],
+        "current_action": {
+          "action_kind": "trial",
+          "action": "报告基准价116元附近可先建1/4观察仓，但反弹后不追价",
+          "currency": "CNY",
+          "reference_price": 116.24,
+          "reference_source": "主报告明确标注的分析基准价",
+          "requires_validation": false
+        },
         "report_rule_count": 0,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -26403,44 +26574,45 @@
       ],
       "report_history_count": 9,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "持仓者可继续等待确认信号后加至半仓以上",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "label": "小仓验证",
+        "action_kind": "trial",
+        "empty_position_action": "激进型在报告基准价可建1/3底仓；稳健型仍须等待经营确认",
+        "holder_action": "确认信号出现后才允许提高仓位，75元以下按报告条件加仓",
+        "trigger_condition": "80-85元可建仓；75元以下可加仓；稳健型须待合同负债连续两季环比回升且利润降幅收窄至个位数，确认后90元以内介入",
+        "summary": "主报告允许激进型现价底仓，但稳健型买入必须满足经营验证，不能合并成一个无条件买入标签。",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "report_field_conflict": true,
+        "conflict_note": "粗字段写观察，正文则明确允许激进型现价底仓；采用正文分层动作。",
+        "source_basis": "人工逐行核对最终投资建议与分层操作表",
+        "currency": "CNY",
+        "entry_ceiling": 90.0,
+        "trial_range": {
+          "min": 80.0,
+          "max": 85.0
+        },
+        "price_source": "主报告第131至133行",
         "evidence": [
           {
-            "line_start": 182,
-            "line_end": 182,
-            "quote": "| 结论摘要 | 激进型 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 80-85元建仓；75元以下加仓 |",
-            "supports": "空仓者激进型可现价建1/3底仓，并给出价格区间80-85元建仓，属于等待价格触发"
+            "line_start": 131,
+            "line_end": 131,
+            "quote": "激进型现价建1/3底仓，80-85元建仓，75元以下加仓；确认后才提高仓位。",
+            "supports": "明确允许第一笔小仓，同时给出后续价格和确认条件。"
           },
           {
-            "line_start": 183,
-            "line_end": 183,
-            "quote": "| 激进型动作 | 80-85元建仓 |",
-            "supports": "明确等待价格80-85元建仓，价格触发是核心动作条件"
+            "line_start": 132,
+            "line_end": 133,
+            "quote": "稳健型等待合同负债和利润两个信号，确认后90元以内介入；保守型回避或仅小仓吃息。",
+            "supports": "不同风险层级不能被简化成统一无条件买入。"
           }
         ],
         "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
         "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
-        "currency": "CNY",
-        "entry_ceiling": 90.0,
-        "price_source": "本地程序从主报告价格行动表确定性提取",
-        "trial_range": {
-          "min": 54.0,
-          "max": 70.0
-        },
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T02:02:44+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -26448,15 +26620,71 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
-        "event_condition": null,
+        "main_action_kind": "trial",
+        "main_label": "小仓验证",
+        "condition_mode": "current_action",
+        "event_condition": "稳健型须待合同负债连续两季环比回升且利润降幅收窄至个位数，确认后90元以内介入",
         "guard_condition": null,
-        "price_rules": [],
-        "current_action": null,
+        "price_rules": [
+          {
+            "action_kind": "trial",
+            "action": "回避或仅以\"类债券\"心态小仓位吃息",
+            "price_range": "54-70元",
+            "min": 54.0,
+            "ceiling": 70.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "report_price_plan"
+          },
+          {
+            "action_kind": "buy",
+            "action": "75元以下可加仓",
+            "price_range": "75元以下",
+            "min": null,
+            "ceiling": 75.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "80-85元建仓",
+            "price_range": "80-85元",
+            "min": 80.0,
+            "ceiling": 85.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "report_price_plan"
+          },
+          {
+            "action_kind": "buy",
+            "action": "确认后90元以内仍可介入",
+            "price_range": "90元",
+            "min": null,
+            "ceiling": 90.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "确认后90元以内仍可介入",
+            "source": "report_price_plan"
+          }
+        ],
+        "current_action": {
+          "action_kind": "trial",
+          "action": "激进型在报告基准价可建1/3底仓；稳健型仍须等待经营确认",
+          "currency": "CNY",
+          "reference_price": 82.46,
+          "reference_source": "主报告明确标注的分析基准价",
+          "requires_validation": false
+        },
         "report_rule_count": 3,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -26972,7 +27200,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "观望，不追。若非买不可，把买点设在8.4元以下，仓位按高股息债券替代管理，同等价位内招行与兴业是更优选择。",
+            "action": "股价跌破8.4元且分红方案维持30%",
             "price_range": "8.4元",
             "min": 8.4,
             "ceiling": 8.4,
@@ -27981,7 +28209,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "观察，不追高，等待价格进入250-300元区间后再复核",
+            "action": "保守型价格区间为250-300元，且不追高",
             "price_range": "250-300元",
             "min": 250.0,
             "ceiling": 300.0,
@@ -28256,7 +28484,7 @@
         "price_rules": [
           {
             "action_kind": "trial",
-            "action": "空仓、价值投资者不追高，列入观察清单，等待17-20元价格带或资产注入细节证明；空仓、趋势投资者可小仓跟踪但不应误认为低估，需趋势和公告催化并严格止损；保守型投资者回避。",
+            "action": "股价回到17-20元，同时金锑钨价格未系统性反转",
             "price_range": "17-20元",
             "min": 17.0,
             "ceiling": 20.0,
@@ -29169,7 +29397,7 @@
         "price_rules": [
           {
             "action_kind": "trial",
-            "action": "观望为主，等待更好的买入时机；若股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位。",
+            "action": "股价回到25元以下，且Q2/Q3业绩持续向好",
             "price_range": "25元以下",
             "min": null,
             "ceiling": 25.0,
@@ -29559,7 +29787,7 @@
         "price_rules": [
           {
             "action_kind": "trial",
-            "action": "空仓不宜追高，稳健型等TTM PE回落至40-50x或股价回落至90-110元且业绩未坏再重估；激进型只允许小仓试错，若2026Q2/Q3继续高增长且毛利率维持27%+可小仓跟踪，否则等待；保守型暂不买，需等待至少两个季度现金流/利润匹配且估值明显下修。",
+            "action": "TTM PE回落到40-50x，或股价回落到90-110元且业绩未坏（稳健型）",
             "price_range": "90-110元",
             "min": 90.0,
             "ceiling": 110.0,
@@ -31945,9 +32173,9 @@
             "action_kind": "trial",
             "action": "75.27 元以下小仓分批",
             "price_range": "75.27 元",
-            "min": 75.27,
+            "min": null,
             "ceiling": 75.27,
-            "mode": "point",
+            "mode": "ceiling",
             "currency": "CNY",
             "requires_validation": false,
             "validation_condition": null,
@@ -33098,7 +33326,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者等待股价跌至30元以下后再考虑参与，30-50元区间仅观察不可重仓",
+            "action": "股价低于30元（市值低于380亿元）",
             "price_range": "低于30元",
             "min": null,
             "ceiling": 30.0,
@@ -34240,7 +34468,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "空仓者当前不建议新建仓，等待回调至35–40元附近后再评估",
+            "action": "股价回调至35–40元附近，对应PB约3x后再评估",
             "price_range": "35–40元附近",
             "min": 35.0,
             "ceiling": 40.0,
@@ -35062,7 +35290,7 @@
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "观望为主，不建议现价大举买入；等待催化剂或股价回调至45-50元区间再考虑建仓",
+            "action": "股价回调至45-50元区间（对应PE 13-15x）",
             "price_range": "45-50元",
             "min": 45.0,
             "ceiling": 50.0,
@@ -36147,7 +36375,7 @@
         "price_rules": [
           {
             "action_kind": "trial",
-            "action": "空仓保守型投资者等待估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估；激进型只能事件驱动小仓，稳健型小仓观察即可。",
+            "action": "估值回落至约30x可持续EPS，或股价进入45-55元区间",
             "price_range": "进入45-55元",
             "min": 45.0,
             "ceiling": 55.0,
@@ -37821,62 +38049,45 @@
       ],
       "report_history_count": 20,
       "primary_judgment": {
-        "label": "待人工复核",
-        "action_kind": "unknown",
-        "empty_position_action": "模型结果不可用，暂停自动归类",
-        "holder_action": "持仓者可继续持有，因为报告给出分批买入建议，未要求卖出或减仓",
-        "trigger_condition": "重新解析当前主报告并完成人工复核",
-        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "报告基准价28.42元时空仓等待，不在当前估值下直接建仓",
+        "holder_action": "持仓者可继续收息并按季度复核",
+        "trigger_condition": "25-26元可小仓试建；23-25元可分批建仓但需基本面未坏；22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "summary": "主报告明确写明当前空仓等待，只有进入对应价格带并满足保护条件后才可行动。",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-        "evidence": [
-          {
-            "line_start": 358,
-            "line_end": 358,
-            "quote": "| 契约版本 | 1 |",
-            "supports": "报告有明确的结构化契约信息。"
-          },
-          {
-            "line_start": 365,
-            "line_end": 365,
-            "quote": "| 基本面建议动作 | 分批买入 |",
-            "supports": "报告建议分批买入，但需要结合价格区间判断执行时机。"
-          },
-          {
-            "line_start": 366,
-            "line_end": 366,
-            "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
-            "supports": "报告看好公司基本面，但支持在价格区间内分批买入，暗示需等待价格。"
-          },
-          {
-            "line_start": 368,
-            "line_end": 368,
-            "quote": "| 激进型价格区间 | 25-26 元 |",
-            "supports": "给出具体价格触发区间，未到达该区间前不买入，等待价格。"
-          },
-          {
-            "line_start": 370,
-            "line_end": 370,
-            "quote": "| 稳健型价格区间 | 23-25 元 |",
-            "supports": "同样给出稳健型价格触发区间，进一步强调等待价格条件。"
-          }
-        ],
-        "enabled": true,
-        "source_basis": "报告判断缓存状态检查",
-        "model_consensus": false,
-        "label_detail_consensus": false,
-        "conflict_flag_consensus": true,
+        "report_field_conflict": true,
+        "conflict_note": "粗字段写分批买入，但正文当前价格行和最终总结明确要求空仓等待价格。",
+        "source_basis": "人工逐行核对当前价格行、分层价格表与最终总结",
         "currency": "CNY",
         "entry_ceiling": 26.0,
-        "price_source": "本地程序从主报告价格行动表确定性提取",
         "trial_range": {
           "min": 25.0,
           "max": 26.0
         },
-        "artifact_status": "review",
+        "price_source": "主报告第273至280行与第302行",
+        "evidence": [
+          {
+            "line_start": 273,
+            "line_end": 280,
+            "quote": "25-26元小仓试建，23-25元分批且要求基本面未坏，22.5元以下须先排除永久性损伤；当前28.42元空仓等待。",
+            "supports": "当前不能买和未来价格触发条件都写得明确。"
+          },
+          {
+            "line_start": 302,
+            "line_end": 302,
+            "quote": "对空仓者，23-25元更接近好公司与合理安全边际的交集。",
+            "supports": "最终总结再次确认等待更低价格。"
+          }
+        ],
+        "enabled": true,
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-13T11:14:00+08:00",
+        "model_consensus": false,
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-13T01:59:30+08:00",
+        "generated_at": "2026-08-13T11:14:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "gpt-5.6-terra"
@@ -37884,15 +38095,52 @@
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "unknown",
-        "main_label": "待人工复核",
-        "condition_mode": "review",
-        "event_condition": null,
-        "guard_condition": null,
-        "price_rules": [],
+        "main_action_kind": "watch",
+        "main_label": "等待价格",
+        "condition_mode": "price_and_event",
+        "event_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "guard_condition": "23-25元可分批建仓但需基本面未坏",
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+            "price_range": "22.5元以下",
+            "min": null,
+            "ceiling": 22.5,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "buy",
+            "action": "23-25元可分批建仓但需基本面未坏",
+            "price_range": "23-25元",
+            "min": 23.0,
+            "ceiling": 25.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "trial",
+            "action": "小仓试建，保留回撤加仓空间",
+            "price_range": "25-26 元",
+            "min": 25.0,
+            "ceiling": 26.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+            "source": "report_price_plan"
+          }
+        ],
         "current_action": null,
         "report_rule_count": 2,
-        "reliability": "review",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {

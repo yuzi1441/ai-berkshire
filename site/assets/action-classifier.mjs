@@ -253,7 +253,25 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown") {
     return executionResult("review", "行情暂不可比", "当前行情币种与报告价格门槛不一致", { policy });
   }
 
-  if (mode === "current_action" && !hasRules) {
+  if (mode === "current_action") {
+    const matched = matchedExecutionRule(rules, price);
+    if (matched) {
+      if (matched.requires_validation) {
+        return executionResult(
+          "validation",
+          "价格已到，等待验证",
+          `${executionRuleDetail(price, matched)} · 尚需：${matched.validation_condition || policy.event_condition || "报告列明的经营条件"}`,
+          { policy, rule: matched },
+        );
+      }
+      const matchedTrial = matched.action_kind === "trial";
+      return executionResult(
+        matchedTrial ? "trial" : "actionable",
+        matchedTrial ? "当前可小仓" : "当前可分批",
+        executionRuleDetail(price, matched),
+        { policy, rule: matched },
+      );
+    }
     const current = policy.current_action || {};
     const reference = Number(current.reference_price);
     if (!Number.isFinite(reference) || current.currency !== quote?.currency) {
@@ -266,9 +284,9 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown") {
     }
     if (price > reference + 1e-9) {
       return executionResult(
-        "review",
-        "高于报告判断基准价",
-        `现价 ${price.toFixed(2)} 高于报告作出“当前可行动”时的 ${reference.toFixed(2)}，暂停沿用原买入判断`,
+        "wait_price",
+        "等待价格，不追高",
+        `现价 ${price.toFixed(2)} 高于报告作出“当前可行动”时的 ${reference.toFixed(2)}，按主报告价格纪律暂停新增买入`,
         { policy, reference },
       );
     }

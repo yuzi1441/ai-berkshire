@@ -165,8 +165,42 @@ class DashboardActionClassifierTests(unittest.TestCase):
               }
             }}, {price: 108, currency: "CNY"})"""
         )
-        self.assertEqual(result["key"], "review")
-        self.assertEqual(result["label"], "高于报告判断基准价")
+        self.assertEqual(result["key"], "wait_price")
+        self.assertEqual(result["label"], "等待价格，不追高")
+
+    def test_current_action_uses_report_tiers_before_reference_price_fallback(self):
+        result = self.run_classifier(
+            """[
+              classifier.currentExecutionState({market: "A股", execution_policy: {
+                main_action_kind: "trial",
+                condition_mode: "current_action",
+                reliability: "high",
+                price_rules: [{
+                  action_kind: "buy", action: "110元以下积极分批", price_range: "110元以下",
+                  ceiling: 110, currency: "CNY", requires_validation: false
+                }],
+                current_action: {
+                  action_kind: "trial", action: "116元附近只建观察仓", currency: "CNY",
+                  reference_price: 116
+                }
+              }}, {price: 108, currency: "CNY"}),
+              classifier.currentExecutionState({market: "A股", execution_policy: {
+                main_action_kind: "trial",
+                condition_mode: "current_action",
+                reliability: "high",
+                price_rules: [{
+                  action_kind: "buy", action: "110元以下积极分批", price_range: "110元以下",
+                  ceiling: 110, currency: "CNY", requires_validation: false
+                }],
+                current_action: {
+                  action_kind: "trial", action: "116元附近只建观察仓", currency: "CNY",
+                  reference_price: 116
+                }
+              }}, {price: 114, currency: "CNY"})
+            ]"""
+        )
+        self.assertEqual(result[0]["key"], "actionable")
+        self.assertEqual(result[1]["key"], "trial")
 
     def test_model_review_never_enters_buy_filter(self):
         result = self.run_classifier(
