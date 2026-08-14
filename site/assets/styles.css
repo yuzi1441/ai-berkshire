@@ -61,7 +61,7 @@ body {
     var(--bg-0);
   min-height: 100vh;
   overflow-x: clip;
-  overscroll-behavior-y: none;
+  overscroll-behavior-y: auto;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -442,10 +442,10 @@ h1 {
 }
 .table-panel { overflow: hidden; }
 .table-wrap {
-  overflow: auto;
-  max-height: min(580px, calc(100dvh - 330px));
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  overflow-x: auto;
+  overflow-y: clip;
+  max-height: none;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -484,6 +484,24 @@ tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.014); }
 tbody tr:hover { background: var(--bg-3); box-shadow: inset 3px 0 0 rgba(46, 230, 168, 0.45); }
 tbody tr.active { background: rgba(46, 230, 168, 0.07); box-shadow: inset 3px 0 0 var(--brand); }
 tbody tr:last-child td { border-bottom: none; }
+
+/* 详情跟随当前个股，在该行正下方展开，不改变整张列表的滚动方式。 */
+tbody tr.detail-inline-row,
+tbody tr.detail-inline-row:hover {
+  cursor: default;
+  background: var(--bg-1) !important;
+  box-shadow: none !important;
+}
+tbody tr.detail-inline-row > td {
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+tbody tr.detail-inline-row .detail-panel {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
 
 .company-cell { min-width: 120px; }
 .company-name { font-weight: 700; color: var(--ink-strong); }
@@ -1178,11 +1196,11 @@ tbody tr:last-child td { border-bottom: none; }
 .detail-panel {
   position: relative;
   width: 100%;
-  height: auto;
-  max-height: none;
+  height: min(78vh, 820px);
+  max-height: calc(100vh - 96px);
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   min-height: 0;
   scroll-margin-top: 88px;
   animation: detail-in 0.18s ease;
@@ -1244,8 +1262,8 @@ tbody tr:last-child td { border-bottom: none; }
   min-height: 0;
   padding: 12px 14px 20px;
   overflow-x: hidden;
-  overflow-y: visible;
-  overscroll-behavior: contain;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
   touch-action: pan-y;
   scrollbar-gutter: stable;
   display: grid;
@@ -1455,9 +1473,8 @@ tbody tr.active .valuation-chip.ready {
 .valuation-markdown.compact {
   padding: 8px 0 0;
   gap: 10px;
-  max-height: min(52vh, 480px);
-  overflow: auto;
-  min-height: 0;
+  max-height: none;
+  overflow: visible;
 }
 .valuation-empty {
   padding: 18px;
@@ -1714,8 +1731,8 @@ tbody tr.active .valuation-chip.ready {
   .workspace.detail-open { grid-template-columns: 1fr; }
   .detail-panel {
     position: relative;
-    height: auto;
-    max-height: none;
+    height: min(78vh, 720px);
+    max-height: calc(100vh - 40px);
     border-radius: var(--radius-lg);
     z-index: auto;
     box-shadow: var(--shadow);
@@ -1804,6 +1821,25 @@ tbody tr.active .valuation-chip.ready {
   .table-wrap tbody tr:not(:first-child) td { border-top: 0; }
   .table-wrap tbody tr:hover { box-shadow: inset 3px 0 0 rgba(46, 230, 168, 0.45), 0 2px 10px rgba(0, 0, 0, 0.28); }
   .table-wrap tbody tr.active { box-shadow: inset 3px 0 0 var(--brand), 0 3px 12px rgba(46, 230, 168, 0.12); }
+  .table-wrap tbody tr.detail-inline-row,
+  .table-wrap tbody tr.detail-inline-row:hover {
+    display: block;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .table-wrap tbody tr.detail-inline-row > td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+  .table-wrap tbody tr.detail-inline-row .detail-panel {
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+  }
   .table-wrap tbody td {
     min-width: 0;
     padding: 10px;
@@ -1869,7 +1905,8 @@ tbody tr.active .valuation-chip.ready {
 
   .detail-panel {
     height: auto;
-    max-height: none;
+    height: min(78vh, 720px);
+    max-height: calc(100vh - 32px);
     border-radius: var(--radius-lg);
   }
   .detail-head { gap: 8px; padding: 12px 12px 9px; }
@@ -1885,7 +1922,12 @@ tbody tr.active .valuation-chip.ready {
     -webkit-overflow-scrolling: touch;
   }
   .tab { flex: 0 0 auto; min-height: 34px; padding: 6px 11px; }
-  .detail-body { padding: 10px 10px 16px; gap: 10px; }
+  .detail-body {
+    padding: 10px 10px 16px;
+    gap: 10px;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+  }
   .detail-foot {
     gap: 8px;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
@@ -1894,7 +1936,7 @@ tbody tr.active .valuation-chip.ready {
   .card { border-radius: 10px; padding: 10px; }
   .valuation-card-head { padding: 12px 12px 9px; }
   .valuation-markdown { gap: 10px; padding: 12px 10px 16px; }
-  .valuation-markdown.compact { max-height: min(48dvh, 430px); }
+  .valuation-markdown.compact { max-height: none; }
   .valuation-table-wrap { border-radius: 10px; }
   .valuation-table { font-size: 12px; }
   .valuation-table th, .valuation-table td { padding: 8px 9px; }

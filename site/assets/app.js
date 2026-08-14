@@ -2241,6 +2241,7 @@ function renderRows() {
   els.rows.replaceChildren();
   if (state.view === "tracking") {
     renderTrackingRows(visible);
+    mountInlineDetail(selectedItem());
     els.status.textContent = `显示 ${visible.length} / ${state.decisions.filter((item) => trackingForItem(item)).length} · 持仓跟踪`;
     if (els.emptyState) els.emptyState.hidden = visible.length > 0;
     if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
@@ -2313,6 +2314,8 @@ function renderRows() {
     });
     els.rows.append(tr);
   });
+
+  mountInlineDetail(selectedItem());
 
   els.status.textContent = `显示 ${visible.length} / ${state.decisions.length} · 排序：${els.sortSelect.selectedOptions[0]?.text || state.sort}`;
   if (els.emptyState) {
@@ -2450,17 +2453,46 @@ function renderTrackingDetail(item, tracking) {
   }
 }
 
+function mountInlineDetail(item) {
+  if (!item || !els.rows || !els.detailPanel) return false;
+  const key = itemKey(item);
+  const row = Array.from(els.rows.querySelectorAll("tr[data-key]")).find((node) => node.dataset.key === key);
+  if (!row) return false;
+
+  const existing = Array.from(els.rows.querySelectorAll("tr.detail-inline-row"))
+    .find((node) => node.dataset.detailFor === key);
+  if (existing) {
+    const existingCell = existing.querySelector("td");
+    if (existingCell && els.detailPanel.parentElement !== existingCell) existingCell.append(els.detailPanel);
+    if (row.nextElementSibling !== existing) row.insertAdjacentElement("afterend", existing);
+    return true;
+  }
+
+  const detailRow = document.createElement("tr");
+  detailRow.className = "detail-inline-row";
+  detailRow.dataset.detailFor = key;
+  const cell = document.createElement("td");
+  cell.colSpan = Math.max(1, els.decisionHead.querySelectorAll("th").length);
+  cell.append(els.detailPanel);
+  detailRow.append(cell);
+  row.insertAdjacentElement("afterend", detailRow);
+  return true;
+}
+
 function renderDetail() {
   const item = selectedItem();
   if (!item) {
     document.body.classList.remove("drawer-open");
     els.detailPanel.hidden = true;
-    els.workspace.classList.remove("detail-open");
+    return;
+  }
+  if (!mountInlineDetail(item)) {
+    document.body.classList.remove("drawer-open");
+    els.detailPanel.hidden = true;
     return;
   }
   document.body.classList.add("drawer-open");
   els.detailPanel.hidden = false;
-  els.workspace.classList.add("detail-open");
   els.detailTitle.textContent = item.company;
   const quote = state.quotes.get(item.ticker);
   const change = formatChange(quote);
@@ -2662,7 +2694,11 @@ function updateHash(item) {
 
 function revealTableRow(row) {
   const wrap = els.tableWrap;
-  if (!row || !wrap || wrap.scrollHeight <= wrap.clientHeight) return;
+  if (!row) return;
+  if (!wrap || wrap.scrollHeight <= wrap.clientHeight) {
+    row.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    return;
+  }
   const wrapRect = wrap.getBoundingClientRect();
   const header = wrap.querySelector("thead");
   const topLimit = wrapRect.top + (header?.getBoundingClientRect().height || 0);
@@ -2675,12 +2711,13 @@ function revealTableRow(row) {
 }
 
 function revealDetailPanel() {
-  if (!els.detailPanel || els.detailPanel.hidden) return;
-  const rect = els.detailPanel.getBoundingClientRect();
+  const detailRow = els.detailPanel?.closest("tr.detail-inline-row");
+  if (!detailRow || els.detailPanel.hidden) return;
+  const rect = detailRow.getBoundingClientRect();
   const topGuard = 82;
   const bottomGuard = Math.min(window.innerHeight - 48, 720);
   if (rect.top < topGuard || rect.top > bottomGuard) {
-    els.detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    detailRow.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
   }
 }
 
@@ -2693,11 +2730,11 @@ function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   renderRows();
   renderDetail();
   if (els.detailBody) els.detailBody.scrollTop = 0;
-  revealDetailPanel();
   if (scrollRow) {
-    const row = els.rows.querySelector(`tr[data-key="${CSS.escape(state.selectedKey)}"]`);
+    const row = Array.from(els.rows.querySelectorAll("tr[data-key]")).find((node) => node.dataset.key === state.selectedKey);
     revealTableRow(row);
   }
+  revealDetailPanel();
 }
 
 function closeDetail() {
