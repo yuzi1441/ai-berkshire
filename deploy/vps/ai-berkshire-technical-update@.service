@@ -9,3 +9,4 @@ User=root
 WorkingDirectory=/opt/ai-berkshire
 Environment=TZ=Asia/Shanghai
 ExecStart=/usr/local/sbin/ai-berkshire-technical-update %i
+TimeoutStartSec=90min
