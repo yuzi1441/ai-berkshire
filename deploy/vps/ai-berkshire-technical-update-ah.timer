@@ -1,9 +1,25 @@
 [Unit]
-Description=Refresh A-share and Hong Kong technical analysis after close
+Description=Refresh A-share and Hong Kong technical analysis during market hours
 
 [Timer]
+# A/H combined session: skip the lunch break, then run every 30 minutes.
+# The 16:30 run is the final full-day close snapshot.
+OnCalendar=Mon..Fri *-*-* 09:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 10:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 10:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 11:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 11:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 12:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 13:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 13:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 14:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 14:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 15:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 15:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 16:00:00 Asia/Shanghai
 OnCalendar=Mon..Fri *-*-* 16:30:00 Asia/Shanghai
-Persistent=true
+AccuracySec=30s
+Persistent=false
 Unit=ai-berkshire-technical-update@ah.service
 
 [Install]

@@ -8,7 +8,7 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260813-terminal-dark" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260814-ai-review-layout" />
   </head>
   <body>
     <div class="app-shell">
@@ -74,6 +74,7 @@
           <button type="button" class="chip active" data-tracking-filter="all">全部</button>
           <button type="button" class="chip" data-tracking-filter="alert">有预警</button>
           <button type="button" class="chip" data-tracking-filter="review">待复核</button>
+          <button type="button" class="chip" id="restore-tracking" hidden>恢复已隐藏</button>
         </div>
         <div class="control-meta">
           <label class="sort-field">
@@ -130,6 +131,7 @@
           <div class="detail-tabs" role="tablist">
             <button type="button" class="tab active" data-tab="technical">技术面</button>
             <button type="button" class="tab" data-tab="overview">摘要</button>
+            <button type="button" class="tab decision-review-tab" data-tab="decision-review">AI复核</button>
             <button type="button" class="tab checklist-tab" data-tab="checklist">买入前检查</button>
             <button type="button" class="tab" data-tab="sentiment">情绪</button>
             <button type="button" class="tab" data-tab="history">历史研报</button>
@@ -150,6 +152,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=20260813-main-report-review"></script>
+    <script type="module" src="./assets/app.js?v=20260814-ai-review-layout"></script>
   </body>
 </html>

@@ -9,11 +9,14 @@ import {
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
+const TRACKING_HIDDEN_STORAGE_KEY = "ai-berkshire.hidden-post-buy-tracking.v1";
 const LIVE_INTERVAL_MS = 45_000;
 const SNAPSHOT_INTERVAL_MS = 180_000;
 
 const state = {
   decisions: [],
+  intradayTechnical: new Map(),
+  decisionReviews: new Map(),
   sentimentSnapshot: null,
   sentiments: new Map(),
   sentimentStatus: null,
@@ -24,6 +27,7 @@ const state = {
   market: "all",
   action: "all",
   trackingFilter: "all",
+  hiddenTrackingKeys: new Set(),
   sort: "execution",
   detailTab: "technical",
   quoteMode: "idle", // live | snapshot | idle | error
@@ -48,6 +52,7 @@ const els = {
   viewTabs: document.querySelector("#view-tabs"),
   trackingFilterRow: document.querySelector("#tracking-filter-row"),
   trackingCount: document.querySelector("#tracking-count"),
+  restoreTracking: document.querySelector("#restore-tracking"),
   detailPanel: document.querySelector("#detail-panel"),
   detailTitle: document.querySelector("#detail-title"),
   detailSub: document.querySelector("#detail-sub"),
@@ -67,7 +72,51 @@ const els = {
 
 function trackingForItem(item) {
   const tracking = item?.post_buy_tracking;
-  return tracking && tracking.status !== "not_tracked" ? tracking : null;
+  if (!tracking || tracking.status === "not_tracked") return null;
+  if (state.hiddenTrackingKeys.has(itemKey(item))) return null;
+  return tracking;
+}
+
+function loadHiddenTrackingKeys() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(TRACKING_HIDDEN_STORAGE_KEY) || "[]");
+    return new Set(Array.isArray(stored) ? stored.filter((value) => typeof value === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveHiddenTrackingKeys() {
+  try {
+    localStorage.setItem(TRACKING_HIDDEN_STORAGE_KEY, JSON.stringify([...state.hiddenTrackingKeys]));
+  } catch {
+    showToast("浏览器不允许保存隐藏状态");
+  }
+}
+
+function updateTrackingControls() {
+  const visibleCount = state.decisions.filter((item) => trackingForItem(item)).length;
+  if (els.trackingCount) els.trackingCount.textContent = String(visibleCount);
+  if (els.restoreTracking) els.restoreTracking.hidden = state.hiddenTrackingKeys.size === 0;
+}
+
+function hideTrackingForCurrentBrowser(item) {
+  const key = itemKey(item);
+  if (!window.confirm(`确认从本机看板隐藏 ${item.company} 的买入后跟踪记录？\n\n源数据不会被删除；以后可点击“恢复已隐藏”。`)) return;
+  state.hiddenTrackingKeys.add(key);
+  saveHiddenTrackingKeys();
+  closeDetail();
+  updateTrackingControls();
+  showToast("已从本机看板隐藏，源数据未删除");
+}
+
+function restoreHiddenTracking() {
+  if (!state.hiddenTrackingKeys.size) return;
+  state.hiddenTrackingKeys.clear();
+  saveHiddenTrackingKeys();
+  updateTrackingControls();
+  renderAll();
+  showToast("已恢复本机隐藏的跟踪记录");
 }
 
 function trackingStatusLabel(status) {
@@ -424,6 +473,89 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
     wrap.append(note);
   }
   return wrap;
+}
+
+function appendReviewList(card, title, values, className = "") {
+  if (!Array.isArray(values) || !values.length) return;
+  const section = document.createElement("section");
+  section.className = "decision-review-list-block";
+  const heading = document.createElement("h4");
+  heading.className = "decision-review-list-title";
+  heading.textContent = title;
+  const list = document.createElement("ul");
+  list.className = `decision-review-list ${className}`.trim();
+  for (const value of values) {
+    const item = document.createElement("li");
+    item.textContent = value;
+    list.append(item);
+  }
+  section.append(heading, list);
+  card.append(section);
+}
+
+function renderDecisionReviewDetail(item) {
+  const review = decisionReviewForItem(item);
+  const card = document.createElement("section");
+  card.className = "card decision-review-detail";
+  const title = document.createElement("h3");
+  title.textContent = "AI综合复核 · DeepSeek V4 Flash";
+  card.append(title);
+
+  const disclaimer = document.createElement("p");
+  disclaimer.className = "decision-review-disclaimer";
+  disclaimer.textContent = "这是跨模块一致性解释层，不改变主报告判断、当前可执行状态、粗颗粒度筛选、技术面或情绪分数。模型失败时只保留失败提示。";
+  card.append(disclaimer);
+
+  if (review.status === "missing") {
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = "尚未生成AI综合复核。当前看板主判断不受影响。";
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
+  if (review.status === "error") {
+    const error = document.createElement("p");
+    error.className = "decision-review-error";
+    error.textContent = `本次AI综合复核失败：${review.error || "未知错误"}。主报告和粗筛保持原结果。`;
+    card.append(error);
+    els.detailBody.append(card);
+    return;
+  }
+
+  const result = review.review || {};
+  const summary = document.createElement("dl");
+  summary.className = "technical-summary decision-review-summary";
+  const rows = [
+    ["一致性", result.alignment || "待复核"],
+    ["关注级别", result.attention || "待复核"],
+    ["主要矛盾", result.focus || "待复核"],
+    ["复核置信度", result.confidence || "待复核"],
+    ["复核模型", review.model || "deepseek-v4-flash"],
+    ["生成时间", review.generated_at || "待复核"],
+  ];
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  card.append(summary);
+
+  const explanation = document.createElement("p");
+  explanation.className = "decision-review-explanation";
+  explanation.textContent = result.explanation || "未提供综合解释";
+  card.append(explanation);
+  appendReviewList(card, "已满足条件", result.satisfied_conditions);
+  appendReviewList(card, "尚未满足或无法确认", result.missing_conditions, "warning");
+  appendReviewList(card, "模块冲突", result.conflicts, "conflict");
+
+  const source = document.createElement("p");
+  source.className = "source-note";
+  source.textContent = `复核输入：主报告、价格规则、日线技术面、30分钟技术面、情绪和Checklist；${review.screening_effect || "不改变主报告和粗颗粒度筛选"}。`;
+  card.append(source);
+  els.detailBody.append(card);
 }
 
 function reportPriceRowText(row) {
@@ -1411,8 +1543,31 @@ function technicalLight(technical, dimension) {
   return (technical?.lights || []).find((light) => light?.dimension === dimension) || null;
 }
 
+function intradayTechnicalForItem(item) {
+  if (item?.market !== "A股") return { status: "not_applicable", lights: [] };
+  return state.intradayTechnical.get(item?.ticker) || item?.intraday_technical_analysis || { status: "missing", lights: [] };
+}
+
+function decisionReviewForItem(item) {
+  if (item?.market !== "A股") return { status: "missing" };
+  return state.decisionReviews.get(item?.ticker) || { status: "missing" };
+}
+
+function intradayTone(technical) {
+  if (technical?.status !== "ready") return technical?.status === "review" ? "review" : "missing";
+  const state = String(technical.technical_state || "");
+  if (/防守|数据待复核|数据不足/.test(state)) return "defensive";
+  if (/确认|分批/.test(state)) return "positive";
+  return "neutral";
+}
+
+function intradayLight(technical, dimension) {
+  return (technical?.lights || []).find((light) => light?.dimension === dimension) || null;
+}
+
 function renderTechnicalCell(item) {
   const technical = item?.technical_analysis || { status: "missing", lights: [] };
+  const intraday = intradayTechnicalForItem(item);
   const cell = document.createElement("td");
   cell.className = "technical-col";
   const state = document.createElement("span");
@@ -1439,6 +1594,15 @@ function renderTechnicalCell(item) {
     ? `技术日 ${technical.data_cutoff || "待复核"}`
     : technical.status === "review" ? "报告字段不完整" : "尚无技术报告";
   cell.append(freshness);
+  if (item.market === "A股") {
+    const intradayFreshness = document.createElement("span");
+    intradayFreshness.className = "technical-intraday-freshness";
+    intradayFreshness.textContent = intraday.status === "ready"
+      ? `盘中30m：${intraday.technical_state || "待复核"}`
+      : intraday.status === "failed" ? "盘中30m：抓取失败"
+        : intraday.status === "review" ? "盘中30m：待复核" : "盘中30m：未生成";
+    cell.append(intradayFreshness);
+  }
   return cell;
 }
 
@@ -1509,6 +1673,7 @@ function renderTechnicalDetail(item) {
     empty.textContent = "未生成技术面报告。生成后会按技术指标的实际数据截止日自动显示。";
     card.append(empty);
     els.detailBody.append(card);
+    renderIntradayTechnicalDetail(item);
     return;
   }
   if (technical.status === "review") {
@@ -1526,6 +1691,7 @@ function renderTechnicalDetail(item) {
       card.append(link);
     }
     els.detailBody.append(card);
+    renderIntradayTechnicalDetail(item);
     return;
   }
 
@@ -1533,6 +1699,7 @@ function renderTechnicalDetail(item) {
   summary.className = "technical-summary";
   const rows = [
     ["技术状态", technical.state || "待复核"],
+    ["分析模式", "收盘日线"],
     ["技术日", technical.data_cutoff || "待复核"],
     ["技术收盘价", technical.latest_price != null ? `${technical.latest_price} ${technical.currency || ""}`.trim() : "待复核"],
     ["技术观察区", technical.observation_zone || "待复核"],
@@ -1570,6 +1737,93 @@ function renderTechnicalDetail(item) {
     card.append(link);
   }
   els.detailBody.append(card);
+  renderIntradayTechnicalDetail(item);
+}
+
+function renderIntradayTechnicalDetail(item) {
+  if (item?.market !== "A股") return;
+  const intraday = intradayTechnicalForItem(item);
+  const card = document.createElement("section");
+  card.className = "card technical-detail intraday-technical-detail";
+  const title = document.createElement("h3");
+  title.textContent = "盘中30分钟辅助观察";
+  card.append(title);
+
+  const disclaimer = document.createElement("p");
+  disclaimer.className = "technical-disclaimer intraday-disclaimer";
+  disclaimer.textContent = "这是独立的30分钟K线节奏层，只辅助观察盘中位置和量价，不改变主报告判断、当前可执行状态或粗颗粒度筛选。";
+  card.append(disclaimer);
+
+  if (intraday.status === "missing") {
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = "尚未生成30分钟盘中快照。日线主报告不受影响。";
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
+  if (intraday.status === "failed") {
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = `30分钟盘中数据抓取失败：${intraday.error || "未知错误"}。日线主报告不受影响。`;
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
+
+  const latest = intraday.latest || {};
+  const trend = intraday.trend || {};
+  const momentum = intraday.momentum || {};
+  const volatility = intraday.volatility || {};
+  const session = intraday.intraday || {};
+  const summary = document.createElement("dl");
+  summary.className = "technical-summary";
+  const rows = [
+    ["盘中状态", intraday.status === "ready" ? intraday.technical_state || "待复核" : "待复核"],
+    ["最新K线", intraday.bar_timestamp || "待复核"],
+    ["最新价", latest.close != null ? `${latest.close} ${latest.currency || ""}`.trim() : "待复核"],
+    ["VWAP", session.vwap != null ? String(session.vwap) : "数据不足"],
+    ["相对量能", session.relative_volume != null ? `${session.relative_volume}x` : "数据不足"],
+    ["开盘区间", session.opening_range_low != null && session.opening_range_high != null
+      ? `${session.opening_range_low}-${session.opening_range_high}` : "数据不足"],
+    ["EMA9 / 20 / 60", [trend.ema9, trend.ema20, trend.ema60].map((value) => value == null ? "-" : value).join(" / ")],
+    ["RSI14 / ATR14", `${momentum.rsi14 ?? "-"} / ${volatility.atr14 ?? "-"}`],
+    ["数据质量", intraday.confidence || "待复核"],
+  ];
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  card.append(summary);
+
+  if (intraday.technical_reason) {
+    const reason = document.createElement("p");
+    reason.className = "technical-empty";
+    reason.textContent = intraday.technical_reason;
+    card.append(reason);
+  }
+  const grid = document.createElement("div");
+  grid.className = "technical-light-grid";
+  for (const dimension of ["EMA趋势", "动量", "波动", "盘中量价"]) {
+    const light = intradayLight(intraday, dimension);
+    const itemNode = document.createElement("div");
+    itemNode.className = `technical-light-card intraday-light-card ${intradayTone(intraday)}`;
+    const label = document.createElement("span");
+    label.textContent = dimension;
+    const signal = document.createElement("strong");
+    signal.className = light?.light === "绿" ? "green" : light?.light === "黄" ? "yellow" : light?.light === "红" ? "red" : "";
+    signal.textContent = light?.light || "待复核";
+    itemNode.append(label, signal);
+    const meaning = document.createElement("p");
+    meaning.textContent = light?.meaning || "未提供说明";
+    itemNode.append(meaning);
+    grid.append(itemNode);
+  }
+  card.append(grid);
+  els.detailBody.append(card);
 }
 
 function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
@@ -1588,7 +1842,19 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
   }
   const list = document.createElement("div");
   list.className = "sentiment-news-list";
-  for (const item of items) {
+  const tierRank = { A: 4, B: 3, C: 2, D: 1 };
+  const sortedItems = [...items].sort((left, right) => {
+    const tierDelta = (tierRank[String(right.source_tier || "").toUpperCase()] || 0)
+      - (tierRank[String(left.source_tier || "").toUpperCase()] || 0);
+    if (tierDelta) return tierDelta;
+    const inclusionDelta = Number(right.included !== false) - Number(left.included !== false);
+    if (inclusionDelta) return inclusionDelta;
+    const rightTime = Date.parse(right.published_at || "") || 0;
+    const leftTime = Date.parse(left.published_at || "") || 0;
+    if (rightTime !== leftTime) return rightTime - leftTime;
+    return String(left.title || "").localeCompare(String(right.title || ""), "zh");
+  });
+  for (const item of sortedItems) {
     const scoreEligible = item.score_eligible !== false;
     const included = item.included !== false && scoreEligible;
     const row = document.createElement("article");
@@ -2095,6 +2361,20 @@ function renderTrackingDetail(item, tracking) {
   }
   appendTrackingDetailCard("持仓与论文", summary);
 
+  const manage = document.createElement("div");
+  manage.className = "tracking-manage-row";
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.className = "btn danger";
+  removeButton.textContent = "删除本机跟踪记录";
+  removeButton.title = "仅从当前浏览器隐藏，源数据不会被删除";
+  removeButton.addEventListener("click", () => hideTrackingForCurrentBrowser(item));
+  const manageNote = document.createElement("span");
+  manageNote.className = "source-note";
+  manageNote.textContent = "静态看板不能直接修改 VPS 源文件；此操作只隐藏当前浏览器记录。";
+  manage.append(removeButton, manageNote);
+  appendTrackingDetailCard("跟踪记录管理", manage);
+
   const metrics = document.createElement("div");
   metrics.className = "tracking-metric-list";
   if (tracking.metrics?.length) {
@@ -2204,6 +2484,12 @@ function renderDetail() {
     if (!tracking && state.detailTab === "tracking") state.detailTab = "overview";
   }
   const checklistTab = document.querySelector(".checklist-tab");
+  const decisionReviewTab = document.querySelector(".decision-review-tab");
+  const isAShare = item.market === "A股";
+  if (decisionReviewTab) {
+    decisionReviewTab.hidden = !isAShare;
+    if (!isAShare && state.detailTab === "decision-review") state.detailTab = "overview";
+  }
   const hasChecklist = Boolean(checklistForItem(item));
   if (checklistTab) {
     checklistTab.hidden = !hasChecklist;
@@ -2301,6 +2587,11 @@ function renderDetail() {
 
   if (state.detailTab === "technical") {
     renderTechnicalDetail(item);
+    return;
+  }
+
+  if (state.detailTab === "decision-review") {
+    renderDecisionReviewDetail(item);
     return;
   }
 
@@ -2507,6 +2798,7 @@ function bindEvents() {
     });
     renderRows();
   });
+  els.restoreTracking?.addEventListener("click", restoreHiddenTracking);
   document.querySelector(".detail-tabs")?.addEventListener("click", (event) => {
     const tab = event.target.closest(".tab");
     if (!tab) return;
@@ -2587,12 +2879,52 @@ async function loadSentimentSnapshot() {
   updateSentimentAlert();
 }
 
+async function loadIntradayTechnicalSnapshot() {
+  const response = await fetch(`./data/intraday_technical.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) {
+    state.intradayTechnical = new Map();
+    return;
+  }
+  const snapshot = await response.json();
+  state.intradayTechnical = new Map(
+    (snapshot.companies || [])
+      .filter((item) => item?.ticker && item.market === "A股")
+      .map((item) => [item.ticker, item]),
+  );
+}
+
+async function loadDecisionReviewsSnapshot() {
+  const response = await fetch(`./data/decision_reviews.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) {
+    state.decisionReviews = new Map();
+    return;
+  }
+  const snapshot = await response.json();
+  state.decisionReviews = new Map(
+    (snapshot.reviews || [])
+      .filter((item) => item?.ticker && item.market === "A股")
+      .map((item) => [item.ticker, item]),
+  );
+}
+
 async function loadDashboard() {
   setLiveStatus("idle", "加载决策数据…");
   const response = await fetch(`./data/decision_board.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("无法加载 decision_board.json");
   const board = await response.json();
   state.decisions = board.decisions || [];
+  try {
+    await loadIntradayTechnicalSnapshot();
+  } catch (error) {
+    console.warn("intraday technical snapshot failed", error);
+    state.intradayTechnical = new Map();
+  }
+  try {
+    await loadDecisionReviewsSnapshot();
+  } catch (error) {
+    console.warn("decision review snapshot failed", error);
+    state.decisionReviews = new Map();
+  }
   try {
     await loadSentimentSnapshot();
   } catch (error) {
@@ -2602,8 +2934,8 @@ async function loadDashboard() {
     state.sentiments = new Map();
     updateSentimentAlert();
   }
-  const activeTracking = Number(board.post_buy_tracking?.active_count || 0);
-  if (els.trackingCount) els.trackingCount.textContent = activeTracking ? String(activeTracking) : "0";
+  state.hiddenTrackingKeys = loadHiddenTrackingKeys();
+  updateTrackingControls();
   renderAll();
   applyHashRoute();
   await refreshQuotes({ forceLive: isLikelyMarketOpen(), silent: true });

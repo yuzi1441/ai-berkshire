@@ -136,6 +136,7 @@ def generate_one(
         as_of=as_of,
         source=source,
     )
+    result["analysis_mode"] = "daily_close"
     content = technical.render_markdown(
         result,
         base_report=base_report.relative_to(repo_root).as_posix(),

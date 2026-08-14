@@ -1548,7 +1548,7 @@ valid_buy_candidate: "是（候选）"
 | 中期（60日） | 黄 | 中期等待确认。 |
 | 长期（200日） | 绿 | 长期趋势尚可。 |
 | 量能确认 | 黄 | 量能未确认。 |
-''',
+                ''',
                     encoding="utf-8",
                 )
 
@@ -1565,6 +1565,32 @@ valid_buy_candidate: "是（候选）"
             self.assertEqual(technical["fundamental_entry_plan"], "12-13 CNY")
             self.assertEqual(technical["combined_candidate_zone"], "12-13 CNY")
             self.assertEqual(technical["valid_buy_candidate"], "是（候选）")
+
+    def test_attaches_intraday_layer_separately_from_decision_fields(self):
+        decisions = [
+            {"company": "示例公司", "ticker": "600000.SH", "market": "A股"},
+            {"company": "港股示例", "ticker": "00700.HK", "market": "港股"},
+        ]
+        payload = {
+            "schema_version": 1,
+            "interval": "30m",
+            "companies": [
+                {
+                    "company": "示例公司",
+                    "ticker": "600000.SH",
+                    "status": "ready",
+                    "analysis_mode": "intraday_30m",
+                    "bar_timestamp": "2026-08-14T10:30:00+08:00",
+                    "technical_state": "关注分批区",
+                    "lights": [],
+                }
+            ],
+            "failures": [],
+        }
+        dashboard.attach_intraday_technical(decisions, payload)
+        self.assertEqual(decisions[0]["intraday_technical_analysis"]["analysis_mode"], "intraday_30m")
+        self.assertEqual(decisions[0]["intraday_technical_analysis"]["technical_state"], "关注分批区")
+        self.assertEqual(decisions[1]["intraday_technical_analysis"]["status"], "not_applicable")
 
     def test_technical_snapshot_missing_and_review_states_are_explicit(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

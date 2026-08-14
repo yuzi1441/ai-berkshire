@@ -27,6 +27,10 @@ ROOT = Path(__file__).resolve().parents[1]
 YAHOO_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
 MINIMUM_OBSERVATIONS = 200
 PREFERRED_OBSERVATIONS = 260
+INTRADAY_INTERVAL = "30m"
+INTRADAY_MINIMUM_OBSERVATIONS = 100
+INTRADAY_PREFERRED_OBSERVATIONS = 200
+INTRADAY_LOOKBACK_DAYS = 59
 MAX_STALENESS_DAYS = 7
 CROSS_SOURCE_TOLERANCE_PCT = 1.0
 PRICE_NUMBER_PATTERN = re.compile(r"\d+(?:\.\d+)?")
@@ -63,6 +67,7 @@ class PriceRow:
     low: float
     close: float
     volume: float
+    bar_time: datetime | None = None
 
 
 def finite_number(value: Any) -> float | None:
@@ -553,6 +558,99 @@ def fetch_yahoo_history(symbol: str, start: date, end: date) -> tuple[list[Price
     }
 
 
+def fetch_yahoo_intraday(
+    symbol: str,
+    start: date,
+    end: date,
+    interval: str = INTRADAY_INTERVAL,
+    market: str | None = None,
+) -> tuple[list[PriceRow], dict[str, Any]]:
+    """Fetch timestamped intraday OHLCV bars for the independent 30m layer."""
+    if interval != INTRADAY_INTERVAL:
+        raise TechnicalAnalysisError(f"unsupported intraday interval: {interval}")
+    # Yahoo currently rejects a 30m range that reaches beyond its rolling
+    # 60-calendar-day window; keep the requested endpoint inclusive while
+    # leaving one day of provider-side headroom.
+    start = max(start, end - timedelta(days=59))
+    params = {
+        "period1": int(datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc).timestamp()),
+        "period2": int(
+            datetime.combine(end + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc).timestamp()
+        ),
+        "interval": interval,
+        "events": "div,splits",
+        "includeAdjustedClose": "true",
+        "includePrePost": "false",
+    }
+    url = f"{YAHOO_CHART_URL.format(symbol=symbol)}?{urlencode(params)}"
+    request = Request(url, headers={"User-Agent": "ai-berkshire-technical-analysis/1.0"})
+    try:
+        with urlopen(request, timeout=30) as response:  # noqa: S310 - fixed provider endpoint
+            payload = json.loads(response.read().decode("utf-8"))
+    except Exception as error:
+        raise TechnicalAnalysisError(f"Yahoo intraday request failed for {symbol}: {error}") from error
+
+    chart = payload.get("chart") or {}
+    if chart.get("error"):
+        raise TechnicalAnalysisError(f"Yahoo returned an intraday error for {symbol}: {chart['error']}")
+    results = chart.get("result") or []
+    if not results:
+        raise TechnicalAnalysisError(f"Yahoo returned no intraday history for {symbol}")
+    result = results[0]
+    metadata = result.get("meta") or {}
+    timezone_name = metadata.get("exchangeTimezoneName") or {
+        "A股": "Asia/Shanghai",
+        "港股": "Asia/Hong_Kong",
+    }.get(market or "", "Asia/Shanghai")
+    try:
+        exchange_timezone = ZoneInfo(str(timezone_name))
+    except (KeyError, ValueError):
+        exchange_timezone = ZoneInfo("Asia/Shanghai")
+
+    timestamps = result.get("timestamp") or []
+    quotes = ((result.get("indicators") or {}).get("quote") or [{}])[0]
+    rows: list[PriceRow] = []
+    rejected = 0
+    for index, timestamp in enumerate(timestamps):
+        values = {}
+        for field in ("open", "high", "low", "close", "volume"):
+            series = quotes.get(field) or []
+            values[field] = finite_number(series[index]) if index < len(series) else None
+        if any(values[field] is None for field in values):
+            rejected += 1
+            continue
+        if values["close"] <= 0 or values["high"] < values["low"] or values["volume"] <= 0:
+            rejected += 1
+            continue
+        try:
+            bar_time = datetime.fromtimestamp(float(timestamp), tz=timezone.utc).astimezone(exchange_timezone)
+        except (TypeError, ValueError, OverflowError, OSError):
+            rejected += 1
+            continue
+        rows.append(
+            PriceRow(
+                trading_date=bar_time.date(),
+                open=values["open"],
+                high=values["high"],
+                low=values["low"],
+                close=values["close"],
+                volume=values["volume"],
+                bar_time=bar_time,
+            )
+        )
+    return normalize_rows(rows), {
+        "provider": "Yahoo Finance Chart API",
+        "provider_symbol": symbol,
+        "source_url": url,
+        "interval": interval,
+        "rejected_rows": rejected,
+        "currency": metadata.get("currency"),
+        "exchange_timezone": str(exchange_timezone),
+        "instrument_type": metadata.get("instrumentType"),
+        "include_prepost": False,
+    }
+
+
 def parse_csv_date(raw: str) -> date:
     value = raw.strip()
     for pattern in ("%Y-%m-%d", "%Y/%m/%d", "%Y%m%d"):
@@ -608,13 +706,20 @@ def load_csv_history(path: Path) -> tuple[list[PriceRow], dict[str, Any]]:
 
 
 def normalize_rows(rows: Iterable[PriceRow]) -> list[PriceRow]:
-    """Sort and de-duplicate valid OHLCV rows, keeping the last row per date."""
-    by_date: dict[date, PriceRow] = {}
+    """Sort and de-duplicate daily or timestamped intraday OHLCV rows."""
+    by_key: dict[str, PriceRow] = {}
     for row in rows:
         if row.close <= 0 or row.high < row.low or row.volume < 0:
             continue
-        by_date[row.trading_date] = row
-    return [by_date[key] for key in sorted(by_date)]
+        key = row.bar_time.isoformat() if row.bar_time else row.trading_date.isoformat()
+        by_key[key] = row
+    return sorted(
+        by_key.values(),
+        key=lambda row: (
+            row.trading_date,
+            row.bar_time or datetime.min.replace(tzinfo=timezone.utc),
+        ),
+    )
 
 
 def remove_incomplete_daily_bar(
@@ -623,7 +728,7 @@ def remove_incomplete_daily_bar(
     market: str,
     now: datetime | None = None,
 ) -> list[PriceRow]:
-    """Exclude a current-session partial daily bar before indicator calculation."""
+    """Exclude a current-session partial daily bar from canonical daily analysis."""
     if not rows:
         return rows
     timezone_name = source.get("exchange_timezone")
@@ -973,6 +1078,288 @@ def compute_analysis(
     }
 
 
+def _intraday_light(light: str, meaning: str) -> dict[str, str]:
+    return {"light": light, "meaning": meaning}
+
+
+def _intraday_session_stats(rows: list[PriceRow], latest_date: date) -> dict[str, float | None]:
+    """Return session VWAP, opening range, and same-slot relative volume."""
+    session_rows = [row for row in rows if row.trading_date == latest_date and row.bar_time]
+    if not session_rows:
+        return {
+            "vwap": None,
+            "opening_range_high": None,
+            "opening_range_low": None,
+            "relative_volume": None,
+        }
+    total_volume = sum(row.volume for row in session_rows)
+    vwap = (
+        sum(((row.high + row.low + row.close) / 3) * row.volume for row in session_rows) / total_volume
+        if total_volume > 0
+        else None
+    )
+    opening_rows = session_rows[:2]
+    latest = session_rows[-1]
+    slot = (latest.bar_time.hour, latest.bar_time.minute) if latest.bar_time else None
+    prior_slot_volumes = [
+        row.volume
+        for row in rows
+        if row.trading_date < latest_date
+        and row.bar_time
+        and slot is not None
+        and (row.bar_time.hour, row.bar_time.minute) == slot
+    ][-20:]
+    baseline = sum(prior_slot_volumes) / len(prior_slot_volumes) if prior_slot_volumes else None
+    return {
+        "vwap": vwap,
+        "opening_range_high": max(row.high for row in opening_rows),
+        "opening_range_low": min(row.low for row in opening_rows),
+        "relative_volume": latest.volume / baseline if baseline and baseline > 0 else None,
+    }
+
+
+def compute_intraday_analysis(
+    rows: list[PriceRow],
+    *,
+    company: str,
+    ticker: str,
+    yahoo_symbol: str,
+    market: str,
+    as_of: date,
+    source: dict[str, Any],
+    cross_check: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Compute an independent 30-minute timing snapshot.
+
+    This layer is deliberately not compatible with the daily decision contract:
+    it describes session rhythm and entry timing only, and is attached to the
+    dashboard as an auxiliary observation.
+    """
+    rows = [row for row in normalize_rows(rows) if row.bar_time and row.trading_date <= as_of]
+    if not rows:
+        raise TechnicalAnalysisError("no valid timestamped intraday rows remain at the requested cutoff")
+
+    latest = rows[-1]
+    staleness_days = (as_of - latest.trading_date).days
+    warnings: list[str] = []
+    if len(rows) < INTRADAY_MINIMUM_OBSERVATIONS:
+        warnings.append(
+            f"仅有 {len(rows)} 个有效30分钟K线，少于最低要求 {INTRADAY_MINIMUM_OBSERVATIONS}。"
+        )
+    elif len(rows) < INTRADAY_PREFERRED_OBSERVATIONS:
+        warnings.append(
+            f"仅有 {len(rows)} 个有效30分钟K线，低于建议样本 {INTRADAY_PREFERRED_OBSERVATIONS}。"
+        )
+    if staleness_days > MAX_STALENESS_DAYS:
+        warnings.append(f"最新30分钟K线距请求截止日 {staleness_days} 天，超过允许的 {MAX_STALENESS_DAYS} 天。")
+    if source.get("rejected_rows"):
+        warnings.append(f"数据清洗剔除了 {source['rejected_rows']} 行不完整或非法30分钟行情。")
+
+    if len(rows) < INTRADAY_MINIMUM_OBSERVATIONS:
+        return {
+            "schema_version": 1,
+            "report_type": "technical-intraday",
+            "analysis_mode": "intraday_30m",
+            "company": company,
+            "ticker": ticker,
+            "provider_symbol": yahoo_symbol,
+            "market": market,
+            "interval": INTRADAY_INTERVAL,
+            "analysis_date": as_of.isoformat(),
+            "requested_cutoff": as_of.isoformat(),
+            "data_cutoff": latest.trading_date.isoformat(),
+            "bar_timestamp": latest.bar_time.isoformat() if latest.bar_time else None,
+            "observations": len(rows),
+            "engine": {"name": "TA-Lib", "version": "0.7.1"},
+            "status": "review",
+            "publishable": False,
+            "technical_state": "数据不足",
+            "technical_reason": "30分钟样本不足，不能稳定计算盘中辅助指标。",
+            "confidence": "低",
+            "latest": {"close": rounded(latest.close), "currency": source.get("currency")},
+            "trend": {},
+            "momentum": {},
+            "volatility": {},
+            "intraday": {},
+            "lights": [],
+            "cross_check": cross_check or {"status": "not_available"},
+            "source": source,
+            "warnings": warnings,
+        }
+
+    talib = get_talib()
+    try:
+        import numpy as np  # type: ignore
+    except ImportError as error:
+        raise TechnicalAnalysisError("NumPy is required by TA-Lib") from error
+
+    high = np.asarray([row.high for row in rows], dtype="float64")
+    low = np.asarray([row.low for row in rows], dtype="float64")
+    close = np.asarray([row.close for row in rows], dtype="float64")
+    volume = np.asarray([row.volume for row in rows], dtype="float64")
+    ema9_series = talib.EMA(close, timeperiod=9)
+    ema20_series = talib.EMA(close, timeperiod=20)
+    ema60_series = talib.EMA(close, timeperiod=60)
+    ema200_series = talib.EMA(close, timeperiod=200)
+    rsi_series = talib.RSI(close, timeperiod=14)
+    atr_series = talib.ATR(high, low, close, timeperiod=14)
+    macd_series, macd_signal_series, macd_hist_series = talib.MACD(
+        close, fastperiod=12, slowperiod=26, signalperiod=9
+    )
+    bb_upper_series, bb_middle_series, bb_lower_series = talib.BBANDS(
+        close, timeperiod=20, nbdevup=2, nbdevdn=2, matype=0
+    )
+    adx_series = talib.ADX(high, low, close, timeperiod=14)
+
+    ema9 = last_finite(ema9_series)
+    ema20 = last_finite(ema20_series)
+    ema60 = last_finite(ema60_series)
+    ema200 = last_finite(ema200_series)
+    rsi14 = last_finite(rsi_series)
+    atr14 = last_finite(atr_series)
+    ema20_slope = slope_label(ema20, last_finite(ema20_series, offset=5))
+    ema60_slope = slope_label(ema60, last_finite(ema60_series, offset=5))
+    session = _intraday_session_stats(rows, latest.trading_date)
+    distance_to_ema20_atr = (latest.close - ema20) / atr14 if ema20 and atr14 and atr14 > 0 else None
+    if ema60 is None or atr14 is None or rsi14 is None:
+        technical_state = "数据不足"
+        technical_reason = "30分钟指标尚未形成足够的有效窗口。"
+    elif latest.close < ema60 and ema60_slope == "下行":
+        technical_state = "防守观察"
+        technical_reason = "盘中价格位于EMA60下方且中期盘中趋势下行，只观察，不追价。"
+    elif rsi14 >= 70 or (distance_to_ema20_atr is not None and distance_to_ema20_atr >= 1.5):
+        technical_state = "等待回踩"
+        technical_reason = "盘中价格短线偏热或明显偏离EMA20，等待回踩确认。"
+    elif (
+        latest.close > ema60
+        and ema20_slope == "上行"
+        and distance_to_ema20_atr is not None
+        and abs(distance_to_ema20_atr) <= 1.0
+        and 35 <= rsi14 <= 65
+    ):
+        technical_state = "关注分批区"
+        technical_reason = "盘中趋势向上，价格靠近EMA20且动量未过热，可作为分批节奏观察。"
+    elif latest.close > ema60:
+        technical_state = "趋势确认"
+        technical_reason = "盘中价格站在EMA60上方，但尚未形成明确的回踩节奏。"
+    else:
+        technical_state = "中性观察"
+        technical_reason = "盘中指标没有形成一致的趋势与位置优势，等待更清晰结构。"
+
+    atr_pct = atr14 / latest.close * 100 if atr14 and latest.close else None
+    relative_volume = session["relative_volume"]
+    lights = [
+        {
+            "dimension": "EMA趋势",
+            **_intraday_light(
+                "绿" if latest.close > (ema20 or latest.close) and ema20_slope == "上行"
+                else "红" if ema60 is not None and latest.close < ema60
+                else "黄",
+                "观察价格与EMA20/EMA60及其斜率，不替代日线趋势。",
+            ),
+        },
+        {
+            "dimension": "动量",
+            **_intraday_light(
+                "绿" if rsi14 is not None and 45 <= rsi14 <= 65 and (last_finite(macd_hist_series) or 0) >= 0
+                else "红" if rsi14 is not None and (rsi14 < 30 or rsi14 > 75)
+                else "黄",
+                "RSI14与MACD柱只用于识别盘中过热、过弱或动量配合。",
+            ),
+        },
+        {
+            "dimension": "波动",
+            **_intraday_light(
+                "红" if atr_pct is not None and atr_pct >= 5 else "绿" if atr_pct is not None and atr_pct <= 2 else "黄",
+                "ATR14衡量30分钟正常波动幅度，波动越大越需要降低追价冲动。",
+            ),
+        },
+        {
+            "dimension": "盘中量价",
+            **_intraday_light(
+                "绿" if relative_volume is not None and 0.9 <= relative_volume <= 1.8
+                else "红" if relative_volume is not None and relative_volume < 0.5
+                else "黄",
+                "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。",
+            ),
+        },
+    ]
+    publishable = (
+        len(rows) >= INTRADAY_MINIMUM_OBSERVATIONS
+        and ema200 is not None
+        and staleness_days <= MAX_STALENESS_DAYS
+    )
+    confidence = "高" if publishable and len(rows) >= INTRADAY_PREFERRED_OBSERVATIONS else "中" if publishable else "低"
+    if not publishable:
+        technical_state = "数据待复核"
+        technical_reason = "盘中数据新鲜度或样本质量未达到发布条件，只保留诊断信息。"
+
+    return {
+        "schema_version": 1,
+        "report_type": "technical-intraday",
+        "analysis_mode": "intraday_30m",
+        "company": company,
+        "ticker": ticker,
+        "provider_symbol": yahoo_symbol,
+        "market": market,
+        "interval": INTRADAY_INTERVAL,
+        "analysis_date": as_of.isoformat(),
+        "requested_cutoff": as_of.isoformat(),
+        "data_cutoff": latest.trading_date.isoformat(),
+        "bar_timestamp": latest.bar_time.isoformat() if latest.bar_time else None,
+        "observations": len(rows),
+        "engine": {"name": "TA-Lib", "version": str(talib.__version__)},
+        "status": "ready" if publishable else "review",
+        "publishable": publishable,
+        "technical_state": technical_state,
+        "technical_reason": technical_reason,
+        "confidence": confidence,
+        "latest": {
+            "open": rounded(latest.open),
+            "high": rounded(latest.high),
+            "low": rounded(latest.low),
+            "close": rounded(latest.close),
+            "volume": rounded(latest.volume, 0),
+            "currency": source.get("currency"),
+        },
+        "trend": {
+            "ema9": rounded(ema9),
+            "ema20": rounded(ema20),
+            "ema60": rounded(ema60),
+            "ema200": rounded(ema200),
+            "ema20_slope": ema20_slope,
+            "ema60_slope": ema60_slope,
+            "adx14": rounded(last_finite(adx_series)),
+        },
+        "momentum": {
+            "rsi14": rounded(rsi14),
+            "macd": rounded(last_finite(macd_series)),
+            "macd_signal": rounded(last_finite(macd_signal_series)),
+            "macd_histogram": rounded(last_finite(macd_hist_series)),
+        },
+        "volatility": {
+            "atr14": rounded(atr14),
+            "atr_pct": rounded(atr_pct),
+            "bollinger_upper": rounded(last_finite(bb_upper_series)),
+            "bollinger_middle": rounded(last_finite(bb_middle_series)),
+            "bollinger_lower": rounded(last_finite(bb_lower_series)),
+        },
+        "intraday": {
+            "vwap": rounded(session["vwap"]),
+            "relative_volume": rounded(relative_volume),
+            "opening_range_high": rounded(session["opening_range_high"]),
+            "opening_range_low": rounded(session["opening_range_low"]),
+        },
+        "lights": lights,
+        "cross_check": cross_check or {
+            "status": "not_available",
+            "reason": "30分钟盘中快照不与收盘日线交叉核验，当前只作为独立节奏观察。",
+        },
+        "source": source,
+        "warnings": warnings,
+    }
+
+
 def display_number(value: Any, digits: int = 2) -> str:
     number = finite_number(value)
     if number is None:
@@ -1007,6 +1394,7 @@ def render_markdown(
     quality = result["data_quality"]
     source = result["source"]
     check = result["cross_check"]
+    cutoff_label = "最近一个完整日线"
     currency = latest.get("currency") or {"A股": "CNY", "港股": "HKD", "美股": "USD"}.get(result["market"], "")
     preferred_zone = display_zone(levels.get("preferred_observation_zone"))
     fundamental_bands = fundamental_bands or []
@@ -1021,6 +1409,7 @@ def render_markdown(
         f"ticker: {yaml_string(result['ticker'])}",
         f"market: {yaml_string(result['market'])}",
         f"analysis_date: {yaml_string(result['analysis_date'])}",
+        'analysis_mode: "daily_close"',
         f"requested_cutoff: {yaml_string(result['requested_cutoff'])}",
         f"data_cutoff: {yaml_string(result['data_cutoff'])}",
         f"technical_state: {yaml_string(result['technical_state'])}",
@@ -1047,7 +1436,7 @@ def render_markdown(
             "",
             f"> 执行日期：{result['analysis_date']}  ",
             f"> 技术分析请求截止：{result['requested_cutoff']}  ",
-            f"> 技术指标行情截止：{result['data_cutoff']}（最近一个完整日线）  ",
+            f"> 技术指标行情截止：{result['data_cutoff']}（{cutoff_label}）  ",
             f"> 指标引擎：TA-Lib {result['engine']['version']}  ",
             f"> 数据来源：{source.get('provider')}（{source.get('provider_symbol') or '本地文件'}）  ",
             "> 定位：只辅助判断建仓节奏，不评价公司质量或内在价值，不构成投资建议。",
@@ -1247,6 +1636,7 @@ def main() -> int:
             as_of=as_of,
             source=source,
         )
+        result["analysis_mode"] = "daily_close"
         content = (
             json.dumps(result, ensure_ascii=False, indent=2) + "\n"
             if arguments.format == "json"

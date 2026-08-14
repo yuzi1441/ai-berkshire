@@ -2,7 +2,7 @@ import math
 import sys
 import tempfile
 import unittest
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time as datetime_time, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -61,6 +61,31 @@ def sample_rows(count: int = 320) -> list[technical.PriceRow]:
                 volume=1_000_000 + index * 1_000,
             )
         )
+    return rows
+
+
+def sample_intraday_rows(days: int = 26) -> list[technical.PriceRow]:
+    rows = []
+    start = date(2026, 1, 5)
+    timezone = ZoneInfo("Asia/Shanghai")
+    for day_index in range(days):
+        trading_date = start + timedelta(days=day_index)
+        for slot in range(10):
+            close = 90 + day_index * 0.25 + slot * 0.04 + math.sin((day_index * 10 + slot) / 5) * 0.3
+            bar_time = datetime.combine(trading_date, datetime_time(9, 30), tzinfo=timezone) + timedelta(
+                minutes=30 * slot
+            )
+            rows.append(
+                technical.PriceRow(
+                    trading_date=trading_date,
+                    open=close - 0.08,
+                    high=close + 0.25,
+                    low=close - 0.2,
+                    close=close,
+                    volume=100_000 + day_index * 500 + slot * 100,
+                    bar_time=bar_time,
+                )
+            )
     return rows
 
 
@@ -298,6 +323,33 @@ class TechnicalAnalysisTests(unittest.TestCase):
         self.assertEqual(len(filtered), len(rows) - 1)
         self.assertEqual(source["incomplete_rows_removed"], 1)
 
+    def test_intraday_rows_keep_multiple_bars_on_one_trading_date(self):
+        rows = sample_intraday_rows(days=2)
+        normalized = technical.normalize_rows(rows)
+        self.assertEqual(len(normalized), 20)
+        self.assertEqual(len({row.trading_date for row in normalized}), 2)
+        self.assertEqual(normalized[0].bar_time.hour, 9)
+
+    def test_intraday_analysis_is_independent_and_uses_30m_indicators(self):
+        rows = sample_intraday_rows()
+        result = technical.compute_intraday_analysis(
+            rows,
+            company="示例公司",
+            ticker="600000.SH",
+            yahoo_symbol="600000.SS",
+            market="A股",
+            as_of=rows[-1].trading_date,
+            source={"provider": "fixture", "currency": "CNY", "rejected_rows": 0},
+        )
+        self.assertEqual(result["report_type"], "technical-intraday")
+        self.assertEqual(result["analysis_mode"], "intraday_30m")
+        self.assertEqual(result["interval"], "30m")
+        self.assertEqual(result["observations"], 260)
+        self.assertEqual(result["status"], "ready")
+        self.assertIsNotNone(result["trend"]["ema20"])
+        self.assertIsNotNone(result["intraday"]["vwap"])
+        self.assertEqual(len(result["lights"]), 4)
+
     def test_rendered_report_has_machine_readable_contract(self):
         rows = sample_rows()
         result = technical.compute_analysis(
@@ -338,6 +390,7 @@ class TechnicalAnalysisTests(unittest.TestCase):
         self.assertIn("## 指标明细与复核", markdown)
         self.assertIn("不评价公司质量或内在价值", markdown)
         self.assertIn("## 关联研究上下文", markdown)
+
         self.assertIn("data/600000/verified.json", markdown)
         self.assertIn('requested_cutoff: "2025-11-16"', markdown)
         self.assertIn("技术指标行情截止：2025-11-16（最近一个完整日线）", markdown)

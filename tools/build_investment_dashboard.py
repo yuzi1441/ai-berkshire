@@ -388,6 +388,7 @@ def technical_snapshot(report_path: Path, repo_root: Path, registry: list[dict[s
         "report_path": report_path.relative_to(repo_root).as_posix(),
         "analysis_date": analysis_date,
         "data_cutoff": data_cutoff,
+        "analysis_mode": frontmatter.get("analysis_mode") or "daily_close",
         "state": frontmatter.get("technical_state") or "待复核",
         "confidence": frontmatter.get("technical_confidence") or "待复核",
         "publishable": publishable,
@@ -432,6 +433,95 @@ def attach_technical_snapshots(
             decision["technical_analysis"] = max(candidates, key=technical_snapshot_rank).copy()
         else:
             decision["technical_analysis"] = {"status": "missing", "lights": []}
+
+
+def load_intraday_technical(data_directory: Path) -> dict[str, Any]:
+    """Load the optional independent 30-minute layer without failing daily builds."""
+    payload = load_json(
+        data_directory / "intraday_technical.json",
+        {
+            "schema_version": 1,
+            "status": "missing",
+            "interval": "30m",
+            "companies": [],
+            "failures": [],
+        },
+    )
+    if payload.get("schema_version") != 1:
+        raise ValueError("Unsupported intraday technical schema")
+    if not isinstance(payload.get("companies"), list) or not isinstance(payload.get("failures"), list):
+        raise ValueError("Invalid intraday technical payload")
+    return payload
+
+
+def intraday_technical_rank(snapshot: dict[str, Any]) -> tuple[str, str, str]:
+    return (
+        str(snapshot.get("bar_timestamp") or ""),
+        str(snapshot.get("data_cutoff") or ""),
+        str(snapshot.get("company") or ""),
+    )
+
+
+def attach_intraday_technical(
+    decisions: list[dict[str, Any]], payload: dict[str, Any]
+) -> None:
+    """Attach A-share intraday observations as a separate, non-decision field."""
+    by_ticker: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    by_company: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for snapshot in payload.get("companies") or []:
+        if not isinstance(snapshot, dict):
+            continue
+        if snapshot.get("ticker"):
+            by_ticker[str(snapshot["ticker"]).upper()].append(snapshot)
+        if snapshot.get("company"):
+            by_company[str(snapshot["company"])].append(snapshot)
+
+    failures = {
+        str(item.get("ticker") or "").upper(): item
+        for item in payload.get("failures") or []
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    for decision in decisions:
+        if str(decision.get("market") or "") != "A股":
+            decision["intraday_technical_analysis"] = {
+                "status": "not_applicable",
+                "analysis_mode": "intraday_30m",
+                "interval": payload.get("interval") or "30m",
+                "reason": "30分钟技术面目前只覆盖A股",
+                "lights": [],
+            }
+            continue
+        ticker = str(decision.get("ticker") or "").upper()
+        candidates = by_ticker.get(ticker) or by_company.get(str(decision.get("company") or "")) or []
+        if candidates:
+            decision["intraday_technical_analysis"] = max(candidates, key=intraday_technical_rank).copy()
+        elif ticker in failures:
+            failure = failures[ticker]
+            decision["intraday_technical_analysis"] = {
+                "status": "failed",
+                "analysis_mode": "intraday_30m",
+                "interval": payload.get("interval") or "30m",
+                "error": failure.get("error") or "盘中数据抓取失败",
+                "lights": [],
+            }
+        else:
+            decision["intraday_technical_analysis"] = {
+                "status": "missing",
+                "analysis_mode": "intraday_30m",
+                "interval": payload.get("interval") or "30m",
+                "lights": [],
+            }
+
+
+def load_decision_reviews(data_directory: Path) -> dict[str, Any]:
+    """Load optional DeepSeek cross-module review results as a separate layer."""
+    payload = load_json(
+        data_directory / "decision_reviews.json",
+        {"schema_version": 1, "status": "missing", "model": None, "reviews": []},
+    )
+    if payload.get("schema_version") != 1 or not isinstance(payload.get("reviews"), list):
+        raise ValueError("Invalid decision review payload")
+    return payload
 
 
 def extract_report_completed_date(lines: list[str]) -> str | None:
@@ -4464,6 +4554,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
+    intraday_technical = load_intraday_technical(data_directory)
+    decision_reviews = load_decision_reviews(data_directory)
     registry = load_registry(repo_root / "data" / "report-routing" / "company_registry.json")
     overrides = load_json(
         data_directory / "overrides.json",
@@ -4511,7 +4603,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "schema_version": 6,
         "generated_at": generated_at,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Technical snapshots and Checklist reports are attached separately and never replace the main fundamental conclusion. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
         "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,
@@ -4533,9 +4625,13 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "reports_catalog.json", catalog)
     write_json(data_directory / "decision_board.json", board)
     write_json(data_directory / "report_history.json", history_board)
+    write_json(data_directory / "intraday_technical.json", intraday_technical)
+    write_json(data_directory / "decision_reviews.json", decision_reviews)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     write_json(site_directory / "data" / "report_history.json", history_board)
+    write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
+    write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)

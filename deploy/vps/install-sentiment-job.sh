@@ -22,6 +22,16 @@ install -D -m 0644 \
 install -D -m 0644 \
     "${REPO_ROOT}/deploy/vps/ai-berkshire-sentiment-update.timer" \
     /etc/systemd/system/ai-berkshire-sentiment-update.timer
+# Keep the A/H and US technical timers in sync with the repository as well.
+install -D -m 0644 \
+    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update@.service" \
+    /etc/systemd/system/ai-berkshire-technical-update@.service
+install -D -m 0644 \
+    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update-ah.timer" \
+    /etc/systemd/system/ai-berkshire-technical-update-ah.timer
+install -D -m 0644 \
+    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update-us.timer" \
+    /etc/systemd/system/ai-berkshire-technical-update-us.timer
 
 install -d -m 0750 /etc/ai-berkshire
 if [[ ! -f /etc/ai-berkshire/sentiment.env ]]; then
@@ -32,4 +42,5 @@ fi
 
 systemctl daemon-reload
 systemctl enable --now ai-berkshire-sentiment-update.timer
+systemctl enable --now ai-berkshire-technical-update-ah.timer ai-berkshire-technical-update-us.timer
 systemctl list-timers ai-berkshire-sentiment-update.timer --no-pager
