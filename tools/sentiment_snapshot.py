@@ -223,6 +223,7 @@ class LLMConfig:
     batch_size: int = 20
     workers: int = 4
     thinking_mode: str | None = None
+    reasoning_effort: str | None = None
     json_mode: bool = False
     max_tokens: int | None = None
     timeout_seconds: int = DEFAULT_LLM_TIMEOUT_SECONDS
@@ -258,6 +259,9 @@ class LLMConfig:
         thinking_mode = os.environ.get(f"{prefix}THINKING", "disabled").strip().lower()
         if thinking_mode not in {"enabled", "disabled"}:
             thinking_mode = None
+        reasoning_effort = os.environ.get(f"{prefix}REASONING_EFFORT", "").strip().lower()
+        if reasoning_effort not in {"low", "medium", "high", "max"}:
+            reasoning_effort = None
         json_mode = os.environ.get(f"{prefix}JSON_MODE", "true").strip().lower() in {
             "1",
             "true",
@@ -303,6 +307,7 @@ class LLMConfig:
             batch_size=batch_size,
             workers=workers,
             thinking_mode=thinking_mode,
+            reasoning_effort=reasoning_effort,
             json_mode=json_mode,
             max_tokens=max_tokens,
             timeout_seconds=timeout_seconds,
@@ -1786,6 +1791,8 @@ def score_with_llm(
     }
     if config.thinking_mode:
         request_payload["thinking"] = {"type": config.thinking_mode}
+    if config.reasoning_effort:
+        request_payload["reasoning_effort"] = config.reasoning_effort
     if config.json_mode:
         request_payload["response_format"] = {"type": "json_object"}
     if config.max_tokens:

@@ -126,6 +126,8 @@ def call_model(config: LLMConfig, excerpt: str, provider: str) -> dict[str, Any]
     }
     if config.thinking_mode:
         payload["thinking"] = {"type": config.thinking_mode}
+    if config.reasoning_effort:
+        payload["reasoning_effort"] = config.reasoning_effort
     if config.json_mode:
         payload["response_format"] = {"type": "json_object"}
     payload["max_tokens"] = max(1200, config.max_tokens or 0)

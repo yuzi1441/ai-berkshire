@@ -367,6 +367,8 @@ def call_review_model(config: LLMConfig, facts: dict[str, Any]) -> dict[str, Any
     }
     if config.thinking_mode:
         payload["thinking"] = {"type": config.thinking_mode}
+    if config.reasoning_effort:
+        payload["reasoning_effort"] = config.reasoning_effort
     if config.json_mode:
         payload["response_format"] = {"type": "json_object"}
     response = http_json(
