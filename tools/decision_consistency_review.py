@@ -74,13 +74,27 @@ def load_model_config(model_override: str | None) -> LLMConfig:
     report_judgment.load_model_environment()
     dedicated = LLMConfig.from_environment("DECISION_REVIEW_")
     if dedicated:
-        return replace(dedicated, model=model_override or dedicated.model)
-    base = LLMConfig.from_environment("SENTIMENT_LLM_")
-    if base is None:
-        raise ConsistencyReviewError(
-            "missing model configuration; configure the shared OpenCode Go key and SENTIMENT_LLM_* settings"
-        )
-    return replace(base, model=model_override or os.environ.get("DECISION_REVIEW_MODEL") or base.model or "deepseek-v4-flash")
+        config = dedicated
+    else:
+        config = LLMConfig.from_environment("SENTIMENT_LLM_")
+        if config is None:
+            raise ConsistencyReviewError(
+                "missing model configuration; configure the shared OpenCode Go key and SENTIMENT_LLM_* settings"
+            )
+
+    max_tokens_text = os.environ.get("DECISION_REVIEW_MAX_TOKENS", "").strip()
+    if max_tokens_text:
+        try:
+            max_tokens = min(8192, max(900, int(max_tokens_text)))
+        except ValueError:
+            max_tokens = config.max_tokens
+    else:
+        max_tokens = config.max_tokens
+    return replace(
+        config,
+        model=model_override or os.environ.get("DECISION_REVIEW_MODEL") or config.model or "deepseek-v4-flash",
+        max_tokens=max_tokens,
+    )
 
 
 def find_decisions(board_path: Path, ticker: str | None, company: str | None) -> list[dict[str, Any]]:
