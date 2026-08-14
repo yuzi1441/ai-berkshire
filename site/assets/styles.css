@@ -431,7 +431,7 @@ h1 {
   align-items: start;
 }
 .workspace.detail-open {
-  grid-template-columns: minmax(0, 1.15fr) minmax(420px, 1fr);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .table-panel, .detail-panel {
@@ -1176,14 +1176,15 @@ tbody tr:last-child td { border-bottom: none; }
    -------------------------------------------------------------------------- */
 
 .detail-panel {
-  position: sticky;
-  top: 16px;
-  height: min(calc(100dvh - 44px), 720px);
-  max-height: min(calc(100dvh - 44px), 720px);
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   min-height: 0;
+  scroll-margin-top: 88px;
   animation: detail-in 0.18s ease;
 }
 .detail-panel[hidden] { display: none; }
@@ -1243,7 +1244,7 @@ tbody tr:last-child td { border-bottom: none; }
   min-height: 0;
   padding: 12px 14px 20px;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible;
   overscroll-behavior: contain;
   touch-action: pan-y;
   scrollbar-gutter: stable;
@@ -1706,24 +1707,18 @@ tbody tr.active .valuation-chip.ready {
 }
 
 /* --------------------------------------------------------------------------
-   响应式：抽屉（≤1100px）
+   响应式：详情仍在报告列表下方展开
    -------------------------------------------------------------------------- */
 
 @media (max-width: 1100px) {
-  body.drawer-open {
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
   .workspace.detail-open { grid-template-columns: 1fr; }
   .detail-panel {
-    position: fixed;
-    inset: auto 0 0 0;
-    top: auto;
-    height: min(84dvh, 780px);
-    max-height: min(84dvh, 780px);
-    border-radius: 16px 16px 0 0;
-    z-index: 40;
-    box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.6);
+    position: relative;
+    height: auto;
+    max-height: none;
+    border-radius: var(--radius-lg);
+    z-index: auto;
+    box-shadow: var(--shadow);
   }
   .table-wrap { max-height: none; }
   .control-band { position: static; }
@@ -1873,11 +1868,9 @@ tbody tr.active .valuation-chip.ready {
   .table-hint { display: none; }
 
   .detail-panel {
-    height: min(88vh, 760px);
-    height: min(88dvh, 760px);
-    max-height: min(88vh, 760px);
-    max-height: min(88dvh, 760px);
-    border-radius: 16px 16px 0 0;
+    height: auto;
+    max-height: none;
+    border-radius: var(--radius-lg);
   }
   .detail-head { gap: 8px; padding: 12px 12px 9px; }
   .detail-head h2 { font-size: 20px; overflow-wrap: anywhere; }

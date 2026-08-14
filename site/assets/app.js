@@ -2674,9 +2674,18 @@ function revealTableRow(row) {
   if (delta) wrap.scrollTop += delta;
 }
 
+function revealDetailPanel() {
+  if (!els.detailPanel || els.detailPanel.hidden) return;
+  const rect = els.detailPanel.getBoundingClientRect();
+  const topGuard = 82;
+  const bottomGuard = Math.min(window.innerHeight - 48, 720);
+  if (rect.top < topGuard || rect.top > bottomGuard) {
+    els.detailPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   if (!item) return;
-  const pageScrollY = window.scrollY;
   state.selectedKey = itemKey(item);
   const visible = filteredDecisions();
   state.focusIndex = visible.findIndex((x) => itemKey(x) === state.selectedKey);
@@ -2684,7 +2693,7 @@ function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   renderRows();
   renderDetail();
   if (els.detailBody) els.detailBody.scrollTop = 0;
-  if (window.scrollY !== pageScrollY) window.scrollTo(0, pageScrollY);
+  revealDetailPanel();
   if (scrollRow) {
     const row = els.rows.querySelector(`tr[data-key="${CSS.escape(state.selectedKey)}"]`);
     revealTableRow(row);
