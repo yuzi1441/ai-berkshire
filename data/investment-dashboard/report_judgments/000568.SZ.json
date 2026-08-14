@@ -1,109 +1,38 @@
 {
   "schema_version": 1,
-  "status": "review",
-  "generated_at": "2026-08-13T02:02:44+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:54:09+00:00",
   "company": "泸州老窖",
   "ticker": "000568.SZ",
   "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
   "report_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
   "judgment": {
+    "enabled": true,
     "label": "待人工复核",
     "action_kind": "unknown",
-    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "持仓者可继续等待确认信号后加至半仓以上",
-    "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "报告建议激进型现价可建1/3底仓，80-85元建仓，75元以下加仓；稳健型确认后90元以内介入；保守型回避或小仓位吃息",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "契约中基本面建议动作为‘观察’，但结论摘要中激进型明确要求‘现价建1/3底仓’和‘80-85元建仓’，存在动作与观察的冲突，正文优先",
-    "evidence": [
-      {
-        "line_start": 182,
-        "line_end": 182,
-        "quote": "| 结论摘要 | 激进型 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 80-85元建仓；75元以下加仓 |",
-        "supports": "空仓者激进型可现价建1/3底仓，并给出价格区间80-85元建仓，属于等待价格触发"
-      },
-      {
-        "line_start": 183,
-        "line_end": 183,
-        "quote": "| 激进型动作 | 80-85元建仓 |",
-        "supports": "明确等待价格80-85元建仓，价格触发是核心动作条件"
-      }
-    ],
-    "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": false,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 90.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 54.0,
-      "max": 70.0
-    }
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "激进型可现价建1/3底仓，80-85元建仓，75元以下加仓；稳健型确认后90元以内仍可介入；保守型回避或仅以类债券心态小仓位吃息",
-        "holder_action": "持仓者可继续等待确认信号后加至半仓以上",
-        "trigger_condition": "价格触发点为80-85元（激进型）和90元（稳健型），确认信号出现后加仓",
-        "summary": "报告建议激进型现价可建1/3底仓，80-85元建仓，75元以下加仓；稳健型确认后90元以内介入；保守型回避或小仓位吃息",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "契约中基本面建议动作为‘观察’，但结论摘要中激进型明确要求‘现价建1/3底仓’和‘80-85元建仓’，存在动作与观察的冲突，正文优先",
-        "evidence": [
-          {
-            "line_start": 182,
-            "line_end": 182,
-            "quote": "| 结论摘要 | 激进型 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 80-85元建仓；75元以下加仓 |",
-            "supports": "空仓者激进型可现价建1/3底仓，并给出价格区间80-85元建仓，属于等待价格触发"
-          },
-          {
-            "line_start": 183,
-            "line_end": 183,
-            "quote": "| 激进型动作 | 80-85元建仓 |",
-            "supports": "明确等待价格80-85元建仓，价格触发是核心动作条件"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "可分批买入",
-        "action_kind": "buy",
-        "empty_position_action": "激进型可按现价建立1/3底仓，或在80-85元建仓；稳健型等待确认后在90元以内介入，保守型回避或仅小仓位吃息",
-        "holder_action": "确认信号出现后加至半仓以上，75元以下加仓",
-        "trigger_condition": "确认信号出现；80-85元建仓，75元以下加仓；稳健型确认后90元以内介入",
-        "summary": "激进型现价建1/3底仓，确认后加仓；稳健型等待确认",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "契约基本面建议为“观察”，保守型为“回避或仅小仓位吃息”，但最终结论及激进型动作允许现价建立1/3底仓，存在字段冲突；按明确空仓动作和最终结论判定",
-        "evidence": [
-          {
-            "line_start": 182,
-            "line_end": 182,
-            "quote": "| 结论摘要 | 激进型 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 80-85元建仓；75元以下加仓 |",
-            "supports": "明确给出空仓投资者激进型当前可现价建立1/3底仓，并规定确认信号及价格条件下加仓"
-          },
-          {
-            "line_start": 183,
-            "line_end": 186,
-            "quote": "| 激进型动作 | 80-85元建仓 | | 激进型价格区间 | 80-85元 | | 稳健型动作 | 确认后90元以内仍可介入 | | 稳健型价格区间 | 90元 |",
-            "supports": "最终动作进一步明确激进型建仓价格区间和稳健型等待确认后的介入条件"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
     "label": false,
     "action_kind": false,
-    "report_field_conflict": true
-  }
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

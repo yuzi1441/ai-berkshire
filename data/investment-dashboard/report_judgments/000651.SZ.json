@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "review",
-  "generated_at": "2026-08-13T01:54:23+08:00",
+  "generated_at": "2026-08-14T10:54:48+00:00",
   "company": "格力电器",
   "ticker": "000651.SZ",
   "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
@@ -10,31 +10,31 @@
     "label": "待人工复核",
     "action_kind": "unknown",
     "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "持仓者维持观察，不急于卖出。",
+    "holder_action": "报告未给出明确减/增持建议，基本面建议为‘观察’，可推断为持有观察，暂无加仓或卖出动作。",
     "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "报告认为格力是好生意但已成熟，整体建议观察；不同风格触发价格各异，空仓者需等待更低价格或基本面改善。",
+    "summary": "报告基本面建议观察，生意好但已成熟。激进型38元以下可分批建仓，稳健型等32-35元，保守型等30元以下，整体等待更低价格或基本面改善。",
     "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "正文与契约一致，均给出价格触发条件，不冲突。",
+    "report_field_conflict": false,
+    "conflict_note": "契约内不同风险偏好动作存在差异，但基本面建议动作为观察，与整体等待更低价格的基调一致，无冲突。",
     "evidence": [
       {
-        "line_start": 288,
-        "line_end": 288,
-        "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
-        "supports": "明确指出空仓稳健型应等待价格或信号，属于等待类型。"
+        "line_start": 284,
+        "line_end": 284,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "支持最终结论为观察，空仓者不应立即行动，应等待价格或信号。"
       },
       {
-        "line_start": 284,
-        "line_end": 285,
-        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
-        "supports": "最终结论为观察，表示当前不行动，支持等待判断。"
+        "line_start": 286,
+        "line_end": 288,
+        "quote": "| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 | | 激进型价格区间 | 38 元 | | 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
+        "supports": "支持空仓者需等待价格触发，不同风险偏好对应不同触发价格，当前未知价格下不构成立即买入条件。"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": false,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": false,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 55.0,
     "price_source": "本地程序从主报告价格行动表确定性提取"
@@ -45,67 +45,67 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者当前不应买入；稳健型须等待股价跌至32-35元，激进型可在38元以下分批建仓但上限受控。",
-        "holder_action": "持仓者维持观察，不急于卖出。",
-        "trigger_condition": "价格触发：稳健型32-35元，激进型38元以下；或基本面改善信号。",
-        "summary": "报告认为格力是好生意但已成熟，整体建议观察；不同风格触发价格各异，空仓者需等待更低价格或基本面改善。",
+        "empty_position_action": "空仓者当前不建议立即买入，需等待价格触发：激进型可在38元以下分批建仓，稳健型等待32-35元或基本面改善信号，保守型等待30元以下且分红政策未恶化时再考虑重仓。",
+        "holder_action": "报告未给出明确减/增持建议，基本面建议为‘观察’，可推断为持有观察，暂无加仓或卖出动作。",
+        "trigger_condition": "价格触发：激进型38元以下；稳健型32-35元；保守型30元以下且分红政策未恶化。",
+        "summary": "报告基本面建议观察，生意好但已成熟。激进型38元以下可分批建仓，稳健型等32-35元，保守型等30元以下，整体等待更低价格或基本面改善。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文与契约一致，均给出价格触发条件，不冲突。",
+        "conflict_note": "契约内不同风险偏好动作存在差异，但基本面建议动作为观察，与整体等待更低价格的基调一致，无冲突。",
         "evidence": [
           {
-            "line_start": 288,
-            "line_end": 288,
-            "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
-            "supports": "明确指出空仓稳健型应等待价格或信号，属于等待类型。"
+            "line_start": 284,
+            "line_end": 284,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "支持最终结论为观察，空仓者不应立即行动，应等待价格或信号。"
           },
           {
-            "line_start": 284,
-            "line_end": 285,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
-            "supports": "最终结论为观察，表示当前不行动，支持等待判断。"
+            "line_start": 286,
+            "line_end": 288,
+            "quote": "| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 | | 激进型价格区间 | 38 元 | | 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
+            "supports": "支持空仓者需等待价格触发，不同风险偏好对应不同触发价格，当前未知价格下不构成立即买入条件。"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
-        "label": "可分批买入",
-        "action_kind": "buy",
-        "empty_position_action": "激进型空仓者可在38元以下分批建仓，并控制总仓位上限；稳健及保守型投资者仍需等待各自条件。",
-        "holder_action": "报告片段未给出持仓者的明确操作建议。",
-        "trigger_condition": "激进型在38元以下；稳健型等待32-35元或基本面改善信号；保守型在30元以下且分红政策未恶化。",
-        "summary": "生意质量较好但已成熟；激进型可在38元以下分批建仓，其他风格等待条件。",
-        "confidence": "medium",
-        "report_field_conflict": true,
-        "conflict_note": "契约粗标签“基本面建议动作”为“观察”，但同一契约明确给出激进型空仓者“38元以下分批建仓”的具体买入动作；按优先级采用明确空仓动作。",
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓投资者应等待价格跌至38元以下（激进型）或32-35元/30元以下（根据风险偏好），或等待基本面改善信号后行动。",
+        "holder_action": "基于“观察”建议，持仓者可能保持持有但不加仓，等待进一步信号。",
+        "trigger_condition": "价格跌至38元以下或32-35元区间，或出现基本面改善信号",
+        "summary": "格力电器为成熟好生意，中央空调领域更值得跟踪；建议在价格下跌或基本面改善后考虑行动。",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突，报告片段仅包含契约部分，未提供正文内容。",
         "evidence": [
-          {
-            "line_start": 285,
-            "line_end": 285,
-            "quote": "| 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
-            "supports": "支持最终结论：公司生意质量较好但已成熟，关注重点偏向中央空调。"
-          },
           {
             "line_start": 286,
             "line_end": 286,
             "quote": "| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 |",
-            "supports": "支持空仓激进型投资者当前可执行分批买入动作。"
+            "supports": "该证据显示空仓激进型投资者可在价格低于38元时建仓，但当前未指定价格，需等待价格条件，支持“等待价格”判断。"
           },
           {
-            "line_start": 284,
-            "line_end": 284,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持存在与具体激进型建仓动作相冲突的看板粗标签。"
+            "line_start": 288,
+            "line_end": 288,
+            "quote": "| 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
+            "supports": "该证据直接要求稳健型空仓投资者等待更低价格或事件验证，归类为等待价格，覆盖空仓建议。"
+          },
+          {
+            "line_start": 285,
+            "line_end": 285,
+            "quote": "| 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |",
+            "supports": "该证据为最终结论摘要，表明生意成熟但值得跟踪，支持整体建议为观察或等待，而非立即行动。"
           }
         ]
       }
     }
   },
   "consensus": {
-    "label": false,
-    "action_kind": false,
-    "report_field_conflict": false
+    "label": true,
+    "action_kind": true,
+    "report_field_conflict": true
   }
 }

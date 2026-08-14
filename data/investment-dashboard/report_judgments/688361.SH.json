@@ -1,39 +1,39 @@
 {
   "schema_version": 1,
-  "status": "review",
-  "generated_at": "2026-08-13T01:52:12+08:00",
+  "status": "ready",
+  "generated_at": "2026-08-14T10:04:20+00:00",
   "company": "skyverse-tech",
   "ticker": "688361.SH",
   "report_path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
   "report_sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
   "judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "持仓者应回避或考虑卖出，因当前价格严重透支未来增长，投资论文已不具吸引力。",
-    "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "报告建议空仓者回避，因当前价格严重透支未来5-7年增长，等待回调至57-86元再考虑。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前应回避，不买入；若看好该赛道，等待股价回调至CNY 57-86（PS 10-15x）再入场。",
+    "holder_action": "持仓者被强烈建议减仓或清仓。",
+    "trigger_condition": "股价回调至CNY 57-86（PS 10-15x），或出现经营现金流转正等加仓信号。",
+    "summary": "报告认为中科飞测赛道优质但当前估值极度透支，空仓者回避并等待价格回落至57-86元，持仓者应减仓。",
     "confidence": "high",
     "report_field_conflict": true,
-    "conflict_note": "正文与契约一致，均明确建议回避。",
+    "conflict_note": "正文与看板契约一致，均建议观察/回避并等待价格。",
     "evidence": [
       {
-        "line_start": 346,
-        "line_end": 346,
-        "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
-        "supports": "明确给出空仓者回避的动作，且等待回调价格是回避后的后续条件，而非当前可行动价格。"
+        "line_start": 286,
+        "line_end": 286,
+        "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+        "supports": "明确给出空仓者当前回避且需等待价格触发点，支持'等待价格'标签。"
       },
       {
-        "line_start": 345,
-        "line_end": 345,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "契约中动作虽为观察，但结论摘要详细说明空仓者回避，且条件为等待更低价格，故整体判断为回避/卖出。"
+        "line_start": 316,
+        "line_end": 317,
+        "quote": "- 本报告最重要的结论不是\"公司不好\"（公司在正确的赛道上做正确的事），而是 **\"价格太贵\"**——即使最乐观的情景，3年上行也仅3.7% - 建议读者**持续跟踪但等待合理价格**：PS回到10-15x（股价CNY 57-86）时，中科飞测将成为一个风险回报比极佳的投资标的",
+        "supports": "最终结论强调价格过贵并等待合理价格，印证等待价格而非单纯回避。"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": false,
-    "label_detail_consensus": false,
+    "model_consensus": true,
+    "label_detail_consensus": true,
     "conflict_flag_consensus": false,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档"
@@ -42,63 +42,63 @@
     "primary": {
       "model": "deepseek-v4-flash",
       "result": {
-        "label": "回避/卖出",
-        "action_kind": "no",
-        "empty_position_action": "空仓者回避，当前价格严重透支未来5-7年增长，不应入场；等待回调至CNY 57-86（PS 10-15x）再考虑。",
-        "holder_action": "持仓者应回避或考虑卖出，因当前价格严重透支未来增长，投资论文已不具吸引力。",
-        "trigger_condition": "价格回调至CNY 57-86（PS 10-15x）区间。",
-        "summary": "报告建议空仓者回避，因当前价格严重透支未来5-7年增长，等待回调至57-86元再考虑。",
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者当前应回避，不买入；若看好该赛道，等待股价回调至CNY 57-86（PS 10-15x）再入场。",
+        "holder_action": "持仓者被强烈建议减仓或清仓。",
+        "trigger_condition": "股价回调至CNY 57-86（PS 10-15x），或出现经营现金流转正等加仓信号。",
+        "summary": "报告认为中科飞测赛道优质但当前估值极度透支，空仓者回避并等待价格回落至57-86元，持仓者应减仓。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文与契约一致，均明确建议回避。",
+        "conflict_note": "正文与看板契约一致，均建议观察/回避并等待价格。",
         "evidence": [
           {
-            "line_start": 346,
-            "line_end": 346,
-            "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
-            "supports": "明确给出空仓者回避的动作，且等待回调价格是回避后的后续条件，而非当前可行动价格。"
+            "line_start": 286,
+            "line_end": 286,
+            "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+            "supports": "明确给出空仓者当前回避且需等待价格触发点，支持'等待价格'标签。"
           },
           {
-            "line_start": 345,
-            "line_end": 345,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "契约中动作虽为观察，但结论摘要详细说明空仓者回避，且条件为等待更低价格，故整体判断为回避/卖出。"
+            "line_start": 316,
+            "line_end": 317,
+            "quote": "- 本报告最重要的结论不是\"公司不好\"（公司在正确的赛道上做正确的事），而是 **\"价格太贵\"**——即使最乐观的情景，3年上行也仅3.7% - 建议读者**持续跟踪但等待合理价格**：PS回到10-15x（股价CNY 57-86）时，中科飞测将成为一个风险回报比极佳的投资标的",
+            "supports": "最终结论强调价格过贵并等待合理价格，印证等待价格而非单纯回避。"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "当前不入场，等待回调至CNY 57-86（PS 10-15x）再入场。",
-        "holder_action": "未给出。",
-        "trigger_condition": "回调至CNY 57-86（PS 10-15x）。",
-        "summary": "当前价格严重透支增长，空仓者等待回调至CNY 57-86再入场。",
-        "confidence": "medium",
+        "empty_position_action": "回避当前价格，等待回调至CNY 57-86（PS 10-15x）再入场",
+        "holder_action": "强烈建议减仓或清仓",
+        "trigger_condition": "股价回调至CNY 57-86（PS 10-15x）",
+        "summary": "空仓者应回避，因当前价格严重透支增长，等待回调至合理价格区间再考虑入场。",
+        "confidence": "high",
         "report_field_conflict": true,
-        "conflict_note": "看板粗标签为“观察”，但结论摘要同时写“空仓者 回避”及“等待回调至CNY 57-86再入场”。按空仓者明确的价格触发动作，归为等待价格/watch，而非回避/卖出。",
+        "conflict_note": "正文建议空仓者'回避'但附加等待价格条件；契约中基本面建议动作为'观察'，存在表述差异。采用正文判断，因正文明确要求等待价格触发。",
         "evidence": [
           {
-            "line_start": 345,
-            "line_end": 345,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "看板契约的粗标签为观察。"
+            "line_start": 286,
+            "line_end": 286,
+            "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
+            "supports": "该证据支持空仓者明确动作是回避并等待价格触发。"
           },
           {
-            "line_start": 346,
-            "line_end": 346,
-            "quote": "| 结论摘要 | 空仓者 回避。当前价格严重透支未来5-7年增长。 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |",
-            "supports": "覆盖空仓建议和最终结论；明确给出等待更低价格后再入场的价格触发动作。"
+            "line_start": 316,
+            "line_end": 317,
+            "quote": "- 本报告最重要的结论不是\"公司不好\"（公司在正确的赛道上做正确的事），而是 **\"价格太贵\"**——即使最乐观的情景，3年上行也仅3.7% - 建议读者**持续跟踪但等待合理价格**：PS回到10-15x（股价CNY 57-86）时，中科飞测将成为一个风险回报比极佳的投资标的",
+            "supports": "该证据支持最终结论是价格太贵，应等待合理价格。"
           }
         ]
       }
     }
   },
   "consensus": {
-    "label": false,
-    "action_kind": false,
+    "label": true,
+    "action_kind": true,
     "report_field_conflict": false
   }
 }

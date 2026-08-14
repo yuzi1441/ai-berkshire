@@ -1,115 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:58:15+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:55:39+00:00",
   "company": "紫金矿业",
   "ticker": "601899.SH",
   "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
   "report_sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者当前应观察，不追价；若激进型可小仓分批操作，但优先等待价格回落至26-30元区间；稳健型和保守型需等待更低价格或更多验证。",
-    "holder_action": "持仓者继续持有，但需关注买入失效条件，一旦触发应及时减仓或离场。",
-    "trigger_condition": "激进型价格区间26-30元；稳健型价格不高于26元；保守型价格不高于25元；或等待正式半年报和项目修复。",
-    "summary": "报告认为A股32.55元合理但安全边际薄，建议观察；H股可小仓分批，但折价可能长期存在；各类型投资者均需等待价格回落或验证。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "正文与契约均未要求回避或卖出，且报告明确给出价格触发点，属等待价格类型。",
-    "evidence": [
-      {
-        "line_start": 383,
-        "line_end": 383,
-        "quote": "| 结论摘要 | A 股 32.55 元合理但安全边际薄，当前观察、不追价；H 股 32.92 港元因折价可小仓分批观察，但折价可能长期存在。 |",
-        "supports": "空仓者应观察不追价，H股可小仓但需谨慎，符合等待价格判断。"
-      },
-      {
-        "line_start": 384,
-        "line_end": 385,
-        "quote": "| 激进型动作 | 小仓分批，优先等待价格回落 | | 激进型价格区间 | 26-30 元 |",
-        "supports": "明确要求等待价格回落并给出触发区间，归为等待价格/watch。"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 34.9,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 30.2,
-      "max": 34.9
-    }
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者当前应观察，不追价；若激进型可小仓分批操作，但优先等待价格回落至26-30元区间；稳健型和保守型需等待更低价格或更多验证。",
-        "holder_action": "持仓者继续持有，但需关注买入失效条件，一旦触发应及时减仓或离场。",
-        "trigger_condition": "激进型价格区间26-30元；稳健型价格不高于26元；保守型价格不高于25元；或等待正式半年报和项目修复。",
-        "summary": "报告认为A股32.55元合理但安全边际薄，建议观察；H股可小仓分批，但折价可能长期存在；各类型投资者均需等待价格回落或验证。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文与契约均未要求回避或卖出，且报告明确给出价格触发点，属等待价格类型。",
-        "evidence": [
-          {
-            "line_start": 383,
-            "line_end": 383,
-            "quote": "| 结论摘要 | A 股 32.55 元合理但安全边际薄，当前观察、不追价；H 股 32.92 港元因折价可小仓分批观察，但折价可能长期存在。 |",
-            "supports": "空仓者应观察不追价，H股可小仓但需谨慎，符合等待价格判断。"
-          },
-          {
-            "line_start": 384,
-            "line_end": 385,
-            "quote": "| 激进型动作 | 小仓分批，优先等待价格回落 | | 激进型价格区间 | 26-30 元 |",
-            "supports": "明确要求等待价格回落并给出触发区间，归为等待价格/watch。"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "A股当前观察、不追价，优先等待价格回落后再考虑小仓分批；稳健型还需等待正式半年报和项目修复。",
-        "holder_action": "报告片段未对已有A股持仓者给出明确操作建议。",
-        "trigger_condition": "优先等待A股价格回落至26-30元；稳健型不高于26元，并等待正式半年报和项目修复。",
-        "summary": "A股32.55元安全边际薄，当前观察不追价，等待回落及经营验证。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文片段仅含看板决策契约；其中“当前观察、不追价”与各风险偏好下等待价格或验证的安排一致，不存在冲突。",
-        "evidence": [
-          {
-            "line_start": 383,
-            "line_end": 383,
-            "quote": "| 结论摘要 | A 股 32.55 元合理但安全边际薄，当前观察、不追价；H 股 32.92 港元因折价可小仓分批观察，但折价可能长期存在。 |",
-            "supports": "支持空仓者对A股当前观察、不追价，并覆盖报告最终结论。"
-          },
-          {
-            "line_start": 384,
-            "line_end": 385,
-            "quote": "| 激进型动作 | 小仓分批，优先等待价格回落 | | 激进型价格区间 | 26-30 元 |",
-            "supports": "支持空仓者以价格回落作为优先触发条件，归为等待价格。"
-          },
-          {
-            "line_start": 386,
-            "line_end": 387,
-            "quote": "| 稳健型动作 | 观察，等待正式半年报和项目修复 | | 稳健型价格区间 | 不高于 26 元 |",
-            "supports": "支持稳健型空仓者等待经营验证且价格不高于26元。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

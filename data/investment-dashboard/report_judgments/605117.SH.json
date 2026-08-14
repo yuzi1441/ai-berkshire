@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:51:48+08:00",
+  "generated_at": "2026-08-14T10:49:44+00:00",
   "company": "deye",
   "ticker": "605117.SH",
   "report_path": "reports/deye/deye-investment-research-20260623.md",
@@ -9,26 +9,32 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "空仓者等待回调至CNY 70-80元区间再考虑建仓；若2026Q2-Q3继续高增长且禁令影响有限，可在CNY 85-95元区间建5%观察仓",
-    "holder_action": "持仓者继续观察，等待更佳价格或业绩验证",
-    "trigger_condition": "价格触发条件为CNY 70-80元区间（2026E PE 13-15x）；事件触发条件为2026Q2-Q3业绩继续高增长且欧盟禁令影响有限",
-    "summary": "当前PE 41x偏高，空仓者应等待回调至70-80元区间（PE 13-15x）再建仓；若Q2-Q3增长持续且禁令影响有限，可在85-95元区间建5%观察仓",
+    "empty_position_action": "空仓者等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓；若2026Q2-Q3保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+    "holder_action": "持仓者持有但控制仓位在10%以内，密切关注欧盟禁令执行和应收账款趋势，触发卖出信号则减仓",
+    "trigger_condition": "股价回调至CNY 70-80区间（2026E PE 13-15x）",
+    "summary": "德业生意质量优秀但当前PE偏高，空仓者等待回调至70-80元再建仓，持仓者持有但控制仓位，关注欧盟禁令风险",
     "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "契约字段基本面建议动作为'观察'，结论摘要明确给出等待价格区间，均非'回避/卖出'，与正文一致；但契约结论摘要要求等待价格，因此不能归为回避，需按等待价格处理",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约不冲突，契约称‘观察’，正文明确给出等待价格区间，是更具体的执行指引",
     "evidence": [
       {
-        "line_start": 411,
-        "line_end": 411,
-        "quote": "| 结论摘要 | 空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
-        "supports": "报告明确要求空仓者等待更低价格区间（70-80元）再建仓，属于'等待价格'动作"
+        "line_start": 358,
+        "line_end": 358,
+        "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
+        "supports": "明确给出空仓者等待价格触发条件，归为‘等待价格/watch’"
+      },
+      {
+        "line_start": 390,
+        "line_end": 390,
+        "quote": "- **当前PE 41倍需要\"大部分乐观假设兑现\"才能获得合理回报**。如果投资者对欧盟禁令影响和业绩持续性没有高于市场共识的信心，建议等待更好的价格",
+        "supports": "最终结论再次强调等待更好价格，支持‘等待价格/watch’判断"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": true,
     "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
+    "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档"
   },
@@ -38,47 +44,53 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者等待回调至CNY 70-80元区间再考虑建仓；若2026Q2-Q3继续高增长且禁令影响有限，可在CNY 85-95元区间建5%观察仓",
-        "holder_action": "持仓者继续观察，等待更佳价格或业绩验证",
-        "trigger_condition": "价格触发条件为CNY 70-80元区间（2026E PE 13-15x）；事件触发条件为2026Q2-Q3业绩继续高增长且欧盟禁令影响有限",
-        "summary": "当前PE 41x偏高，空仓者应等待回调至70-80元区间（PE 13-15x）再建仓；若Q2-Q3增长持续且禁令影响有限，可在85-95元区间建5%观察仓",
+        "empty_position_action": "空仓者等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓；若2026Q2-Q3保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+        "holder_action": "持仓者持有但控制仓位在10%以内，密切关注欧盟禁令执行和应收账款趋势，触发卖出信号则减仓",
+        "trigger_condition": "股价回调至CNY 70-80区间（2026E PE 13-15x）",
+        "summary": "德业生意质量优秀但当前PE偏高，空仓者等待回调至70-80元再建仓，持仓者持有但控制仓位，关注欧盟禁令风险",
         "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "契约字段基本面建议动作为'观察'，结论摘要明确给出等待价格区间，均非'回避/卖出'，与正文一致；但契约结论摘要要求等待价格，因此不能归为回避，需按等待价格处理",
+        "report_field_conflict": false,
+        "conflict_note": "正文与看板契约不冲突，契约称‘观察’，正文明确给出等待价格区间，是更具体的执行指引",
         "evidence": [
           {
-            "line_start": 411,
-            "line_end": 411,
-            "quote": "| 结论摘要 | 空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
-            "supports": "报告明确要求空仓者等待更低价格区间（70-80元）再建仓，属于'等待价格'动作"
+            "line_start": 358,
+            "line_end": 358,
+            "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
+            "supports": "明确给出空仓者等待价格触发条件，归为‘等待价格/watch’"
+          },
+          {
+            "line_start": 390,
+            "line_end": 390,
+            "quote": "- **当前PE 41倍需要\"大部分乐观假设兑现\"才能获得合理回报**。如果投资者对欧盟禁令影响和业绩持续性没有高于市场共识的信心，建议等待更好的价格",
+            "supports": "最终结论再次强调等待更好价格，支持‘等待价格/watch’判断"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓；若2026Q2-Q3继续高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓。",
-        "holder_action": "报告片段未给出持仓者动作。",
-        "trigger_condition": "价格主触发为回调至CNY 70-80区间；替代条件为2026Q2-Q3高增长且欧盟禁令影响有限时CNY 85-95区间建5%观察仓。",
-        "summary": "空仓者应等待回调至70-80元再考虑建仓，满足经营验证可于85-95元建5%观察仓。",
-        "confidence": "high",
+        "empty_position_action": "等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓",
+        "holder_action": "持有但控制仓位在10%以内",
+        "trigger_condition": "股价回调至CNY 70-80区间（2026E PE 13-15x），以及2026Q2-Q3高增长且欧盟禁令影响有限",
+        "summary": "空仓者等待回调至CNY 70-80区间建仓，当前PE 41x偏高且欧盟禁令未充分定价。",
+        "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "看板粗标签为“观察”，与结论摘要中以价格回调为主触发的等待价格判断一致。",
+        "conflict_note": "正文与契约一致，均建议空仓者等待，无冲突。",
         "evidence": [
           {
-            "line_start": 410,
-            "line_end": 410,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持当前不立即采取买入或卖出动作，处于观察状态。"
+            "line_start": 358,
+            "line_end": 358,
+            "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
+            "supports": "该证据支持空仓者应等待价格回调至指定区间再行动，属于等待价格/watch。"
           },
           {
-            "line_start": 411,
-            "line_end": 411,
-            "quote": "| 结论摘要 | 空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
-            "supports": "明确规定空仓者以70-80元价格回调为主要行动触发，并给出经营验证后的5%观察仓条件；同时构成最终结论。"
+            "line_start": 390,
+            "line_end": 390,
+            "quote": "- **当前PE 41倍需要\"大部分乐观假设兑现\"才能获得合理回报**。如果投资者对欧盟禁令影响和业绩持续性没有高于市场共识的信心，建议等待更好的价格",
+            "supports": "该证据支持最终结论是建议等待更好的价格，进一步确认空仓者应观望。"
           }
         ]
       }
@@ -87,6 +99,6 @@
   "consensus": {
     "label": true,
     "action_kind": true,
-    "report_field_conflict": false
+    "report_field_conflict": true
   }
 }

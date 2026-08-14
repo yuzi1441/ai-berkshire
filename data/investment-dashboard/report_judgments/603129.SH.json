@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:49:26+08:00",
+  "generated_at": "2026-08-14T10:01:45+00:00",
   "company": "chunfeng-dongli",
   "ticker": "603129.SH",
   "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
@@ -9,25 +9,25 @@
   "judgment": {
     "label": "可分批买入",
     "action_kind": "buy",
-    "empty_position_action": "建议空仓者在当前价位配置半仓建仓，后续在理想加仓价位200-220元继续分批买入。",
-    "holder_action": "建议持仓者继续持有，并密切关注2026Q2-Q3的关税影响和极核盈利进度。",
-    "trigger_condition": "理想加仓价位：200-220元（对应Forward PE 12-14x）",
-    "summary": "当前价位可分批建仓半仓，估值安全边际，等待200-220元理想加仓位。",
+    "empty_position_action": "空仓者建议分批建仓，当前价位可配置半仓，需密切跟踪2026Q2-Q3关税影响和极核盈利进度",
+    "holder_action": "持仓者继续持有但不急于加仓，关注极核毛利率转正、美国关税政策明确化、欧洲渠道重建完成三个拐点",
+    "trigger_condition": "当前Forward PE 15x具备安全边际即可建仓半仓；理想加仓价位200-220元（Forward PE 12-14x）",
+    "summary": "空仓者可分批建仓半仓，估值有安全边际，需跟踪关税与极核进度；持仓者持有不急于加仓",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文和契约一致，均建议分批买入。",
+    "conflict_note": "正文最终决策与看板契约均建议分批买入，无冲突",
     "evidence": [
       {
-        "line_start": 529,
-        "line_end": 529,
-        "quote": "基本面建议动作 | 分批买入",
-        "supports": "契约明确建议分批买入，支持可分批买入判断。"
+        "line_start": 437,
+        "line_end": 437,
+        "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
+        "supports": "明确给出空仓者当前分批建仓半仓的买入动作"
       },
       {
         "line_start": 530,
         "line_end": 530,
-        "quote": "空仓者 建议分批建仓（当前价位可配置半仓）。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x）",
-        "supports": "正文明确空仓者当前可配置半仓，并给出理想加仓价位，支持可分批买入及空仓者动作。"
+        "quote": "| 结论摘要 | 空仓者 建议分批建仓（当前价位可配置半仓）。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
+        "supports": "看板契约结论摘要与正文一致，确认空仓者当前可分批买入"
       }
     ],
     "enabled": true,
@@ -44,53 +44,53 @@
       "result": {
         "label": "可分批买入",
         "action_kind": "buy",
-        "empty_position_action": "建议空仓者在当前价位配置半仓建仓，后续在理想加仓价位200-220元继续分批买入。",
-        "holder_action": "建议持仓者继续持有，并密切关注2026Q2-Q3的关税影响和极核盈利进度。",
-        "trigger_condition": "理想加仓价位：200-220元（对应Forward PE 12-14x）",
-        "summary": "当前价位可分批建仓半仓，估值安全边际，等待200-220元理想加仓位。",
+        "empty_position_action": "空仓者建议分批建仓，当前价位可配置半仓，需密切跟踪2026Q2-Q3关税影响和极核盈利进度",
+        "holder_action": "持仓者继续持有但不急于加仓，关注极核毛利率转正、美国关税政策明确化、欧洲渠道重建完成三个拐点",
+        "trigger_condition": "当前Forward PE 15x具备安全边际即可建仓半仓；理想加仓价位200-220元（Forward PE 12-14x）",
+        "summary": "空仓者可分批建仓半仓，估值有安全边际，需跟踪关税与极核进度；持仓者持有不急于加仓",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文和契约一致，均建议分批买入。",
+        "conflict_note": "正文最终决策与看板契约均建议分批买入，无冲突",
         "evidence": [
           {
-            "line_start": 529,
-            "line_end": 529,
-            "quote": "基本面建议动作 | 分批买入",
-            "supports": "契约明确建议分批买入，支持可分批买入判断。"
-          },
-          {
-            "line_start": 530,
-            "line_end": 530,
-            "quote": "空仓者 建议分批建仓（当前价位可配置半仓）。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x）",
-            "supports": "正文明确空仓者当前可配置半仓，并给出理想加仓价位，支持可分批买入及空仓者动作。"
-          }
-        ]
-      }
-    },
-    "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "可分批买入",
-        "action_kind": "buy",
-        "empty_position_action": "建议分批建仓，当前价位可配置半仓。",
-        "holder_action": "未给出",
-        "trigger_condition": "理想加仓价位：200-220元（对应Forward PE 12-14x）",
-        "summary": "空仓者建议分批建仓，当前可配置半仓，并跟踪关税及极核盈利进度。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "所给片段仅含看板决策契约；其中基本面建议动作与结论摘要一致，未见冲突。",
-        "evidence": [
-          {
-            "line_start": 529,
-            "line_end": 529,
-            "quote": "| 基本面建议动作 | 分批买入 |",
-            "supports": "支持标签为可分批买入及空仓者可采取买入动作。"
+            "line_start": 437,
+            "line_end": 437,
+            "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
+            "supports": "明确给出空仓者当前分批建仓半仓的买入动作"
           },
           {
             "line_start": 530,
             "line_end": 530,
             "quote": "| 结论摘要 | 空仓者 建议分批建仓（当前价位可配置半仓）。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
-            "supports": "支持空仓者当前分批建仓、理想加仓条件及最终结论。"
+            "supports": "看板契约结论摘要与正文一致，确认空仓者当前可分批买入"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "mimo-v2.5-pro",
+      "result": {
+        "label": "可分批买入",
+        "action_kind": "buy",
+        "empty_position_action": "建议分批建仓，当前价位可配置半仓，需密切跟踪关税影响和极核盈利进度",
+        "holder_action": "继续持有，但不急于加仓",
+        "trigger_condition": "需跟踪2026Q2-Q3关税影响和极核盈利进度；加仓信号包括股价跌至200元以下或极核毛利率转正等",
+        "summary": "空仓者建议分批建仓，当前估值有安全边际，理想加仓价位200-220元，需监控关税和盈利。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突，正文空仓建议与契约‘分批买入’一致",
+        "evidence": [
+          {
+            "line_start": 437,
+            "line_end": 437,
+            "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
+            "supports": "该证据支持空仓者当前可分批建仓的判断"
+          },
+          {
+            "line_start": 530,
+            "line_end": 530,
+            "quote": "| 结论摘要 | 空仓者 建议分批建仓（当前价位可配置半仓）。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |",
+            "supports": "该证据支持报告的最终结论，与空仓建议一致"
           }
         ]
       }

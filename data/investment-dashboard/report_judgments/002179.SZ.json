@@ -1,115 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:52:53+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:50:01+00:00",
   "company": "中航光电科技股份有限公司",
   "ticker": "002179.SZ",
   "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
   "report_sha256": "9afce21252d49e59c2cc384012bad9f27ae24d964547d1b807f850e60e914b67",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "不追买；¥29–32仅适合激进小仓，¥24–28才进入稳健分批区",
-    "holder_action": "若成本较低可持有观察，不因短期反弹加仓；等2026中报验证毛利和现金流",
-    "trigger_condition": "价格跌至¥24–28（稳健分批区）或毛利率回到31%以上且现金流改善",
-    "summary": "公司质量高但盈利未见拐点，当前估值缺乏安全边际，建议观察；空仓者等待价格回落至24-28元或基本面验证。",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "正文明确空仓者不追买、等24-28元或验证信号，属于等待价格/watch，契约中激进型动作虽含'小仓试仓'但正文未鼓励当前买入，故按正文归类。",
-    "evidence": [
-      {
-        "line_start": 323,
-        "line_end": 323,
-        "quote": "| 空仓者 | 不追买；¥29–32 仅适合激进小仓，¥24–28 才进入稳健分批区 |",
-        "supports": "空仓者明确不追买并给出价格触发点，归为等待价格"
-      },
-      {
-        "line_start": 319,
-        "line_end": 319,
-        "quote": "**最终建议：观察。** 这是“公司质量高于当前投资吸引力”的典型。公司资产负债表安全、技术与认证壁垒真实；但 2025–2026Q1 盈利和现金流尚未见底，当前价要求 15%–23% 级别的持续盈利修复，风险回报不够偏向买方。",
-        "supports": "最终结论为观察，支持'wait'标签"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "entry_ceiling": 32.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 29.0,
-      "max": 32.0
-    }
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "不追买；¥29–32仅适合激进小仓，¥24–28才进入稳健分批区",
-        "holder_action": "若成本较低可持有观察，不因短期反弹加仓；等2026中报验证毛利和现金流",
-        "trigger_condition": "价格跌至¥24–28（稳健分批区）或毛利率回到31%以上且现金流改善",
-        "summary": "公司质量高但盈利未见拐点，当前估值缺乏安全边际，建议观察；空仓者等待价格回落至24-28元或基本面验证。",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "正文明确空仓者不追买、等24-28元或验证信号，属于等待价格/watch，契约中激进型动作虽含'小仓试仓'但正文未鼓励当前买入，故按正文归类。",
-        "evidence": [
-          {
-            "line_start": 323,
-            "line_end": 323,
-            "quote": "| 空仓者 | 不追买；¥29–32 仅适合激进小仓，¥24–28 才进入稳健分批区 |",
-            "supports": "空仓者明确不追买并给出价格触发点，归为等待价格"
-          },
-          {
-            "line_start": 319,
-            "line_end": 319,
-            "quote": "**最终建议：观察。** 这是“公司质量高于当前投资吸引力”的典型。公司资产负债表安全、技术与认证壁垒真实；但 2025–2026Q1 盈利和现金流尚未见底，当前价要求 15%–23% 级别的持续盈利修复，风险回报不够偏向买方。",
-            "supports": "最终结论为观察，支持'wait'标签"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "不追买；仅在¥29–32考虑激进小仓，¥24–28进入稳健分批区。",
-        "holder_action": "成本较低可持有观察，不因短期反弹加仓，等待2026中报验证毛利和现金流。",
-        "trigger_condition": "价格回落至¥29–32可激进小仓，¥24–28才进入稳健分批区。",
-        "summary": "公司质量高于当前投资吸引力，盈利和现金流未见底，当前缺少安全边际。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文的最终建议“观察”及空仓者价格分档，与看板契约的基本面建议动作“观察”一致；契约补充了不同风险偏好的条件化动作，未改变当前等待价格的判断。",
-        "evidence": [
-          {
-            "line_start": 319,
-            "line_end": 319,
-            "quote": "**最终建议：观察。** 这是“公司质量高于当前投资吸引力”的典型。公司资产负债表安全、技术与认证壁垒真实；但 2025–2026Q1 盈利和现金流尚未见底，当前价要求 15%–23% 级别的持续盈利修复，风险回报不够偏向买方。",
-            "supports": "支持最终结论为观察，当前不具备直接买入的风险回报。"
-          },
-          {
-            "line_start": 323,
-            "line_end": 323,
-            "quote": "| 空仓者 | 不追买；¥29–32 仅适合激进小仓，¥24–28 才进入稳健分批区 |",
-            "supports": "直接规定空仓者不追买，并以明确价格档位作为行动触发。"
-          },
-          {
-            "line_start": 335,
-            "line_end": 335,
-            "quote": "> **段永平：** 生意方向是对的，价格还不够对。好公司不代表任何价格都值得买，等证据或等价格，哪个先来都行。",
-            "supports": "进一步说明当前价格不足，支持等待价格的判断。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
+    "label": false,
+    "action_kind": false,
     "report_field_conflict": false
-  }
+  },
+  "error": "Unterminated string starting at: line 1 column 389 (char 388)"
 }

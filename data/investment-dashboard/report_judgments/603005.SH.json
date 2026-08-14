@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:49:29+08:00",
+  "generated_at": "2026-08-14T10:02:48+00:00",
   "company": "jingfang-keji",
   "ticker": "603005.SH",
   "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
@@ -9,25 +9,25 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "空仓者观望，等待价格回落至23-29元区间或2026年后续季报验证增长持续性后再做决策",
-    "holder_action": "未明确给出持仓者具体动作，但报告基本面建议为观察",
-    "trigger_condition": "股价回落至23-29元（对应PE 40-50倍）或2026年后续季报验证增长持续性",
-    "summary": "空仓者观望，当前87倍PE透支增长，建议等待PE回落至40-50倍或季报验证后再决策",
+    "empty_position_action": "空仓者观望，等待更好价格，建议PE回落至40-50倍（约23-29元）或等2026年季报验证后再决策",
+    "holder_action": "持仓者考虑减仓锁定利润，建议至少减持一半仓位",
+    "trigger_condition": "PE回落至40-50倍区间（对应股价约23-29元），或2026年后续季报验证增长持续性",
+    "summary": "报告认为87倍PE透支增长，空仓者等待价格回落或业绩验证；持仓者建议减仓锁利",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约一致，无冲突",
+    "conflict_note": "正文与契约一致，契约摘要亦为观望等待更好价格",
     "evidence": [
+      {
+        "line_start": 403,
+        "line_end": 403,
+        "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |",
+        "supports": "明确空仓者为等待价格动作，给出PE和股价触发条件"
+      },
       {
         "line_start": 475,
         "line_end": 475,
-        "quote": "空仓者 观望，等待更好价格。 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策",
-        "supports": "空仓者明确要求等待价格和验证，故归为等待价格/watch；结论为观望"
-      },
-      {
-        "line_start": 474,
-        "line_end": 474,
-        "quote": "基本面建议动作 | 观察",
-        "supports": "报告最终结论为观察，进一步支持等待而非买入或回避"
+        "quote": "| 结论摘要 | 空仓者 观望，等待更好价格。 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |",
+        "supports": "看板契约最终结论与正文一致，确认空仓者等待价格"
       }
     ],
     "enabled": true,
@@ -44,53 +44,53 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者观望，等待价格回落至23-29元区间或2026年后续季报验证增长持续性后再做决策",
-        "holder_action": "未明确给出持仓者具体动作，但报告基本面建议为观察",
-        "trigger_condition": "股价回落至23-29元（对应PE 40-50倍）或2026年后续季报验证增长持续性",
-        "summary": "空仓者观望，当前87倍PE透支增长，建议等待PE回落至40-50倍或季报验证后再决策",
+        "empty_position_action": "空仓者观望，等待更好价格，建议PE回落至40-50倍（约23-29元）或等2026年季报验证后再决策",
+        "holder_action": "持仓者考虑减仓锁定利润，建议至少减持一半仓位",
+        "trigger_condition": "PE回落至40-50倍区间（对应股价约23-29元），或2026年后续季报验证增长持续性",
+        "summary": "报告认为87倍PE透支增长，空仓者等待价格回落或业绩验证；持仓者建议减仓锁利",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文与契约一致，无冲突",
+        "conflict_note": "正文与契约一致，契约摘要亦为观望等待更好价格",
         "evidence": [
           {
-            "line_start": 475,
-            "line_end": 475,
-            "quote": "空仓者 观望，等待更好价格。 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策",
-            "supports": "空仓者明确要求等待价格和验证，故归为等待价格/watch；结论为观望"
-          },
-          {
-            "line_start": 474,
-            "line_end": 474,
-            "quote": "基本面建议动作 | 观察",
-            "supports": "报告最终结论为观察，进一步支持等待而非买入或回避"
-          }
-        ]
-      }
-    },
-    "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "观望，等待更好价格；待PE回落至40-50倍区间对应股价约23-29元后再考虑，或待2026年后续季报验证增长持续性后决策。",
-        "holder_action": "未给出。",
-        "trigger_condition": "PE回落至40-50倍区间（对应股价约23-29元）；或2026年后续季报验证增长持续性。",
-        "summary": "空仓者观望，优先等待更好价格，或等待后续季报验证。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "正文可见的契约结论摘要与“基本面建议动作：观察”一致，均指向观望等待，未见冲突。",
-        "evidence": [
-          {
-            "line_start": 474,
-            "line_end": 474,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "看板契约粗标签表明当前建议为观察。"
+            "line_start": 403,
+            "line_end": 403,
+            "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |",
+            "supports": "明确空仓者为等待价格动作，给出PE和股价触发条件"
           },
           {
             "line_start": 475,
             "line_end": 475,
             "quote": "| 结论摘要 | 空仓者 观望，等待更好价格。 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |",
-            "supports": "明确给出空仓者观望建议、价格主触发点及最终结论。"
+            "supports": "看板契约最终结论与正文一致，确认空仓者等待价格"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "mimo-v2.5-pro",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "观望，等待PE回落至40-50倍区间（对应股价23-29元）或等待2026年后续季报验证增长持续性后再做决策",
+        "holder_action": "考虑减仓锁定利润，建议至少减持一半仓位",
+        "trigger_condition": "PE回落至40-50倍（对应股价23-29元）或2026年后续季报验证增长持续性",
+        "summary": "空仓者观望等待更好价格，建议买入区间25-35元；持仓者建议减仓锁定利润。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "无冲突，正文和契约均建议观察或等待价格",
+        "evidence": [
+          {
+            "line_start": 403,
+            "line_end": 403,
+            "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |",
+            "supports": "该证据支持空仓者应等待价格触发点，归为等待价格动作"
+          },
+          {
+            "line_start": 416,
+            "line_end": 416,
+            "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**",
+            "supports": "该证据支持最终结论给出具体价格区间，强化等待价格判断"
           }
         ]
       }

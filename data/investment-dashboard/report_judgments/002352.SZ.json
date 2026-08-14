@@ -1,110 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:59:46+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:58:30+00:00",
   "company": "顺丰控股股份有限公司",
   "ticker": "002352.SZ",
   "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
   "report_sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "A股观察，等待A股回到30元以下或H股回到31.4港元以下再考虑买入；H股在31.4-34.9港元可分批，但前提是半年报确认扣非利润和FCF改善",
-    "holder_action": "继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点",
-    "trigger_condition": "A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降；H股分批需半年报确认扣非利润和FCF改善",
-    "summary": "A股观察，H股可分批研究买入；H股因折价风险收益比更好，但需等待价格触发或半年报验证。",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "正文明确要求等待半年报验证，而契约的激进型动作允许A股30-34元小额试探，存在冲突，以正文为准。",
-    "evidence": [
-      {
-        "line_start": 237,
-        "line_end": 237,
-        "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |",
-        "supports": "空仓者A股明确为观察，H股虽可分批但需等待半年报验证，故为等待验证。"
-      },
-      {
-        "line_start": 233,
-        "line_end": 233,
-        "quote": "**基本面建议：A股观察，H股可分批研究买入。** 顺丰是值得长期跟踪的高质量物流系统，但不是高毛利复利股。33.80元A股对应中性情景的上行空间有限；33.26港元H股因人民币折价约15.38%，风险收益比更好，但不能忽略汇率、海外和交叉持股风险。",
-        "supports": "最终结论明确A股观察，H股分批研究，但整体为观察态度。"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档"
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "A股观察，等待A股回到30元以下或H股回到31.4港元以下再考虑买入；H股在31.4-34.9港元可分批，但前提是半年报确认扣非利润和FCF改善",
-        "holder_action": "继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点",
-        "trigger_condition": "A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降；H股分批需半年报确认扣非利润和FCF改善",
-        "summary": "A股观察，H股可分批研究买入；H股因折价风险收益比更好，但需等待价格触发或半年报验证。",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "正文明确要求等待半年报验证，而契约的激进型动作允许A股30-34元小额试探，存在冲突，以正文为准。",
-        "evidence": [
-          {
-            "line_start": 237,
-            "line_end": 237,
-            "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |",
-            "supports": "空仓者A股明确为观察，H股虽可分批但需等待半年报验证，故为等待验证。"
-          },
-          {
-            "line_start": 233,
-            "line_end": 233,
-            "quote": "**基本面建议：A股观察，H股可分批研究买入。** 顺丰是值得长期跟踪的高质量物流系统，但不是高毛利复利股。33.80元A股对应中性情景的上行空间有限；33.26港元H股因人民币折价约15.38%，风险收益比更好，但不能忽略汇率、海外和交叉持股风险。",
-            "supports": "最终结论明确A股观察，H股分批研究，但整体为观察态度。"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待验证",
-        "action_kind": "watch",
-        "empty_position_action": "A股继续观察；H股仅在31.4-34.9港元区间内，且半年报确认扣非利润和FCF改善后，才可分批研究买入",
-        "holder_action": "继续持有，不在A股33.80元追涨，以半年报和经营简报为复核节点",
-        "trigger_condition": "H股分批买入需半年报确认扣非利润和FCF改善；A股加仓需回到30元以下且经营指标满足条件",
-        "summary": "A股观察，H股需等待半年报确认后再分批研究买入",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "正文明确要求A股观察，但看板契约列出A股30-34元小额试探、27-30元和23-26元买入动作，存在冲突；按正文判断",
-        "evidence": [
-          {
-            "line_start": 231,
-            "line_end": 233,
-            "quote": "### 明确结论 **基本面建议：A股观察，H股可分批研究买入。** 顺丰是值得长期跟踪的高质量物流系统，但不是高毛利复利股。33.80元A股对应中性情景的上行空间有限；33.26港元H股因人民币折价约15.38%，风险收益比更好，但不能忽略汇率、海外和交叉持股风险。",
-            "supports": "支持最终结论：A股观察，H股具备更好的研究买入条件，但并非无条件行动"
-          },
-          {
-            "line_start": 235,
-            "line_end": 239,
-            "quote": "| 投资者 | 建议 | |---|---| | 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 | | 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 | | 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |",
-            "supports": "支持空仓者动作：A股等待观察，H股需满足价格区间和半年报经营验证后才可分批"
-          },
-          {
-            "line_start": 277,
-            "line_end": 284,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | A股接近合理价，H股折价后可分批研究 | | 激进型动作 | A股30-34元小额试探 | | 激进型价格区间 | 30-34元 | | 稳健型动作 | A股27-30元分批买入 | | 稳健型价格区间 | 27-30元 | | 保守型动作 | A股23-26元重点研究买入 | | 保守型价格区间 | 23-26元 |",
-            "supports": "支持正文与看板契约存在冲突：看板除基本面建议为观察外，还列出A股不同价格档的买入动作"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
     "label": false,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

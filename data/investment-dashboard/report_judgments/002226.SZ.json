@@ -1,105 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T02:02:36+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:53:51+00:00",
   "company": "江南化工",
   "ticker": "002226.SZ",
   "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
   "report_sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者等待价格回落至3.3-3.7元区间再考虑买入，当前不行动。",
-    "holder_action": "持仓者维持观察，不追加仓位。",
-    "trigger_condition": "股价进入3.3-3.7元区间",
-    "summary": "报告对江南化工给出观察建议，稳健型动作要求等待安全边际，价格区间3.3-3.7元。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "看板契约正文与摘要一致，均为等待安全边际，无冲突。",
-    "evidence": [
-      {
-        "line_start": 262,
-        "line_end": 262,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "报告核心动作为观察，而非直接买入。"
-      },
-      {
-        "line_start": 266,
-        "line_end": 267,
-        "quote": "| 稳健型动作 | 等待安全边际 | | 稳健型价格区间 | 3.3-3.7元 |",
-        "supports": "明确要求等待价格至3.3-3.7元，符合等待价格/watch分类。"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 4.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取"
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者等待价格回落至3.3-3.7元区间再考虑买入，当前不行动。",
-        "holder_action": "持仓者维持观察，不追加仓位。",
-        "trigger_condition": "股价进入3.3-3.7元区间",
-        "summary": "报告对江南化工给出观察建议，稳健型动作要求等待安全边际，价格区间3.3-3.7元。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "看板契约正文与摘要一致，均为等待安全边际，无冲突。",
-        "evidence": [
-          {
-            "line_start": 262,
-            "line_end": 262,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "报告核心动作为观察，而非直接买入。"
-          },
-          {
-            "line_start": 266,
-            "line_end": 267,
-            "quote": "| 稳健型动作 | 等待安全边际 | | 稳健型价格区间 | 3.3-3.7元 |",
-            "supports": "明确要求等待价格至3.3-3.7元，符合等待价格/watch分类。"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "契约未明确空仓者具体动作；稳健型等待3.3-3.7元安全边际",
-        "holder_action": "未给出持仓者动作",
-        "trigger_condition": "稳健型价格区间为3.3-3.7元，等待安全边际",
-        "summary": "契约建议观察，稳健型等待3.3-3.7元安全边际",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "未发现正文与契约冲突；片段仅包含看板决策契约，缺少正文空仓建议",
-        "evidence": [
-          {
-            "line_start": 262,
-            "line_end": 263,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 7.3 分层操作建议（研究口径，不构成投资建议） |",
-            "supports": "支持报告总体为观察而非当前直接行动"
-          },
-          {
-            "line_start": 266,
-            "line_end": 267,
-            "quote": "| 稳健型动作 | 等待安全边际 | | 稳健型价格区间 | 3.3-3.7元 |",
-            "supports": "支持空仓者等待明确价格区间后再行动"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

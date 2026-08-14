@@ -1,45 +1,39 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:53:27+08:00",
+  "generated_at": "2026-08-14T10:11:11+00:00",
   "company": "北化股份",
   "ticker": "002246.SZ",
   "report_path": "reports/北化股份/北化股份研究报告-20260709.md",
   "report_sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
   "judgment": {
-    "label": "等待价格",
+    "label": "等待验证",
     "action_kind": "watch",
-    "empty_position_action": "观察优先，不追高，等2026中报/三季报验证基本面和价格触发条件",
+    "empty_position_action": "观察优先，不追高，等待2026中报/三季报验证硝化棉毛利、防护订单、经营现金流后再评估",
     "holder_action": "持有但设验证线，若业绩靠重组预期支撑应降低仓位",
-    "trigger_condition": "2026中报/三季报验证硝化棉毛利、防护订单、经营现金流；保守投资者等待价格低于13-15元",
-    "summary": "报告综合评分3.2/5，建议空仓者观察优先、不追高，等待中报验证或更低价格。",
-    "confidence": "medium",
+    "trigger_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流；保守投资者可等待股价低于13-15元",
+    "summary": "综合评分3.2/5，可跟踪有弹性但需安全边际，空仓观察优先不追高，等业绩验证",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "",
+    "conflict_note": "正文与看板契约均为‘观察’，无冲突",
     "evidence": [
       {
         "line_start": 308,
         "line_end": 308,
         "quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-        "supports": "空仓者应等待事件验证，不立即买入"
+        "supports": "明确空仓投资者当前动作是观察等待验证，而非买入或回避"
       },
       {
-        "line_start": 311,
-        "line_end": 311,
-        "quote": "| 保守投资者 | **等待更低价格或更高确定性** | 低于 13-15 元或连续多个季度利润验证后再评估 |",
-        "supports": "存在明确价格触发条件（13-15元），支持等待价格标签"
-      },
-      {
-        "line_start": 382,
-        "line_end": 382,
-        "quote": "| 结论摘要 | 空仓投资者 观察优先，不追高 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-        "supports": "看板契约同样强调观察而非立即买入"
+        "line_start": 265,
+        "line_end": 265,
+        "quote": "**综合评分：3.2 / 5。** 结论是“可跟踪、有弹性、需安全边际”，不是“无脑买入型长期复利公司”。",
+        "supports": "最终结论为可跟踪但需安全边际，支持等待验证而非立即行动"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": true,
-    "label_detail_consensus": false,
+    "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 20.0,
@@ -53,74 +47,62 @@
     "primary": {
       "model": "deepseek-v4-flash",
       "result": {
-        "label": "等待价格",
+        "label": "等待验证",
         "action_kind": "watch",
-        "empty_position_action": "观察优先，不追高，等2026中报/三季报验证基本面和价格触发条件",
+        "empty_position_action": "观察优先，不追高，等待2026中报/三季报验证硝化棉毛利、防护订单、经营现金流后再评估",
         "holder_action": "持有但设验证线，若业绩靠重组预期支撑应降低仓位",
-        "trigger_condition": "2026中报/三季报验证硝化棉毛利、防护订单、经营现金流；保守投资者等待价格低于13-15元",
-        "summary": "报告综合评分3.2/5，建议空仓者观察优先、不追高，等待中报验证或更低价格。",
-        "confidence": "medium",
+        "trigger_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流；保守投资者可等待股价低于13-15元",
+        "summary": "综合评分3.2/5，可跟踪有弹性但需安全边际，空仓观察优先不追高，等业绩验证",
+        "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "",
+        "conflict_note": "正文与看板契约均为‘观察’，无冲突",
         "evidence": [
           {
             "line_start": 308,
             "line_end": 308,
             "quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-            "supports": "空仓者应等待事件验证，不立即买入"
+            "supports": "明确空仓投资者当前动作是观察等待验证，而非买入或回避"
           },
           {
-            "line_start": 311,
-            "line_end": 311,
-            "quote": "| 保守投资者 | **等待更低价格或更高确定性** | 低于 13-15 元或连续多个季度利润验证后再评估 |",
-            "supports": "存在明确价格触发条件（13-15元），支持等待价格标签"
-          },
-          {
-            "line_start": 382,
-            "line_end": 382,
-            "quote": "| 结论摘要 | 空仓投资者 观察优先，不追高 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-            "supports": "看板契约同样强调观察而非立即买入"
+            "line_start": 265,
+            "line_end": 265,
+            "quote": "**综合评分：3.2 / 5。** 结论是“可跟踪、有弹性、需安全边际”，不是“无脑买入型长期复利公司”。",
+            "supports": "最终结论为可跟踪但需安全边际，支持等待验证而非立即行动"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待验证",
         "action_kind": "watch",
-        "empty_position_action": "观察优先，不追高，等待2026中报/三季报验证硝化棉毛利、防护订单和经营现金流。",
-        "holder_action": "持有但设验证线；毛利率和现金流维持可继续，若业绩靠重组预期支撑则降低仓位。",
-        "trigger_condition": "2026中报/三季报验证硝化棉毛利、防护订单、经营现金流。",
-        "summary": "可跟踪但安全边际不足；空仓观察，待经营与订单验证后再评估。",
-        "confidence": "high",
+        "empty_position_action": "观察优先，不追高，等待2026中报/三季报验证硝化棉毛利、防护订单、经营现金流",
+        "holder_action": "持有但设验证线，若硝化棉毛利率和现金流维持可继续，若业绩靠重组预期支撑应降低仓位",
+        "trigger_condition": "等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流",
+        "summary": "空仓投资者应观察优先，不追高，等待2026中报/三季报验证关键指标以评估投资价值。",
+        "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "正文最终行动建议与看板契约均要求空仓者观察并等待经营验证，不存在冲突。",
+        "conflict_note": "无冲突，正文（L308）和契约（L381-L382）均建议观察等待验证，一致。",
         "evidence": [
-          {
-            "line_start": 265,
-            "line_end": 265,
-            "quote": "**综合评分：3.2 / 5。** 结论是“可跟踪、有弹性、需安全边际”，不是“无脑买入型长期复利公司”。",
-            "supports": "支持最终结论：报告并未给出当前直接买入判断。"
-          },
           {
             "line_start": 308,
             "line_end": 308,
             "quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-            "supports": "直接支持空仓者等待经营验证的动作及触发条件。"
+            "supports": "支持空仓投资者当前动作是观察等待验证，非立即买入。"
           },
           {
-            "line_start": 382,
-            "line_end": 382,
-            "quote": "| 结论摘要 | 空仓投资者 观察优先，不追高 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-            "supports": "支持看板契约与正文的空仓建议一致。"
+            "line_start": 265,
+            "line_end": 265,
+            "quote": "**综合评分：3.2 / 5。** 结论是“可跟踪、有弹性、需安全边际”，不是“无脑买入型长期复利公司”。",
+            "supports": "支持最终结论强调需验证和安全边际，与等待验证动作一致。"
           }
         ]
       }
     }
   },
   "consensus": {
-    "label": false,
+    "label": true,
     "action_kind": true,
     "report_field_conflict": true
   }

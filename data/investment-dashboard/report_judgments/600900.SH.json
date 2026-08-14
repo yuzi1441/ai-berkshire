@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "review",
-  "generated_at": "2026-08-13T01:59:30+08:00",
+  "generated_at": "2026-08-14T10:58:16+00:00",
   "company": "长江电力",
   "ticker": "600900.SH",
   "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
@@ -10,42 +10,36 @@
     "label": "待人工复核",
     "action_kind": "unknown",
     "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "持仓者可继续持有，因为报告给出分批买入建议，未要求卖出或减仓",
+    "holder_action": "持仓者可继续持有，若价格进入对应区间可考虑加仓",
     "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "报告建议分批买入，但给出具体的价格触发区间，要求等价格回落至区间内方可行动。",
-    "confidence": "high",
+    "summary": "长江电力生意质量优秀，基本面建议分批买入，但需在指定价格区间内执行，属于等待价格条件",
+    "confidence": "medium",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约一致，无冲突。",
+    "conflict_note": "未发现冲突，本片段仅含看板决策契约，无正文内容",
     "evidence": [
-      {
-        "line_start": 358,
-        "line_end": 358,
-        "quote": "| 契约版本 | 1 |",
-        "supports": "报告有明确的结构化契约信息。"
-      },
       {
         "line_start": 365,
         "line_end": 365,
         "quote": "| 基本面建议动作 | 分批买入 |",
-        "supports": "报告建议分批买入，但需要结合价格区间判断执行时机。"
+        "supports": "明确建议分批买入，但结合价格区间，需等待价格条件"
       },
       {
         "line_start": 366,
         "line_end": 366,
         "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
-        "supports": "报告看好公司基本面，但支持在价格区间内分批买入，暗示需等待价格。"
+        "supports": "看好基本面，支持买入逻辑"
       },
       {
         "line_start": 368,
         "line_end": 368,
         "quote": "| 激进型价格区间 | 25-26 元 |",
-        "supports": "给出具体价格触发区间，未到达该区间前不买入，等待价格。"
+        "supports": "给出激进型买入价格触发区间，空仓者需等待价格达到"
       },
       {
         "line_start": 370,
         "line_end": 370,
         "quote": "| 稳健型价格区间 | 23-25 元 |",
-        "supports": "同样给出稳健型价格触发区间，进一步强调等待价格条件。"
+        "supports": "给出稳健型买入价格触发区间，空仓者需等待价格达到"
       }
     ],
     "enabled": true,
@@ -67,71 +61,65 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者应等待价格回落至激进型或稳健型价格区间（25-26元或23-25元）后再行动",
-        "holder_action": "持仓者可继续持有，因为报告给出分批买入建议，未要求卖出或减仓",
-        "trigger_condition": "价格进入25-26元（激进）或23-25元（稳健）区间",
-        "summary": "报告建议分批买入，但给出具体的价格触发区间，要求等价格回落至区间内方可行动。",
-        "confidence": "high",
+        "empty_position_action": "空仓者应等待价格进入激进区间25-26元或稳健区间23-25元后再分批买入",
+        "holder_action": "持仓者可继续持有，若价格进入对应区间可考虑加仓",
+        "trigger_condition": "价格进入激进区间25-26元或稳健区间23-25元",
+        "summary": "长江电力生意质量优秀，基本面建议分批买入，但需在指定价格区间内执行，属于等待价格条件",
+        "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "正文与契约一致，无冲突。",
+        "conflict_note": "未发现冲突，本片段仅含看板决策契约，无正文内容",
         "evidence": [
-          {
-            "line_start": 358,
-            "line_end": 358,
-            "quote": "| 契约版本 | 1 |",
-            "supports": "报告有明确的结构化契约信息。"
-          },
           {
             "line_start": 365,
             "line_end": 365,
             "quote": "| 基本面建议动作 | 分批买入 |",
-            "supports": "报告建议分批买入，但需要结合价格区间判断执行时机。"
+            "supports": "明确建议分批买入，但结合价格区间，需等待价格条件"
           },
           {
             "line_start": 366,
             "line_end": 366,
             "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
-            "supports": "报告看好公司基本面，但支持在价格区间内分批买入，暗示需等待价格。"
+            "supports": "看好基本面，支持买入逻辑"
           },
           {
             "line_start": 368,
             "line_end": 368,
             "quote": "| 激进型价格区间 | 25-26 元 |",
-            "supports": "给出具体价格触发区间，未到达该区间前不买入，等待价格。"
+            "supports": "给出激进型买入价格触发区间，空仓者需等待价格达到"
           },
           {
             "line_start": 370,
             "line_end": 370,
             "quote": "| 稳健型价格区间 | 23-25 元 |",
-            "supports": "同样给出稳健型价格触发区间，进一步强调等待价格条件。"
+            "supports": "给出稳健型买入价格触发区间，空仓者需等待价格达到"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "可分批买入",
         "action_kind": "buy",
-        "empty_position_action": "激进型可小仓试建，稳健型可分批建仓，并保留回撤加仓空间。",
-        "holder_action": "报告未明确给出持仓者动作。",
-        "trigger_condition": "稳健型要求基本面未坏；契约列示激进型价格区间25-26元、稳健型价格区间23-25元。",
-        "summary": "契约建议小仓试建或分批建仓，核心前提是基本面未坏。",
+        "empty_position_action": "建议在23-26元价格区间内分批买入长江电力股票，激进型在25-26元小仓试建，稳健型在23-25元分批建仓",
+        "holder_action": "未明确建议持仓者动作",
+        "trigger_condition": "价格在23-26元区间内，基本面未坏",
+        "summary": "长江电力基本面优秀，接近顶级存量基础设施资产，建议分批买入。",
         "confidence": "low",
         "report_field_conflict": false,
-        "conflict_note": "未提供正文与最终结论段落，现有片段未显示正文和契约冲突；研究置信度标注为待复核。",
+        "conflict_note": "无正文，故无冲突。",
         "evidence": [
           {
-            "line_start": 367,
-            "line_end": 369,
-            "quote": "| 激进型动作 | 小仓试建，保留回撤加仓空间 | | 激进型价格区间 | 25-26 元 | | 稳健型动作 | 分批建仓，要求基本面未坏 |",
-            "supports": "支持空仓投资者当前可以小仓试建或分批建仓。"
+            "line_start": 365,
+            "line_end": 365,
+            "quote": "| 基本面建议动作 | 分批买入 |",
+            "supports": "该证据支持空仓者明确买入建议"
           },
           {
-            "line_start": 365,
+            "line_start": 366,
             "line_end": 366,
-            "quote": "| 基本面建议动作 | 分批买入 | | 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
-            "supports": "支持报告契约层面的最终判断为分批买入，且基本面评价积极。"
+            "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
+            "supports": "该证据支持最终结论看好基本面，隐含买入倾向"
           }
         ]
       }

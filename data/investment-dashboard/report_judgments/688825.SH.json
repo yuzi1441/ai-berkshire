@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "review",
-  "generated_at": "2026-08-13T02:03:54+08:00",
+  "generated_at": "2026-08-14T10:58:47+00:00",
   "company": "长鑫存储",
   "ticker": "688825.SH",
   "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
@@ -10,30 +10,30 @@
     "label": "待人工复核",
     "action_kind": "unknown",
     "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "估值逻辑崩塌，考虑卖出或减仓。",
+    "holder_action": "持仓者应继续持有但不加仓，保持观察，等待验证结果",
     "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "长鑫存储因代际差拉大、无EUV及国产设备不达预期，估值逻辑崩塌，基本面建议动作为观察，研究报告观负面。",
+    "summary": "报告提示代际差距拉大，公司或退化为中国南亚科，估值逻辑崩塌风险高，建议观察等待验证",
     "confidence": "medium",
     "report_field_conflict": false,
-    "conflict_note": "正文中虽然表达负面但契约动作是观察，属于负面观察，无冲突。",
+    "conflict_note": "正文未提供，仅看板契约，无冲突",
     "evidence": [
-      {
-        "line_start": 393,
-        "line_end": 393,
-        "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
-        "supports": "报告认为投资逻辑破裂，估值逻辑崩塌，支持负面评估。"
-      },
       {
         "line_start": 392,
         "line_end": 392,
         "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "契约动作明确为观察，但结合正文的负面判断，对空仓者不建议买入。"
+        "supports": "契约明确建议动作是观察，对应空仓者应等待验证，不急于行动"
+      },
+      {
+        "line_start": 393,
+        "line_end": 393,
+        "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
+        "supports": "最终结论强调风险与待验证点，支持观察等待验证而非立即买入或明确卖出"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": false,
-    "label_detail_consensus": false,
+    "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档"
@@ -42,63 +42,63 @@
     "primary": {
       "model": "deepseek-v4-flash",
       "result": {
-        "label": "回避/卖出",
-        "action_kind": "no",
-        "empty_position_action": "不应买入，维持空仓，等待G5量产时间和国产设备验证进度等基本面信号明朗后再评估。",
-        "holder_action": "估值逻辑崩塌，考虑卖出或减仓。",
-        "trigger_condition": "G5量产时间、国产设备验证进度",
-        "summary": "长鑫存储因代际差拉大、无EUV及国产设备不达预期，估值逻辑崩塌，基本面建议动作为观察，研究报告观负面。",
+        "label": "等待验证",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者应保持观察，暂不买入，等待G5量产时间与国产设备验证进度等关键信息明确后再决策",
+        "holder_action": "持仓者应继续持有但不加仓，保持观察，等待验证结果",
+        "trigger_condition": "G5量产时间和国产设备验证进度",
+        "summary": "报告提示代际差距拉大，公司或退化为中国南亚科，估值逻辑崩塌风险高，建议观察等待验证",
         "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "正文中虽然表达负面但契约动作是观察，属于负面观察，无冲突。",
+        "conflict_note": "正文未提供，仅看板契约，无冲突",
         "evidence": [
-          {
-            "line_start": 393,
-            "line_end": 393,
-            "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
-            "supports": "报告认为投资逻辑破裂，估值逻辑崩塌，支持负面评估。"
-          },
           {
             "line_start": 392,
             "line_end": 392,
             "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "契约动作明确为观察，但结合正文的负面判断，对空仓者不建议买入。"
+            "supports": "契约明确建议动作是观察，对应空仓者应等待验证，不急于行动"
+          },
+          {
+            "line_start": 393,
+            "line_end": 393,
+            "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
+            "supports": "最终结论强调风险与待验证点，支持观察等待验证而非立即买入或明确卖出"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待验证",
         "action_kind": "watch",
-        "empty_position_action": "空仓者当前观察，等待G5量产时间及国产设备验证进度后再判断",
-        "holder_action": "片段未明确说明持仓者动作",
-        "trigger_condition": "G5量产时间、国产光刻/量测设备验证进度",
-        "summary": "代际差距扩大，空仓先观察G5量产与国产设备验证",
-        "confidence": "medium",
+        "empty_position_action": "观察等待验证",
+        "holder_action": "未明确指定，但结论建议谨慎或回避",
+        "trigger_condition": "G5量产时间和国产设备验证进度",
+        "summary": "基本面建议观察，结论指出代际差重新拉大、估值逻辑崩塌，需等待G5量产和设备验证进度。",
+        "confidence": "low",
         "report_field_conflict": false,
-        "conflict_note": "正文片段未见与看板契约动作的明确冲突",
+        "conflict_note": "无冲突，仅提供契约部分，无正文对比",
         "evidence": [
           {
             "line_start": 392,
             "line_end": 392,
             "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持空仓者当前应观察、暂不立即行动"
+            "supports": "支持空仓者当前动作应为观察等待验证"
           },
           {
             "line_start": 393,
             "line_end": 393,
             "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
-            "supports": "支持等待G5量产及国产设备验证这一经营验证触发条件，并说明基本面风险结论"
+            "supports": "支持最终结论为负面，需等待验证进展，而非立即回避/卖出"
           }
         ]
       }
     }
   },
   "consensus": {
-    "label": false,
-    "action_kind": false,
+    "label": true,
+    "action_kind": true,
     "report_field_conflict": true
   }
 }

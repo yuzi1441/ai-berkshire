@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:53:11+08:00",
+  "generated_at": "2026-08-14T10:10:53+00:00",
   "company": "伊利股份",
   "ticker": "600887.SH",
   "report_path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
@@ -9,31 +9,31 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "空仓者当前不追高，等待价格回落至明确触发点后再行动",
-    "holder_action": "持仓者继续持有，不加仓，等待价格或业绩确认",
-    "trigger_condition": "价格低于24元或21元，或业绩确认（如收入、现金流等指标改善）",
-    "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+    "empty_position_action": "当前不追高，空仓者等待价格跌至24元以下或业绩确认后再考虑介入，激进型可在21-24元等待确认后逐步增加，稳健型不高于21元分批研究性建仓",
+    "holder_action": "当前观察为主，不追加仓位，等待更明确的价格或基本面信号，同时关注买入失效条件",
+    "trigger_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
+    "summary": "伊利股份27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认，不同风险偏好有各自建仓价格区间。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "",
+    "conflict_note": "无冲突，正文与看板契约一致。",
     "evidence": [
-      {
-        "line_start": 270,
-        "line_end": 270,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "报告对当前整体的基本动作是观察，不支持立即买入。"
-      },
       {
         "line_start": 271,
         "line_end": 271,
         "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
-        "supports": "明确要求空仓者等待价格触发点（24元以下）或业绩确认，归为等待价格/watch。"
+        "supports": "该证据明确给出空仓者当前不追高，需等待价格触发条件或业绩确认，属于等待价格/验证动作。"
+      },
+      {
+        "line_start": 270,
+        "line_end": 270,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "该证据表明报告对当前股票的基本面建议是观察而非买入或回避，支持空仓者等待的结论。"
       },
       {
         "line_start": 272,
         "line_end": 274,
         "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
-        "supports": "具体建仓价格均低于当前价格，强化需要等待更低价格的观点。"
+        "supports": "该证据进一步说明只有价格进入更低区间或业绩确认后才可行动，当前空仓者应等待。"
       }
     ],
     "enabled": true,
@@ -50,59 +50,59 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者当前不追高，等待价格回落至明确触发点后再行动",
-        "holder_action": "持仓者继续持有，不加仓，等待价格或业绩确认",
-        "trigger_condition": "价格低于24元或21元，或业绩确认（如收入、现金流等指标改善）",
-        "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+        "empty_position_action": "当前不追高，空仓者等待价格跌至24元以下或业绩确认后再考虑介入，激进型可在21-24元等待确认后逐步增加，稳健型不高于21元分批研究性建仓",
+        "holder_action": "当前观察为主，不追加仓位，等待更明确的价格或基本面信号，同时关注买入失效条件",
+        "trigger_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
+        "summary": "伊利股份27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认，不同风险偏好有各自建仓价格区间。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "",
+        "conflict_note": "无冲突，正文与看板契约一致。",
         "evidence": [
-          {
-            "line_start": 270,
-            "line_end": 270,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "报告对当前整体的基本动作是观察，不支持立即买入。"
-          },
           {
             "line_start": 271,
             "line_end": 271,
             "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
-            "supports": "明确要求空仓者等待价格触发点（24元以下）或业绩确认，归为等待价格/watch。"
+            "supports": "该证据明确给出空仓者当前不追高，需等待价格触发条件或业绩确认，属于等待价格/验证动作。"
+          },
+          {
+            "line_start": 270,
+            "line_end": 270,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "该证据表明报告对当前股票的基本面建议是观察而非买入或回避，支持空仓者等待的结论。"
           },
           {
             "line_start": 272,
             "line_end": 274,
             "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
-            "supports": "具体建仓价格均低于当前价格，强化需要等待更低价格的观点。"
+            "supports": "该证据进一步说明只有价格进入更低区间或业绩确认后才可行动，当前空仓者应等待。"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "当前观察不追高，等待24元以下；业绩确认亦可作为后续条件。",
-        "holder_action": "未明确持仓者动作。",
-        "trigger_condition": "价格降至24元以下。",
+        "empty_position_action": "等待价格降至24元以下或业绩确认后行动",
+        "holder_action": "持有观察不加仓",
+        "trigger_condition": "价格跌至24元以下或业绩确认时",
         "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
         "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "片段仅含看板决策契约，基本面建议动作与结论摘要一致，未见正文冲突。",
+        "conflict_note": "不适用，报告片段仅为契约表格，无其他正文冲突。",
         "evidence": [
           {
             "line_start": 270,
             "line_end": 270,
             "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持空仓者当前采取观察、暂不行动。"
+            "supports": "该证据支持空仓者当前应观察等待，而非立即行动。"
           },
           {
             "line_start": 271,
             "line_end": 271,
             "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
-            "supports": "支持最终结论为不追高，并以24元以下作为价格等待触发点。"
+            "supports": "该证据支持最终结论是等待价格触发点（24元以下）或事件验证（业绩确认）。"
           }
         ]
       }

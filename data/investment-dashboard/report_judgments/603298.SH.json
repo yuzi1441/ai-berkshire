@@ -1,115 +1,38 @@
 {
   "schema_version": 1,
-  "status": "review",
-  "generated_at": "2026-08-13T02:02:39+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:53:33+00:00",
   "company": "杭叉集团",
   "ticker": "603298.SH",
   "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
   "report_sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
   "judgment": {
+    "enabled": true,
     "label": "待人工复核",
     "action_kind": "unknown",
-    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "报告未明确持仓者动作，仅按风险偏好区分操作",
-    "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "杭叉集团基本面建议为观察，激进型轻仓，稳健型等待，保守型回避，各风险偏好对应不同价格区间。",
-    "confidence": "medium",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
     "report_field_conflict": false,
-    "conflict_note": "",
-    "evidence": [
-      {
-        "line_start": 216,
-        "line_end": 216,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "报告无明确买入或回避动作，整体态度为观察"
-      },
-      {
-        "line_start": 218,
-        "line_end": 223,
-        "quote": "| 激进型动作 | 轻仓观察 | | 激进型价格区间 | 24-26元 | | 稳健型动作 | 等待 | | 稳健型价格区间 | 20-23元 | | 保守型动作 | 回避 | | 保守型价格区间 | 18元 |",
-        "supports": "空仓者操作按风险偏好分档，激进型可轻仓试探，稳健型等待，保守型回避"
-      }
-    ],
-    "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": false,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 26.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 24.0,
-      "max": 26.0
-    }
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "小仓验证",
-        "action_kind": "trial",
-        "empty_position_action": "激进型可轻仓观察，稳健型等待更低价格，保守型回避",
-        "holder_action": "报告未明确持仓者动作，仅按风险偏好区分操作",
-        "trigger_condition": "激进型在24-26元区间轻仓观察；稳健型等待20-23元；保守型等待18元",
-        "summary": "杭叉集团基本面建议为观察，激进型轻仓，稳健型等待，保守型回避，各风险偏好对应不同价格区间。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "",
-        "evidence": [
-          {
-            "line_start": 216,
-            "line_end": 216,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "报告无明确买入或回避动作，整体态度为观察"
-          },
-          {
-            "line_start": 218,
-            "line_end": 223,
-            "quote": "| 激进型动作 | 轻仓观察 | | 激进型价格区间 | 24-26元 | | 稳健型动作 | 等待 | | 稳健型价格区间 | 20-23元 | | 保守型动作 | 回避 | | 保守型价格区间 | 18元 |",
-            "supports": "空仓者操作按风险偏好分档，激进型可轻仓试探，稳健型等待，保守型回避"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者按稳健型建议等待，等待价格区间为20-23元；激进型仅轻仓观察。",
-        "holder_action": "报告未单列持仓者动作；保守型契约动作为回避。",
-        "trigger_condition": "稳健型价格区间20-23元；激进型价格区间24-26元。",
-        "summary": "空仓者以等待为主，稳健型等待20-23元，激进型轻仓观察。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "正文未提供独立于看板契约的最终结论，现有契约内部同时列示观察、等待和回避，按空仓者等待价格建议归类。",
-        "evidence": [
-          {
-            "line_start": 220,
-            "line_end": 221,
-            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 20-23元 |",
-            "supports": "支持空仓者当前应等待价格触发，归类为等待价格。"
-          },
-          {
-            "line_start": 216,
-            "line_end": 216,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持报告的总体契约动作是观察，而非当前明确买入。"
-          },
-          {
-            "line_start": 218,
-            "line_end": 219,
-            "quote": "| 激进型动作 | 轻仓观察 | | 激进型价格区间 | 24-26元 |",
-            "supports": "补充说明激进型空仓投资者也不是直接买入，而是轻仓观察并参考价格区间。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
     "label": false,
     "action_kind": false,
-    "report_field_conflict": true
-  }
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

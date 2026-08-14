@@ -1,104 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:58:51+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:56:13+00:00",
   "company": "联影医疗",
   "ticker": "688271.SH",
   "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
   "report_sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者应等待价格回落至对应类型价格区间或等待进一步证据，不建议当前分批买入或小仓验证。",
-    "holder_action": "持仓者建议维持观察，不做重仓或加仓动作。",
-    "trigger_condition": "稳健型等待80-95元区间，激进型等待95-110元区间，保守型等待70-80元区间。",
-    "summary": "报告建议空仓者等待更好价格或证据，激进型可小仓观察但不宜重仓，稳健型等待80-95元，保守型暂不买入。",
-    "confidence": "medium",
-    "report_field_conflict": false,
-    "conflict_note": "正文与契约一致，无冲突。",
-    "evidence": [
-      {
-        "line_start": 293,
-        "line_end": 293,
-        "quote": "| 激进型动作 | 小仓位观察，不做重仓 |",
-        "supports": "空仓者不宜当前大量买入，仅可小仓观察。"
-      },
-      {
-        "line_start": 295,
-        "line_end": 295,
-        "quote": "| 稳健型动作 | 等待更好价格或证据 |",
-        "supports": "最终结论建议等待，而非当前买入。"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档"
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者应等待价格回落至对应类型价格区间或等待进一步证据，不建议当前分批买入或小仓验证。",
-        "holder_action": "持仓者建议维持观察，不做重仓或加仓动作。",
-        "trigger_condition": "稳健型等待80-95元区间，激进型等待95-110元区间，保守型等待70-80元区间。",
-        "summary": "报告建议空仓者等待更好价格或证据，激进型可小仓观察但不宜重仓，稳健型等待80-95元，保守型暂不买入。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "正文与契约一致，无冲突。",
-        "evidence": [
-          {
-            "line_start": 293,
-            "line_end": 293,
-            "quote": "| 激进型动作 | 小仓位观察，不做重仓 |",
-            "supports": "空仓者不宜当前大量买入，仅可小仓观察。"
-          },
-          {
-            "line_start": 295,
-            "line_end": 295,
-            "quote": "| 稳健型动作 | 等待更好价格或证据 |",
-            "supports": "最终结论建议等待，而非当前买入。"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "稳健型空仓者等待更好价格或证据，保守型暂不买入，激进型仅小仓位观察",
-        "holder_action": "报告未明确说明持仓者动作",
-        "trigger_condition": "稳健型参考价格区间为80-95元；激进型参考价格区间为95-110元，保守型参考价格区间为70-80元",
-        "summary": "空仓者当前以观察和等待更好价格或证据为主，不宜重仓买入。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "未提供正文结论，现有看板契约内部未见明确冲突。",
-        "evidence": [
-          {
-            "line_start": 295,
-            "line_end": 298,
-            "quote": "| 稳健型动作 | 等待更好价格或证据 | | 稳健型价格区间 | 80-95 元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 70-80 元 |",
-            "supports": "直接说明空仓者等待价格或证据，保守型暂不买入，并给出参考价格区间。"
-          },
-          {
-            "line_start": 291,
-            "line_end": 293,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 投资者类型 建议 参考价格/条件 | | 激进型动作 | 小仓位观察，不做重仓 |",
-            "supports": "说明报告总体结论为观察，激进型仅小仓位观察且不做重仓。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

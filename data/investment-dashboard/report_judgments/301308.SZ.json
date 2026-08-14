@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:54:35+08:00",
+  "generated_at": "2026-08-14T10:18:27+00:00",
   "company": "江波龙",
   "ticker": "301308.SZ",
   "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
@@ -9,32 +9,32 @@
   "judgment": {
     "label": "回避/卖出",
     "action_kind": "no",
-    "empty_position_action": "空仓者应回避，不买入",
-    "holder_action": "持仓者应卖出或减仓",
-    "trigger_condition": "无明确价格触发点，因投资论文已破裂",
-    "summary": "报告认为江波龙是好周期股但当前不是好买点，空仓者回避，持仓者应卖出或减仓。",
+    "empty_position_action": "回避，不在中报预增743倍时买入；等待周期下行出清、PB回到8倍以下且企业级存储收入占比升至20%以上再评估",
+    "holder_action": "分批止盈，至少减半；剩余仓位定性为周期投机头寸，设置严格卖出纪律；若成本极低至少收回本金",
+    "trigger_condition": "NAND/DRAM合约价环比转负、季报存货跌价准备大额计提、实控人减持或定增落地价显著低于市价；买入需PB回到8倍以下且企业级存储占比超20%",
+    "summary": "江波龙是周期股非投资标的，当前618元无安全边际，空仓者回避，持仓者分批止盈至少减半",
     "confidence": "high",
     "report_field_conflict": true,
-    "conflict_note": "契约摘要明确空仓者回避，与正文一致，无冲突。",
+    "conflict_note": "正文明确给出空仓者回避、持仓者止盈，而看板契约基本面建议动作标为‘待复核’，正文与契约冲突，按正文优先原则采用正文结论",
     "evidence": [
       {
-        "line_start": 307,
-        "line_end": 307,
-        "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
-        "supports": "明确建议空仓者回避，且指出买点在历史低点，当前不是买入时机。"
+        "line_start": 240,
+        "line_end": 240,
+        "quote": "| 空仓者 | **回避**。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+        "supports": "明确空仓者当前动作是回避，属于‘no’类"
       },
       {
-        "line_start": 306,
-        "line_end": 306,
-        "quote": "| 基本面建议动作 | 待复核 |",
-        "supports": "契约中基本面建议为待复核，但摘要已明确回避，表明实际判断为回避。"
+        "line_start": 241,
+        "line_end": 241,
+        "quote": "| 持仓者 | **分批止盈，至少减半**。剩余仓位明确定性为\"周期投机头寸\"而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金 |",
+        "supports": "明确持仓者动作是分批止盈减半，支持‘回避/卖出’标签"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": true,
     "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
+    "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档"
   },
@@ -44,59 +44,53 @@
       "result": {
         "label": "回避/卖出",
         "action_kind": "no",
-        "empty_position_action": "空仓者应回避，不买入",
-        "holder_action": "持仓者应卖出或减仓",
-        "trigger_condition": "无明确价格触发点，因投资论文已破裂",
-        "summary": "报告认为江波龙是好周期股但当前不是好买点，空仓者回避，持仓者应卖出或减仓。",
+        "empty_position_action": "回避，不在中报预增743倍时买入；等待周期下行出清、PB回到8倍以下且企业级存储收入占比升至20%以上再评估",
+        "holder_action": "分批止盈，至少减半；剩余仓位定性为周期投机头寸，设置严格卖出纪律；若成本极低至少收回本金",
+        "trigger_condition": "NAND/DRAM合约价环比转负、季报存货跌价准备大额计提、实控人减持或定增落地价显著低于市价；买入需PB回到8倍以下且企业级存储占比超20%",
+        "summary": "江波龙是周期股非投资标的，当前618元无安全边际，空仓者回避，持仓者分批止盈至少减半",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "契约摘要明确空仓者回避，与正文一致，无冲突。",
+        "report_field_conflict": true,
+        "conflict_note": "正文明确给出空仓者回避、持仓者止盈，而看板契约基本面建议动作标为‘待复核’，正文与契约冲突，按正文优先原则采用正文结论",
         "evidence": [
           {
-            "line_start": 307,
-            "line_end": 307,
-            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
-            "supports": "明确建议空仓者回避，且指出买点在历史低点，当前不是买入时机。"
+            "line_start": 240,
+            "line_end": 240,
+            "quote": "| 空仓者 | **回避**。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+            "supports": "明确空仓者当前动作是回避，属于‘no’类"
           },
           {
-            "line_start": 306,
-            "line_end": 306,
-            "quote": "| 基本面建议动作 | 待复核 |",
-            "supports": "契约中基本面建议为待复核，但摘要已明确回避，表明实际判断为回避。"
+            "line_start": 241,
+            "line_end": 241,
+            "quote": "| 持仓者 | **分批止盈，至少减半**。剩余仓位明确定性为\"周期投机头寸\"而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金 |",
+            "supports": "明确持仓者动作是分批止盈减半，支持‘回避/卖出’标签"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "回避/卖出",
         "action_kind": "no",
-        "empty_position_action": "空仓者回避，当前不采取买入行动。",
-        "holder_action": "报告片段未给出持仓者动作。",
-        "trigger_condition": "报告仅以2024年9月“PB 3.9倍、59元”的历史买点作对比，未给出当前可执行触发条件。",
-        "summary": "空仓者回避；认为公司是好周期股，但当前中报预增新闻时点不是好买点。",
-        "confidence": "medium",
+        "empty_position_action": "建议回避当前买入，因当前是好周期股的高位而非好投资标的，买点应在周期低谷",
+        "holder_action": "建议分批止盈，至少减半仓位，剩余仓位视为周期投机头寸并设置严格卖出纪律",
+        "trigger_condition": "最关键触发条件：等待周期下行出清，PB回到8倍以下且企业级存储收入占比升至20%以上再评估",
+        "summary": "空仓者应回避，因当前是好周期股高位而非好投资标的，买点在周期低谷而非新闻热点时。",
+        "confidence": "high",
         "report_field_conflict": true,
-        "conflict_note": "看板“基本面建议动作”为“待复核”，但“结论摘要”明确写明“空仓者 回避”。按正文明确动作优先，采用回避/卖出。",
+        "conflict_note": "正文明确空仓者应'回避'，但看板契约中'基本面建议动作'为'待复核'，存在冲突，采用正文回避动作。",
         "evidence": [
           {
-            "line_start": 307,
-            "line_end": 307,
-            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
-            "supports": "直接支持空仓者当前应回避，分类为回避/卖出。"
+            "line_start": 240,
+            "line_end": 240,
+            "quote": "| 空仓者 | **回避**。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
+            "supports": "直接支持空仓者应立即回避的建议，表明当前不是买入时机"
           },
           {
-            "line_start": 307,
-            "line_end": 307,
-            "quote": "| 结论摘要 | 空仓者 回避。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
-            "supports": "支持最终结论：当前并非报告认定的合适买点。"
-          },
-          {
-            "line_start": 306,
-            "line_end": 306,
-            "quote": "| 基本面建议动作 | 待复核 |",
-            "supports": "与结论摘要中的明确回避动作存在看板字段冲突。"
+            "line_start": 236,
+            "line_end": 236,
+            "quote": "### 8.2 最终决策",
+            "supports": "表明这是报告的最终决策部分，空仓建议是其中明确结论，强化回避判断"
           }
         ]
       }
@@ -105,6 +99,6 @@
   "consensus": {
     "label": true,
     "action_kind": true,
-    "report_field_conflict": false
+    "report_field_conflict": true
   }
 }

@@ -1,115 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:47:43+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:53:11+00:00",
   "company": "工商银行",
   "ticker": "601398.SH",
   "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
   "report_sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者应等待更高股息率或 PB 明显低于 0.60x 再考虑买入，当前不宜入场。",
-    "holder_action": "持仓者可继续持有，但无加仓建议。",
-    "trigger_condition": "股息率更高或 PB 明显低于 0.60x",
-    "summary": "工商银行基本面为强基础设施型，保守型动作要求等待更高股息率或 PB 明显低于 0.60x 再考虑。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "正文与契约无冲突，均指向等待。",
-    "evidence": [
-      {
-        "line_start": 444,
-        "line_end": 444,
-        "quote": "保守型动作 | 等待更高股息率或 PB 明显低于 0.60x 再考虑",
-        "supports": "明确要求空仓者等待价格触发，归为等待价格/watch。"
-      },
-      {
-        "line_start": 438,
-        "line_end": 438,
-        "quote": "基本面建议动作 | 观察",
-        "supports": "整体建议为观察，没有买入或加仓信号。"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 7.5,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 6.5,
-      "max": 7.5
-    }
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者应等待更高股息率或 PB 明显低于 0.60x 再考虑买入，当前不宜入场。",
-        "holder_action": "持仓者可继续持有，但无加仓建议。",
-        "trigger_condition": "股息率更高或 PB 明显低于 0.60x",
-        "summary": "工商银行基本面为强基础设施型，保守型动作要求等待更高股息率或 PB 明显低于 0.60x 再考虑。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文与契约无冲突，均指向等待。",
-        "evidence": [
-          {
-            "line_start": 444,
-            "line_end": 444,
-            "quote": "保守型动作 | 等待更高股息率或 PB 明显低于 0.60x 再考虑",
-            "supports": "明确要求空仓者等待价格触发，归为等待价格/watch。"
-          },
-          {
-            "line_start": 438,
-            "line_end": 438,
-            "quote": "基本面建议动作 | 观察",
-            "supports": "整体建议为观察，没有买入或加仓信号。"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者当前观察，等待更高股息率或PB明显低于0.60x后再考虑",
-        "holder_action": "未给出持仓者具体动作",
-        "trigger_condition": "更高股息率或PB明显低于0.60x",
-        "summary": "生意质量强基础设施型但非高定价权型，当前等待价格条件。",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "未发现正文与看板契约冲突；所给片段仅包含看板决策契约。",
-        "evidence": [
-          {
-            "line_start": 438,
-            "line_end": 438,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "支持空仓者当前不立即行动，而是继续观察。"
-          },
-          {
-            "line_start": 444,
-            "line_end": 444,
-            "quote": "| 保守型动作 | 等待更高股息率或 PB 明显低于 0.60x 再考虑 |",
-            "supports": "支持等待价格触发条件，且明确给出PB价格估值触发点。"
-          },
-          {
-            "line_start": 439,
-            "line_end": 439,
-            "quote": "| 结论摘要 | 生意质量 强基础设施型，非高定价权型 |",
-            "supports": "支持报告对公司生意质量的最终判断摘要。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "primary evidence quote does not match report lines 422-424: quote='## 12. 最终总结 工商银行是一家极强、极稳、极重要的金融基础设施公司。……真正的买点不在“它很大很安全”，而在“足够低的价格补偿了银行资产不透明和公共职能带来的回报上限”。' source='## 12. 最终总结 工商银行是一家极强、极稳、极重要的金融基础设施公司。它的护城河来自低成本负债、账户关系、对公结算、国家信用和系统重要性，而不是来自产品差异化和自由定价权。当前 A股估值约 7.12x PE、0.66x PB，分红具备吸引力，但ROE和净息差下行说明市场的低估值并非没有道理。若你的目标是稳定现金流'"
 }

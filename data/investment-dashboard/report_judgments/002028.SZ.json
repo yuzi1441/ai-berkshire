@@ -1,115 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T01:54:17+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:53:26+00:00",
   "company": "思源电气",
   "ticker": "002028.SZ",
   "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
   "report_sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
   "judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓不宜追高，145 元以上不追高，等待正式中报披露；125-145 元只适合激进型小仓研究；125 元以下更合理，110 元以下更有安全边际",
-    "holder_action": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据，至少每季检查核心指标，多个指标同向恶化则应重审论文",
-    "trigger_condition": "等待价格触发点：125 元以下更合理，110 元以下更有安全边际；同时需确认核心业务没有恶化",
-    "summary": "思源电气优质但当前估值安全边际不足，空仓不宜追高，持有者继续验证，等待 125 元以下更具吸引力的价格",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "看板契约中激进型动作写明‘仅小仓分批’，而正文在价格区间内仅让激进型小仓研究，结论是‘空仓不追高’；两者侧重点不同，但正文更明确空仓不追高，故以正文为准",
-    "evidence": [
-      {
-        "line_start": 357,
-        "line_end": 357,
-        "quote": "> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。",
-        "supports": "明确给出空仓者当前动作：不宜追高"
-      },
-      {
-        "line_start": 426,
-        "line_end": 426,
-        "quote": "154.27 元对应约 36.1 倍 TTM PE，中性三年情景只有约 3.2% 价差。更合适的纪律是：认可公司，但不替价格找理由；持有者用现金流和核心毛利验证，空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会。",
-        "supports": "最终结论强调空仓者等待价格触发点，归为等待价格"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "entry_ceiling": 145.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 125.0,
-      "max": 145.0
-    }
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓不宜追高，145 元以上不追高，等待正式中报披露；125-145 元只适合激进型小仓研究；125 元以下更合理，110 元以下更有安全边际",
-        "holder_action": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据，至少每季检查核心指标，多个指标同向恶化则应重审论文",
-        "trigger_condition": "等待价格触发点：125 元以下更合理，110 元以下更有安全边际；同时需确认核心业务没有恶化",
-        "summary": "思源电气优质但当前估值安全边际不足，空仓不宜追高，持有者继续验证，等待 125 元以下更具吸引力的价格",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "看板契约中激进型动作写明‘仅小仓分批’，而正文在价格区间内仅让激进型小仓研究，结论是‘空仓不追高’；两者侧重点不同，但正文更明确空仓不追高，故以正文为准",
-        "evidence": [
-          {
-            "line_start": 357,
-            "line_end": 357,
-            "quote": "> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。",
-            "supports": "明确给出空仓者当前动作：不宜追高"
-          },
-          {
-            "line_start": 426,
-            "line_end": 426,
-            "quote": "154.27 元对应约 36.1 倍 TTM PE，中性三年情景只有约 3.2% 价差。更合适的纪律是：认可公司，但不替价格找理由；持有者用现金流和核心毛利验证，空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会。",
-            "supports": "最终结论强调空仓者等待价格触发点，归为等待价格"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "当前154.27元空仓不追高，等待125元以下更合理的价格机会，并关注正式中报及核心业务验证。",
-        "holder_action": "已有仓位可持有验证，按季度检查关键指标；多个指标同向恶化时重审论文。",
-        "trigger_condition": "空仓者等待125元以下更合理的机会；110元以下安全边际更高，且需确认核心业务未恶化。",
-        "summary": "公司质量通过筛选但现价安全边际不足；空仓不追高，等待125元以下并验证基本面。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文明确空仓不追高并给出125元以下价格等待条件，与看板契约“观察”一致。",
-        "evidence": [
-          {
-            "line_start": 357,
-            "line_end": 357,
-            "quote": "> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。",
-            "supports": "最终结论明确当前空仓者不宜追高，应重点跟踪。"
-          },
-          {
-            "line_start": 390,
-            "line_end": 393,
-            "quote": "- 145 元以上不追高，先等待正式中报披露分产品毛利、应收、资本开支和汇兑金额； - 125-145 元只适合激进型小仓研究，不把小仓当成估值正确的证明； - 110-125 元开始具备较合理的基准回报，但必须同时确认核心业务没有恶化； - 90-110 元才是保守资金更值得认真研究的区间。",
-            "supports": "空仓建议给出明确价格分档；当前价高于145元不追高，等待更低价格是主要行动。"
-          },
-          {
-            "line_start": 426,
-            "line_end": 426,
-            "quote": "154.27 元对应约 36.1 倍 TTM PE，中性三年情景只有约 3.2% 价差。更合适的纪律是：认可公司，但不替价格找理由；持有者用现金流和核心毛利验证，空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会。",
-            "supports": "总结再次明确空仓者等待125元以下，110元以下安全边际更高。"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
+    "label": false,
+    "action_kind": false,
     "report_field_conflict": false
-  }
+  },
+  "error": "Expecting ',' delimiter: line 1 column 729 (char 728)"
 }

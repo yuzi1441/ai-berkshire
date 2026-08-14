@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:48:11+08:00",
+  "generated_at": "2026-08-14T10:15:56+00:00",
   "company": "景旺电子",
   "ticker": "603228.SH",
   "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
@@ -9,32 +9,38 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "空仓价值投资者不追高，放入观察名单，等待价格回到30-40元或财报验证后再行动。",
-    "holder_action": "已持有且成本低的投资者可继续持有，但需设置跟踪纪律；若毛利率连续低于18%、扣非净利连续下滑、存货继续上升，应减仓或重审。",
+    "empty_position_action": "空仓价值投资者不追高，放入观察名单，等待价格回到30-40元或公司用财报证明18-20亿元净利、毛利率与FCF修复后再考虑买入。",
+    "holder_action": "已持有且成本低的投资者可继续持有但设跟踪纪律，若毛利率连续低于18%、扣非净利连续下滑、存货继续上升等减仓信号出现，应减仓或重审。",
     "trigger_condition": "价格回到30-40元，或公司用财报证明18-20亿元净利、毛利率与FCF修复。",
-    "summary": "报告综合建议为观察，价值投资者不追高新买，空仓者等价格回落或财报验证。",
+    "summary": "空仓价值投资者不追高，等价格回30-40元或财报验证；已持有者审慎跟踪并设减仓纪律。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，均为观察。",
+    "report_field_conflict": true,
+    "conflict_note": "正文与看板契约均给出‘观察’动作，无冲突。",
     "evidence": [
-      {
-        "line_start": 298,
-        "line_end": 298,
-        "quote": "空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。",
-        "supports": "空仓者应等待价格或验证，而非立即买入。"
-      },
       {
         "line_start": 292,
         "line_end": 292,
-        "quote": "综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。",
-        "supports": "最终结论为观察，非买入。"
+        "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |",
+        "supports": "表明最终结论为观察，空仓者不应追高买入，支持等待判断。"
+      },
+      {
+        "line_start": 298,
+        "line_end": 298,
+        "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |",
+        "supports": "明确空仓者当前动作是等待价格回到30-40元或财报验证，属于明确的等待价格触发条件。"
+      },
+      {
+        "line_start": 374,
+        "line_end": 374,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "看板契约同样给出‘观察’动作，与正文一致，佐证空仓者不行动、等待后续信号。"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": true,
     "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
+    "conflict_flag_consensus": false,
     "currency": "CNY",
     "entry_ceiling": 40.0,
     "price_source": "本地程序从主报告价格行动表确定性提取"
@@ -45,53 +51,59 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓价值投资者不追高，放入观察名单，等待价格回到30-40元或财报验证后再行动。",
-        "holder_action": "已持有且成本低的投资者可继续持有，但需设置跟踪纪律；若毛利率连续低于18%、扣非净利连续下滑、存货继续上升，应减仓或重审。",
+        "empty_position_action": "空仓价值投资者不追高，放入观察名单，等待价格回到30-40元或公司用财报证明18-20亿元净利、毛利率与FCF修复后再考虑买入。",
+        "holder_action": "已持有且成本低的投资者可继续持有但设跟踪纪律，若毛利率连续低于18%、扣非净利连续下滑、存货继续上升等减仓信号出现，应减仓或重审。",
         "trigger_condition": "价格回到30-40元，或公司用财报证明18-20亿元净利、毛利率与FCF修复。",
-        "summary": "报告综合建议为观察，价值投资者不追高新买，空仓者等价格回落或财报验证。",
+        "summary": "空仓价值投资者不追高，等价格回30-40元或财报验证；已持有者审慎跟踪并设减仓纪律。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文与看板契约一致，均为观察。",
+        "conflict_note": "正文与看板契约均给出‘观察’动作，无冲突。",
         "evidence": [
-          {
-            "line_start": 298,
-            "line_end": 298,
-            "quote": "空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。",
-            "supports": "空仓者应等待价格或验证，而非立即买入。"
-          },
           {
             "line_start": 292,
             "line_end": 292,
-            "quote": "综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。",
-            "supports": "最终结论为观察，非买入。"
+            "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |",
+            "supports": "表明最终结论为观察，空仓者不应追高买入，支持等待判断。"
+          },
+          {
+            "line_start": 298,
+            "line_end": 298,
+            "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |",
+            "supports": "明确空仓者当前动作是等待价格回到30-40元或财报验证，属于明确的等待价格触发条件。"
+          },
+          {
+            "line_start": 374,
+            "line_end": 374,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "看板契约同样给出‘观察’动作，与正文一致，佐证空仓者不行动、等待后续信号。"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者不追高，放入观察名单，等待价格回到30-40元或财报验证基本面修复",
-        "holder_action": "低成本持有者可继续持有但需设跟踪纪律，触发风险信号时减仓或重审",
-        "trigger_condition": "股价回到30-40元，或公司用财报证明净利18-20亿元、毛利率与FCF修复；持仓风险触发条件包括毛利率连续低于18%等",
-        "summary": "当前估值偏贵，空仓不追高，等待价格或基本面验证。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文明确细化为空仓等待价格或财报验证；看板契约标注“观察”，与正文方向一致，不构成冲突。",
+        "empty_position_action": "不追高，放入观察名单，等待价格回到30-40元或财报证明净利、毛利率与FCF修复。",
+        "holder_action": "可继续持有但设跟踪纪律，若毛利率连续低于18%、扣非净利连续下滑、存货继续上升，应减仓或重审。",
+        "trigger_condition": "价格回到30-40元；或财报证明净利润18-20亿元、毛利率与FCF修复。",
+        "summary": "观察/持有者审慎管理；价值投资者不追高新买，等待价格30-40元或财报验证。",
+        "confidence": "medium",
+        "report_field_conflict": true,
+        "conflict_note": "正文提供了空仓者的具体价格和事件触发条件，但看板契约只给出了'观察'的粗标签，未细化。",
         "evidence": [
-          {
-            "line_start": 292,
-            "line_end": 292,
-            "quote": "综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。",
-            "supports": "支持最终结论为观察、不追高新买。"
-          },
           {
             "line_start": 298,
             "line_end": 298,
-            "quote": "空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。",
-            "supports": "明确支持空仓者当前等待价格或财报验证，而非立即买入。"
+            "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |",
+            "supports": "该证据支持空仓者当前应等待价格或验证，不能行动。"
+          },
+          {
+            "line_start": 292,
+            "line_end": 292,
+            "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |",
+            "supports": "该证据支持最终结论是观察和谨慎管理。"
           }
         ]
       }
@@ -100,6 +112,6 @@
   "consensus": {
     "label": true,
     "action_kind": true,
-    "report_field_conflict": true
+    "report_field_conflict": false
   }
 }

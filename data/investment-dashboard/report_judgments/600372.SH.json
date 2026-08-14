@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:52:56+08:00",
+  "generated_at": "2026-08-14T10:09:33+00:00",
   "company": "中航机载",
   "ticker": "600372.SH",
   "report_path": "reports/中航机载/中航机载研究报告-20260709.md",
@@ -9,25 +9,25 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "不急于买入；等待价格跌至8元附近，或等待ROE/现金流连续两个季度改善后重新估值",
-    "holder_action": "持有观察，避免盲目加仓；盯住2026H1/2026Q3经营现金流、应收账款、存货、毛利率",
-    "trigger_condition": "价格跌至8元附近，或ROE/现金流连续两个季度改善",
-    "summary": "空仓者不急于买入，等待8元附近或基本面连续改善；已持有者持有观察，不加仓。",
+    "empty_position_action": "空仓者不急于买入，等待股价跌至8元附近，或等ROE/现金流连续两个季度改善后重新估值",
+    "holder_action": "已持有者可持有观察，避免盲目加仓，盯住2026H1/2026Q3经营现金流、应收账款、存货、毛利率",
+    "trigger_condition": "股价回落至8元附近，或ROE/现金流连续两个季度改善",
+    "summary": "综合评分3.2/5，好资产但当前价格非高确定性买点，空仓者不急于买入，等待更佳价格或基本面验证",
     "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "看板契约基本面建议动作写'观察'，但正文明确要求空仓者等8元附近，属于价格触发，按正文归为等待价格。",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均建议空仓者等待，无冲突",
     "evidence": [
       {
         "line_start": 343,
         "line_end": 343,
         "quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |",
-        "supports": "空仓者明确等待价格或事件触发，归为等待价格"
+        "supports": "明确给出空仓者等待价格或验证的触发条件，归为等待价格/watch"
       },
       {
-        "line_start": 344,
-        "line_end": 344,
-        "quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |",
-        "supports": "持仓者持有不加仓，等待基本面验证"
+        "line_start": 300,
+        "line_end": 300,
+        "quote": "| 综合评分 | 四大师综合 | 3.2 / 5 | 好资产、强平台，但不是当前价格下的高确定性复利买点 |",
+        "supports": "最终结论显示当前非买点，支持等待而非买入"
       }
     ],
     "enabled": true,
@@ -49,65 +49,53 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "不急于买入；等待价格跌至8元附近，或等待ROE/现金流连续两个季度改善后重新估值",
-        "holder_action": "持有观察，避免盲目加仓；盯住2026H1/2026Q3经营现金流、应收账款、存货、毛利率",
-        "trigger_condition": "价格跌至8元附近，或ROE/现金流连续两个季度改善",
-        "summary": "空仓者不急于买入，等待8元附近或基本面连续改善；已持有者持有观察，不加仓。",
+        "empty_position_action": "空仓者不急于买入，等待股价跌至8元附近，或等ROE/现金流连续两个季度改善后重新估值",
+        "holder_action": "已持有者可持有观察，避免盲目加仓，盯住2026H1/2026Q3经营现金流、应收账款、存货、毛利率",
+        "trigger_condition": "股价回落至8元附近，或ROE/现金流连续两个季度改善",
+        "summary": "综合评分3.2/5，好资产但当前价格非高确定性买点，空仓者不急于买入，等待更佳价格或基本面验证",
         "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "看板契约基本面建议动作写'观察'，但正文明确要求空仓者等8元附近，属于价格触发，按正文归为等待价格。",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约一致，均建议空仓者等待，无冲突",
         "evidence": [
           {
             "line_start": 343,
             "line_end": 343,
             "quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |",
-            "supports": "空仓者明确等待价格或事件触发，归为等待价格"
-          },
-          {
-            "line_start": 344,
-            "line_end": 344,
-            "quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |",
-            "supports": "持仓者持有不加仓，等待基本面验证"
-          }
-        ]
-      }
-    },
-    "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "不急于买入，等待8元附近；也可待ROE/现金流连续两个季度改善后重新估值。",
-        "holder_action": "可持有观察，避免盲目加仓，跟踪经营现金流、应收账款、存货和毛利率。",
-        "trigger_condition": "等8元附近；若不以价格为主，则等待ROE/现金流连续两个季度改善后重新估值。",
-        "summary": "好资产、强平台，但当前价格不是高确定性复利买点；空仓者等待8元附近。",
-        "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "正文明确要求空仓者“不急于买入，等8元附近”，应优先归为等待价格；契约中的“稳健型动作”称可进入“小仓试错区”，与正文空仓建议不一致。",
-        "evidence": [
-          {
-            "line_start": 343,
-            "line_end": 343,
-            "quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |",
-            "supports": "直接规定空仓者当前不买入，并给出以8元附近为主的等待价格触发点。"
-          },
-          {
-            "line_start": 344,
-            "line_end": 344,
-            "quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |",
-            "supports": "直接规定持仓者可持有观察且避免加仓。"
+            "supports": "明确给出空仓者等待价格或验证的触发条件，归为等待价格/watch"
           },
           {
             "line_start": 300,
             "line_end": 300,
             "quote": "| 综合评分 | 四大师综合 | 3.2 / 5 | 好资产、强平台，但不是当前价格下的高确定性复利买点 |",
-            "supports": "最终综合判断支持当前不作为高确定性买点。"
+            "supports": "最终结论显示当前非买点，支持等待而非买入"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "mimo-v2.5-pro",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "空仓者不急于买入，等待8元附近价格或ROE/现金流连续两个季度改善后重新估值。",
+        "holder_action": "已持有者可持有观察，避免盲目加仓。",
+        "trigger_condition": "等待8元附近价格触发，或ROE/现金流连续两个季度改善事件触发。",
+        "summary": "空仓者不急于买入，等8元附近或ROE/现金流改善后重新估值。",
+        "confidence": "medium",
+        "report_field_conflict": false,
+        "conflict_note": "正文和契约一致，无冲突。",
+        "evidence": [
+          {
+            "line_start": 343,
+            "line_end": 343,
+            "quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |",
+            "supports": "该证据支持空仓者应等待价格或事件触发，不立即买入。"
           },
           {
-            "line_start": 434,
-            "line_end": 434,
-            "quote": "| 稳健型动作 | 可进入观察/小仓试错区，但必须跟踪现金流和 ROE |",
-            "supports": "看板契约允许小仓试错，与正文针对空仓者“不急于买入、等8元附近”的明确建议冲突。"
+            "line_start": 431,
+            "line_end": 431,
+            "quote": "| 结论摘要 | 空仓者 不急于买入 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |",
+            "supports": "该证据支持最终结论为空仓者应等待。"
           }
         ]
       }

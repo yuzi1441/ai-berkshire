@@ -1,116 +1,38 @@
 {
   "schema_version": 1,
-  "status": "ready",
-  "generated_at": "2026-08-13T02:02:54+08:00",
+  "status": "error",
+  "generated_at": "2026-08-14T10:55:22+00:00",
   "company": "百济神州",
   "ticker": "688235.SH",
   "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
   "report_sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
   "judgment": {
-    "label": "等待验证",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者应小仓跟踪或观察，等待确认，不追高",
-    "holder_action": "持仓者继续持有观望，等待确认",
-    "trigger_condition": "稳健型等待确认信号，保守型在240-260美元价格区间内不追高，等待价格回落",
-    "summary": "百济神州基本面待复核，稳健型小仓跟踪等待确认，保守型观察不追高，建议等待验证",
-    "confidence": "medium",
-    "report_field_conflict": false,
-    "conflict_note": "无冲突，正文与契约一致",
-    "evidence": [
-      {
-        "line_start": 473,
-        "line_end": 473,
-        "quote": "| 稳健型动作 | 小仓跟踪，等待确认 |",
-        "supports": "空仓者应小仓跟踪，等待确认，属于等待验证"
-      },
-      {
-        "line_start": 475,
-        "line_end": 476,
-        "quote": "| 保守型动作 | 观察，不追高 | | 保守型价格区间 | 240-260 美元 |",
-        "supports": "空仓者观察不追高，等待价格条件，属于等待验证"
-      },
-      {
-        "line_start": 469,
-        "line_end": 470,
-        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 待复核 |",
-        "supports": "整体建议观察或等待确认，不急于买入"
-      }
-    ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档"
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型调用或证据校验失败，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "双模型恢复并通过证据校验后再进入筛选",
+    "summary": "模型结果不可用，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未完成可信校验。",
+    "evidence": [],
+    "source_basis": "报告判断模型失败关闭",
+    "model_consensus": false
   },
   "models": {
     "primary": {
-      "model": "deepseek-v4-flash",
-      "result": {
-        "label": "等待验证",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者应小仓跟踪或观察，等待确认，不追高",
-        "holder_action": "持仓者继续持有观望，等待确认",
-        "trigger_condition": "稳健型等待确认信号，保守型在240-260美元价格区间内不追高，等待价格回落",
-        "summary": "百济神州基本面待复核，稳健型小仓跟踪等待确认，保守型观察不追高，建议等待验证",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "无冲突，正文与契约一致",
-        "evidence": [
-          {
-            "line_start": 473,
-            "line_end": 473,
-            "quote": "| 稳健型动作 | 小仓跟踪，等待确认 |",
-            "supports": "空仓者应小仓跟踪，等待确认，属于等待验证"
-          },
-          {
-            "line_start": 475,
-            "line_end": 476,
-            "quote": "| 保守型动作 | 观察，不追高 | | 保守型价格区间 | 240-260 美元 |",
-            "supports": "空仓者观察不追高，等待价格条件，属于等待验证"
-          },
-          {
-            "line_start": 469,
-            "line_end": 470,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 待复核 |",
-            "supports": "整体建议观察或等待确认，不急于买入"
-          }
-        ]
-      }
+      "model": "deepseek-v4-flash"
     },
     "review": {
-      "model": "gpt-5.6-terra",
-      "result": {
-        "label": "等待验证",
-        "action_kind": "watch",
-        "empty_position_action": "空仓者观察，稳健型小仓跟踪并等待确认，保守型不追高",
-        "holder_action": "报告未给出明确持仓者动作",
-        "trigger_condition": "等待确认；未给出具体事件触发条件",
-        "summary": "空仓观察并等待确认，不追高",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "正文未提供，契约内各动作均指向观察或等待确认，无明确冲突",
-        "evidence": [
-          {
-            "line_start": 473,
-            "line_end": 475,
-            "quote": "| 稳健型动作 | 小仓跟踪，等待确认 | | 稳健型价格区间 | 未给出 | | 保守型动作 | 观察，不追高 |",
-            "supports": "支持空仓者当前应观察、等待确认且不追高"
-          },
-          {
-            "line_start": 469,
-            "line_end": 470,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 待复核 |",
-            "supports": "支持报告最终结论尚未确认，当前不构成明确买入动作"
-          }
-        ]
-      }
+      "model": "mimo-v2.5-pro"
     }
   },
   "consensus": {
-    "label": true,
-    "action_kind": true,
-    "report_field_conflict": true
-  }
+    "label": false,
+    "action_kind": false,
+    "report_field_conflict": false
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
 }

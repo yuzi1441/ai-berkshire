@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "ready",
-  "generated_at": "2026-08-13T01:58:37+08:00",
+  "generated_at": "2026-08-14T10:22:07+00:00",
   "company": "神火股份",
   "ticker": "000933.SZ",
   "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
@@ -9,32 +9,32 @@
   "judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "不追高，等待股价跌至21元以下进入观察买入区，18元以下才考虑更积极分批",
+    "empty_position_action": "25.37元不追高，等待价格跌至21元以下进入观察买入区，18元以下才考虑更积极分批",
     "holder_action": "可持有但不默认加仓，用铝价、氧化铝、短借和经营现金流设监控线",
-    "trigger_condition": "股价跌入18-21元区间；H2铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖",
-    "summary": "25.37元不追高，21元以下再评估，18元以下安全边际更厚；空仓者等待价格触发，持仓者持有但需监控风险。",
+    "trigger_condition": "股价跌至21元以下（观察买入区），18元以下更积极分批",
+    "summary": "报告认为25.37元不追高，21元以下进入观察买入区，18元以下更积极分批，已持仓者可持有但不加仓。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，均要求等待价格而非回避或卖出。",
+    "report_field_conflict": true,
+    "conflict_note": "正文空仓者建议为21元以下才进入观察买入区，但契约激进型动作允许21-25元小仓位分批评估，存在冲突；依据规则以正文为准。",
     "evidence": [
       {
         "line_start": 251,
         "line_end": 251,
         "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |",
-        "supports": "明确指示空仓者不追高，等待更低价格，属于等待价格/watch"
+        "supports": "明确给出空仓者应等待更低价格，属于等待价格/watch"
       },
       {
         "line_start": 312,
         "line_end": 312,
         "quote": "| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |",
-        "supports": "最终结论强调等待更低价格，而非立即回避或卖出"
+        "supports": "最终结论同样要求等待价格触发，支持等待价格判断"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
     "model_consensus": true,
     "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
+    "conflict_flag_consensus": false,
     "currency": "CNY",
     "entry_ceiling": 25.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
@@ -49,59 +49,53 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "不追高，等待股价跌至21元以下进入观察买入区，18元以下才考虑更积极分批",
+        "empty_position_action": "25.37元不追高，等待价格跌至21元以下进入观察买入区，18元以下才考虑更积极分批",
         "holder_action": "可持有但不默认加仓，用铝价、氧化铝、短借和经营现金流设监控线",
-        "trigger_condition": "股价跌入18-21元区间；H2铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖",
-        "summary": "25.37元不追高，21元以下再评估，18元以下安全边际更厚；空仓者等待价格触发，持仓者持有但需监控风险。",
+        "trigger_condition": "股价跌至21元以下（观察买入区），18元以下更积极分批",
+        "summary": "报告认为25.37元不追高，21元以下进入观察买入区，18元以下更积极分批，已持仓者可持有但不加仓。",
         "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "正文与看板契约一致，均要求等待价格而非回避或卖出。",
+        "report_field_conflict": true,
+        "conflict_note": "正文空仓者建议为21元以下才进入观察买入区，但契约激进型动作允许21-25元小仓位分批评估，存在冲突；依据规则以正文为准。",
         "evidence": [
           {
             "line_start": 251,
             "line_end": 251,
             "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |",
-            "supports": "明确指示空仓者不追高，等待更低价格，属于等待价格/watch"
+            "supports": "明确给出空仓者应等待更低价格，属于等待价格/watch"
           },
           {
             "line_start": 312,
             "line_end": 312,
             "quote": "| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |",
-            "supports": "最终结论强调等待更低价格，而非立即回避或卖出"
+            "supports": "最终结论同样要求等待价格触发，支持等待价格判断"
           }
         ]
       }
     },
     "review": {
-      "model": "gpt-5.6-terra",
+      "model": "mimo-v2.5-pro",
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "25.37元不追，21元以下进入观察买入区，18元以下才考虑更积极分批。",
-        "holder_action": "可持有但不默认加仓，并监控铝价、氧化铝、短借和经营现金流。",
-        "trigger_condition": "股价跌入21元以下进入观察；18-21元考虑加仓，且需铝价、氧化铝、流动性及分红覆盖等基本面条件配合。",
-        "summary": "当前估值缺乏厚安全边际，空仓者等待更低价格再评估。",
-        "confidence": "high",
+        "empty_position_action": "等待股价跌至21元以下进入观察买入区，18元以下考虑更积极分批买入；当前25.37元不追高。",
+        "holder_action": "可持有但不默认加仓；设置铝价、氧化铝、短借和经营现金流监控线。",
+        "trigger_condition": "股价跌至21元以下进入观察区，18元以下积极买入；铝价跌破21500元/吨并持续等事件触发减仓。",
+        "summary": "25.37元不追高，21元以下再评估，18元以下安全边际更厚。",
+        "confidence": "medium",
         "report_field_conflict": false,
-        "conflict_note": "正文明确要求等待更低价格，契约的“观察”及分层价格区间与正文基本一致，无实质冲突。",
+        "conflict_note": "无冲突，正文和契约都建议等待价格触发。",
         "evidence": [
           {
             "line_start": 251,
             "line_end": 251,
             "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |",
-            "supports": "明确说明空仓者当前不追高，等待价格下行至指定区间后再行动。"
-          },
-          {
-            "line_start": 245,
-            "line_end": 245,
-            "quote": "| 当前估值 | 动态 PE 不贵，正常化价值下缺乏厚安全边际 | 中高 |",
-            "supports": "最终结论显示当前估值虽不贵，但安全边际不足，支持等待价格而非立即买入。"
+            "supports": "支持空仓者应等待价格下跌的动作。"
           },
           {
             "line_start": 312,
             "line_end": 312,
             "quote": "| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |",
-            "supports": "契约摘要与正文一致，进一步确认价格触发型等待判断。"
+            "supports": "支持最终结论是等待价格评估。"
           }
         ]
       }
@@ -110,6 +104,6 @@
   "consensus": {
     "label": true,
     "action_kind": true,
-    "report_field_conflict": true
+    "report_field_conflict": false
   }
 }
