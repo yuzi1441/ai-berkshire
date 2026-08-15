@@ -1,0 +1,227 @@
+======================================================================
+报告数据抽检清单
+文件：reports\东方电缆\巴菲特Checklist-东方电缆-20260814.md
+总提取数据点：104  |  抽样比例：15%  |  抽检数量：16
+随机种子：603606（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  3     58  归母净利润 · 2026H1                               5.65  亿元
+ 13     63  资本开支 · 2026H1                                2.71  亿元
+ 19     66  存货 · 2026H1                                 51.21  亿元
+ 24     75  海底电缆与高压电缆 · 毛利率                             26.13  %
+ 30     80  2026-04-21 · 海工运维                           36.56  亿元
+ 49     96  TTM 自由现金流 · 口径                            2025.00  
+ 48     96  TTM 自由现金流 · 数值                               3.38  亿元
+ 52    131  毛利率 · 东方电缆                                2025.00  
+ 67    184  PB · 数值                                      3.71  x
+ 76    197  乐观 · 第 3 年目标价                               67.90  
+ 89    199  悲观 · 今日值相对 38 元                            -49.60  %
+ 90    207  激进型 · 条件                                     2.00  
+ 92    208  稳健型 · 基本面价格线                                30.00  
+ 94    223  停牌 5 年能否接受 · 判断                             50.00  %
+ 97    325  报告日期 · 内容                                 2026.00  
+101    334  保守型价格区间 · 内容                                20.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 3,
+    "label": "归母净利润 · 2026H1",
+    "reported_value": 5.65,
+    "unit": "亿元",
+    "line_number": 58,
+    "raw_text": "| 归母净利润 | 5.65 亿元 | +19.41% | 增收快于增利 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 13,
+    "label": "资本开支 · 2026H1",
+    "reported_value": 2.71,
+    "unit": "亿元",
+    "line_number": 63,
+    "raw_text": "| 资本开支 | 2.71 亿元 | 上年同期 3.07 亿元 | 扩产仍在继续 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 19,
+    "label": "存货 · 2026H1",
+    "reported_value": 51.21,
+    "unit": "亿元",
+    "line_number": 66,
+    "raw_text": "| 存货 | 51.21 亿元 | 较年初 +29.65% | 交付和去化待观察 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 24,
+    "label": "海底电缆与高压电缆 · 毛利率",
+    "reported_value": 26.13,
+    "unit": "%",
+    "line_number": 75,
+    "raw_text": "| 海底电缆与高压电缆 | 23.65 亿元 | +20.90% | 26.13% | 核心利润池，但低于 2025 全年 33.36% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 30,
+    "label": "2026-04-21 · 海工运维",
+    "reported_value": 36.56,
+    "unit": "亿元",
+    "line_number": 80,
+    "raw_text": "| 2026-04-21 | 184.12 亿元 | 103.89 亿元 | 43.67 亿元 | 36.56 亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 49,
+    "label": "TTM 自由现金流 · 口径",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 96,
+    "raw_text": "| TTM 自由现金流 | 3.38 亿元 | 2025 全年 FCF - 2025H1 FCF + 2026H1 FCF |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "TTM 自由现金流 · 数值",
+    "reported_value": 3.38,
+    "unit": "亿元",
+    "line_number": 96,
+    "raw_text": "| TTM 自由现金流 | 3.38 亿元 | 2025 全年 FCF - 2025H1 FCF + 2026H1 FCF |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 52,
+    "label": "毛利率 · 东方电缆",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 131,
+    "raw_text": "| 毛利率 | 2025 22.11%；2026H1 19.44% | >40% 暗示强定价权 | 不达标，产品结构波动明显 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 67,
+    "label": "PB · 数值",
+    "reported_value": 3.71,
+    "unit": "x",
+    "line_number": 184,
+    "raw_text": "| PB | 3.71x | 近五年低位区 | 对周期制造业不算低 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "乐观 · 第 3 年目标价",
+    "reported_value": 67.9,
+    "unit": "",
+    "line_number": 197,
+    "raw_text": "| 乐观 | +18% | 25x | 2.72 元 | 67.9 元 | 52.43 元 | +38.0% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 89,
+    "label": "悲观 · 今日值相对 38 元",
+    "reported_value": -49.6,
+    "unit": "%",
+    "line_number": 199,
+    "raw_text": "| 悲观 | 0% | 15x | 1.65 元 | 24.8 元 | 19.15 元 | **-49.6%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 90,
+    "label": "激进型 · 条件",
+    "reported_value": 2.0,
+    "unit": "",
+    "line_number": 207,
+    "raw_text": "| 激进型 | H2 经营现金流转正，海缆订单止跌，海缆毛利率回到 30% 附近 | 不高于 34 元，小仓分批 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 92,
+    "label": "稳健型 · 基本面价格线",
+    "reported_value": 30.0,
+    "unit": "",
+    "line_number": 208,
+    "raw_text": "| 稳健型 | 连续两个报告期现金流改善，海缆订单不低于 90 亿元，无新增治理事件 | 不高于 30 元，分批 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 94,
+    "label": "停牌 5 年能否接受 · 判断",
+    "reported_value": 50.0,
+    "unit": "%",
+    "line_number": 223,
+    "raw_text": "| 停牌 5 年能否接受 | 仅在能承受项目周期、同行竞争和 50% 价格波动时才可能接受 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 97,
+    "label": "报告日期 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 325,
+    "raw_text": "| 报告日期 | 2026-08-14 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 101,
+    "label": "保守型价格区间 · 内容",
+    "reported_value": 20.0,
+    "unit": "",
+    "line_number": 334,
+    "raw_text": "| 保守型价格区间 | 不高于20元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]
