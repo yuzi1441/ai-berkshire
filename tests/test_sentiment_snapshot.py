@@ -24,11 +24,11 @@ class SentimentSnapshotTests(unittest.TestCase):
             "SENTIMENT_LLM_API_KEY": "test-key",
             "SENTIMENT_LLM_MODEL": "deepseek-v4-flash",
             "SENTIMENT_LLM_ENDPOINT": "https://api.deepseek.com/chat/completions",
-            "SENTIMENT_LLM_BATCH_SIZE": "20",
-            "SENTIMENT_LLM_WORKERS": "6",
+            "SENTIMENT_LLM_BATCH_SIZE": "8",
+            "SENTIMENT_LLM_WORKERS": "2",
             "SENTIMENT_LLM_THINKING": "disabled",
             "SENTIMENT_LLM_JSON_MODE": "true",
-            "SENTIMENT_LLM_MAX_TOKENS": "1800",
+            "SENTIMENT_LLM_MAX_TOKENS": "4096",
             "SENTIMENT_LLM_RETRIES": "5",
             "SENTIMENT_LLM_RETRY_BACKOFF": "7",
             "SENTIMENT_LLM_MISSING_RESULT_RETRIES": "4",
@@ -36,10 +36,11 @@ class SentimentSnapshotTests(unittest.TestCase):
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment()
         self.assertIsNotNone(config)
-        self.assertEqual(config.workers, 6)
+        self.assertEqual(config.batch_size, 8)
+        self.assertEqual(config.workers, 2)
         self.assertEqual(config.thinking_mode, "disabled")
         self.assertTrue(config.json_mode)
-        self.assertEqual(config.max_tokens, 1800)
+        self.assertEqual(config.max_tokens, 4096)
         self.assertEqual(config.timeout_seconds, 600)
         self.assertEqual(config.max_retries, 5)
         self.assertEqual(config.retry_backoff_seconds, 7.0)
@@ -116,6 +117,34 @@ class SentimentSnapshotTests(unittest.TestCase):
                 sentiment_snapshot.http_text("https://example.com", attempts=5)
         self.assertIn("non-retryable HTTP 401", str(raised.exception))
         urlopen.assert_called_once()
+
+    def test_http_json_retries_malformed_json_envelope(self):
+        class FakeResponse:
+            def __init__(self, payload):
+                self.payload = payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self):
+                return self.payload
+
+        with patch.object(
+            sentiment_snapshot,
+            "urlopen",
+            side_effect=[FakeResponse(b'{"choices":'), FakeResponse(b'{"choices": []}')],
+        ) as urlopen, patch.object(sentiment_snapshot.time, "sleep") as sleep:
+            result = sentiment_snapshot.http_json(
+                "https://example.com",
+                attempts=2,
+                retry_backoff_seconds=2,
+            )
+        self.assertEqual(result, {"choices": []})
+        self.assertEqual(urlopen.call_count, 2)
+        self.assertEqual(sleep.call_args.args, (2,))
 
     def test_score_with_llm_passes_configured_retry_policy(self):
         config = sentiment_snapshot.LLMConfig(
@@ -202,6 +231,33 @@ class SentimentSnapshotTests(unittest.TestCase):
         with patch.object(sentiment_snapshot, "http_json", return_value=response):
             scored = sentiment_snapshot.score_with_llm([article], config)
         self.assertEqual(scored["reasoning-1"]["event_type"], "一般新闻")
+
+    def test_score_with_llm_reports_finish_reason_for_malformed_content(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="test-model",
+        )
+        article = {
+            "id": "malformed-1",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "title": "示例公司发布公告",
+            "summary": "公告摘要",
+        }
+        response = {
+            "choices": [
+                {
+                    "finish_reason": "length",
+                    "message": {"content": '{"items": ['},
+                }
+            ]
+        }
+        with patch.object(sentiment_snapshot, "http_json", return_value=response):
+            with self.assertRaises(sentiment_snapshot.SentimentError) as raised:
+                sentiment_snapshot.score_with_llm([article], config)
+        self.assertIn("finish_reason='length'", str(raised.exception))
+        self.assertIn("content_bytes=", str(raised.exception))
 
     def test_missing_model_items_are_retried_one_at_a_time(self):
         config = sentiment_snapshot.LLMConfig(

@@ -436,6 +436,9 @@ def http_json(
     attempts: int = 3,
     retry_backoff_seconds: float = 0.6,
 ) -> dict[str, Any]:
+    # A gateway can return HTTP 200 while emitting a truncated JSON envelope.
+    # Keep the existing network retry policy, then retry malformed bodies
+    # separately before handing the failure back to the batch recovery logic.
     text = http_text(
         url,
         headers=headers,
@@ -444,10 +447,28 @@ def http_json(
         attempts=attempts,
         retry_backoff_seconds=retry_backoff_seconds,
     )
-    payload = json.loads(text)
-    if not isinstance(payload, dict):
-        raise SentimentError(f"provider returned non-object JSON: {url}")
-    return payload
+    for parse_attempt in range(max(1, attempts)):
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError as exc:
+            if parse_attempt + 1 >= max(1, attempts):
+                raise SentimentError(
+                    f"provider returned malformed JSON after {attempts} parse attempts: {url}"
+                ) from exc
+            time.sleep(min(60.0, retry_backoff_seconds * (2**parse_attempt)))
+            text = http_text(
+                url,
+                headers=headers,
+                body=body,
+                timeout=timeout,
+                attempts=1,
+                retry_backoff_seconds=retry_backoff_seconds,
+            )
+            continue
+        if not isinstance(payload, dict):
+            raise SentimentError(f"provider returned non-object JSON: {url}")
+        return payload
+    raise SentimentError(f"provider returned no JSON payload: {url}")
 
 
 def http_form_json(
@@ -1811,7 +1832,17 @@ def score_with_llm(
         raise SentimentError("LLM response has no choices")
     message = choices[0].get("message", {})
     content = message.get("content") or message.get("reasoning_content", "")
-    parsed = parse_json_block(content)
+    content_text = content if isinstance(content, str) else str(content or "")
+    try:
+        parsed = parse_json_block(content_text)
+    except (json.JSONDecodeError, TypeError, AttributeError) as exc:
+        finish_reason = choices[0].get("finish_reason")
+        content_bytes = len(content_text.encode("utf-8"))
+        raise SentimentError(
+            "LLM content malformed JSON "
+            f"(provider={provider_label}, finish_reason={finish_reason!r}, "
+            f"content_bytes={content_bytes})"
+        ) from exc
     rows = parsed.get("items", []) if isinstance(parsed, dict) else parsed
     if not isinstance(rows, list):
         raise SentimentError("LLM response is not a JSON array")
