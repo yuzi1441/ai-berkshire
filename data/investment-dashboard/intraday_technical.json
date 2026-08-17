@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-14T09:36:55+00:00",
-  "analysis_date": "2026-08-14",
-  "requested_cutoff": "2026-08-14",
+  "generated_at": "2026-08-17T09:31:36+08:00",
+  "analysis_date": "2026-08-17",
+  "requested_cutoff": "2026-08-17",
   "interval": "30m",
   "requested_markets": [
     "A股"
@@ -15,7 +15,7 @@
   "selected_count": 93,
   "excluded_count": 0,
   "failed_count": 0,
-  "elapsed_seconds": 14.043,
+  "elapsed_seconds": 71.976,
   "companies": [
     {
       "schema_version": 1,
@@ -26,11 +26,11 @@
       "provider_symbol": "002594.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 352,
+      "observations": 326,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -45,14 +45,14 @@
         "high": 89.05,
         "low": 88.88,
         "close": 88.97,
-        "volume": 2730839.0,
+        "volume": 2332769.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 89.1356,
         "ema20": 89.4961,
         "ema60": 90.341,
-        "ema200": 90.3947,
+        "ema200": 90.1605,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.8382
@@ -71,8 +71,8 @@
         "bollinger_lower": 88.5135
       },
       "intraday": {
-        "vwap": 89.0349,
-        "relative_volume": 0.6669,
+        "vwap": 89.0358,
+        "relative_volume": 0.5696,
         "opening_range_high": 89.59,
         "opening_range_low": 88.88
       },
@@ -105,18 +105,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002594.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002594.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002594.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 122,
+        "rejected_rows": 115,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 122 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 115 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.421
+      "elapsed_seconds": 1.224
     },
     {
       "schema_version": 1,
@@ -127,11 +127,11 @@
       "provider_symbol": "603993.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 386,
+      "observations": 359,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -153,7 +153,7 @@
         "ema9": 18.3946,
         "ema20": 18.5805,
         "ema60": 19.176,
-        "ema200": 19.213,
+        "ema200": 19.169,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 41.8145
@@ -206,18 +206,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603993.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603993.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603993.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 88,
+        "rejected_rows": 82,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 88 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 82 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.139
+      "elapsed_seconds": 0.805
     },
     {
       "schema_version": 1,
@@ -228,11 +228,11 @@
       "provider_symbol": "301666.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 340,
+      "observations": 316,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -247,14 +247,14 @@
         "high": 438.64,
         "low": 434.5,
         "close": 436.95,
-        "volume": 279600.0,
+        "volume": 239700.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 437.7808,
         "ema20": 438.3889,
-        "ema60": 436.8876,
-        "ema200": 480.6389,
+        "ema60": 436.8911,
+        "ema200": 481.408,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 17.6449
@@ -273,8 +273,8 @@
         "bollinger_lower": 428.8773
       },
       "intraday": {
-        "vwap": 437.5452,
-        "relative_volume": 0.9744,
+        "vwap": 437.5525,
+        "relative_volume": 0.8353,
         "opening_range_high": 453.75,
         "opening_range_low": 437.0
       },
@@ -296,7 +296,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -307,18 +307,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "301666.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/301666.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/301666.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 134,
+        "rejected_rows": 125,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 134 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.141
+      "elapsed_seconds": 0.723
     },
     {
       "schema_version": 1,
@@ -329,11 +329,11 @@
       "provider_symbol": "002202.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 352,
+      "observations": 327,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -348,14 +348,14 @@
         "high": 20.94,
         "low": 20.83,
         "close": 20.93,
-        "volume": 10627600.0,
+        "volume": 8934400.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 20.8285,
         "ema20": 20.7784,
         "ema60": 20.4925,
-        "ema200": 20.1643,
+        "ema200": 20.2482,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 17.4305
@@ -374,8 +374,8 @@
         "bollinger_lower": 20.2651
       },
       "intraday": {
-        "vwap": 20.7186,
-        "relative_volume": 0.7542,
+        "vwap": 20.7165,
+        "relative_volume": 0.634,
         "opening_range_high": 21.15,
         "opening_range_low": 20.61
       },
@@ -408,18 +408,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002202.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002202.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002202.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 122,
+        "rejected_rows": 114,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 122 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 114 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.149
+      "elapsed_seconds": 0.802
     },
     {
       "schema_version": 1,
@@ -430,11 +430,11 @@
       "provider_symbol": "002353.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -449,14 +449,14 @@
         "high": 151.18,
         "low": 149.84,
         "close": 150.87,
-        "volume": 1634486.0,
+        "volume": 1380745.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 150.0079,
         "ema20": 147.9547,
-        "ema60": 144.9161,
-        "ema200": 144.2098,
+        "ema60": 144.9165,
+        "ema200": 144.6321,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 30.6104
@@ -475,8 +475,8 @@
         "bollinger_lower": 137.2168
       },
       "intraday": {
-        "vwap": 150.3047,
-        "relative_volume": 0.926,
+        "vwap": 150.303,
+        "relative_volume": 0.7823,
         "opening_range_high": 154.14,
         "opening_range_low": 145.92
       },
@@ -498,7 +498,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -509,18 +509,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002353.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002353.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002353.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.134
+      "elapsed_seconds": 0.787
     },
     {
       "schema_version": 1,
@@ -531,11 +531,11 @@
       "provider_symbol": "002272.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -550,14 +550,14 @@
         "high": 15.15,
         "low": 15.04,
         "close": 15.11,
-        "volume": 2718300.0,
+        "volume": 2292800.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 15.0825,
         "ema20": 15.0947,
         "ema60": 14.873,
-        "ema200": 16.2848,
+        "ema200": 16.4652,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 17.9712
@@ -576,8 +576,8 @@
         "bollinger_lower": 14.717
       },
       "intraday": {
-        "vwap": 14.985,
-        "relative_volume": 0.8794,
+        "vwap": 14.9836,
+        "relative_volume": 0.7417,
         "opening_range_high": 15.29,
         "opening_range_low": 14.89
       },
@@ -610,18 +610,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002272.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002272.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002272.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.205
+      "elapsed_seconds": 0.833
     },
     {
       "schema_version": 1,
@@ -632,11 +632,11 @@
       "provider_symbol": "603129.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 357,
+      "observations": 333,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -657,8 +657,8 @@
       "trend": {
         "ema9": 284.2048,
         "ema20": 284.7792,
-        "ema60": 289.5554,
-        "ema200": 284.2835,
+        "ema60": 289.5553,
+        "ema200": 284.6851,
         "ema20_slope": "走平",
         "ema60_slope": "下行",
         "adx14": 26.6938
@@ -711,18 +711,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603129.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603129.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603129.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 117,
+        "rejected_rows": 108,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 108 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.141
+      "elapsed_seconds": 0.687
     },
     {
       "schema_version": 1,
@@ -733,11 +733,11 @@
       "provider_symbol": "605117.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 365,
+      "observations": 340,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -759,7 +759,7 @@
         "ema9": 90.5113,
         "ema20": 90.914,
         "ema60": 89.1144,
-        "ema200": 88.2667,
+        "ema200": 88.3546,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 17.7161
@@ -812,18 +812,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "605117.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/605117.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/605117.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 109,
+        "rejected_rows": 101,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 109 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 101 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.132
+      "elapsed_seconds": 0.687
     },
     {
       "schema_version": 1,
@@ -834,11 +834,11 @@
       "provider_symbol": "002683.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 342,
+      "observations": 318,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -853,14 +853,14 @@
         "high": 28.52,
         "low": 28.41,
         "close": 28.45,
-        "volume": 6840800.0,
+        "volume": 940400.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 28.6387,
         "ema20": 28.7893,
-        "ema60": 28.6463,
-        "ema200": 28.2754,
+        "ema60": 28.6462,
+        "ema200": 28.2779,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 18.3801
@@ -879,8 +879,8 @@
         "bollinger_lower": 28.2289
       },
       "intraday": {
-        "vwap": 28.5524,
-        "relative_volume": 6.3906,
+        "vwap": 28.6129,
+        "relative_volume": 0.8785,
         "opening_range_high": 29.09,
         "opening_range_low": 28.58
       },
@@ -913,18 +913,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002683.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002683.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002683.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 132,
+        "rejected_rows": 123,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 132 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 123 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.162
+      "elapsed_seconds": 0.789
     },
     {
       "schema_version": 1,
@@ -935,11 +935,11 @@
       "provider_symbol": "600795.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 372,
+      "observations": 346,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -961,7 +961,7 @@
         "ema9": 5.0729,
         "ema20": 5.0667,
         "ema60": 5.047,
-        "ema200": 4.9646,
+        "ema200": 4.956,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 28.1572
@@ -1014,18 +1014,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600795.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600795.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600795.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 102,
+        "rejected_rows": 95,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.139
+      "elapsed_seconds": 0.685
     },
     {
       "schema_version": 1,
@@ -1036,11 +1036,11 @@
       "provider_symbol": "000988.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 350,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1055,14 +1055,14 @@
         "high": 109.86,
         "low": 109.1,
         "close": 109.79,
-        "volume": 6002100.0,
+        "volume": 5123656.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 109.0673,
         "ema20": 108.3057,
-        "ema60": 106.0059,
-        "ema200": 116.2121,
+        "ema60": 106.0057,
+        "ema200": 116.979,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 23.3981
@@ -1081,8 +1081,8 @@
         "bollinger_lower": 105.7951
       },
       "intraday": {
-        "vwap": 108.3991,
-        "relative_volume": 1.3662,
+        "vwap": 108.3862,
+        "relative_volume": 1.1663,
         "opening_range_high": 109.15,
         "opening_range_low": 106.88
       },
@@ -1115,18 +1115,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000988.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000988.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000988.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 124,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 124 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.121
+      "elapsed_seconds": 0.783
     },
     {
       "schema_version": 1,
@@ -1137,11 +1137,11 @@
       "provider_symbol": "603005.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 379,
+      "observations": 352,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1163,7 +1163,7 @@
         "ema9": 33.4269,
         "ema20": 33.4192,
         "ema60": 32.8576,
-        "ema200": 33.9558,
+        "ema200": 34.2734,
         "ema20_slope": "走平",
         "ema60_slope": "上行",
         "adx14": 21.2627
@@ -1216,18 +1216,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603005.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603005.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603005.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 95,
+        "rejected_rows": 89,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 89 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.154
+      "elapsed_seconds": 0.694
     },
     {
       "schema_version": 1,
@@ -1238,11 +1238,11 @@
       "provider_symbol": "688017.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 368,
+      "observations": 343,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1264,7 +1264,7 @@
         "ema9": 348.4231,
         "ema20": 350.133,
         "ema60": 344.6212,
-        "ema200": 342.8886,
+        "ema200": 345.2693,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 18.4892
@@ -1317,18 +1317,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688017.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688017.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688017.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 106,
+        "rejected_rows": 98,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 106 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 98 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.144
+      "elapsed_seconds": 0.685
     },
     {
       "schema_version": 1,
@@ -1339,11 +1339,11 @@
       "provider_symbol": "688008.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 383,
+      "observations": 356,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1364,8 +1364,8 @@
       "trend": {
         "ema9": 212.7746,
         "ema20": 213.4818,
-        "ema60": 212.1051,
-        "ema200": 219.6675,
+        "ema60": 212.105,
+        "ema200": 221.4071,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 11.6775
@@ -1418,18 +1418,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688008.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688008.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688008.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 91,
+        "rejected_rows": 85,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 91 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 85 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.129
+      "elapsed_seconds": 0.696
     },
     {
       "schema_version": 1,
@@ -1440,11 +1440,11 @@
       "provider_symbol": "688361.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 369,
+      "observations": 344,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1465,8 +1465,8 @@
       "trend": {
         "ema9": 325.4848,
         "ema20": 332.8688,
-        "ema60": 341.3666,
-        "ema200": 345.0259,
+        "ema60": 341.3661,
+        "ema200": 348.0822,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 28.4844
@@ -1519,18 +1519,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688361.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688361.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688361.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 105,
+        "rejected_rows": 97,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 105 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 97 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.149
+      "elapsed_seconds": 0.682
     },
     {
       "schema_version": 1,
@@ -1541,11 +1541,11 @@
       "provider_symbol": "601038.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 355,
+      "observations": 330,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1567,7 +1567,7 @@
         "ema9": 12.7209,
         "ema20": 12.837,
         "ema60": 13.1203,
-        "ema200": 13.0334,
+        "ema200": 12.9726,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 39.8632
@@ -1620,18 +1620,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601038.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601038.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601038.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 119,
+        "rejected_rows": 111,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 119 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 111 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.167
+      "elapsed_seconds": 0.664
     },
     {
       "schema_version": 1,
@@ -1642,11 +1642,11 @@
       "provider_symbol": "600309.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 379,
+      "observations": 352,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1668,7 +1668,7 @@
         "ema9": 73.2515,
         "ema20": 73.7365,
         "ema60": 74.6705,
-        "ema200": 73.9681,
+        "ema200": 73.9469,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 28.7078
@@ -1721,18 +1721,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600309.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600309.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600309.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 95,
+        "rejected_rows": 89,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 89 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.16
+      "elapsed_seconds": 0.684
     },
     {
       "schema_version": 1,
@@ -1743,11 +1743,11 @@
       "provider_symbol": "600031.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 374,
+      "observations": 348,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1769,7 +1769,7 @@
         "ema9": 18.7646,
         "ema20": 18.8265,
         "ema60": 19.1506,
-        "ema200": 19.3075,
+        "ema200": 19.2722,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.826
@@ -1822,18 +1822,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600031.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600031.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600031.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 100,
+        "rejected_rows": 93,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 100 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 93 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.126
+      "elapsed_seconds": 0.674
     },
     {
       "schema_version": 1,
@@ -1844,11 +1844,11 @@
       "provider_symbol": "601727.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 370,
+      "observations": 345,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1870,7 +1870,7 @@
         "ema9": 6.7309,
         "ema20": 6.7577,
         "ema60": 6.8069,
-        "ema200": 6.8364,
+        "ema200": 6.8324,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.7149
@@ -1923,18 +1923,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601727.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601727.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601727.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 104,
+        "rejected_rows": 96,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 104 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 96 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.212
+      "elapsed_seconds": 0.696
     },
     {
       "schema_version": 1,
@@ -1945,11 +1945,11 @@
       "provider_symbol": "000682.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 345,
+      "observations": 321,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -1964,14 +1964,14 @@
         "high": 11.9,
         "low": 11.86,
         "close": 11.9,
-        "volume": 1425500.0,
+        "volume": 1162200.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 11.877,
         "ema20": 11.9218,
         "ema60": 12.0301,
-        "ema200": 12.1305,
+        "ema200": 12.1406,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 29.4631
@@ -1990,8 +1990,8 @@
         "bollinger_lower": 11.7564
       },
       "intraday": {
-        "vwap": 11.8277,
-        "relative_volume": 0.6707,
+        "vwap": 11.8269,
+        "relative_volume": 0.5468,
         "opening_range_high": 11.93,
         "opening_range_low": 11.77
       },
@@ -2024,18 +2024,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000682.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000682.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000682.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 129,
+        "rejected_rows": 120,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 129 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 120 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.142
+      "elapsed_seconds": 0.765
     },
     {
       "schema_version": 1,
@@ -2046,11 +2046,11 @@
       "provider_symbol": "603606.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 364,
+      "observations": 338,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2071,8 +2071,8 @@
       "trend": {
         "ema9": 38.1592,
         "ema20": 38.369,
-        "ema60": 38.8053,
-        "ema200": 39.5169,
+        "ema60": 38.8052,
+        "ema200": 39.5447,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 25.2274
@@ -2125,18 +2125,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603606.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603606.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603606.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 110,
+        "rejected_rows": 103,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 103 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.132
+      "elapsed_seconds": 0.679
     },
     {
       "schema_version": 1,
@@ -2147,11 +2147,11 @@
       "provider_symbol": "601156.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 354,
+      "observations": 330,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2173,7 +2173,7 @@
         "ema9": 17.8425,
         "ema20": 17.9299,
         "ema60": 17.7765,
-        "ema200": 17.2461,
+        "ema200": 17.261,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 27.5224
@@ -2226,18 +2226,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601156.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601156.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601156.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 120,
+        "rejected_rows": 111,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 120 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 111 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.15
+      "elapsed_seconds": 0.718
     },
     {
       "schema_version": 1,
@@ -2248,11 +2248,11 @@
       "provider_symbol": "605499.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 365,
+      "observations": 340,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2273,8 +2273,8 @@
       "trend": {
         "ema9": 123.8506,
         "ema20": 125.0771,
-        "ema60": 126.3217,
-        "ema200": 126.9309,
+        "ema60": 126.3214,
+        "ema200": 126.7152,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 28.5753
@@ -2327,18 +2327,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "605499.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/605499.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/605499.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 109,
+        "rejected_rows": 101,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 109 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 101 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.19
+      "elapsed_seconds": 0.686
     },
     {
       "schema_version": 1,
@@ -2349,11 +2349,11 @@
       "provider_symbol": "601717.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 356,
+      "observations": 331,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2374,8 +2374,8 @@
       "trend": {
         "ema9": 15.3782,
         "ema20": 15.4591,
-        "ema60": 15.6765,
-        "ema200": 15.632,
+        "ema60": 15.6764,
+        "ema200": 15.5462,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 37.187
@@ -2428,18 +2428,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601717.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601717.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601717.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 118,
+        "rejected_rows": 110,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 118 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.117
+      "elapsed_seconds": 0.737
     },
     {
       "schema_version": 1,
@@ -2450,11 +2450,11 @@
       "provider_symbol": "600176.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 386,
+      "observations": 359,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2475,8 +2475,8 @@
       "trend": {
         "ema9": 43.869,
         "ema20": 43.5988,
-        "ema60": 42.5723,
-        "ema200": 43.9236,
+        "ema60": 42.5724,
+        "ema200": 44.5438,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 12.1931
@@ -2529,18 +2529,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600176.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600176.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600176.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 88,
+        "rejected_rows": 82,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 88 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 82 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.15
+      "elapsed_seconds": 0.772
     },
     {
       "schema_version": 1,
@@ -2551,11 +2551,11 @@
       "provider_symbol": "601318.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 379,
+      "observations": 352,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2577,7 +2577,7 @@
         "ema9": 52.064,
         "ema20": 52.3143,
         "ema60": 52.8412,
-        "ema200": 52.776,
+        "ema200": 52.6444,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 38.4892
@@ -2630,18 +2630,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601318.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601318.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601318.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 95,
+        "rejected_rows": 89,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 89 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.129
+      "elapsed_seconds": 0.709
     },
     {
       "schema_version": 1,
@@ -2652,11 +2652,11 @@
       "provider_symbol": "003816.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2671,14 +2671,14 @@
         "high": 3.87,
         "low": 3.85,
         "close": 3.86,
-        "volume": 111558900.0,
+        "volume": 15113300.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 3.8782,
         "ema20": 3.897,
         "ema60": 3.939,
-        "ema200": 3.9862,
+        "ema200": 3.9739,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 33.1319
@@ -2697,8 +2697,8 @@
         "bollinger_lower": 3.852
       },
       "intraday": {
-        "vwap": 3.8685,
-        "relative_volume": 8.6747,
+        "vwap": 3.8742,
+        "relative_volume": 1.1752,
         "opening_range_high": 3.91,
         "opening_range_low": 3.87
       },
@@ -2720,7 +2720,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "绿",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -2731,18 +2731,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "003816.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/003816.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/003816.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.167
+      "elapsed_seconds": 0.782
     },
     {
       "schema_version": 1,
@@ -2753,11 +2753,11 @@
       "provider_symbol": "601088.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 372,
+      "observations": 345,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2779,7 +2779,7 @@
         "ema9": 44.6,
         "ema20": 44.4574,
         "ema60": 44.2934,
-        "ema200": 43.8315,
+        "ema200": 43.7279,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 16.0074
@@ -2832,18 +2832,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601088.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601088.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601088.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 102,
+        "rejected_rows": 96,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 96 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.134
+      "elapsed_seconds": 0.682
     },
     {
       "schema_version": 1,
@@ -2854,11 +2854,11 @@
       "provider_symbol": "600941.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 364,
+      "observations": 339,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2880,7 +2880,7 @@
         "ema9": 97.3747,
         "ema20": 96.9364,
         "ema60": 96.5735,
-        "ema200": 95.1503,
+        "ema200": 94.9631,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 16.8971
@@ -2933,18 +2933,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600941.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600941.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600941.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 110,
+        "rejected_rows": 102,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.162
+      "elapsed_seconds": 0.685
     },
     {
       "schema_version": 1,
@@ -2955,11 +2955,11 @@
       "provider_symbol": "601179.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 378,
+      "observations": 351,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -2981,7 +2981,7 @@
         "ema9": 13.5436,
         "ema20": 13.6437,
         "ema60": 13.7899,
-        "ema200": 13.8246,
+        "ema200": 13.8288,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 25.578
@@ -3034,18 +3034,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601179.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601179.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601179.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 96,
+        "rejected_rows": 90,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 96 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 90 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.132
+      "elapsed_seconds": 0.788
     },
     {
       "schema_version": 1,
@@ -3056,11 +3056,11 @@
       "provider_symbol": "002179.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 350,
+      "observations": 326,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3075,14 +3075,14 @@
         "high": 36.14,
         "low": 35.91,
         "close": 36.04,
-        "volume": 2434905.0,
+        "volume": 2081605.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 36.09,
         "ema20": 35.9548,
         "ema60": 35.451,
-        "ema200": 36.0106,
+        "ema200": 36.205,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 26.8321
@@ -3101,8 +3101,8 @@
         "bollinger_lower": 35.404
       },
       "intraday": {
-        "vwap": 36.2011,
-        "relative_volume": 0.8968,
+        "vwap": 36.2024,
+        "relative_volume": 0.7667,
         "opening_range_high": 37.24,
         "opening_range_low": 35.68
       },
@@ -3135,18 +3135,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002179.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002179.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002179.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 124,
+        "rejected_rows": 115,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 124 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 115 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.146
+      "elapsed_seconds": 0.792
     },
     {
       "schema_version": 1,
@@ -3157,11 +3157,11 @@
       "provider_symbol": "600372.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 357,
+      "observations": 332,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3183,7 +3183,7 @@
         "ema9": 11.2612,
         "ema20": 11.2786,
         "ema60": 11.3155,
-        "ema200": 11.2582,
+        "ema200": 11.2514,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 14.4172
@@ -3236,18 +3236,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600372.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600372.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600372.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 117,
+        "rejected_rows": 109,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 109 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.133
+      "elapsed_seconds": 0.774
     },
     {
       "schema_version": 1,
@@ -3258,11 +3258,11 @@
       "provider_symbol": "601919.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 367,
+      "observations": 341,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3284,7 +3284,7 @@
         "ema9": 15.405,
         "ema20": 15.3943,
         "ema60": 15.4233,
-        "ema200": 15.1337,
+        "ema200": 15.1022,
         "ema20_slope": "上行",
         "ema60_slope": "走平",
         "adx14": 18.2317
@@ -3337,18 +3337,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601919.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601919.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601919.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 107,
+        "rejected_rows": 100,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 107 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 100 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.177
+      "elapsed_seconds": 0.686
     },
     {
       "schema_version": 1,
@@ -3359,11 +3359,11 @@
       "provider_symbol": "000657.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3378,14 +3378,14 @@
         "high": 68.4,
         "low": 67.95,
         "close": 68.29,
-        "volume": 7739903.0,
+        "volume": 6637970.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 67.9665,
         "ema20": 68.2106,
-        "ema60": 66.1888,
-        "ema200": 67.1084,
+        "ema60": 66.1893,
+        "ema200": 67.5772,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 13.7376
@@ -3404,8 +3404,8 @@
         "bollinger_lower": 66.1189
       },
       "intraday": {
-        "vwap": 67.4621,
-        "relative_volume": 1.0949,
+        "vwap": 67.4557,
+        "relative_volume": 0.939,
         "opening_range_high": 68.97,
         "opening_range_low": 66.25
       },
@@ -3438,18 +3438,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000657.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000657.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000657.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.144
+      "elapsed_seconds": 0.803
     },
     {
       "schema_version": 1,
@@ -3460,11 +3460,11 @@
       "provider_symbol": "000858.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3479,14 +3479,14 @@
         "high": 73.81,
         "low": 73.72,
         "close": 73.76,
-        "volume": 3568364.0,
+        "volume": 3122439.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 74.0825,
         "ema20": 74.5342,
         "ema60": 75.1353,
-        "ema200": 75.1464,
+        "ema200": 75.0274,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 24.6873
@@ -3505,8 +3505,8 @@
         "bollinger_lower": 73.207
       },
       "intraday": {
-        "vwap": 74.0257,
-        "relative_volume": 0.9629,
+        "vwap": 74.0276,
+        "relative_volume": 0.8426,
         "opening_range_high": 75.0,
         "opening_range_low": 74.04
       },
@@ -3528,7 +3528,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -3539,18 +3539,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000858.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000858.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000858.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.788
     },
     {
       "schema_version": 1,
@@ -3561,11 +3561,11 @@
       "provider_symbol": "600887.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 372,
+      "observations": 346,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3587,7 +3587,7 @@
         "ema9": 25.5985,
         "ema20": 25.7174,
         "ema60": 26.0194,
-        "ema200": 26.1263,
+        "ema200": 26.0822,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 22.3702
@@ -3640,18 +3640,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600887.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600887.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600887.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 102,
+        "rejected_rows": 95,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.158
+      "elapsed_seconds": 0.689
     },
     {
       "schema_version": 1,
@@ -3662,11 +3662,11 @@
       "provider_symbol": "600141.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 375,
+      "observations": 349,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3687,8 +3687,8 @@
       "trend": {
         "ema9": 30.8543,
         "ema20": 31.1178,
-        "ema60": 31.3167,
-        "ema200": 32.1671,
+        "ema60": 31.3168,
+        "ema200": 32.4269,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.0507
@@ -3741,18 +3741,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600141.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600141.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600141.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 99,
+        "rejected_rows": 92,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 99 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 92 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.142
+      "elapsed_seconds": 0.712
     },
     {
       "schema_version": 1,
@@ -3763,11 +3763,11 @@
       "provider_symbol": "002027.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3782,14 +3782,14 @@
         "high": 5.1,
         "low": 5.08,
         "close": 5.09,
-        "volume": 15831809.0,
+        "volume": 13211009.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 5.119,
         "ema20": 5.1716,
         "ema60": 5.2318,
-        "ema200": 5.1857,
+        "ema200": 5.1728,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.6978
@@ -3808,8 +3808,8 @@
         "bollinger_lower": 5.0151
       },
       "intraday": {
-        "vwap": 5.0989,
-        "relative_volume": 0.8424,
+        "vwap": 5.099,
+        "relative_volume": 0.703,
         "opening_range_high": 5.21,
         "opening_range_low": 5.08
       },
@@ -3842,18 +3842,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002027.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002027.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002027.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.147
+      "elapsed_seconds": 0.794
     },
     {
       "schema_version": 1,
@@ -3864,11 +3864,11 @@
       "provider_symbol": "002246.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 345,
+      "observations": 320,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3883,14 +3883,14 @@
         "high": 21.1,
         "low": 21.03,
         "close": 21.09,
-        "volume": 1609000.0,
+        "volume": 1401300.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 21.2162,
         "ema20": 21.4002,
         "ema60": 21.0893,
-        "ema200": 20.0731,
+        "ema200": 20.008,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 27.1051
@@ -3909,8 +3909,8 @@
         "bollinger_lower": 20.7788
       },
       "intraday": {
-        "vwap": 21.0865,
-        "relative_volume": 0.7352,
+        "vwap": 21.0866,
+        "relative_volume": 0.6403,
         "opening_range_high": 21.5,
         "opening_range_low": 20.86
       },
@@ -3943,18 +3943,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002246.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002246.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002246.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 129,
+        "rejected_rows": 121,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 129 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 121 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.153
+      "elapsed_seconds": 0.779
     },
     {
       "schema_version": 1,
@@ -3965,11 +3965,11 @@
       "provider_symbol": "002270.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -3984,14 +3984,14 @@
         "high": 20.14,
         "low": 20.04,
         "close": 20.12,
-        "volume": 1227162.0,
+        "volume": 1072804.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 20.1736,
         "ema20": 20.2958,
-        "ema60": 20.3311,
-        "ema200": 19.8917,
+        "ema60": 20.3312,
+        "ema200": 19.8418,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.2147
@@ -4010,8 +4010,8 @@
         "bollinger_lower": 19.8821
       },
       "intraday": {
-        "vwap": 20.1286,
-        "relative_volume": 0.4905,
+        "vwap": 20.1288,
+        "relative_volume": 0.4288,
         "opening_range_high": 20.57,
         "opening_range_low": 20.06
       },
@@ -4044,18 +4044,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002270.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002270.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002270.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.134
+      "elapsed_seconds": 0.779
     },
     {
       "schema_version": 1,
@@ -4066,11 +4066,11 @@
       "provider_symbol": "601020.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 363,
+      "observations": 338,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4092,7 +4092,7 @@
         "ema9": 21.9551,
         "ema20": 22.1451,
         "ema60": 21.8809,
-        "ema200": 21.1642,
+        "ema200": 21.2001,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 27.7071
@@ -4145,18 +4145,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601020.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601020.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601020.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 111,
+        "rejected_rows": 103,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 111 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 103 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.811
     },
     {
       "schema_version": 1,
@@ -4167,11 +4167,11 @@
       "provider_symbol": "600549.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 381,
+      "observations": 355,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4192,8 +4192,8 @@
       "trend": {
         "ema9": 56.1153,
         "ema20": 56.1849,
-        "ema60": 55.6584,
-        "ema200": 56.6642,
+        "ema60": 55.6585,
+        "ema200": 57.0406,
         "ema20_slope": "走平",
         "ema60_slope": "上行",
         "adx14": 10.0799
@@ -4246,18 +4246,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600549.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600549.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600549.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 93,
+        "rejected_rows": 86,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 93 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 86 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.154
+      "elapsed_seconds": 0.743
     },
     {
       "schema_version": 1,
@@ -4268,11 +4268,11 @@
       "provider_symbol": "601126.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 370,
+      "observations": 343,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4293,8 +4293,8 @@
       "trend": {
         "ema9": 46.3579,
         "ema20": 46.4587,
-        "ema60": 45.5554,
-        "ema200": 47.0288,
+        "ema60": 45.5555,
+        "ema200": 47.0949,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 25.9157
@@ -4347,18 +4347,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601126.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601126.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601126.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 104,
+        "rejected_rows": 98,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 104 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 98 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.132
+      "elapsed_seconds": 0.746
     },
     {
       "schema_version": 1,
@@ -4369,11 +4369,11 @@
       "provider_symbol": "600406.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 371,
+      "observations": 344,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4395,7 +4395,7 @@
         "ema9": 23.3387,
         "ema20": 23.5219,
         "ema60": 23.8388,
-        "ema200": 23.7698,
+        "ema200": 23.7285,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 41.5137
@@ -4448,18 +4448,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600406.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600406.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600406.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 103,
+        "rejected_rows": 97,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 103 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 97 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.153
+      "elapsed_seconds": 0.891
     },
     {
       "schema_version": 1,
@@ -4470,11 +4470,11 @@
       "provider_symbol": "600420.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4496,7 +4496,7 @@
         "ema9": 8.7321,
         "ema20": 8.7314,
         "ema60": 8.726,
-        "ema200": 8.6822,
+        "ema200": 8.6846,
         "ema20_slope": "走平",
         "ema60_slope": "走平",
         "adx14": 14.022
@@ -4549,18 +4549,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600420.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600420.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600420.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.123
+      "elapsed_seconds": 0.743
     },
     {
       "schema_version": 1,
@@ -4571,11 +4571,11 @@
       "provider_symbol": "600161.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 351,
+      "observations": 326,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4597,7 +4597,7 @@
         "ema9": 12.6172,
         "ema20": 12.6662,
         "ema60": 12.6559,
-        "ema200": 12.502,
+        "ema200": 12.4843,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 25.274
@@ -4650,18 +4650,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600161.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600161.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600161.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 123,
+        "rejected_rows": 115,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 123 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 115 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.159
+      "elapsed_seconds": 0.691
     },
     {
       "schema_version": 1,
@@ -4672,11 +4672,11 @@
       "provider_symbol": "002142.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 347,
+      "observations": 323,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4691,14 +4691,14 @@
         "high": 32.38,
         "low": 32.24,
         "close": 32.24,
-        "volume": 20074150.0,
+        "volume": 2014796.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 32.2965,
         "ema20": 32.2279,
         "ema60": 32.0561,
-        "ema200": 31.7507,
+        "ema200": 31.7231,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 12.6237
@@ -4717,8 +4717,8 @@
         "bollinger_lower": 31.9347
       },
       "intraday": {
-        "vwap": 32.3262,
-        "relative_volume": 4.9312,
+        "vwap": 32.3532,
+        "relative_volume": 0.4949,
         "opening_range_high": 32.33,
         "opening_range_low": 32.02
       },
@@ -4740,7 +4740,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "红",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -4751,18 +4751,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002142.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002142.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002142.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 127,
+        "rejected_rows": 118,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 127 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 118 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.173
+      "elapsed_seconds": 0.855
     },
     {
       "schema_version": 1,
@@ -4773,11 +4773,11 @@
       "provider_symbol": "600426.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 373,
+      "observations": 347,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4799,7 +4799,7 @@
         "ema9": 20.7314,
         "ema20": 20.8549,
         "ema60": 21.0546,
-        "ema200": 20.8474,
+        "ema200": 20.7936,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 18.4215
@@ -4852,18 +4852,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600426.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600426.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600426.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 101,
+        "rejected_rows": 94,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 101 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 94 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.166
+      "elapsed_seconds": 0.854
     },
     {
       "schema_version": 1,
@@ -4874,11 +4874,11 @@
       "provider_symbol": "601138.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 386,
+      "observations": 359,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -4899,8 +4899,8 @@
       "trend": {
         "ema9": 65.9424,
         "ema20": 65.9731,
-        "ema60": 65.6321,
-        "ema200": 64.3027,
+        "ema60": 65.6322,
+        "ema200": 64.3891,
         "ema20_slope": "走平",
         "ema60_slope": "上行",
         "adx14": 14.032
@@ -4953,18 +4953,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601138.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601138.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601138.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 88,
+        "rejected_rows": 82,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 88 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 82 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.12
+      "elapsed_seconds": 0.853
     },
     {
       "schema_version": 1,
@@ -4975,11 +4975,11 @@
       "provider_symbol": "601398.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 381,
+      "observations": 354,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5001,7 +5001,7 @@
         "ema9": 7.5754,
         "ema20": 7.5651,
         "ema60": 7.5727,
-        "ema200": 7.5762,
+        "ema200": 7.567,
         "ema20_slope": "上行",
         "ema60_slope": "走平",
         "adx14": 9.3384
@@ -5054,18 +5054,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601398.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601398.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601398.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 93,
+        "rejected_rows": 87,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 93 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 87 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.17
+      "elapsed_seconds": 0.731
     },
     {
       "schema_version": 1,
@@ -5076,11 +5076,11 @@
       "provider_symbol": "600312.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 360,
+      "observations": 335,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5102,7 +5102,7 @@
         "ema9": 19.4643,
         "ema20": 19.5931,
         "ema60": 19.8882,
-        "ema200": 19.4735,
+        "ema200": 19.3995,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 27.5083
@@ -5155,18 +5155,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600312.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600312.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600312.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 114,
+        "rejected_rows": 106,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 114 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 106 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.162
+      "elapsed_seconds": 0.682
     },
     {
       "schema_version": 1,
@@ -5177,11 +5177,11 @@
       "provider_symbol": "002028.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5196,14 +5196,14 @@
         "high": 166.45,
         "low": 165.59,
         "close": 166.0,
-        "volume": 898072.0,
+        "volume": 733500.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 166.1607,
         "ema20": 166.1606,
-        "ema60": 163.9854,
-        "ema200": 163.8784,
+        "ema60": 163.986,
+        "ema200": 163.6811,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 29.3328
@@ -5222,8 +5222,8 @@
         "bollinger_lower": 163.1835
       },
       "intraday": {
-        "vwap": 165.7824,
-        "relative_volume": 0.7332,
+        "vwap": 165.779,
+        "relative_volume": 0.5989,
         "opening_range_high": 167.88,
         "opening_range_low": 164.61
       },
@@ -5256,18 +5256,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002028.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002028.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002028.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.153
+      "elapsed_seconds": 0.852
     },
     {
       "schema_version": 1,
@@ -5278,11 +5278,11 @@
       "provider_symbol": "600276.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 379,
+      "observations": 353,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5304,7 +5304,7 @@
         "ema9": 52.9215,
         "ema20": 53.4888,
         "ema60": 53.8944,
-        "ema200": 53.6936,
+        "ema200": 53.7895,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.4299
@@ -5357,18 +5357,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600276.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600276.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600276.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 95,
+        "rejected_rows": 88,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 95 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 88 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.133
+      "elapsed_seconds": 0.762
     },
     {
       "schema_version": 1,
@@ -5379,11 +5379,11 @@
       "provider_symbol": "601975.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 364,
+      "observations": 339,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5405,7 +5405,7 @@
         "ema9": 3.5762,
         "ema20": 3.5904,
         "ema60": 3.6311,
-        "ema200": 3.689,
+        "ema200": 3.6809,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 8.7259
@@ -5458,18 +5458,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601975.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601975.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601975.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 110,
+        "rejected_rows": 102,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.142
+      "elapsed_seconds": 0.853
     },
     {
       "schema_version": 1,
@@ -5480,11 +5480,11 @@
       "provider_symbol": "600036.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 378,
+      "observations": 351,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5506,7 +5506,7 @@
         "ema9": 38.5886,
         "ema20": 38.6515,
         "ema60": 38.8356,
-        "ema200": 38.7076,
+        "ema200": 38.651,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.0267
@@ -5559,18 +5559,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600036.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600036.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600036.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 96,
+        "rejected_rows": 90,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 96 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 90 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.17
+      "elapsed_seconds": 0.759
     },
     {
       "schema_version": 1,
@@ -5581,11 +5581,11 @@
       "provider_symbol": "603228.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 376,
+      "observations": 350,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5607,7 +5607,7 @@
         "ema9": 97.705,
         "ema20": 97.1626,
         "ema60": 92.8538,
-        "ema200": 83.1674,
+        "ema200": 82.8793,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 28.0647
@@ -5660,18 +5660,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603228.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603228.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603228.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 98,
+        "rejected_rows": 91,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 98 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 91 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.151
+      "elapsed_seconds": 0.738
     },
     {
       "schema_version": 1,
@@ -5682,11 +5682,11 @@
       "provider_symbol": "603298.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 357,
+      "observations": 332,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5708,7 +5708,7 @@
         "ema9": 25.6468,
         "ema20": 25.8125,
         "ema60": 26.2687,
-        "ema200": 26.3372,
+        "ema200": 26.3048,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 25.4738
@@ -5761,18 +5761,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603298.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603298.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603298.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 117,
+        "rejected_rows": 109,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 109 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.147
+      "elapsed_seconds": 0.7
     },
     {
       "schema_version": 1,
@@ -5783,11 +5783,11 @@
       "provider_symbol": "000651.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5802,14 +5802,14 @@
         "high": 39.99,
         "low": 39.9,
         "close": 39.92,
-        "volume": 5984819.0,
+        "volume": 5471519.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 40.0512,
         "ema20": 40.1403,
         "ema60": 40.3338,
-        "ema200": 40.0274,
+        "ema200": 39.9967,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.4247
@@ -5828,8 +5828,8 @@
         "bollinger_lower": 39.9242
       },
       "intraday": {
-        "vwap": 40.0713,
-        "relative_volume": 0.9791,
+        "vwap": 40.0728,
+        "relative_volume": 0.8952,
         "opening_range_high": 40.17,
         "opening_range_low": 39.98
       },
@@ -5851,7 +5851,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -5862,18 +5862,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000651.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000651.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000651.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.145
+      "elapsed_seconds": 0.861
     },
     {
       "schema_version": 1,
@@ -5884,11 +5884,11 @@
       "provider_symbol": "300124.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 340,
+      "observations": 316,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -5903,14 +5903,14 @@
         "high": 61.25,
         "low": 61.08,
         "close": 61.22,
-        "volume": 2210268.0,
+        "volume": 1877200.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 61.3288,
         "ema20": 61.8643,
-        "ema60": 62.796,
-        "ema200": 63.418,
+        "ema60": 62.7959,
+        "ema200": 63.3746,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 51.8457
@@ -5929,8 +5929,8 @@
         "bollinger_lower": 60.2913
       },
       "intraday": {
-        "vwap": 61.1289,
-        "relative_volume": 0.6598,
+        "vwap": 61.1281,
+        "relative_volume": 0.5604,
         "opening_range_high": 61.49,
         "opening_range_low": 60.91
       },
@@ -5963,18 +5963,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "300124.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300124.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300124.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 134,
+        "rejected_rows": 125,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 134 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.147
+      "elapsed_seconds": 0.77
     },
     {
       "schema_version": 1,
@@ -5985,11 +5985,11 @@
       "provider_symbol": "002226.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 345,
+      "observations": 321,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6004,14 +6004,14 @@
         "high": 5.13,
         "low": 5.09,
         "close": 5.1,
-        "volume": 4624580.0,
+        "volume": 4151180.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 5.154,
         "ema20": 5.2081,
         "ema60": 5.1859,
-        "ema200": 4.9705,
+        "ema200": 4.9603,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 31.7199
@@ -6030,8 +6030,8 @@
         "bollinger_lower": 5.0413
       },
       "intraday": {
-        "vwap": 5.1401,
-        "relative_volume": 1.592,
+        "vwap": 5.1406,
+        "relative_volume": 1.429,
         "opening_range_high": 5.24,
         "opening_range_low": 5.1
       },
@@ -6064,18 +6064,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002226.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002226.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002226.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 129,
+        "rejected_rows": 120,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 129 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 120 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.174
+      "elapsed_seconds": 0.794
     },
     {
       "schema_version": 1,
@@ -6086,11 +6086,11 @@
       "provider_symbol": "301308.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 340,
+      "observations": 316,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6105,14 +6105,14 @@
         "high": 406.45,
         "low": 404.5,
         "close": 406.43,
-        "volume": 1405072.0,
+        "volume": 1171244.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 405.4906,
         "ema20": 407.2165,
         "ema60": 397.965,
-        "ema200": 430.4301,
+        "ema200": 437.2126,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 13.7817
@@ -6131,8 +6131,8 @@
         "bollinger_lower": 397.0631
       },
       "intraday": {
-        "vwap": 403.8841,
-        "relative_volume": 0.7366,
+        "vwap": 403.8671,
+        "relative_volume": 0.614,
         "opening_range_high": 413.6,
         "opening_range_low": 400.0
       },
@@ -6165,18 +6165,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "301308.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/301308.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/301308.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 134,
+        "rejected_rows": 125,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 134 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.694
     },
     {
       "schema_version": 1,
@@ -6187,11 +6187,11 @@
       "provider_symbol": "600809.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 368,
+      "observations": 344,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6213,7 +6213,7 @@
         "ema9": 124.2287,
         "ema20": 124.3866,
         "ema60": 123.5357,
-        "ema200": 121.2602,
+        "ema200": 120.8839,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 19.4883
@@ -6266,18 +6266,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600809.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600809.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600809.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 106,
+        "rejected_rows": 97,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 106 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 97 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.133
+      "elapsed_seconds": 0.704
     },
     {
       "schema_version": 1,
@@ -6288,11 +6288,11 @@
       "provider_symbol": "002463.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 323,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6307,14 +6307,14 @@
         "high": 121.47,
         "low": 120.56,
         "close": 121.27,
-        "volume": 4233837.0,
+        "volume": 3754437.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 121.3943,
         "ema20": 121.8165,
-        "ema60": 120.1892,
-        "ema200": 121.2337,
+        "ema60": 120.1891,
+        "ema200": 121.5573,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 15.2572
@@ -6333,8 +6333,8 @@
         "bollinger_lower": 118.7282
       },
       "intraday": {
-        "vwap": 120.6984,
-        "relative_volume": 0.8454,
+        "vwap": 120.6951,
+        "relative_volume": 0.7497,
         "opening_range_high": 122.04,
         "opening_range_low": 119.11
       },
@@ -6367,18 +6367,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002463.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002463.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002463.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 118,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 118 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.158
+      "elapsed_seconds": 0.79
     },
     {
       "schema_version": 1,
@@ -6389,11 +6389,11 @@
       "provider_symbol": "000568.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 344,
+      "observations": 319,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6408,14 +6408,14 @@
         "high": 89.55,
         "low": 89.21,
         "close": 89.5,
-        "volume": 1348975.0,
+        "volume": 1246175.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 90.1607,
         "ema20": 90.5356,
-        "ema60": 89.9601,
-        "ema200": 86.618,
+        "ema60": 89.96,
+        "ema200": 86.3281,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 26.786
@@ -6434,8 +6434,8 @@
         "bollinger_lower": 89.0668
       },
       "intraday": {
-        "vwap": 90.1593,
-        "relative_volume": 0.9947,
+        "vwap": 90.165,
+        "relative_volume": 0.9189,
         "opening_range_high": 91.9,
         "opening_range_low": 90.08
       },
@@ -6468,18 +6468,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000568.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000568.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000568.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 130,
+        "rejected_rows": 122,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 130 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 122 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.166
+      "elapsed_seconds": 0.788
     },
     {
       "schema_version": 1,
@@ -6490,11 +6490,11 @@
       "provider_symbol": "002050.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 351,
+      "observations": 327,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6509,14 +6509,14 @@
         "high": 38.39,
         "low": 38.19,
         "close": 38.31,
-        "volume": 5226615.0,
+        "volume": 4439595.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 38.3894,
         "ema20": 38.6336,
         "ema60": 38.6826,
-        "ema200": 39.2817,
+        "ema200": 39.3822,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 20.7345
@@ -6535,8 +6535,8 @@
         "bollinger_lower": 37.8594
       },
       "intraday": {
-        "vwap": 38.2403,
-        "relative_volume": 0.6514,
+        "vwap": 38.2396,
+        "relative_volume": 0.5533,
         "opening_range_high": 38.88,
         "opening_range_low": 38.1
       },
@@ -6569,18 +6569,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002050.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002050.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002050.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 123,
+        "rejected_rows": 114,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 123 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 114 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.13
+      "elapsed_seconds": 0.785
     },
     {
       "schema_version": 1,
@@ -6591,11 +6591,11 @@
       "provider_symbol": "600000.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 363,
+      "observations": 338,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6617,7 +6617,7 @@
         "ema9": 9.1227,
         "ema20": 9.1416,
         "ema60": 9.2003,
-        "ema200": 9.178,
+        "ema200": 9.1669,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 10.917
@@ -6670,18 +6670,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600000.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600000.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600000.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 111,
+        "rejected_rows": 103,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 111 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 103 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.122
+      "elapsed_seconds": 0.674
     },
     {
       "schema_version": 1,
@@ -6692,11 +6692,11 @@
       "provider_symbol": "603288.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 373,
+      "observations": 347,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6718,7 +6718,7 @@
         "ema9": 35.9112,
         "ema20": 36.0295,
         "ema60": 36.3726,
-        "ema200": 36.2425,
+        "ema200": 36.2102,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 25.6321
@@ -6771,18 +6771,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603288.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603288.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603288.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 101,
+        "rejected_rows": 94,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 101 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 94 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.125
+      "elapsed_seconds": 0.831
     },
     {
       "schema_version": 1,
@@ -6793,11 +6793,11 @@
       "provider_symbol": "002415.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6812,14 +6812,14 @@
         "high": 34.93,
         "low": 34.74,
         "close": 34.9,
-        "volume": 11133777.0,
+        "volume": 8440875.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 35.0685,
         "ema20": 35.5308,
         "ema60": 36.3312,
-        "ema200": 35.9156,
+        "ema200": 35.9242,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 45.1695
@@ -6838,8 +6838,8 @@
         "bollinger_lower": 34.3256
       },
       "intraday": {
-        "vwap": 34.8862,
-        "relative_volume": 0.9386,
+        "vwap": 34.8867,
+        "relative_volume": 0.7116,
         "opening_range_high": 35.78,
         "opening_range_low": 34.85
       },
@@ -6861,7 +6861,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -6872,18 +6872,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002415.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002415.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002415.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.159
+      "elapsed_seconds": 0.788
     },
     {
       "schema_version": 1,
@@ -6894,11 +6894,11 @@
       "provider_symbol": "002916.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 353,
+      "observations": 328,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -6913,14 +6913,14 @@
         "high": 378.05,
         "low": 375.63,
         "close": 377.99,
-        "volume": 7359008.0,
+        "volume": 745857.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 378.2152,
         "ema20": 379.7938,
-        "ema60": 370.6036,
-        "ema200": 367.6402,
+        "ema60": 370.6035,
+        "ema200": 369.4121,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 15.2942
@@ -6939,8 +6939,8 @@
         "bollinger_lower": 370.7557
       },
       "intraday": {
-        "vwap": 376.4219,
-        "relative_volume": 7.3956,
+        "vwap": 375.9069,
+        "relative_volume": 0.7496,
         "opening_range_high": 382.5,
         "opening_range_low": 374.05
       },
@@ -6973,18 +6973,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002916.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002916.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002916.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 121,
+        "rejected_rows": 113,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 121 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 113 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.151
+      "elapsed_seconds": 0.8
     },
     {
       "schema_version": 1,
@@ -6995,11 +6995,11 @@
       "provider_symbol": "002155.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7014,14 +7014,14 @@
         "high": 24.66,
         "low": 24.57,
         "close": 24.65,
-        "volume": 3699136.0,
+        "volume": 3287236.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 24.6988,
         "ema20": 24.9883,
-        "ema60": 25.0711,
-        "ema200": 24.3631,
+        "ema60": 25.0712,
+        "ema200": 24.3223,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 37.5441
@@ -7040,8 +7040,8 @@
         "bollinger_lower": 24.0856
       },
       "intraday": {
-        "vwap": 24.545,
-        "relative_volume": 0.7952,
+        "vwap": 24.5444,
+        "relative_volume": 0.7067,
         "opening_range_high": 24.81,
         "opening_range_low": 24.19
       },
@@ -7074,18 +7074,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002155.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002155.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002155.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.158
+      "elapsed_seconds": 0.921
     },
     {
       "schema_version": 1,
@@ -7096,11 +7096,11 @@
       "provider_symbol": "600089.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 378,
+      "observations": 351,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7121,8 +7121,8 @@
       "trend": {
         "ema9": 20.8776,
         "ema20": 20.9931,
-        "ema60": 21.1381,
-        "ema200": 21.1061,
+        "ema60": 21.1382,
+        "ema200": 21.101,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 33.0698
@@ -7175,18 +7175,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600089.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600089.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600089.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 96,
+        "rejected_rows": 90,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 96 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 90 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.149
+      "elapsed_seconds": 0.807
     },
     {
       "schema_version": 1,
@@ -7197,11 +7197,11 @@
       "provider_symbol": "603659.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 365,
+      "observations": 340,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7223,7 +7223,7 @@
         "ema9": 24.559,
         "ema20": 24.4938,
         "ema60": 24.3575,
-        "ema200": 24.6726,
+        "ema200": 24.6973,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 21.1162
@@ -7276,18 +7276,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "603659.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603659.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/603659.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 109,
+        "rejected_rows": 101,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 109 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 101 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.687
     },
     {
       "schema_version": 1,
@@ -7298,11 +7298,11 @@
       "provider_symbol": "600183.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 383,
+      "observations": 356,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7324,7 +7324,7 @@
         "ema9": 143.3816,
         "ema20": 143.0704,
         "ema60": 137.4339,
-        "ema200": 134.0709,
+        "ema200": 134.2539,
         "ema20_slope": "走平",
         "ema60_slope": "上行",
         "adx14": 22.1966
@@ -7377,18 +7377,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600183.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600183.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600183.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 91,
+        "rejected_rows": 85,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 91 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 85 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.159
+      "elapsed_seconds": 0.733
     },
     {
       "schema_version": 1,
@@ -7399,11 +7399,11 @@
       "provider_symbol": "688235.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 358,
+      "observations": 333,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7425,7 +7425,7 @@
         "ema9": 288.0757,
         "ema20": 290.8557,
         "ema60": 289.0581,
-        "ema200": 274.4382,
+        "ema200": 275.0631,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 27.4832
@@ -7478,18 +7478,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688235.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688235.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688235.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 116,
+        "rejected_rows": 108,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 108 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.165
+      "elapsed_seconds": 0.751
     },
     {
       "schema_version": 1,
@@ -7500,11 +7500,11 @@
       "provider_symbol": "000933.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 349,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7519,14 +7519,14 @@
         "high": 25.85,
         "low": 25.78,
         "close": 25.83,
-        "volume": 3101752.0,
+        "volume": 2707240.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 25.8406,
         "ema20": 26.1306,
         "ema60": 26.3994,
-        "ema200": 25.4908,
+        "ema200": 25.3739,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 33.1275
@@ -7545,8 +7545,8 @@
         "bollinger_lower": 25.0375
       },
       "intraday": {
-        "vwap": 25.6955,
-        "relative_volume": 0.5486,
+        "vwap": 25.6945,
+        "relative_volume": 0.4788,
         "opening_range_high": 25.96,
         "opening_range_low": 25.45
       },
@@ -7568,7 +7568,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "红",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -7579,18 +7579,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000933.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000933.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000933.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 125,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.158
+      "elapsed_seconds": 0.808
     },
     {
       "schema_version": 1,
@@ -7601,11 +7601,11 @@
       "provider_symbol": "002049.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 323,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7620,14 +7620,14 @@
         "high": 67.9,
         "low": 67.27,
         "close": 67.88,
-        "volume": 4709191.0,
+        "volume": 3880651.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 67.0626,
         "ema20": 67.0129,
         "ema60": 66.8834,
-        "ema200": 69.4756,
+        "ema200": 69.9394,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 16.8194
@@ -7646,8 +7646,8 @@
         "bollinger_lower": 65.7635
       },
       "intraday": {
-        "vwap": 66.8203,
-        "relative_volume": 1.827,
+        "vwap": 66.8037,
+        "relative_volume": 1.5056,
         "opening_range_high": 66.75,
         "opening_range_low": 65.55
       },
@@ -7669,7 +7669,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "绿",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -7680,18 +7680,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002049.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002049.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002049.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 118,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 118 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.142
+      "elapsed_seconds": 0.787
     },
     {
       "schema_version": 1,
@@ -7702,11 +7702,11 @@
       "provider_symbol": "601899.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 387,
+      "observations": 360,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7728,7 +7728,7 @@
         "ema9": 32.4782,
         "ema20": 32.7053,
         "ema60": 33.2611,
-        "ema200": 32.1648,
+        "ema200": 32.0591,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 40.3642
@@ -7781,18 +7781,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601899.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601899.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601899.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 87,
+        "rejected_rows": 81,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 87 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 81 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.165
+      "elapsed_seconds": 0.783
     },
     {
       "schema_version": 1,
@@ -7803,11 +7803,11 @@
       "provider_symbol": "000333.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 351,
+      "observations": 326,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7822,14 +7822,14 @@
         "high": 83.25,
         "low": 83.0,
         "close": 83.14,
-        "volume": 2842563.0,
+        "volume": 2529863.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 83.4193,
         "ema20": 83.8099,
         "ema60": 84.5047,
-        "ema200": 83.7082,
+        "ema200": 83.5664,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 22.9653
@@ -7848,8 +7848,8 @@
         "bollinger_lower": 82.8223
       },
       "intraday": {
-        "vwap": 83.4023,
-        "relative_volume": 0.7639,
+        "vwap": 83.4048,
+        "relative_volume": 0.6799,
         "opening_range_high": 84.25,
         "opening_range_low": 83.05
       },
@@ -7882,18 +7882,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000333.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000333.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000333.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 123,
+        "rejected_rows": 115,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 123 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 115 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.144
+      "elapsed_seconds": 0.775
     },
     {
       "schema_version": 1,
@@ -7904,11 +7904,11 @@
       "provider_symbol": "688271.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 352,
+      "observations": 327,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -7929,8 +7929,8 @@
       "trend": {
         "ema9": 108.9995,
         "ema20": 109.698,
-        "ema60": 111.1065,
-        "ema200": 110.9,
+        "ema60": 111.1064,
+        "ema200": 110.6226,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.8713
@@ -7983,18 +7983,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688271.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688271.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688271.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 122,
+        "rejected_rows": 114,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 122 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 114 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.168
+      "elapsed_seconds": 0.681
     },
     {
       "schema_version": 1,
@@ -8005,11 +8005,11 @@
       "provider_symbol": "600167.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 354,
+      "observations": 330,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8031,7 +8031,7 @@
         "ema9": 5.6584,
         "ema20": 5.6852,
         "ema60": 5.7496,
-        "ema200": 5.7656,
+        "ema200": 5.757,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 39.7158
@@ -8084,18 +8084,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600167.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600167.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600167.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 120,
+        "rejected_rows": 111,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 120 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 111 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.136
+      "elapsed_seconds": 0.704
     },
     {
       "schema_version": 1,
@@ -8106,11 +8106,11 @@
       "provider_symbol": "002837.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 355,
+      "observations": 331,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8125,14 +8125,14 @@
         "high": 57.09,
         "low": 56.78,
         "close": 57.09,
-        "volume": 40201209.0,
+        "volume": 4183198.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 56.8106,
         "ema20": 56.5509,
-        "ema60": 55.3957,
-        "ema200": 58.6294,
+        "ema60": 55.3959,
+        "ema200": 58.9389,
         "ema20_slope": "上行",
         "ema60_slope": "上行",
         "adx14": 21.3971
@@ -8151,8 +8151,8 @@
         "bollinger_lower": 55.6475
       },
       "intraday": {
-        "vwap": 56.7696,
-        "relative_volume": 11.4469,
+        "vwap": 56.6354,
+        "relative_volume": 1.1911,
         "opening_range_high": 57.09,
         "opening_range_low": 56.18
       },
@@ -8174,7 +8174,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "绿",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -8185,18 +8185,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002837.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002837.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002837.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 119,
+        "rejected_rows": 110,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 119 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.166
+      "elapsed_seconds": 1.768
     },
     {
       "schema_version": 1,
@@ -8207,11 +8207,11 @@
       "provider_symbol": "600519.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 364,
+      "observations": 338,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8232,8 +8232,8 @@
       "trend": {
         "ema9": 1345.5752,
         "ema20": 1347.0149,
-        "ema60": 1340.4684,
-        "ema200": 1308.9314,
+        "ema60": 1340.4686,
+        "ema200": 1305.8818,
         "ema20_slope": "下行",
         "ema60_slope": "走平",
         "adx14": 16.4108
@@ -8286,18 +8286,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600519.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600519.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600519.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 110,
+        "rejected_rows": 103,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 103 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.124
+      "elapsed_seconds": 0.692
     },
     {
       "schema_version": 1,
@@ -8308,11 +8308,11 @@
       "provider_symbol": "000408.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 350,
+      "observations": 325,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8327,14 +8327,14 @@
         "high": 77.83,
         "low": 77.47,
         "close": 77.71,
-        "volume": 1418496.0,
+        "volume": 1238396.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 77.4921,
         "ema20": 78.7475,
         "ema60": 81.5548,
-        "ema200": 79.6614,
+        "ema200": 79.3101,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 60.1578
@@ -8353,8 +8353,8 @@
         "bollinger_lower": 75.2792
       },
       "intraday": {
-        "vwap": 76.9079,
-        "relative_volume": 0.9959,
+        "vwap": 76.9018,
+        "relative_volume": 0.8694,
         "opening_range_high": 78.14,
         "opening_range_low": 76.91
       },
@@ -8376,7 +8376,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -8387,18 +8387,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000408.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000408.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000408.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 124,
+        "rejected_rows": 116,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 124 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 116 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.156
+      "elapsed_seconds": 0.775
     },
     {
       "schema_version": 1,
@@ -8409,11 +8409,11 @@
       "provider_symbol": "000400.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 351,
+      "observations": 327,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8428,14 +8428,14 @@
         "high": 22.09,
         "low": 21.99,
         "close": 22.03,
-        "volume": 1456800.0,
+        "volume": 1232900.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 22.0652,
         "ema20": 22.2249,
         "ema60": 22.5116,
-        "ema200": 22.3459,
+        "ema200": 22.2679,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 23.205
@@ -8454,8 +8454,8 @@
         "bollinger_lower": 21.7313
       },
       "intraday": {
-        "vwap": 21.9768,
-        "relative_volume": 0.5902,
+        "vwap": 21.9762,
+        "relative_volume": 0.4994,
         "opening_range_high": 22.2,
         "opening_range_low": 21.88
       },
@@ -8477,7 +8477,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "黄",
+          "light": "红",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -8488,18 +8488,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "000400.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000400.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/000400.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 123,
+        "rejected_rows": 114,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 123 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 114 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.14
+      "elapsed_seconds": 0.787
     },
     {
       "schema_version": 1,
@@ -8510,11 +8510,11 @@
       "provider_symbol": "601127.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 376,
+      "observations": 349,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8536,7 +8536,7 @@
         "ema9": 53.5147,
         "ema20": 54.1286,
         "ema60": 55.5172,
-        "ema200": 57.3145,
+        "ema200": 57.2365,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 35.4877
@@ -8589,18 +8589,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "601127.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601127.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/601127.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 98,
+        "rejected_rows": 92,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 98 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 92 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.119
+      "elapsed_seconds": 0.684
     },
     {
       "schema_version": 1,
@@ -8611,11 +8611,11 @@
       "provider_symbol": "300760.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 340,
+      "observations": 316,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8630,14 +8630,14 @@
         "high": 150.6,
         "low": 150.31,
         "close": 150.49,
-        "volume": 654570.0,
+        "volume": 574670.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 151.4598,
         "ema20": 152.4187,
-        "ema60": 153.2069,
-        "ema200": 150.449,
+        "ema60": 153.2068,
+        "ema200": 150.1557,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 23.1465
@@ -8656,8 +8656,8 @@
         "bollinger_lower": 149.836
       },
       "intraday": {
-        "vwap": 151.4522,
-        "relative_volume": 0.6229,
+        "vwap": 151.4598,
+        "relative_volume": 0.5469,
         "opening_range_high": 154.46,
         "opening_range_low": 152.35
       },
@@ -8690,18 +8690,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "300760.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300760.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300760.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 134,
+        "rejected_rows": 125,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 134 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.851
     },
     {
       "schema_version": 1,
@@ -8712,11 +8712,11 @@
       "provider_symbol": "688676.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 364,
+      "observations": 339,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8738,7 +8738,7 @@
         "ema9": 70.4336,
         "ema20": 70.5222,
         "ema60": 69.7071,
-        "ema200": 70.9286,
+        "ema200": 70.9674,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 24.2772
@@ -8791,18 +8791,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688676.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688676.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688676.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 110,
+        "rejected_rows": 102,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 110 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 102 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.138
+      "elapsed_seconds": 0.74
     },
     {
       "schema_version": 1,
@@ -8813,11 +8813,11 @@
       "provider_symbol": "002597.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 322,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8832,14 +8832,14 @@
         "high": 19.73,
         "low": 19.65,
         "close": 19.65,
-        "volume": 718500.0,
+        "volume": 602800.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 19.7204,
         "ema20": 19.8437,
-        "ema60": 20.0902,
-        "ema200": 20.2295,
+        "ema60": 20.0903,
+        "ema200": 20.2434,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 34.279
@@ -8858,8 +8858,8 @@
         "bollinger_lower": 19.4022
       },
       "intraday": {
-        "vwap": 19.6822,
-        "relative_volume": 0.7765,
+        "vwap": 19.6823,
+        "relative_volume": 0.6514,
         "opening_range_high": 19.85,
         "opening_range_low": 19.6
       },
@@ -8892,18 +8892,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002597.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002597.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002597.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 119,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 119 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.14
+      "elapsed_seconds": 0.924
     },
     {
       "schema_version": 1,
@@ -8914,11 +8914,11 @@
       "provider_symbol": "600900.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 380,
+      "observations": 354,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -8940,7 +8940,7 @@
         "ema9": 28.1242,
         "ema20": 28.1093,
         "ema60": 28.1187,
-        "ema200": 28.1359,
+        "ema200": 28.1138,
         "ema20_slope": "走平",
         "ema60_slope": "走平",
         "adx14": 14.3732
@@ -8993,18 +8993,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "600900.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600900.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/600900.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 94,
+        "rejected_rows": 87,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 94 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 87 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.146
+      "elapsed_seconds": 0.79
     },
     {
       "schema_version": 1,
@@ -9015,8 +9015,8 @@
       "provider_symbol": "688825.SS",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
       "observations": 135,
@@ -9094,7 +9094,7 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "688825.SS",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688825.SS?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/688825.SS?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
         "rejected_rows": 31,
         "currency": "CNY",
@@ -9106,7 +9106,7 @@
         "仅有 135 个有效30分钟K线，低于建议样本 200。",
         "数据清洗剔除了 31 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.123
+      "elapsed_seconds": 0.67
     },
     {
       "schema_version": 1,
@@ -9117,11 +9117,11 @@
       "provider_symbol": "300274.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 340,
+      "observations": 316,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -9136,14 +9136,14 @@
         "high": 117.06,
         "low": 116.37,
         "close": 116.72,
-        "volume": 5093551.0,
+        "volume": 4422189.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 117.6963,
         "ema20": 118.0075,
-        "ema60": 115.3405,
-        "ema200": 117.2301,
+        "ema60": 115.3409,
+        "ema200": 117.076,
         "ema20_slope": "下行",
         "ema60_slope": "上行",
         "adx14": 20.9356
@@ -9162,8 +9162,8 @@
         "bollinger_lower": 115.367
       },
       "intraday": {
-        "vwap": 117.7099,
-        "relative_volume": 0.9637,
+        "vwap": 117.7198,
+        "relative_volume": 0.8367,
         "opening_range_high": 120.76,
         "opening_range_low": 118.02
       },
@@ -9185,7 +9185,7 @@
         },
         {
           "dimension": "盘中量价",
-          "light": "绿",
+          "light": "黄",
           "meaning": "相对量能按同一盘中时间段对比近20个交易日，避免把早盘天然放量误判成异动。"
         }
       ],
@@ -9196,18 +9196,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "300274.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300274.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/300274.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 134,
+        "rejected_rows": 125,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 134 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 125 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.145
+      "elapsed_seconds": 0.84
     },
     {
       "schema_version": 1,
@@ -9218,11 +9218,11 @@
       "provider_symbol": "002352.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 348,
+      "observations": 324,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -9237,14 +9237,14 @@
         "high": 32.77,
         "low": 32.72,
         "close": 32.76,
-        "volume": 1652000.0,
+        "volume": 1400400.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 32.801,
         "ema20": 32.9638,
         "ema60": 33.4025,
-        "ema200": 33.4412,
+        "ema200": 33.4026,
         "ema20_slope": "下行",
         "ema60_slope": "下行",
         "adx14": 37.1185
@@ -9263,8 +9263,8 @@
         "bollinger_lower": 32.5729
       },
       "intraday": {
-        "vwap": 32.772,
-        "relative_volume": 0.6971,
+        "vwap": 32.7723,
+        "relative_volume": 0.5909,
         "opening_range_high": 32.98,
         "opening_range_low": 32.72
       },
@@ -9297,18 +9297,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002352.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002352.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002352.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 126,
+        "rejected_rows": 117,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 126 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 117 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.143
+      "elapsed_seconds": 0.798
     },
     {
       "schema_version": 1,
@@ -9319,11 +9319,11 @@
       "provider_symbol": "002600.SZ",
       "market": "A股",
       "interval": "30m",
-      "analysis_date": "2026-08-14",
-      "requested_cutoff": "2026-08-14",
+      "analysis_date": "2026-08-17",
+      "requested_cutoff": "2026-08-17",
       "data_cutoff": "2026-08-14",
       "bar_timestamp": "2026-08-14T14:30:00+08:00",
-      "observations": 350,
+      "observations": 326,
       "engine": {
         "name": "TA-Lib",
         "version": "0.7.1"
@@ -9338,14 +9338,14 @@
         "high": 12.7,
         "low": 12.65,
         "close": 12.69,
-        "volume": 14437284.0,
+        "volume": 11838184.0,
         "currency": "CNY"
       },
       "trend": {
         "ema9": 12.6382,
         "ema20": 12.6171,
         "ema60": 12.5973,
-        "ema200": 13.177,
+        "ema200": 13.2433,
         "ema20_slope": "上行",
         "ema60_slope": "走平",
         "adx14": 17.9233
@@ -9364,8 +9364,8 @@
         "bollinger_lower": 12.4668
       },
       "intraday": {
-        "vwap": 12.6145,
-        "relative_volume": 1.2726,
+        "vwap": 12.6132,
+        "relative_volume": 1.0435,
         "opening_range_high": 12.66,
         "opening_range_low": 12.49
       },
@@ -9398,18 +9398,18 @@
       "source": {
         "provider": "Yahoo Finance Chart API",
         "provider_symbol": "002600.SZ",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002600.SZ?period1=1781568000&period2=1786752000&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/002600.SZ?period1=1781827200&period2=1787011200&interval=30m&events=div%2Csplits&includeAdjustedClose=true&includePrePost=false",
         "interval": "30m",
-        "rejected_rows": 124,
+        "rejected_rows": 115,
         "currency": "CNY",
         "exchange_timezone": "Asia/Shanghai",
         "instrument_type": "EQUITY",
         "include_prepost": false
       },
       "warnings": [
-        "数据清洗剔除了 124 行不完整或非法30分钟行情。"
+        "数据清洗剔除了 115 行不完整或非法30分钟行情。"
       ],
-      "elapsed_seconds": 0.135
+      "elapsed_seconds": 0.787
     }
   ],
   "failures": []
