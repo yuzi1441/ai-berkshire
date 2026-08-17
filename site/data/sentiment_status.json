@@ -1,7 +1,7 @@
 {
-  "status": "ok",
-  "generated_at": "2026-08-14T18:14:37.665537+08:00",
-  "data_cutoff": "2026-08-14",
-  "scoring_mode": "remote-mixed-llm:deepseek-v4-flash+A股复核:mimo-v2.5-pro",
-  "company_count": 93
+  "status": "error",
+  "generated_at": "2026-08-17T18:10:31.692742+08:00",
+  "data_cutoff": "2026-08-17",
+  "error": "primary model failed; snapshot generation blocked: batch 46deb831b538c6e91129 failed: Expecting ',' delimiter: line 1 column 620 (char 619); missing ids after 3 single-item retries ['58eff0c3dfdad9b0f990', 'db368689b754c8f34a30']; batch 60eb7d87a4caf4883b60 failed: Expecting value: line 1 column 11 (char 10); missing ids after 3 single-item retries ['219590bad0e4b49276fb', '0b39e6404696bcca4168', '2a1dcfc6c51a950637ad']; batch ee82376697932e5dc503 failed: Expecting value: line 1 column 1 (char 0); missing ids after 3 single-item retries ['9bc9c98924f8c1ad10c0', '334d3fc88665303e9733', '96cfebd606a678bc66dc', 'a684cc4dff1081da88d7', '978e495270897138043a']",
+  "message": "情绪更新失败；看板继续显示上一份成功快照。"
 }
