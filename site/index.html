@@ -8,7 +8,7 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260815-inline-detail-inner-scroll" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260817-opportunity-screen-v2" />
   </head>
   <body>
     <div class="app-shell">
@@ -34,6 +34,28 @@
         <div class="summary-grid" id="summary"></div>
       </section>
       <div class="sentiment-alert" id="sentiment-alert" hidden role="status"></div>
+
+      <details class="attention-panel" id="attention-panel" hidden>
+        <summary class="attention-toggle">
+          <span class="attention-toggle-copy">
+            <span class="eyebrow">A-SHARE OPPORTUNITY</span>
+            <span class="attention-toggle-title">当前机会筛选</span>
+            <span class="attention-toggle-note">主报告允许当前行动，且 AI 复核未发现硬冲突</span>
+          </span>
+          <span class="attention-toggle-side">
+            <span class="attention-toggle-meta" id="attention-toggle-meta">尚未加载</span>
+            <span class="attention-toggle-state" id="attention-toggle-state">展开</span>
+            <span class="attention-toggle-chevron" aria-hidden="true">⌄</span>
+          </span>
+        </summary>
+        <div class="attention-panel-body">
+          <div class="attention-panel-head">
+            <p class="attention-panel-note">只把“主报告 + 当前价格 + AI一致性”同时满足的 A 股列为候选；技术面、情绪和 Checklist 仍是辅助核验，不是自动买入信号。</p>
+            <p class="attention-panel-meta" id="attention-meta"></p>
+          </div>
+          <div class="attention-list" id="attention-list"></div>
+        </div>
+      </details>
 
       <section class="control-band" aria-label="筛选与检索">
         <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
@@ -152,6 +174,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=20260815-inline-detail-scroll"></script>
+    <script type="module" src="./assets/app.js?v=20260817-opportunity-screen-v2"></script>
   </body>
 </html>

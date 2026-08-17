@@ -17,6 +17,8 @@ const state = {
   decisions: [],
   intradayTechnical: new Map(),
   decisionReviews: new Map(),
+  decisionReviewsGeneratedAt: null,
+  decisionReviewStatus: null,
   sentimentSnapshot: null,
   sentiments: new Map(),
   sentimentStatus: null,
@@ -43,6 +45,11 @@ const els = {
   decisionHead: document.querySelector("#decision-head"),
   summary: document.querySelector("#summary"),
   sentimentAlert: document.querySelector("#sentiment-alert"),
+  attentionPanel: document.querySelector("#attention-panel"),
+  attentionToggleMeta: document.querySelector("#attention-toggle-meta"),
+  attentionToggleState: document.querySelector("#attention-toggle-state"),
+  attentionMeta: document.querySelector("#attention-meta"),
+  attentionList: document.querySelector("#attention-list"),
   status: document.querySelector("#data-status"),
   companyFilter: document.querySelector("#company-filter"),
   sortSelect: document.querySelector("#sort-select"),
@@ -2086,6 +2093,214 @@ function renderSentimentDetail(item) {
   }));
 }
 
+function opportunityCandidateForItem(item) {
+  if (item?.market !== "A股") return null;
+  const review = decisionReviewForItem(item);
+  if (review.status !== "ready" || !review.review) return null;
+
+  const result = review.review;
+  const conflicts = Array.isArray(result.conflicts) ? result.conflicts.filter(Boolean) : [];
+  const missing = Array.isArray(result.missing_conditions) ? result.missing_conditions.filter(Boolean) : [];
+  const attention = String(result.attention || "");
+  const alignment = String(result.alignment || "");
+  const quote = state.quotes.get(item.ticker);
+  const fallback = buyAdviceForItem(item, quote);
+  const execution = currentExecutionState(item, quote, fallback.key);
+  const judgment = primaryJudgmentForItem(item);
+  const executionKeys = new Set(["actionable", "trial", "validation"]);
+  const aligned = new Set(["一致", "条件一致"]);
+
+  // This is an opportunity screen, not a contradiction queue. A candidate
+  // must be executable at the current quote, have a consensus primary report,
+  // and avoid reviews that explicitly require manual adjudication.
+  if (!judgment || judgment.model_consensus !== true) return null;
+  if (!executionKeys.has(execution.key) || !aligned.has(alignment)) return null;
+  if (attention === "待复核" || item.checklist?.hard_veto === true) return null;
+
+  const tier = execution.key === "validation" ? "validation" : "now";
+  const priority = execution.rank
+    + (alignment === "一致" ? 12 : 6)
+    + (result.confidence === "high" ? 4 : result.confidence === "medium" ? 2 : 0)
+    - Math.min(conflicts.length, 3) * 2;
+
+  return {
+    item,
+    review,
+    result,
+    quote,
+    execution,
+    judgment,
+    conflicts,
+    missing,
+    priority,
+    tier,
+    label: tier === "validation" ? "价格已到 · 待验证" : execution.label,
+    tone: tier === "validation" ? "notice" : "opportunity",
+  };
+}
+
+function attentionTimestamp(value) {
+  if (!value) return "时间待复核";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+function renderAttentionPanel() {
+  if (!els.attentionPanel || !els.attentionList || state.view === "tracking") {
+    if (els.attentionPanel) els.attentionPanel.hidden = true;
+    return;
+  }
+
+  const aShares = state.decisions.filter((item) => item.market === "A股");
+  const readyReviews = aShares
+    .map((item) => decisionReviewForItem(item))
+    .filter((review) => review.status === "ready");
+  const candidates = aShares
+    .map(opportunityCandidateForItem)
+    .filter(Boolean)
+    .sort((a, b) => b.priority - a.priority || a.item.company.localeCompare(b.item.company, "zh"));
+  const nowCandidates = candidates.filter((candidate) => candidate.tier === "now");
+  const validationCandidates = candidates.filter((candidate) => candidate.tier === "validation");
+
+  els.attentionPanel.hidden = false;
+  const reviewStatus = state.decisionReviewStatus;
+  const freshness = state.decisionReviewsGeneratedAt
+    ? ` · 快照 ${attentionTimestamp(state.decisionReviewsGeneratedAt)}`
+    : "";
+  const failure = reviewStatus?.status === "error";
+  const failureNote = failure
+    ? ` · 本次失败，沿用${reviewStatus.last_success_review_generated_at ? `${attentionTimestamp(reviewStatus.last_success_review_generated_at)}的` : "上次成功的"}结果`
+    : "";
+  const metaText = `A股机会候选 ${nowCandidates.length} · 待验证 ${validationCandidates.length} · AI复核 ${readyReviews.length}/${aShares.length}${freshness}${failureNote}`;
+  els.attentionMeta.textContent = metaText;
+  els.attentionMeta.dataset.status = failure ? "error" : (reviewStatus?.status || "ready");
+  if (els.attentionToggleMeta) {
+    els.attentionToggleMeta.textContent = failure
+      ? `本次失败 · 沿用上次结果 · ${candidates.length} 项候选`
+      : `可执行 ${nowCandidates.length} · 待验证 ${validationCandidates.length}${state.decisionReviewsGeneratedAt ? ` · ${attentionTimestamp(state.decisionReviewsGeneratedAt)}` : ""}`;
+    els.attentionToggleMeta.dataset.status = failure ? "error" : (reviewStatus?.status || "ready");
+  }
+  if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
+  els.attentionList.replaceChildren();
+
+  if (!candidates.length) {
+    const empty = document.createElement("p");
+    empty.className = "attention-empty";
+    empty.textContent = failure
+      ? "本次收盘后 AI 复核失败，当前继续沿用上次成功结果。"
+      : readyReviews.length ? "当前没有同时满足主报告、现价和 AI 一致性条件的候选。冲突或待复核股票仍保留在主列表。" : "AI复核数据尚未加载，暂不生成机会候选。";
+    els.attentionList.append(empty);
+    return;
+  }
+
+  const groups = [
+    {
+      items: nowCandidates,
+      title: "当前可执行候选",
+      note: "主报告允许当前分批或小仓行动，且 AI 复核未标记为待复核。",
+    },
+    {
+      items: validationCandidates,
+      title: "价格已到 · 等待条件确认",
+      note: "价格已进入报告区间，但主报告仍要求经营/财报条件确认。",
+    },
+  ];
+  for (const group of groups) {
+    if (!group.items.length) continue;
+    const groupElement = document.createElement("section");
+    groupElement.className = "attention-group";
+    const groupHead = document.createElement("div");
+    groupHead.className = "attention-group-head";
+    const groupTitle = document.createElement("h3");
+    groupTitle.textContent = `${group.title} · ${group.items.length}`;
+    const groupNote = document.createElement("p");
+    groupNote.textContent = group.note;
+    groupHead.append(groupTitle, groupNote);
+    const groupGrid = document.createElement("div");
+    groupGrid.className = "attention-group-grid";
+    for (const candidate of group.items) {
+    const { item, result, execution, judgment, quote } = candidate;
+    const card = document.createElement("article");
+    card.className = `attention-card attention-${candidate.tone}`;
+
+    const head = document.createElement("div");
+    head.className = "attention-card-head";
+    const identity = document.createElement("div");
+    identity.className = "attention-card-identity";
+    const company = document.createElement("strong");
+    company.className = "attention-company";
+    company.textContent = item.company;
+    const code = document.createElement("span");
+    code.className = "attention-code";
+    code.textContent = `${item.market} · ${item.ticker || "无代码"}`;
+    identity.append(company, code);
+    const badge = document.createElement("span");
+    badge.className = "attention-badge";
+    badge.textContent = candidate.label;
+    head.append(identity, badge);
+    card.append(head);
+
+    const facts = document.createElement("div");
+    facts.className = "attention-card-facts";
+    const judgmentFact = document.createElement("span");
+    judgmentFact.textContent = `主报告：${judgment?.label || item.action || "待复核"}`;
+    const priceFact = document.createElement("span");
+    priceFact.textContent = `现价：${formatPrice(quote)}`;
+    const executionFact = document.createElement("span");
+    executionFact.textContent = `当前状态：${execution.label}`;
+    facts.append(judgmentFact, priceFact, executionFact);
+    card.append(facts);
+
+    const focus = document.createElement("p");
+    focus.className = "attention-card-focus";
+    focus.textContent = `AI复核：${result.alignment || "待复核"} · ${result.attention || "待复核"} · 主要核验 ${result.focus || "跨模块一致性"}`;
+    card.append(focus);
+
+    const explanation = document.createElement("p");
+    explanation.className = "attention-card-reason";
+    explanation.textContent = result.explanation || "暂无复核摘要，请打开详情查看。";
+    card.append(explanation);
+
+    const flags = document.createElement("div");
+    flags.className = "attention-card-flags";
+    if (candidate.conflicts.length) {
+      const conflict = document.createElement("span");
+      conflict.textContent = `冲突 ${candidate.conflicts.length} 条`;
+      flags.append(conflict);
+    }
+    if (candidate.missing.length) {
+      const missing = document.createElement("span");
+      missing.textContent = `待确认 ${candidate.missing.length} 项`;
+      flags.append(missing);
+    }
+    if (result.confidence) {
+      const confidence = document.createElement("span");
+      confidence.textContent = `置信度 ${result.confidence}`;
+      flags.append(confidence);
+    }
+    if (flags.childElementCount) card.append(flags);
+
+    const foot = document.createElement("div");
+    foot.className = "attention-card-foot";
+    const open = document.createElement("button");
+    open.type = "button";
+    open.className = "btn ghost attention-open";
+    open.textContent = "打开 AI 复核";
+    open.addEventListener("click", (event) => {
+      event.stopPropagation();
+      state.detailTab = "decision-review";
+      openDetail(item);
+    });
+    foot.append(open);
+    card.append(foot);
+      groupGrid.append(card);
+    }
+    groupElement.append(groupHead, groupGrid);
+    els.attentionList.append(groupElement);
+  }
+}
+
 function renderSummary(visible) {
   if (state.view === "tracking") {
     const tracked = visible.map((item) => trackingForItem(item)).filter(Boolean);
@@ -2746,6 +2961,7 @@ function closeDetail() {
 }
 
 function renderAll() {
+  renderAttentionPanel();
   renderRows();
   renderDetail();
 }
@@ -2865,6 +3081,9 @@ function bindEvents() {
     }
   });
   els.refreshQuotes.addEventListener("click", () => refreshQuotes({ forceLive: true }));
+  els.attentionPanel?.addEventListener("toggle", () => {
+    if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
+  });
   window.addEventListener("hashchange", applyHashRoute);
 
   document.addEventListener("keydown", (event) => {
@@ -2943,14 +3162,25 @@ async function loadDecisionReviewsSnapshot() {
   const response = await fetch(`./data/decision_reviews.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) {
     state.decisionReviews = new Map();
+    state.decisionReviewsGeneratedAt = null;
     return;
   }
   const snapshot = await response.json();
+  state.decisionReviewsGeneratedAt = snapshot.generated_at || null;
   state.decisionReviews = new Map(
     (snapshot.reviews || [])
       .filter((item) => item?.ticker && item.market === "A股")
       .map((item) => [item.ticker, item]),
   );
+}
+
+async function loadDecisionReviewStatus() {
+  const response = await fetch(`./data/decision_review_status.json?t=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) {
+    state.decisionReviewStatus = null;
+    return;
+  }
+  state.decisionReviewStatus = await response.json();
 }
 
 async function loadDashboard() {
@@ -2970,6 +3200,13 @@ async function loadDashboard() {
   } catch (error) {
     console.warn("decision review snapshot failed", error);
     state.decisionReviews = new Map();
+    state.decisionReviewsGeneratedAt = null;
+  }
+  try {
+    await loadDecisionReviewStatus();
+  } catch (error) {
+    console.warn("decision review status failed", error);
+    state.decisionReviewStatus = null;
   }
   try {
     await loadSentimentSnapshot();

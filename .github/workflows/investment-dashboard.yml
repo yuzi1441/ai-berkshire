@@ -25,7 +25,7 @@ permissions:
   deployments: write
 
 concurrency:
-  group: investment-dashboard-pages
+  group: investment-dashboard-build
   cancel-in-progress: true
 
 jobs:
@@ -58,7 +58,9 @@ jobs:
 
   deploy:
     needs: build
-    if: vars.CLOUDFLARE_PAGES_PROJECT != ''
+    # Cloudflare Pages is an explicit opt-in backup path. Production hosting
+    # is handled by the VPS static-site service to avoid Pages daily limits.
+    if: vars.ENABLE_CLOUDFLARE_DEPLOY == 'true' && vars.CLOUDFLARE_PAGES_PROJECT != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

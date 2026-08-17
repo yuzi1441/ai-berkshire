@@ -1,0 +1,17 @@
+[Unit]
+Description=AI Berkshire investment dashboard static site
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/ai-berkshire
+ExecStart=/usr/bin/python3 -m http.server 80 --bind 0.0.0.0 --directory /opt/ai-berkshire/site
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
