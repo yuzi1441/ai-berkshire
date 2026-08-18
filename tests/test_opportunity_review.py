@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -162,6 +163,13 @@ class OpportunityReviewTests(unittest.TestCase):
         with patch.dict("os.environ", {"OPENCODE_GO_API_KEY": "test-key"}, clear=True):
             config = opportunity.model_config("deep_luna")
         self.assertEqual(config.reasoning_effort, "high")
+
+    def test_scan_concurrency_defaults_to_three_companies(self):
+        with patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(
+                opportunity.parse_integer(os.environ.get("OPPORTUNITY_SCAN_CONCURRENCY"), 3, 1, 6),
+                3,
+            )
 
 
 if __name__ == "__main__":
