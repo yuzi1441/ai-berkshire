@@ -264,6 +264,13 @@ function renderSentimentCell(item) {
   stateLine.className = "sentiment-state";
   stateLine.textContent = sentimentStateText(combined);
   cell.append(stateLine);
+  const industry = record?.industry_sentiment || record?.industry_detail;
+  const market = state.sentimentSnapshot?.market_sentiment?.[item.market];
+  const layers = document.createElement("div");
+  layers.className = "sentiment-layers";
+  layers.textContent = `个股 ${sentimentScoreText(record?.news_sentiment?.score_0_100)} · 行业 ${sentimentScoreText(industry?.score_0_100)} · 市场 ${sentimentScoreText(market?.score_0_100)}`;
+  layers.title = "个股新闻 · 行业新闻 · 市场情绪；缺失层显示为 —，不会自动放大其他层权重";
+  cell.append(layers);
   const freshness = document.createElement("div");
   freshness.className = "sentiment-freshness";
   freshness.textContent = state.sentimentStatus?.status === "error"
