@@ -2,9 +2,9 @@
 Description=Run A-share opportunity scan after the daily close
 
 [Timer]
-OnCalendar=Mon..Fri *-*-* 18:20:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 20:00:00 Asia/Shanghai
 Persistent=true
-RandomizedDelaySec=10min
+RandomizedDelaySec=5min
 Unit=ai-berkshire-after-close-review.service
 
 [Install]
