@@ -195,7 +195,7 @@ def refresh_snapshot(
         "quotes": quotes,
     }
     write_snapshot(output_path, snapshot)
-    # Keep static site payload in sync for local preview and Pages deploys.
+    # Keep the static site payload in sync for local preview and VPS serving.
     site_snapshot = ROOT / "site" / "data" / "quotes" / "latest.json"
     if output_path.resolve() != site_snapshot.resolve():
         write_snapshot(site_snapshot, snapshot)

@@ -102,7 +102,7 @@ py -3 tools\market_snapshot.py
 
 1. 自动重建看板数据
 2. 刷新 A/H 行情快照（交易时段）
-3. 在配置了 Cloudflare Pages 密钥时自动部署网页
+3. 由 VPS 静态站点服务提供生产网页
 
 因此：新公司研报只要按路由保存到 `reports/<公司>/` 并推送，网页会同步更新。
 
@@ -157,17 +157,6 @@ py -3 tools\dashboard_server.py --port 8000 --directory site
 ```
 
 打开 `http://localhost:8000`。
-
-## Cloudflare Pages
-
-| 类型 | 名称 | 值 |
-|---|---|---|
-| Secret | `CLOUDFLARE_API_TOKEN` | 可部署 Pages 的 Cloudflare token |
-| Secret | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 账户 ID |
-| Variable | `CLOUDFLARE_PAGES_PROJECT` | Pages 项目名，如 `ai-berkshire-invest` |
-
-自定义域名在 Cloudflare：Workers & Pages -> 项目 -> Custom domains。
-
 
 ## 买入建议列（现价对照）
 
