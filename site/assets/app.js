@@ -214,13 +214,29 @@ function sentimentRecencyText(news) {
 function updateSentimentAlert() {
   if (!els.sentimentAlert) return;
   const status = state.sentimentStatus;
-  if (status?.status !== "error") {
+  const partial = status?.status === "partial";
+  const failed = status?.status === "error";
+  if (!partial && !failed) {
     els.sentimentAlert.hidden = true;
     els.sentimentAlert.textContent = "";
+    delete els.sentimentAlert.dataset.status;
     return;
   }
   els.sentimentAlert.hidden = false;
-  els.sentimentAlert.textContent = `情绪数据更新失败：${status.error || "模型未完成复核"}。当前显示上一份成功快照，不生成不完整结果。`;
+  els.sentimentAlert.dataset.status = status.status;
+  if (failed) {
+    els.sentimentAlert.textContent = `情绪数据更新失败：${status.error || "模型未完成复核"}。当前显示上一份成功快照。`;
+    return;
+  }
+  const skipped = Array.isArray(status.skipped_articles) ? status.skipped_articles : [];
+  const skippedCount = Number(status.skipped_count || skipped.length || 0);
+  const labels = skipped
+    .slice(0, 4)
+    .map((item) => `${item.ticker || item.id || "未知标的"}（${item.provider === "review" ? "复核模型" : "主模型"}）`)
+    .join("、");
+  const more = skippedCount > 4 ? `等${skippedCount}项` : "";
+  const detail = labels ? `跳过：${labels}${more}。` : "部分来源异常，但成功结果已保留。";
+  els.sentimentAlert.textContent = `情绪数据部分更新：${skippedCount} 条新闻已重试仍失败并跳过，其余成功结果已写入。${detail}`;
 }
 
 function renderSentimentBadge(sentiment, label = "综合") {
@@ -246,6 +262,8 @@ function renderSentimentCell(item) {
   freshness.className = "sentiment-freshness";
   freshness.textContent = state.sentimentStatus?.status === "error"
     ? `更新失败 · 上次快照 ${state.sentimentSnapshot?.data_cutoff || "未知"}`
+    : state.sentimentStatus?.status === "partial"
+      ? `部分更新 · 跳过 ${state.sentimentStatus?.skipped_count || 0} 条`
     : record ? sentimentRecencyText(record.news_sentiment) : "情绪快照未加载";
   cell.append(freshness);
   return cell;
@@ -2059,6 +2077,15 @@ function renderSentimentDetail(item) {
     warning.className = "sentiment-warning-note";
     warning.textContent = `本次更新失败：${state.sentimentStatus.error || "模型未完成复核"}。以下内容来自上一份成功快照。`;
     card.append(warning);
+  } else if (state.sentimentStatus?.status === "partial") {
+    const skipped = (state.sentimentStatus.skipped_articles || [])
+      .filter((entry) => entry.ticker === item.ticker);
+    if (skipped.length) {
+      const warning = document.createElement("p");
+      warning.className = "sentiment-warning-note sentiment-partial-note";
+      warning.textContent = `本次更新部分成功：该股有${skipped.length}条新闻在重试后仍失败并跳过，其余成功结果已写入。`;
+      card.append(warning);
+    }
   }
   const summary = document.createElement("dl");
   summary.className = "kv-grid sentiment-summary";

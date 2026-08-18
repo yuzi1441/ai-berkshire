@@ -1873,12 +1873,12 @@ def score_articles(
     articles: list[dict[str, Any]],
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
-) -> tuple[list[dict[str, Any]], list[str]]:
+) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
     """Score eligible articles and preserve ineligible news as auxiliary context."""
     if primary_config is None:
         raise SentimentError("primary model configuration is required")
     if not articles:
-        return [], []
+        return [], [], []
     scoreable_articles = [
         article for article in articles if article.get("score_eligible", True)
     ]
@@ -1888,23 +1888,40 @@ def score_articles(
         if not article.get("score_eligible", True)
     ]
     if not scoreable_articles:
-        return auxiliary_articles, []
-    review_articles = [article for article in scoreable_articles if article.get("market") == "A股"]
-    if review_articles and review_config is None:
+        return auxiliary_articles, [], []
+    if any(article.get("market") == "A股" for article in scoreable_articles) and review_config is None:
         raise SentimentError("A-share dual-model scoring requires the review model configuration")
 
     def collect_scores(
         target_articles: list[dict[str, Any]], config: LLMConfig, provider_label: str
-    ) -> dict[str, dict[str, Any]]:
+    ) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
         batches = list(chunks(target_articles, config.batch_size))
         scores: dict[str, dict[str, Any]] = {}
-        failures: list[str] = []
+        failures: list[dict[str, Any]] = []
+
+        def failure_record(
+            item: dict[str, Any], reason: str
+        ) -> dict[str, Any]:
+            return {
+                "id": item.get("id"),
+                "ticker": item.get("ticker"),
+                "company": clean_text(
+                    item.get("display_name") or item.get("company") or item.get("ticker"),
+                    120,
+                ),
+                "market": item.get("market"),
+                "title": clean_text(item.get("title"), 160),
+                "provider": provider_label,
+                "retry_count": config.missing_result_retries,
+                "reason": clean_text(reason, 500),
+            }
 
         def recover_items(
             items: list[dict[str, Any]], reason: str
         ) -> None:
             """Retry unresolved items one at a time to avoid gateway omissions."""
             remaining = list(items)
+            last_errors: dict[str, str] = {}
             for retry_round in range(config.missing_result_retries):
                 if not remaining:
                     break
@@ -1929,20 +1946,25 @@ def score_articles(
                         item = retry_futures[retry_future]
                         try:
                             retry_scores = retry_future.result()
-                        except Exception:  # noqa: BLE001 - fail closed after recovery attempts
+                        except Exception as exc:  # noqa: BLE001 - record and skip after recovery attempts
+                            last_errors[item["id"]] = clean_text(exc, 240)
                             next_remaining.append(item)
                             continue
                         item_score = retry_scores.get(item["id"])
                         if item_score is None:
+                            last_errors[item["id"]] = "单条重试未返回该新闻的有效评分"
                             next_remaining.append(item)
                         else:
                             scores[item["id"]] = item_score
                 remaining = next_remaining
             if remaining:
-                failures.append(
-                    f"{reason}; missing ids after {config.missing_result_retries} "
-                    f"single-item retries {[item['id'] for item in remaining]}"
-                )
+                for item in remaining:
+                    detail = (
+                        f"{reason}; {config.missing_result_retries} 次单条重试后仍未得到有效评分"
+                    )
+                    if last_errors.get(item["id"]):
+                        detail += f"；最后错误：{last_errors[item['id']]}"
+                    failures.append(failure_record(item, detail))
 
         with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
             futures = {
@@ -1964,31 +1986,56 @@ def score_articles(
                         missing_items,
                         f"batch {batch[0]['id']} returned incomplete results",
                     )
-        if failures:
-            raise SentimentError(
-                f"{provider_label} model failed; snapshot generation blocked: {'; '.join(failures[:3])}"
-            )
         expected = {article["id"] for article in target_articles}
         missing = expected - set(scores)
-        if missing:
-            raise SentimentError(
-                f"{provider_label} model returned incomplete results; missing {len(missing)} article(s)"
-            )
-        return scores
+        recorded = {failure.get("id") for failure in failures}
+        for item in target_articles:
+            if item["id"] in missing and item["id"] not in recorded:
+                failures.append(
+                    failure_record(
+                        item,
+                        f"{provider_label} 模型未返回有效评分；已完成 {config.missing_result_retries} 次单条重试",
+                    )
+                )
+        return scores, failures
 
-    primary_scores = collect_scores(scoreable_articles, primary_config, "primary")
-    review_scores = (
-        collect_scores(review_articles, review_config, "review") if review_articles else {}
+    primary_scores, primary_failures = collect_scores(
+        scoreable_articles, primary_config, "primary"
     )
+    primary_success_articles = [
+        article for article in scoreable_articles if article["id"] in primary_scores
+    ]
+    review_articles = [
+        article for article in primary_success_articles if article.get("market") == "A股"
+    ]
+    review_scores = (
+        collect_scores(review_articles, review_config, "review")
+        if review_articles
+        else ({}, [])
+    )
+    review_score_map, review_failures = review_scores
+    skipped_articles = primary_failures + review_failures
+    skipped_ids = {failure.get("id") for failure in skipped_articles}
+    scoring_warnings = [
+        (
+            f"情绪评分跳过：{failure.get('market') or '未知市场'} "
+            f"{failure.get('ticker') or failure.get('id')} "
+            f"{failure.get('company') or ''}（{failure.get('provider')}，"
+            f"重试{failure.get('retry_count', 0)}次）：{failure.get('reason')}"
+        ).strip()
+        for failure in skipped_articles
+    ]
     scored: list[dict[str, Any]] = []
-    for article in scoreable_articles:
+    for article in primary_success_articles:
+        if article["id"] in skipped_ids:
+            continue
         primary = dict(primary_scores[article["id"]])
         if article.get("market") != "A股":
             combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
             apply_company_relevance_guard(combined, combined)
             scored.append(combined)
             continue
-        review = dict(review_scores[article["id"]])
+        review = dict(review_score_map[article["id"]])
         apply_company_relevance_guard(article, primary)
         apply_company_relevance_guard(article, review)
         direction_gap = abs(float(primary["direction"]) - float(review["direction"]))
@@ -2018,7 +2065,7 @@ def score_articles(
         apply_company_relevance_guard(combined, combined)
         scored.append(combined)
     scored.extend(auxiliary_articles)
-    return scored, []
+    return scored, scoring_warnings, skipped_articles
 
 
 def time_decay(article: dict[str, Any], cutoff: datetime) -> float:
@@ -2501,7 +2548,7 @@ def build_snapshot(
 
     all_articles = [article for items in articles_by_ticker.values() for article in items]
     all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
-    scored_articles, scoring_warnings = score_articles(
+    scored_articles, scoring_warnings, skipped_articles = score_articles(
         all_articles, llm_config, review_llm_config
     )
     warnings.extend(scoring_warnings)
@@ -2564,7 +2611,7 @@ def build_snapshot(
         "generated_at": now.astimezone(SHANGHAI_TIMEZONE).isoformat(),
         "data_cutoff": as_of.isoformat(),
         "scope": sorted({item["market"] for item in universe}),
-        "status": "ok" if not warnings else "partial",
+        "status": "ok" if not warnings and not skipped_articles else "partial",
         "dashboard_integration": True,
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
         "company_count": len(companies),
@@ -2603,9 +2650,11 @@ def build_snapshot(
         "industry_sentiments": industry_details,
         "companies": companies,
         "warnings": warnings,
+        "skipped_count": len(skipped_articles),
+        "skipped_articles": skipped_articles,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、百度、新浪、雪球公开索引、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；A股任一模型失败、超时或返回缺失都会阻止生成新快照。",
+            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、百度、新浪、雪球公开索引、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "个股综合分只使用个股新闻100%；行业新闻、A股市场温度和同花顺热度只作为辅助，不计入个股分。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
@@ -2702,11 +2751,19 @@ def main(argv: list[str] | None = None) -> int:
         write_json(args.output.resolve(), snapshot)
         write_json(args.site_output.resolve(), snapshot)
         status = {
-            "status": "ok",
+            "status": snapshot["status"],
             "generated_at": snapshot["generated_at"],
             "data_cutoff": snapshot["data_cutoff"],
             "scoring_mode": snapshot["scoring_mode"],
             "company_count": snapshot["company_count"],
+            "skipped_count": snapshot.get("skipped_count", 0),
+            "skipped_articles": snapshot.get("skipped_articles", []),
+            "warnings": snapshot.get("warnings", []),
+            "message": (
+                "情绪部分更新；失败项目已重试后跳过，其余成功结果已写入。"
+                if snapshot.get("skipped_count", 0)
+                else "情绪数据更新完成。"
+            ),
         }
         write_json(args.status_output.resolve(), status)
         if not args.no_archive:

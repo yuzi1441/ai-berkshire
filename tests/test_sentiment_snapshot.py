@@ -311,33 +311,73 @@ class SentimentSnapshotTests(unittest.TestCase):
             return score("missing-1")
 
         with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
-            scored, failures = sentiment_snapshot.score_articles(articles, config, None)
-        self.assertEqual(failures, [])
+            scored, warnings, skipped = sentiment_snapshot.score_articles(articles, config, None)
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
         self.assertEqual({item["id"] for item in scored}, {"complete-1", "missing-1"})
         self.assertEqual(calls, [["complete-1", "missing-1"], ["missing-1"], ["missing-1"]])
 
-    def test_dual_model_scoring_blocks_snapshot_when_review_model_fails(self):
-        article = {
-            "id": "article-1",
-            "scope": "company",
-            "company": "示例公司",
-            "display_name": "示例公司",
-            "ticker": "600000.SH",
-            "market": "A股",
-            "title": "示例公司发布公告",
-            "summary": "公司公告",
-        }
+    def test_dual_model_scoring_skips_failed_review_item_but_keeps_successful_items(self):
+        articles = [
+            {
+                "id": "article-1",
+                "scope": "company",
+                "company": "失败复核公司",
+                "display_name": "失败复核公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "title": "失败复核公司发布公告",
+                "summary": "公司公告",
+            },
+            {
+                "id": "article-2",
+                "scope": "company",
+                "company": "成功复核公司",
+                "display_name": "成功复核公司",
+                "ticker": "600001.SH",
+                "market": "A股",
+                "title": "成功复核公司发布公告",
+                "summary": "公司公告",
+            },
+        ]
         config = sentiment_snapshot.LLMConfig(
             endpoint="https://example.com",
             api_key="test",
             model="test-model",
+            batch_size=2,
+            workers=1,
+            missing_result_retries=1,
         )
+
+        def score(item_id):
+            return {
+                item_id: {
+                    "direction": 0.2,
+                    "impact": 1,
+                    "relevance": 1,
+                    "confidence": 1,
+                    "event_type": "一般新闻",
+                    "scoring_method": "test",
+                }
+            }
+
+        def fake_score(batch, _config, provider_label):
+            ids = [item["id"] for item in batch]
+            if provider_label == "review" and "article-1" in ids:
+                raise sentiment_snapshot.SentimentError("review unavailable")
+            return {item_id: score(item_id)[item_id] for item_id in ids}
+
         with patch.object(
             sentiment_snapshot,
             "score_with_llm",
-            side_effect=sentiment_snapshot.SentimentError("review unavailable"),
-        ), self.assertRaises(sentiment_snapshot.SentimentError):
-            sentiment_snapshot.score_articles([article], config, config)
+            side_effect=fake_score,
+        ):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(articles, config, config)
+        self.assertEqual({item["id"] for item in scored}, {"article-2"})
+        self.assertEqual(len(skipped), 1)
+        self.assertEqual(skipped[0]["id"], "article-1")
+        self.assertEqual(skipped[0]["provider"], "review")
+        self.assertIn("重试1次", warnings[0])
 
     def test_only_a_shares_use_review_model(self):
         articles = [
@@ -382,7 +422,8 @@ class SentimentSnapshotTests(unittest.TestCase):
             }
 
         with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
-            scored, _ = sentiment_snapshot.score_articles(articles, config, config)
+            scored, _, skipped = sentiment_snapshot.score_articles(articles, config, config)
+        self.assertEqual(skipped, [])
         self.assertEqual(sorted(calls), [("primary", ["a-1", "hk-1"]), ("review", ["a-1"])])
         by_id = {item["id"]: item for item in scored}
         self.assertIn("model_review", by_id["a-1"])
@@ -417,7 +458,8 @@ class SentimentSnapshotTests(unittest.TestCase):
                 }
             },
         ):
-            scored, _ = sentiment_snapshot.score_articles([article], config, None)
+            scored, _, skipped = sentiment_snapshot.score_articles([article], config, None)
+        self.assertEqual(skipped, [])
         self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
 
     def test_main_writes_error_status_when_dual_model_configuration_is_missing(self):
@@ -886,9 +928,10 @@ class SentimentSnapshotTests(unittest.TestCase):
             "score_eligible": False,
         }
         with patch.object(sentiment_snapshot, "score_with_llm") as score_with_llm:
-            scored, failures = sentiment_snapshot.score_articles([article], config, config)
+            scored, warnings, skipped = sentiment_snapshot.score_articles([article], config, config)
         score_with_llm.assert_not_called()
-        self.assertEqual(failures, [])
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
         self.assertEqual(len(scored), 1)
         self.assertFalse(scored[0]["score_eligible"])
         self.assertEqual(scored[0]["scoring_method"], "not_scored:source_policy")

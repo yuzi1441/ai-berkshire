@@ -484,6 +484,12 @@ h1 {
   font-size: 12px;
   line-height: 1.5;
 }
+.sentiment-alert[data-status="partial"] {
+  border-color: rgba(239, 180, 77, 0.45);
+  border-left-color: #efb44d;
+  background: rgba(239, 180, 77, 0.1);
+  color: #f6d99c;
+}
 .sentiment-alert[hidden] { display: none !important; }
 
 /* --------------------------------------------------------------------------
