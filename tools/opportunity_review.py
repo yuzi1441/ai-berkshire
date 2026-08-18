@@ -669,21 +669,39 @@ def scan_all(
         decisions = decisions[: max(0, limit)]
     sentiment, intraday, quotes = snapshot_maps(repo_root)
     prior = previous if isinstance(previous, dict) else {}
-    scans = [
-        scan_one(
-            decision,
-            repo_root=repo_root,
-            configs=configs,
-            sentiment_by_ticker=sentiment,
-            intraday_by_ticker=intraday,
-            quote_by_ticker=quotes,
-            previous=prior,
-        )
-        for decision in decisions
-    ]
+    # Each company still gets two independent model calls, but a small bounded
+    # company-level pool keeps a full after-close scan practical.  The default
+    # means at most six model requests are in flight, avoiding a burst that
+    # could exhaust provider concurrency or rate limits.
+    workers = parse_integer(os.environ.get("OPPORTUNITY_SCAN_CONCURRENCY"), 3, 1, 6)
+    scans: list[dict[str, Any] | None] = [None] * len(decisions)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=min(workers, len(decisions) or 1)) as executor:
+        futures = {
+            executor.submit(
+                scan_one,
+                decision,
+                repo_root=repo_root,
+                configs=configs,
+                sentiment_by_ticker=sentiment,
+                intraday_by_ticker=intraday,
+                quote_by_ticker=quotes,
+                previous=prior,
+            ): index
+            for index, decision in enumerate(decisions)
+        }
+        for completed, future in enumerate(concurrent.futures.as_completed(futures), start=1):
+            index = futures[future]
+            scans[index] = future.result()
+            scanned = scans[index] or {}
+            print(
+                f"AI opportunity scan progress {completed}/{len(decisions)} · "
+                f"{scanned.get('ticker') or 'unknown'} · {scanned.get('status') or 'unknown'}",
+                flush=True,
+            )
+    completed_scans = [item for item in scans if isinstance(item, dict)]
     model_results = [
         result
-        for item in scans
+        for item in completed_scans
         for result in (item.get("models") or {}).values()
         if isinstance(result, dict)
     ]
@@ -693,7 +711,7 @@ def scan_all(
     return {
         "schema_version": SCAN_SCHEMA_VERSION,
         "generated_at": now_iso(),
-        "status": "ok" if scans and not errors and not stale else "partial" if scans else "missing",
+        "status": "ok" if completed_scans and not errors and not stale else "partial" if completed_scans else "missing",
         "market": MARKET,
         "models": [
             {
@@ -704,13 +722,14 @@ def scan_all(
             }
             for config in configs
         ],
-        "scan_count": len(scans),
+        "scan_count": len(completed_scans),
+        "company_concurrency": min(workers, len(decisions) or 1),
         "model_result_count": len(model_results),
         "ready_count": ready,
         "stale_count": stale,
         "error_count": errors,
         "inclusion_rule": "任一模型判为机会或条件机会即纳入；模型之间互不否决，最终买卖由投资者决定。",
-        "scans": scans,
+        "scans": completed_scans,
     }
 
 
