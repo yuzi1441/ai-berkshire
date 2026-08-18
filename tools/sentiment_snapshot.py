@@ -58,6 +58,7 @@ SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
 EASTMONEY_SEARCH_URL = "https://search-api-web.eastmoney.com/search/jsonp"
 EASTMONEY_QUOTE_URL = "https://push2.eastmoney.com/api/qt/stock/get"
+EASTMONEY_DELAY_QUOTE_URL = "https://push2delay.eastmoney.com/api/qt/stock/get"
 EASTMONEY_GUBA_URL = "https://guba.eastmoney.com/list,{symbol}.html"
 GOOGLE_NEWS_RSS_URL = "https://news.google.com/rss/search"
 BING_NEWS_RSS_URL = "https://www.bing.com/news/search"
@@ -650,7 +651,17 @@ def eastmoney_secid(ticker: str, market: str) -> str | None:
 def fetch_provider_industries(
     universe: list[dict[str, str]], workers: int = 6
 ) -> tuple[dict[str, str], list[str]]:
-    """Resolve industries with batch lookup and per-security recovery."""
+    """Resolve industries with a bounded quote fallback.
+
+    The regular ``push2`` list endpoint is efficient, but it is not reachable
+    from every VPS egress IP (it can return an nginx 502 while the rest of
+    Eastmoney remains available).  ``push2delay`` exposes the same primary
+    industry field on the per-security quote endpoint, so use it in bounded
+    parallel batches first and retain the old list endpoint as a fallback.
+
+    The fallback is deliberately parallel and bounded.  A provider outage
+    must not turn into a serial retry of every security for several minutes.
+    """
     ticker_by_secid = {
         secid: item["ticker"]
         for item in universe
@@ -658,6 +669,50 @@ def fetch_provider_industries(
     }
     industries: dict[str, str] = {}
     failures: list[str] = []
+
+    def industry_from_row(row: dict[str, Any]) -> str:
+        # f100 is returned by the list endpoint; f127 is the primary industry
+        # field returned by the per-security quote endpoint.
+        return clean_text(row.get("f100")) or clean_text(row.get("f127"))
+
+    def request_delay_row(secid: str) -> dict[str, Any]:
+        query = urlencode(
+            {
+                "secid": secid,
+                "fields": "f57,f58,f100,f127",
+            }
+        )
+        payload = http_json(
+            f"{EASTMONEY_DELAY_QUOTE_URL}?{query}",
+            timeout=12,
+            attempts=2,
+            retry_backoff_seconds=0.4,
+        )
+        row = payload.get("data")
+        if not isinstance(row, dict):
+            raise SentimentError(f"industry quote returned no data: {secid}")
+        return row
+
+    def request_delay_batch(secid_batch: list[str]) -> tuple[dict[str, str], list[str]]:
+        resolved: dict[str, str] = {}
+        failed: list[str] = []
+        max_workers = min(max(1, workers), max(1, len(secid_batch)))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = {
+                executor.submit(request_delay_row, secid): secid for secid in secid_batch
+            }
+            for future in as_completed(futures):
+                secid = futures[future]
+                try:
+                    industry = industry_from_row(future.result())
+                except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+                    failed.append(secid)
+                    continue
+                if industry:
+                    resolved[ticker_by_secid[secid]] = industry
+                else:
+                    failed.append(secid)
+        return resolved, failed
 
     def request_rows(secid_batch: list[str]) -> Iterable[dict[str, Any]]:
         query = urlencode(
@@ -679,30 +734,30 @@ def fetch_provider_industries(
         return [row for row in rows if isinstance(row, dict)]
 
     for secid_batch in chunks(list(ticker_by_secid), 50):
+        # This endpoint is reachable from the VPS and avoids the known 502
+        # returned by push2.eastmoney.com there.  Keep the old batch endpoint
+        # below as a compatibility fallback for securities it cannot resolve.
+        delay_resolved, delay_failed = request_delay_batch(secid_batch)
+        industries.update(delay_resolved)
+        if not delay_failed:
+            continue
         try:
-            rows = request_rows(secid_batch)
+            rows = request_rows(delay_failed)
             rows_by_code = {clean_text(row.get("f12")): row for row in rows if isinstance(row, dict)}
-            for secid in secid_batch:
+            still_failed: list[str] = []
+            for secid in delay_failed:
                 code = secid.split(".", 1)[1]
-                industry = clean_text((rows_by_code.get(code) or {}).get("f100"))
+                industry = industry_from_row(rows_by_code.get(code) or {})
                 if industry:
                     industries[ticker_by_secid[secid]] = industry
+                else:
+                    still_failed.append(secid)
+            failures.extend(still_failed)
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
-            # A single malformed or rate-limited batch must not erase all
-            # industry context. Recover one security at a time and report only
-            # the identities that still failed.
-            for secid in secid_batch:
-                try:
-                    rows = request_rows([secid])
-                    rows_by_code = {clean_text(row.get("f12")): row for row in rows}
-                    code = secid.split(".", 1)[1]
-                    industry = clean_text((rows_by_code.get(code) or {}).get("f100"))
-                    if industry:
-                        industries[ticker_by_secid[secid]] = industry
-                    else:
-                        failures.append(ticker_by_secid[secid])
-                except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
-                    failures.append(ticker_by_secid[secid])
+            # Do not retry each security serially after a provider-wide
+            # failure.  The delay endpoint already attempted each security in
+            # parallel, so report only the unresolved identities.
+            failures.extend(delay_failed)
     warnings = [
         f"industry lookup failed for {len(set(failures))} ticker(s): {', '.join(sorted(set(failures))[:8])}"
     ] if failures else []

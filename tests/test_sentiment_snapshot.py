@@ -573,24 +573,40 @@ class SentimentSnapshotTests(unittest.TestCase):
             {"ticker": "600519.SH", "market": "A股", "company": "茅台"},
             {"ticker": "000333.SZ", "market": "A股", "company": "美的集团"},
         ]
-        responses = iter(
-            [
-                sentiment_snapshot.SentimentError("batch failed"),
-                {"data": {"diff": {"1": {"f12": "600519", "f100": "白酒Ⅱ"}}}},
-                {"data": {"diff": {"0": {"f12": "000333", "f100": "白色家电"}}}},
-            ]
-        )
-
-        def fake_http_json(_url):
-            value = next(responses)
-            if isinstance(value, Exception):
-                raise value
-            return value
+        def fake_http_json(url, **_kwargs):
+            if "push2delay.eastmoney.com" in url:
+                raise sentiment_snapshot.SentimentError("delay endpoint unavailable")
+            return {
+                "data": {
+                    "diff": {
+                        "1": {"f12": "600519", "f100": "白酒Ⅱ"},
+                        "0": {"f12": "000333", "f100": "白色家电"},
+                    }
+                }
+            }
 
         with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
             industries, warnings = sentiment_snapshot.fetch_provider_industries(universe)
         self.assertEqual(industries["600519.SH"], "白酒Ⅱ")
         self.assertEqual(industries["000333.SZ"], "白色家电")
+        self.assertEqual(warnings, [])
+
+    def test_industry_lookup_uses_delay_quote_primary_industry(self):
+        universe = [
+            {"ticker": "600519.SH", "market": "A股", "company": "茅台"},
+            {"ticker": "000333.SZ", "market": "A股", "company": "美的集团"},
+        ]
+
+        def fake_http_json(url, **_kwargs):
+            if "1.600519" in url:
+                return {"data": {"f57": "600519", "f127": "白酒Ⅱ"}}
+            if "0.000333" in url:
+                return {"data": {"f57": "000333", "f127": "白色家电"}}
+            raise AssertionError(f"unexpected industry URL: {url}")
+
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            industries, warnings = sentiment_snapshot.fetch_provider_industries(universe, workers=2)
+        self.assertEqual(industries, {"600519.SH": "白酒Ⅱ", "000333.SZ": "白色家电"})
         self.assertEqual(warnings, [])
 
     def test_parse_cninfo_official_announcement(self):
