@@ -160,12 +160,18 @@ def main() -> int:
         fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
         existing_changes = git_status(repo_root)
+        publish_to_git = not existing_changes
         if existing_changes:
-            raise JobError(
-                "工作区已有未提交变更，已停止本次收盘复核以保护现有生成结果："
-                + "；".join(existing_changes[:5])
+            # The VPS intentionally retains locally generated quotes, sentiment
+            # snapshots and technical reports.  Those files must not prevent the
+            # live dashboard from getting its daily opportunity scan, but they
+            # also must not be silently mixed into a Git commit.
+            print(
+                "工作区已有未提交变更；继续刷新本机看板，但跳过 Git 同步和推送以保护现有生成结果："
+                + "；".join(existing_changes[:5]),
+                flush=True,
             )
-        if not arguments.skip_git_sync:
+        if not arguments.skip_git_sync and publish_to_git:
             run_step(repo_root, "同步远端主分支", ["git", "pull", "--ff-only", "origin", "main"])
 
         run_step(repo_root, "刷新 A/H 收盘行情", [str(python), "tools/market_snapshot.py", "--force"])
@@ -197,7 +203,10 @@ def main() -> int:
                 scan,
             )
             run_step(repo_root, "重建静态看板", [str(python), "tools/build_investment_dashboard.py"])
-            stage_and_push(repo_root, f"chore: refresh A-share opportunity scan after close {datetime.now(SHANGHAI):%F}")
+            if publish_to_git:
+                stage_and_push(repo_root, f"chore: refresh A-share opportunity scan after close {datetime.now(SHANGHAI):%F}")
+            else:
+                print("本机看板已刷新；Git 推送因既有工作区变更而跳过。", flush=True)
             print("After-close opportunity scan completed successfully.", flush=True)
             return 0
         except Exception as error:  # noqa: BLE001 - the job must fail closed
@@ -213,7 +222,10 @@ def main() -> int:
             )
             try:
                 run_step(repo_root, "重建失败保护状态", [str(python), "tools/build_investment_dashboard.py"])
-                stage_and_push(repo_root, f"chore: record A-share opportunity scan failure {datetime.now(SHANGHAI):%F}")
+                if publish_to_git:
+                    stage_and_push(repo_root, f"chore: record A-share opportunity scan failure {datetime.now(SHANGHAI):%F}")
+                else:
+                    print("失败保护状态已写入本机看板；Git 推送因既有工作区变更而跳过。", flush=True)
             except Exception as publish_error:  # noqa: BLE001
                 print(f"Could not publish failure status: {publish_error}", file=sys.stderr)
             print(f"After-close opportunity scan failed closed: {error}", file=sys.stderr)
