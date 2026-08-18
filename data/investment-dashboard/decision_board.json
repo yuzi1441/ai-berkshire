@@ -1,13 +1,13 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-17T16:01:31+08:00",
+  "generated_at": "2026-08-18T15:41:05+08:00",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 250,
   "checklist_count": 25,
   "post_buy_tracking": {
-    "registered_count": 1,
-    "active_count": 1,
+    "registered_count": 2,
+    "active_count": 2,
     "alert_count": 0
   },
   "decisions": [
@@ -6085,7 +6085,49 @@
         ]
       },
       "post_buy_tracking": {
-        "status": "not_tracked",
+        "status": "holding",
+        "buy_date": "2026-08-18",
+        "cost_basis": 11.765,
+        "position_weight": 10.0,
+        "thesis_report_path": "reports/东方电子/东方电子-thesis.md",
+        "thesis_status": "borderline",
+        "health_score": 7,
+        "last_review_date": "2026-08-18",
+        "next_review_date": "2026-08-31",
+        "review_action": "持有",
+        "metrics": [
+          {
+            "name": "营收与扣非增长",
+            "target": "长期同比10%+，不连续两季下滑",
+            "frequency": "每季度",
+            "status": "2026Q1营收+8.05%、扣非+9.66%，边际弱化"
+          },
+          {
+            "name": "综合毛利率",
+            "target": "31%+，不连续两期低于30%",
+            "frequency": "每季度/半年",
+            "status": "2025约32.24%，分部毛利承压"
+          },
+          {
+            "name": "经营现金流质量",
+            "target": "全年经营现金流/归母净利0.70+",
+            "frequency": "每季度/全年",
+            "status": "2025约0.89，2026Q1季节性为负"
+          },
+          {
+            "name": "海外与新业务质量",
+            "target": "海外毛利率28%+，储能毛利不再明显下滑",
+            "frequency": "半年/全年",
+            "status": "海外高增但毛利下滑，储能毛利13.95%"
+          },
+          {
+            "name": "产业园资本纪律",
+            "target": "分期按需投入，不挤压研发和现金流，负债受控",
+            "frequency": "重大公告/每季度",
+            "status": "24.7亿元计划待验证，有董事反对"
+          }
+        ],
+        "latest_event": null,
         "alerts": []
       }
     },
