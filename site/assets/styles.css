@@ -1044,6 +1044,75 @@ tbody tr.detail-inline-row .detail-panel {
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+.deep-review-start { justify-self: start; }
+.deep-review-token-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+  max-width: 620px;
+}
+.deep-review-token-form label {
+  display: grid;
+  gap: 5px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.deep-review-token-form input {
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid rgba(142, 111, 255, 0.46);
+  border-radius: 7px;
+  background: rgba(8, 15, 28, 0.86);
+  color: var(--ink);
+  font: inherit;
+}
+.deep-review-token-form input:focus {
+  outline: 2px solid rgba(142, 111, 255, 0.52);
+  outline-offset: 1px;
+}
+.deep-review-model {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(142, 111, 255, 0.28);
+  border-radius: 10px;
+  background: rgba(142, 111, 255, 0.035);
+}
+.deep-review-model h4 {
+  margin: 0;
+  color: #cfc4ff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+.deep-review-challenge,
+.deep-review-boundary {
+  margin: 0;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.deep-review-challenge {
+  border-left: 3px solid var(--watch);
+  background: rgba(255, 178, 36, 0.08);
+  color: #e5c584;
+}
+.deep-review-boundary {
+  border-left: 3px solid var(--brand);
+  background: rgba(46, 230, 168, 0.07);
+  color: #afeed7;
+}
+
+@media (max-width: 560px) {
+  .deep-review-token-form { grid-template-columns: 1fr; }
+  .deep-review-token-form .btn { justify-self: start; }
+}
 
 /* 可执行状态辅助块 */
 .primary-judgment-aux {

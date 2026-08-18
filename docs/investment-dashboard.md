@@ -8,6 +8,7 @@
 - `data/investment-dashboard/report_history.json`：每家公司的历史研报结论
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
+- `data/investment-dashboard/opportunity_scans.json`：Flash + Qwen3.7 Plus 的独立机会扫描与并集
 - `site/`：静态网页看板
 
 ## 范围
@@ -43,6 +44,47 @@
 - 若最新报告是较薄的 thesis-tracker，估值原文会回挂同公司更完整研报并标注来源
 
 后端仍会解析价格表与分层建议用于排序与看板字段，但不改写报告正文。
+
+## 当前机会筛选：AI 找机会，你决定买不买
+
+顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股会由两个模型独立阅读主报告、当前行情、技术辅助、情绪和 Checklist。
+
+- 全量扫描：`deepseek-v4-flash` + `qwen3.7-plus`
+- 进入规则：任一模型给出「机会」或「条件机会」就展示；另一模型只能提供反证，不能否决
+- 页面分组：双模型机会、单模型机会、条件机会
+- 最终决定：模型不输出买卖、仓位或目标价；你阅读依据、反证和报告后自行决定
+- 推理：所有调用请求供应商支持的最高推理档；产物会记录实际生效档位，若无法启用不会悄悄降为低推理
+
+收盘后全量扫描：
+
+```powershell
+py -3 tools\opportunity_review.py scan
+py -3 tools\build_investment_dashboard.py
+```
+
+单只股票的深度复核使用 `deepseek-v4-pro` + `gpt-5.6-luna`：
+
+```powershell
+py -3 tools\opportunity_review.py deep --ticker 000682.SZ
+```
+
+线上看板的「启动深度复核」按钮调用受保护接口，结果写入服务器运行目录而不是 Git 工作区。部署时在 `/etc/ai-berkshire/dashboard-review.env` 设置一个随机长令牌：
+
+```ini
+DASHBOARD_REVIEW_TOKEN=replace-with-a-long-random-secret
+DASHBOARD_DEEP_REVIEW_DAILY_LIMIT=12
+```
+
+未配置令牌时，网页仍可正常浏览，但深度复核接口保持关闭，避免公网消耗模型额度。收盘任务使用的 `/etc/ai-berkshire/sentiment.env` 需要保留 `OPENCODE_GO_API_KEY`；如需覆盖默认模型参数，可使用：
+
+首次点击深度复核会在详情内要求输入令牌；令牌只保存到该浏览器会话，输入后才会向服务器发起模型请求。
+
+```ini
+OPPORTUNITY_SCAN_FLASH_REASONING_EFFORT=max
+OPPORTUNITY_SCAN_QWEN_THINKING_BUDGET_TOKENS=32000
+OPPORTUNITY_DEEP_V4PRO_REASONING_EFFORT=max
+OPPORTUNITY_DEEP_LUNA_REASONING_EFFORT=high
+```
 
 
 ## 新报告后如何同步网页
@@ -109,7 +151,7 @@ py -3 tools\market_snapshot.py --force
 py -3 tools\post_buy_tracking.py check
 py -3 tools\build_investment_dashboard.py
 Copy-Item data\investment-dashboard\quotes\latest.json site\data\quotes\latest.json -Force
-py -3 -m http.server 8000 --directory site
+py -3 tools\dashboard_server.py --port 8000 --directory site
 ```
 
 打开 `http://localhost:8000`。
