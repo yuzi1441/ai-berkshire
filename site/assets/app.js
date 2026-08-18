@@ -10,15 +10,20 @@ import {
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
 const TRACKING_HIDDEN_STORAGE_KEY = "ai-berkshire.hidden-post-buy-tracking.v1";
+const DEEP_REVIEW_TOKEN_STORAGE_KEY = "ai-berkshire.deep-review-token.v1";
 const LIVE_INTERVAL_MS = 45_000;
 const SNAPSHOT_INTERVAL_MS = 180_000;
 
 const state = {
   decisions: [],
   intradayTechnical: new Map(),
-  decisionReviews: new Map(),
-  decisionReviewsGeneratedAt: null,
-  decisionReviewStatus: null,
+  opportunityScans: new Map(),
+  opportunityScansGeneratedAt: null,
+  opportunityScanStatus: null,
+  opportunityScanModels: [],
+  deepReviews: new Map(),
+  deepReviewLoadingTicker: null,
+  deepReviewTokenRequestedFor: null,
   sentimentSnapshot: null,
   sentiments: new Map(),
   sentimentStatus: null,
@@ -518,45 +523,228 @@ function appendReviewList(card, title, values, className = "") {
   card.append(section);
 }
 
-function renderDecisionReviewDetail(item) {
-  const review = decisionReviewForItem(item);
+function storedDeepReviewToken() {
+  try {
+    return sessionStorage.getItem(DEEP_REVIEW_TOKEN_STORAGE_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function rememberDeepReviewToken(token) {
+  try {
+    if (token) sessionStorage.setItem(DEEP_REVIEW_TOKEN_STORAGE_KEY, token);
+  } catch {
+    // The request can still continue during this page session if storage is blocked.
+  }
+}
+
+function clearDeepReviewToken() {
+  try {
+    sessionStorage.removeItem(DEEP_REVIEW_TOKEN_STORAGE_KEY);
+  } catch {
+    // Nothing else is required when storage is unavailable.
+  }
+}
+
+async function deepReviewRequest(url, options = {}) {
+  const token = storedDeepReviewToken();
+  if (!token) throw new Error("请先输入深度复核访问令牌");
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+  let payload = {};
+  try {
+    payload = await response.json();
+  } catch {
+    payload = { error: "服务器返回了无效响应" };
+  }
+  if (response.status === 401) clearDeepReviewToken();
+  if (!response.ok) throw new Error(payload.error || `深度复核请求失败（${response.status}）`);
+  return payload;
+}
+
+async function loadDeepReviews() {
+  if (!storedDeepReviewToken()) return;
+  try {
+    const payload = await deepReviewRequest("/api/deep-reviews");
+    state.deepReviews = new Map(
+      (payload.reviews || [])
+        .filter((review) => review?.ticker && review?.market === "A股")
+        .map((review) => [review.ticker, review]),
+    );
+  } catch (error) {
+    console.warn("deep reviews are unavailable", error);
+  }
+}
+
+async function startDeepReview(item, button) {
+  if (!item?.ticker || item.market !== "A股") return;
+  if (!storedDeepReviewToken()) {
+    state.deepReviewTokenRequestedFor = item.ticker;
+    state.detailTab = "deep-review";
+    openDetail(item);
+    return;
+  }
+  if (state.deepReviewLoadingTicker) {
+    showToast("已有深度复核正在进行，请等待完成");
+    return;
+  }
+  state.deepReviewTokenRequestedFor = null;
+  state.deepReviewLoadingTicker = item.ticker;
+  const previousText = button?.textContent;
+  if (button) {
+    button.disabled = true;
+    button.textContent = "V4 Pro + Luna 复核中…";
+  }
+  try {
+    const payload = await deepReviewRequest("/api/deep-reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ticker: item.ticker }),
+    });
+    if (payload.review?.ticker) state.deepReviews.set(payload.review.ticker, payload.review);
+    state.detailTab = "deep-review";
+    openDetail(item);
+    showToast(payload.status === "cached" ? "已打开本报告版本的深度复核" : "双模型深度复核已完成");
+  } catch (error) {
+    showToast(error instanceof Error ? error.message : "深度复核失败");
+    if (button) {
+      button.disabled = false;
+      button.textContent = previousText || "启动深度复核";
+    }
+  } finally {
+    state.deepReviewLoadingTicker = null;
+  }
+}
+
+function modelAssessmentCard(model, record) {
+  const section = document.createElement("section");
+  section.className = "deep-review-model";
+  const heading = document.createElement("h4");
+  heading.textContent = model;
+  section.append(heading);
+  if (record?.status !== "ready") {
+    const error = document.createElement("p");
+    error.className = "decision-review-error";
+    error.textContent = `本模型未完成：${record?.error || "结果缺失"}`;
+    section.append(error);
+    return section;
+  }
+  const assessment = record.assessment || {};
+  const summary = document.createElement("dl");
+  summary.className = "technical-summary decision-review-summary";
+  const rows = [
+    ["机会判断", assessment.opportunity_state || "待复核"],
+    ["置信度", assessment.confidence || "待复核"],
+    ["最高推理", record.reasoning?.effective || record.reasoning?.requested || "待复核"],
+    ["完成时间", record.generated_at || "待复核"],
+  ];
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  }
+  section.append(summary);
+  const explanation = document.createElement("p");
+  explanation.className = "decision-review-explanation";
+  explanation.textContent = assessment.opportunity_summary || "未提供机会解释";
+  section.append(explanation);
+  appendReviewList(section, "支持依据", assessment.supporting_evidence);
+  appendReviewList(section, "风险或反面证据", assessment.risks_or_counterevidence, "warning");
+  appendReviewList(section, "你需要亲自确认", assessment.human_questions, "conflict");
+  if (assessment.thesis_challenge) {
+    const challenge = document.createElement("p");
+    challenge.className = "deep-review-challenge";
+    challenge.textContent = `反证挑战：${assessment.thesis_challenge}`;
+    section.append(challenge);
+  }
+  if (assessment.decision_boundary) {
+    const boundary = document.createElement("p");
+    boundary.className = "deep-review-boundary";
+    boundary.textContent = `人工决策边界：${assessment.decision_boundary}`;
+    section.append(boundary);
+  }
+  return section;
+}
+
+function renderDeepReviewDetail(item) {
+  const review = deepReviewForItem(item);
   const card = document.createElement("section");
-  card.className = "card decision-review-detail";
+  card.className = "card decision-review-detail deep-review-detail";
   const title = document.createElement("h3");
-  title.textContent = "AI综合复核 · DeepSeek V4 Flash";
+  title.textContent = "双模型深度复核 · V4 Pro + GPT‑5.6 Luna";
   card.append(title);
 
   const disclaimer = document.createElement("p");
   disclaimer.className = "decision-review-disclaimer";
-  disclaimer.textContent = "这是跨模块一致性解释层，不改变主报告判断、当前可执行状态、粗颗粒度筛选、技术面或情绪分数。模型失败时只保留失败提示。";
+  disclaimer.textContent = "两份高推理意见并列展示，帮助你理解机会与反证；它们不生成买卖指令，也不会覆盖主报告、行情、技术面、情绪或 Checklist。最终决定由你作出。";
   card.append(disclaimer);
 
   if (review.status === "missing") {
     const empty = document.createElement("p");
     empty.className = "technical-empty";
-    empty.textContent = "尚未生成AI综合复核。当前看板主判断不受影响。";
-    card.append(empty);
+    empty.textContent = "尚未进行深度复核。点击后会调用 V4 Pro 和 GPT‑5.6 Luna 的最高推理档；结果只保存在服务器运行目录，不写入公开静态站。";
+    if (state.deepReviewTokenRequestedFor === item.ticker && !storedDeepReviewToken()) {
+      const form = document.createElement("form");
+      form.className = "deep-review-token-form";
+      const label = document.createElement("label");
+      label.textContent = "深度复核访问令牌";
+      const input = document.createElement("input");
+      input.type = "password";
+      input.name = "deep-review-token";
+      input.autocomplete = "off";
+      input.required = true;
+      input.placeholder = "仅本次浏览器会话保存";
+      const submit = document.createElement("button");
+      submit.type = "submit";
+      submit.className = "btn primary";
+      submit.textContent = "保存并启动 V4 Pro + Luna 复核";
+      form.append(label, input, submit);
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const token = input.value.trim();
+        if (!token) return;
+        rememberDeepReviewToken(token);
+        state.deepReviewTokenRequestedFor = null;
+        startDeepReview(item, submit);
+      });
+      card.append(empty, form);
+      els.detailBody.append(card);
+      input.focus();
+      return;
+    }
+    const start = document.createElement("button");
+    start.type = "button";
+    start.className = "btn primary deep-review-start";
+    start.textContent = state.deepReviewLoadingTicker === item.ticker ? "V4 Pro + Luna 复核中…" : "启动双模型深度复核";
+    start.disabled = state.deepReviewLoadingTicker === item.ticker;
+    start.addEventListener("click", () => startDeepReview(item, start));
+    card.append(empty, start);
     els.detailBody.append(card);
     return;
   }
-  if (review.status === "error") {
+  if (review.status === "error" && !Object.keys(review.models || {}).length) {
     const error = document.createElement("p");
     error.className = "decision-review-error";
-    error.textContent = `本次AI综合复核失败：${review.error || "未知错误"}。主报告和粗筛保持原结果。`;
+    error.textContent = `本次深度复核失败：${review.error || "未知错误"}。你仍可从报告与全量扫描判断机会。`;
     card.append(error);
     els.detailBody.append(card);
     return;
   }
 
-  const result = review.review || {};
   const summary = document.createElement("dl");
   summary.className = "technical-summary decision-review-summary";
   const rows = [
-    ["一致性", result.alignment || "待复核"],
-    ["关注级别", result.attention || "待复核"],
-    ["主要矛盾", result.focus || "待复核"],
-    ["复核置信度", result.confidence || "待复核"],
-    ["复核模型", review.model || "deepseek-v4-flash"],
+    ["结果状态", review.status || "待复核"],
+    ["模型判断关系", review.synthesis?.state_agreement || "待复核"],
+    ["结果规则", review.synthesis?.rule || "不形成买卖结论"],
     ["生成时间", review.generated_at || "待复核"],
   ];
   for (const [label, value] of rows) {
@@ -568,17 +756,13 @@ function renderDecisionReviewDetail(item) {
   }
   card.append(summary);
 
-  const explanation = document.createElement("p");
-  explanation.className = "decision-review-explanation";
-  explanation.textContent = result.explanation || "未提供综合解释";
-  card.append(explanation);
-  appendReviewList(card, "已满足条件", result.satisfied_conditions);
-  appendReviewList(card, "尚未满足或无法确认", result.missing_conditions, "warning");
-  appendReviewList(card, "模块冲突", result.conflicts, "conflict");
+  for (const [model, result] of Object.entries(review.models || {})) {
+    card.append(modelAssessmentCard(model, result));
+  }
 
   const source = document.createElement("p");
   source.className = "source-note";
-  source.textContent = `复核输入：主报告、价格规则、日线技术面、30分钟技术面、情绪和Checklist；${review.screening_effect || "不改变主报告和粗颗粒度筛选"}。`;
+  source.textContent = "复核输入：主报告、价格规则、日线技术面、30分钟技术面、情绪和 Checklist。它们均为模型理解机会的事实，不是自动买卖条件。";
   card.append(source);
   els.detailBody.append(card);
 }
@@ -1573,9 +1757,14 @@ function intradayTechnicalForItem(item) {
   return state.intradayTechnical.get(item?.ticker) || item?.intraday_technical_analysis || { status: "missing", lights: [] };
 }
 
-function decisionReviewForItem(item) {
+function opportunityScanForItem(item) {
   if (item?.market !== "A股") return { status: "missing" };
-  return state.decisionReviews.get(item?.ticker) || { status: "missing" };
+  return state.opportunityScans.get(item?.ticker) || { status: "missing" };
+}
+
+function deepReviewForItem(item) {
+  if (item?.market !== "A股") return { status: "missing" };
+  return state.deepReviews.get(item?.ticker) || { status: "missing" };
 }
 
 function intradayTone(technical) {
@@ -2122,47 +2311,37 @@ function renderSentimentDetail(item) {
 
 function opportunityCandidateForItem(item) {
   if (item?.market !== "A股") return null;
-  const review = decisionReviewForItem(item);
-  if (review.status !== "ready" || !review.review) return null;
-
-  const result = review.review;
-  const conflicts = Array.isArray(result.conflicts) ? result.conflicts.filter(Boolean) : [];
-  const missing = Array.isArray(result.missing_conditions) ? result.missing_conditions.filter(Boolean) : [];
-  const attention = String(result.attention || "");
-  const alignment = String(result.alignment || "");
+  const scan = opportunityScanForItem(item);
+  const union = scan?.union || {};
+  if (!union.included) return null;
   const quote = state.quotes.get(item.ticker);
-  const fallback = buyAdviceForItem(item, quote);
-  const execution = currentExecutionState(item, quote, fallback.key);
   const judgment = primaryJudgmentForItem(item);
-  const executionKeys = new Set(["actionable", "trial", "validation"]);
-  const aligned = new Set(["一致", "条件一致"]);
-
-  // This is an opportunity screen, not a contradiction queue. A candidate
-  // must be executable at the current quote, have a consensus primary report,
-  // and avoid reviews that explicitly require manual adjudication.
-  if (!judgment || judgment.model_consensus !== true) return null;
-  if (!executionKeys.has(execution.key) || !aligned.has(alignment)) return null;
-  if (attention === "待复核" || item.checklist?.hard_veto === true) return null;
-
-  const tier = execution.key === "validation" ? "validation" : "now";
-  const priority = execution.rank
-    + (alignment === "一致" ? 12 : 6)
-    + (result.confidence === "high" ? 4 : result.confidence === "medium" ? 2 : 0)
-    - Math.min(conflicts.length, 3) * 2;
+  const models = Object.entries(scan.models || {})
+    .filter(([, result]) => result && ["ready", "stale"].includes(result.status));
+  const tier = union.classification === "双模型机会"
+    ? "dual"
+    : union.classification === "单模型机会"
+      ? "single"
+      : "conditional";
+  const confidenceScore = models.reduce((score, [, result]) => {
+    const confidence = result.assessment?.confidence;
+    return score + (confidence === "high" ? 2 : confidence === "medium" ? 1 : 0);
+  }, 0);
+  const staleModels = models.filter(([, result]) => result.status === "stale");
+  const priority = (tier === "dual" ? 30 : tier === "single" ? 20 : 10) + confidenceScore;
 
   return {
     item,
-    review,
-    result,
+    scan,
+    union,
+    models,
     quote,
-    execution,
     judgment,
-    conflicts,
-    missing,
+    staleModels,
     priority,
     tier,
-    label: tier === "validation" ? "价格已到 · 待验证" : execution.label,
-    tone: tier === "validation" ? "notice" : "opportunity",
+    label: union.classification || "模型机会",
+    tone: tier === "conditional" ? "notice" : "opportunity",
   };
 }
 
@@ -2180,33 +2359,34 @@ function renderAttentionPanel() {
   }
 
   const aShares = state.decisions.filter((item) => item.market === "A股");
-  const readyReviews = aShares
-    .map((item) => decisionReviewForItem(item))
-    .filter((review) => review.status === "ready");
+  const scans = aShares.map((item) => opportunityScanForItem(item));
+  const modelResults = scans.flatMap((scan) => Object.values(scan?.models || {}));
+  const readyModelResults = modelResults.filter((result) => result?.status === "ready");
   const candidates = aShares
     .map(opportunityCandidateForItem)
     .filter(Boolean)
     .sort((a, b) => b.priority - a.priority || a.item.company.localeCompare(b.item.company, "zh"));
-  const nowCandidates = candidates.filter((candidate) => candidate.tier === "now");
-  const validationCandidates = candidates.filter((candidate) => candidate.tier === "validation");
+  const dualCandidates = candidates.filter((candidate) => candidate.tier === "dual");
+  const singleCandidates = candidates.filter((candidate) => candidate.tier === "single");
+  const conditionalCandidates = candidates.filter((candidate) => candidate.tier === "conditional");
 
   els.attentionPanel.hidden = false;
-  const reviewStatus = state.decisionReviewStatus;
-  const freshness = state.decisionReviewsGeneratedAt
-    ? ` · 快照 ${attentionTimestamp(state.decisionReviewsGeneratedAt)}`
+  const scanStatus = state.opportunityScanStatus;
+  const freshness = state.opportunityScansGeneratedAt
+    ? ` · 快照 ${attentionTimestamp(state.opportunityScansGeneratedAt)}`
     : "";
-  const failure = reviewStatus?.status === "error";
+  const failure = scanStatus?.status === "error";
   const failureNote = failure
-    ? ` · 本次失败，沿用${reviewStatus.last_success_review_generated_at ? `${attentionTimestamp(reviewStatus.last_success_review_generated_at)}的` : "上次成功的"}结果`
+    ? ` · 本次失败，沿用${scanStatus.last_success_scan_generated_at ? `${attentionTimestamp(scanStatus.last_success_scan_generated_at)}的` : "上次成功的"}结果`
     : "";
-  const metaText = `A股机会候选 ${nowCandidates.length} · 待验证 ${validationCandidates.length} · AI复核 ${readyReviews.length}/${aShares.length}${freshness}${failureNote}`;
+  const metaText = `机会 ${candidates.length} · 双模型 ${dualCandidates.length} · 单模型 ${singleCandidates.length} · 条件 ${conditionalCandidates.length} · 模型结果 ${readyModelResults.length}/${aShares.length * 2}${freshness}${failureNote}`;
   els.attentionMeta.textContent = metaText;
-  els.attentionMeta.dataset.status = failure ? "error" : (reviewStatus?.status || "ready");
+  els.attentionMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
   if (els.attentionToggleMeta) {
     els.attentionToggleMeta.textContent = failure
       ? `本次失败 · 沿用上次结果 · ${candidates.length} 项候选`
-      : `可执行 ${nowCandidates.length} · 待验证 ${validationCandidates.length}${state.decisionReviewsGeneratedAt ? ` · ${attentionTimestamp(state.decisionReviewsGeneratedAt)}` : ""}`;
-    els.attentionToggleMeta.dataset.status = failure ? "error" : (reviewStatus?.status || "ready");
+      : `机会 ${candidates.length} · 任一模型可入${state.opportunityScansGeneratedAt ? ` · ${attentionTimestamp(state.opportunityScansGeneratedAt)}` : ""}`;
+    els.attentionToggleMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
   els.attentionList.replaceChildren();
@@ -2215,22 +2395,27 @@ function renderAttentionPanel() {
     const empty = document.createElement("p");
     empty.className = "attention-empty";
     empty.textContent = failure
-      ? "本次收盘后 AI 复核失败，当前继续沿用上次成功结果。"
-      : readyReviews.length ? "当前没有同时满足主报告、现价和 AI 一致性条件的候选。冲突或待复核股票仍保留在主列表。" : "AI复核数据尚未加载，暂不生成机会候选。";
+      ? "本次收盘后 AI 机会扫描失败，当前继续沿用上次成功结果。"
+      : readyModelResults.length ? "当前没有模型认为值得立刻人工决策的机会；这不是自动买卖建议。" : "Flash + Qwen 全量扫描数据尚未加载，暂不生成机会面板。";
     els.attentionList.append(empty);
     return;
   }
 
   const groups = [
     {
-      items: nowCandidates,
-      title: "当前可执行候选",
-      note: "主报告允许当前分批或小仓行动，且 AI 复核未标记为待复核。",
+      items: dualCandidates,
+      title: "双模型机会",
+      note: "Flash 与 Qwen 都认为值得你现在亲自复核；仍不是自动买入信号。",
     },
     {
-      items: validationCandidates,
-      title: "价格已到 · 等待条件确认",
-      note: "价格已进入报告区间，但主报告仍要求经营/财报条件确认。",
+      items: singleCandidates,
+      title: "单模型机会",
+      note: "至少一份独立意见发现机会；另一份意见只提供反证，不享有否决权。",
+    },
+    {
+      items: conditionalCandidates,
+      title: "条件机会",
+      note: "模型识别到可研究的机会，但你需要先判断关键条件是否成立。",
     },
   ];
   for (const group of groups) {
@@ -2247,7 +2432,7 @@ function renderAttentionPanel() {
     const groupGrid = document.createElement("div");
     groupGrid.className = "attention-group-grid";
     for (const candidate of group.items) {
-    const { item, result, execution, judgment, quote } = candidate;
+    const { item, scan, models, judgment, quote } = candidate;
     const card = document.createElement("article");
     card.className = `attention-card attention-${candidate.tone}`;
 
@@ -2271,40 +2456,44 @@ function renderAttentionPanel() {
     const facts = document.createElement("div");
     facts.className = "attention-card-facts";
     const judgmentFact = document.createElement("span");
-    judgmentFact.textContent = `主报告：${judgment?.label || item.action || "待复核"}`;
-    const priceFact = document.createElement("span");
-    priceFact.textContent = `现价：${formatPrice(quote)}`;
-    const executionFact = document.createElement("span");
-    executionFact.textContent = `当前状态：${execution.label}`;
-    facts.append(judgmentFact, priceFact, executionFact);
+    judgmentFact.textContent = `报告视角：${judgment?.label || item.action || "待复核"}`;
+    const currentPriceFact = document.createElement("span");
+    currentPriceFact.textContent = `当前现价：${formatPrice(quote)}`;
+    facts.append(judgmentFact, currentPriceFact);
+    const scanQuote = scan?.input_snapshot?.current_quote;
+    if (scanQuote?.price != null) {
+      const scanPriceFact = document.createElement("span");
+      scanPriceFact.textContent = `模型输入价：${formatPrice(scanQuote)}`;
+      facts.append(scanPriceFact);
+    }
     card.append(facts);
 
     const focus = document.createElement("p");
     focus.className = "attention-card-focus";
-    focus.textContent = `AI复核：${result.alignment || "待复核"} · ${result.attention || "待复核"} · 主要核验 ${result.focus || "跨模块一致性"}`;
+    focus.textContent = models.map(([model, result]) => `${model}：${result.assessment?.opportunity_state || "待复核"}`).join(" · ");
     card.append(focus);
 
     const explanation = document.createElement("p");
     explanation.className = "attention-card-reason";
-    explanation.textContent = result.explanation || "暂无复核摘要，请打开详情查看。";
+    explanation.textContent = models
+      .filter(([, result]) => ["机会", "条件机会"].includes(result.assessment?.opportunity_state))
+      .map(([, result]) => result.assessment?.opportunity_summary)
+      .filter(Boolean)
+      .join(" ") || "模型未提供机会摘要，请启动深度复核。";
     card.append(explanation);
 
     const flags = document.createElement("div");
     flags.className = "attention-card-flags";
-    if (candidate.conflicts.length) {
-      const conflict = document.createElement("span");
-      conflict.textContent = `冲突 ${candidate.conflicts.length} 条`;
-      flags.append(conflict);
-    }
-    if (candidate.missing.length) {
-      const missing = document.createElement("span");
-      missing.textContent = `待确认 ${candidate.missing.length} 项`;
-      flags.append(missing);
-    }
-    if (result.confidence) {
+    for (const [model, result] of models) {
+      if (!result.assessment?.confidence) continue;
       const confidence = document.createElement("span");
-      confidence.textContent = `置信度 ${result.confidence}`;
+      confidence.textContent = `${model} · ${result.assessment.confidence}`;
       flags.append(confidence);
+    }
+    if (candidate.staleModels.length) {
+      const stale = document.createElement("span");
+      stale.textContent = `沿用 ${candidate.staleModels.length} 份同报告旧结果`;
+      flags.append(stale);
     }
     if (flags.childElementCount) card.append(flags);
 
@@ -2313,11 +2502,10 @@ function renderAttentionPanel() {
     const open = document.createElement("button");
     open.type = "button";
     open.className = "btn ghost attention-open";
-    open.textContent = "打开 AI 复核";
+    open.textContent = "启动深度复核";
     open.addEventListener("click", (event) => {
       event.stopPropagation();
-      state.detailTab = "decision-review";
-      openDetail(item);
+      startDeepReview(item, open);
     });
     foot.append(open);
     card.append(foot);
@@ -2758,11 +2946,11 @@ function renderDetail() {
     if (!tracking && state.detailTab === "tracking") state.detailTab = "overview";
   }
   const checklistTab = document.querySelector(".checklist-tab");
-  const decisionReviewTab = document.querySelector(".decision-review-tab");
+  const deepReviewTab = document.querySelector(".deep-review-tab");
   const isAShare = item.market === "A股";
-  if (decisionReviewTab) {
-    decisionReviewTab.hidden = !isAShare;
-    if (!isAShare && state.detailTab === "decision-review") state.detailTab = "overview";
+  if (deepReviewTab) {
+    deepReviewTab.hidden = !isAShare;
+    if (!isAShare && state.detailTab === "deep-review") state.detailTab = "overview";
   }
   const hasChecklist = Boolean(checklistForItem(item));
   if (checklistTab) {
@@ -2864,8 +3052,8 @@ function renderDetail() {
     return;
   }
 
-  if (state.detailTab === "decision-review") {
-    renderDecisionReviewDetail(item);
+  if (state.detailTab === "deep-review") {
+    renderDeepReviewDetail(item);
     return;
   }
 
@@ -3185,29 +3373,31 @@ async function loadIntradayTechnicalSnapshot() {
   );
 }
 
-async function loadDecisionReviewsSnapshot() {
-  const response = await fetch(`./data/decision_reviews.json?t=${Date.now()}`, { cache: "no-store" });
+async function loadOpportunityScansSnapshot() {
+  const response = await fetch(`./data/opportunity_scans.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) {
-    state.decisionReviews = new Map();
-    state.decisionReviewsGeneratedAt = null;
+    state.opportunityScans = new Map();
+    state.opportunityScansGeneratedAt = null;
+    state.opportunityScanModels = [];
     return;
   }
   const snapshot = await response.json();
-  state.decisionReviewsGeneratedAt = snapshot.generated_at || null;
-  state.decisionReviews = new Map(
-    (snapshot.reviews || [])
+  state.opportunityScansGeneratedAt = snapshot.generated_at || null;
+  state.opportunityScanModels = Array.isArray(snapshot.models) ? snapshot.models : [];
+  state.opportunityScans = new Map(
+    (snapshot.scans || [])
       .filter((item) => item?.ticker && item.market === "A股")
       .map((item) => [item.ticker, item]),
   );
 }
 
-async function loadDecisionReviewStatus() {
-  const response = await fetch(`./data/decision_review_status.json?t=${Date.now()}`, { cache: "no-store" });
+async function loadOpportunityScanStatus() {
+  const response = await fetch(`./data/opportunity_scan_status.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) {
-    state.decisionReviewStatus = null;
+    state.opportunityScanStatus = null;
     return;
   }
-  state.decisionReviewStatus = await response.json();
+  state.opportunityScanStatus = await response.json();
 }
 
 async function loadDashboard() {
@@ -3223,17 +3413,18 @@ async function loadDashboard() {
     state.intradayTechnical = new Map();
   }
   try {
-    await loadDecisionReviewsSnapshot();
+    await loadOpportunityScansSnapshot();
   } catch (error) {
-    console.warn("decision review snapshot failed", error);
-    state.decisionReviews = new Map();
-    state.decisionReviewsGeneratedAt = null;
+    console.warn("opportunity scan snapshot failed", error);
+    state.opportunityScans = new Map();
+    state.opportunityScansGeneratedAt = null;
+    state.opportunityScanModels = [];
   }
   try {
-    await loadDecisionReviewStatus();
+    await loadOpportunityScanStatus();
   } catch (error) {
-    console.warn("decision review status failed", error);
-    state.decisionReviewStatus = null;
+    console.warn("opportunity scan status failed", error);
+    state.opportunityScanStatus = null;
   }
   try {
     await loadSentimentSnapshot();
@@ -3246,6 +3437,7 @@ async function loadDashboard() {
   }
   state.hiddenTrackingKeys = loadHiddenTrackingKeys();
   updateTrackingControls();
+  await loadDeepReviews();
   renderAll();
   applyHashRoute();
   await refreshQuotes({ forceLive: isLikelyMarketOpen(), silent: true });

@@ -524,6 +524,22 @@ def load_decision_reviews(data_directory: Path) -> dict[str, Any]:
     return payload
 
 
+def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
+    """Load model-led opportunity scans without changing report decisions.
+
+    The scan is intentionally a separate display layer.  It contains two
+    independent semantic opinions and their union; it must never be folded
+    back into the deterministic current-execution classification.
+    """
+    payload = load_json(
+        data_directory / "opportunity_scans.json",
+        {"schema_version": 1, "status": "missing", "models": [], "scans": []},
+    )
+    if payload.get("schema_version") != 1 or not isinstance(payload.get("scans"), list):
+        raise ValueError("Invalid opportunity scan payload")
+    return payload
+
+
 def extract_report_completed_date(lines: list[str]) -> str | None:
     """Extract an explicitly labelled report completion date for tie-breaking.
 
@@ -4556,6 +4572,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
+    opportunity_scans = load_opportunity_scans(data_directory)
     registry = load_registry(repo_root / "data" / "report-routing" / "company_registry.json")
     overrides = load_json(
         data_directory / "overrides.json",
@@ -4627,11 +4644,13 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "report_history.json", history_board)
     write_json(data_directory / "intraday_technical.json", intraday_technical)
     write_json(data_directory / "decision_reviews.json", decision_reviews)
+    write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     write_json(site_directory / "data" / "report_history.json", history_board)
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
+    write_json(site_directory / "data" / "opportunity_scans.json", opportunity_scans)
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)

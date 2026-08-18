@@ -1,5 +1,5 @@
 [Unit]
-Description=AI Berkshire investment dashboard static site
+Description=AI Berkshire investment dashboard with protected deep-review API
 Wants=network-online.target
 After=network-online.target
 
@@ -7,7 +7,10 @@ After=network-online.target
 Type=simple
 User=root
 WorkingDirectory=/opt/ai-berkshire
-ExecStart=/usr/bin/python3 -m http.server 80 --bind 0.0.0.0 --directory /opt/ai-berkshire/site
+Environment=DASHBOARD_RUNTIME_DIR=/var/lib/ai-berkshire
+EnvironmentFile=-/etc/ai-berkshire/dashboard-review.env
+StateDirectory=ai-berkshire
+ExecStart=/usr/bin/python3 tools/dashboard_server.py --repo-root /opt/ai-berkshire --directory /opt/ai-berkshire/site --bind 0.0.0.0 --port 80
 Restart=always
 RestartSec=3
 NoNewPrivileges=true

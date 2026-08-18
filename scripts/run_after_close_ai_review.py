@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Refresh the A-share close quote and the dashboard AI review fail-closed.
+"""Refresh close quotes and the model-led A-share opportunity scan.
 
 This job is intended for the VPS after the A-share close. It refreshes the
-latest quote, rebuilds the board, reviews all A-share decisions, and rebuilds
-the static site. A partial or failed AI run never replaces the last successful
-decision_reviews.json; instead it writes a public status artifact so the board
-can say that the previous result is being used.
+latest quote, rebuilds the board, then asks DeepSeek V4 Flash and Qwen3.7 Plus
+to independently identify research opportunities. A partial run may retain a
+per-model prior result for the same report, but a completely failed run never
+replaces the last successful opportunity_scans.json.
 """
 
 from __future__ import annotations
@@ -26,23 +26,23 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SHANGHAI = ZoneInfo("Asia/Shanghai")
-REVIEW_RELATIVE = Path("data/investment-dashboard/decision_reviews.json")
-STATUS_RELATIVE = Path("data/investment-dashboard/decision_review_status.json")
-SITE_STATUS_RELATIVE = Path("site/data/decision_review_status.json")
+SCAN_RELATIVE = Path("data/investment-dashboard/opportunity_scans.json")
+STATUS_RELATIVE = Path("data/investment-dashboard/opportunity_scan_status.json")
+SITE_STATUS_RELATIVE = Path("site/data/opportunity_scan_status.json")
 LOCK_PATH = Path("/run/lock/ai-berkshire-repo-update.lock")
 
 GENERATED_PATHS = (
     "data/investment-dashboard/decision_board.json",
     "data/investment-dashboard/report_history.json",
     "data/investment-dashboard/reports_catalog.json",
-    "data/investment-dashboard/decision_reviews.json",
-    "data/investment-dashboard/decision_review_status.json",
+    "data/investment-dashboard/opportunity_scans.json",
+    "data/investment-dashboard/opportunity_scan_status.json",
     "data/investment-dashboard/quotes/latest.json",
     "site/data/decision_board.json",
     "site/data/report_history.json",
     "site/data/reports_catalog.json",
-    "site/data/decision_reviews.json",
-    "site/data/decision_review_status.json",
+    "site/data/opportunity_scans.json",
+    "site/data/opportunity_scan_status.json",
     "site/data/quotes/latest.json",
 )
 
@@ -97,7 +97,7 @@ def write_status(
     status: str,
     message: str,
     previous: dict[str, Any],
-    review: dict[str, Any] | None = None,
+    scan: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": 1,
@@ -105,18 +105,19 @@ def write_status(
         "attempted_at": now_iso(),
         "message": message,
         "last_success_at": previous.get("last_success_at"),
-        "last_success_review_generated_at": previous.get("last_success_review_generated_at"),
+        "last_success_scan_generated_at": previous.get("last_success_scan_generated_at"),
         "last_success_ready_count": previous.get("last_success_ready_count"),
     }
-    if status == "ok" and review:
+    if status == "ok" and scan:
         payload.update(
             {
                 "last_success_at": payload["attempted_at"],
-                "last_success_review_generated_at": review.get("generated_at"),
-                "last_success_ready_count": review.get("ready_count"),
-                "review_count": review.get("review_count"),
-                "ready_count": review.get("ready_count"),
-                "error_count": review.get("error_count", 0),
+                "last_success_scan_generated_at": scan.get("generated_at"),
+                "last_success_ready_count": scan.get("ready_count"),
+                "scan_count": scan.get("scan_count"),
+                "ready_count": scan.get("ready_count"),
+                "stale_count": scan.get("stale_count", 0),
+                "error_count": scan.get("error_count", 0),
             }
         )
     write_json(repo_root / STATUS_RELATIVE, payload)
@@ -149,7 +150,7 @@ def main() -> int:
     python = repo_root / ".venv" / "bin" / "python"
     if not python.is_file():
         python = Path(sys.executable)
-    review_path = repo_root / REVIEW_RELATIVE
+    scan_path = repo_root / SCAN_RELATIVE
     previous_status = load_json(repo_root / STATUS_RELATIVE, {})
     backup_path: Path | None = None
     lock_handle = None
@@ -170,46 +171,52 @@ def main() -> int:
         run_step(repo_root, "刷新 A/H 收盘行情", [str(python), "tools/market_snapshot.py", "--force"])
         run_step(repo_root, "重建含最新价格的决策板", [str(python), "tools/build_investment_dashboard.py"])
 
-        if review_path.is_file():
-            with tempfile.NamedTemporaryFile(prefix="decision-reviews-", suffix=".json", delete=False) as handle:
+        if scan_path.is_file():
+            with tempfile.NamedTemporaryFile(prefix="opportunity-scans-", suffix=".json", delete=False) as handle:
                 backup_path = Path(handle.name)
-            shutil.copy2(review_path, backup_path)
+            shutil.copy2(scan_path, backup_path)
 
         try:
             run_step(
                 repo_root,
-                "收盘后复核全部 A 股",
-                [str(python), "tools/decision_consistency_review.py"],
+                "收盘后扫描全部 A 股机会",
+                [str(python), "tools/opportunity_review.py", "scan"],
             )
-            review = load_json(review_path, {})
-            if review.get("status") != "ok" or review.get("error_count", 0):
+            scan = load_json(scan_path, {})
+            if not scan.get("scan_count") or not scan.get("ready_count"):
                 raise JobError(
-                    f"AI复核未完整成功：status={review.get('status')}, "
-                    f"ready={review.get('ready_count')}/{review.get('review_count')}, "
-                    f"errors={review.get('error_count')}"
+                    f"AI机会扫描没有有效模型结果：status={scan.get('status')}, "
+                    f"ready={scan.get('ready_count')}/{scan.get('model_result_count')}, "
+                    f"errors={scan.get('error_count')}"
                 )
-            write_status(repo_root, "ok", "收盘后 AI 复核已完成，重点关注区已按最新收盘价更新。", previous_status, review)
+            write_status(
+                repo_root,
+                "ok",
+                "收盘后 AI 机会扫描已完成；任一模型发现机会即进入人工决策面板。",
+                previous_status,
+                scan,
+            )
             run_step(repo_root, "重建静态看板", [str(python), "tools/build_investment_dashboard.py"])
-            stage_and_push(repo_root, f"chore: refresh A-share AI review after close {datetime.now(SHANGHAI):%F}")
-            print("Close-review job completed successfully.", flush=True)
+            stage_and_push(repo_root, f"chore: refresh A-share opportunity scan after close {datetime.now(SHANGHAI):%F}")
+            print("After-close opportunity scan completed successfully.", flush=True)
             return 0
         except Exception as error:  # noqa: BLE001 - the job must fail closed
             if backup_path and backup_path.is_file():
-                shutil.copy2(backup_path, review_path)
+                shutil.copy2(backup_path, scan_path)
             else:
-                review_path.unlink(missing_ok=True)
+                scan_path.unlink(missing_ok=True)
             write_status(
                 repo_root,
                 "error",
-                "本次收盘后 AI 复核失败，已沿用上次成功结果；详情见 VPS 服务日志。",
+                "本次收盘后 AI 机会扫描失败，已沿用上次成功结果；详情见 VPS 服务日志。",
                 previous_status,
             )
             try:
                 run_step(repo_root, "重建失败保护状态", [str(python), "tools/build_investment_dashboard.py"])
-                stage_and_push(repo_root, f"chore: record A-share AI review failure {datetime.now(SHANGHAI):%F}")
+                stage_and_push(repo_root, f"chore: record A-share opportunity scan failure {datetime.now(SHANGHAI):%F}")
             except Exception as publish_error:  # noqa: BLE001
                 print(f"Could not publish failure status: {publish_error}", file=sys.stderr)
-            print(f"Close-review job failed closed: {error}", file=sys.stderr)
+            print(f"After-close opportunity scan failed closed: {error}", file=sys.stderr)
             return 1
     except BlockingIOError:
         print("another AI Berkshire repository update is already running; exiting", flush=True)
