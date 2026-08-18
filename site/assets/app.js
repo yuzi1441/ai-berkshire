@@ -2334,8 +2334,11 @@ function opportunityCandidateForItem(item) {
   const union = scan?.union || {};
   const quote = state.quotes.get(item.ticker);
   const judgment = primaryJudgmentForItem(item);
-  const models = Object.entries(scan.models || {})
+  const allModels = Object.entries(scan.models || {})
     .filter(([, result]) => result && ["ready", "stale"].includes(result.status));
+  // Old fallback results remain visible for audit, but cannot create a
+  // current/near opportunity after the latest model refresh failed.
+  const models = allModels.filter(([, result]) => result.status === "ready");
   const normalizeState = (value) => ({
     "机会": "当前机会",
     "条件机会": "临近机会",
@@ -2349,7 +2352,7 @@ function opportunityCandidateForItem(item) {
     const confidence = result.assessment?.confidence;
     return score + (confidence === "high" ? 2 : confidence === "medium" ? 1 : 0);
   }, 0);
-  const staleModels = models.filter(([, result]) => result.status === "stale");
+  const staleModels = allModels.filter(([, result]) => result.status === "stale");
   const priority = (tier === "current" ? 20 : 10) + confidenceScore;
 
   return {

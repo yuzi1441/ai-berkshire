@@ -56,6 +56,32 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertTrue(result["near_included"])
         self.assertEqual(result["classification"], "临近机会")
 
+    def test_union_never_promotes_stale_opportunity(self):
+        stale = ready("deepseek-v4-flash", "当前机会")
+        stale["status"] = "stale"
+        result = opportunity.union_result({"deepseek-v4-flash": stale})
+        self.assertFalse(result["included"])
+        self.assertFalse(result["near_included"])
+        self.assertEqual(result["classification"], "待人工复核")
+        self.assertEqual(result["model_count"], 0)
+        self.assertEqual(result["stale_count"], 1)
+
+    def test_previous_model_does_not_chain_stale_fallback(self):
+        stale = ready("deepseek-v4-flash", "当前机会")
+        stale["status"] = "stale"
+        previous = {
+            "scans": [
+                {
+                    "ticker": "600000.SH",
+                    "report_sha256": "report-hash",
+                    "models": {"deepseek-v4-flash": stale},
+                }
+            ]
+        }
+        self.assertIsNone(
+            opportunity.previous_model(previous, "600000.SH", "deepseek-v4-flash", "report-hash")
+        )
+
     def test_scan_does_not_use_execution_or_checklist_as_a_veto(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -213,6 +239,28 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["status"], "ready")
         self.assertEqual(result["schema_repair_attempts"], 1)
         self.assertEqual(result["reasoning"]["effective"], "max")
+        self.assertEqual(request.call_count, 2)
+
+    def test_run_model_does_not_turn_repeated_blank_state_into_an_opportunity(self):
+        config = opportunity.ModelConfig(
+            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        with patch.object(
+            opportunity,
+            "request_json",
+            side_effect=[
+                ({"opportunity_state": ""}, {"requested": "max", "effective": "max"}),
+                ({"opportunity_state": ""}, {"requested": "max", "effective": "max"}),
+            ],
+        ) as request:
+            result = opportunity.run_model(
+                config,
+                {"local_price_context": {"status": "inside_price_rule"}},
+                deep=False,
+            )
+        self.assertEqual(result["status"], "error")
+        self.assertEqual(result["schema_repair_attempts"], 1)
+        self.assertIn("opportunity_state", result["validation_error"])
         self.assertEqual(request.call_count, 2)
 
     def test_full_scan_selects_only_flash(self):

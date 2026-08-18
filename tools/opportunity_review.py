@@ -303,6 +303,7 @@ def review_prompts(facts: dict[str, Any], *, deep: bool) -> tuple[str, str]:
         "‘暂不构成当前机会’表示现在没有足够正向理由。好公司、热门叙事、估值争议、值得长期研究、未来可能跌到某价格、未来可能出现事件，"
         "以及报告需要重做，本身都不是当前或临近机会。高估值、高风险或回避案例即使很有研究价值，也不得因此判为机会。"
         "‘证据不足’只用于关键输入缺失或互相无法解释。"
+        "opportunity_state是必填字段，绝不能输出空字符串、null或自造枚举；只能原样选择：当前机会、临近机会、暂不构成当前机会、证据不足。"
         "不得把本地程序的价格匹配、Checklist状态、技术状态或主报告粗标签当作自动否决器；应解释它们各自支持或反驳什么。"
         "但如果现价不在主报告任何价格规则内却仍判为当前机会，必须在constraint_override_reason中引用输入里的新事实，"
         "解释为什么该事实足以突破原约束；不能只写情绪、技术形态、好公司或值得研究。"
@@ -568,15 +569,20 @@ def validate_assessment(
 def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict[str, Any]:
     started = time.perf_counter()
     system, user = review_prompts(facts, deep=deep)
+    repair_attempts = 0
+    validation_error_text = ""
     try:
         raw, reasoning = request_json(config, system=system, user=user)
-        repair_attempts = 0
         try:
             assessment = validate_assessment(raw, deep=deep, facts=facts)
         except OpportunityReviewError as validation_error:
+            validation_error_text = str(validation_error)
             repair_attempts = 1
             repair_user = (
-                "上一次返回的JSON未通过结构校验。请仅修复字段和枚举，不得降低推理强度、改变事实或增加外部信息。"
+                "上一次返回的JSON未通过结构校验。请重新检查输入事实并只修复结构，不得降低推理强度、改变事实或增加外部信息。"
+                "\n特别注意：opportunity_state是必填字段，绝不能是空字符串、null或缺失。"
+                "它只能原样取以下四个值之一：当前机会、临近机会、暂不构成当前机会、证据不足。"
+                "如果事实不足以支持机会判断，就选择证据不足；不要留空，也不要自行创造其他状态。"
                 f"\n校验错误：{validation_error}"
                 f"\n必须满足的结构：{json.dumps(review_schema(deep), ensure_ascii=False)}"
                 f"\n上一次JSON：{json.dumps(raw, ensure_ascii=False)}"
@@ -584,7 +590,11 @@ def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict
                 "\n只输出修复后的严格JSON。"
             )
             raw, repair_reasoning = request_json(config, system=system, user=repair_user)
-            assessment = validate_assessment(raw, deep=deep, facts=facts)
+            try:
+                assessment = validate_assessment(raw, deep=deep, facts=facts)
+            except OpportunityReviewError as repair_error:
+                validation_error_text = f"初次校验：{validation_error}；结构修复后仍失败：{repair_error}"
+                raise
             reasoning = {
                 **repair_reasoning,
                 "schema_repair": True,
@@ -610,13 +620,19 @@ def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict
                 "requested": "highest reasoning only",
                 "effective": None,
             },
+            "schema_repair_attempts": repair_attempts,
+            "validation_error": validation_error_text,
             "error": clean_text(error, 600),
             "elapsed_seconds": round(time.perf_counter() - started, 3),
         }
 
 
 def union_result(models: dict[str, dict[str, Any]]) -> dict[str, Any]:
-    ready = [item for item in models.values() if item.get("status") in {"ready", "stale"}]
+    # A stale result is useful for audit and diagnosis, but it is not evidence
+    # for today's opportunity decision.  Never let a failed refresh promote an
+    # old "current" or "near" assessment back into the opportunity panel.
+    ready = [item for item in models.values() if item.get("status") == "ready"]
+    stale = [item for item in models.values() if item.get("status") == "stale"]
     opportunities = [
         item
         for item in ready
@@ -633,6 +649,8 @@ def union_result(models: dict[str, dict[str, Any]]) -> dict[str, Any]:
         classification = "临近机会"
     elif ready:
         classification = "暂不进入机会面板"
+    elif stale:
+        classification = "待人工复核"
     else:
         classification = "待人工复核"
     return {
@@ -642,6 +660,7 @@ def union_result(models: dict[str, dict[str, Any]]) -> dict[str, Any]:
         "supporting_models": [item.get("model") for item in opportunities if item.get("model")],
         "near_models": [item.get("model") for item in conditional if item.get("model")],
         "model_count": len(ready),
+        "stale_count": len(stale),
         "opportunity_count": len(opportunities),
         "conditional_count": len(conditional),
         "rule": "当前机会进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
@@ -660,7 +679,10 @@ def previous_model(
         if record.get("report_sha256") != report_hash:
             return None
         found = (record.get("models") or {}).get(model)
-        if isinstance(found, dict) and found.get("status") in {"ready", "stale"}:
+        # Do not chain stale fallbacks.  A previous stale result already means
+        # the last refresh failed; carrying it forward would make its age
+        # invisible and could eventually re-enter the opportunity panel.
+        if isinstance(found, dict) and found.get("status") == "ready":
             return dict(found)
     return None
 
