@@ -556,6 +556,43 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(community["source_tier"], "D")
         self.assertFalse(community["score_eligible"])
 
+    def test_industry_authority_source_can_be_a_grade(self):
+        source = sentiment_snapshot.classify_news_source(
+            {
+                "scope": "industry",
+                "publisher": "工业和信息化部",
+                "url": "https://example.gov.cn/news/1",
+            }
+        )
+        self.assertEqual(source["source_tier"], "A")
+        self.assertEqual(source["source_tier_label"], "行业权威来源")
+        self.assertTrue(source["score_eligible"])
+
+    def test_industry_lookup_recovers_after_batch_failure(self):
+        universe = [
+            {"ticker": "600519.SH", "market": "A股", "company": "茅台"},
+            {"ticker": "000333.SZ", "market": "A股", "company": "美的集团"},
+        ]
+        responses = iter(
+            [
+                sentiment_snapshot.SentimentError("batch failed"),
+                {"data": {"diff": {"1": {"f12": "600519", "f100": "白酒Ⅱ"}}}},
+                {"data": {"diff": {"0": {"f12": "000333", "f100": "白色家电"}}}},
+            ]
+        )
+
+        def fake_http_json(_url):
+            value = next(responses)
+            if isinstance(value, Exception):
+                raise value
+            return value
+
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            industries, warnings = sentiment_snapshot.fetch_provider_industries(universe)
+        self.assertEqual(industries["600519.SH"], "白酒Ⅱ")
+        self.assertEqual(industries["000333.SZ"], "白色家电")
+        self.assertEqual(warnings, [])
+
     def test_parse_cninfo_official_announcement(self):
         payload = {
             "announcements": [
@@ -911,7 +948,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(len(result["captured_items"]), 2)
         self.assertFalse(result["captured_items"][0]["score_eligible"])
 
-    def test_auxiliary_news_is_not_sent_to_llm(self):
+    def test_auxiliary_news_is_analyzed_as_context_without_formal_promotion(self):
         config = sentiment_snapshot.LLMConfig(
             endpoint="https://example.com", api_key="test", model="test-model"
         )
@@ -927,14 +964,28 @@ class SentimentSnapshotTests(unittest.TestCase):
             "source_tier_label": "社区/传闻",
             "score_eligible": False,
         }
-        with patch.object(sentiment_snapshot, "score_with_llm") as score_with_llm:
+        def fake_score(batch, _config, _provider):
+            return {
+                item["id"]: {
+                    "direction": -0.4,
+                    "impact": 2,
+                    "relevance": 0.8,
+                    "confidence": 0.7,
+                    "event_type": "一般新闻",
+                    "scoring_method": "llm:test",
+                }
+                for item in batch
+            }
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score) as score_with_llm:
             scored, warnings, skipped = sentiment_snapshot.score_articles([article], config, config)
-        score_with_llm.assert_not_called()
+        self.assertEqual(score_with_llm.call_count, 2)
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
         self.assertEqual(len(scored), 1)
         self.assertFalse(scored[0]["score_eligible"])
-        self.assertEqual(scored[0]["scoring_method"], "not_scored:source_policy")
+        self.assertTrue(scored[0]["context_score_eligible"])
+        self.assertTrue(scored[0]["scoring_method"].startswith("llm:dual:"))
 
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {
@@ -974,16 +1025,69 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(score["relevance"], 0.15)
         self.assertEqual(score["confidence"], 0.35)
 
-    def test_combined_score_uses_company_news_only(self):
+    def test_combined_score_uses_three_sentiment_layers(self):
         result = sentiment_snapshot.combined_company_score(
             "A股",
             {"score_0_100": 70},
             {"score_0_100": 50},
             {"score_0_100": 80},
         )
-        self.assertEqual(result["score_0_100"], 70.0)
-        self.assertIn("个股新闻100%", result["method"])
-        self.assertIn("行业新闻", result["method"])
+        self.assertEqual(result["score_0_100"], 66.5)
+        self.assertEqual(result["coverage"], {"company": True, "industry": True, "market": True})
+        self.assertIn("个股60%", result["method"])
+        self.assertIn("市场15%", result["method"])
+
+    def test_combined_score_does_not_renormalize_missing_layers(self):
+        result = sentiment_snapshot.combined_company_score(
+            "A股",
+            {"score_0_100": None, "state": "无数据"},
+            {"score_0_100": 80},
+            {"score_0_100": 50},
+        )
+        self.assertEqual(result["status"], "context_only")
+        self.assertEqual(result["score_0_100"], 54.5)
+
+    def test_contextual_aggregate_uses_analyzed_auxiliary_news_with_discount(self):
+        cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
+        formal = {
+            "title": "公司正式公告改善",
+            "publisher": "巨潮资讯",
+            "url": "https://www.cninfo.com.cn/1",
+            "published_at": "2026-08-10T20:00:00+08:00",
+            "event_type": "经营事件",
+            "direction": 0.5,
+            "impact": 2,
+            "relevance": 1.0,
+            "confidence": 0.8,
+            "scoring_method": "llm:dual:test",
+            "source_tier": "A",
+            "score_eligible": True,
+        }
+        context = {
+            "title": "行业辅助新闻偏弱",
+            "publisher": "行业资讯",
+            "url": "https://example.com/1",
+            "published_at": "2026-08-10T21:00:00+08:00",
+            "event_type": "行业政策",
+            "direction": -0.8,
+            "impact": 2,
+            "relevance": 0.9,
+            "confidence": 0.8,
+            "scoring_method": "llm:dual:test",
+            "source_tier": "C",
+            "score_eligible": False,
+            "context_score_eligible": True,
+        }
+        formal_result = sentiment_snapshot.aggregate_news([formal, context], cutoff)
+        contextual_result = sentiment_snapshot.aggregate_news(
+            [formal, context], cutoff, include_context=True
+        )
+        self.assertEqual(formal_result["score_article_count"], 1)
+        self.assertEqual(contextual_result["context_only_article_count"], 1)
+        self.assertNotEqual(contextual_result["score_0_100"], formal_result["score_0_100"])
+        self.assertTrue(
+            any(item["contextual"] for item in contextual_result["captured_items"])
+        )
 
     def test_news_aggregation_applies_direction_and_time_decay(self):
         cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)

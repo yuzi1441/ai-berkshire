@@ -248,7 +248,8 @@ function renderSentimentBadge(sentiment, label = "综合") {
   const badge = document.createElement("span");
   const score = sentiment?.score_0_100;
   badge.className = `sentiment-badge ${sentimentTone(score)}`;
-  badge.textContent = `${label} ${sentimentScoreText(score)}`;
+  const displayLabel = sentiment?.status === "context_only" ? "上下文" : label;
+  badge.textContent = `${displayLabel} ${sentimentScoreText(score)}`;
   return badge;
 }
 
@@ -2293,11 +2294,15 @@ function renderSentimentDetail(item) {
   const summary = document.createElement("dl");
   summary.className = "kv-grid sentiment-summary";
   const industry = record.industry_sentiment || record.industry_detail;
+  const market = state.sentimentSnapshot?.market_sentiment?.[item.market];
+  const combined = record.combined_sentiment;
   const rows = [
-    ["综合情绪（个股评分）", `${sentimentScoreText(record.combined_sentiment?.score_0_100)} · ${sentimentStateText(record.combined_sentiment)}`],
-    ["个股新闻", `${sentimentScoreText(record.news_sentiment?.score_0_100)} · ${sentimentStateText(record.news_sentiment)}`],
-    ["行业情绪（辅助）", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
-    ["新闻池", `可评分 ${record.news_sentiment?.score_article_count || 0} · 辅助 ${record.news_sentiment?.auxiliary_article_count || 0}`],
+    ["综合情绪（三层）", `${sentimentScoreText(combined?.score_0_100)} · ${sentimentStateText(combined)}`],
+    ["个股情绪（含辅助AI）", `${sentimentScoreText(record.news_sentiment?.score_0_100)} · ${sentimentStateText(record.news_sentiment)}`],
+    ["个股正式来源", `${sentimentScoreText(record.news_sentiment?.formal_score_0_100)} · ${record.news_sentiment?.formal_status || "待复核"}`],
+    ["行业情绪", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
+    ["市场情绪", `${sentimentScoreText(market?.score_0_100)} · ${sentimentStateText(market)}`],
+    ["新闻池", `正式 ${record.news_sentiment?.score_article_count || 0} · AI分析 ${record.news_sentiment?.context_only_article_count || 0} · 辅助总量 ${record.news_sentiment?.auxiliary_article_count || 0}`],
     ["新闻时效", sentimentRecencyText(record.news_sentiment)],
     ["情绪数据截止", state.sentimentSnapshot?.data_cutoff || "待复核"],
   ];
@@ -2311,14 +2316,14 @@ function renderSentimentDetail(item) {
   card.append(summary);
   const note = document.createElement("p");
   note.className = "source-note";
-  note.textContent = "综合情绪只使用个股可评分新闻；行业新闻、市场温度、聚合资讯和社区线索均为辅助，不会影响分数。";
+  note.textContent = "综合情绪由个股60% + 行业25% + A股市场15%组成；C/D新闻仅按降权上下文进入，缺失层不会放大其他层权重。行业权威来源可为A级，但仍按行业传导系数处理。";
   card.append(note);
   els.detailBody.append(card);
 
   els.detailBody.append(renderNewsList("个股新闻 · 全部抓取结果", record.news_sentiment, {
     emptyText: record.news_sentiment?.state || "暂无个股新闻",
   }));
-  els.detailBody.append(renderNewsList("行业/相关新闻 · 全部抓取结果（仅辅助）", record.industry_detail, {
+  els.detailBody.append(renderNewsList("行业/相关新闻 · AI分析与辅助线索", record.industry_detail, {
     emptyText: industry?.state || "暂无行业新闻",
   }));
 }
@@ -2594,7 +2599,7 @@ function renderSummary(visible) {
     ["当前个股", visible.length],
     ["A股", visible.filter((i) => i.market === "A股").length],
     ["港股", visible.filter((i) => i.market === "港股").length],
-    ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.score_0_100 != null).length}/${visible.length}`],
+    ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.status === "ok").length}/${visible.length}`],
     ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
     ["价格已到待验证", counts.validation || 0],
     ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],

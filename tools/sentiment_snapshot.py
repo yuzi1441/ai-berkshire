@@ -51,6 +51,7 @@ DEFAULT_LLM_TIMEOUT_SECONDS = 600
 DEFAULT_LLM_RETRIES = 4
 DEFAULT_LLM_RETRY_BACKOFF_SECONDS = 5.0
 DEFAULT_LLM_MISSING_RESULT_RETRIES = 3
+DEFAULT_CONTEXT_ANALYSIS_LIMIT = 12
 TRANSIENT_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
@@ -119,6 +120,28 @@ PROFESSIONAL_SOURCE_TERMS = (
     "证券日报",
     "中国经营报",
     "澎湃新闻",
+)
+INDUSTRY_AUTHORITY_SOURCE_TERMS = (
+    "国家发展改革委",
+    "发改委",
+    "工业和信息化部",
+    "工信部",
+    "商务部",
+    "国家能源局",
+    "国家统计局",
+    "海关总署",
+    "国家药监局",
+    "国家医保局",
+    "市场监管总局",
+    "生态环境部",
+    "交通运输部",
+    "中国汽车流通协会",
+    "中国有色金属工业协会",
+    "中国钢铁工业协会",
+    "中国煤炭工业协会",
+    "中国电力企业联合会",
+    "中国光伏行业协会",
+    "中国半导体行业协会",
 )
 COMMUNITY_SOURCE_TERMS = (
     "雪球",
@@ -343,14 +366,30 @@ def classify_news_source(article: dict[str, Any]) -> dict[str, Any]:
             "source_tier": "A",
             "source_tier_label": "一手披露",
             "score_eligible": True,
+            "context_score_eligible": True,
+            "context_analysis_eligible": True,
             "verification_status": "official_source",
             "source_via": "official_or_exchange",
+        }
+    if article.get("scope") == "industry" and any(
+        term.casefold() in publisher_folded for term in INDUSTRY_AUTHORITY_SOURCE_TERMS
+    ):
+        return {
+            "source_tier": "A",
+            "source_tier_label": "行业权威来源",
+            "score_eligible": True,
+            "context_score_eligible": True,
+            "context_analysis_eligible": True,
+            "verification_status": "industry_authority_source",
+            "source_via": "industry_authority",
         }
     if any(term.casefold() in publisher_folded for term in PROFESSIONAL_SOURCE_TERMS):
         return {
             "source_tier": "B",
             "source_tier_label": "专业媒体",
             "score_eligible": True,
+            "context_score_eligible": True,
+            "context_analysis_eligible": True,
             "verification_status": "single_source_secondary",
             "source_via": "eastmoney_aggregator" if "eastmoney.com" in url else "publisher_direct",
         }
@@ -359,6 +398,8 @@ def classify_news_source(article: dict[str, Any]) -> dict[str, Any]:
             "source_tier": "D",
             "source_tier_label": "社区/传闻",
             "score_eligible": False,
+            "context_score_eligible": True,
+            "context_analysis_eligible": True,
             "verification_status": "unverified",
             "source_via": "community_or_social",
         }
@@ -366,13 +407,18 @@ def classify_news_source(article: dict[str, Any]) -> dict[str, Any]:
         "source_tier": "C",
         "source_tier_label": "聚合/其他媒体",
         "score_eligible": False,
+        "context_score_eligible": True,
+        "context_analysis_eligible": True,
         "verification_status": "single_source_unverified",
         "source_via": "eastmoney_aggregator" if "eastmoney.com" in url else "unknown_channel",
     }
 
 
 def mark_auxiliary_article(article: dict[str, Any]) -> dict[str, Any]:
-    """Keep a non-scoreable article visible without asking a model to score it."""
+    """Keep a non-formal article visible while preserving contextual analysis."""
+    exclusion_reason = article.get("score_exclusion_reason")
+    if article.get("context_analysis_eligible") is False:
+        exclusion_reason = "超过辅助新闻 AI 分析上限：仅展示，不进入模型"
     return {
         **article,
         "direction": None,
@@ -380,8 +426,12 @@ def mark_auxiliary_article(article: dict[str, Any]) -> dict[str, Any]:
         "relevance": None,
         "confidence": None,
         "event_type": detect_event_type(f"{article.get('title', '')} {article.get('summary', '')}"),
-        "scoring_method": "not_scored:source_policy",
-        "score_exclusion_reason": f"来源等级{article.get('source_tier', 'C')}：仅作为辅助，不计入评分",
+        "context_score_eligible": bool(article.get("context_score_eligible", True)),
+        "scoring_method": "not_scored:analysis_cap"
+        if article.get("context_analysis_eligible") is False
+        else "not_scored:source_policy",
+        "score_exclusion_reason": exclusion_reason
+        or f"来源等级{article.get('source_tier', 'C')}：仅作为辅助，不计入正式评分",
     }
 
 
@@ -600,32 +650,37 @@ def eastmoney_secid(ticker: str, market: str) -> str | None:
 def fetch_provider_industries(
     universe: list[dict[str, str]], workers: int = 6
 ) -> tuple[dict[str, str], list[str]]:
-    """Resolve industries with Eastmoney's batched security-list endpoint."""
+    """Resolve industries with batch lookup and per-security recovery."""
     ticker_by_secid = {
         secid: item["ticker"]
         for item in universe
         if (secid := eastmoney_secid(item["ticker"], item["market"]))
     }
     industries: dict[str, str] = {}
-    failures = 0
+    failures: list[str] = []
+
+    def request_rows(secid_batch: list[str]) -> Iterable[dict[str, Any]]:
+        query = urlencode(
+            {
+                "pn": "1",
+                "pz": str(max(1, len(secid_batch))),
+                "po": "1",
+                "np": "1",
+                "secids": ",".join(secid_batch),
+                "fields": "f12,f14,f100",
+                "fltt": "2",
+                "invt": "2",
+                "fid": "f3",
+            }
+        )
+        payload = http_json(f"https://push2.eastmoney.com/api/qt/ulist/get?{query}")
+        diff = (payload.get("data") or {}).get("diff") or {}
+        rows = diff.values() if isinstance(diff, dict) else diff
+        return [row for row in rows if isinstance(row, dict)]
+
     for secid_batch in chunks(list(ticker_by_secid), 50):
         try:
-            query = urlencode(
-                {
-                    "pn": "1",
-                    "pz": "100",
-                    "po": "1",
-                    "np": "1",
-                    "secids": ",".join(secid_batch),
-                    "fields": "f12,f14,f100",
-                    "fltt": "2",
-                    "invt": "2",
-                    "fid": "f3",
-                }
-            )
-            payload = http_json(f"https://push2.eastmoney.com/api/qt/ulist/get?{query}")
-            diff = (payload.get("data") or {}).get("diff") or {}
-            rows = diff.values() if isinstance(diff, dict) else diff
+            rows = request_rows(secid_batch)
             rows_by_code = {clean_text(row.get("f12")): row for row in rows if isinstance(row, dict)}
             for secid in secid_batch:
                 code = secid.split(".", 1)[1]
@@ -633,8 +688,24 @@ def fetch_provider_industries(
                 if industry:
                     industries[ticker_by_secid[secid]] = industry
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
-            failures += len(secid_batch)
-    warnings = [f"industry lookup failed for {failures} ticker(s)"] if failures else []
+            # A single malformed or rate-limited batch must not erase all
+            # industry context. Recover one security at a time and report only
+            # the identities that still failed.
+            for secid in secid_batch:
+                try:
+                    rows = request_rows([secid])
+                    rows_by_code = {clean_text(row.get("f12")): row for row in rows}
+                    code = secid.split(".", 1)[1]
+                    industry = clean_text((rows_by_code.get(code) or {}).get("f100"))
+                    if industry:
+                        industries[ticker_by_secid[secid]] = industry
+                    else:
+                        failures.append(ticker_by_secid[secid])
+                except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+                    failures.append(ticker_by_secid[secid])
+    warnings = [
+        f"industry lookup failed for {len(set(failures))} ticker(s): {', '.join(sorted(set(failures))[:8])}"
+    ] if failures else []
     return industries, warnings
 
 
@@ -1452,9 +1523,16 @@ def merge_news_sources(articles: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def cap_auxiliary_news(
-    articles: list[dict[str, Any]], auxiliary_news_limit: int
+    articles: list[dict[str, Any]],
+    auxiliary_news_limit: int,
+    context_analysis_limit: int = DEFAULT_CONTEXT_ANALYSIS_LIMIT,
 ) -> list[dict[str, Any]]:
-    """Keep scoring intact while giving every auxiliary channel coverage."""
+    """Keep scoring intact while giving every auxiliary channel coverage.
+
+    The displayed auxiliary pool may be larger than the model pool.  Mark only
+    the newest round-robin subset for contextual AI analysis so a full scan
+    cannot multiply remote-model cost by every low-quality feed item.
+    """
     scoreable = [article for article in articles if article.get("score_eligible", True)]
     auxiliary = [article for article in articles if not article.get("score_eligible", True)]
     limit = max(1, auxiliary_news_limit)
@@ -1481,6 +1559,10 @@ def cap_auxiliary_news(
                 next_channels.append(channel)
         channels = next_channels
     selected.sort(key=lambda item: item.get("published_at") or "", reverse=True)
+    analysis_limit = max(0, context_analysis_limit)
+    for index, article in enumerate(selected):
+        article["context_analysis_eligible"] = index < analysis_limit
+        article["context_analysis_rank"] = index + 1
     return scoreable + selected
 
 
@@ -1492,6 +1574,7 @@ def fetch_company_news_result(
     lookback_days: int,
     news_limit: int,
     auxiliary_news_limit: int = 60,
+    context_analysis_limit: int = DEFAULT_CONTEXT_ANALYSIS_LIMIT,
     rss_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> tuple[list[dict[str, Any]], list[str]]:
@@ -1625,7 +1708,11 @@ def fetch_company_news_result(
         except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             if company.get("market") == "A股":
                 source_errors.append(f"Xueqiu indexed search: {exc}")
-        return cap_auxiliary_news(merge_news_sources(rows), auxiliary_news_limit), source_errors
+        return cap_auxiliary_news(
+            merge_news_sources(rows),
+            auxiliary_news_limit,
+            context_analysis_limit,
+        ), source_errors
 
     rows, source_errors = fetch_window(lookback_days, "recent")
     if rows or fallback_lookback_days <= lookback_days:
@@ -1644,6 +1731,7 @@ def fetch_company_news(
     lookback_days: int,
     news_limit: int,
     auxiliary_news_limit: int = 60,
+    context_analysis_limit: int = DEFAULT_CONTEXT_ANALYSIS_LIMIT,
     rss_news_limit: int = 20,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
@@ -1655,6 +1743,7 @@ def fetch_company_news(
         lookback_days=lookback_days,
         news_limit=news_limit,
         auxiliary_news_limit=auxiliary_news_limit,
+        context_analysis_limit=context_analysis_limit,
         rss_news_limit=rss_news_limit,
         fallback_lookback_days=fallback_lookback_days,
     )
@@ -1668,6 +1757,7 @@ def fetch_industry_news(
     lookback_days: int,
     news_limit: int,
     auxiliary_news_limit: int = 60,
+    context_analysis_limit: int = DEFAULT_CONTEXT_ANALYSIS_LIMIT,
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
 ) -> list[dict[str, Any]]:
     """Fetch one shared news set per primary industry classification."""
@@ -1707,8 +1797,12 @@ def fetch_industry_news(
 
     rows = fetch_window(lookback_days, "recent")
     if rows or fallback_lookback_days <= lookback_days:
-        return rows
-    return fetch_window(fallback_lookback_days, "fallback")
+        return cap_auxiliary_news(merge_news_sources(rows), auxiliary_news_limit, context_analysis_limit)
+    return cap_auxiliary_news(
+        merge_news_sources(fetch_window(fallback_lookback_days, "fallback")),
+        auxiliary_news_limit,
+        context_analysis_limit,
+    )
 
 
 def detect_event_type(text: str) -> str:
@@ -1874,7 +1968,12 @@ def score_articles(
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
 ) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
-    """Score eligible articles and preserve ineligible news as auxiliary context."""
+    """Score formal news and a bounded contextual subset of auxiliary news.
+
+    A/B articles remain eligible for the formal score.  C/D articles can now
+    be interpreted by the models, but are retained as contextual evidence and
+    never silently promoted to formal source quality.
+    """
     if primary_config is None:
         raise SentimentError("primary model configuration is required")
     if not articles:
@@ -1882,14 +1981,26 @@ def score_articles(
     scoreable_articles = [
         article for article in articles if article.get("score_eligible", True)
     ]
-    auxiliary_articles = [
+    contextual_articles = [
+        article
+        for article in articles
+        if not article.get("score_eligible", True)
+        and article.get("context_analysis_eligible", True)
+    ]
+    untouched_auxiliary_articles = [
         mark_auxiliary_article(article)
         for article in articles
         if not article.get("score_eligible", True)
+        and not article.get("context_analysis_eligible", True)
     ]
-    if not scoreable_articles:
-        return auxiliary_articles, [], []
-    if any(article.get("market") == "A股" for article in scoreable_articles) and review_config is None:
+    model_articles = scoreable_articles + contextual_articles
+    if not model_articles:
+        return untouched_auxiliary_articles, [], []
+    requires_review = any(
+        article.get("market") == "A股" or article.get("scope") == "industry"
+        for article in model_articles
+    )
+    if requires_review and review_config is None:
         raise SentimentError("A-share dual-model scoring requires the review model configuration")
 
     def collect_scores(
@@ -2000,13 +2111,15 @@ def score_articles(
         return scores, failures
 
     primary_scores, primary_failures = collect_scores(
-        scoreable_articles, primary_config, "primary"
+        model_articles, primary_config, "primary"
     )
     primary_success_articles = [
-        article for article in scoreable_articles if article["id"] in primary_scores
+        article for article in model_articles if article["id"] in primary_scores
     ]
     review_articles = [
-        article for article in primary_success_articles if article.get("market") == "A股"
+        article
+        for article in primary_success_articles
+        if article.get("market") == "A股" or article.get("scope") == "industry"
     ]
     review_scores = (
         collect_scores(review_articles, review_config, "review")
@@ -2030,7 +2143,8 @@ def score_articles(
         if article["id"] in skipped_ids:
             continue
         primary = dict(primary_scores[article["id"]])
-        if article.get("market") != "A股":
+        needs_review = article.get("market") == "A股" or article.get("scope") == "industry"
+        if not needs_review:
             combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
             apply_company_relevance_guard(combined, combined)
             scored.append(combined)
@@ -2062,9 +2176,15 @@ def score_articles(
                 "review_event_type": review["event_type"],
             },
         }
+        if not article.get("score_eligible", True):
+            combined["score_eligible"] = False
+            combined["context_score_eligible"] = True
+            combined["score_exclusion_reason"] = (
+                f"来源等级{article.get('source_tier', 'C')}：模型已分析，但仅进入辅助情绪"
+            )
         apply_company_relevance_guard(combined, combined)
         scored.append(combined)
-    scored.extend(auxiliary_articles)
+    scored.extend(untouched_auxiliary_articles)
     return scored, scoring_warnings, skipped_articles
 
 
@@ -2098,22 +2218,37 @@ def sentiment_state(score: float) -> str:
     return "显著正面"
 
 
+def contextual_source_weight(article: dict[str, Any]) -> float:
+    """Discount contextual evidence without treating it as formal A/B evidence."""
+    if article.get("score_eligible", True):
+        return 1.0 if article.get("source_tier") == "A" else 0.8
+    if article.get("context_score_eligible", False):
+        return {"C": 0.35, "D": 0.15}.get(article.get("source_tier"), 0.2)
+    return 0.0
+
+
 def aggregate_news(
     articles: list[dict[str, Any]],
     cutoff: datetime,
     *,
     primary_lookback_days: int = DEFAULT_PRIMARY_LOOKBACK_DAYS,
+    include_context: bool = False,
 ) -> dict[str, Any]:
-    """Aggregate scored headlines with impact, relevance, confidence and decay."""
+    """Aggregate formal news, optionally including AI-analyzed context news."""
     scoreable_articles = [
         article for article in articles if article.get("score_eligible", True)
     ]
     auxiliary_articles = [
         article for article in articles if not article.get("score_eligible", True)
     ]
-    relevant_articles = [
+    context_articles = [
         article
-        for article in scoreable_articles
+        for article in articles
+        if article.get("score_eligible", True)
+        or (include_context and article.get("context_score_eligible", False))
+    ]
+    relevant_articles = [
+        article for article in context_articles
         if float(article.get("relevance", 0)) >= 0.5
     ]
     numerator = 0.0
@@ -2126,14 +2261,19 @@ def aggregate_news(
     rendered_items: list[dict[str, Any]] = []
     fallback_articles = [
         article
-        for article in scoreable_articles
+        for article in context_articles
         if article.get("retrieval_window_type") == "fallback"
     ]
     relevant_identity = {id(article) for article in relevant_articles}
 
     def render_news_item(article: dict[str, Any], included: bool) -> dict[str, Any]:
         is_scoreable = bool(article.get("score_eligible", True))
-        decay = time_decay(article, cutoff) if is_scoreable else None
+        is_contextual = bool(
+            include_context
+            and not is_scoreable
+            and article.get("context_score_eligible", False)
+        )
+        decay = time_decay(article, cutoff) if is_scoreable or is_contextual else None
         return {
             "title": article["title"],
             "summary": article.get("summary", ""),
@@ -2141,11 +2281,15 @@ def aggregate_news(
             "url": article["url"],
             "published_at": article["published_at"],
             "event_type": article["event_type"],
-            "direction": article.get("direction") if is_scoreable else None,
-            "impact": article.get("impact") if is_scoreable else None,
-            "relevance": article.get("relevance") if is_scoreable else None,
-            "confidence": article.get("confidence") if is_scoreable else None,
+            "direction": article.get("direction") if is_scoreable or is_contextual else None,
+            "impact": article.get("impact") if is_scoreable or is_contextual else None,
+            "relevance": article.get("relevance") if is_scoreable or is_contextual else None,
+            "confidence": article.get("confidence") if is_scoreable or is_contextual else None,
             "time_weight": round(decay, 4) if decay is not None else None,
+            "contextual": is_contextual,
+            "source_weight": round(contextual_source_weight(article), 4)
+            if is_scoreable or is_contextual
+            else None,
             "retrieval_window_days": article.get("retrieval_window_days", primary_lookback_days),
             "scoring_method": article["scoring_method"],
             "included": included,
@@ -2175,11 +2319,15 @@ def aggregate_news(
             * float(article["confidence"])
             * decay
         )
+        if include_context:
+            weight *= contextual_source_weight(article)
         base_weight = (
             float(article["impact"])
             * float(article["relevance"])
             * float(article["confidence"])
         )
+        if include_context:
+            base_weight *= contextual_source_weight(article)
         direction = float(article["direction"])
         numerator += direction * weight
         denominator += weight
@@ -2210,6 +2358,13 @@ def aggregate_news(
             "article_count": len(articles),
             "score_article_count": len(scoreable_articles),
             "auxiliary_article_count": len(auxiliary_articles),
+            "context_article_count": len(context_articles) if include_context else len(scoreable_articles),
+            "context_only_article_count": sum(
+                1 for article in context_articles if not article.get("score_eligible", True)
+            )
+            if include_context
+            else 0,
+            "score_scope": "formal_and_context" if include_context else "formal",
             "relevant_article_count": len(relevant_articles),
             "classified_count": 0,
             "high_impact_negative_count": 0,
@@ -2250,6 +2405,13 @@ def aggregate_news(
         "article_count": len(articles),
         "score_article_count": len(scoreable_articles),
         "auxiliary_article_count": len(auxiliary_articles),
+        "context_article_count": len(context_articles) if include_context else len(scoreable_articles),
+        "context_only_article_count": sum(
+            1 for article in context_articles if not article.get("score_eligible", True)
+        )
+        if include_context
+        else 0,
+        "score_scope": "formal_and_context" if include_context else "formal",
         "relevant_article_count": len(relevant_articles),
         "classified_count": classified_count,
         "high_impact_negative_count": high_impact_negative,
@@ -2257,6 +2419,32 @@ def aggregate_news(
         "items": rendered_items,
         "captured_items": captured_items,
     }
+
+
+def merge_sentiment_views(
+    formal: dict[str, Any], contextual: dict[str, Any]
+) -> dict[str, Any]:
+    """Expose formal and contextual views without hiding source quality."""
+    result = dict(formal)
+    result["formal_score_0_100"] = formal.get("score_0_100")
+    result["formal_status"] = formal.get("status")
+    result["context_score_0_100"] = contextual.get("score_0_100")
+    result["context_state"] = contextual.get("state")
+    result["context_confidence"] = contextual.get("confidence")
+    result["context_article_count"] = contextual.get("context_article_count", 0)
+    result["context_only_article_count"] = contextual.get("context_only_article_count", 0)
+    result["context_scoring_methods"] = contextual.get("scoring_methods", [])
+    if contextual.get("score_0_100") is not None:
+        result["score_0_100"] = contextual["score_0_100"]
+        result["state"] = contextual.get("state")
+        result["confidence"] = contextual.get("confidence")
+        result["score_scope"] = "正式+辅助AI分析"
+        if formal.get("score_0_100") is None:
+            result["status"] = "context_only"
+            result["score_scope"] = "仅辅助AI分析"
+    else:
+        result["score_scope"] = "正式来源"
+    return result
 
 
 def zzshare_json(path: str) -> dict[str, Any]:
@@ -2414,21 +2602,61 @@ def combined_company_score(
     industry: dict[str, Any] | None,
     market_sentiment: dict[str, Any],
 ) -> dict[str, Any]:
-    """Use direct company news only; industry/market news stays contextual."""
+    """Combine three sentiment layers without renormalizing missing data."""
     news_score = news.get("score_0_100")
-    if news_score is None:
+    industry_score = (industry or {}).get("score_0_100")
+    market_score = market_sentiment.get("score_0_100") if market else None
+    if market != "A股":
+        market_score = None
+    if news_score is None and industry_score is None and market_score is None:
         return {
             "status": "unavailable",
             "score_0_100": None,
             "state": news.get("recency_state") or news.get("state") or "无数据",
+            "coverage": {"company": False, "industry": False, "market": False},
         }
-    score = round(float(news_score), 2)
-    method = "个股新闻100%；行业新闻、市场温度和关注度仅辅助，不计入个股分"
+    # Until a company-to-industry exposure map exists, use a conservative
+    # 0.6 transmission coefficient for a mapped constituent. This keeps an
+    # industry shock meaningful without treating every constituent equally.
+    industry_exposure = 0.6 if industry_score is not None else 0.0
+    layer_scores = {
+        "company": round(float(news_score), 2) if news_score is not None else None,
+        "industry": round(float(industry_score), 2) if industry_score is not None else None,
+        "industry_adjusted": round(
+            50 + (float(industry_score) - 50) * industry_exposure, 2
+        )
+        if industry_score is not None
+        else None,
+        "market": round(float(market_score), 2) if market_score is not None else None,
+    }
+    weights = {"company": 0.60, "industry": 0.25, "market": 0.15}
+    score = 50.0
+    if news_score is not None:
+        score += weights["company"] * (float(news_score) - 50)
+    if industry_score is not None:
+        score += weights["industry"] * (
+            layer_scores["industry_adjusted"] - 50
+        )
+    if market_score is not None:
+        score += weights["market"] * (float(market_score) - 50)
+    score = round(clamp(score, 0, 100), 2)
+    company_formal_available = news.get("formal_score_0_100", news_score) is not None
+    status = "ok" if company_formal_available else "context_only"
+    method = "个股60% + 行业25%（行业传导系数0.6）+ 市场15%；缺失层不放大其他层权重"
     return {
-        "status": "ok",
+        "status": status,
         "score_0_100": score,
         "state": sentiment_state(score),
         "method": method,
+        "weights": weights,
+        "layer_scores": layer_scores,
+        "coverage": {
+            "company": news_score is not None,
+            "industry": industry_score is not None,
+            "market": market_score is not None,
+        },
+        "industry_exposure": industry_exposure,
+        "confidence": "较低" if status == "context_only" else news.get("confidence", "较低"),
         "preliminary": True,
     }
 
@@ -2448,6 +2676,7 @@ def build_snapshot(
     fallback_lookback_days: int = DEFAULT_FALLBACK_LOOKBACK_DAYS,
     news_limit: int,
     auxiliary_news_limit: int = 60,
+    context_analysis_limit: int = DEFAULT_CONTEXT_ANALYSIS_LIMIT,
     rss_news_limit: int = 20,
     workers: int,
     markets: set[str] | None = None,
@@ -2507,6 +2736,7 @@ def build_snapshot(
                 lookback_days=lookback_days,
                 news_limit=news_limit,
                 auxiliary_news_limit=auxiliary_news_limit,
+                context_analysis_limit=context_analysis_limit,
                 rss_news_limit=rss_news_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): item
@@ -2535,6 +2765,7 @@ def build_snapshot(
                 lookback_days=lookback_days,
                 news_limit=news_limit,
                 auxiliary_news_limit=auxiliary_news_limit,
+                context_analysis_limit=context_analysis_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): industry
             for industry in industry_names
@@ -2562,20 +2793,33 @@ def build_snapshot(
 
     industry_details: dict[str, dict[str, Any]] = {}
     for industry in industry_names:
-        full_sentiment = aggregate_news(
+        formal_sentiment = aggregate_news(
             scored_by_industry[industry], cutoff, primary_lookback_days=lookback_days
+        )
+        contextual_sentiment = aggregate_news(
+            scored_by_industry[industry],
+            cutoff,
+            primary_lookback_days=lookback_days,
+            include_context=True,
         )
         industry_details[industry] = {
             "industry": industry,
             "company_count": sum(1 for value in industries_by_ticker.values() if value == industry),
-            "sentiment": full_sentiment,
+            "sentiment": merge_sentiment_views(formal_sentiment, contextual_sentiment),
         }
 
     companies = []
     for item in universe:
-        news = aggregate_news(
+        formal_news = aggregate_news(
             scored_by_ticker[item["ticker"]], cutoff, primary_lookback_days=lookback_days
         )
+        contextual_news = aggregate_news(
+            scored_by_ticker[item["ticker"]],
+            cutoff,
+            primary_lookback_days=lookback_days,
+            include_context=True,
+        )
+        news = merge_sentiment_views(formal_news, contextual_news)
         crowding = crowding_snapshot(item["ticker"], item["market"], hot_by_code)
         industry = industries_by_ticker[item["ticker"]]
         industry_sentiment = industry_details.get(industry, {}).get("sentiment")
@@ -2600,11 +2844,23 @@ def build_snapshot(
             }
         )
 
-    successful_news = sum(1 for company in companies if company["news_sentiment"]["status"] == "ok")
+    successful_news = sum(
+        1 for company in companies if company["news_sentiment"].get("score_0_100") is not None
+    )
+    formal_news_available = sum(
+        1
+        for company in companies
+        if company["news_sentiment"].get("formal_score_0_100") is not None
+    )
     successful_industry_news = sum(
         1
         for detail in industry_details.values()
-        if detail["sentiment"]["status"] == "ok"
+        if detail["sentiment"].get("score_0_100") is not None
+    )
+    formal_industry_news = sum(
+        1
+        for detail in industry_details.values()
+        if detail["sentiment"].get("formal_score_0_100") is not None
     )
     return {
         "schema_version": 1,
@@ -2616,10 +2872,12 @@ def build_snapshot(
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
         "company_count": len(companies),
         "company_news_available_count": successful_news,
+        "company_formal_news_available_count": formal_news_available,
         "industry_count": len(industry_names),
         "industry_news_available_count": successful_industry_news,
+        "industry_formal_news_available_count": formal_industry_news,
         "scoring_mode": (
-            f"remote-mixed-llm:{llm_config.model}+A股复核:{review_llm_config.model}"
+            f"remote-mixed-llm:{llm_config.model}+A股/行业复核:{review_llm_config.model}"
             if llm_config and review_llm_config
             else f"remote-primary-llm:{llm_config.model}"
             if llm_config
@@ -2631,7 +2889,8 @@ def build_snapshot(
             "fallback_only_when_primary_window_is_empty": True,
             "score_news_limit": news_limit,
             "auxiliary_news_limit": auxiliary_news_limit,
-            "auxiliary_news_sources": "C/D only; extra auxiliary items are not sent to models",
+            "context_analysis_limit": context_analysis_limit,
+            "auxiliary_news_sources": "C/D enter bounded contextual AI analysis; they do not become formal A/B evidence",
             "rss_news_limit_per_channel": rss_news_limit,
             "rss_channels": ["Google News RSS", "Bing News RSS", "Google News indexed Xueqiu pages"],
             "direct_auxiliary_channels": [
@@ -2642,9 +2901,9 @@ def build_snapshot(
         "source_policy": {
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
             "B": "专业媒体：需视为二手来源，当前可进入评分但明确标注单一来源；重要事件建议人工核对一手公告",
-            "C": "聚合/其他媒体：Google/Bing RSS、百度资讯搜索、新浪财经个股资讯、东方财富平台资讯等，仅作为辅助，不计入评分",
-            "D": "社区/传闻：东方财富股吧普通用户帖子、雪球公开索引页面等，仅作为辅助，不计入评分",
-            "company_score_rule": "只使用个股新闻；行业新闻、A股市场温度和关注度只在看板展示，不计入个股综合分",
+            "C": "聚合/其他媒体：可进入有限度上下文AI分析，但不进入正式来源分",
+            "D": "社区/传闻：可进入有限度上下文AI分析，但不进入正式来源分，也不能单独形成方向判断",
+            "company_score_rule": "个股60% + 行业25%（默认传导系数0.6）+ A股市场15%；缺失层不放大其他层权重",
         },
         "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
         "industry_sentiments": industry_details,
@@ -2654,9 +2913,10 @@ def build_snapshot(
         "skipped_articles": skipped_articles,
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股可评分新闻由主模型和复核模型共同评分；Google/Bing RSS、百度、新浪、雪球公开索引、股吧和来源等级C/D新闻不送入模型，只作为辅助新闻展示。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
+            "A股和行业新闻由主模型与复核模型共同评分；C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
-            "个股综合分只使用个股新闻100%；行业新闻、A股市场温度和同花顺热度只作为辅助，不计入个股分。",
+            "个股情绪保留正式来源分，同时展示含辅助AI分析的上下文分；A/B进入正式分，C/D只按降权上下文进入。",
+            "行业权威来源可标为行业A级，但行业范围和对个股的传导系数仍单独记录。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
             "同花顺热度只表示关注/拥挤，不作为方向性利好。",
             "该快照是研究辅助数据，不构成投资建议。",
@@ -2685,7 +2945,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "--auxiliary-news-limit",
         type=int,
         default=60,
-        help="C/D auxiliary-news pool size; extra items are displayed but never scored",
+        help="C/D auxiliary-news pool size",
+    )
+    parser.add_argument(
+        "--context-analysis-limit",
+        type=int,
+        default=DEFAULT_CONTEXT_ANALYSIS_LIMIT,
+        help="per company/industry maximum auxiliary headlines sent to models",
     )
     parser.add_argument(
         "--rss-news-limit",
@@ -2716,11 +2982,12 @@ def main(argv: list[str] | None = None) -> int:
             or args.fallback_lookback_days < 1
             or args.news_limit < 1
             or args.auxiliary_news_limit < 1
+            or args.context_analysis_limit < 0
             or args.rss_news_limit < 1
             or args.workers < 1
         ):
             raise SentimentError(
-                "lookback-days, fallback-lookback-days, news limits and workers must be positive"
+                "lookback-days, fallback-lookback-days, news limits and workers must be positive; context-analysis-limit cannot be negative"
             )
         if args.fallback_lookback_days < args.lookback_days:
             raise SentimentError("fallback-lookback-days must be >= lookback-days")
@@ -2741,6 +3008,7 @@ def main(argv: list[str] | None = None) -> int:
             fallback_lookback_days=args.fallback_lookback_days,
             news_limit=args.news_limit,
             auxiliary_news_limit=args.auxiliary_news_limit,
+            context_analysis_limit=args.context_analysis_limit,
             rss_news_limit=args.rss_news_limit,
             workers=args.workers,
             markets=set(args.markets),
