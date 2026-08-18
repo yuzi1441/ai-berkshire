@@ -2,7 +2,7 @@
 """Refresh close quotes and the model-led A-share opportunity scan.
 
 This job is intended for the VPS after the A-share close. It refreshes the
-latest quote, rebuilds the board, then asks DeepSeek V4 Flash and Qwen3.7 Plus
+latest quote, rebuilds the board, then asks DeepSeek V4 Flash
 to independently identify research opportunities. A partial run may retain a
 per-model prior result for the same report, but a completely failed run never
 replaces the last successful opportunity_scans.json.
@@ -211,7 +211,7 @@ def main() -> int:
             write_status(
                 repo_root,
                 "ok",
-                "收盘后 AI 机会扫描已完成；任一模型发现机会即进入人工决策面板。",
+                "收盘后 Flash 机会扫描已完成；当前机会进入主面板，临近机会折叠展示。",
                 previous_status,
                 scan,
             )

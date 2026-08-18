@@ -656,6 +656,20 @@ function modelAssessmentCard(model, record) {
   explanation.className = "decision-review-explanation";
   explanation.textContent = assessment.opportunity_summary || "未提供机会解释";
   section.append(explanation);
+  if (assessment.why_now) {
+    const whyNow = document.createElement("p");
+    whyNow.className = "deep-review-boundary";
+    whyNow.textContent = `为什么是现在：${assessment.why_now}`;
+    section.append(whyNow);
+  }
+  appendReviewList(section, "已满足条件", assessment.satisfied_conditions);
+  appendReviewList(section, "尚未满足条件", assessment.unmet_conditions, "warning");
+  if (assessment.constraint_override_reason) {
+    const override = document.createElement("p");
+    override.className = "deep-review-challenge";
+    override.textContent = `突破原约束的依据：${assessment.constraint_override_reason}`;
+    section.append(override);
+  }
   appendReviewList(section, "支持依据", assessment.supporting_evidence);
   appendReviewList(section, "风险或反面证据", assessment.risks_or_counterevidence, "warning");
   appendReviewList(section, "你需要亲自确认", assessment.human_questions, "conflict");
@@ -2313,22 +2327,25 @@ function opportunityCandidateForItem(item) {
   if (item?.market !== "A股") return null;
   const scan = opportunityScanForItem(item);
   const union = scan?.union || {};
-  if (!union.included) return null;
   const quote = state.quotes.get(item.ticker);
   const judgment = primaryJudgmentForItem(item);
   const models = Object.entries(scan.models || {})
     .filter(([, result]) => result && ["ready", "stale"].includes(result.status));
-  const tier = union.classification === "双模型机会"
-    ? "dual"
-    : union.classification === "单模型机会"
-      ? "single"
-      : "conditional";
+  const normalizeState = (value) => ({
+    "机会": "当前机会",
+    "条件机会": "临近机会",
+    "暂不构成机会": "暂不构成当前机会",
+  })[value] || value;
+  const currentModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "当前机会");
+  const nearModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "临近机会");
+  const tier = currentModels.length ? "current" : nearModels.length ? "near" : null;
+  if (!tier) return null;
   const confidenceScore = models.reduce((score, [, result]) => {
     const confidence = result.assessment?.confidence;
     return score + (confidence === "high" ? 2 : confidence === "medium" ? 1 : 0);
   }, 0);
   const staleModels = models.filter(([, result]) => result.status === "stale");
-  const priority = (tier === "dual" ? 30 : tier === "single" ? 20 : 10) + confidenceScore;
+  const priority = (tier === "current" ? 20 : 10) + confidenceScore;
 
   return {
     item,
@@ -2338,10 +2355,11 @@ function opportunityCandidateForItem(item) {
     quote,
     judgment,
     staleModels,
+    relevantModels: tier === "current" ? currentModels : nearModels,
     priority,
     tier,
-    label: union.classification || "模型机会",
-    tone: tier === "conditional" ? "notice" : "opportunity",
+    label: tier === "current" ? "当前机会" : "临近机会",
+    tone: tier === "near" ? "notice" : "opportunity",
   };
 }
 
@@ -2350,6 +2368,118 @@ function attentionTimestamp(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
   return date.toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+function renderOpportunityCard(candidate) {
+  const { item, scan, models, relevantModels, judgment, quote } = candidate;
+  const card = document.createElement("article");
+  card.className = `attention-card attention-${candidate.tone}`;
+
+  const head = document.createElement("div");
+  head.className = "attention-card-head";
+  const identity = document.createElement("div");
+  identity.className = "attention-card-identity";
+  const company = document.createElement("strong");
+  company.className = "attention-company";
+  company.textContent = item.company;
+  const code = document.createElement("span");
+  code.className = "attention-code";
+  code.textContent = `${item.market} · ${item.ticker || "无代码"}`;
+  identity.append(company, code);
+  const badge = document.createElement("span");
+  badge.className = "attention-badge";
+  badge.textContent = candidate.label;
+  head.append(identity, badge);
+  card.append(head);
+
+  const facts = document.createElement("div");
+  facts.className = "attention-card-facts";
+  const judgmentFact = document.createElement("span");
+  judgmentFact.textContent = `报告视角：${judgment?.label || item.action || "待复核"}`;
+  const currentPriceFact = document.createElement("span");
+  currentPriceFact.textContent = `当前现价：${formatPrice(quote)}`;
+  facts.append(judgmentFact, currentPriceFact);
+  const scanQuote = scan?.input_context?.current_quote || scan?.input_snapshot?.current_quote;
+  if (scanQuote?.price != null) {
+    const scanPriceFact = document.createElement("span");
+    scanPriceFact.textContent = `模型输入价：${formatPrice(scanQuote)}`;
+    facts.append(scanPriceFact);
+  }
+  card.append(facts);
+
+  const focus = document.createElement("p");
+  focus.className = "attention-card-focus";
+  focus.textContent = models.map(([model, result]) => `${model}：${result.assessment?.opportunity_state || "待复核"}`).join(" · ");
+  card.append(focus);
+
+  const whyNow = relevantModels
+    .map(([, result]) => result.assessment?.why_now)
+    .filter(Boolean)
+    .join(" ");
+  if (whyNow) {
+    const why = document.createElement("p");
+    why.className = "attention-card-why";
+    why.textContent = `为什么是现在：${whyNow}`;
+    card.append(why);
+  }
+
+  const explanation = document.createElement("p");
+  explanation.className = "attention-card-reason";
+  explanation.textContent = relevantModels
+    .map(([, result]) => result.assessment?.opportunity_summary)
+    .filter(Boolean)
+    .join(" ") || "模型未提供机会摘要，请启动深度复核。";
+  card.append(explanation);
+
+  const flags = document.createElement("div");
+  flags.className = "attention-card-flags";
+  for (const [model, result] of models) {
+    if (!result.assessment?.confidence) continue;
+    const confidence = document.createElement("span");
+    confidence.textContent = `${model} · ${result.assessment.confidence}`;
+    flags.append(confidence);
+  }
+  if (candidate.staleModels.length) {
+    const stale = document.createElement("span");
+    stale.textContent = `沿用 ${candidate.staleModels.length} 份同报告旧结果`;
+    flags.append(stale);
+  }
+  if (flags.childElementCount) card.append(flags);
+
+  const foot = document.createElement("div");
+  foot.className = "attention-card-foot";
+  const open = document.createElement("button");
+  open.type = "button";
+  open.className = "btn ghost attention-open";
+  open.textContent = "启动深度复核";
+  open.addEventListener("click", (event) => {
+    event.stopPropagation();
+    startDeepReview(item, open);
+  });
+  foot.append(open);
+  card.append(foot);
+  return card;
+}
+
+function appendOpportunityCards(grid, candidates) {
+  for (const candidate of candidates) grid.append(renderOpportunityCard(candidate));
+}
+
+function renderOpportunityGroup(candidates, title, note) {
+  const group = document.createElement("section");
+  group.className = "attention-group";
+  const head = document.createElement("div");
+  head.className = "attention-group-head";
+  const heading = document.createElement("h3");
+  heading.textContent = `${title} · ${candidates.length}`;
+  const description = document.createElement("p");
+  description.textContent = note;
+  head.append(heading, description);
+  const grid = document.createElement("div");
+  grid.className = "attention-group-grid";
+  appendOpportunityCards(grid, candidates);
+  group.append(head, grid);
+  return group;
 }
 
 function renderAttentionPanel() {
@@ -2366,9 +2496,8 @@ function renderAttentionPanel() {
     .map(opportunityCandidateForItem)
     .filter(Boolean)
     .sort((a, b) => b.priority - a.priority || a.item.company.localeCompare(b.item.company, "zh"));
-  const dualCandidates = candidates.filter((candidate) => candidate.tier === "dual");
-  const singleCandidates = candidates.filter((candidate) => candidate.tier === "single");
-  const conditionalCandidates = candidates.filter((candidate) => candidate.tier === "conditional");
+  const currentCandidates = candidates.filter((candidate) => candidate.tier === "current");
+  const nearCandidates = candidates.filter((candidate) => candidate.tier === "near");
 
   els.attentionPanel.hidden = false;
   const scanStatus = state.opportunityScanStatus;
@@ -2379,13 +2508,14 @@ function renderAttentionPanel() {
   const failureNote = failure
     ? ` · 本次失败，沿用${scanStatus.last_success_scan_generated_at ? `${attentionTimestamp(scanStatus.last_success_scan_generated_at)}的` : "上次成功的"}结果`
     : "";
-  const metaText = `机会 ${candidates.length} · 双模型 ${dualCandidates.length} · 单模型 ${singleCandidates.length} · 条件 ${conditionalCandidates.length} · 模型结果 ${readyModelResults.length}/${aShares.length * 2}${freshness}${failureNote}`;
+  const expectedModelResults = aShares.length * Math.max(1, state.opportunityScanModels.length);
+  const metaText = `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · Flash 结果 ${readyModelResults.length}/${expectedModelResults}${freshness}${failureNote}`;
   els.attentionMeta.textContent = metaText;
   els.attentionMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
   if (els.attentionToggleMeta) {
     els.attentionToggleMeta.textContent = failure
       ? `本次失败 · 沿用上次结果 · ${candidates.length} 项候选`
-      : `机会 ${candidates.length} · 任一模型可入${state.opportunityScansGeneratedAt ? ` · ${attentionTimestamp(state.opportunityScansGeneratedAt)}` : ""}`;
+      : `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}${state.opportunityScansGeneratedAt ? ` · ${attentionTimestamp(state.opportunityScansGeneratedAt)}` : ""}`;
     els.attentionToggleMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
@@ -2396,123 +2526,39 @@ function renderAttentionPanel() {
     empty.className = "attention-empty";
     empty.textContent = failure
       ? "本次收盘后 AI 机会扫描失败，当前继续沿用上次成功结果。"
-      : readyModelResults.length ? "当前没有模型认为值得立刻人工决策的机会；这不是自动买卖建议。" : "Flash + Qwen 全量扫描数据尚未加载，暂不生成机会面板。";
+      : readyModelResults.length ? "当前没有模型认为值得立刻人工决策的机会；这不是自动买卖建议。" : "Flash 全量扫描数据尚未加载，暂不生成机会面板。";
     els.attentionList.append(empty);
     return;
   }
 
-  const groups = [
-    {
-      items: dualCandidates,
-      title: "双模型机会",
-      note: "Flash 与 Qwen 都认为值得你现在亲自复核；仍不是自动买入信号。",
-    },
-    {
-      items: singleCandidates,
-      title: "单模型机会",
-      note: "至少一份独立意见发现机会；另一份意见只提供反证，不享有否决权。",
-    },
-    {
-      items: conditionalCandidates,
-      title: "条件机会",
-      note: "模型识别到可研究的机会，但你需要先判断关键条件是否成立。",
-    },
-  ];
-  for (const group of groups) {
-    if (!group.items.length) continue;
-    const groupElement = document.createElement("section");
-    groupElement.className = "attention-group";
-    const groupHead = document.createElement("div");
-    groupHead.className = "attention-group-head";
-    const groupTitle = document.createElement("h3");
-    groupTitle.textContent = `${group.title} · ${group.items.length}`;
-    const groupNote = document.createElement("p");
-    groupNote.textContent = group.note;
-    groupHead.append(groupTitle, groupNote);
-    const groupGrid = document.createElement("div");
-    groupGrid.className = "attention-group-grid";
-    for (const candidate of group.items) {
-    const { item, scan, models, judgment, quote } = candidate;
-    const card = document.createElement("article");
-    card.className = `attention-card attention-${candidate.tone}`;
+  if (currentCandidates.length) {
+    els.attentionList.append(renderOpportunityGroup(
+      currentCandidates,
+      "当前机会",
+      "Flash 已说明为什么是现在；是否行动仍由你判断。",
+    ));
+  } else {
+    const emptyCurrent = document.createElement("p");
+    emptyCurrent.className = "attention-empty attention-current-empty";
+    emptyCurrent.textContent = "当前没有满足“为什么是现在”的机会。";
+    els.attentionList.append(emptyCurrent);
+  }
 
-    const head = document.createElement("div");
-    head.className = "attention-card-head";
-    const identity = document.createElement("div");
-    identity.className = "attention-card-identity";
-    const company = document.createElement("strong");
-    company.className = "attention-company";
-    company.textContent = item.company;
-    const code = document.createElement("span");
-    code.className = "attention-code";
-    code.textContent = `${item.market} · ${item.ticker || "无代码"}`;
-    identity.append(company, code);
-    const badge = document.createElement("span");
-    badge.className = "attention-badge";
-    badge.textContent = candidate.label;
-    head.append(identity, badge);
-    card.append(head);
-
-    const facts = document.createElement("div");
-    facts.className = "attention-card-facts";
-    const judgmentFact = document.createElement("span");
-    judgmentFact.textContent = `报告视角：${judgment?.label || item.action || "待复核"}`;
-    const currentPriceFact = document.createElement("span");
-    currentPriceFact.textContent = `当前现价：${formatPrice(quote)}`;
-    facts.append(judgmentFact, currentPriceFact);
-    const scanQuote = scan?.input_snapshot?.current_quote;
-    if (scanQuote?.price != null) {
-      const scanPriceFact = document.createElement("span");
-      scanPriceFact.textContent = `模型输入价：${formatPrice(scanQuote)}`;
-      facts.append(scanPriceFact);
-    }
-    card.append(facts);
-
-    const focus = document.createElement("p");
-    focus.className = "attention-card-focus";
-    focus.textContent = models.map(([model, result]) => `${model}：${result.assessment?.opportunity_state || "待复核"}`).join(" · ");
-    card.append(focus);
-
-    const explanation = document.createElement("p");
-    explanation.className = "attention-card-reason";
-    explanation.textContent = models
-      .filter(([, result]) => ["机会", "条件机会"].includes(result.assessment?.opportunity_state))
-      .map(([, result]) => result.assessment?.opportunity_summary)
-      .filter(Boolean)
-      .join(" ") || "模型未提供机会摘要，请启动深度复核。";
-    card.append(explanation);
-
-    const flags = document.createElement("div");
-    flags.className = "attention-card-flags";
-    for (const [model, result] of models) {
-      if (!result.assessment?.confidence) continue;
-      const confidence = document.createElement("span");
-      confidence.textContent = `${model} · ${result.assessment.confidence}`;
-      flags.append(confidence);
-    }
-    if (candidate.staleModels.length) {
-      const stale = document.createElement("span");
-      stale.textContent = `沿用 ${candidate.staleModels.length} 份同报告旧结果`;
-      flags.append(stale);
-    }
-    if (flags.childElementCount) card.append(flags);
-
-    const foot = document.createElement("div");
-    foot.className = "attention-card-foot";
-    const open = document.createElement("button");
-    open.type = "button";
-    open.className = "btn ghost attention-open";
-    open.textContent = "启动深度复核";
-    open.addEventListener("click", (event) => {
-      event.stopPropagation();
-      startDeepReview(item, open);
+  if (nearCandidates.length) {
+    const near = document.createElement("details");
+    near.className = "attention-near";
+    const summary = document.createElement("summary");
+    summary.textContent = `临近机会 · ${nearCandidates.length}（仍缺一个决定性条件，点击展开）`;
+    const grid = document.createElement("div");
+    grid.className = "attention-group-grid attention-near-grid";
+    near.addEventListener("toggle", () => {
+      if (near.open && !near.dataset.rendered) {
+        appendOpportunityCards(grid, nearCandidates);
+        near.dataset.rendered = "true";
+      }
     });
-    foot.append(open);
-    card.append(foot);
-      groupGrid.append(card);
-    }
-    groupElement.append(groupHead, groupGrid);
-    els.attentionList.append(groupElement);
+    near.append(summary, grid);
+    els.attentionList.append(near);
   }
 }
 

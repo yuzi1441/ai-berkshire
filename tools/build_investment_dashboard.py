@@ -527,8 +527,8 @@ def load_decision_reviews(data_directory: Path) -> dict[str, Any]:
 def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
     """Load model-led opportunity scans without changing report decisions.
 
-    The scan is intentionally a separate display layer.  It contains two
-    independent semantic opinions and their union; it must never be folded
+    The scan is intentionally a separate display layer.  It contains the
+    semantic opinion and panel classification; it must never be folded
     back into the deterministic current-execution classification.
     """
     payload = load_json(
@@ -538,6 +538,33 @@ def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
     if payload.get("schema_version") != 1 or not isinstance(payload.get("scans"), list):
         raise ValueError("Invalid opportunity scan payload")
     return payload
+
+
+def public_opportunity_scans(payload: dict[str, Any]) -> dict[str, Any]:
+    """Remove the large audit-only evidence snapshot from the public site copy.
+
+    The complete model input remains in data/investment-dashboard for audit.
+    The browser only needs the assessment, classification, and compact quote
+    context, which keeps the landing page responsive after a full-market scan.
+    """
+    public = {key: value for key, value in payload.items() if key != "scans"}
+    scans: list[dict[str, Any]] = []
+    for record in payload.get("scans", []) if isinstance(payload.get("scans"), list) else []:
+        if not isinstance(record, dict):
+            continue
+        compact = {key: value for key, value in record.items() if key != "input_snapshot"}
+        snapshot = record.get("input_snapshot") if isinstance(record.get("input_snapshot"), dict) else {}
+        compact["input_context"] = {
+            "current_quote": snapshot.get("current_quote") or {},
+            "local_price_context": snapshot.get("local_price_context") or {},
+            "report_data_cutoff": (snapshot.get("report") or {}).get("data_cutoff")
+            if isinstance(snapshot.get("report"), dict)
+            else None,
+        }
+        scans.append(compact)
+    public["scans"] = scans
+    public["public_payload"] = "compact; full evidence snapshot retained in data/investment-dashboard"
+    return public
 
 
 def extract_report_completed_date(lines: list[str]) -> str | None:
@@ -4650,7 +4677,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(site_directory / "data" / "report_history.json", history_board)
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
-    write_json(site_directory / "data" / "opportunity_scans.json", opportunity_scans)
+    write_json(
+        site_directory / "data" / "opportunity_scans.json",
+        public_opportunity_scans(opportunity_scans),
+    )
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)

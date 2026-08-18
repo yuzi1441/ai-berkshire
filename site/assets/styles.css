@@ -365,6 +365,19 @@ h1 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
+.attention-near {
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.attention-near > summary {
+  color: var(--watch);
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 700;
+  list-style-position: inside;
+}
+.attention-near-grid { margin-top: 9px; }
 .attention-card {
   min-width: 0;
   padding: 10px 11px;
@@ -438,6 +451,13 @@ h1 {
   font-size: 11.5px;
   font-weight: 700;
   line-height: 1.45;
+}
+.attention-card-why {
+  margin: 6px 0 0;
+  color: var(--ink-strong);
+  font-size: 11.5px;
+  font-weight: 650;
+  line-height: 1.5;
 }
 .attention-card-reason {
   display: -webkit-box;
