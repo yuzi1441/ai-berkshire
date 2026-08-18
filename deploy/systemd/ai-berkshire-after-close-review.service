@@ -9,7 +9,7 @@ User=root
 WorkingDirectory=/opt/ai-berkshire
 Environment=TZ=Asia/Shanghai
 EnvironmentFile=-/etc/ai-berkshire/sentiment.env
-ExecStart=/usr/local/sbin/ai-berkshire-after-close-review
+ExecStart=/usr/local/sbin/ai-berkshire-after-close-review --repo-root /opt/ai-berkshire
 Nice=10
 MemoryMax=700M
 TimeoutStartSec=6h
