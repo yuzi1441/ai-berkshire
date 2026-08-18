@@ -81,14 +81,22 @@ def run_step(repo_root: Path, label: str, args: list[str]) -> None:
         raise JobError(f"{label} failed with exit code {completed.returncode}")
 
 
-def git_status(repo_root: Path) -> list[str]:
+def git_status(repo_root: Path) -> list[str] | None:
     completed = subprocess.run(
         ["git", "status", "--porcelain", "--untracked-files=all"],
         cwd=repo_root,
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
     )
+    if completed.returncode:
+        detail = completed.stderr.strip() or completed.stdout.strip() or f"exit code {completed.returncode}"
+        print(
+            "无法读取 Git 工作区状态；为保护现有文件将跳过 Git 同步和推送，但继续刷新本机机会扫描："
+            + detail,
+            flush=True,
+        )
+        return None
     return [line for line in completed.stdout.splitlines() if line.strip()]
 
 
@@ -160,8 +168,13 @@ def main() -> int:
         fcntl.flock(lock_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
         existing_changes = git_status(repo_root)
-        publish_to_git = not existing_changes
-        if existing_changes:
+        publish_to_git = existing_changes is not None and not existing_changes
+        if existing_changes is None:
+            # A transient Git index/permission issue must never block the local
+            # daily scan.  The result is still safe to serve on this VPS; only
+            # repository synchronization is disabled for this invocation.
+            pass
+        elif existing_changes:
             # The VPS intentionally retains locally generated quotes, sentiment
             # snapshots and technical reports.  Those files must not prevent the
             # live dashboard from getting its daily opportunity scan, but they
