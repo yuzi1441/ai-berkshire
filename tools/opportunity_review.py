@@ -81,13 +81,6 @@ MODEL_DEFAULTS = {
         endpoint=f"{OPENCODE_GO_BASE}/chat/completions",
         prefix="OPPORTUNITY_SCAN_FLASH_",
     ),
-    "scan_qwen": ModelDefaults(
-        role="scan_qwen",
-        model="qwen3.7-plus",
-        transport=TRANSPORT_ANTHROPIC_MESSAGES,
-        endpoint=f"{OPENCODE_GO_BASE}/messages",
-        prefix="OPPORTUNITY_SCAN_QWEN_",
-    ),
     "deep_v4pro": ModelDefaults(
         role="deep_v4pro",
         model="deepseek-v4-pro",
@@ -104,7 +97,12 @@ MODEL_DEFAULTS = {
     ),
 }
 
-OPPORTUNITY_STATES = {"机会", "条件机会", "暂不构成机会", "证据不足"}
+OPPORTUNITY_STATES = {"当前机会", "临近机会", "暂不构成当前机会", "证据不足"}
+LEGACY_STATE_ALIASES = {
+    "机会": "当前机会",
+    "条件机会": "临近机会",
+    "暂不构成机会": "暂不构成当前机会",
+}
 CONFIDENCE = {"high", "medium", "low"}
 
 
@@ -161,8 +159,7 @@ def model_config(role: str) -> ModelConfig:
             os.environ.get(
                 f"{prefix}REASONING_EFFORT",
                 # Luna's live Responses endpoint accepts high as its strongest
-                # currently supported effort.  Other selected models accept
-                # max, while Qwen uses its enabled-thinking budget instead.
+                # currently supported effort. Other selected models accept max.
                 "high" if role == "deep_luna" else "max",
             ).strip().lower()
             or ("high" if role == "deep_luna" else "max")
@@ -263,8 +260,8 @@ def build_opportunity_input(
         quote=quote,
     )
     facts["review_contract"] = {
-        "purpose": "识别是否值得投资者现在人工查看，不是买卖指令",
-        "inclusion_rule": "任一独立模型判为机会或条件机会，都会进入机会面板",
+        "purpose": "识别当前是否已经出现值得投资者优先决策的正向机会，不是买卖指令",
+        "current_panel_rule": "只有模型判为当前机会才进入主面板；临近机会单独折叠展示",
         "investor_role": "投资者根据完整材料自行决定买、不买或继续观察",
         "mechanical_gate_warning": "本地价格匹配、Checklist、技术面和情绪均是输入事实，不得机械地充当机会否决器",
     }
@@ -275,8 +272,12 @@ def build_opportunity_input(
 
 def review_schema(deep: bool) -> dict[str, Any]:
     schema: dict[str, Any] = {
-        "opportunity_state": "仅可取：机会/条件机会/暂不构成机会/证据不足",
-        "opportunity_summary": "不超过120字，解释为何值得或不值得投资者现在人工查看；不是买卖指令",
+        "opportunity_state": "仅可取：当前机会/临近机会/暂不构成当前机会/证据不足",
+        "opportunity_summary": "不超过120字，解释当前机会强度；不是买卖指令",
+        "why_now": "不超过120字，回答为什么是现在；若不是当前或临近机会，也要说明现在缺少什么",
+        "satisfied_conditions": ["现在已经满足的关键条件，最多4条"],
+        "unmet_conditions": ["仍未满足的关键条件，最多4条"],
+        "constraint_override_reason": "若判为当前机会但现价不在主报告价格规则内，必须说明为何新证据足以突破旧约束；否则留空",
         "supporting_evidence": ["直接来自输入的关键依据，最多4条"],
         "risks_or_counterevidence": ["直接来自输入的反面证据或不确定性，最多4条"],
         "human_questions": ["投资者最终决策前应自己核实的问题，最多4条"],
@@ -296,10 +297,15 @@ def review_prompts(facts: dict[str, Any], *, deep: bool) -> tuple[str, str]:
     mode = "深度复核" if deep else "全量机会扫描"
     system = (
         f"你是个股研究机会识别员，正在做{mode}。你的职责是理解主报告、当前行情、技术辅助、情绪和Checklist的语义关系，"
-        "判断这只股票是否值得投资者现在亲自投入时间复核。你不是投顾，不得下买入、卖出、持有、仓位或目标价指令。"
-        "‘机会’只表示出现了值得人工决策的风险收益或信息变化；‘条件机会’表示存在可研究的机会但关键条件仍要由人核实；"
-        "‘暂不构成机会’表示输入中没有足够理由把它排到当前人工优先级；‘证据不足’只用于关键输入缺失或互相无法解释。"
+        "判断这只股票现在是否已经出现值得投资者优先决策的正向机会。你不是投顾，不得下买入、卖出、持有、仓位或目标价指令。"
+        "‘当前机会’必须能明确回答为什么是现在，并指出至少一个已经满足的关键条件；它表示当前风险收益或论文发生了正向变化。"
+        "‘临近机会’表示一个具体正向触发器已经接近或部分满足，但仍有一个决定性条件未满足；它不会进入当前机会主列表。"
+        "‘暂不构成当前机会’表示现在没有足够正向理由。好公司、热门叙事、估值争议、值得长期研究、未来可能跌到某价格、未来可能出现事件，"
+        "以及报告需要重做，本身都不是当前或临近机会。高估值、高风险或回避案例即使很有研究价值，也不得因此判为机会。"
+        "‘证据不足’只用于关键输入缺失或互相无法解释。"
         "不得把本地程序的价格匹配、Checklist状态、技术状态或主报告粗标签当作自动否决器；应解释它们各自支持或反驳什么。"
+        "但如果现价不在主报告任何价格规则内却仍判为当前机会，必须在constraint_override_reason中引用输入里的新事实，"
+        "解释为什么该事实足以突破原约束；不能只写情绪、技术形态、好公司或值得研究。"
         "这是机会识别而非交易建议：输出中不得出现或复述买入、卖出、持有、建仓、加仓、减仓、仓位、止损、目标价、等待某价再买等动作语言，"
         "即使主报告包含这些词也不要转述。只写为何值得研究、反证是什么、以及投资者应核实哪些事实。"
         "必须只依据输入事实，不得编造外部新闻、财务数据或价格。输出严格JSON，不要Markdown。"
@@ -472,8 +478,18 @@ def request_json(
     raise OpportunityReviewError(f"unsupported transport: {config.transport}")
 
 
-def validate_assessment(result: dict[str, Any], *, deep: bool) -> dict[str, Any]:
-    state = clean_text(result.get("opportunity_state"), 30)
+def normalize_opportunity_state(value: Any) -> str:
+    state = clean_text(value, 30)
+    return LEGACY_STATE_ALIASES.get(state, state)
+
+
+def validate_assessment(
+    result: dict[str, Any],
+    *,
+    deep: bool,
+    facts: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    state = normalize_opportunity_state(result.get("opportunity_state"))
     if state not in OPPORTUNITY_STATES:
         raise OpportunityReviewError(f"invalid opportunity_state: {state!r}")
     confidence = clean_text(result.get("confidence"), 20).lower()
@@ -482,9 +498,46 @@ def validate_assessment(result: dict[str, Any], *, deep: bool) -> dict[str, Any]
     summary = clean_text(result.get("opportunity_summary"), 240)
     if not summary:
         raise OpportunityReviewError("opportunity_summary is empty")
+    list_fields = (
+        "satisfied_conditions",
+        "unmet_conditions",
+        "supporting_evidence",
+        "risks_or_counterevidence",
+        "human_questions",
+    )
+    for key in list_fields:
+        if not isinstance(result.get(key, []), list):
+            raise OpportunityReviewError(f"{key} must be an array")
+    why_now = clean_text(result.get("why_now"), 240)
+    satisfied = [
+        clean_text(item, 220)
+        for item in (result.get("satisfied_conditions") or [])[:4]
+        if clean_text(item, 220)
+    ]
+    unmet = [
+        clean_text(item, 220)
+        for item in (result.get("unmet_conditions") or [])[:4]
+        if clean_text(item, 220)
+    ]
+    override_reason = clean_text(result.get("constraint_override_reason"), 260)
+    if state in {"当前机会", "临近机会"} and not why_now:
+        raise OpportunityReviewError(f"{state} must include why_now")
+    if state == "当前机会" and not satisfied:
+        raise OpportunityReviewError("当前机会 must include at least one satisfied condition")
+    if state == "临近机会" and not unmet:
+        raise OpportunityReviewError("临近机会 must include at least one unmet condition")
+    price_status = str(((facts or {}).get("local_price_context") or {}).get("status") or "")
+    if state == "当前机会" and price_status and price_status != "inside_price_rule" and not override_reason:
+        raise OpportunityReviewError(
+            "当前机会 outside the report price rules must include constraint_override_reason"
+        )
     cleaned = {
         "opportunity_state": state,
         "opportunity_summary": summary,
+        "why_now": why_now,
+        "satisfied_conditions": satisfied,
+        "unmet_conditions": unmet,
+        "constraint_override_reason": override_reason,
         "supporting_evidence": [
             clean_text(item, 220)
             for item in (result.get("supporting_evidence") or [])[:4]
@@ -502,9 +555,6 @@ def validate_assessment(result: dict[str, Any], *, deep: bool) -> dict[str, Any]
         ],
         "confidence": confidence,
     }
-    for key in ("supporting_evidence", "risks_or_counterevidence", "human_questions"):
-        if not isinstance(result.get(key, []), list):
-            raise OpportunityReviewError(f"{key} must be an array")
     if deep:
         challenge = clean_text(result.get("thesis_challenge"), 300)
         boundary = clean_text(result.get("decision_boundary"), 220)
@@ -520,7 +570,26 @@ def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict
     system, user = review_prompts(facts, deep=deep)
     try:
         raw, reasoning = request_json(config, system=system, user=user)
-        assessment = validate_assessment(raw, deep=deep)
+        repair_attempts = 0
+        try:
+            assessment = validate_assessment(raw, deep=deep, facts=facts)
+        except OpportunityReviewError as validation_error:
+            repair_attempts = 1
+            repair_user = (
+                "上一次返回的JSON未通过结构校验。请仅修复字段和枚举，不得降低推理强度、改变事实或增加外部信息。"
+                f"\n校验错误：{validation_error}"
+                f"\n必须满足的结构：{json.dumps(review_schema(deep), ensure_ascii=False)}"
+                f"\n上一次JSON：{json.dumps(raw, ensure_ascii=False)}"
+                f"\n事实输入：{json.dumps(facts, ensure_ascii=False)}"
+                "\n只输出修复后的严格JSON。"
+            )
+            raw, repair_reasoning = request_json(config, system=system, user=repair_user)
+            assessment = validate_assessment(raw, deep=deep, facts=facts)
+            reasoning = {
+                **repair_reasoning,
+                "schema_repair": True,
+                "initial_effective": reasoning.get("effective"),
+            }
         return {
             "status": "ready",
             "model": config.model,
@@ -528,6 +597,7 @@ def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict
             "generated_at": now_iso(),
             "reasoning": reasoning,
             "assessment": assessment,
+            "schema_repair_attempts": repair_attempts,
             "elapsed_seconds": round(time.perf_counter() - started, 3),
         }
     except Exception as error:  # noqa: BLE001 - preserve a durable per-model error
@@ -550,32 +620,31 @@ def union_result(models: dict[str, dict[str, Any]]) -> dict[str, Any]:
     opportunities = [
         item
         for item in ready
-        if (item.get("assessment") or {}).get("opportunity_state") == "机会"
+        if normalize_opportunity_state((item.get("assessment") or {}).get("opportunity_state")) == "当前机会"
     ]
     conditional = [
         item
         for item in ready
-        if (item.get("assessment") or {}).get("opportunity_state") == "条件机会"
+        if normalize_opportunity_state((item.get("assessment") or {}).get("opportunity_state")) == "临近机会"
     ]
-    positive = opportunities or conditional
-    if len(opportunities) >= 2:
-        classification = "双模型机会"
-    elif len(opportunities) == 1:
-        classification = "单模型机会"
+    if opportunities:
+        classification = "当前机会"
     elif conditional:
-        classification = "条件机会"
+        classification = "临近机会"
     elif ready:
         classification = "暂不进入机会面板"
     else:
         classification = "待人工复核"
     return {
-        "included": bool(positive),
+        "included": bool(opportunities),
+        "near_included": bool(conditional) and not opportunities,
         "classification": classification,
-        "supporting_models": [item.get("model") for item in positive if item.get("model")],
+        "supporting_models": [item.get("model") for item in opportunities if item.get("model")],
+        "near_models": [item.get("model") for item in conditional if item.get("model")],
         "model_count": len(ready),
         "opportunity_count": len(opportunities),
         "conditional_count": len(conditional),
-        "rule": "任一模型判为机会或条件机会即纳入；模型之间互不否决，最终买卖由投资者决定。",
+        "rule": "当前机会进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
     }
 
 
@@ -616,7 +685,7 @@ def scan_one(
         quote=quote_by_ticker.get(ticker),
     )
     models: dict[str, dict[str, Any]] = {}
-    # The two independent models see exactly the same frozen evidence snapshot.
+    # The selected scan model sees one frozen, auditable evidence snapshot.
     with concurrent.futures.ThreadPoolExecutor(max_workers=len(configs)) as executor:
         futures = {executor.submit(run_model, config, facts, deep=False): config for config in configs}
         for future in concurrent.futures.as_completed(futures):
@@ -663,15 +732,14 @@ def scan_all(
     limit: int | None = None,
     previous: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    configs = [model_config("scan_flash"), model_config("scan_qwen")]
+    configs = [model_config("scan_flash")]
     decisions = find_decisions(repo_root, ticker)
     if limit is not None:
         decisions = decisions[: max(0, limit)]
     sentiment, intraday, quotes = snapshot_maps(repo_root)
     prior = previous if isinstance(previous, dict) else {}
-    # Each company still gets two independent model calls, but a small bounded
-    # company-level pool keeps a full after-close scan practical.  The default
-    # means at most six model requests are in flight, avoiding a burst that
+    # A small bounded company-level pool keeps a full after-close scan practical.
+    # The default means at most three model requests are in flight, avoiding a burst that
     # could exhaust provider concurrency or rate limits.
     workers = parse_integer(os.environ.get("OPPORTUNITY_SCAN_CONCURRENCY"), 3, 1, 6)
     scans: list[dict[str, Any] | None] = [None] * len(decisions)
@@ -728,7 +796,7 @@ def scan_all(
         "ready_count": ready,
         "stale_count": stale,
         "error_count": errors,
-        "inclusion_rule": "任一模型判为机会或条件机会即纳入；模型之间互不否决，最终买卖由投资者决定。",
+        "inclusion_rule": "Flash 判为当前机会才进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
         "scans": completed_scans,
     }
 
@@ -812,7 +880,7 @@ def command_deep(arguments: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
-    scan = subparsers.add_parser("scan", help="scan all A shares with Flash + Qwen")
+    scan = subparsers.add_parser("scan", help="scan all A shares with Flash")
     scan.add_argument("--repo-root", type=Path, default=ROOT)
     scan.add_argument("--ticker")
     scan.add_argument("--limit", type=int)

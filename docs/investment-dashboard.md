@@ -8,7 +8,7 @@
 - `data/investment-dashboard/report_history.json`：每家公司的历史研报结论
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
-- `data/investment-dashboard/opportunity_scans.json`：Flash + Qwen3.7 Plus 的独立机会扫描与并集
+- `data/investment-dashboard/opportunity_scans.json`：Flash 的全量机会扫描、当前机会与临近机会分层
 - `site/`：静态网页看板
 
 ## 范围
@@ -47,13 +47,16 @@
 
 ## 当前机会筛选：AI 找机会，你决定买不买
 
-顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股会由两个模型独立阅读主报告、当前行情、技术辅助、情绪和 Checklist。
+顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股由 Flash 阅读主报告、当前行情、技术辅助、情绪和 Checklist，理解“为什么是现在”。
 
-- 全量扫描：`deepseek-v4-flash` + `qwen3.7-plus`
-- 进入规则：任一模型给出「机会」或「条件机会」就展示；另一模型只能提供反证，不能否决
-- 页面分组：双模型机会、单模型机会、条件机会
+- 全量扫描：仅使用 `deepseek-v4-flash`
+- 当前机会：必须回答“为什么是现在”，并至少指出一个已经满足的关键条件
+- 临近机会：具体触发器已经接近或部分满足，但仍差一个决定性条件；单独折叠展示
+- 不算机会：好公司、热门叙事、值得研究、估值争议、未来可能到价或未来可能出现事件，不能单独进入机会面板
+- 人工深度复核：点击按钮后再使用 `deepseek-v4-pro` + `gpt-5.6-luna`
 - 最终决定：模型不输出买卖、仓位或目标价；你阅读依据、反证和报告后自行决定
 - 推理：所有调用请求供应商支持的最高推理档；产物会记录实际生效档位，若无法启用不会悄悄降为低推理
+- 数据体积：完整模型输入保留在 `data/investment-dashboard` 供审计；公开网页只发布精简结果和行情上下文
 
 收盘后全量扫描：
 
@@ -81,7 +84,6 @@ DASHBOARD_DEEP_REVIEW_DAILY_LIMIT=12
 
 ```ini
 OPPORTUNITY_SCAN_FLASH_REASONING_EFFORT=max
-OPPORTUNITY_SCAN_QWEN_THINKING_BUDGET_TOKENS=32000
 OPPORTUNITY_DEEP_V4PRO_REASONING_EFFORT=max
 OPPORTUNITY_DEEP_LUNA_REASONING_EFFORT=high
 ```

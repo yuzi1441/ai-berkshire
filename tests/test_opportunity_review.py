@@ -22,6 +22,10 @@ def ready(model: str, state: str) -> dict:
         "assessment": {
             "opportunity_state": state,
             "opportunity_summary": "测试摘要",
+            "why_now": "当前已有关键条件满足",
+            "satisfied_conditions": ["关键条件已满足"],
+            "unmet_conditions": ["仍需人工确认一项条件"] if state in {"临近机会", "条件机会"} else [],
+            "constraint_override_reason": "",
             "supporting_evidence": [],
             "risks_or_counterevidence": [],
             "human_questions": [],
@@ -31,26 +35,26 @@ def ready(model: str, state: str) -> dict:
 
 
 class OpportunityReviewTests(unittest.TestCase):
-    def test_union_keeps_one_model_opportunity_without_consensus(self):
+    def test_union_includes_a_current_opportunity(self):
         result = opportunity.union_result(
             {
-                "deepseek-v4-flash": ready("deepseek-v4-flash", "机会"),
-                "qwen3.7-plus": ready("qwen3.7-plus", "暂不构成机会"),
+                "deepseek-v4-flash": ready("deepseek-v4-flash", "当前机会"),
             }
         )
         self.assertTrue(result["included"])
-        self.assertEqual(result["classification"], "单模型机会")
+        self.assertFalse(result["near_included"])
+        self.assertEqual(result["classification"], "当前机会")
         self.assertEqual(result["supporting_models"], ["deepseek-v4-flash"])
 
-    def test_union_includes_a_conditional_opportunity(self):
+    def test_union_keeps_near_opportunity_out_of_current_panel(self):
         result = opportunity.union_result(
             {
-                "deepseek-v4-flash": ready("deepseek-v4-flash", "条件机会"),
-                "qwen3.7-plus": ready("qwen3.7-plus", "暂不构成机会"),
+                "deepseek-v4-flash": ready("deepseek-v4-flash", "临近机会"),
             }
         )
-        self.assertTrue(result["included"])
-        self.assertEqual(result["classification"], "条件机会")
+        self.assertFalse(result["included"])
+        self.assertTrue(result["near_included"])
+        self.assertEqual(result["classification"], "临近机会")
 
     def test_scan_does_not_use_execution_or_checklist_as_a_veto(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -82,12 +86,11 @@ class OpportunityReviewTests(unittest.TestCase):
             }
             configs = [
                 opportunity.ModelConfig("scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024),
-                opportunity.ModelConfig("scan_qwen", "qwen3.7-plus", "test", "https://test", "key", 1000, 30, 0, "max", 1024),
             ]
             with patch.object(
                 opportunity,
                 "run_model",
-                side_effect=[ready("deepseek-v4-flash", "机会"), ready("qwen3.7-plus", "暂不构成机会")],
+                return_value=ready("deepseek-v4-flash", "当前机会"),
             ):
                 result = opportunity.scan_one(
                     decision,
@@ -99,12 +102,12 @@ class OpportunityReviewTests(unittest.TestCase):
                     previous={},
                 )
             self.assertTrue(result["union"]["included"])
-            self.assertEqual(result["union"]["classification"], "单模型机会")
+            self.assertEqual(result["union"]["classification"], "当前机会")
 
     def test_messages_transport_requests_enabled_thinking(self):
         config = opportunity.ModelConfig(
-            "scan_qwen",
-            "qwen3.7-plus",
+            "generic_messages",
+            "test-thinking-model",
             opportunity.TRANSPORT_ANTHROPIC_MESSAGES,
             "https://test/messages",
             "key",
@@ -158,6 +161,72 @@ class OpportunityReviewTests(unittest.TestCase):
         system, _ = opportunity.review_prompts({}, deep=False)
         self.assertIn("机会识别而非交易建议", system)
         self.assertIn("不得出现或复述买入、卖出、持有、建仓、加仓、减仓、仓位", system)
+        self.assertIn("为什么是现在", system)
+        self.assertIn("高估值、高风险或回避案例", system)
+
+    def test_current_opportunity_requires_why_now_and_satisfied_condition(self):
+        with self.assertRaisesRegex(opportunity.OpportunityReviewError, "why_now"):
+            opportunity.validate_assessment(
+                {
+                    "opportunity_state": "当前机会",
+                    "opportunity_summary": "出现机会",
+                    "satisfied_conditions": ["现价进入报告区间"],
+                    "unmet_conditions": [],
+                    "supporting_evidence": [],
+                    "risks_or_counterevidence": [],
+                    "human_questions": [],
+                    "confidence": "medium",
+                },
+                deep=False,
+                facts={"local_price_context": {"status": "inside_price_rule"}},
+            )
+
+    def test_run_model_repairs_schema_once_without_lowering_reasoning(self):
+        config = opportunity.ModelConfig(
+            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        repaired = {
+            "opportunity_state": "当前机会",
+            "opportunity_summary": "关键条件现在已经满足",
+            "why_now": "现价已进入报告允许区间",
+            "satisfied_conditions": ["现价进入报告允许区间"],
+            "unmet_conditions": [],
+            "constraint_override_reason": "",
+            "supporting_evidence": [],
+            "risks_or_counterevidence": [],
+            "human_questions": [],
+            "confidence": "medium",
+        }
+        with patch.object(
+            opportunity,
+            "request_json",
+            side_effect=[
+                ({"opportunity_state": ""}, {"requested": "max", "effective": "max"}),
+                (repaired, {"requested": "max", "effective": "max"}),
+            ],
+        ) as request:
+            result = opportunity.run_model(
+                config,
+                {"local_price_context": {"status": "inside_price_rule"}},
+                deep=False,
+            )
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["schema_repair_attempts"], 1)
+        self.assertEqual(result["reasoning"]["effective"], "max")
+        self.assertEqual(request.call_count, 2)
+
+    def test_full_scan_selects_only_flash(self):
+        config = opportunity.ModelConfig(
+            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        with (
+            patch.object(opportunity, "model_config", return_value=config) as selected,
+            patch.object(opportunity, "find_decisions", return_value=[]),
+            patch.object(opportunity, "snapshot_maps", return_value=({}, {}, {})),
+        ):
+            result = opportunity.scan_all(Path("/tmp/unused"))
+        selected.assert_called_once_with("scan_flash")
+        self.assertEqual([item["model"] for item in result["models"]], ["deepseek-v4-flash"])
 
     def test_luna_defaults_to_highest_supported_reasoning_effort(self):
         with patch.dict("os.environ", {"OPENCODE_GO_API_KEY": "test-key"}, clear=True):

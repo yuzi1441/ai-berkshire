@@ -8,7 +8,7 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260818-model-union-opportunities" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260818-flash-current-opportunities" />
   </head>
   <body>
     <div class="app-shell">
@@ -40,7 +40,7 @@
           <span class="attention-toggle-copy">
             <span class="eyebrow">A-SHARE OPPORTUNITY</span>
             <span class="attention-toggle-title">当前机会筛选</span>
-            <span class="attention-toggle-note">Flash 与 Qwen 独立理解材料；任一发现机会即进入，由你最终决定</span>
+            <span class="attention-toggle-note">Flash 语义扫描“为什么是现在”；其他模型留给你点击深度复核</span>
           </span>
           <span class="attention-toggle-side">
             <span class="attention-toggle-meta" id="attention-toggle-meta">尚未加载</span>
@@ -50,7 +50,7 @@
         </summary>
         <div class="attention-panel-body">
           <div class="attention-panel-head">
-            <p class="attention-panel-note">模型从主报告、行情、技术辅助、情绪和 Checklist 中理解机会语意。任一模型判为“机会”或“条件机会”即展示；主报告价格档与各项指标只作证据，不会机械否决。你决定是否买入。</p>
+            <p class="attention-panel-note">Flash 从主报告、行情、技术辅助、情绪和 Checklist 中理解机会语意。只有能说明“为什么是现在”的当前机会进入主列表；尚缺一个决定性条件的临近机会折叠展示。价格档与各项指标是证据而非机械开关，你决定是否买入。</p>
             <p class="attention-panel-meta" id="attention-meta"></p>
           </div>
           <div class="attention-list" id="attention-list"></div>
@@ -174,6 +174,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=20260818-model-union-opportunities"></script>
+    <script type="module" src="./assets/app.js?v=20260818-flash-current-opportunities"></script>
   </body>
 </html>

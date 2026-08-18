@@ -32,6 +32,48 @@ class InvestmentDashboardTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def test_public_opportunity_scan_omits_full_input_snapshot(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            source = root / "data" / "investment-dashboard" / "opportunity_scans.json"
+            source.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "status": "ok",
+                        "models": [{"model": "deepseek-v4-flash"}],
+                        "scans": [
+                            {
+                                "company": "示例公司",
+                                "ticker": "600000.SH",
+                                "market": "A股",
+                                "models": {},
+                                "union": {"included": False, "near_included": True},
+                                "input_snapshot": {
+                                    "report": {"data_cutoff": "2026-08-18", "excerpt": "很长的审计原文"},
+                                    "current_quote": {"price": 10.5, "currency": "CNY"},
+                                    "local_price_context": {"status": "inside_price_rule"},
+                                },
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            dashboard.build_dashboard(root)
+
+            full = json.loads(source.read_text(encoding="utf-8"))
+            public = json.loads(
+                (root / "site" / "data" / "opportunity_scans.json").read_text(encoding="utf-8")
+            )
+            self.assertIn("input_snapshot", full["scans"][0])
+            self.assertNotIn("input_snapshot", public["scans"][0])
+            self.assertEqual(public["scans"][0]["input_context"]["current_quote"]["price"], 10.5)
+            self.assertNotIn("excerpt", public["scans"][0]["input_context"])
+
     def test_uses_data_cutoff_not_filesystem_modification_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
