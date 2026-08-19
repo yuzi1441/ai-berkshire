@@ -152,25 +152,21 @@ commit_generated() {
 }
 
 run_annual() {
-    sync_repo
     build_dashboard
     "${PYTHON}" tools/annual_report_dates.py --repo-root "${REPO_ROOT}" --as-of "${AS_OF}"
 }
 
 run_morning() {
-    sync_repo
     build_dashboard
     post_buy_check
     build_dashboard
 }
 
 run_market() {
-    sync_repo
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股
 }
 
 run_intraday() {
-    sync_repo
     "${PYTHON}" tools/batch_intraday_technical.py \
         --repo-root "${REPO_ROOT}" \
         --markets A股 \
@@ -181,7 +177,6 @@ run_intraday() {
 }
 
 run_close() {
-    sync_repo
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股 --force
     post_buy_check
     build_dashboard
@@ -189,7 +184,6 @@ run_close() {
 }
 
 run_daily() {
-    sync_repo
     "${PYTHON}" tools/batch_technical_analysis.py \
         --repo-root "${REPO_ROOT}" \
         --market A股 \
@@ -204,7 +198,6 @@ run_daily() {
 }
 
 run_heavy() {
-    sync_repo
     local sentiment_rc=0
     local opportunity_rc=0
     local started
@@ -249,12 +242,12 @@ run_heavy() {
 }
 
 run_reconcile() {
-    sync_repo
     post_buy_check
     build_dashboard
     commit_generated "chore: reconcile A-share dashboard ${AS_OF}"
 }
 
+sync_repo
 status_start "${JOB}"
 started_at="$(date +%s)"
 set +e
