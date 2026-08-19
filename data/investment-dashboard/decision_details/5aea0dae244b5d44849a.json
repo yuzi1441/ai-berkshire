@@ -1,0 +1,276 @@
+{
+  "company": "英维克",
+  "entity_kind": "company",
+  "entity_directory": "英维克",
+  "ticker": "002837.SZ",
+  "market": "A股",
+  "data_cutoff": "2026-07-06",
+  "report_reference_price": {
+    "price": 74.06,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "观望区",
+      "price_range": "30-50元",
+      "source": "inferred_inline_price_actions",
+      "buy_eligible": false,
+      "note": "观望区：30-50元"
+    },
+    {
+      "stance": "保守型",
+      "action": "具备安全边际的买点",
+      "price_range": "30元以下",
+      "source": "inferred_inline_price_actions",
+      "buy_eligible": true,
+      "note": "具备安全边际的买点：30元以下（对应市值约380亿以下）"
+    }
+  ],
+  "conclusion_summary": "空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+  "buy_price": "30 元",
+  "price_plan": [],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "76.2元",
+      "target_pe": "50倍",
+      "upside": "+3.0%"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "31.5元",
+      "target_pe": "35倍",
+      "upside": "-57.5%"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "10.9元",
+      "target_pe": "20倍",
+      "upside": "-85.3%"
+    }
+  ],
+  "valuation_section": {
+    "heading": "七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\"",
+    "start_line": 196,
+    "end_line": 248,
+    "markdown": "## 七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 当前市场定价（已工具验算）\n\n| 指标 | 数值 | 验算方式 |\n|---|---|---|\n| 股价 | 74.06元（2026-07-06） | 东财+腾讯行情双源一致 |\n| 总股本 | 12.74亿股（10转3除权后） | 权益分派公告+东财接口 |\n| 总市值 | **约944亿元** | 工具验算74.06×12.74亿，偏差0.02%；东财接口1164亿系字段异常，弃用 |\n| PE（2025静态） | **180.85倍** | 工具精确计算（EPS 0.4095元/转增后口径） |\n| PE（TTM） | **195.56倍** | 工具精确计算（TTM归母4.83亿） |\n| PE（2026E一致预期） | 约92倍 | 一致预期10.2亿（隐含+96%，而Q1仅完成0.87%） |\n| PB | 约28.6倍 | 东财口径 |\n| PS（TTM） | 约15倍 | 自算 |\n| 股息率 | 0.18% | 工具精确计算 |\n| 历史PE分位 | 上市以来约79%分位（历史均值58倍，最高235倍） | 亿牛网 |\n\n### 反向DCF：当前股价隐含了什么？\n\n以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。\n\n### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）\n\n| 情景 | 假设 | 3年后EPS | 目标PE | 目标股价 | 较现价 |\n|---|---|---|---|---|---|\n| 乐观 | 海外订单足额兑现，净利年增55%（超一致预期的路径） | 1.52元 | 50倍 | **76.2元** | **+3.0%** |\n| 中性 | 收入增25-30%，毛利率企稳，净利年增30% | 0.90元 | 35倍 | **31.5元** | **-57.5%** |\n| 悲观 | 价格战延续+海外证伪，净利年增10% | 0.55元 | 20倍 | **10.9元** | **-85.3%** |\n\n**这张表是全报告的核心：连乐观情景都只有+3%。** 买入当前价格的唯一获利方式，是指望3年后市场仍愿为一家设备商付出50倍以上的市盈率——把回报完全寄托在估值不收缩上，这正是安全边际的反面。\n\n### 同行对比印证高估\n\n| 公司 | PE(TTM) | 基本面状态 |\n|---|---|---|\n| 英维克 | ~196倍 | 2026Q1净利-82% |\n| Vertiv（全球龙头） | ~75-82倍（各源口径75.5-81.8，前瞻~44倍） | 2026Q1营收+29%、高增长兑现中 |\n| 同飞股份 | ~71倍 | 储能温控高增 |\n| 申菱环境 | ~245倍 | 同为传闻链热门股 |\n\n英维克估值是Vertiv的2.5倍，而Vertiv在增长、英维克在暴雷。A股液冷板块整体系统性高估，板块比价不能作为买入理由。\n\n### 合理价格区间（本报告独立测算）\n\n- **内在价值参考区间：24-32元**（中性情景31.5元按10%折现率折回现值约23.7元；给予液冷期权价值上浮后取上限32元），对应市值约300-410亿、2026E（按打折后8-9亿净利）PE约35-45倍。\n- **具备安全边际的买点：30元以下**（对应市值约380亿以下）。\n- **观望区：30-50元**。\n- **当前74.06元：显著高估区**，价格已透支乐观情景。\n\n**段永平式追问：如果股市明天关闭5年，你愿意以944亿持有这家公司吗？** 5年后即使净利润做到25亿（年增37%，相当乐观），944亿成本对应静态38倍PE，还未计入这5年为增长垫付的应收和资本开支。答案是不愿意。这个问题把一切传闻和情绪都过滤掉了——944亿买一家净现比0.30的设备商，生意本身撑不起这个价。\n\n---"
+  },
+  "recommendation": "空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+  "title": "英维克（002837.SZ）投资研究报告",
+  "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+  "report_link": "英维克/英维克投资研究报告-20260706.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "英维克",
+    "ticker": "002837.SZ",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-06",
+    "action": "观察",
+    "summary": "空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+    "investor_stances": [],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取三情景",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观望区",
+          "price_range": "30-50元",
+          "source": "inferred_inline_price_actions",
+          "buy_eligible": false,
+          "note": "观望区：30-50元"
+        },
+        {
+          "stance": "保守型",
+          "action": "具备安全边际的买点",
+          "price_range": "30元以下",
+          "source": "inferred_inline_price_actions",
+          "buy_eligible": true,
+          "note": "具备安全边际的买点：30元以下（对应市值约380亿以下）"
+        }
+      ],
+      "conclusion_summary": "空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+      "buy_price": "30 元",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "76.2元",
+          "target_pe": "50倍",
+          "upside": "+3.0%"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "31.5元",
+          "target_pe": "35倍",
+          "upside": "-57.5%"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "10.9元",
+          "target_pe": "20倍",
+          "upside": "-85.3%"
+        }
+      ],
+      "valuation_section": {
+        "heading": "七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\"",
+        "start_line": 196,
+        "end_line": 248,
+        "markdown": "## 七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 当前市场定价（已工具验算）\n\n| 指标 | 数值 | 验算方式 |\n|---|---|---|\n| 股价 | 74.06元（2026-07-06） | 东财+腾讯行情双源一致 |\n| 总股本 | 12.74亿股（10转3除权后） | 权益分派公告+东财接口 |\n| 总市值 | **约944亿元** | 工具验算74.06×12.74亿，偏差0.02%；东财接口1164亿系字段异常，弃用 |\n| PE（2025静态） | **180.85倍** | 工具精确计算（EPS 0.4095元/转增后口径） |\n| PE（TTM） | **195.56倍** | 工具精确计算（TTM归母4.83亿） |\n| PE（2026E一致预期） | 约92倍 | 一致预期10.2亿（隐含+96%，而Q1仅完成0.87%） |\n| PB | 约28.6倍 | 东财口径 |\n| PS（TTM） | 约15倍 | 自算 |\n| 股息率 | 0.18% | 工具精确计算 |\n| 历史PE分位 | 上市以来约79%分位（历史均值58倍，最高235倍） | 亿牛网 |\n\n### 反向DCF：当前股价隐含了什么？\n\n以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。\n\n### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）\n\n| 情景 | 假设 | 3年后EPS | 目标PE | 目标股价 | 较现价 |\n|---|---|---|---|---|---|\n| 乐观 | 海外订单足额兑现，净利年增55%（超一致预期的路径） | 1.52元 | 50倍 | **76.2元** | **+3.0%** |\n| 中性 | 收入增25-30%，毛利率企稳，净利年增30% | 0.90元 | 35倍 | **31.5元** | **-57.5%** |\n| 悲观 | 价格战延续+海外证伪，净利年增10% | 0.55元 | 20倍 | **10.9元** | **-85.3%** |\n\n**这张表是全报告的核心：连乐观情景都只有+3%。** 买入当前价格的唯一获利方式，是指望3年后市场仍愿为一家设备商付出50倍以上的市盈率——把回报完全寄托在估值不收缩上，这正是安全边际的反面。\n\n### 同行对比印证高估\n\n| 公司 | PE(TTM) | 基本面状态 |\n|---|---|---|\n| 英维克 | ~196倍 | 2026Q1净利-82% |\n| Vertiv（全球龙头） | ~75-82倍（各源口径75.5-81.8，前瞻~44倍） | 2026Q1营收+29%、高增长兑现中 |\n| 同飞股份 | ~71倍 | 储能温控高增 |\n| 申菱环境 | ~245倍 | 同为传闻链热门股 |\n\n英维克估值是Vertiv的2.5倍，而Vertiv在增长、英维克在暴雷。A股液冷板块整体系统性高估，板块比价不能作为买入理由。\n\n### 合理价格区间（本报告独立测算）\n\n- **内在价值参考区间：24-32元**（中性情景31.5元按10%折现率折回现值约23.7元；给予液冷期权价值上浮后取上限32元），对应市值约300-410亿、2026E（按打折后8-9亿净利）PE约35-45倍。\n- **具备安全边际的买点：30元以下**（对应市值约380亿以下）。\n- **观望区：30-50元**。\n- **当前74.06元：显著高估区**，价格已透支乐观情景。\n\n**段永平式追问：如果股市明天关闭5年，你愿意以944亿持有这家公司吗？** 5年后即使净利润做到25亿（年增37%，相当乐观），944亿成本对应静态38倍PE，还未计入这5年为增长垫付的应收和资本开支。答案是不愿意。这个问题把一切传闻和情绪都过滤掉了——944亿买一家净现比0.30的设备商，生意本身撑不起这个价。\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "英维克（002837.SZ）投资研究报告",
+      "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "report_link": "英维克/英维克投资研究报告-20260706.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "英维克",
+        "ticker": "002837.SZ",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-06",
+        "action": "观察",
+        "summary": "空仓者 回避。 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+        "investor_stances": [],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "当前回避，建议等待股价跌至30元以下（市值380亿以下）再考虑参与",
+    "holder_action": "建议减仓至可承受-60%回撤的比例，等待海外订单公告落地验证",
+    "trigger_condition": "股价跌至30元以下（市值380亿以下）",
+    "summary": "空仓者应回避，好行业+好卡位+错误的价格=坏投资，等30元以下再谈安全边际",
+    "confidence": "medium",
+    "report_field_conflict": true,
+    "conflict_note": "正文空仓者建议'回避'但指定等待价格触发点，契约基本建议动作为'观察'；根据优先级和分类规则，应采用正文归类为'等待价格/watch'而非'回避/卖出/no'或'等待验证/watch'",
+    "evidence": [
+      {
+        "line_start": 266,
+        "line_end": 266,
+        "quote": "| **空仓者** | **回避。** 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
+        "supports": "该证据支持空仓者当前回避，但等待价格跌至30元以下再考虑参与，符合'等待价格/watch'分类"
+      },
+      {
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "| **加仓信号（需先跌入安全区）** | ①股价跌至30元下方且②以下任一兑现：公司公告形式披露海外大客户批量订单、海外收入占比升至25%+、净现比回到0.7以上、毛利率连续两季回升 |",
+        "supports": "该证据支持价格触发条件为股价跌至30元下方，强化'等待价格/watch'判断"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+    "model_consensus": false,
+    "screening_consensus": true,
+    "screening_resolution": "conservative_intersection",
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "review",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:56:59+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "股价跌至30元以下（市值380亿以下）",
+        "price_range": "跌至30元以下",
+        "min": null,
+        "ceiling": 30.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 0,
+    "reliability": "conservative",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "英维克",
+    "ticker": "002837.SZ",
+    "status": "ready",
+    "report_path": "reports/英维克/英维克-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 57.09,
+    "currency": "CNY",
+    "observation_zone": "52.72-56.75",
+    "fundamental_entry_plan": "| 加仓信号（需先跌入安全区） | ①股价跌至：30元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "黄",
+        "meaning": "股价暂在20日均线之上，但均线仍在下行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价仍在200日均线之下。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "5aea0dae244b5d44849a",
+  "detail_path": "./data/decision_details/5aea0dae244b5d44849a.json"
+}

@@ -1,0 +1,444 @@
+{
+  "company": "金盘科技",
+  "entity_kind": "company",
+  "entity_directory": "金盘科技",
+  "ticker": "688676.SH",
+  "market": "A股",
+  "data_cutoff": "2026-07-09",
+  "report_reference_price": {
+    "price": 82.04,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "只能事件驱动小仓"
+    },
+    {
+      "stance": "稳健型",
+      "action": "小仓观察即可"
+    },
+    {
+      "stance": "保守型",
+      "action": "等待"
+    }
+  ],
+  "conclusion_summary": "空仓保守型 等待 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估",
+  "buy_price": "82.04 元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "只能事件驱动小仓"
+    },
+    {
+      "stance": "稳健型",
+      "action": "小仓观察即可"
+    },
+    {
+      "stance": "保守型",
+      "action": "等待"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "118.2元",
+      "eps_growth": "22%",
+      "target_pe": "45x",
+      "target_eps": "2.63"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "77.0元",
+      "eps_growth": "15%",
+      "target_pe": "35x",
+      "target_eps": "2.20"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "41.8元",
+      "eps_growth": "5%",
+      "target_pe": "25x",
+      "target_eps": "1.67"
+    }
+  ],
+  "valuation_section": {
+    "heading": "第九部分：估值与安全边际",
+    "start_line": 238,
+    "end_line": 272,
+    "markdown": "## 第九部分：估值与安全边际\n\n### 1. 当前估值\n\n以 2026-07-09 收盘价 **82.04 元**、总股本 **459,784,364 股**计算：\n\n| 指标 | 数值 | 口径 |\n|---|---:|---|\n| 市值 | **377.21亿元** | 82.04 × 4.5978亿股 |\n| TTM收入 | 74.75亿元 | 2025收入 - 2025Q1 + 2026Q1 |\n| TTM归母净利润 | 6.65亿元 | 2025归母净利 - 2025Q1 + 2026Q1 |\n| PE TTM | **56.7x** | 市值 / TTM归母净利 |\n| PS TTM | **5.05x** | 市值 / TTM收入 |\n| PB | **7.05x** | 市值 / 2026Q1归母权益 |\n| EV/2025经营利润 | 约53.5x | EV / 2025经营利润 |\n| EV/2025 FCF | 约179.7x | EV / 2025自由现金流 |\n\n### 2. 情景估值\n\n使用 `tools/financial_rigor.py` 按当前 EPS 1.446 元、预测期 3 年计算：\n\n| 情景 | EPS年增速 | 目标PE | 3年后目标EPS | 目标股价 | 较82.04元空间 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 22% | 45x | 2.63 | **118.2元** | +44.0% |\n| 基准 | 15% | 35x | 2.20 | **77.0元** | -6.2% |\n| 悲观 | 5% | 25x | 1.67 | **41.8元** | -49.0% |\n\n### 3. 隐含预期\n\n以 82.04 元买入，若 5 年后市场愿意给 25-35x PE，则公司未来 5 年 EPS CAGR 大致需要达到 21%-30%。这意味着当前价格基本要求公司延续接近 2021-2025 年的高利润复合增速。\n\n**估值结论**：当前价格不是“明显泡沫”，但也不是“有安全边际”。它更像是把 AIDC、海外和订单增长提前资本化后的成长股价格。\n\n---"
+  },
+  "recommendation": "空仓保守型 等待 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估",
+  "title": "金盘科技（688676.SH）研究报告",
+  "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+  "report_link": "金盘科技/金盘科技研究报告-20260709.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "金盘科技",
+    "ticker": "688676.SH",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-09",
+    "action": "观察",
+    "summary": "空仓保守型 等待 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "只能事件驱动小仓"
+      },
+      {
+        "stance": "稳健型",
+        "action": "小仓观察即可"
+      },
+      {
+        "stance": "保守型",
+        "action": "等待"
+      }
+    ],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "历史价格参照",
+  "data_status": "已标注",
+  "historical_price_reference": {
+    "source_report_path": "reports/金盘科技/金盘科技-investment-team-20260712.md",
+    "source_report_link": "金盘科技/金盘科技-investment-team-20260712.md",
+    "source_title": "金盘科技（688676.SH）研究报告",
+    "source_data_cutoff": "2026-07-09",
+    "price_plan": [
+      {
+        "profile": "",
+        "price_range": "65-72 元",
+        "action": "仅适合小仓，且 AIDC/海外订单继续兑现、现金流不恶化"
+      },
+      {
+        "profile": "",
+        "price_range": "45 元",
+        "action": "长期逻辑未破坏，接近以合理倍数买入成长制造业"
+      }
+    ],
+    "usage": "display_only"
+  },
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-09",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "只能事件驱动小仓"
+        },
+        {
+          "stance": "稳健型",
+          "action": "小仓观察即可"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待"
+        }
+      ],
+      "conclusion_summary": "空仓保守型 等待 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估",
+      "buy_price": "82.04 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "只能事件驱动小仓"
+        },
+        {
+          "stance": "稳健型",
+          "action": "小仓观察即可"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "118.2元",
+          "eps_growth": "22%",
+          "target_pe": "45x",
+          "target_eps": "2.63"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "77.0元",
+          "eps_growth": "15%",
+          "target_pe": "35x",
+          "target_eps": "2.20"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "41.8元",
+          "eps_growth": "5%",
+          "target_pe": "25x",
+          "target_eps": "1.67"
+        }
+      ],
+      "valuation_section": {
+        "heading": "第九部分：估值与安全边际",
+        "start_line": 238,
+        "end_line": 272,
+        "markdown": "## 第九部分：估值与安全边际\n\n### 1. 当前估值\n\n以 2026-07-09 收盘价 **82.04 元**、总股本 **459,784,364 股**计算：\n\n| 指标 | 数值 | 口径 |\n|---|---:|---|\n| 市值 | **377.21亿元** | 82.04 × 4.5978亿股 |\n| TTM收入 | 74.75亿元 | 2025收入 - 2025Q1 + 2026Q1 |\n| TTM归母净利润 | 6.65亿元 | 2025归母净利 - 2025Q1 + 2026Q1 |\n| PE TTM | **56.7x** | 市值 / TTM归母净利 |\n| PS TTM | **5.05x** | 市值 / TTM收入 |\n| PB | **7.05x** | 市值 / 2026Q1归母权益 |\n| EV/2025经营利润 | 约53.5x | EV / 2025经营利润 |\n| EV/2025 FCF | 约179.7x | EV / 2025自由现金流 |\n\n### 2. 情景估值\n\n使用 `tools/financial_rigor.py` 按当前 EPS 1.446 元、预测期 3 年计算：\n\n| 情景 | EPS年增速 | 目标PE | 3年后目标EPS | 目标股价 | 较82.04元空间 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 22% | 45x | 2.63 | **118.2元** | +44.0% |\n| 基准 | 15% | 35x | 2.20 | **77.0元** | -6.2% |\n| 悲观 | 5% | 25x | 1.67 | **41.8元** | -49.0% |\n\n### 3. 隐含预期\n\n以 82.04 元买入，若 5 年后市场愿意给 25-35x PE，则公司未来 5 年 EPS CAGR 大致需要达到 21%-30%。这意味着当前价格基本要求公司延续接近 2021-2025 年的高利润复合增速。\n\n**估值结论**：当前价格不是“明显泡沫”，但也不是“有安全边际”。它更像是把 AIDC、海外和订单增长提前资本化后的成长股价格。\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "金盘科技（688676.SH）研究报告",
+      "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+      "report_link": "金盘科技/金盘科技研究报告-20260709.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "金盘科技",
+        "ticker": "688676.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-09",
+        "action": "观察",
+        "summary": "空仓保守型 等待 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "只能事件驱动小仓"
+          },
+          {
+            "stance": "稳健型",
+            "action": "小仓观察即可"
+          },
+          {
+            "stance": "保守型",
+            "action": "等待"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    },
+    {
+      "data_cutoff": "2026-07-09",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "仅适合小仓，且 AIDC/海外订单继续兑现、现金流不恶化",
+          "price_range": "65-72 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "长期逻辑未破坏，接近以合理倍数买入成长制造业",
+          "price_range": "45 元"
+        }
+      ],
+      "conclusion_summary": "以下区间以 TTM EPS 1.4457 元为静态估值锚，不是精确内在价值：",
+      "buy_price": "45 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "仅适合小仓，且 AIDC/海外订单继续兑现、现金流不恶化",
+          "price_range": "65-72 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "长期逻辑未破坏，接近以合理倍数买入成长制造业",
+          "price_range": "45 元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "118.1 元",
+          "eps_growth": "22%",
+          "target_pe": "45x"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "77.0 元",
+          "eps_growth": "15%",
+          "target_pe": "35x"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "41.8 元",
+          "eps_growth": "5%",
+          "target_pe": "25x"
+        }
+      ],
+      "valuation_section": {
+        "heading": "10. 最终投资建议",
+        "start_line": 256,
+        "end_line": 298,
+        "markdown": "## 10. 最终投资建议\n\n### 定性判断\n\n| 项目 | 判断 |\n|---|---|\n| 生意质量 | 中上，工程护城河真实，但不是轻资产垄断 |\n| 行业趋势 | 强，AIDC、电网和海外需求共振 |\n| 管理层 | 中上，产业经验较强，传承和扩产待验证 |\n| 财务质量 | 改善中，利润率提升但现金流不稳定 |\n| 估值 | 偏贵，当前价格依赖高增长持续兑现 |\n| 时机 | 观望优先，不建议按价值投资标准追高 |\n\n### 分层操作建议\n\n以下区间以 TTM EPS 1.4457 元为静态估值锚，不是精确内在价值：\n\n| 类型 | 建议区间 | 对应静态 PE | 前提 |\n|---|---:|---:|---|\n| 激进型 | 65-72 元 | 45.0x-49.8x | 仅适合小仓，且 AIDC/海外订单继续兑现、现金流不恶化 |\n| 稳健型 | 50-60 元 | 34.6x-41.5x | 经营现金流连续改善，主业毛利率维持 25% 以上 |\n| 保守型 | 45 元以下 | 31.1x 以下 | 长期逻辑未破坏，接近以合理倍数买入成长制造业 |\n| 当前 82.04 元 | 观望或持有跟踪 | 56.75x | 不具备充分安全边际 |\n\n### 加仓信号\n\n1. 经营现金流连续两个半年度覆盖净利润。\n2. 数据中心收入和订单继续增长，同时毛利率保持或提升。\n3. 海外订单顺利交付，海外毛利率未被关税和汇率明显侵蚀。\n4. 储能毛利率回到 10% 以上，且应收和售后风险可控。\n5. 股价回到与可持续盈利相匹配的区间，而长期逻辑未变。\n\n### 减仓或回避信号\n\n1. 应收账款、合同资产和存货持续快于收入增长。\n2. 电气设备主业毛利率连续下降或单年下降超过 3 个百分点。\n3. 数据中心订单高增但利润和现金流没有同步改善。\n4. 储能继续低毛利扩张，拖累集团 ROIC。\n5. 可转债项目产能利用率低，折旧和利息明显侵蚀利润。\n6. 海外关税、认证、本地化或重大质量问题破坏客户关系。\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "金盘科技（688676.SH）研究报告",
+      "report_path": "reports/金盘科技/金盘科技-investment-team-20260712.md",
+      "report_link": "金盘科技/金盘科技-investment-team-20260712.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "金盘科技",
+        "ticker": "688676.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-09",
+        "action": "观察",
+        "summary": "以下区间以 TTM EPS 1.4457 元为静态估值锚，不是精确内在价值：",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "仅适合小仓，且 AIDC/海外订单继续兑现、现金流不恶化",
+            "price_range": "65-72 元"
+          },
+          {
+            "stance": "保守型",
+            "action": "长期逻辑未破坏，接近以合理倍数买入成长制造业",
+            "price_range": "45 元"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 2,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓保守型等待股价进入45-55元或估值回落至约30x可持续EPS再评估；空仓稳健型可小仓观察，需连续2-3季度验证订单转化；空仓激进型仅可事件驱动小仓且须承认估值风险",
+    "holder_action": "已持有且成本低可继续持有但设预警线，盯现金流、AIDC毛利、海外订单、储能毛利率；成本接近现价者谨慎持有/逢高降风险，若PE维持50x+且业绩低于预期应降低仓位",
+    "trigger_condition": "股价进入45-55元区间或估值回落至约30x可持续EPS；或连续2-3季度证明订单转化为利润和经营现金流",
+    "summary": "金盘科技质地中上但估值偏贵，观望/持有跟踪，不建议追高，等待估值回落或经营验证后再行动",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，均表示观察/等待",
+    "evidence": [
+      {
+        "line_start": 327,
+        "line_end": 327,
+        "quote": "| 当前操作 | 观望/持有跟踪，不建议按价值投资标准追高 |",
+        "supports": "报告明确建议当前不追高，空仓者应等待"
+      },
+      {
+        "line_start": 333,
+        "line_end": 333,
+        "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |",
+        "supports": "给出明确价格触发点，故归为等待价格/watch"
+      },
+      {
+        "line_start": 334,
+        "line_end": 334,
+        "quote": "| 空仓稳健型 | 小仓观察即可 | 若公司连续2-3个季度证明订单转化为利润和经营现金流，可在估值回落时分批研究 |",
+        "supports": "稳健型可小仓观察，但核心仍需等待验证和估值回落"
+      },
+      {
+        "line_start": 360,
+        "line_end": 360,
+        "quote": "金盘科技是一家值得持续跟踪的中高端电力设备公司。它的好处在于：产品真实有用，需求曲线较多，电气设备主业盈利能力改善，海外和AIDC打开成长空间；它的问题在于：制造业属性仍强，现金流和资本开支压力不能忽视，储能业务尚未证明高质量，当前估值已经要求公司持续兑现高增长。对价值投资者而言，金盘目前更像“好行业里的好公司候选”，而不是“好价格下的高确定性买入”。",
+        "supports": "最终结论不支持空仓者当前买入，应等待更好价格"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:57:42+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "或连续2-3季度证明订单转化为利润和经营现金流",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "股价进入45-55元区间或估值回落至约30x可持续EPS",
+        "price_range": "进入45-55元",
+        "min": 45.0,
+        "ceiling": 55.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 0,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "金盘科技",
+    "ticker": "688676.SH",
+    "status": "ready",
+    "report_path": "reports/金盘科技/金盘科技-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 70.22,
+    "currency": "CNY",
+    "observation_zone": "65.35-69.94",
+    "fundamental_entry_plan": "金盘科技是一家处在好行业趋势中的优秀制造业候选：主业电气设备有客户价值和工程壁垒，AIDC与海外订单带来增长弹性；但它不是消费垄断型复利机，定价权、现金流和资本开支仍受制造业规律约束。以：82.04 元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "绿",
+        "meaning": "股价在20日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价仍在200日均线之下。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "绿",
+        "meaning": "近5日平均成交量高于20日平均，量能有确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "4afbaaa3d712684642c5",
+  "detail_path": "./data/decision_details/4afbaaa3d712684642c5.json"
+}

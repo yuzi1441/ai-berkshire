@@ -1,0 +1,269 @@
+{
+  "company": "景旺电子",
+  "entity_kind": "company",
+  "entity_directory": "景旺电子",
+  "ticker": "603228.SH",
+  "market": "A股",
+  "data_cutoff": "2026-07-09",
+  "report_reference_price": {
+    "price": 65.91,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "稳健型",
+      "action": "工控 / 医疗 / 能源",
+      "price_range": "",
+      "note": "长生命周期、高可靠需求，贡献稳定性。"
+    },
+    {
+      "stance": "保守型",
+      "action": "暂不适合",
+      "price_range": "",
+      "note": "估值、现金流和周期风险均不舒服。"
+    }
+  ],
+  "conclusion_summary": "生意质量 中上。制造业优秀平台，但不是强定价权超级生意。",
+  "buy_price": "30-40 元",
+  "price_plan": [
+    {
+      "profile": "新买不建议；持有者可评估仓位和风险预算。",
+      "price_range": "70 元以上",
+      "action": "新买不建议；持有者可评估仓位和风险预算。"
+    },
+    {
+      "profile": "观察/持有，不适合价值型加仓。",
+      "price_range": "55-70 元",
+      "action": "观察/持有，不适合价值型加仓。"
+    },
+    {
+      "profile": "若基本面未恶化，可进入重点买入研究区。",
+      "price_range": "30-40 元",
+      "action": "若基本面未恶化，可进入重点买入研究区。"
+    }
+  ],
+  "scenario_valuation": [],
+  "valuation_section": {
+    "heading": "第七步：估值与安全边际",
+    "start_line": 204,
+    "end_line": 238,
+    "markdown": "## 第七步：估值与安全边际\n\n### 1. 工具验算记录\n\n已用 `tools/financial_rigor.py` 做精确验算，记录保存于 `logs/jingwang_financial_rigor_20260709.txt`。\n\n| 验算项 | 结果 |\n|---|---|\n| 市值验算 | 65.91 元 × 984,818,053 股 = 649.09 亿元，偏差 0.00%。 |\n| 估值验算 | TTM EPS 约 1.1566 元，对应 PE 56.99x；BVPS 约 13.51 元，对应 PB 4.88x。 |\n| 2025 收入交叉验证 | 年报、公司官网/披露、东方财富新闻三源均为约 153.08 亿元，偏差 0.00%。 |\n| 三年 EPS 情景 | 乐观目标价 101.7 元，中性 61.6 元，悲观 33.5 元。该工具情景只按 EPS 增长和 PE 估值，不替代完整 DCF。 |\n\n### 2. 情景估值：利润 × 合理 PE\n\n| 情景 | 关键假设 | 归母净利 | 合理PE | 合理市值 | 对应股价 | 相对 65.91 元 |\n|---|---|---:|---:|---:|---:|---:|\n| 悲观 | 原材料/汇率压力持续，AI 放量不及预期，扩产摊薄 ROE | 10.5 亿元 | 18x | 189 亿元 | 19.19 元 | -70.9% |\n| 基准 | 收入增长，毛利率回到 21%-22%，ROE 约 10%-12% | 13.5 亿元 | 25x | 337.5 亿元 | 34.27 元 | -48.0% |\n| 乐观 | AI/通信数据基础设施显著放量，ROE 修复 | 18.0 亿元 | 35x | 630 亿元 | 63.97 元 | -2.9% |\n\n**关键判断：** 当前价格几乎贴近乐观情景。除非未来 2-3 年净利润达到 18-20 亿元以上、毛利率和 FCF 同步修复，否则 57x TTM PE 很难给价值投资者安全边际。\n\n### 3. 价格区间与动作\n\n| 区间 | 判断 | 动作建议 |\n|---|---|---|\n| 70 元以上 | 明显透支乐观预期 | 新买不建议；持有者可评估仓位和风险预算。 |\n| 55-70 元 | 需要强兑现支持 | 观察/持有，不适合价值型加仓。 |\n| 40-55 元 | 估值开始回到可研究区 | 需结合毛利率、扣非利润和 FCF 判断。 |\n| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |\n| 30 元以下 | 市场按普通制造业定价 | 若高端化仍成立，可能出现较好安全边际。 |\n\n---"
+  },
+  "recommendation": "生意质量 中上。制造业优秀平台，但不是强定价权超级生意。",
+  "title": "景旺电子（603228.SH）研究报告",
+  "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+  "report_link": "景旺电子/景旺电子研究报告-20260709.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "景旺电子",
+    "ticker": "603228.SH",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-09",
+    "action": "观察",
+    "summary": "生意质量 中上。制造业优秀平台，但不是强定价权超级生意。",
+    "investor_stances": [],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-09",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "稳健型",
+          "action": "工控 / 医疗 / 能源",
+          "price_range": "",
+          "note": "长生命周期、高可靠需求，贡献稳定性。"
+        },
+        {
+          "stance": "保守型",
+          "action": "暂不适合",
+          "price_range": "",
+          "note": "估值、现金流和周期风险均不舒服。"
+        }
+      ],
+      "conclusion_summary": "生意质量 中上。制造业优秀平台，但不是强定价权超级生意。",
+      "buy_price": "30-40 元",
+      "price_plan": [
+        {
+          "profile": "新买不建议；持有者可评估仓位和风险预算。",
+          "price_range": "70 元以上",
+          "action": "新买不建议；持有者可评估仓位和风险预算。"
+        },
+        {
+          "profile": "观察/持有，不适合价值型加仓。",
+          "price_range": "55-70 元",
+          "action": "观察/持有，不适合价值型加仓。"
+        },
+        {
+          "profile": "若基本面未恶化，可进入重点买入研究区。",
+          "price_range": "30-40 元",
+          "action": "若基本面未恶化，可进入重点买入研究区。"
+        }
+      ],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "第七步：估值与安全边际",
+        "start_line": 204,
+        "end_line": 238,
+        "markdown": "## 第七步：估值与安全边际\n\n### 1. 工具验算记录\n\n已用 `tools/financial_rigor.py` 做精确验算，记录保存于 `logs/jingwang_financial_rigor_20260709.txt`。\n\n| 验算项 | 结果 |\n|---|---|\n| 市值验算 | 65.91 元 × 984,818,053 股 = 649.09 亿元，偏差 0.00%。 |\n| 估值验算 | TTM EPS 约 1.1566 元，对应 PE 56.99x；BVPS 约 13.51 元，对应 PB 4.88x。 |\n| 2025 收入交叉验证 | 年报、公司官网/披露、东方财富新闻三源均为约 153.08 亿元，偏差 0.00%。 |\n| 三年 EPS 情景 | 乐观目标价 101.7 元，中性 61.6 元，悲观 33.5 元。该工具情景只按 EPS 增长和 PE 估值，不替代完整 DCF。 |\n\n### 2. 情景估值：利润 × 合理 PE\n\n| 情景 | 关键假设 | 归母净利 | 合理PE | 合理市值 | 对应股价 | 相对 65.91 元 |\n|---|---|---:|---:|---:|---:|---:|\n| 悲观 | 原材料/汇率压力持续，AI 放量不及预期，扩产摊薄 ROE | 10.5 亿元 | 18x | 189 亿元 | 19.19 元 | -70.9% |\n| 基准 | 收入增长，毛利率回到 21%-22%，ROE 约 10%-12% | 13.5 亿元 | 25x | 337.5 亿元 | 34.27 元 | -48.0% |\n| 乐观 | AI/通信数据基础设施显著放量，ROE 修复 | 18.0 亿元 | 35x | 630 亿元 | 63.97 元 | -2.9% |\n\n**关键判断：** 当前价格几乎贴近乐观情景。除非未来 2-3 年净利润达到 18-20 亿元以上、毛利率和 FCF 同步修复，否则 57x TTM PE 很难给价值投资者安全边际。\n\n### 3. 价格区间与动作\n\n| 区间 | 判断 | 动作建议 |\n|---|---|---|\n| 70 元以上 | 明显透支乐观预期 | 新买不建议；持有者可评估仓位和风险预算。 |\n| 55-70 元 | 需要强兑现支持 | 观察/持有，不适合价值型加仓。 |\n| 40-55 元 | 估值开始回到可研究区 | 需结合毛利率、扣非利润和 FCF 判断。 |\n| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |\n| 30 元以下 | 市场按普通制造业定价 | 若高端化仍成立，可能出现较好安全边际。 |\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "景旺电子（603228.SH）研究报告",
+      "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+      "report_link": "景旺电子/景旺电子研究报告-20260709.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "景旺电子",
+        "ticker": "603228.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-09",
+        "action": "观察",
+        "summary": "生意质量 中上。制造业优秀平台，但不是强定价权超级生意。",
+        "investor_stances": [],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓价值投资者不追高，放入观察名单，等待价格回到30-40元或公司用财报证明18-20亿元净利、毛利率与FCF修复后再考虑买入。",
+    "holder_action": "已持有且成本低的投资者可继续持有但设跟踪纪律，若毛利率连续低于18%、扣非净利连续下滑、存货继续上升等减仓信号出现，应减仓或重审。",
+    "trigger_condition": "价格回到30-40元，或公司用财报证明18-20亿元净利、毛利率与FCF修复。",
+    "summary": "空仓价值投资者不追高，等价格回30-40元或财报验证；已持有者审慎跟踪并设减仓纪律。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文与看板契约均给出‘观察’动作，无冲突。",
+    "evidence": [
+      {
+        "line_start": 292,
+        "line_end": 292,
+        "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |",
+        "supports": "表明最终结论为观察，空仓者不应追高买入，支持等待判断。"
+      },
+      {
+        "line_start": 298,
+        "line_end": 298,
+        "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |",
+        "supports": "明确空仓者当前动作是等待价格回到30-40元或财报验证，属于明确的等待价格触发条件。"
+      },
+      {
+        "line_start": 374,
+        "line_end": 374,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "看板契约同样给出‘观察’动作，与正文一致，佐证空仓者不行动、等待后续信号。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 40.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:15:56+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "价格回到30-40元，或公司用财报证明18-20亿元净利、毛利率与FCF修复",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "若基本面未恶化，可进入重点买入研究区。",
+        "price_range": "30-40 元",
+        "min": 30.0,
+        "ceiling": 40.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "若基本面未恶化，可进入重点买入研究区。",
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 1,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "景旺电子",
+    "ticker": "603228.SH",
+    "status": "ready",
+    "report_path": "reports/景旺电子/景旺电子-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "等待回踩",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 98.01,
+    "currency": "CNY",
+    "observation_zone": "78.00-85.51",
+    "fundamental_entry_plan": "若基本面未恶化，可进入重点买入研究区。：30-40 元；观察/持有，不适合价值型加仓。：55-70 元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "绿",
+        "meaning": "股价在20日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "绿",
+        "meaning": "股价在60日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "绿",
+        "meaning": "股价在200日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "绿",
+        "meaning": "近5日平均成交量高于20日平均，量能有确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "a1591a9be7fb3e815f12",
+  "detail_path": "./data/decision_details/a1591a9be7fb3e815f12.json"
+}

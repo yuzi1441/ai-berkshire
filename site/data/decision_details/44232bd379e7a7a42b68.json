@@ -1,0 +1,332 @@
+{
+  "company": "深南电路",
+  "entity_kind": "company",
+  "entity_directory": "深南电路",
+  "ticker": "002916.SZ",
+  "market": "A股",
+  "data_cutoff": "2026-07-09",
+  "report_reference_price": {
+    "price": 414.8,
+    "currency": "CNY",
+    "line": 19,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "小仓位跟踪，不把它当低估值投资"
+    },
+    {
+      "stance": "保守型",
+      "action": "观察，不追高",
+      "price_range": "250-300 元"
+    }
+  ],
+  "conclusion_summary": "激进型：小仓位跟踪，不把它当低估值投资；保守型：观察，不追高（250-300 元）",
+  "buy_price": "414.80 元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "小仓位跟踪，不把它当低估值投资"
+    },
+    {
+      "stance": "保守型",
+      "action": "观察，不追高",
+      "price_range": "250-300 元"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "727.9 元",
+      "target_pe": "65x",
+      "target_eps": "11.20 元"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "438.7 元",
+      "target_pe": "50x",
+      "target_eps": "8.77 元"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "235.4 元",
+      "target_pe": "35x",
+      "target_eps": "6.73 元"
+    },
+    {
+      "scenario": "乐观",
+      "target_price": "573.6 元",
+      "target_pe": "55x",
+      "target_eps": "10.43 元"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "365.5 元",
+      "target_pe": "45x",
+      "target_eps": "8.12 元"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "216.4 元",
+      "target_pe": "35x",
+      "target_eps": "6.18 元"
+    }
+  ],
+  "valuation_section": {
+    "heading": "第九部分：估值与安全边际",
+    "start_line": 205,
+    "end_line": 246,
+    "markdown": "## 第九部分：估值与安全边际\n\n### 1. 工具验算结果\n\n`financial_rigor.py` 精确验算：\n\n| 项目 | 结果 |\n|---|---:|\n| 股价 | 414.80 元 |\n| 总股本 | 681.17 百万股 |\n| 计算市值 | 282.55 十亿元 = 2825.5 亿元 |\n| PE(TTM) | 77.68x |\n| 盈利收益率 | 1.29% |\n| PB | 15.21x |\n| ROE（EPS/BVPS 口径） | 19.57% |\n\n### 2. 三情景估值\n\n假设当前 TTM EPS 约 5.34 元，预测期 3 年：\n\n| 情景 | EPS CAGR | 目标 PE | 3年后 EPS | 目标价 | 相对 414.80 元 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观（工具高景气版） | +28% | 65x | 11.20 元 | 727.9 元 | +75.5% | AI PCB 与封装基板高景气延续且高估值维持。 |\n| 中性（工具高估值版） | +18% | 50x | 8.77 元 | 438.7 元 | +5.8% | 增长不错，但当前价已接近中性结果。 |\n| 悲观（工具版） | +8% | 35x | 6.73 元 | 235.4 元 | -43.2% | 增速回落且估值均值回归。 |\n| 财务分析师乐观版 | +25% | 55x | 10.43 元 | 573.6 元 | +38.3% | 更保守地假设高景气但 PE 回落。 |\n| 财务分析师中性版 | +15% | 45x | 8.12 元 | 365.5 元 | -11.9% | 若高增长正常化，当前价格不便宜。 |\n| 财务分析师悲观版 | +5% | 35x | 6.18 元 | 216.4 元 | -47.8% | 公司未必出问题，只是高估值叠加增速回归。 |\n\n### 3. 估值解读\n\n当前股价隐含了很高预期：\n\n- 如果公司未来 3 年维持 +18% EPS 复合增长，且 3 年后仍能给 50x PE，中性目标价也只比当前高约 +5.8%。\n- 真正有吸引力的回报需要“高增长 + 高估值维持”同时成立。\n- 如果 AI PCB 景气回落，市场将 PE 从 70-80x 压到 35x，即使 EPS 仍增长，股价也可能大幅回撤。\n\n**安全边际判断：不足。**  \n不是公司差，而是价格对不确定性的补偿不够。\n\n---"
+  },
+  "recommendation": "投资者类型 建议 价格/事件区间",
+  "title": "深南电路（002916.SZ）研究报告",
+  "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+  "report_link": "深南电路/深南电路研究报告-20260709.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "深南电路",
+    "ticker": "002916.SZ",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-09",
+    "action": "观察",
+    "summary": null,
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "小仓位跟踪，不把它当低估值投资"
+      },
+      {
+        "stance": "保守型",
+        "action": "观察，不追高",
+        "price_range": "250-300 元"
+      }
+    ],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-09",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "小仓位跟踪，不把它当低估值投资"
+        },
+        {
+          "stance": "保守型",
+          "action": "观察，不追高",
+          "price_range": "250-300 元"
+        }
+      ],
+      "conclusion_summary": "激进型：小仓位跟踪，不把它当低估值投资；保守型：观察，不追高（250-300 元）",
+      "buy_price": "414.80 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "小仓位跟踪，不把它当低估值投资"
+        },
+        {
+          "stance": "保守型",
+          "action": "观察，不追高",
+          "price_range": "250-300 元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "727.9 元",
+          "target_pe": "65x",
+          "target_eps": "11.20 元"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "438.7 元",
+          "target_pe": "50x",
+          "target_eps": "8.77 元"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "235.4 元",
+          "target_pe": "35x",
+          "target_eps": "6.73 元"
+        },
+        {
+          "scenario": "乐观",
+          "target_price": "573.6 元",
+          "target_pe": "55x",
+          "target_eps": "10.43 元"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "365.5 元",
+          "target_pe": "45x",
+          "target_eps": "8.12 元"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "216.4 元",
+          "target_pe": "35x",
+          "target_eps": "6.18 元"
+        }
+      ],
+      "valuation_section": {
+        "heading": "第九部分：估值与安全边际",
+        "start_line": 205,
+        "end_line": 246,
+        "markdown": "## 第九部分：估值与安全边际\n\n### 1. 工具验算结果\n\n`financial_rigor.py` 精确验算：\n\n| 项目 | 结果 |\n|---|---:|\n| 股价 | 414.80 元 |\n| 总股本 | 681.17 百万股 |\n| 计算市值 | 282.55 十亿元 = 2825.5 亿元 |\n| PE(TTM) | 77.68x |\n| 盈利收益率 | 1.29% |\n| PB | 15.21x |\n| ROE（EPS/BVPS 口径） | 19.57% |\n\n### 2. 三情景估值\n\n假设当前 TTM EPS 约 5.34 元，预测期 3 年：\n\n| 情景 | EPS CAGR | 目标 PE | 3年后 EPS | 目标价 | 相对 414.80 元 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观（工具高景气版） | +28% | 65x | 11.20 元 | 727.9 元 | +75.5% | AI PCB 与封装基板高景气延续且高估值维持。 |\n| 中性（工具高估值版） | +18% | 50x | 8.77 元 | 438.7 元 | +5.8% | 增长不错，但当前价已接近中性结果。 |\n| 悲观（工具版） | +8% | 35x | 6.73 元 | 235.4 元 | -43.2% | 增速回落且估值均值回归。 |\n| 财务分析师乐观版 | +25% | 55x | 10.43 元 | 573.6 元 | +38.3% | 更保守地假设高景气但 PE 回落。 |\n| 财务分析师中性版 | +15% | 45x | 8.12 元 | 365.5 元 | -11.9% | 若高增长正常化，当前价格不便宜。 |\n| 财务分析师悲观版 | +5% | 35x | 6.18 元 | 216.4 元 | -47.8% | 公司未必出问题，只是高估值叠加增速回归。 |\n\n### 3. 估值解读\n\n当前股价隐含了很高预期：\n\n- 如果公司未来 3 年维持 +18% EPS 复合增长，且 3 年后仍能给 50x PE，中性目标价也只比当前高约 +5.8%。\n- 真正有吸引力的回报需要“高增长 + 高估值维持”同时成立。\n- 如果 AI PCB 景气回落，市场将 PE 从 70-80x 压到 35x，即使 EPS 仍增长，股价也可能大幅回撤。\n\n**安全边际判断：不足。**  \n不是公司差，而是价格对不确定性的补偿不够。\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "深南电路（002916.SZ）研究报告",
+      "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+      "report_link": "深南电路/深南电路研究报告-20260709.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "深南电路",
+        "ticker": "002916.SZ",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-09",
+        "action": "观察",
+        "summary": null,
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "小仓位跟踪，不把它当低估值投资"
+          },
+          {
+            "stance": "保守型",
+            "action": "观察，不追高",
+            "price_range": "250-300 元"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
+    "holder_action": "报告未明确持仓者动作，但激进型建议小仓位跟踪，保守型建议观察不追高，均未要求减仓或卖出",
+    "trigger_condition": "未给出明确的买入触发条件；保守型价格区间为250-300元，但不构成买入触发点",
+    "summary": "报告对深南电路给出观察评级，激进型可小仓位跟踪，保守型不追高，结论待复核",
+    "confidence": "medium",
+    "report_field_conflict": false,
+    "conflict_note": "无正文可对比，仅依据看板契约输出",
+    "evidence": [
+      {
+        "line_start": 384,
+        "line_end": 384,
+        "quote": "| 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
+        "supports": "明确给出激进型空仓者可小仓位跟踪，故归为小仓验证"
+      },
+      {
+        "line_start": 388,
+        "line_end": 388,
+        "quote": "| 保守型动作 | 观察，不追高 |",
+        "supports": "保守型建议观察不追高，未要求回避或卖出，支持不归为回避/卖出"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+    "model_consensus": false,
+    "screening_consensus": true,
+    "screening_resolution": "conservative_intersection",
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "review",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:55:53+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
+      "currency": "CNY",
+      "reference_price": 414.8,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
+    "report_rule_count": 0,
+    "reliability": "conservative",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "深南电路",
+    "ticker": "002916.SZ",
+    "status": "ready",
+    "report_path": "reports/深南电路/深南电路-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "关注分批区",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 378.0,
+    "currency": "CNY",
+    "observation_zone": "329.45-358.37",
+    "fundamental_entry_plan": "主报告未提取到可核验的建仓价格带",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "暂不能判断",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "绿",
+        "meaning": "股价在20日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价仍在60日均线之下。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "绿",
+        "meaning": "股价在200日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "44232bd379e7a7a42b68",
+  "detail_path": "./data/decision_details/44232bd379e7a7a42b68.json"
+}

@@ -1,0 +1,485 @@
+{
+  "company": "联影医疗",
+  "entity_kind": "company",
+  "entity_directory": "联影医疗",
+  "ticker": "688271.SH",
+  "market": "A股",
+  "data_cutoff": "2026-07-06",
+  "report_reference_price": {
+    "price": 106.75,
+    "currency": "CNY",
+    "line": 6,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "小仓位观察，不做重仓",
+      "price_range": "95-110 元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待更好价格或证据",
+      "price_range": "80-95 元"
+    },
+    {
+      "stance": "保守型",
+      "action": "暂不买入",
+      "price_range": "70-80 元"
+    }
+  ],
+  "conclusion_summary": "投资者类型 建议 参考价格/条件",
+  "buy_price": "70-80 元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "小仓位观察，不做重仓",
+      "price_range": "95-110 元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待更好价格或证据",
+      "price_range": "80-95 元"
+    },
+    {
+      "stance": "保守型",
+      "action": "暂不买入",
+      "price_range": "70-80 元"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "168.6 元",
+      "target_pe": "45x"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "97.1 元",
+      "target_pe": "32x"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "53.2 元",
+      "target_pe": "22x"
+    }
+  ],
+  "valuation_section": {
+    "heading": "7. 估值与最终投资建议",
+    "start_line": 182,
+    "end_line": 234,
+    "markdown": "## 7. 估值与最终投资建议\n\n### 7.1 三情景估值\n\n工具假设：当前股价 106.75 元，当前 EPS 2.28 元，预测期 3 年，总股本 8.2416 亿股；使用 `financial_rigor.py three-scenario` 验算。\n\n| 情景 | EPS CAGR | 3年后目标PE | 3年后EPS | 目标价 | 相对当前 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观 | +18% | 45x | 3.75 | 168.6 元 | +57.9% | 海外高增、服务占比提升、ROE和现金流修复，市场继续给高估值。 |\n| 中性 | +10% | 32x | 3.03 | 97.1 元 | -9.0% | 国内稳健、海外推进但费用高，现金流改善但不惊艳。 |\n| 悲观 | +2% | 22x | 2.42 | 53.2 元 | -50.1% | 采购周期回落、降价、海外受阻、应收存货恶化，估值杀至设备制造口径。 |\n\n**估值结论**：当前 106.75 元略高于中性情景价值，需要偏乐观假设才能获得满意回报；安全边际不足。\n\n### 7.2 定性判断表\n\n| 维度 | 判断 | 操作含义 |\n|---|---|---|\n| 生意质量 | 较好但复杂 | 可长期研究，不宜按消费品式轻松复利估值。 |\n| 管理层 | 能力强，需观察 | 能进入观察池，但关联交易和减持需跟踪。 |\n| 财务质量 | 资产负债表健康，现金流波动 | 重点看 OCF/FCF、应收、存货和 ROE 修复。 |\n| 估值 | 当前偏充分 | 空仓不急追，持仓者看证据而非叙事加仓。 |\n| 时机 | 不在明显低估区 | 等价格回落或基本面超预期兑现。 |\n\n### 7.3 分层操作建议\n\n| 投资者类型 | 建议 | 参考价格/条件 |\n|---|---|---|\n| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |\n| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |\n| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |\n| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |\n\n### 7.4 加仓信号与减仓信号\n\n**加仓/上修信号：**\n\n1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。\n2. 服务收入增速持续高于设备收入，服务占比提升且毛利率稳定。\n3. 海外收入保持高增，同时海外毛利率和回款质量不恶化。\n4. ROE 回升至 12%-15%并非由杠杆驱动。\n5. 关联交易透明、占比可控，管理层与股东同船感增强。\n\n**减仓/重审信号：**\n\n1. 毛利率跌破 45%且非一次性因素。\n2. 应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。\n3. 海外收入增速明显放缓但费用继续高增。\n4. 研发资本化比例继续上升，而新品销售贡献和现金流不匹配。\n5. 关联交易持续扩大、核心人员持续减持或出现质量/合规事件。\n\n---"
+  },
+  "recommendation": "投资者类型 建议 参考价格/条件",
+  "title": "联影医疗（688271.SH）投资研究报告",
+  "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+  "report_link": "联影医疗/联影医疗投资研究报告_team-20260706.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "联影医疗",
+    "ticker": "688271.SH",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-06",
+    "action": "观察",
+    "summary": "投资者类型 建议 参考价格/条件",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "小仓位观察，不做重仓",
+        "price_range": "95-110 元"
+      },
+      {
+        "stance": "稳健型",
+        "action": "等待更好价格或证据",
+        "price_range": "80-95 元"
+      },
+      {
+        "stance": "保守型",
+        "action": "暂不买入",
+        "price_range": "70-80 元"
+      }
+    ],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "小仓位观察，不做重仓",
+          "price_range": "95-110 元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待更好价格或证据",
+          "price_range": "80-95 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "暂不买入",
+          "price_range": "70-80 元"
+        }
+      ],
+      "conclusion_summary": "投资者类型 建议 参考价格/条件",
+      "buy_price": "70-80 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "小仓位观察，不做重仓",
+          "price_range": "95-110 元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待更好价格或证据",
+          "price_range": "80-95 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "暂不买入",
+          "price_range": "70-80 元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "168.6 元",
+          "target_pe": "45x"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "97.1 元",
+          "target_pe": "32x"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "53.2 元",
+          "target_pe": "22x"
+        }
+      ],
+      "valuation_section": {
+        "heading": "7. 估值与最终投资建议",
+        "start_line": 182,
+        "end_line": 234,
+        "markdown": "## 7. 估值与最终投资建议\n\n### 7.1 三情景估值\n\n工具假设：当前股价 106.75 元，当前 EPS 2.28 元，预测期 3 年，总股本 8.2416 亿股；使用 `financial_rigor.py three-scenario` 验算。\n\n| 情景 | EPS CAGR | 3年后目标PE | 3年后EPS | 目标价 | 相对当前 | 解释 |\n|---|---:|---:|---:|---:|---:|---|\n| 乐观 | +18% | 45x | 3.75 | 168.6 元 | +57.9% | 海外高增、服务占比提升、ROE和现金流修复，市场继续给高估值。 |\n| 中性 | +10% | 32x | 3.03 | 97.1 元 | -9.0% | 国内稳健、海外推进但费用高，现金流改善但不惊艳。 |\n| 悲观 | +2% | 22x | 2.42 | 53.2 元 | -50.1% | 采购周期回落、降价、海外受阻、应收存货恶化，估值杀至设备制造口径。 |\n\n**估值结论**：当前 106.75 元略高于中性情景价值，需要偏乐观假设才能获得满意回报；安全边际不足。\n\n### 7.2 定性判断表\n\n| 维度 | 判断 | 操作含义 |\n|---|---|---|\n| 生意质量 | 较好但复杂 | 可长期研究，不宜按消费品式轻松复利估值。 |\n| 管理层 | 能力强，需观察 | 能进入观察池，但关联交易和减持需跟踪。 |\n| 财务质量 | 资产负债表健康，现金流波动 | 重点看 OCF/FCF、应收、存货和 ROE 修复。 |\n| 估值 | 当前偏充分 | 空仓不急追，持仓者看证据而非叙事加仓。 |\n| 时机 | 不在明显低估区 | 等价格回落或基本面超预期兑现。 |\n\n### 7.3 分层操作建议\n\n| 投资者类型 | 建议 | 参考价格/条件 |\n|---|---|---|\n| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |\n| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |\n| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |\n| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |\n\n### 7.4 加仓信号与减仓信号\n\n**加仓/上修信号：**\n\n1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。\n2. 服务收入增速持续高于设备收入，服务占比提升且毛利率稳定。\n3. 海外收入保持高增，同时海外毛利率和回款质量不恶化。\n4. ROE 回升至 12%-15%并非由杠杆驱动。\n5. 关联交易透明、占比可控，管理层与股东同船感增强。\n\n**减仓/重审信号：**\n\n1. 毛利率跌破 45%且非一次性因素。\n2. 应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。\n3. 海外收入增速明显放缓但费用继续高增。\n4. 研发资本化比例继续上升，而新品销售贡献和现金流不匹配。\n5. 关联交易持续扩大、核心人员持续减持或出现质量/合规事件。\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "联影医疗（688271.SH）投资研究报告",
+      "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+      "report_link": "联影医疗/联影医疗投资研究报告_team-20260706.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "联影医疗",
+        "ticker": "688271.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-06",
+        "action": "观察",
+        "summary": "投资者类型 建议 参考价格/条件",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "小仓位观察，不做重仓",
+            "price_range": "95-110 元"
+          },
+          {
+            "stance": "稳健型",
+            "action": "等待更好价格或证据",
+            "price_range": "80-95 元"
+          },
+          {
+            "stance": "保守型",
+            "action": "暂不买入",
+            "price_range": "70-80 元"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    },
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "空仓者更合理的等待区间",
+          "price_range": "70-80 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "若基本面未恶化，可重点研究和分批买入",
+          "price_range": "55-65 元"
+        }
+      ],
+      "conclusion_summary": "空仓者 观望为主。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。",
+      "buy_price": "55-65 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "空仓者更合理的等待区间",
+          "price_range": "70-80 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "若基本面未恶化，可重点研究和分批买入",
+          "price_range": "55-65 元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "157.3 元",
+          "eps_growth": "+18%",
+          "target_pe": "42x",
+          "target_eps": "3.75"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "102.5 元",
+          "eps_growth": "+12%",
+          "target_pe": "32x",
+          "target_eps": "3.20"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "54.8 元",
+          "eps_growth": "+3%",
+          "target_pe": "22x",
+          "target_eps": "2.49"
+        }
+      ],
+      "valuation_section": {
+        "heading": "第七步：估值与安全边际",
+        "start_line": 216,
+        "end_line": 298,
+        "markdown": "## 第七步：估值与安全边际\n\n### 1. 当前估值工具验算\n\nfinancial_rigor.py 输出摘要：\n\n| 指标 | 计算 |\n|---|---:|\n| 市值 | 106.75 元 × 824.16 百万股 = 879.79 亿元 |\n| 2025 PE | 106.75 / 2.28 = 46.82x |\n| PB | 106.75 / 26.17 = 4.08x（按 2025 BVPS）；按 2026Q1 BVPS 约 4.01x |\n| P/FCF | 106.75 / 3.2506 = 32.84x（按 2025 每股经营现金流近似） |\n| PS | 106.75 / 16.7447 = 6.38x（按 2025 收入/股）；TTM PS 约 6.18x |\n\n### 2. 反向 DCF 直觉\n\n现价约 46x TTM PE。若 5 年后市场愿意给 30x PE，要获得约 10% 年化回报，EPS 需要从约 2.30 元增长到约 6.4 元，五年 CAGR 约 23%。这要求：\n- 国内设备更新不只是一次性脉冲；\n- 海外收入维持高增且不牺牲毛利率；\n- 研发费用率逐步释放经营杠杆；\n- 现金流与应收存货控制同步改善。\n\n这不是不可能，但难度不低。\n\n### 3. 三情景估值\n\n工具参数：当前价 106.75 元，2025 EPS 2.28 元，三年期。\n\n| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +18% | 42x | 3.75 | **157.3 元** | +47.4% |\n| 中性 | +12% | 32x | 3.20 | **102.5 元** | -4.0% |\n| 悲观 | +3% | 22x | 2.49 | **54.8 元** | -48.7% |\n\n### 4. 价格区间与操作含义\n\n| 价格区间 | 隐含判断 | 行动建议 |\n|---|---|---|\n| 55-65 元 | 悲观情景附近，市场开始给周期/竞争折价 | 若基本面未恶化，可重点研究和分批买入 |\n| 70-80 元 | 约 30-35x 2025 PE，较适合长期资金建立观察仓 | 空仓者更合理的等待区间 |\n| 90-110 元 | 接近中性情景估值，需靠后续业绩兑现 | 持仓可持有，新增仓位要谨慎 |\n| 130 元以上 | 需要海外高增和利润率持续修复同时兑现 | 除非订单/现金流超预期，否则不宜追高 |\n| 155 元以上 | 接近乐观情景三年目标价 | 需要重新审视预期是否过热 |\n\n> 段永平式追问：如果明天股市关闭五年，愿不愿意以 106.75 元持有？我的答案是：如果已持有优质仓位可以忍受波动，但空仓新买缺少足够安全边际。\n\n---\n\n## 第八步：最终决策与行动清单\n\n### 综合评分\n\n| 维度 | 结论 | 信心度 |\n|---|---|---:|\n| 生意质量（段永平） | 高端医疗设备龙头，产品和服务粘性较强，但资本品周期属性明显 | 中高 |\n| 护城河（巴菲特） | 技术、产品矩阵、临床口碑和装机服务构成护城河，仍需对抗全球巨头 | 中高 |\n| 管理层（段永平+巴菲特） | 长期研发投入和全球化方向清晰，执行力较强 | 中高 |\n| 最大风险（芒格） | 估值偏高 + 行业周期 + 海外建设低于预期 + 应收存货占用 | 高 |\n| 文明趋势（李录） | 医疗资源均衡、国产替代、AI 影像均是长期趋势 | 高 |\n| 估值（巴菲特+段永平） | 好公司但价格不便宜，中性情景缺乏上行空间 | 中高 |\n\n### 决策表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | **观望为主**。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。 |\n| 持仓者 | **可持有但控制仓位**。若买入成本低、仓位不高，可继续跟踪海外收入、服务收入和现金流；若仓位过重，可在高估区间分批降风险。 |\n| 加仓信号 | 1）境外收入继续 +40% 以上且毛利率稳定；2）扣非净利增速回到 +25% 以上；3）经营现金流/净利润持续 >1；4）股价回落到 70-80 元且基本面未坏。 |\n| 卖出/减仓信号 | 1）连续两个季度扣非净利低增或负增；2）存货、应收增速显著高于收入；3）毛利率跌破 45%；4）海外费用投入高但收入不兑现；5）估值升至乐观情景以上但订单没有同步超预期。 |\n| 本报告评级 | **观望 / 持有**，不是回避型公司，但现价不是舒服买点。 |\n\n### 四位大师模拟点评\n\n> **巴菲特**：这是一家有真实技术和客户价值的企业，但我更想在市场悲观时买，而不是在大家都相信国产替代时支付高倍数。\n\n> **芒格**：最危险的错误是把宏大叙事当成护城河。你要盯住回款、存货和真实利润，而不是只看收入增长。\n\n> **段永平**：公司做的是对的事，长期主义也明显；问题是价格是否对。好公司贵了，也可能让股东几年不赚钱。\n\n> **李录**：高端医疗装备国产化符合文明演进方向，但能否成为世界级公司，关键在全球客户信任和组织能力，而非单一年度订单。\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "联影医疗（688271.SH）研究报告",
+      "report_path": "reports/联影医疗/联影医疗研究报告-20260706.md",
+      "report_link": "联影医疗/联影医疗研究报告-20260706.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "联影医疗",
+        "ticker": "688271.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-06",
+        "action": "观察",
+        "summary": "空仓者 观望为主。优先等待 70-80 元区间，或等待 2026 中报/三季报证明收入、扣非净利、经营现金流同步改善后再考虑。",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "空仓者更合理的等待区间",
+            "price_range": "70-80 元"
+          },
+          {
+            "stance": "保守型",
+            "action": "若基本面未恶化，可重点研究和分批买入",
+            "price_range": "55-65 元"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    },
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "- 全球员工总数突破8,700名；",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "如果张强明天离开，公司能正常运转吗？ 大概率能维持运转，但估值叙事会受冲击。公司已有联席CEO、总经理、总裁、CTO、事业部技术负责人体系，组织不完全依赖单一CEO；但张强对技术路线、全球化和资本市场信心仍是关键符号。",
+        "start_line": 230,
+        "end_line": 237,
+        "markdown": "| 如果张强明天离开，公司能正常运转吗？ | 大概率能维持运转，但估值叙事会受冲击。公司已有联席CEO、总经理、总裁、CTO、事业部技术负责人体系，组织不完全依赖单一CEO；但张强对技术路线、全球化和资本市场信心仍是关键符号。 |\n| 如果薛敏/联影集团发生变化，影响是否更大？ | 是。实际控制人与集团生态对资源、AI/智能协同、资本配置边界影响更大。市场可能更关注集团层面稳定性。 |\n| 现有管理团队深度如何？ | 技术和经营层次较深，多名核心技术人员长期任职，海外与服务团队正在扩张；CFO任期较短是观察点。 |\n| 竞争优势依赖CEO个人还是组织/系统？ | 更偏组织/系统：研发平台、核心部件、产品矩阵、供应链、服务网络、客户装机基础共同构成护城河。但战略方向仍高度依赖核心团队。 |\n| 历史管理层交接是否顺利？ | 2022年后张强从董事长/总经理/CEO调整为董事长/联席CEO，GUOSHENG TAN、JUN BAO等分担经营角色；2024年CFO由王建保接任。公开资料未见交接失控迹象，但时间仍不长。 |\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "联影医疗-management-20260706",
+      "report_path": "reports/联影医疗/联影医疗-management-20260706.md",
+      "report_link": "联影医疗/联影医疗-management-20260706.md"
+    },
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "- 研究用途：仅供学习和研究，不构成投资建议。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "4. 市场与估值快照",
+        "start_line": 56,
+        "end_line": 61,
+        "markdown": "## 4. 市场与估值快照\n\n2026-07-06 收盘后行情交叉：新浪与腾讯均显示联影医疗收盘价 106.75 元；腾讯口径显示总市值约 879.79 亿元。用总股本 824,157,988 股验算，市值约 879.79 亿元。以 2025 年归母净利润 18.69 亿元计算，静态 PE 约 47.07 倍；若假设 2026 年利润在 2025 年基础上增长 15%，前瞻 PE 约 40.93 倍。\n\n这个估值隐含市场相信公司能持续全球化、高端化和利润爬坡。若 2026Q1 的现金流与扣非压力延续，估值会变脆；若后续合同负债恢复、存货转销售、服务收入占比继续提升，估值才有支撑。"
+      },
+      "price_status": "价格未给出",
+      "title": "联影医疗财报精读团队研究底稿",
+      "report_path": "reports/联影医疗/联影医疗-earnings-2025年报及2026Q1-研究底稿.md",
+      "report_link": "联影医疗/联影医疗-earnings-2025年报及2026Q1-研究底稿.md"
+    }
+  ],
+  "report_history_count": 4,
+  "primary_judgment": {
+    "enabled": true,
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "evidence": [],
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
+    "artifact_status": "error",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:56:13+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
+    "current_action": null,
+    "report_rule_count": 1,
+    "reliability": "review",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "company": "联影医疗",
+    "ticker": "688271.SH",
+    "market": "A股",
+    "report_path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+    "report_link": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+    "title": "巴菲特Checklist-联影医疗",
+    "source_type": "standalone",
+    "decision_contract": null,
+    "status": "灰色地带",
+    "passed_count": null,
+    "total_gates": 4,
+    "gates": [
+      {
+        "name": "好生意",
+        "score": "★★★",
+        "result": "灰色。毛利率高、收入增长快；但 ROE 中位不高，FCF 波动，资本与研发消耗大。",
+        "reason": ""
+      },
+      {
+        "name": "护城河",
+        "score": "★★★",
+        "result": "灰色偏正面。技术/产品线/装机服务有壁垒，但全球巨头仍强，价格与集采压力不可忽视。",
+        "reason": ""
+      },
+      {
+        "name": "管理层",
+        "score": "★★★",
+        "result": "灰色。创始/技术团队色彩强，治理披露正常；但分红低、激励摊薄和客户担保需继续跟踪。",
+        "reason": ""
+      },
+      {
+        "name": "安全边际",
+        "score": "★★",
+        "result": "未通过。 当前价格对未来增长要求不低，悲观情景下下行接近腰斩。",
+        "reason": ""
+      }
+    ],
+    "hard_veto": false,
+    "hard_veto_label": "未触发/未发现",
+    "mirror_test": "待复核",
+    "action": "待复核",
+    "summary": "❓灰色地带 — 不通过当前买入 Checklist。",
+    "data_cutoff": "2026-07-06",
+    "report_date": null,
+    "next_review_date": null,
+    "confidence": "待复核",
+    "invalidation_triggers": "",
+    "history": [
+      {
+        "status": "灰色地带",
+        "action": "待复核",
+        "data_cutoff": "2026-07-06",
+        "report_date": null,
+        "report_path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+        "report_link": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+        "source_type": "standalone"
+      }
+    ]
+  },
+  "technical_analysis": {
+    "company": "联影医疗",
+    "ticker": "688271.SH",
+    "status": "ready",
+    "report_path": "reports/联影医疗/联影医疗-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 108.4,
+    "currency": "CNY",
+    "observation_zone": "数据不足",
+    "fundamental_entry_plan": "| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于：120 元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "红",
+        "meaning": "股价仍在20日均线之下。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价在200日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "b5f7ea483670f74a94be",
+  "detail_path": "./data/decision_details/b5f7ea483670f74a94be.json"
+}

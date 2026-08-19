@@ -1,0 +1,278 @@
+{
+  "company": "生益科技",
+  "entity_kind": "company",
+  "entity_directory": "生益科技",
+  "ticker": "600183.SH",
+  "market": "A股",
+  "data_cutoff": "2026-07-09",
+  "report_reference_price": {
+    "price": 157.4,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "只允许小仓试错，不能把它当低估资产"
+    }
+  ],
+  "conclusion_summary": "投资者类型 建议 价格/条件区间",
+  "buy_price": "157.40 元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "只允许小仓试错，不能把它当低估资产"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "232.0 元",
+      "eps_growth": "+30%",
+      "target_pe": "55x"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "110.4 元",
+      "eps_growth": "+18%",
+      "target_pe": "35x"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "44.5 元",
+      "eps_growth": "+5%",
+      "target_pe": "20x"
+    }
+  ],
+  "valuation_section": {
+    "heading": "第六部分：财务质量与估值",
+    "start_line": 147,
+    "end_line": 179,
+    "markdown": "## 第六部分：财务质量与估值\n\n### 1. 财务质量\n\n2025 年是财务质量明显改善的一年：收入 +39.45%，归母净利 +91.75%，经营现金流 52.74 亿元，高于归母净利 33.34 亿元。2026Q1 继续高增长，收入 +45.09%，归母净利 +105.47%。资产负债率虽随扩产上行，但仍处可控区间。\n\n但必须承认，2022—2023 年收入、毛利率、ROE 曾明显下行，说明生益科技不是“无视周期”的永续复利资产。它更像是“周期中能打出高 ROE 的优秀制造企业”。\n\n### 2. 市场已经定价什么\n\n以总市值约 3823 亿元估算：\n\n- 对应 2025 静态 PE 约 114.68x；\n- 对应 TTM PE 约 97.33x；\n- 对应 2026Q1 BVPS 的 PB 约 21.33x；\n- 2025 拟派息 0.80 元/股，对当前价股息率约 0.51%。\n\n这说明当前股价买的不是 2025 年 33 亿净利，而是市场相信公司未来几年能把利润中枢显著抬升到更高层级。\n\n### 3. 三情景估值（工具验算）\n\n使用 `financial_rigor.py three-scenario`，以 2026Q1 年化 EPS 1.92 元作为当前 EPS，仅作敏感性演算：\n\n| 情景 | 年增速 | 目标 PE | 3 年后目标 EPS | 目标价 | 相对 157.40 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +30% | 55x | 4.22 元 | 232.0 元 | +47.4% |\n| 基准 | +18% | 35x | 3.15 元 | 110.4 元 | -29.9% |\n| 悲观 | +5% | 20x | 2.22 元 | 44.5 元 | -71.8% |\n\n**估值含义：** 当前价格只有在“高速增长 + 高估值维持”的乐观情景下才有吸引力；只要利润增速或估值中枢回落，安全边际就明显不足。\n\n---"
+  },
+  "recommendation": "投资者类型 建议 价格/条件区间",
+  "title": "生益科技（600183.SH）研究报告",
+  "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+  "report_link": "生益科技/生益科技研究报告-20260709.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "生益科技",
+    "ticker": "600183.SH",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-09",
+    "action": "观察",
+    "summary": "投资者类型 建议 价格/条件区间",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "只允许小仓试错，不能把它当低估资产"
+      }
+    ],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取三情景",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-09",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "只允许小仓试错，不能把它当低估资产"
+        }
+      ],
+      "conclusion_summary": "投资者类型 建议 价格/条件区间",
+      "buy_price": "157.40 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "只允许小仓试错，不能把它当低估资产"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "232.0 元",
+          "eps_growth": "+30%",
+          "target_pe": "55x"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "110.4 元",
+          "eps_growth": "+18%",
+          "target_pe": "35x"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "44.5 元",
+          "eps_growth": "+5%",
+          "target_pe": "20x"
+        }
+      ],
+      "valuation_section": {
+        "heading": "第六部分：财务质量与估值",
+        "start_line": 147,
+        "end_line": 179,
+        "markdown": "## 第六部分：财务质量与估值\n\n### 1. 财务质量\n\n2025 年是财务质量明显改善的一年：收入 +39.45%，归母净利 +91.75%，经营现金流 52.74 亿元，高于归母净利 33.34 亿元。2026Q1 继续高增长，收入 +45.09%，归母净利 +105.47%。资产负债率虽随扩产上行，但仍处可控区间。\n\n但必须承认，2022—2023 年收入、毛利率、ROE 曾明显下行，说明生益科技不是“无视周期”的永续复利资产。它更像是“周期中能打出高 ROE 的优秀制造企业”。\n\n### 2. 市场已经定价什么\n\n以总市值约 3823 亿元估算：\n\n- 对应 2025 静态 PE 约 114.68x；\n- 对应 TTM PE 约 97.33x；\n- 对应 2026Q1 BVPS 的 PB 约 21.33x；\n- 2025 拟派息 0.80 元/股，对当前价股息率约 0.51%。\n\n这说明当前股价买的不是 2025 年 33 亿净利，而是市场相信公司未来几年能把利润中枢显著抬升到更高层级。\n\n### 3. 三情景估值（工具验算）\n\n使用 `financial_rigor.py three-scenario`，以 2026Q1 年化 EPS 1.92 元作为当前 EPS，仅作敏感性演算：\n\n| 情景 | 年增速 | 目标 PE | 3 年后目标 EPS | 目标价 | 相对 157.40 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +30% | 55x | 4.22 元 | 232.0 元 | +47.4% |\n| 基准 | +18% | 35x | 3.15 元 | 110.4 元 | -29.9% |\n| 悲观 | +5% | 20x | 2.22 元 | 44.5 元 | -71.8% |\n\n**估值含义：** 当前价格只有在“高速增长 + 高估值维持”的乐观情景下才有吸引力；只要利润增速或估值中枢回落，安全边际就明显不足。\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "生益科技（600183.SH）研究报告",
+      "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "report_link": "生益科技/生益科技研究报告-20260709.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "生益科技",
+        "ticker": "600183.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-09",
+        "action": "观察",
+        "summary": "投资者类型 建议 价格/条件区间",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "只允许小仓试错，不能把它当低估资产"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓不追高，等待估值消化或价格回落至90-110元且业绩未坏再重估；激进型可待2026Q2/Q3高增长且毛利率维持27%+时小仓试错",
+    "holder_action": "可持有但设置基本面止损，盯毛利率、CFO/净利、库存应收、AI PCB订单与扩产回报；高仓位不建议加仓，若PE仍>80x且增速放缓应考虑降低风险暴露",
+    "trigger_condition": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏；或2026Q2/Q3继续高增长且毛利率维持27%+（激进型小仓条件）",
+    "summary": "生益科技质地好但估值偏贵，空仓不追高，等待价格回落或业绩验证后再行动",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与契约一致，均指向观察等待，无冲突",
+    "evidence": [
+      {
+        "line_start": 22,
+        "line_end": 22,
+        "quote": "**一句话结论：** 生益科技是 A 股高端电子材料链中质量较高的龙头，2025—2026Q1 已把 AI 算力、高速通信和高端 PCB 景气转化为收入、利润和现金流；但以 157.40 元、约 3823 亿元总市值看，当前价格已要求未来几年利润继续大幅跃迁，适合重点跟踪和持有者纪律观察，空仓不宜情绪化追高。",
+        "supports": "明确空仓不宜追高，支持等待价格/观察判断"
+      },
+      {
+        "line_start": 270,
+        "line_end": 270,
+        "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** |",
+        "supports": "最终结论为观察，空仓不追高，支持waiting动作"
+      },
+      {
+        "line_start": 276,
+        "line_end": 278,
+        "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 | | 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 | | 空仓保守型 | 暂不买 | 需要看到至少两个季度现金流/利润匹配，且估值明显下修 |",
+        "supports": "具体给出空仓者分层等待条件，包含价格触发点，支持等待价格标签"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:55:53+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "或2026Q2/Q3继续高增长且毛利率维持27%+（激进型小仓条件）",
+    "guard_condition": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏",
+        "price_range": "回落至90-110元",
+        "min": 90.0,
+        "ceiling": 110.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 0,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "生益科技",
+    "ticker": "600183.SH",
+    "status": "ready",
+    "report_path": "reports/生益科技/生益科技-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "趋势确认",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 143.21,
+    "currency": "CNY",
+    "observation_zone": "137.44-148.44",
+    "fundamental_entry_plan": "主报告未提取到可核验的建仓价格带",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "暂不能判断",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "黄",
+        "meaning": "股价暂在20日均线之上，但均线仍在下行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "绿",
+        "meaning": "股价在60日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "绿",
+        "meaning": "股价在200日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "efe2e65208a01fdad026",
+  "detail_path": "./data/decision_details/efe2e65208a01fdad026.json"
+}
