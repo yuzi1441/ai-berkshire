@@ -379,7 +379,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(skipped[0]["provider"], "review")
         self.assertIn("重试1次", warnings[0])
 
-    def test_only_a_shares_use_review_model(self):
+    def test_a_b_news_use_dual_model_regardless_of_market(self):
         articles = [
             {
                 "id": "a-1",
@@ -388,6 +388,7 @@ class SentimentSnapshotTests(unittest.TestCase):
                 "display_name": "A股公司",
                 "ticker": "600000.SH",
                 "market": "A股",
+                "source_tier": "A",
                 "title": "A股新闻",
                 "summary": "",
             },
@@ -398,6 +399,7 @@ class SentimentSnapshotTests(unittest.TestCase):
                 "display_name": "港股公司",
                 "ticker": "00001.HK",
                 "market": "港股",
+                "source_tier": "B",
                 "title": "港股新闻",
                 "summary": "",
             },
@@ -424,11 +426,176 @@ class SentimentSnapshotTests(unittest.TestCase):
         with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
             scored, _, skipped = sentiment_snapshot.score_articles(articles, config, config)
         self.assertEqual(skipped, [])
-        self.assertEqual(sorted(calls), [("primary", ["a-1", "hk-1"]), ("review", ["a-1"])])
+        self.assertEqual(
+            sorted(calls), [("primary", ["a-1", "hk-1"]), ("review", ["a-1", "hk-1"])]
+        )
         by_id = {item["id"]: item for item in scored}
         self.assertIn("model_review", by_id["a-1"])
-        self.assertNotIn("model_review", by_id["hk-1"])
-        self.assertEqual(by_id["hk-1"]["scoring_method"], "llm:single:test-model")
+        self.assertIn("model_review", by_id["hk-1"])
+        self.assertTrue(by_id["hk-1"]["scoring_method"].startswith("llm:dual:"))
+
+    def test_c_d_news_use_only_review_model_as_context(self):
+        article = {
+            "id": "context-1",
+            "scope": "company",
+            "company": "辅助新闻公司",
+            "display_name": "辅助新闻公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "source_tier": "D",
+            "score_eligible": False,
+            "context_analysis_eligible": True,
+            "title": "社区辅助新闻",
+            "summary": "未经核验的市场信息",
+        }
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        calls = []
+
+        def fake_score(batch, _config, provider_label):
+            calls.append((provider_label, [item["id"] for item in batch]))
+            return {
+                article["id"]: {
+                    "direction": -0.4,
+                    "impact": 2,
+                    "relevance": 0.8,
+                    "confidence": 0.7,
+                    "event_type": "一般新闻",
+                    "scoring_method": "test",
+                }
+            }
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                [article], config, config
+            )
+        self.assertEqual(calls, [("review", ["context-1"])])
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(scored[0]["scoring_method"], "llm:context:test-model")
+        self.assertFalse(scored[0]["score_eligible"])
+        self.assertTrue(scored[0]["context_score_eligible"])
+        self.assertTrue(scored[0]["model_review"]["review_only"])
+
+    def test_primary_scores_can_be_reused_before_review(self):
+        article = {
+            "id": "resume-1",
+            "scope": "company",
+            "company": "缓存公司",
+            "display_name": "缓存公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "source_tier": "A",
+            "score_eligible": True,
+            "title": "缓存公司公告",
+            "summary": "经营稳定",
+        }
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        calls = []
+
+        def fake_score(batch, _config, provider_label):
+            calls.append((provider_label, [item["id"] for item in batch]))
+            return {
+                article["id"]: {
+                    "direction": 0.2,
+                    "impact": 2,
+                    "relevance": 0.9,
+                    "confidence": 0.8,
+                    "event_type": "经营事件",
+                    "scoring_method": "test",
+                }
+            }
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                [article],
+                config,
+                config,
+                preloaded_primary_scores={
+                    article["id"]: {
+                        "direction": 0.1,
+                        "impact": 2,
+                        "relevance": 0.8,
+                        "confidence": 0.7,
+                        "event_type": "经营事件",
+                        "scoring_method": "llm:primary:test-model",
+                    }
+                },
+            )
+        self.assertEqual(calls, [("review", ["resume-1"])])
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(scored[0]["scoring_method"], "llm:dual:test-model+test-model")
+
+    def test_primary_scores_are_checkpointed_in_fifths(self):
+        articles = [
+            {
+                "id": f"checkpoint-{index}",
+                "scope": "company",
+                "company": f"分批公司{index}",
+                "display_name": f"分批公司{index}",
+                "ticker": f"600{index:03d}.SH",
+                "market": "A股",
+                "source_tier": "A",
+                "score_eligible": True,
+                "title": f"分批公司{index}公告",
+                "summary": "经营稳定",
+            }
+            for index in range(10)
+        ]
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com",
+            api_key="test",
+            model="test-model",
+            batch_size=1,
+            workers=1,
+            missing_result_retries=0,
+        )
+        checkpoints = []
+        review_checkpoints = []
+
+        def fake_score(batch, _config, provider_label):
+            return {
+                item["id"]: {
+                    "direction": 0.2,
+                    "impact": 2,
+                    "relevance": 0.9,
+                    "confidence": 0.8,
+                    "event_type": "经营事件",
+                    "scoring_method": f"test:{provider_label}",
+                }
+                for item in batch
+            }
+
+        def progress_callback(
+            provider_label, _target_articles, scores, _failures, completed, total
+        ):
+            if provider_label == "primary_partial":
+                checkpoints.append((len(scores), completed, total))
+            if provider_label == "review_partial":
+                review_checkpoints.append((len(scores), completed, total))
+
+        with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                articles,
+                config,
+                config,
+                progress_callback=progress_callback,
+            )
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(len(scored), 10)
+        self.assertEqual(
+            checkpoints,
+            [(2, 2, 10), (4, 4, 10), (6, 6, 10), (8, 8, 10), (10, 10, 10)],
+        )
+        self.assertEqual(
+            review_checkpoints,
+            [(2, 2, 10), (4, 4, 10), (6, 6, 10), (8, 8, 10), (10, 10, 10)],
+        )
 
     def test_hong_kong_scoring_does_not_require_review_model(self):
         article = {
@@ -496,6 +663,147 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(args.markets, ["A股"])
         self.assertEqual(args.auxiliary_news_limit, 60)
         self.assertEqual(args.rss_news_limit, 20)
+        self.assertEqual(args.cache_dir, sentiment_snapshot.DEFAULT_CACHE_DIR)
+
+    def test_news_cache_round_trip_and_policy_mismatch(self):
+        universe = [{"ticker": "600000.SH", "market": "A股"}]
+        parameters = {
+            "as_of": "2026-08-18",
+            "lookback_days": 7,
+            "fallback_lookback_days": 30,
+            "news_limit": 8,
+            "auxiliary_news_limit": 60,
+            "context_analysis_limit": 12,
+            "rss_news_limit": 20,
+        }
+        rows = [{"id": "news-1", "title": "已缓存新闻"}]
+        with tempfile.TemporaryDirectory() as directory:
+            path = sentiment_snapshot.news_cache_path(
+                Path(directory),
+                as_of=date(2026, 8, 18),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+                auxiliary_news_limit=60,
+                context_analysis_limit=12,
+                rss_news_limit=20,
+            )
+            signature = sentiment_snapshot.news_cache_universe_signature(universe)
+            sentiment_snapshot.save_news_cache(
+                path,
+                as_of=date(2026, 8, 18),
+                parameters=parameters,
+                universe_signature=signature,
+                company_news={"600000.SH": rows},
+                company_warnings={"600000.SH": []},
+                industry_news={},
+                industry_warnings={},
+            )
+            loaded = sentiment_snapshot.load_news_cache(
+                path, universe_signature=signature, parameters=parameters
+            )
+            self.assertEqual(loaded["company_news"]["600000.SH"], rows)
+            self.assertEqual(
+                sentiment_snapshot.load_news_cache(
+                    path,
+                    universe_signature=signature,
+                    parameters={**parameters, "news_limit": 9},
+                ),
+                {},
+            )
+
+    def test_build_snapshot_reuses_cached_company_news(self):
+        universe = [{
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+        }]
+        parameters = {
+            "as_of": "2026-08-18",
+            "lookback_days": 7,
+            "fallback_lookback_days": 30,
+            "news_limit": 8,
+            "auxiliary_news_limit": 60,
+            "context_analysis_limit": 12,
+            "rss_news_limit": 20,
+        }
+        article = {
+            "id": "cached-1",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "scope": "company",
+            "title": "示例公司发布公告",
+            "summary": "经营情况稳定",
+            "publisher": "巨潮资讯",
+            "url": "https://www.cninfo.com.cn/notice/1",
+            "published_at": "2026-08-18T10:00:00+08:00",
+            "event_type": "经营事件",
+            "direction": 0.3,
+            "impact": 2,
+            "relevance": 0.9,
+            "confidence": 0.8,
+            "source_tier": "A",
+            "score_eligible": True,
+            "context_score_eligible": True,
+            "scoring_method": "test",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            cache_dir = Path(directory) / "cache"
+            signature = sentiment_snapshot.news_cache_universe_signature(universe)
+            cache_path = sentiment_snapshot.news_cache_path(
+                cache_dir,
+                as_of=date(2026, 8, 18),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+                auxiliary_news_limit=60,
+                context_analysis_limit=12,
+                rss_news_limit=20,
+            )
+            sentiment_snapshot.save_news_cache(
+                cache_path,
+                as_of=date(2026, 8, 18),
+                parameters=parameters,
+                universe_signature=signature,
+                company_news={"600000.SH": [article]},
+                company_warnings={"600000.SH": []},
+                industry_news={},
+                industry_warnings={},
+            )
+            primary = sentiment_snapshot.LLMConfig(
+                endpoint="https://example.com", api_key="test", model="primary"
+            )
+            with patch.object(sentiment_snapshot, "load_universe", return_value=universe), \
+                patch.object(sentiment_snapshot, "load_registry_names", return_value={}), \
+                patch.object(sentiment_snapshot, "fetch_provider_names", return_value={}), \
+                patch.object(sentiment_snapshot, "fetch_provider_industries", return_value=({}, [])), \
+                patch.object(
+                    sentiment_snapshot,
+                    "fetch_market_context",
+                    return_value=(
+                        {"status": "ok", "score_0_100": 50, "state": "中性"},
+                        {},
+                    ),
+                ), \
+                patch.object(sentiment_snapshot, "fetch_company_news_result") as company_fetch, \
+                patch.object(sentiment_snapshot, "score_articles", return_value=([article], [], [])):
+                result = sentiment_snapshot.build_snapshot(
+                    board_path=Path(directory) / "board.json",
+                    registry_path=Path(directory) / "registry.json",
+                    as_of=date(2026, 8, 18),
+                    now=datetime(2026, 8, 18, 18, 0, tzinfo=SHANGHAI),
+                    lookback_days=7,
+                    fallback_lookback_days=30,
+                    news_limit=8,
+                    workers=1,
+                    markets={"A股"},
+                    llm_config=primary,
+                    cache_dir=cache_dir,
+                )
+            company_fetch.assert_not_called()
+            self.assertEqual(result["companies"][0]["news_sentiment"]["score_0_100"], 65.0)
 
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
@@ -964,6 +1272,27 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(len(result["captured_items"]), 2)
         self.assertFalse(result["captured_items"][0]["score_eligible"])
 
+    def test_unscored_auxiliary_news_with_missing_scores_does_not_crash_context_aggregation(self):
+        cutoff = datetime(2026, 8, 11, tzinfo=SHANGHAI)
+        auxiliary = sentiment_snapshot.mark_auxiliary_article(
+            {
+                "title": "辅助新闻没有模型评分",
+                "summary": "仅作上下文展示",
+                "publisher": "其他媒体",
+                "url": "https://example.com/1",
+                "published_at": "2026-08-10T21:00:00+08:00",
+                "source_tier": "C",
+                "source_tier_label": "聚合/其他媒体",
+                "score_eligible": False,
+                "context_score_eligible": True,
+            }
+        )
+        result = sentiment_snapshot.aggregate_news(
+            [auxiliary], cutoff, include_context=True
+        )
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIsNone(result["score_0_100"])
+
     def test_auxiliary_news_is_analyzed_as_context_without_formal_promotion(self):
         config = sentiment_snapshot.LLMConfig(
             endpoint="https://example.com", api_key="test", model="test-model"
@@ -995,13 +1324,13 @@ class SentimentSnapshotTests(unittest.TestCase):
 
         with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score) as score_with_llm:
             scored, warnings, skipped = sentiment_snapshot.score_articles([article], config, config)
-        self.assertEqual(score_with_llm.call_count, 2)
+        self.assertEqual(score_with_llm.call_count, 1)
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
         self.assertEqual(len(scored), 1)
         self.assertFalse(scored[0]["score_eligible"])
         self.assertTrue(scored[0]["context_score_eligible"])
-        self.assertTrue(scored[0]["scoring_method"].startswith("llm:dual:"))
+        self.assertEqual(scored[0]["scoring_method"], "llm:context:test-model")
 
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {

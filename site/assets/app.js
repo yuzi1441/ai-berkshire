@@ -13,6 +13,7 @@ const TRACKING_HIDDEN_STORAGE_KEY = "ai-berkshire.hidden-post-buy-tracking.v1";
 const DEEP_REVIEW_TOKEN_STORAGE_KEY = "ai-berkshire.deep-review-token.v1";
 const LIVE_INTERVAL_MS = 300_000;
 const SNAPSHOT_INTERVAL_MS = 300_000;
+const ROW_PAGE_SIZE = 50;
 const A_SHARE_INDEX_WATCH = [
   { index_id: "sse", ticker: "000001.SH", symbol: "sh000001", company: "上证指数" },
   { index_id: "szse", ticker: "399001.SZ", symbol: "sz399001", company: "深证成指" },
@@ -25,6 +26,9 @@ const A_SHARE_INDEX_WATCH = [
 
 const state = {
   decisions: [],
+  details: new Map(),
+  detailRequests: new Map(),
+  detailErrors: new Map(),
   intradayTechnical: new Map(),
   opportunityScans: new Map(),
   opportunityScansGeneratedAt: null,
@@ -54,6 +58,7 @@ const state = {
   liveTimer: null,
   snapshotTimer: null,
   focusIndex: -1,
+  page: 1,
 };
 
 const els = {
@@ -92,6 +97,7 @@ const els = {
   refreshQuotes: document.querySelector("#refresh-quotes"),
   toast: document.querySelector("#toast"),
   emptyState: document.querySelector("#empty-state"),
+  loadMoreRows: document.querySelector("#load-more-rows"),
   indexCards: document.querySelector("#index-cards"),
   indexBandMeta: document.querySelector("#index-band-meta"),
   annualPanelMeta: document.querySelector("#annual-panel-meta"),
@@ -947,6 +953,56 @@ function itemKey(item) {
   return `${item.ticker || ""}::${item.company}`;
 }
 
+function rawSelectedItem() {
+  if (!state.selectedKey) return null;
+  return state.decisions.find((item) => itemKey(item) === state.selectedKey) || null;
+}
+
+function detailLoaded(item) {
+  return !item?.detail_id || state.details.has(itemKey(item));
+}
+
+function selectedItem() {
+  const item = rawSelectedItem();
+  if (!item) return null;
+  const detail = state.details.get(itemKey(item));
+  return detail ? { ...item, ...detail } : item;
+}
+
+async function loadDecisionDetail(item) {
+  if (!item?.detail_path) return item;
+  const key = itemKey(item);
+  if (state.details.has(key)) return state.details.get(key);
+  if (state.detailRequests.has(key)) return state.detailRequests.get(key);
+  const request = fetch(item.detail_path, { cache: "no-cache" })
+    .then(async (response) => {
+      if (!response.ok) throw new Error(`详细研报加载失败（${response.status}）`);
+      const detail = await response.json();
+      state.details.set(key, detail);
+      state.detailErrors.delete(key);
+      return detail;
+    })
+    .catch((error) => {
+      state.detailErrors.set(key, error instanceof Error ? error.message : "详细研报加载失败");
+      throw error;
+    })
+    .finally(() => {
+      state.detailRequests.delete(key);
+    });
+  state.detailRequests.set(key, request);
+  return request;
+}
+
+function resetRowPage() {
+  state.page = 1;
+}
+
+function ensureItemPage(item, visible = filteredDecisions()) {
+  const index = visible.findIndex((candidate) => itemKey(candidate) === itemKey(item));
+  if (index >= 0) state.page = Math.max(state.page, Math.ceil((index + 1) / ROW_PAGE_SIZE));
+  return index;
+}
+
 function showToast(message) {
   els.toast.hidden = false;
   els.toast.textContent = message;
@@ -1115,11 +1171,12 @@ function reportFallbackKind(item) {
     action: item?.action,
     recommendation: item?.recommendation,
     conclusion_summary: item?.conclusion_summary,
-    valuation_heading: item?.valuation_section?.heading,
+    valuation_heading: item?.valuation_section?.heading || item?.valuation_heading,
   });
 }
 
 function recentUsableHistoryDecision(item) {
+  if (item?.recent_history_fallback?.action) return item.recent_history_fallback;
   const usable = (item?.report_history || []).filter((entry) => {
     const action = String(entry?.action || "").trim();
     return action && action !== "未提取";
@@ -1130,7 +1187,7 @@ function recentUsableHistoryDecision(item) {
 function compactReportConclusion(item) {
   const action = String(item?.action || "").trim();
   const recommendation = String(item?.recommendation || item?.conclusion_summary || "").trim();
-  const heading = String(item?.valuation_section?.heading || "").trim();
+  const heading = String(item?.valuation_section?.heading || item?.valuation_heading || "").trim();
   const recommendationIsUseful = recommendation
     && recommendation !== action
     && !/免责声明|不构成.{0,12}建议|投资研究最终报告|财务估值分析$|研究报告$/.test(recommendation);
@@ -1429,11 +1486,6 @@ function filteredDecisions() {
     return a.company.localeCompare(b.company, "zh");
   });
   return list;
-}
-
-function selectedItem() {
-  if (!state.selectedKey) return null;
-  return state.decisions.find((item) => itemKey(item) === state.selectedKey) || null;
 }
 
 function setLiveStatus(mode, text) {
@@ -2992,6 +3044,7 @@ function renderRows() {
   if (state.view === "tracking") {
     renderTrackingRows(visible);
     mountInlineDetail(selectedItem());
+    if (els.loadMoreRows) els.loadMoreRows.hidden = true;
     els.status.textContent = `显示 ${visible.length} / ${state.decisions.filter((item) => trackingForItem(item)).length} · 持仓跟踪`;
     if (els.emptyState) els.emptyState.hidden = visible.length > 0;
     if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
@@ -3008,7 +3061,8 @@ function renderRows() {
     "技术价 / 基本面交叉",
   ]);
 
-  visible.forEach((item, index) => {
+  const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
+  rendered.forEach((item, index) => {
     const tr = document.createElement("tr");
     const key = itemKey(item);
     if (key === state.selectedKey) tr.classList.add("active");
@@ -3067,7 +3121,12 @@ function renderRows() {
 
   mountInlineDetail(selectedItem());
 
-  els.status.textContent = `显示 ${visible.length} / ${state.decisions.length} · 排序：${els.sortSelect.selectedOptions[0]?.text || state.sort}`;
+  const remaining = Math.max(0, visible.length - rendered.length);
+  if (els.loadMoreRows) {
+    els.loadMoreRows.hidden = remaining === 0;
+    els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
+  }
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 排序：${els.sortSelect.selectedOptions[0]?.text || state.sort}`;
   if (els.emptyState) {
     els.emptyState.hidden = visible.length > 0;
   }
@@ -3281,6 +3340,30 @@ function renderDetail() {
     tab.classList.toggle("active", tab.dataset.tab === state.detailTab);
   });
 
+  const detailNeeded = ["overview", "history"].includes(state.detailTab);
+  if (detailNeeded && !detailLoaded(item)) {
+    const loading = document.createElement("div");
+    loading.className = "card detail-loading-card";
+    const error = state.detailErrors.get(itemKey(item));
+    loading.innerHTML = `<h3>${error ? "详细研报加载失败" : "正在加载完整研报上下文"}</h3><p class="source-note">${error || "首屏只加载决策所需字段；历史研报和估值内容在打开详情后读取。"}</p>`;
+    if (error) {
+      const retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "btn ghost";
+      retry.textContent = "重新加载详细研报";
+      retry.addEventListener("click", () => {
+        state.detailErrors.delete(itemKey(item));
+        loadDecisionDetail(item)
+          .then(() => renderDetail())
+          .catch(() => renderDetail());
+        renderDetail();
+      });
+      loading.append(retry);
+    }
+    els.detailBody.append(loading);
+    return;
+  }
+
   if (state.detailTab === "tracking") {
     renderTrackingDetail(item, tracking);
     return;
@@ -3475,10 +3558,20 @@ function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   if (!item) return;
   state.selectedKey = itemKey(item);
   const visible = filteredDecisions();
-  state.focusIndex = visible.findIndex((x) => itemKey(x) === state.selectedKey);
+  state.focusIndex = ensureItemPage(item, visible);
   if (updateUrl) updateHash(item);
   renderRows();
   renderDetail();
+  loadDecisionDetail(item)
+    .then(() => {
+      if (state.selectedKey === itemKey(item)) {
+        renderRows();
+        renderDetail();
+      }
+    })
+    .catch(() => {
+      if (state.selectedKey === itemKey(item)) renderDetail();
+    });
   if (els.detailBody) els.detailBody.scrollTop = 0;
   if (scrollRow) {
     const row = Array.from(els.rows.querySelectorAll("tr[data-key]")).find((node) => node.dataset.key === state.selectedKey);
@@ -3507,6 +3600,7 @@ function renderAll() {
 function setView(view) {
   state.view = view === "tracking" ? "tracking" : "decision";
   state.focusIndex = -1;
+  resetRowPage();
   if (state.view === "tracking") {
     state.detailTab = "tracking";
   } else if (state.detailTab === "tracking") {
@@ -3536,6 +3630,7 @@ function applyHashRoute() {
 
 function bindEvents() {
   els.companyFilter.addEventListener("input", () => {
+    resetRowPage();
     renderRows();
   });
   els.companyFilter.addEventListener("keydown", (event) => {
@@ -3546,6 +3641,7 @@ function bindEvents() {
   });
   els.sortSelect.addEventListener("change", () => {
     state.sort = els.sortSelect.value;
+    resetRowPage();
     renderRows();
   });
   els.clearFilters.addEventListener("click", () => {
@@ -3553,6 +3649,7 @@ function bindEvents() {
     state.action = "all";
     state.trackingFilter = "all";
     state.sort = "execution";
+    resetRowPage();
     els.companyFilter.value = "";
     els.sortSelect.value = "execution";
     els.marketChips.querySelectorAll(".chip").forEach((chip) => {
@@ -3575,6 +3672,7 @@ function bindEvents() {
     const chip = event.target.closest(".chip");
     if (!chip) return;
     state.market = chip.dataset.market;
+    resetRowPage();
     els.marketChips.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
@@ -3584,6 +3682,7 @@ function bindEvents() {
     const chip = event.target.closest(".chip");
     if (!chip) return;
     state.action = chip.dataset.action;
+    resetRowPage();
     els.actionChips.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
@@ -3593,12 +3692,17 @@ function bindEvents() {
     const chip = event.target.closest(".chip");
     if (!chip) return;
     state.trackingFilter = chip.dataset.trackingFilter || "all";
+    resetRowPage();
     els.trackingFilterRow.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
     renderRows();
   });
   els.restoreTracking?.addEventListener("click", restoreHiddenTracking);
+  els.loadMoreRows?.addEventListener("click", () => {
+    state.page += 1;
+    renderRows();
+  });
   document.querySelector(".detail-tabs")?.addEventListener("click", (event) => {
     const tab = event.target.closest(".tab");
     if (!tab) return;
@@ -3663,11 +3767,11 @@ function bindEvents() {
 }
 
 async function loadSentimentSnapshot() {
-  const statusResponse = await fetch(`./data/sentiment_status.json?t=${Date.now()}`, { cache: "no-store" });
+  const statusResponse = await fetch("./data/sentiment_status.json", { cache: "no-cache" });
   state.sentimentStatus = statusResponse.ok
     ? await statusResponse.json()
     : {status: "unknown"};
-  const response = await fetch(`./data/sentiment.json?t=${Date.now()}`, { cache: "no-store" });
+  const response = await fetch("./data/sentiment.json", { cache: "no-cache" });
   if (!response.ok) throw new Error("无法加载 sentiment.json");
   const snapshot = await response.json();
   state.sentimentSnapshot = snapshot;
@@ -3683,7 +3787,7 @@ async function loadSentimentSnapshot() {
 }
 
 async function loadIntradayTechnicalSnapshot() {
-  const response = await fetch(`./data/intraday_technical.json?t=${Date.now()}`, { cache: "no-store" });
+  const response = await fetch("./data/intraday_technical.json", { cache: "no-cache" });
   if (!response.ok) {
     state.intradayTechnical = new Map();
     return;
@@ -3697,7 +3801,7 @@ async function loadIntradayTechnicalSnapshot() {
 }
 
 async function loadOpportunityScansSnapshot() {
-  const response = await fetch(`./data/opportunity_scans.json?t=${Date.now()}`, { cache: "no-store" });
+  const response = await fetch("./data/opportunity_scans.json", { cache: "no-cache" });
   if (!response.ok) {
     state.opportunityScans = new Map();
     state.opportunityScansGeneratedAt = null;
@@ -3715,7 +3819,7 @@ async function loadOpportunityScansSnapshot() {
 }
 
 async function loadOpportunityScanStatus() {
-  const response = await fetch(`./data/opportunity_scan_status.json?t=${Date.now()}`, { cache: "no-store" });
+  const response = await fetch("./data/opportunity_scan_status.json", { cache: "no-cache" });
   if (!response.ok) {
     state.opportunityScanStatus = null;
     return;
@@ -3739,54 +3843,71 @@ async function loadAutomationStatus() {
 
 async function loadDashboard() {
   setLiveStatus("idle", "加载决策数据…");
-  const response = await fetch(`./data/decision_board.json?t=${Date.now()}`, { cache: "no-store" });
-  if (!response.ok) throw new Error("无法加载 decision_board.json");
+  let response = await fetch("./data/decision_board_summary.json", { cache: "no-cache" });
+  if (!response.ok) response = await fetch("./data/decision_board.json", { cache: "no-cache" });
+  if (!response.ok) throw new Error("无法加载 decision_board_summary.json 或 decision_board.json");
   const board = await response.json();
   state.decisions = board.decisions || [];
-  try {
-    await loadIntradayTechnicalSnapshot();
-  } catch (error) {
-    console.warn("intraday technical snapshot failed", error);
+  state.page = 1;
+  state.hiddenTrackingKeys = loadHiddenTrackingKeys();
+  updateTrackingControls();
+
+  // Paint the list as soon as the primary board is available.  The auxiliary
+  // snapshots are independent and should not block the first useful view.
+  performance.mark("dashboard-list-ready");
+  setLiveStatus("idle", "列表已载入，补充行情和辅助数据…");
+  renderAll();
+
+  const [intradayResult, scansResult, scanStatusResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult] =
+    await Promise.allSettled([
+      loadIntradayTechnicalSnapshot(),
+      loadOpportunityScansSnapshot(),
+      loadOpportunityScanStatus(),
+      loadSentimentSnapshot(),
+      loadDeepReviews(),
+      loadSnapshotQuotes(),
+      loadAnnualReportDates(),
+      loadAutomationStatus(),
+    ]);
+
+  if (intradayResult.status === "rejected") {
+    console.warn("intraday technical snapshot failed", intradayResult.reason);
     state.intradayTechnical = new Map();
   }
-  try {
-    await loadOpportunityScansSnapshot();
-  } catch (error) {
-    console.warn("opportunity scan snapshot failed", error);
+  if (scansResult.status === "rejected") {
+    console.warn("opportunity scan snapshot failed", scansResult.reason);
     state.opportunityScans = new Map();
     state.opportunityScansGeneratedAt = null;
     state.opportunityScanModels = [];
   }
-  try {
-    await loadOpportunityScanStatus();
-  } catch (error) {
-    console.warn("opportunity scan status failed", error);
+  if (scanStatusResult.status === "rejected") {
+    console.warn("opportunity scan status failed", scanStatusResult.reason);
     state.opportunityScanStatus = null;
   }
-  try {
-    await loadSentimentSnapshot();
-  } catch (error) {
+  if (sentimentResult.status === "rejected") {
+    const error = sentimentResult.reason;
     state.sentimentError = error;
     state.sentimentStatus = {status: "error", error: error.message};
     state.sentimentSnapshot = null;
     state.sentiments = new Map();
     updateSentimentAlert();
   }
-  try {
-    await loadAnnualReportDates();
-  } catch (error) {
-    console.warn("annual report dates snapshot failed", error);
+  if (deepReviewsResult.status === "rejected") {
+    console.warn("deep reviews are unavailable", deepReviewsResult.reason);
+  }
+  if (snapshotQuotesResult.status === "fulfilled" && snapshotQuotesResult.value > 0) {
+    setLiveStatus("snapshot", `行情快照 · ${snapshotQuotesResult.value} 只 · ${new Date().toLocaleTimeString()}`);
+  }
+  if (annualDatesResult.status === "rejected") {
+    console.warn("annual report dates snapshot failed", annualDatesResult.reason);
     state.annualReportDates = null;
   }
-  try {
-    await loadAutomationStatus();
-  } catch (error) {
-    console.warn("automation status snapshot failed", error);
+  if (automationStatusResult.status === "rejected") {
+    console.warn("automation status snapshot failed", automationStatusResult.reason);
     state.automationStatus = null;
   }
-  state.hiddenTrackingKeys = loadHiddenTrackingKeys();
-  updateTrackingControls();
-  await loadDeepReviews();
+
+  performance.mark("dashboard-data-ready");
   renderAll();
   applyHashRoute();
   await refreshQuotes({ forceLive: isLikelyMarketOpen(), silent: true });

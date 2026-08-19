@@ -70,12 +70,13 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 和 `site/data/automation_status.json`。安装时会停用旧的A/H、US、独立情绪和独立盘后扫描定时器，
 避免多个任务同时写同一份看板。
 
-## A股双模型复核配置
+## 新闻来源分级与模型路由
 
-`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek V4 Flash），负责 A股可评分个股新闻和行业
-辅助新闻。`SENTIMENT_REVIEW_*` 为复核模型（当前使用 MiMo-V2.5-Pro），只复核 A股可评分
-个股新闻。两者可以共用 `OPENCODE_GO_API_KEY`；请编辑 `/etc/ai-berkshire/sentiment.env`，
-填写统一密钥及两个模型的 endpoint。
+`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek V4 Flash），只处理 A/B 级新闻；
+`SENTIMENT_REVIEW_*` 为 MiMo-V2.5 复核模型。A/B 级新闻走“主模型 + MiMo”双复核，C/D
+级新闻只交给 MiMo 做辅助语义分析，不再重复调用主模型。C/D 结果仍保留在看板的上下文情绪
+中，但不会升级为正式 A/B 证据，也不会改变来源等级。两者可以共用 `OPENCODE_GO_API_KEY`；
+请编辑 `/etc/ai-berkshire/sentiment.env`，填写统一密钥及两个模型的 endpoint。
 两组模型的单次请求超时默认均为 600 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
 `SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。遇到 408、425、429、500、502、503、
 504 或连接超时等瞬时错误时，每个模型默认额外重试 4 次，采用指数退避（默认 5、10、20、40 秒）；
@@ -84,12 +85,13 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 默认额外重试 3 轮，可用 `SENTIMENT_LLM_MISSING_RESULT_RETRIES` 和
 `SENTIMENT_REVIEW_MISSING_RESULT_RETRIES` 调整。任务整体超时上限为 90 分钟，给完整 A 股任务留下足够的重试空间。
 
-对于 A股新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，本次快照不会生成；
-看板保留上一份成功快照，并通过 `site/data/sentiment_status.json` 显示更新失败。
+对于 A/B 新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，该条新闻会被跳过；
+C/D 新闻只受 MiMo 请求影响。其余成功结果仍会写入快照，看板通过
+`site/data/sentiment_status.json` 显示部分更新和失败项目。
 密钥文件权限为 `0600`，不会写入仓库。
 
 本地运行主报告双模型判断工具时，它会优先读取仓库 `local/opencodego-sentiment.env`，因此
-主报告判断和情绪新闻会使用同一组 Flash + MiMo-V2.5-Pro 模型；旧的 `.env.sentiment*`
+主报告判断和情绪新闻会使用同一组 Flash + MiMo-V2.5 模型；旧的 `.env.sentiment*`
 文件仅作为没有新配置时的兼容回退。
 
 检查统一定时器和最近日志：

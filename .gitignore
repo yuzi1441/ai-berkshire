@@ -26,6 +26,9 @@ assets/公司品牌图/
 # API token（如 FinMind 的 local/finmind_token.txt）也放这里，只留本机
 /local/
 
+# Sentiment news pools are runtime caches, not source data.
+/data/sentiment/cache/
+
 # ===== 密钥/凭证类文件，任何位置一律不入库 =====
 .env
 .env.*
