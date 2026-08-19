@@ -12,4 +12,5 @@ EnvironmentFile=-/etc/ai-berkshire/sentiment.env
 ExecStart=/usr/local/sbin/ai-berkshire-sentiment-update
 Nice=10
 MemoryMax=700M
-TimeoutStartSec=90min
+TimeoutStartSec=3h
+TimeoutStopSec=2min

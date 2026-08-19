@@ -21,6 +21,7 @@ import json
 import math
 import os
 import re
+import signal
 import statistics
 import sys
 import time
@@ -30,7 +31,7 @@ from datetime import date, datetime, time as clock_time, timedelta
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from statistics import NormalDist
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
@@ -2022,6 +2023,10 @@ def score_articles(
     articles: list[dict[str, Any]],
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
+    progress_callback: Callable[
+        [str, list[dict[str, Any]], dict[str, dict[str, Any]], list[dict[str, Any]]], None
+    ]
+    | None = None,
 ) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
     """Score formal news and a bounded contextual subset of auxiliary news.
 
@@ -2163,6 +2168,8 @@ def score_articles(
                         f"{provider_label} 模型未返回有效评分；已完成 {config.missing_result_retries} 次单条重试",
                     )
                 )
+        if progress_callback is not None:
+            progress_callback(provider_label, target_articles, dict(scores), list(failures))
         return scores, failures
 
     primary_scores, primary_failures = collect_scores(
@@ -2718,7 +2725,36 @@ def combined_company_score(
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary_path = path.with_name(f".{path.name}.tmp")
+    temporary_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    temporary_path.replace(path)
+
+
+def snapshot_status_payload(
+    snapshot: dict[str, Any], message: str | None = None
+) -> dict[str, Any]:
+    """Build the small status file shared by complete and partial snapshots."""
+    return {
+        "status": snapshot.get("status", "partial"),
+        "generated_at": snapshot.get("generated_at"),
+        "data_cutoff": snapshot.get("data_cutoff"),
+        "scoring_mode": snapshot.get("scoring_mode"),
+        "company_count": snapshot.get("company_count", 0),
+        "industry_count": snapshot.get("industry_count", 0),
+        "industry_news_available_count": snapshot.get("industry_news_available_count", 0),
+        "skipped_count": snapshot.get("skipped_count", 0),
+        "skipped_articles": snapshot.get("skipped_articles", []),
+        "warnings": snapshot.get("warnings", []),
+        "progress": snapshot.get("progress"),
+        "message": message
+        or (
+            "情绪数据更新完成。"
+            if snapshot.get("status") == "ok"
+            else "情绪任务已保存当前阶段性结果；仍有未完成项目。"
+        ),
+    }
 
 
 def build_snapshot(
@@ -2738,6 +2774,7 @@ def build_snapshot(
     company_limit: int | None = None,
     llm_config: LLMConfig | None = None,
     review_llm_config: LLMConfig | None = None,
+    checkpoint_callback: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     selected_markets = markets or SUPPORTED_MARKETS
     universe = load_universe(board_path, selected_markets)
@@ -2779,8 +2816,168 @@ def build_snapshot(
         hot_by_code = {}
         warnings.append(f"A-share market context failed: {exc}")
 
+    scoring_mode = (
+        f"remote-mixed-llm:{llm_config.model}+A股/行业复核:{review_llm_config.model}"
+        if llm_config and review_llm_config
+        else f"remote-primary-llm:{llm_config.model}"
+        if llm_config
+        else "invalid-primary-model-configuration"
+    )
     cutoff = datetime.combine(as_of + timedelta(days=1), clock_time.min, SHANGHAI_TIMEZONE)
     articles_by_ticker: dict[str, list[dict[str, Any]]] = {item["ticker"]: [] for item in universe}
+    company_news_counts: dict[str, int] = {}
+    industry_news_counts: dict[str, int] = {}
+
+    def pending_sentiment(label: str = "待评分") -> dict[str, Any]:
+        return {
+            "status": "pending",
+            "score_0_100": None,
+            "state": label,
+            "method": "阶段性快照，等待模型评分",
+            "preliminary": True,
+        }
+
+    def emit_checkpoint(
+        stage: str,
+        stage_label: str,
+        *,
+        industry_details: dict[str, dict[str, Any]] | None = None,
+        completed_company_news: int = 0,
+        completed_industry_news: int = 0,
+        scored_articles: list[dict[str, Any]] | None = None,
+        score_provider: str | None = None,
+        score_failures: int = 0,
+    ) -> None:
+        if checkpoint_callback is None:
+            return
+        scored_by_ticker: dict[str, list[dict[str, Any]]] = {
+            item["ticker"]: [] for item in universe
+        }
+        scored_by_industry: dict[str, list[dict[str, Any]]] = {
+            industry: [] for industry in industry_names
+        }
+        for article in scored_articles or []:
+            if article.get("scope") == "industry":
+                scored_by_industry.setdefault(article["display_name"], []).append(article)
+            elif article.get("ticker") in scored_by_ticker:
+                scored_by_ticker[article["ticker"]].append(article)
+
+        details = industry_details or {
+            industry: {
+                "industry": industry,
+                "company_count": sum(
+                    1 for value in industries_by_ticker.values() if value == industry
+                ),
+                "sentiment": pending_sentiment(),
+            }
+            for industry in industry_names
+        }
+        if scored_articles is not None:
+            details = {}
+            for industry in industry_names:
+                formal = aggregate_news(
+                    scored_by_industry[industry], cutoff, primary_lookback_days=lookback_days
+                )
+                contextual = aggregate_news(
+                    scored_by_industry[industry],
+                    cutoff,
+                    primary_lookback_days=lookback_days,
+                    include_context=True,
+                )
+                details[industry] = {
+                    "industry": industry,
+                    "company_count": sum(
+                        1 for value in industries_by_ticker.values() if value == industry
+                    ),
+                    "sentiment": merge_sentiment_views(formal, contextual)
+                    if scored_by_industry[industry]
+                    else pending_sentiment(),
+                }
+        companies_checkpoint: list[dict[str, Any]] = []
+        for item in universe:
+            ticker = item["ticker"]
+            industry = industries_by_ticker[ticker]
+            industry_sentiment = (details.get(industry) or {}).get("sentiment")
+            if not industry_sentiment:
+                industry_sentiment = pending_sentiment()
+            if scored_articles is not None and scored_by_ticker[ticker]:
+                formal_news = aggregate_news(
+                    scored_by_ticker[ticker], cutoff, primary_lookback_days=lookback_days
+                )
+                contextual_news = aggregate_news(
+                    scored_by_ticker[ticker],
+                    cutoff,
+                    primary_lookback_days=lookback_days,
+                    include_context=True,
+                )
+                news = merge_sentiment_views(formal_news, contextual_news)
+            else:
+                news = pending_sentiment("待评分")
+            news["article_count"] = company_news_counts.get(ticker, 0)
+            companies_checkpoint.append(
+                {
+                    **item,
+                    "display_name": display_names[ticker],
+                    "industry": industry or None,
+                    "industry_sentiment": industry_sentiment,
+                    "combined_sentiment": combined_company_score(
+                        item["market"], news, industry_sentiment, market_sentiment
+                    ),
+                    "news_sentiment": news,
+                    "crowding": crowding_snapshot(ticker, item["market"], hot_by_code),
+                }
+            )
+        checkpoint = {
+            "schema_version": 1,
+            "generated_at": now.astimezone(SHANGHAI_TIMEZONE).isoformat(),
+            "data_cutoff": as_of.isoformat(),
+            "scope": sorted({item["market"] for item in universe}),
+            "status": "partial",
+            "dashboard_integration": True,
+            "universe_source": str(board_path.relative_to(ROOT))
+            if board_path.is_relative_to(ROOT)
+            else str(board_path),
+            "company_count": len(companies_checkpoint),
+            "company_news_available_count": sum(
+                1
+                for company in companies_checkpoint
+                if company["news_sentiment"].get("score_0_100") is not None
+            ),
+            "company_formal_news_available_count": 0,
+            "industry_count": len(industry_names),
+            "industry_news_available_count": sum(
+                1
+                for detail in details.values()
+                if (detail.get("sentiment") or {}).get("score_0_100") is not None
+            ),
+            "industry_formal_news_available_count": 0,
+            "scoring_mode": scoring_mode,
+            "market_sentiment": {"A股": market_sentiment, "港股": {"status": "not_available_in_v1"}},
+            "industry_sentiments": details,
+            "companies": companies_checkpoint,
+            "warnings": warnings,
+            "skipped_count": 0,
+            "skipped_articles": [],
+            "progress": {
+                "stage": stage,
+                "stage_label": stage_label,
+                "company_news_completed": completed_company_news,
+                "company_news_total": len(universe),
+                "industry_news_completed": completed_industry_news,
+                "industry_news_total": len(industry_names),
+                "score_provider": score_provider,
+                "scored_article_count": len(scored_articles or [])
+                if scored_articles is not None
+                else 0,
+                "score_failures": score_failures,
+                "checkpoint_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+            },
+        }
+        checkpoint_callback(checkpoint)
+
+    emit_checkpoint("industry_mapping", "行业映射和市场情绪已完成")
+
+    completed_company_news = 0
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
             executor.submit(
@@ -2802,11 +2999,20 @@ def build_snapshot(
             try:
                 rows, source_warnings = future.result()
                 articles_by_ticker[item["ticker"]] = rows
+                company_news_counts[item["ticker"]] = len(rows)
                 warnings.extend(
                     f"{item['ticker']} source warning: {warning}" for warning in source_warnings
                 )
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
                 warnings.append(f"news failed for {item['ticker']}: {exc}")
+                company_news_counts[item["ticker"]] = 0
+            completed_company_news += 1
+            if completed_company_news % 10 == 0 or completed_company_news == len(universe):
+                emit_checkpoint(
+                    "company_news",
+                    "个股新闻抓取进行中",
+                    completed_company_news=completed_company_news,
+                )
 
     industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
         industry: [] for industry in industry_names
@@ -2829,13 +3035,66 @@ def build_snapshot(
             industry = futures[future]
             try:
                 industry_articles_by_name[industry] = future.result()
+                industry_news_counts[industry] = len(industry_articles_by_name[industry])
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
                 warnings.append(f"industry news failed for {industry}: {exc}")
+                industry_news_counts[industry] = 0
+            if len(industry_news_counts) % 5 == 0 or len(industry_news_counts) == len(industry_names):
+                emit_checkpoint(
+                    "industry_news",
+                    "行业新闻抓取进行中",
+                    completed_company_news=completed_company_news,
+                    completed_industry_news=len(industry_news_counts),
+                )
 
     all_articles = [article for items in articles_by_ticker.values() for article in items]
     all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
+
+    latest_primary_preview: list[dict[str, Any]] = []
+
+    def score_progress_callback(
+        provider_label: str,
+        target_articles: list[dict[str, Any]],
+        scores: dict[str, dict[str, Any]],
+        failures: list[dict[str, Any]],
+    ) -> None:
+        nonlocal latest_primary_preview
+        if provider_label == "primary":
+            latest_primary_preview = [
+                {
+                    **article,
+                    **scores[article["id"]],
+                    "preliminary": True,
+                    "scoring_method": f"llm:preliminary:{llm_config.model}",
+                }
+                for article in target_articles
+                if article["id"] in scores
+            ]
+            emit_checkpoint(
+                "primary_scoring",
+                "主模型评分已完成，等待复核模型",
+                completed_company_news=completed_company_news,
+                completed_industry_news=len(industry_news_counts),
+                scored_articles=latest_primary_preview,
+                score_provider="primary",
+                score_failures=len(failures),
+            )
+        elif provider_label == "review" and latest_primary_preview:
+            emit_checkpoint(
+                "review_scoring",
+                "复核模型评分进行中",
+                completed_company_news=completed_company_news,
+                completed_industry_news=len(industry_news_counts),
+                scored_articles=latest_primary_preview,
+                score_provider="review",
+                score_failures=len(failures),
+            )
+
     scored_articles, scoring_warnings, skipped_articles = score_articles(
-        all_articles, llm_config, review_llm_config
+        all_articles,
+        llm_config,
+        review_llm_config,
+        progress_callback=score_progress_callback,
     )
     warnings.extend(scoring_warnings)
     scored_by_ticker: dict[str, list[dict[str, Any]]] = {item["ticker"]: [] for item in universe}
@@ -2931,13 +3190,7 @@ def build_snapshot(
         "industry_count": len(industry_names),
         "industry_news_available_count": successful_industry_news,
         "industry_formal_news_available_count": formal_industry_news,
-        "scoring_mode": (
-            f"remote-mixed-llm:{llm_config.model}+A股/行业复核:{review_llm_config.model}"
-            if llm_config and review_llm_config
-            else f"remote-primary-llm:{llm_config.model}"
-            if llm_config
-            else "invalid-primary-model-configuration"
-        ),
+        "scoring_mode": scoring_mode,
         "news_policy": {
             "primary_lookback_days": lookback_days,
             "fallback_lookback_days": fallback_lookback_days,
@@ -2966,6 +3219,15 @@ def build_snapshot(
         "warnings": warnings,
         "skipped_count": len(skipped_articles),
         "skipped_articles": skipped_articles,
+        "progress": {
+            "stage": "complete",
+            "stage_label": "完整情绪评分已完成",
+            "company_news_completed": len(universe),
+            "company_news_total": len(universe),
+            "industry_news_completed": len(industry_names),
+            "industry_news_total": len(industry_names),
+            "checkpoint_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+        },
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
             "A股和行业新闻由主模型与复核模型共同评分；C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
@@ -3031,6 +3293,38 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = datetime.now(tz=SHANGHAI_TIMEZONE)
     as_of = effective_as_of(now, args.as_of)
+    last_checkpoint: dict[str, Any] | None = None
+
+    def persist_checkpoint(snapshot: dict[str, Any], message: str) -> None:
+        nonlocal last_checkpoint
+        last_checkpoint = snapshot
+        write_json(args.output.resolve(), snapshot)
+        write_json(args.site_output.resolve(), snapshot)
+        write_json(args.status_output.resolve(), snapshot_status_payload(snapshot, message))
+
+    def handle_termination(signum: int, _frame: Any) -> None:
+        if last_checkpoint is not None:
+            interrupted = dict(last_checkpoint)
+            interrupted["status"] = "partial"
+            interrupted["warnings"] = [
+                *interrupted.get("warnings", []),
+                f"任务收到终止信号 {signum}；已发布最近一次阶段性快照，未完成部分未计入。",
+            ]
+            interrupted["progress"] = {
+                **(interrupted.get("progress") or {}),
+                "stage": "interrupted",
+                "stage_label": "任务中断，保留已完成阶段",
+                "interrupted_by_signal": signum,
+                "checkpoint_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+            }
+            try:
+                persist_checkpoint(interrupted, "任务中断；页面已切换到最近一次阶段性结果。")
+            except OSError:
+                pass
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, handle_termination)
+    signal.signal(signal.SIGINT, handle_termination)
     try:
         if (
             args.lookback_days < 1
@@ -3070,24 +3364,20 @@ def main(argv: list[str] | None = None) -> int:
             company_limit=args.company_limit,
             llm_config=primary_config,
             review_llm_config=review_config,
+            checkpoint_callback=lambda snapshot: persist_checkpoint(
+                snapshot, "情绪任务进行中；页面显示最近一次阶段性结果。"
+            ),
         )
         write_json(args.output.resolve(), snapshot)
         write_json(args.site_output.resolve(), snapshot)
-        status = {
-            "status": snapshot["status"],
-            "generated_at": snapshot["generated_at"],
-            "data_cutoff": snapshot["data_cutoff"],
-            "scoring_mode": snapshot["scoring_mode"],
-            "company_count": snapshot["company_count"],
-            "skipped_count": snapshot.get("skipped_count", 0),
-            "skipped_articles": snapshot.get("skipped_articles", []),
-            "warnings": snapshot.get("warnings", []),
-            "message": (
+        status = snapshot_status_payload(
+            snapshot,
+            (
                 "情绪部分更新；失败项目已重试后跳过，其余成功结果已写入。"
                 if snapshot.get("skipped_count", 0)
                 else "情绪数据更新完成。"
             ),
-        }
+        )
         write_json(args.status_output.resolve(), status)
         if not args.no_archive:
             archive_path = args.archive_dir.resolve() / f"{as_of.isoformat()}.json"

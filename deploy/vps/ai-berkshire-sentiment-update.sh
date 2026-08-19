@@ -16,7 +16,14 @@ if ! flock -n 9; then
 fi
 
 cd "${REPO_ROOT}"
-git pull --ff-only origin main
+# A previous interrupted run may have left generated snapshots or local VPS
+# patches unstaged.  Do not overwrite those outputs with a pull; the job can
+# still run against the current checkout and publish its own checkpoint.
+if git diff --quiet && [[ -z "$(git status --porcelain --untracked-files=all)" ]]; then
+    git pull --ff-only origin main
+else
+    echo "pre-existing repository changes detected; skip pull to protect VPS outputs"
+fi
 
 set +e
 "${PYTHON}" tools/sentiment_snapshot.py \
@@ -29,11 +36,17 @@ SNAPSHOT_EXIT=$?
 set -e
 
 if (( SNAPSHOT_EXIT != 0 )); then
-    # The Python job writes an error status without touching the last good
-    # snapshot. Publish that status so the dashboard can show the failure.
-    git add -- site/data/sentiment_status.json
+    # The Python job writes a checkpoint before exiting on interruption or
+    # timeout. Publish every available partial artifact, not only the status,
+    # so the dashboard can show the latest completed stages.
+    for path in \
+        data/sentiment/latest.json \
+        site/data/sentiment.json \
+        site/data/sentiment_status.json; do
+        [[ -e "${path}" ]] && git add -- "${path}"
+    done
     if ! git diff --cached --quiet; then
-        git commit -m "chore: report A-share sentiment failure $(date +%F)"
+        git commit -m "chore: publish partial A-share sentiment $(date +%F-%H%M)"
         git push origin main
     fi
     exit "${SNAPSHOT_EXIT}"
