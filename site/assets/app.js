@@ -196,20 +196,62 @@ function sentimentForItem(item) {
   return item?.ticker ? state.sentiments.get(item.ticker) || null : null;
 }
 
-function sentimentTone(score) {
-  if (!Number.isFinite(Number(score))) return "sentiment-muted";
+function numericSentimentScore(score) {
+  if (score === null || score === undefined || score === "") return null;
   const value = Number(score);
+  return Number.isFinite(value) ? value : null;
+}
+
+function sentimentTone(score) {
+  const value = numericSentimentScore(score);
+  if (value === null) return "sentiment-muted";
   if (value >= 70) return "sentiment-positive";
   if (value <= 45) return "sentiment-negative";
   return "sentiment-neutral";
 }
 
 function sentimentScoreText(score) {
-  return Number.isFinite(Number(score)) ? Number(score).toFixed(1) : "—";
+  const value = numericSentimentScore(score);
+  return value === null ? "—" : value.toFixed(1);
 }
 
 function sentimentStateText(sentiment) {
   return sentiment?.state || "无有效分数";
+}
+
+function sentimentProgressLabel() {
+  if (state.sentimentSnapshot?.status !== "partial") return null;
+  const stage = state.sentimentSnapshot?.progress?.stage;
+  return {
+    industry_mapping: "数据准备中",
+    company_news: "个股新闻抓取中",
+    industry_news: "行业新闻抓取中",
+    primary_scoring: "主模型评分中",
+    review_scoring: "复核模型评分中",
+    interrupted: "本次中断，保留已完成结果",
+  }[stage] || null;
+}
+
+function sentimentPendingLabel(sentiment) {
+  const progressLabel = sentimentProgressLabel();
+  if (!progressLabel) return null;
+  const coverage = sentiment?.coverage || {};
+  const hasScoredCompanyOrIndustry = coverage.company || coverage.industry;
+  if (
+    sentiment?.status === "pending"
+    || (sentiment?.status === "context_only" && !hasScoredCompanyOrIndustry)
+  ) {
+    return progressLabel;
+  }
+  return null;
+}
+
+function sentimentDisplayScore(sentiment) {
+  return sentimentPendingLabel(sentiment) ? null : sentiment?.score_0_100;
+}
+
+function sentimentDisplayState(sentiment) {
+  return sentimentPendingLabel(sentiment) || sentimentStateText(sentiment);
 }
 
 function sentimentRecencyText(news) {
@@ -233,6 +275,21 @@ function updateSentimentAlert() {
     els.sentimentAlert.textContent = `情绪数据更新失败：${status.error || "模型未完成复核"}。当前显示上一份成功快照。`;
     return;
   }
+  const progressStage = status.progress?.stage;
+  const inProgressStages = new Set([
+    "industry_mapping",
+    "company_news",
+    "industry_news",
+    "primary_scoring",
+    "review_scoring",
+  ]);
+  if (inProgressStages.has(progressStage)) {
+    const progress = status.progress || {};
+    const companyPart = `${progress.company_news_completed || 0}/${progress.company_news_total || 0}`;
+    const industryPart = `${progress.industry_news_completed || 0}/${progress.industry_news_total || 0}`;
+    els.sentimentAlert.textContent = `情绪数据更新中：${progress.stage_label || "正在处理"}；个股 ${companyPart}，行业 ${industryPart}。已保存阶段性结果，未完成层暂不计入。`;
+    return;
+  }
   const skipped = Array.isArray(status.skipped_articles) ? status.skipped_articles : [];
   const skippedCount = Number(status.skipped_count || skipped.length || 0);
   const labels = skipped
@@ -246,9 +303,10 @@ function updateSentimentAlert() {
 
 function renderSentimentBadge(sentiment, label = "综合") {
   const badge = document.createElement("span");
-  const score = sentiment?.score_0_100;
+  const pendingLabel = sentimentPendingLabel(sentiment);
+  const score = pendingLabel ? null : sentiment?.score_0_100;
   badge.className = `sentiment-badge ${sentimentTone(score)}`;
-  const displayLabel = sentiment?.status === "context_only" ? "上下文" : label;
+  const displayLabel = pendingLabel || (sentiment?.status === "context_only" ? "上下文" : label);
   badge.textContent = `${displayLabel} ${sentimentScoreText(score)}`;
   return badge;
 }
@@ -262,13 +320,13 @@ function renderSentimentCell(item) {
   cell.append(renderSentimentBadge(combined));
   const stateLine = document.createElement("div");
   stateLine.className = "sentiment-state";
-  stateLine.textContent = sentimentStateText(combined);
+  stateLine.textContent = sentimentDisplayState(combined);
   cell.append(stateLine);
   const industry = record?.industry_sentiment || record?.industry_detail;
   const market = state.sentimentSnapshot?.market_sentiment?.[item.market];
   const layers = document.createElement("div");
   layers.className = "sentiment-layers";
-  layers.textContent = `个股 ${sentimentScoreText(record?.news_sentiment?.score_0_100)} · 行业 ${sentimentScoreText(industry?.score_0_100)} · 市场 ${sentimentScoreText(market?.score_0_100)}`;
+  layers.textContent = `个股 ${sentimentScoreText(sentimentDisplayScore(record?.news_sentiment))} · 行业 ${sentimentScoreText(sentimentDisplayScore(industry))} · 市场 ${sentimentScoreText(sentimentDisplayScore(market))}`;
   layers.title = "个股新闻 · 行业新闻 · 市场情绪；缺失层显示为 —，不会自动放大其他层权重";
   cell.append(layers);
   const freshness = document.createElement("div");
@@ -2304,11 +2362,11 @@ function renderSentimentDetail(item) {
   const market = state.sentimentSnapshot?.market_sentiment?.[item.market];
   const combined = record.combined_sentiment;
   const rows = [
-    ["综合情绪（三层）", `${sentimentScoreText(combined?.score_0_100)} · ${sentimentStateText(combined)}`],
-    ["个股情绪（含辅助AI）", `${sentimentScoreText(record.news_sentiment?.score_0_100)} · ${sentimentStateText(record.news_sentiment)}`],
+    ["综合情绪（三层）", `${sentimentScoreText(sentimentDisplayScore(combined))} · ${sentimentDisplayState(combined)}`],
+    ["个股情绪（含辅助AI）", `${sentimentScoreText(sentimentDisplayScore(record.news_sentiment))} · ${sentimentDisplayState(record.news_sentiment)}`],
     ["个股正式来源", `${sentimentScoreText(record.news_sentiment?.formal_score_0_100)} · ${record.news_sentiment?.formal_status || "待复核"}`],
-    ["行业情绪", `${sentimentScoreText(industry?.score_0_100)} · ${sentimentStateText(industry)}`],
-    ["市场情绪", `${sentimentScoreText(market?.score_0_100)} · ${sentimentStateText(market)}`],
+    ["行业情绪", `${sentimentScoreText(sentimentDisplayScore(industry))} · ${sentimentDisplayState(industry)}`],
+    ["市场情绪", `${sentimentScoreText(sentimentDisplayScore(market))} · ${sentimentDisplayState(market)}`],
     ["新闻池", `正式 ${record.news_sentiment?.score_article_count || 0} · AI分析 ${record.news_sentiment?.context_only_article_count || 0} · 辅助总量 ${record.news_sentiment?.auxiliary_article_count || 0}`],
     ["新闻时效", sentimentRecencyText(record.news_sentiment)],
     ["情绪数据截止", state.sentimentSnapshot?.data_cutoff || "待复核"],
