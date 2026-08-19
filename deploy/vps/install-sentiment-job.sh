@@ -12,26 +12,22 @@ fi
 install -D -m 0755 \
     "${REPO_ROOT}/deploy/vps/ai-berkshire-sentiment-update.sh" \
     /usr/local/sbin/ai-berkshire-sentiment-update
-# Refresh the existing technical wrapper too so both jobs use the shared Git lock.
+# Install the unified A-share scheduler. It is the only scheduled writer after
+# this migration; the legacy A/H, US, sentiment, and independent opportunity
+# timers are disabled below.
 install -D -m 0755 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update.sh" \
-    /usr/local/sbin/ai-berkshire-technical-update
+    "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-scheduler.sh" \
+    /usr/local/sbin/ai-berkshire-a-share-scheduler
 install -D -m 0644 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-sentiment-update.service" \
-    /etc/systemd/system/ai-berkshire-sentiment-update.service
-install -D -m 0644 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-sentiment-update.timer" \
-    /etc/systemd/system/ai-berkshire-sentiment-update.timer
-# Keep the A/H and US technical timers in sync with the repository as well.
-install -D -m 0644 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update@.service" \
-    /etc/systemd/system/ai-berkshire-technical-update@.service
-install -D -m 0644 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update-ah.timer" \
-    /etc/systemd/system/ai-berkshire-technical-update-ah.timer
-install -D -m 0644 \
-    "${REPO_ROOT}/deploy/vps/ai-berkshire-technical-update-us.timer" \
-    /etc/systemd/system/ai-berkshire-technical-update-us.timer
+    "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-scheduler.service" \
+    /etc/systemd/system/ai-berkshire-a-share-scheduler@.service
+
+for timer in \
+    annual morning market intraday close daily heavy reconcile; do
+    install -D -m 0644 \
+        "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-${timer}.timer" \
+        "/etc/systemd/system/ai-berkshire-a-share-${timer}.timer"
+done
 
 install -d -m 0750 /etc/ai-berkshire
 if [[ ! -f /etc/ai-berkshire/sentiment.env ]]; then
@@ -41,6 +37,22 @@ if [[ ! -f /etc/ai-berkshire/sentiment.env ]]; then
 fi
 
 systemctl daemon-reload
-systemctl enable --now ai-berkshire-sentiment-update.timer
-systemctl enable --now ai-berkshire-technical-update-ah.timer ai-berkshire-technical-update-us.timer
-systemctl list-timers ai-berkshire-sentiment-update.timer --no-pager
+
+# Remove the old independent writers before enabling the unified schedule.
+systemctl disable --now \
+    ai-berkshire-sentiment-update.timer \
+    ai-berkshire-technical-update-ah.timer \
+    ai-berkshire-technical-update-us.timer \
+    ai-berkshire-after-close-review.timer 2>/dev/null || true
+
+systemctl enable --now \
+    ai-berkshire-a-share-annual.timer \
+    ai-berkshire-a-share-morning.timer \
+    ai-berkshire-a-share-market.timer \
+    ai-berkshire-a-share-intraday.timer \
+    ai-berkshire-a-share-close.timer \
+    ai-berkshire-a-share-daily.timer \
+    ai-berkshire-a-share-heavy.timer \
+    ai-berkshire-a-share-reconcile.timer
+
+systemctl list-timers 'ai-berkshire-a-share-*.timer' --no-pager

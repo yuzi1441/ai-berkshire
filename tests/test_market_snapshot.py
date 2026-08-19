@@ -26,6 +26,12 @@ class MarketSnapshotTests(unittest.TestCase):
         self.assertEqual(quotes[0]["price"], 23.16)
         self.assertEqual(quotes[0]["currency"], "CNY")
 
+    def test_index_watchlist_contains_requested_a_share_indices(self):
+        indices = market_snapshot.load_index_watchlist()
+        self.assertEqual(len(indices), 7)
+        self.assertEqual(indices["sh000300"]["company"], "沪深300")
+        self.assertEqual(indices["sh000300"]["kind"], "index")
+
     def test_standard_session_gating(self):
         timezone = ZoneInfo("Asia/Shanghai")
         self.assertTrue(market_snapshot.is_market_open("A股", datetime(2026, 7, 20, 10, 0, tzinfo=timezone)))

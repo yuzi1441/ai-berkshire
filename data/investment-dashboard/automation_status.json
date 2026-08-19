@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "updated_at": null,
+  "schedules": [
+    {"job_id": "annual", "label": "A股年报日期", "schedule": "每天 08:30", "description": "最近实际披露日＋下一次预约日"},
+    {"job_id": "morning", "label": "盘前检查", "schedule": "交易日 08:45", "description": "看板、持仓复核和数据健康检查"},
+    {"job_id": "market", "label": "行情＋指数", "schedule": "交易日 09:30–11:30、13:00–15:00 每5分钟", "description": "A股个股与7个指数快照"},
+    {"job_id": "intraday", "label": "盘中技术面", "schedule": "交易日 10:00–15:00 每30分钟", "description": "A股30分钟辅助观察"},
+    {"job_id": "close", "label": "收盘检查", "schedule": "交易日 15:05", "description": "收盘行情、持仓提醒和看板"},
+    {"job_id": "daily", "label": "日线技术面", "schedule": "交易日 16:30", "description": "A股日线技术分析"},
+    {"job_id": "heavy", "label": "情绪→机会扫描", "schedule": "交易日 18:10", "description": "重任务串行接力"},
+    {"job_id": "reconcile", "label": "最终核对发布", "schedule": "交易日 21:30", "description": "统一核对并发布最终状态"}
+  ],
+  "jobs": {}
+}

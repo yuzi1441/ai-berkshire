@@ -249,6 +249,95 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+.index-band,
+.annual-panel,
+.automation-panel {
+  margin: 0 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(9, 16, 23, 0.72);
+}
+.index-band { padding: 14px; }
+.index-band-head,
+.annual-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.index-band h2 { margin: 3px 0 0; font-size: 17px; color: var(--ink-strong); }
+.index-band-meta,
+.annual-panel-meta {
+  margin: 0;
+  color: var(--ink-faint);
+  font: 11px var(--font-mono);
+  text-align: right;
+}
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.index-card {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(16, 27, 37, 0.7);
+}
+.index-card-name,
+.index-card-change,
+.index-card-price { display: block; }
+.index-card-name { color: var(--ink-soft); font-size: 11px; }
+.index-card-price {
+  margin-top: 7px;
+  color: var(--ink-strong);
+  font: 700 17px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.index-card-change {
+  margin-top: 3px;
+  font: 11px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.index-card-change.positive { color: var(--up); }
+.index-card-change.negative { color: var(--down); }
+.index-card-change.neutral { color: var(--ink-faint); }
+.annual-panel,
+.automation-panel { overflow: hidden; }
+.annual-panel[hidden],
+.automation-panel[hidden] { display: none !important; }
+.annual-panel-toggle {
+  padding: 13px 14px;
+  cursor: pointer;
+  list-style: none;
+}
+.annual-panel-toggle::-webkit-details-marker { display: none; }
+.annual-panel-toggle strong { display: block; margin-top: 3px; color: var(--ink-strong); font-size: 15px; }
+.annual-panel-body { padding: 0 14px 14px; overflow-x: auto; }
+.annual-date-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+.annual-date-table th,
+.annual-date-table td {
+  padding: 8px 9px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.annual-date-table th { color: var(--ink-faint); font-weight: 600; }
+.annual-date-table td { color: var(--ink-soft); }
+.annual-date-table td:first-child { color: var(--ink-strong); font-weight: 600; }
+.annual-date-table .date-ok { color: var(--buy); }
+.annual-date-table .date-muted { color: var(--ink-faint); }
+.annual-date-table .date-warn { color: var(--watch); }
+.automation-status-table .status-ok { color: var(--buy); }
+.automation-status-table .status-partial,
+.automation-status-table .status-running { color: var(--watch); }
+.automation-status-table .status-error { color: var(--sell); }
+.automation-status-table .status-skipped,
+.automation-status-table .status-pending { color: var(--ink-faint); }
+
 /* AI复核后的研究优先级队列，不改变主报告或买入筛选。 */
 .attention-panel {
   margin: 0 0 12px;
@@ -2070,6 +2159,7 @@ tbody tr.active .valuation-chip.ready {
 
 @media (max-width: 900px) {
   .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .index-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .attention-list { grid-template-columns: 1fr; }
 }
 
@@ -2110,6 +2200,14 @@ tbody tr.active .valuation-chip.ready {
   .topbar-actions .btn { flex: 1 1 0; min-height: 38px; padding: 7px 10px; }
 
   .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .index-band { padding: 11px; }
+  .index-band-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .index-band-meta { text-align: left; }
+  .index-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .index-card { padding: 9px; }
+  .index-card-price { font-size: 15px; }
+  .annual-panel-toggle { align-items: flex-start; padding: 11px; }
+  .annual-panel-meta { max-width: 135px; }
   .metric { min-height: 62px; padding: 9px 10px; }
   .metric-value { font-size: 17px; }
   .attention-toggle { align-items: flex-start; padding: 10px 11px; }

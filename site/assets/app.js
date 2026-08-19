@@ -11,8 +11,17 @@ const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
 const TRACKING_HIDDEN_STORAGE_KEY = "ai-berkshire.hidden-post-buy-tracking.v1";
 const DEEP_REVIEW_TOKEN_STORAGE_KEY = "ai-berkshire.deep-review-token.v1";
-const LIVE_INTERVAL_MS = 45_000;
-const SNAPSHOT_INTERVAL_MS = 180_000;
+const LIVE_INTERVAL_MS = 300_000;
+const SNAPSHOT_INTERVAL_MS = 300_000;
+const A_SHARE_INDEX_WATCH = [
+  { index_id: "sse", ticker: "000001.SH", symbol: "sh000001", company: "上证指数" },
+  { index_id: "szse", ticker: "399001.SZ", symbol: "sz399001", company: "深证成指" },
+  { index_id: "chinext", ticker: "399006.SZ", symbol: "sz399006", company: "创业板指" },
+  { index_id: "star50", ticker: "000688.SH", symbol: "sh000688", company: "科创50" },
+  { index_id: "hs300", ticker: "000300.SH", symbol: "sh000300", company: "沪深300" },
+  { index_id: "csi500", ticker: "000905.SH", symbol: "sh000905", company: "中证500" },
+  { index_id: "csi1000", ticker: "000852.SH", symbol: "sh000852", company: "中证1000" },
+];
 
 const state = {
   decisions: [],
@@ -29,6 +38,9 @@ const state = {
   sentimentStatus: null,
   sentimentError: null,
   quotes: new Map(),
+  indices: new Map(),
+  annualReportDates: null,
+  automationStatus: null,
   selectedKey: null,
   view: "decision",
   market: "all",
@@ -80,6 +92,12 @@ const els = {
   refreshQuotes: document.querySelector("#refresh-quotes"),
   toast: document.querySelector("#toast"),
   emptyState: document.querySelector("#empty-state"),
+  indexCards: document.querySelector("#index-cards"),
+  indexBandMeta: document.querySelector("#index-band-meta"),
+  annualPanelMeta: document.querySelector("#annual-panel-meta"),
+  annualDateContent: document.querySelector("#annual-date-content"),
+  automationPanelMeta: document.querySelector("#automation-panel-meta"),
+  automationStatusContent: document.querySelector("#automation-status-content"),
 };
 
 function trackingForItem(item) {
@@ -1427,6 +1445,159 @@ function setLiveStatus(mode, text) {
   else els.liveDot.classList.add("off");
 }
 
+function indexChangeTone(value) {
+  if (!Number.isFinite(Number(value)) || Number(value) === 0) return "neutral";
+  return Number(value) > 0 ? "positive" : "negative";
+}
+
+function renderIndexCards() {
+  if (!els.indexCards) return;
+  els.indexCards.replaceChildren();
+  const records = A_SHARE_INDEX_WATCH
+    .map((item) => state.indices.get(item.index_id) || state.indices.get(item.ticker))
+    .filter(Boolean);
+  if (!records.length) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "指数行情快照尚未加载。";
+    els.indexCards.append(empty);
+    if (els.indexBandMeta) els.indexBandMeta.textContent = "等待行情快照";
+    return;
+  }
+  for (const item of records) {
+    const card = document.createElement("article");
+    card.className = "index-card";
+    const name = document.createElement("span");
+    name.className = "index-card-name";
+    name.textContent = item.name || item.company || item.ticker;
+    const price = document.createElement("strong");
+    price.className = "index-card-price";
+    price.textContent = Number(item.price).toFixed(2);
+    const change = document.createElement("span");
+    const changePct = Number(item.change_pct);
+    change.className = `index-card-change ${indexChangeTone(changePct)}`;
+    change.textContent = Number.isFinite(changePct) ? `${changePct >= 0 ? "+" : ""}${changePct.toFixed(2)}%` : "—";
+    card.append(name, price, change);
+    els.indexCards.append(card);
+  }
+  if (els.indexBandMeta) {
+    els.indexBandMeta.textContent = `${records.length}/${A_SHARE_INDEX_WATCH.length} 个指数 · ${state.quoteUpdatedAt ? new Date(state.quoteUpdatedAt).toLocaleString() : "时间待复核"}`;
+  }
+}
+
+function renderAnnualReportDates() {
+  if (!els.annualDateContent) return;
+  const snapshot = state.annualReportDates;
+  els.annualDateContent.replaceChildren();
+  if (!snapshot || !Array.isArray(snapshot.records)) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "年报日期快照尚未加载。";
+    els.annualDateContent.append(empty);
+    if (els.annualPanelMeta) els.annualPanelMeta.textContent = "等待更新";
+    return;
+  }
+  if (els.annualPanelMeta) {
+    els.annualPanelMeta.textContent = `${snapshot.record_count || snapshot.records.length} 家 · 数据截止 ${snapshot.data_cutoff || "待复核"}`;
+  }
+  const table = document.createElement("table");
+  table.className = "annual-date-table";
+  const head = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  const latestPeriodLabel = (snapshot.latest_report_period || "最近年度") + "实际披露";
+  const nextPeriodLabel = (snapshot.next_report_period || "下一年度") + "预约披露";
+  for (const label of ["公司", "代码", latestPeriodLabel, "核对状态", nextPeriodLabel, "状态"]) {
+    const th = document.createElement("th");
+    th.textContent = label;
+    headerRow.append(th);
+  }
+  head.append(headerRow);
+  const body = document.createElement("tbody");
+  for (const item of snapshot.records) {
+    const row = document.createElement("tr");
+    const values = [
+      item.company || "未识别",
+      item.ticker || "—",
+      item.latest_actual_disclosure_date || "未公布",
+      item.latest_actual_verification === "cross_checked" ? "双源一致" : item.latest_actual_verification === "source_mismatch" ? "来源不一致" : item.latest_actual_verification === "single_source" ? "单源" : "未核验",
+      item.next_scheduled_disclosure_date || "未公布",
+      item.next_status || "未公布",
+    ];
+    values.forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? "th" : "td");
+      cell.textContent = value;
+      if (index === 2) cell.className = item.latest_actual_disclosure_date ? "date-ok" : "date-muted";
+      if (index === 3 && item.latest_actual_verification === "source_mismatch") cell.className = "date-warn";
+      if (index === 4) cell.className = item.next_scheduled_disclosure_date ? "date-ok" : "date-muted";
+      row.append(cell);
+    });
+    body.append(row);
+  }
+  table.append(head, body);
+  els.annualDateContent.append(table);
+}
+
+function automationStatusLabel(status) {
+  return {
+    ok: "正常",
+    partial: "部分成功",
+    running: "运行中",
+    error: "失败",
+    skipped: "跳过",
+  }[status] || "待首次运行";
+}
+
+function renderAutomationStatus() {
+  if (!els.automationStatusContent) return;
+  const snapshot = state.automationStatus;
+  els.automationStatusContent.replaceChildren();
+  if (!snapshot) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "统一调度器尚未产生状态快照。安装VPS定时器后，这里会显示每项任务的执行时间。";
+    els.automationStatusContent.append(empty);
+    if (els.automationPanelMeta) els.automationPanelMeta.textContent = "等待调度器";
+    return;
+  }
+  const jobs = snapshot.jobs || {};
+  const schedules = Array.isArray(snapshot.schedules) ? snapshot.schedules : [];
+  if (els.automationPanelMeta) {
+    els.automationPanelMeta.textContent = snapshot.updated_at ? `最后更新 ${new Date(snapshot.updated_at).toLocaleString()}` : "等待首次运行";
+  }
+  const table = document.createElement("table");
+  table.className = "annual-date-table automation-status-table";
+  const head = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  for (const label of ["任务", "计划时间", "状态", "最近完成", "耗时", "说明"]) {
+    const th = document.createElement("th");
+    th.textContent = label;
+    headerRow.append(th);
+  }
+  head.append(headerRow);
+  const body = document.createElement("tbody");
+  for (const schedule of schedules) {
+    const job = jobs[schedule.job_id] || {};
+    const row = document.createElement("tr");
+    const values = [
+      schedule.label || schedule.job_id || "未命名任务",
+      schedule.schedule || "待配置",
+      automationStatusLabel(job.status),
+      job.finished_at || job.last_success_at || "待首次运行",
+      job.duration_seconds == null ? "—" : `${job.duration_seconds}s`,
+      job.message || schedule.description || "",
+    ];
+    values.forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? "th" : "td");
+      cell.textContent = value;
+      if (index === 2) cell.className = `status-${job.status || "pending"}`;
+      row.append(cell);
+    });
+    body.append(row);
+  }
+  table.append(head, body);
+  els.automationStatusContent.append(table);
+}
+
 function isLikelyMarketOpen() {
   try {
     const parts = new Intl.DateTimeFormat("en-GB", {
@@ -1483,6 +1654,8 @@ function parseTencentFieldString(raw, meta) {
     market: meta.market,
     symbol: meta.symbol,
     name: fields[1] || meta.company,
+    kind: meta.kind || "stock",
+    index_id: meta.index_id || null,
     price,
     previous_close: previous,
     change_pct: changePct,
@@ -1503,6 +1676,14 @@ async function fetchLiveQuotes() {
       ticker: item.ticker,
       market: item.market,
       company: item.company,
+      kind: "stock",
+    });
+  }
+  for (const index of A_SHARE_INDEX_WATCH) {
+    watch.push({
+      ...index,
+      market: "A股",
+      kind: "index",
     });
   }
   if (!watch.length) return 0;
@@ -1516,7 +1697,8 @@ async function fetchLiveQuotes() {
       const raw = window[`v_${meta.symbol}`];
       const quote = parseTencentFieldString(raw, meta);
       if (quote) {
-        state.quotes.set(quote.ticker, quote);
+        if (quote.kind === "index") state.indices.set(quote.index_id || quote.ticker, quote);
+        else state.quotes.set(quote.ticker, quote);
         loaded += 1;
       }
       try {
@@ -1553,7 +1735,26 @@ async function loadSnapshotQuotes() {
     });
     count += 1;
   }
+  state.indices.clear();
+  for (const index of payload.indices || []) {
+    if (!index?.ticker || !Number.isFinite(Number(index.price))) continue;
+    const previous = Number(index.previous_close);
+    const price = Number(index.price);
+    const changePct = Number.isFinite(Number(index.change_pct))
+      ? Number(index.change_pct)
+      : Number.isFinite(previous) && previous > 0
+        ? ((price - previous) / previous) * 100
+        : null;
+    state.indices.set(index.index_id || index.ticker, {
+      ...index,
+      price,
+      previous_close: previous,
+      change_pct: changePct,
+      source: index.source || "snapshot",
+    });
+  }
   state.quoteUpdatedAt = payload.generated_at || new Date().toISOString();
+  renderIndexCards();
   return count;
 }
 
@@ -3295,6 +3496,9 @@ function closeDetail() {
 }
 
 function renderAll() {
+  renderIndexCards();
+  renderAnnualReportDates();
+  renderAutomationStatus();
   renderAttentionPanel();
   renderRows();
   renderDetail();
@@ -3519,6 +3723,20 @@ async function loadOpportunityScanStatus() {
   state.opportunityScanStatus = await response.json();
 }
 
+async function loadAnnualReportDates() {
+  const response = await fetch("./data/annual_report_dates.json", { cache: "no-cache" });
+  if (!response.ok) throw new Error("annual report dates missing");
+  state.annualReportDates = await response.json();
+  renderAnnualReportDates();
+}
+
+async function loadAutomationStatus() {
+  const response = await fetch("./data/automation_status.json", { cache: "no-cache" });
+  if (!response.ok) throw new Error("automation status missing");
+  state.automationStatus = await response.json();
+  renderAutomationStatus();
+}
+
 async function loadDashboard() {
   setLiveStatus("idle", "加载决策数据…");
   const response = await fetch(`./data/decision_board.json?t=${Date.now()}`, { cache: "no-store" });
@@ -3553,6 +3771,18 @@ async function loadDashboard() {
     state.sentimentSnapshot = null;
     state.sentiments = new Map();
     updateSentimentAlert();
+  }
+  try {
+    await loadAnnualReportDates();
+  } catch (error) {
+    console.warn("annual report dates snapshot failed", error);
+    state.annualReportDates = null;
+  }
+  try {
+    await loadAutomationStatus();
+  } catch (error) {
+    console.warn("automation status snapshot failed", error);
+    state.automationStatus = null;
   }
   state.hiddenTrackingKeys = loadHiddenTrackingKeys();
   updateTrackingControls();

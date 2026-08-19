@@ -1,0 +1,10 @@
+[Unit]
+Description=Generate the daily A-share technical layer
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:30:00 Asia/Shanghai
+Persistent=false
+Unit=ai-berkshire-a-share-scheduler@daily.service
+
+[Install]
+WantedBy=timers.target

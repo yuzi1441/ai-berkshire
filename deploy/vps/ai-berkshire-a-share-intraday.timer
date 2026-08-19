@@ -1,0 +1,18 @@
+[Unit]
+Description=Refresh A-share 30-minute technical observations
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 10:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 10:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 11:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 11:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 13:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 14:00:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 14:30:00 Asia/Shanghai
+OnCalendar=Mon..Fri *-*-* 15:00:00 Asia/Shanghai
+Unit=ai-berkshire-a-share-scheduler@intraday.service
+AccuracySec=30s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

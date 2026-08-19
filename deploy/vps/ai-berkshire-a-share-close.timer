@@ -1,0 +1,10 @@
+[Unit]
+Description=Finalize A-share closing quote and post-buy checks
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 15:05:00 Asia/Shanghai
+Persistent=false
+Unit=ai-berkshire-a-share-scheduler@close.service
+
+[Install]
+WantedBy=timers.target

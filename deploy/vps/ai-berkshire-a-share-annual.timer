@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh A-share annual-report disclosure dates every day
+
+[Timer]
+OnCalendar=*-*-* 08:30:00 Asia/Shanghai
+Persistent=true
+Unit=ai-berkshire-a-share-scheduler@annual.service
+
+[Install]
+WantedBy=timers.target

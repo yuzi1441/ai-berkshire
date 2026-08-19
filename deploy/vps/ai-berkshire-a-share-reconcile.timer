@@ -1,0 +1,10 @@
+[Unit]
+Description=Reconcile and publish the final A-share dashboard state
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 21:30:00 Asia/Shanghai
+Persistent=false
+Unit=ai-berkshire-a-share-scheduler@reconcile.service
+
+[Install]
+WantedBy=timers.target

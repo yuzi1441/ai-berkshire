@@ -60,12 +60,15 @@ token；Google/Bing RSS 及雪球公开索引每个渠道默认最多抓取 20 �
 cd /opt/ai-berkshire
 git pull --ff-only origin main
 bash deploy/vps/install-sentiment-job.sh
-systemctl start ai-berkshire-sentiment-update.service
-journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
+systemctl start ai-berkshire-a-share-scheduler@heavy.service
+journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 ```
 
-定时器默认在工作日北京时间 18:10 后加 0–5 分钟随机延迟执行。脚本与技术面任务
-共用 Git 仓库锁，避免同时 pull/commit/push。
+安装脚本会启用统一的A股调度：08:30年报日期、盘中5分钟行情和指数、30分钟盘中技术面、
+15:05收盘检查、16:30日线技术面、18:10情绪接力机会扫描、21:30最终核对。情绪和机会扫描
+在同一个重任务链中串行执行，任务状态写入 `data/investment-dashboard/automation_status.json`
+和 `site/data/automation_status.json`。安装时会停用旧的A/H、US、独立情绪和独立盘后扫描定时器，
+避免多个任务同时写同一份看板。
 
 ## A股双模型复核配置
 
@@ -89,10 +92,11 @@ journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
 主报告判断和情绪新闻会使用同一组 Flash + MiMo-V2.5-Pro 模型；旧的 `.env.sentiment*`
 文件仅作为没有新配置时的兼容回退。
 
-检查定时器和最近日志：
+检查统一定时器和最近日志：
 
 ```bash
-systemctl list-timers ai-berkshire-sentiment-update.timer --no-pager
-systemctl status ai-berkshire-sentiment-update.timer --no-pager
-journalctl -u ai-berkshire-sentiment-update.service -n 100 --no-pager
+systemctl list-timers 'ai-berkshire-a-share-*.timer' --no-pager
+systemctl status ai-berkshire-a-share-heavy.timer --no-pager
+journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
+cat data/investment-dashboard/automation_status.json
 ```

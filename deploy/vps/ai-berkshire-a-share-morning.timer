@@ -1,0 +1,10 @@
+[Unit]
+Description=Prepare the A-share dashboard before the open
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 08:45:00 Asia/Shanghai
+Persistent=false
+Unit=ai-berkshire-a-share-scheduler@morning.service
+
+[Install]
+WantedBy=timers.target

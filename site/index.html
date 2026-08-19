@@ -8,7 +8,7 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=20260819-sentiment-layers" />
+    <link rel="stylesheet" href="./assets/styles.css?v=20260819-automation-a-share-3" />
   </head>
   <body>
     <div class="app-shell">
@@ -33,6 +33,40 @@
       <section class="summary-band" aria-label="决策总览">
         <div class="summary-grid" id="summary"></div>
       </section>
+      <section class="index-band" aria-label="A股指数行情">
+        <div class="index-band-head">
+          <div>
+            <p class="eyebrow">A-SHARE INDEX MONITOR</p>
+            <h2>A股指数行情</h2>
+          </div>
+          <p class="index-band-meta" id="index-band-meta">等待行情快照</p>
+        </div>
+        <div class="index-grid" id="index-cards"></div>
+      </section>
+      <details class="annual-panel" id="annual-panel">
+        <summary class="annual-panel-toggle">
+          <span>
+            <span class="eyebrow">A-SHARE ANNUAL REPORT CALENDAR</span>
+            <strong>A股年报披露日期</strong>
+          </span>
+          <span class="annual-panel-meta" id="annual-panel-meta">等待更新</span>
+        </summary>
+        <div class="annual-panel-body" id="annual-date-content">
+          <p class="source-note">正在加载A股年报日期。</p>
+        </div>
+      </details>
+      <details class="automation-panel" id="automation-panel">
+        <summary class="annual-panel-toggle">
+          <span>
+            <span class="eyebrow">AUTOMATION CONTROL TOWER</span>
+            <strong>统一自动化状态</strong>
+          </span>
+          <span class="annual-panel-meta" id="automation-panel-meta">等待调度器</span>
+        </summary>
+        <div class="annual-panel-body" id="automation-status-content">
+          <p class="source-note">正在加载自动化状态。</p>
+        </div>
+      </details>
       <div class="sentiment-alert" id="sentiment-alert" hidden role="status"></div>
 
       <details class="attention-panel" id="attention-panel" hidden>
@@ -174,6 +208,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=20260819-sentiment-progress"></script>
+    <script type="module" src="./assets/app.js?v=20260819-automation-a-share-2"></script>
   </body>
 </html>

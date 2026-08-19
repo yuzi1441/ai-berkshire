@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Refresh A-share and Hong Kong quote snapshots for the static dashboard.
+"""Refresh quote snapshots for the static dashboard.
 
 The command reads tickers from the generated decision board. It queries Tencent
 quotes only during the relevant weekday trading sessions unless ``--force`` is
-used. The output is a separate market snapshot, never an edit to report text or
-report-derived recommendation fields.
+used. A-share indices are fetched alongside A-share stocks and are kept in a
+separate ``indices`` array. The output is a separate market snapshot, never an
+edit to report text or report-derived recommendation fields.
 """
 
 from __future__ import annotations
@@ -23,6 +24,16 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 QUOTE_URL = "https://qt.gtimg.cn/q="
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
+
+A_SHARE_INDICES: tuple[dict[str, str], ...] = (
+    {"index_id": "sse", "ticker": "000001.SH", "symbol": "sh000001", "name": "上证指数"},
+    {"index_id": "szse", "ticker": "399001.SZ", "symbol": "sz399001", "name": "深证成指"},
+    {"index_id": "chinext", "ticker": "399006.SZ", "symbol": "sz399006", "name": "创业板指"},
+    {"index_id": "star50", "ticker": "000688.SH", "symbol": "sh000688", "name": "科创50"},
+    {"index_id": "hs300", "ticker": "000300.SH", "symbol": "sh000300", "name": "沪深300"},
+    {"index_id": "csi500", "ticker": "000905.SH", "symbol": "sh000905", "name": "中证500"},
+    {"index_id": "csi1000", "ticker": "000852.SH", "symbol": "sh000852", "name": "中证1000"},
+)
 
 
 def is_in_range(current: time, start: time, end: time) -> bool:
@@ -114,6 +125,8 @@ def parse_tencent_payload(payload: str, symbols: dict[str, dict[str, str]]) -> l
                 "market": metadata["market"],
                 "symbol": symbol,
                 "name": fields[1] or metadata["company"],
+                "kind": metadata.get("kind", "stock"),
+                "index_id": metadata.get("index_id"),
                 "price": price,
                 "previous_close": previous_close,
                 "change_pct": change_pct,
@@ -125,7 +138,9 @@ def parse_tencent_payload(payload: str, symbols: dict[str, dict[str, str]]) -> l
     return quotes
 
 
-def load_watchlist(board_path: Path) -> dict[str, dict[str, str]]:
+def load_watchlist(
+    board_path: Path, markets: set[str] | None = None
+) -> dict[str, dict[str, str]]:
     """Build a de-duplicated Tencent symbol map from current A/H decisions."""
     with board_path.open(encoding="utf-8") as handle:
         board = json.load(handle)
@@ -133,7 +148,7 @@ def load_watchlist(board_path: Path) -> dict[str, dict[str, str]]:
     for item in board.get("decisions", []):
         ticker = item.get("ticker")
         market = item.get("market")
-        if not ticker or market not in {"A股", "港股"}:
+        if not ticker or market not in (markets or {"A股", "港股"}):
             continue
         symbol = tencent_symbol(str(ticker), str(market))
         if symbol:
@@ -141,8 +156,23 @@ def load_watchlist(board_path: Path) -> dict[str, dict[str, str]]:
                 "ticker": str(ticker),
                 "market": str(market),
                 "company": str(item.get("company", ticker)),
+                "kind": "stock",
             }
     return symbols
+
+
+def load_index_watchlist() -> dict[str, dict[str, str]]:
+    """Return the fixed A-share index universe tracked by the dashboard."""
+    return {
+        item["symbol"]: {
+            "ticker": item["ticker"],
+            "market": "A股",
+            "company": item["name"],
+            "kind": "index",
+            "index_id": item["index_id"],
+        }
+        for item in A_SHARE_INDICES
+    }
 
 
 def fetch_quotes(symbols: dict[str, dict[str, str]]) -> list[dict[str, Any]]:
@@ -164,7 +194,9 @@ def fetch_quotes(symbols: dict[str, dict[str, str]]) -> list[dict[str, Any]]:
 def write_snapshot(path: Path, payload: dict[str, Any]) -> None:
     """Write a UTF-8 quote snapshot and create its parent directory if needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
 
 
 def refresh_snapshot(
@@ -172,13 +204,22 @@ def refresh_snapshot(
     output_path: Path,
     now: datetime | None = None,
     force: bool = False,
+    markets: set[str] | None = None,
 ) -> dict[str, Any]:
-    """Refresh the snapshot if any tracked A/H market is currently open."""
+    """Refresh the snapshot if any requested market is currently open."""
     checked_at = (now or datetime.now().astimezone()).astimezone(SHANGHAI_TIMEZONE)
-    symbols = load_watchlist(board_path)
+    requested_markets = markets or {"A股", "港股"}
+    symbols = load_watchlist(board_path, requested_markets)
+    if "A股" in requested_markets:
+        symbols.update(load_index_watchlist())
     active_markets = {metadata["market"] for metadata in symbols.values() if is_market_open(metadata["market"], checked_at)}
     if not force and not active_markets:
-        return {"updated": False, "reason": "outside_standard_trading_session", "checked_at": checked_at.isoformat()}
+        return {
+            "updated": False,
+            "reason": "outside_standard_trading_session",
+            "checked_at": checked_at.isoformat(),
+            "requested_markets": sorted(requested_markets),
+        }
 
     active_symbols = {
         symbol: metadata
@@ -186,17 +227,24 @@ def refresh_snapshot(
         if force or metadata["market"] in active_markets
     }
     quotes = fetch_quotes(active_symbols)
+    stock_quotes = [quote for quote in quotes if quote.get("kind") != "index"]
+    index_quotes = [quote for quote in quotes if quote.get("kind") == "index"]
     snapshot = {
         "schema_version": 1,
         "generated_at": checked_at.isoformat(timespec="seconds"),
         "market_status": "trading_session" if active_markets else "forced_refresh",
-        "tracked_count": len(active_symbols),
-        "quote_count": len(quotes),
-        "quotes": quotes,
+        "requested_markets": sorted(requested_markets),
+        "tracked_count": len([item for item in active_symbols.values() if item.get("kind") != "index"]),
+        "quote_count": len(stock_quotes),
+        "quotes": stock_quotes,
+        "index_tracked_count": len([item for item in active_symbols.values() if item.get("kind") == "index"]),
+        "index_count": len(index_quotes),
+        "indices": index_quotes,
     }
     write_snapshot(output_path, snapshot)
     # Keep the static site payload in sync for local preview and VPS serving.
-    site_snapshot = ROOT / "site" / "data" / "quotes" / "latest.json"
+    repo_root = board_path.resolve().parents[2]
+    site_snapshot = repo_root / "site" / "data" / "quotes" / "latest.json"
     if output_path.resolve() != site_snapshot.resolve():
         write_snapshot(site_snapshot, snapshot)
     return {"updated": True, **snapshot}
@@ -206,20 +254,33 @@ def main() -> int:
     """Run the market snapshot CLI."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
+    parser.add_argument(
+        "--markets",
+        default="A股,港股",
+        help="comma-separated markets; use A股 for the unified A-share scheduler",
+    )
     parser.add_argument("--force", action="store_true", help="refresh even outside the regular session")
     arguments = parser.parse_args()
     repo_root = arguments.repo_root.resolve()
+    requested_markets = {item.strip() for item in arguments.markets.split(",") if item.strip()}
+    unsupported = requested_markets - {"A股", "港股"}
+    if unsupported:
+        parser.error(f"unsupported market(s): {', '.join(sorted(unsupported))}")
     try:
         result = refresh_snapshot(
             repo_root / "data" / "investment-dashboard" / "decision_board.json",
             repo_root / "data" / "investment-dashboard" / "quotes" / "latest.json",
             force=arguments.force,
+            markets=requested_markets,
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
     if result["updated"]:
-        print(f"Updated {result['quote_count']} of {result['tracked_count']} A/H quotes.")
+        print(
+            f"Updated {result['quote_count']} of {result['tracked_count']} stock quotes and "
+            f"{result.get('index_count', 0)} of {result.get('index_tracked_count', 0)} A-share indices."
+        )
     else:
         print(f"Skipped refresh: {result['reason']}.")
     return 0
