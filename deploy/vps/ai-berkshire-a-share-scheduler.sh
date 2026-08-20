@@ -217,7 +217,6 @@ run_heavy() {
     status_start sentiment
     set +e
     "${PYTHON}" tools/sentiment_snapshot.py \
-        --repo-root "${REPO_ROOT}" \
         --lookback-days 7 \
         --fallback-lookback-days 30 \
         --news-limit 8 \
