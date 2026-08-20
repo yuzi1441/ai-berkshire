@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-20T11:31:20+08:00",
+  "updated_at": "2026-08-20T16:30:11+08:00",
   "schedules": [
     {
       "job_id": "annual",
@@ -83,30 +83,53 @@
     "market": {
       "job_id": "market",
       "status": "ok",
-      "scheduled_for": "2026-08-20T11:31:19+08:00",
-      "started_at": "2026-08-20T11:31:19+08:00",
-      "finished_at": "2026-08-20T11:31:20+08:00",
-      "duration_seconds": 1.0,
+      "scheduled_for": "2026-08-20T15:01:52+08:00",
+      "started_at": "2026-08-20T15:01:52+08:00",
+      "finished_at": "2026-08-20T15:01:52+08:00",
+      "duration_seconds": 0.0,
       "message": "任务完成",
       "data_cutoff": "2026-08-20",
       "record_count": null,
       "failed_count": null,
-      "last_success_at": "2026-08-20T11:31:20+08:00",
+      "last_success_at": "2026-08-20T15:01:52+08:00",
       "last_success_status": "ok"
     },
     "intraday": {
       "job_id": "intraday",
       "status": "ok",
-      "scheduled_for": "2026-08-20T11:30:09+08:00",
-      "started_at": "2026-08-20T11:30:09+08:00",
-      "finished_at": "2026-08-20T11:31:19+08:00",
-      "duration_seconds": 70.0,
+      "scheduled_for": "2026-08-20T15:00:04+08:00",
+      "started_at": "2026-08-20T15:00:04+08:00",
+      "finished_at": "2026-08-20T15:01:52+08:00",
+      "duration_seconds": 108.0,
       "message": "任务完成",
       "data_cutoff": "2026-08-20",
       "record_count": null,
       "failed_count": null,
-      "last_success_at": "2026-08-20T11:31:19+08:00",
+      "last_success_at": "2026-08-20T15:01:52+08:00",
       "last_success_status": "ok"
+    },
+    "close": {
+      "job_id": "close",
+      "status": "ok",
+      "scheduled_for": "2026-08-20T15:05:16+08:00",
+      "started_at": "2026-08-20T15:05:16+08:00",
+      "finished_at": "2026-08-20T15:06:35+08:00",
+      "duration_seconds": 79.0,
+      "message": "任务完成",
+      "data_cutoff": "2026-08-20",
+      "record_count": null,
+      "failed_count": null,
+      "last_success_at": "2026-08-20T15:06:35+08:00",
+      "last_success_status": "ok"
+    },
+    "daily": {
+      "job_id": "daily",
+      "status": "running",
+      "scheduled_for": "2026-08-20T16:30:11+08:00",
+      "started_at": "2026-08-20T16:30:11+08:00",
+      "finished_at": null,
+      "duration_seconds": null,
+      "message": "A股统一调度器正在执行"
     }
   }
 }
