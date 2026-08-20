@@ -1,0 +1,248 @@
+{
+  "company": "hgtech",
+  "entity_kind": "company",
+  "entity_directory": "hgtech",
+  "ticker": "000988.SZ",
+  "market": "A股",
+  "data_cutoff": "2026-06-23",
+  "report_reference_price": {
+    "price": 163.66,
+    "currency": "CNY",
+    "line": 4,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [],
+  "conclusion_summary": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
+  "buy_price": "约27 元",
+  "price_plan": [],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "CNY 284",
+      "eps_growth": "40%",
+      "target_pe": "45x",
+      "upside": "+74%"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "CNY 119",
+      "eps_growth": "20%",
+      "target_pe": "30x",
+      "upside": "-27%"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "CNY 48",
+      "eps_growth": "5%",
+      "target_pe": "18x",
+      "upside": "-71%"
+    }
+  ],
+  "valuation_section": {
+    "heading": "六、估值与安全边际",
+    "start_line": 215,
+    "end_line": 279,
+    "markdown": "## 六、估值与安全边际\n\n### 当前市场定价\n\n| 指标 | 数值 | 说明 |\n|------|------|------|\n| PE（FY2025） | **111.33x** | 基于归母14.71亿 |\n| PE（TTM） | **~96x** | 含2026Q1增量 |\n| PE（2026E） | **~45-50x** | 基于券商预测归母~23-25亿 |\n| PB | **13.94x** | 远超行业中位数 |\n| PS | **11.35x** | — |\n| ROE | 12.52% | 合理但不算出色 |\n| FCF Yield | **0.43%** | 极低 |\n| 股息率 | **0.15%** | 几乎可忽略 |\n\n> 所有指标经 `financial_rigor.py` 精确验算。\n\n### PE历史区间\n\n| 年份 | 平均PE | 最高PE | 最低PE |\n|------|--------|--------|--------|\n| 2022 | 24.28 | 32.16 | **18.75** |\n| 2023 | 31.17 | 46.09 | 19.62 |\n| 2024 | 31.21 | 38.86 | 24.12 |\n| 2025 | 41.65 | 66.15 | 31.83 |\n| 2026（至今） | 63.08 | **92.47** | 46.33 |\n\n当前PE处于近5年**100%分位**（历史最高区间）。2022年底PE低点为18.75倍——如果回到那个水平，股价将跌至约27元（-83%）。\n\n### 三情景估值\n\n> 基于2026年预估EPS=2.30（券商预测归母~23亿/9.96亿股），投射3年至2029年。经工具精确验算。\n\n| 情景 | 年增速 | 目标PE | 2029年EPS | 目标股价 | 较现价涨跌 |\n|------|--------|--------|-----------|---------|-----------|\n| **乐观**（AI持续爆发+份额提升+1.6T/CPO放量） | 40% | 45x | CNY 6.31 | **CNY 284** | +74% |\n| **中性**（AI增速放缓+份额稳定+激光感知温和增长） | 20% | 30x | CNY 3.97 | **CNY 119** | -27% |\n| **悲观**（AI投资周期下行+份额萎缩+估值回归） | 5% | 18x | CNY 2.66 | **CNY 48** | -71% |\n\n**关键洞察**：\n- 即使乐观情景（40%年增长+45x PE），3年上行仅74%（年化20%）——对一个PE 100+的股票来说，赔率偏低\n- 中性情景直接亏27%——市场需要\"一切顺利\"才能打平\n- 悲观情景-71%——如果AI投资周期放缓，杀估值+杀业绩双重打击\n\n### 与同行估值对比\n\n| 公司 | PE（TTM） | PS | 光模块市占 | 1年涨幅 |\n|------|----------|-----|-----------|--------|\n| **华工科技** | **~96x** | **11.4x** | **6-8%** | **+269%** |\n| 中际旭创 | ~35x | ~8x | 28-30% | +180% |\n| 新易盛 | ~30x | ~7x | 15-18% | +150% |\n| 光迅科技 | ~45x | ~5x | 5-8% | +120% |\n\n**华工科技的PE几乎是龙头中际旭创的3倍，但份额仅其1/4**。这一估值溢价极不合理——除非市场认为华工科技的份额会在未来3年追上中际旭创，否则当前价格透支了过多预期。\n\n### 追问：如果股市明天关闭5年，你愿意以这个价格持有吗？\n\n**不愿意。**\n\n163.66元对应PE 111倍（FY2025）或~50倍（2026E）。5年后（2031年），即使华工科技净利润增长到40-50亿（3年CAGR 30%+），PE回归到合理的25-30倍，股价也仅在100-150元——与当前163元相比几乎无上行空间甚至下行。\n\n**只有在净利润持续5年40%+增长且PE维持在40倍以上时，当前价格才能获得合理回报**——这需要光模块业务出现超预期的市占率提升，且AI算力投资不出现任何周期性放缓。这个概率不超过20-25%。\n\n---"
+  },
+  "recommendation": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
+  "title": "华工科技（000988.SZ）投资研究报告",
+  "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+  "report_link": "hgtech/hgtech-investment-research-20260623.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "hgtech",
+    "ticker": "000988.SZ",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-06-23",
+    "action": "观察",
+    "summary": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
+    "investor_stances": [],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取三情景",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-06-23",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
+      "buy_price": "约27 元",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "CNY 284",
+          "eps_growth": "40%",
+          "target_pe": "45x",
+          "upside": "+74%"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "CNY 119",
+          "eps_growth": "20%",
+          "target_pe": "30x",
+          "upside": "-27%"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "CNY 48",
+          "eps_growth": "5%",
+          "target_pe": "18x",
+          "upside": "-71%"
+        }
+      ],
+      "valuation_section": {
+        "heading": "六、估值与安全边际",
+        "start_line": 215,
+        "end_line": 279,
+        "markdown": "## 六、估值与安全边际\n\n### 当前市场定价\n\n| 指标 | 数值 | 说明 |\n|------|------|------|\n| PE（FY2025） | **111.33x** | 基于归母14.71亿 |\n| PE（TTM） | **~96x** | 含2026Q1增量 |\n| PE（2026E） | **~45-50x** | 基于券商预测归母~23-25亿 |\n| PB | **13.94x** | 远超行业中位数 |\n| PS | **11.35x** | — |\n| ROE | 12.52% | 合理但不算出色 |\n| FCF Yield | **0.43%** | 极低 |\n| 股息率 | **0.15%** | 几乎可忽略 |\n\n> 所有指标经 `financial_rigor.py` 精确验算。\n\n### PE历史区间\n\n| 年份 | 平均PE | 最高PE | 最低PE |\n|------|--------|--------|--------|\n| 2022 | 24.28 | 32.16 | **18.75** |\n| 2023 | 31.17 | 46.09 | 19.62 |\n| 2024 | 31.21 | 38.86 | 24.12 |\n| 2025 | 41.65 | 66.15 | 31.83 |\n| 2026（至今） | 63.08 | **92.47** | 46.33 |\n\n当前PE处于近5年**100%分位**（历史最高区间）。2022年底PE低点为18.75倍——如果回到那个水平，股价将跌至约27元（-83%）。\n\n### 三情景估值\n\n> 基于2026年预估EPS=2.30（券商预测归母~23亿/9.96亿股），投射3年至2029年。经工具精确验算。\n\n| 情景 | 年增速 | 目标PE | 2029年EPS | 目标股价 | 较现价涨跌 |\n|------|--------|--------|-----------|---------|-----------|\n| **乐观**（AI持续爆发+份额提升+1.6T/CPO放量） | 40% | 45x | CNY 6.31 | **CNY 284** | +74% |\n| **中性**（AI增速放缓+份额稳定+激光感知温和增长） | 20% | 30x | CNY 3.97 | **CNY 119** | -27% |\n| **悲观**（AI投资周期下行+份额萎缩+估值回归） | 5% | 18x | CNY 2.66 | **CNY 48** | -71% |\n\n**关键洞察**：\n- 即使乐观情景（40%年增长+45x PE），3年上行仅74%（年化20%）——对一个PE 100+的股票来说，赔率偏低\n- 中性情景直接亏27%——市场需要\"一切顺利\"才能打平\n- 悲观情景-71%——如果AI投资周期放缓，杀估值+杀业绩双重打击\n\n### 与同行估值对比\n\n| 公司 | PE（TTM） | PS | 光模块市占 | 1年涨幅 |\n|------|----------|-----|-----------|--------|\n| **华工科技** | **~96x** | **11.4x** | **6-8%** | **+269%** |\n| 中际旭创 | ~35x | ~8x | 28-30% | +180% |\n| 新易盛 | ~30x | ~7x | 15-18% | +150% |\n| 光迅科技 | ~45x | ~5x | 5-8% | +120% |\n\n**华工科技的PE几乎是龙头中际旭创的3倍，但份额仅其1/4**。这一估值溢价极不合理——除非市场认为华工科技的份额会在未来3年追上中际旭创，否则当前价格透支了过多预期。\n\n### 追问：如果股市明天关闭5年，你愿意以这个价格持有吗？\n\n**不愿意。**\n\n163.66元对应PE 111倍（FY2025）或~50倍（2026E）。5年后（2031年），即使华工科技净利润增长到40-50亿（3年CAGR 30%+），PE回归到合理的25-30倍，股价也仅在100-150元——与当前163元相比几乎无上行空间甚至下行。\n\n**只有在净利润持续5年40%+增长且PE维持在40倍以上时，当前价格才能获得合理回报**——这需要光模块业务出现超预期的市占率提升，且AI算力投资不出现任何周期性放缓。这个概率不超过20-25%。\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "华工科技（000988.SZ）投资研究报告",
+      "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+      "report_link": "hgtech/hgtech-investment-research-20260623.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "hgtech",
+        "ticker": "000988.SZ",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-06-23",
+        "action": "观察",
+        "summary": "空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下",
+        "investor_stances": [],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者当前应回避，不要买入；若看好可等待股价回调至CNY 70-80以下再考虑介入。",
+    "holder_action": "持仓者建议减仓至5%以下甚至清仓，获利了结。",
+    "trigger_condition": "股价回调至CNY 70-80（2026E PE ~30-35x）以下；或出现1.6T光模块获批量订单等加仓信号。",
+    "summary": "报告认为当前PE 100x极度高估，空仓者回避，持仓者减仓；若回调至70-80元才具投资价值。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文明确建议空仓者回避，而契约动作字段为‘观察’，存在不一致；但正文给出了等待回调至70-80的触发条件，按规则应归为等待价格。",
+    "evidence": [
+      {
+        "line_start": 297,
+        "line_end": 297,
+        "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |",
+        "supports": "该证据支持空仓者当前应回避，但明确给出等待价格触发点，属于等待价格/watch。"
+      },
+      {
+        "line_start": 328,
+        "line_end": 328,
+        "quote": "- 如果回调至CNY 70-80（PE 30-35x），华工科技会成为一个不错的AI光模块投资标的——但在163元，它不是",
+        "supports": "该证据支持最终结论为等待更低价位，而非彻底回避，符合等待价格分类。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:03:09+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "或出现1.6T光模块获批量订单等加仓信号",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "股价回调至CNY 70-80（2026E PE ~30-35x）以下",
+        "price_range": "CNY 70-80",
+        "min": 70.0,
+        "ceiling": 80.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 0,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "hgtech",
+    "ticker": "000988.SZ",
+    "status": "ready",
+    "report_path": "reports/hgtech/hgtech-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 109.79,
+    "currency": "CNY",
+    "observation_zone": "100.24-108.37",
+    "fundamental_entry_plan": "主报告未提取到可核验的建仓价格带",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "暂不能判断",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "黄",
+        "meaning": "股价暂在20日均线之上，但均线仍在下行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "绿",
+        "meaning": "股价在200日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "f6f40108e77e75c0beb4",
+  "detail_path": "./data/decision_details/f6f40108e77e75c0beb4.json"
+}

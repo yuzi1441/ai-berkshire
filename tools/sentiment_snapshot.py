@@ -44,8 +44,10 @@ DEFAULT_BOARD = ROOT / "data" / "investment-dashboard" / "decision_board.json"
 DEFAULT_REGISTRY = ROOT / "data" / "report-routing" / "company_registry.json"
 DEFAULT_OUTPUT = ROOT / "data" / "sentiment" / "latest.json"
 DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
+DEFAULT_CACHE_DIR = ROOT / "data" / "sentiment" / "cache"
 DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
 DEFAULT_STATUS_OUTPUT = ROOT / "site" / "data" / "sentiment_status.json"
+NEWS_CACHE_SCHEMA_VERSION = 1
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 DEFAULT_LLM_TIMEOUT_SECONDS = 600
@@ -437,8 +439,37 @@ def mark_auxiliary_article(article: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def model_route_for_article(article: dict[str, Any]) -> str:
+    """Choose the minimum model route allowed by the source quality.
+
+    A/B evidence is formal enough to require an independent double check.
+    C/D evidence is contextual only, so it is classified by the MiMo review
+    model without also spending a primary-model request. Articles created by
+    older snapshots without ``source_tier`` retain the previous market-based
+    fallback: A-share/industry items are dual-scored and other formal items
+    use the primary model once.
+    """
+    source_tier = clean_text(article.get("source_tier")).upper()
+    if source_tier in {"A", "B"}:
+        return "dual"
+    if source_tier in {"C", "D"} or not article.get("score_eligible", True):
+        return "review_only"
+    if article.get("market") == "A股" or article.get("scope") == "industry":
+        return "dual"
+    return "primary_only"
+
+
 def clamp(value: float, lower: float, upper: float) -> float:
     return min(upper, max(lower, value))
+
+
+def safe_float(value: Any, default: float = 0.0) -> float:
+    """Convert optional cached/model values without crashing aggregation."""
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return default
+    return parsed if math.isfinite(parsed) else default
 
 
 def chunks(items: list[Any], size: int) -> Iterable[list[Any]]:
@@ -778,6 +809,32 @@ def load_registry_names(path: Path) -> dict[str, str]:
             if name:
                 names[clean_text(ticker).upper()] = name
     return names
+
+
+def load_cached_industry_mapping(
+    path: Path, universe: list[dict[str, str]], *, minimum_coverage: float = 0.8
+) -> dict[str, str]:
+    """Reuse a recent complete mapping when the quote provider is slow or down."""
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    by_ticker = {
+        str(item.get("ticker")): clean_text(item.get("industry"))
+        for item in payload.get("companies", [])
+        if isinstance(item, dict) and clean_text(item.get("ticker"))
+    }
+    mapping = {
+        item["ticker"]: by_ticker[item["ticker"]]
+        for item in universe
+        if by_ticker.get(item["ticker"])
+    }
+    required = max(1, math.ceil(len(universe) * minimum_coverage))
+    return mapping if len(mapping) >= required else {}
 
 
 def build_eastmoney_search_url(keyword: str, count: int) -> str:
@@ -1916,8 +1973,8 @@ def apply_company_relevance_guard(article: dict[str, Any], score: dict[str, Any]
         term and term in text for term in (display_name, company_name, ticker_digits)
     )
     if not direct_match:
-        score["relevance"] = min(float(score.get("relevance", 0)), 0.15)
-        score["confidence"] = min(float(score.get("confidence", 0)), 0.35)
+        score["relevance"] = min(safe_float(score.get("relevance")), 0.15)
+        score["confidence"] = min(safe_float(score.get("confidence")), 0.35)
 
 
 def parse_json_block(content: str) -> Any:
@@ -2023,16 +2080,26 @@ def score_articles(
     articles: list[dict[str, Any]],
     primary_config: LLMConfig | None,
     review_config: LLMConfig | None,
+    preloaded_primary_scores: dict[str, dict[str, Any]] | None = None,
+    preloaded_review_scores: dict[str, dict[str, Any]] | None = None,
     progress_callback: Callable[
-        [str, list[dict[str, Any]], dict[str, dict[str, Any]], list[dict[str, Any]]], None
+        [
+            str,
+            list[dict[str, Any]],
+            dict[str, dict[str, Any]],
+            list[dict[str, Any]],
+            int | None,
+            int | None,
+        ],
+        None,
     ]
     | None = None,
 ) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
     """Score formal news and a bounded contextual subset of auxiliary news.
 
-    A/B articles remain eligible for the formal score.  C/D articles can now
-    be interpreted by the models, but are retained as contextual evidence and
-    never silently promoted to formal source quality.
+    A/B articles use the primary model plus the independent MiMo review. C/D
+    articles use only the MiMo review model and remain contextual evidence;
+    they are never silently promoted to formal source quality.
     """
     if primary_config is None:
         raise SentimentError("primary model configuration is required")
@@ -2056,19 +2123,56 @@ def score_articles(
     model_articles = scoreable_articles + contextual_articles
     if not model_articles:
         return untouched_auxiliary_articles, [], []
-    requires_review = any(
-        article.get("market") == "A股" or article.get("scope") == "industry"
+    routes = {article["id"]: model_route_for_article(article) for article in model_articles}
+    primary_articles = [
+        article
         for article in model_articles
-    )
+        if routes[article["id"]] in {"dual", "primary_only"}
+    ]
+    review_only_articles = [
+        article for article in model_articles if routes[article["id"]] == "review_only"
+    ]
+    requires_review = any(route in {"dual", "review_only"} for route in routes.values())
     if requires_review and review_config is None:
-        raise SentimentError("A-share dual-model scoring requires the review model configuration")
+        raise SentimentError("A/B 双复核或 C/D MiMo 分析需要复核模型配置")
 
     def collect_scores(
-        target_articles: list[dict[str, Any]], config: LLMConfig, provider_label: str
+        target_articles: list[dict[str, Any]],
+        config: LLMConfig,
+        provider_label: str,
+        *,
+        notify: bool = True,
+        checkpoint_callback: Callable[
+            [dict[str, dict[str, Any]], list[dict[str, Any]], int, int], None
+        ]
+        | None = None,
+        checkpoint_every: int | None = None,
     ) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
         batches = list(chunks(target_articles, config.batch_size))
         scores: dict[str, dict[str, Any]] = {}
         failures: list[dict[str, Any]] = []
+        completed_batches = 0
+        next_checkpoint = max(1, checkpoint_every or len(batches) + 1)
+        last_checkpoint_batches = -1
+
+        def maybe_checkpoint(*, force: bool = False) -> None:
+            nonlocal last_checkpoint_batches, next_checkpoint
+            if checkpoint_callback is None or not batches:
+                return
+            if not force and completed_batches < next_checkpoint:
+                return
+            if completed_batches == last_checkpoint_batches:
+                return
+            checkpoint_callback(
+                dict(scores),
+                list(failures),
+                completed_batches,
+                len(batches),
+            )
+            last_checkpoint_batches = completed_batches
+            if checkpoint_every:
+                while next_checkpoint <= completed_batches:
+                    next_checkpoint += checkpoint_every
 
         def failure_record(
             item: dict[str, Any], reason: str
@@ -2148,6 +2252,8 @@ def score_articles(
                     batch_scores = future.result()
                 except Exception as exc:  # noqa: BLE001 - fail closed for every provider error
                     recover_items(batch, f"batch {batch[0]['id']} failed: {exc}")
+                    completed_batches += 1
+                    maybe_checkpoint()
                     continue
                 scores.update(batch_scores)
                 missing = {item["id"] for item in batch} - set(batch_scores)
@@ -2157,6 +2263,8 @@ def score_articles(
                         missing_items,
                         f"batch {batch[0]['id']} returned incomplete results",
                     )
+                completed_batches += 1
+                maybe_checkpoint()
         expected = {article["id"] for article in target_articles}
         missing = expected - set(scores)
         recorded = {failure.get("id") for failure in failures}
@@ -2168,27 +2276,132 @@ def score_articles(
                         f"{provider_label} 模型未返回有效评分；已完成 {config.missing_result_retries} 次单条重试",
                     )
                 )
-        if progress_callback is not None:
-            progress_callback(provider_label, target_articles, dict(scores), list(failures))
+        maybe_checkpoint(force=True)
+        if notify and progress_callback is not None:
+            progress_callback(
+                provider_label,
+                target_articles,
+                dict(scores),
+                list(failures),
+                None,
+                None,
+            )
         return scores, failures
 
-    primary_scores, primary_failures = collect_scores(
-        model_articles, primary_config, "primary"
+    preloaded_scores = {
+        article["id"]: dict(preloaded_primary_scores[article["id"]])
+        for article in primary_articles
+        if preloaded_primary_scores and article["id"] in preloaded_primary_scores
+    }
+    primary_to_score = [
+        article for article in primary_articles if article["id"] not in preloaded_scores
+    ]
+
+    def primary_checkpoint_callback(
+        collected_scores: dict[str, dict[str, Any]],
+        collected_failures: list[dict[str, Any]],
+        completed_batches: int,
+        total_batches: int,
+    ) -> None:
+        if progress_callback is None:
+            return
+        progress_callback(
+            "primary_partial",
+            primary_articles,
+            {**preloaded_scores, **collected_scores},
+            list(collected_failures),
+            completed_batches,
+            total_batches,
+        )
+
+    collected_primary_scores, primary_failures = (
+        collect_scores(
+            primary_to_score,
+            primary_config,
+            "primary",
+            notify=False,
+            checkpoint_callback=primary_checkpoint_callback,
+            checkpoint_every=max(
+                1,
+                math.ceil(
+                    len(list(chunks(primary_to_score, primary_config.batch_size))) / 5
+                ),
+            ),
+        )
+        if primary_to_score
+        else ({}, [])
     )
+    primary_scores = {**preloaded_scores, **collected_primary_scores}
+    if progress_callback is not None and primary_articles and not primary_to_score:
+        progress_callback(
+            "primary" if primary_to_score else "primary_cached",
+            primary_articles,
+            dict(primary_scores),
+            list(primary_failures),
+            None,
+            None,
+        )
     primary_success_articles = [
-        article for article in model_articles if article["id"] in primary_scores
+        article for article in primary_articles if article["id"] in primary_scores
     ]
     review_articles = [
         article
         for article in primary_success_articles
-        if article.get("market") == "A股" or article.get("scope") == "industry"
+        if routes[article["id"]] == "dual"
+    ] + review_only_articles
+    preloaded_review_map = {
+        article["id"]: dict(preloaded_review_scores[article["id"]])
+        for article in review_articles
+        if preloaded_review_scores and article["id"] in preloaded_review_scores
+    }
+    review_to_score = [
+        article for article in review_articles if article["id"] not in preloaded_review_map
     ]
-    review_scores = (
-        collect_scores(review_articles, review_config, "review")
-        if review_articles
+
+    def review_checkpoint_callback(
+        collected_scores: dict[str, dict[str, Any]],
+        collected_failures: list[dict[str, Any]],
+        completed_batches: int,
+        total_batches: int,
+    ) -> None:
+        if progress_callback is None:
+            return
+        progress_callback(
+            "review_partial",
+            review_articles,
+            {**preloaded_review_map, **collected_scores},
+            list(collected_failures),
+            completed_batches,
+            total_batches,
+        )
+
+    collected_review_scores, review_failures = (
+        collect_scores(
+            review_to_score,
+            review_config,
+            "review",
+            notify=False,
+            checkpoint_callback=review_checkpoint_callback,
+            checkpoint_every=max(
+                1,
+                math.ceil(
+                    len(list(chunks(review_to_score, review_config.batch_size))) / 5
+                ),
+            ),
+        )
+        if review_to_score
         else ({}, [])
     )
-    review_score_map, review_failures = review_scores
+    review_score_map = {**preloaded_review_map, **collected_review_scores}
+    if progress_callback is not None and review_articles and not review_to_score:
+        progress_callback(
+            "review_cached",
+            review_articles,
+            dict(review_score_map),
+            list(review_failures),
+            None,
+            None,
+        )
     skipped_articles = primary_failures + review_failures
     skipped_ids = {failure.get("id") for failure in skipped_articles}
     scoring_warnings = [
@@ -2205,8 +2418,8 @@ def score_articles(
         if article["id"] in skipped_ids:
             continue
         primary = dict(primary_scores[article["id"]])
-        needs_review = article.get("market") == "A股" or article.get("scope") == "industry"
-        if not needs_review:
+        route = routes[article["id"]]
+        if route == "primary_only":
             combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
             apply_company_relevance_guard(combined, combined)
             scored.append(combined)
@@ -2244,6 +2457,27 @@ def score_articles(
             combined["score_exclusion_reason"] = (
                 f"来源等级{article.get('source_tier', 'C')}：模型已分析，但仅进入辅助情绪"
             )
+        apply_company_relevance_guard(combined, combined)
+        scored.append(combined)
+
+    for article in review_only_articles:
+        if article["id"] in skipped_ids:
+            continue
+        review = dict(review_score_map[article["id"]])
+        combined = {
+            **article,
+            **review,
+            "score_eligible": False,
+            "context_score_eligible": True,
+            "scoring_method": f"llm:context:{review_config.model}",
+            "score_exclusion_reason": (
+                f"来源等级{article.get('source_tier', 'C')}：仅由 MiMo 分析，作为辅助情绪"
+            ),
+            "model_review": {
+                "review_only": True,
+                "review_model": review_config.model,
+            },
+        }
         apply_company_relevance_guard(combined, combined)
         scored.append(combined)
     scored.extend(untouched_auxiliary_articles)
@@ -2310,8 +2544,9 @@ def aggregate_news(
         or (include_context and article.get("context_score_eligible", False))
     ]
     relevant_articles = [
-        article for article in context_articles
-        if float(article.get("relevance", 0)) >= 0.5
+        article
+        for article in context_articles
+        if safe_float(article.get("relevance"), 0.0) >= 0.5
     ]
     numerator = 0.0
     denominator = 0.0
@@ -2376,21 +2611,21 @@ def aggregate_news(
     for article in sorted(relevant_articles, key=lambda item: item.get("published_at") or "", reverse=True):
         decay = time_decay(article, cutoff)
         weight = (
-            float(article["impact"])
-            * float(article["relevance"])
-            * float(article["confidence"])
+            safe_float(article.get("impact"))
+            * safe_float(article.get("relevance"))
+            * safe_float(article.get("confidence"))
             * decay
         )
         if include_context:
             weight *= contextual_source_weight(article)
         base_weight = (
-            float(article["impact"])
-            * float(article["relevance"])
-            * float(article["confidence"])
+            safe_float(article.get("impact"))
+            * safe_float(article.get("relevance"))
+            * safe_float(article.get("confidence"))
         )
         if include_context:
             base_weight *= contextual_source_weight(article)
-        direction = float(article["direction"])
+        direction = safe_float(article.get("direction"))
         numerator += direction * weight
         denominator += weight
         freshness_numerator += base_weight * decay
@@ -2732,6 +2967,236 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     temporary_path.replace(path)
 
 
+def news_cache_path(
+    cache_dir: Path,
+    *,
+    as_of: date,
+    lookback_days: int,
+    fallback_lookback_days: int,
+    news_limit: int,
+    auxiliary_news_limit: int,
+    context_analysis_limit: int,
+    rss_news_limit: int,
+) -> Path:
+    """Return a stable cache path for one cutoff and collection policy."""
+    parameters = {
+        "as_of": as_of.isoformat(),
+        "lookback_days": lookback_days,
+        "fallback_lookback_days": fallback_lookback_days,
+        "news_limit": news_limit,
+        "auxiliary_news_limit": auxiliary_news_limit,
+        "context_analysis_limit": context_analysis_limit,
+        "rss_news_limit": rss_news_limit,
+    }
+    digest = hashlib.sha256(
+        json.dumps(parameters, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:16]
+    return cache_dir / f"{as_of.isoformat()}-{digest}.json"
+
+
+def news_cache_universe_signature(universe: list[dict[str, str]]) -> str:
+    """Identify the board universe without embedding report text in the cache key."""
+    identity = [
+        {"ticker": item.get("ticker"), "market": item.get("market")}
+        for item in universe
+    ]
+    return hashlib.sha256(
+        json.dumps(sorted(identity, key=lambda item: (item.get("market") or "", item.get("ticker") or "")), ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+
+
+def load_news_cache(
+    path: Path,
+    *,
+    universe_signature: str,
+    parameters: dict[str, Any],
+) -> dict[str, Any]:
+    """Load a resumable raw-news cache, returning an empty cache on mismatch."""
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    if payload.get("schema_version") != NEWS_CACHE_SCHEMA_VERSION:
+        return {}
+    if payload.get("universe_signature") != universe_signature:
+        return {}
+    if payload.get("parameters") != parameters:
+        return {}
+    return payload
+
+
+def save_news_cache(
+    path: Path,
+    *,
+    as_of: date,
+    parameters: dict[str, Any],
+    universe_signature: str,
+    company_news: dict[str, list[dict[str, Any]]],
+    company_warnings: dict[str, list[str]],
+    industry_news: dict[str, list[dict[str, Any]]],
+    industry_warnings: dict[str, list[str]],
+) -> None:
+    """Persist completed entity fetches so a later run can resume by entity."""
+    write_json(
+        path,
+        {
+            "schema_version": NEWS_CACHE_SCHEMA_VERSION,
+            "as_of": as_of.isoformat(),
+            "parameters": parameters,
+            "universe_signature": universe_signature,
+            "updated_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+            "company_news": company_news,
+            "company_warnings": company_warnings,
+            "industry_news": industry_news,
+            "industry_warnings": industry_warnings,
+        },
+    )
+
+
+def primary_score_cache_path(news_cache: Path) -> Path:
+    """Return the durable score cache paired with one raw-news cache."""
+    return news_cache.with_name(f"{news_cache.stem}-primary-scores.json")
+
+
+def review_score_cache_path(news_cache: Path) -> Path:
+    """Return the durable review-model score cache paired with raw news."""
+    return news_cache.with_name(f"{news_cache.stem}-review-scores.json")
+
+
+def score_config_signature(config: LLMConfig) -> dict[str, Any]:
+    return {
+        "model": config.model,
+        "batch_size": config.batch_size,
+        "thinking_mode": config.thinking_mode,
+        "reasoning_effort": config.reasoning_effort,
+        "json_mode": config.json_mode,
+        "max_tokens": config.max_tokens,
+    }
+
+
+def load_primary_score_cache(
+    path: Path,
+    *,
+    news_cache_name: str,
+    universe_signature: str,
+    config: LLMConfig,
+) -> dict[str, dict[str, Any]]:
+    """Load reusable primary scores while rejecting stale model/policy data."""
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    if (
+        payload.get("schema_version") != NEWS_CACHE_SCHEMA_VERSION
+        or payload.get("news_cache_name") != news_cache_name
+        or payload.get("universe_signature") != universe_signature
+        or payload.get("model_config") != score_config_signature(config)
+    ):
+        return {}
+    scores = payload.get("scores") or {}
+    return {
+        str(article_id): score
+        for article_id, score in scores.items()
+        if isinstance(score, dict)
+    }
+
+
+def load_review_score_cache(
+    path: Path,
+    *,
+    news_cache_name: str,
+    universe_signature: str,
+    config: LLMConfig,
+) -> dict[str, dict[str, Any]]:
+    """Load reusable review scores using the same stale-data safeguards."""
+    return load_primary_score_cache(
+        path,
+        news_cache_name=news_cache_name,
+        universe_signature=universe_signature,
+        config=config,
+    )
+
+
+def save_primary_score_cache(
+    path: Path,
+    *,
+    news_cache_name: str,
+    universe_signature: str,
+    config: LLMConfig,
+    target_articles: list[dict[str, Any]],
+    scores: dict[str, dict[str, Any]],
+    failures: list[dict[str, Any]],
+    completed_batches: int | None = None,
+    total_batches: int | None = None,
+) -> None:
+    """Persist primary results before review and at five staged checkpoints."""
+    checkpoint: dict[str, Any] = {}
+    if completed_batches is not None and total_batches is not None:
+        checkpoint = {
+            "completed_batches": completed_batches,
+            "total_batches": total_batches,
+            "fraction": round(
+                completed_batches / total_batches if total_batches else 1.0,
+                4,
+            ),
+        }
+    write_json(
+        path,
+        {
+            "schema_version": NEWS_CACHE_SCHEMA_VERSION,
+            "updated_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+            "news_cache_name": news_cache_name,
+            "universe_signature": universe_signature,
+            "model_config": score_config_signature(config),
+            "target_article_ids": sorted(article["id"] for article in target_articles),
+            "scores": scores,
+            "failures": failures,
+            "checkpoint": checkpoint,
+            "status": "complete"
+            if all(
+                article["id"] in scores
+                or article["id"] in {failure.get("id") for failure in failures}
+                for article in target_articles
+            )
+            else "partial",
+        },
+    )
+
+
+def save_review_score_cache(
+    path: Path,
+    *,
+    news_cache_name: str,
+    universe_signature: str,
+    config: LLMConfig,
+    target_articles: list[dict[str, Any]],
+    scores: dict[str, dict[str, Any]],
+    failures: list[dict[str, Any]],
+    completed_batches: int | None = None,
+    total_batches: int | None = None,
+) -> None:
+    """Persist review results at the same staged checkpoints as primary scores."""
+    save_primary_score_cache(
+        path,
+        news_cache_name=news_cache_name,
+        universe_signature=universe_signature,
+        config=config,
+        target_articles=target_articles,
+        scores=scores,
+        failures=failures,
+        completed_batches=completed_batches,
+        total_batches=total_batches,
+    )
+
+
 def snapshot_status_payload(
     snapshot: dict[str, Any], message: str | None = None
 ) -> dict[str, Any]:
@@ -2774,6 +3239,7 @@ def build_snapshot(
     company_limit: int | None = None,
     llm_config: LLMConfig | None = None,
     review_llm_config: LLMConfig | None = None,
+    cache_dir: Path | None = None,
     checkpoint_callback: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     selected_markets = markets or SUPPORTED_MARKETS
@@ -2798,12 +3264,16 @@ def build_snapshot(
         or item["company"]
         for item in universe
     }
-    try:
-        provider_industries, industry_warnings = fetch_provider_industries(universe, workers)
-        warnings.extend(industry_warnings)
-    except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-        provider_industries = {}
-        warnings.append(f"industry lookup failed: {exc}")
+    cached_industries = load_cached_industry_mapping(DEFAULT_OUTPUT, universe)
+    if cached_industries:
+        provider_industries, industry_warnings = cached_industries, []
+    else:
+        try:
+            provider_industries, industry_warnings = fetch_provider_industries(universe, workers)
+            warnings.extend(industry_warnings)
+        except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+            provider_industries = {}
+            warnings.append(f"industry lookup failed: {exc}")
     industries_by_ticker = {
         item["ticker"]: provider_industries.get(item["ticker"], "") for item in universe
     }
@@ -2824,9 +3294,112 @@ def build_snapshot(
         else "invalid-primary-model-configuration"
     )
     cutoff = datetime.combine(as_of + timedelta(days=1), clock_time.min, SHANGHAI_TIMEZONE)
-    articles_by_ticker: dict[str, list[dict[str, Any]]] = {item["ticker"]: [] for item in universe}
-    company_news_counts: dict[str, int] = {}
-    industry_news_counts: dict[str, int] = {}
+    cache_parameters = {
+        "as_of": as_of.isoformat(),
+        "lookback_days": lookback_days,
+        "fallback_lookback_days": fallback_lookback_days,
+        "news_limit": news_limit,
+        "auxiliary_news_limit": auxiliary_news_limit,
+        "context_analysis_limit": context_analysis_limit,
+        "rss_news_limit": rss_news_limit,
+    }
+    resolved_cache_dir = (cache_dir or DEFAULT_CACHE_DIR).resolve()
+    cache_path = news_cache_path(
+        resolved_cache_dir,
+        as_of=as_of,
+        lookback_days=lookback_days,
+        fallback_lookback_days=fallback_lookback_days,
+        news_limit=news_limit,
+        auxiliary_news_limit=auxiliary_news_limit,
+        context_analysis_limit=context_analysis_limit,
+        rss_news_limit=rss_news_limit,
+    )
+    universe_signature = news_cache_universe_signature(universe)
+    cached_news = load_news_cache(
+        cache_path,
+        universe_signature=universe_signature,
+        parameters=cache_parameters,
+    )
+    primary_score_path = primary_score_cache_path(cache_path)
+    review_score_path = review_score_cache_path(cache_path)
+    preloaded_primary_scores = (
+        load_primary_score_cache(
+            primary_score_path,
+            news_cache_name=cache_path.name,
+            universe_signature=universe_signature,
+            config=llm_config,
+        )
+        if llm_config
+        else {}
+    )
+    preloaded_review_scores = (
+        load_review_score_cache(
+            review_score_path,
+            news_cache_name=cache_path.name,
+            universe_signature=universe_signature,
+            config=review_llm_config,
+        )
+        if review_llm_config
+        else {}
+    )
+    cached_company_news = {
+        str(ticker): rows
+        for ticker, rows in (cached_news.get("company_news") or {}).items()
+        if isinstance(rows, list)
+    }
+    cached_industry_news = {
+        str(industry): rows
+        for industry, rows in (cached_news.get("industry_news") or {}).items()
+        if isinstance(rows, list)
+    }
+    company_source_warnings = {
+        str(ticker): [str(item) for item in warnings]
+        for ticker, warnings in (cached_news.get("company_warnings") or {}).items()
+        if isinstance(warnings, list)
+    }
+    industry_source_warnings = {
+        str(industry): [str(item) for item in warnings]
+        for industry, warnings in (cached_news.get("industry_warnings") or {}).items()
+        if isinstance(warnings, list)
+    }
+    articles_by_ticker: dict[str, list[dict[str, Any]]] = {
+        item["ticker"]: cached_company_news.get(item["ticker"], [])
+        for item in universe
+    }
+    company_news_counts: dict[str, int] = {
+        ticker: len(rows) for ticker, rows in articles_by_ticker.items()
+        if ticker in cached_company_news
+    }
+    industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
+        industry: cached_industry_news.get(industry, []) for industry in industry_names
+    }
+    industry_news_counts: dict[str, int] = {
+        industry: len(rows)
+        for industry, rows in industry_articles_by_name.items()
+        if industry in cached_industry_news
+    }
+    for ticker, source_warnings in company_source_warnings.items():
+        warnings.extend(f"{ticker} source warning: {item}" for item in source_warnings)
+    for industry, source_warnings in industry_source_warnings.items():
+        warnings.extend(f"industry:{industry} source warning: {item}" for item in source_warnings)
+
+    cache_write_counter = 0
+
+    def persist_news_cache(*, force: bool = False) -> None:
+        nonlocal cache_write_counter
+        cache_write_counter += 1
+        if not force and cache_write_counter % 5:
+            return
+        save_news_cache(
+            cache_path,
+            as_of=as_of,
+            parameters=cache_parameters,
+            universe_signature=universe_signature,
+            company_news=articles_by_ticker,
+            company_warnings=company_source_warnings,
+            industry_news=industry_articles_by_name,
+            industry_warnings=industry_source_warnings,
+        )
 
     def pending_sentiment(label: str = "待评分") -> dict[str, Any]:
         return {
@@ -2975,9 +3548,18 @@ def build_snapshot(
         }
         checkpoint_callback(checkpoint)
 
-    emit_checkpoint("industry_mapping", "行业映射和市场情绪已完成")
+    emit_checkpoint(
+        "industry_mapping",
+        "行业映射和市场情绪已完成；新闻缓存已加载"
+        if cached_news
+        else "行业映射和市场情绪已完成",
+        completed_company_news=len(company_news_counts),
+        completed_industry_news=len(industry_news_counts),
+    )
 
-    completed_company_news = 0
+    pending_company_items = [
+        item for item in universe if item["ticker"] not in cached_company_news
+    ]
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
             executor.submit(
@@ -2992,7 +3574,7 @@ def build_snapshot(
                 rss_news_limit=rss_news_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): item
-            for item in universe
+            for item in pending_company_items
         }
         for future in as_completed(futures):
             item = futures[future]
@@ -3000,13 +3582,17 @@ def build_snapshot(
                 rows, source_warnings = future.result()
                 articles_by_ticker[item["ticker"]] = rows
                 company_news_counts[item["ticker"]] = len(rows)
+                company_source_warnings[item["ticker"]] = source_warnings
                 warnings.extend(
                     f"{item['ticker']} source warning: {warning}" for warning in source_warnings
                 )
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+                articles_by_ticker[item["ticker"]] = []
+                company_source_warnings[item["ticker"]] = [str(exc)]
                 warnings.append(f"news failed for {item['ticker']}: {exc}")
                 company_news_counts[item["ticker"]] = 0
-            completed_company_news += 1
+            persist_news_cache()
+            completed_company_news = len(company_news_counts)
             if completed_company_news % 10 == 0 or completed_company_news == len(universe):
                 emit_checkpoint(
                     "company_news",
@@ -3014,9 +3600,19 @@ def build_snapshot(
                     completed_company_news=completed_company_news,
                 )
 
-    industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
-        industry: [] for industry in industry_names
-    }
+    persist_news_cache(force=True)
+    completed_company_news = len(company_news_counts)
+    if not pending_company_items:
+        emit_checkpoint(
+            "company_news",
+            "个股新闻已从缓存恢复",
+            completed_company_news=len(company_news_counts),
+            completed_industry_news=len(industry_news_counts),
+        )
+
+    pending_industries = [
+        industry for industry in industry_names if industry not in cached_industry_news
+    ]
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
             executor.submit(
@@ -3029,16 +3625,20 @@ def build_snapshot(
                 context_analysis_limit=context_analysis_limit,
                 fallback_lookback_days=fallback_lookback_days,
             ): industry
-            for industry in industry_names
+            for industry in pending_industries
         }
         for future in as_completed(futures):
             industry = futures[future]
             try:
                 industry_articles_by_name[industry] = future.result()
                 industry_news_counts[industry] = len(industry_articles_by_name[industry])
+                industry_source_warnings[industry] = []
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+                industry_articles_by_name[industry] = []
+                industry_source_warnings[industry] = [str(exc)]
                 warnings.append(f"industry news failed for {industry}: {exc}")
                 industry_news_counts[industry] = 0
+            persist_news_cache()
             if len(industry_news_counts) % 5 == 0 or len(industry_news_counts) == len(industry_names):
                 emit_checkpoint(
                     "industry_news",
@@ -3046,6 +3646,15 @@ def build_snapshot(
                     completed_company_news=completed_company_news,
                     completed_industry_news=len(industry_news_counts),
                 )
+
+    persist_news_cache(force=True)
+    if not pending_industries:
+        emit_checkpoint(
+            "industry_news",
+            "行业新闻已从缓存恢复",
+            completed_company_news=len(company_news_counts),
+            completed_industry_news=len(industry_news_counts),
+        )
 
     all_articles = [article for items in articles_by_ticker.values() for article in items]
     all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
@@ -3057,9 +3666,23 @@ def build_snapshot(
         target_articles: list[dict[str, Any]],
         scores: dict[str, dict[str, Any]],
         failures: list[dict[str, Any]],
+        completed_batches: int | None,
+        total_batches: int | None,
     ) -> None:
         nonlocal latest_primary_preview
-        if provider_label == "primary":
+        if provider_label in {"primary", "primary_partial", "primary_cached"}:
+            if llm_config is not None:
+                save_primary_score_cache(
+                    primary_score_path,
+                    news_cache_name=cache_path.name,
+                    universe_signature=universe_signature,
+                    config=llm_config,
+                    target_articles=target_articles,
+                    scores=scores,
+                    failures=failures,
+                    completed_batches=completed_batches,
+                    total_batches=total_batches,
+                )
             latest_primary_preview = [
                 {
                     **article,
@@ -3072,28 +3695,61 @@ def build_snapshot(
             ]
             emit_checkpoint(
                 "primary_scoring",
-                "主模型评分已完成，等待复核模型",
+                (
+                    "主模型评分已从缓存恢复，等待复核模型"
+                    if provider_label == "primary_cached"
+                    else (
+                        f"主模型评分已阶段性保存（{completed_batches}/{total_batches}批），"
+                        "任务可中断后续跑"
+                        if provider_label == "primary_partial"
+                        else "主模型评分已完成，等待复核模型"
+                    )
+                ),
                 completed_company_news=completed_company_news,
                 completed_industry_news=len(industry_news_counts),
                 scored_articles=latest_primary_preview,
-                score_provider="primary",
+                score_provider="primary_cache"
+                if provider_label == "primary_cached"
+                else "primary",
                 score_failures=len(failures),
             )
-        elif provider_label == "review" and latest_primary_preview:
-            emit_checkpoint(
-                "review_scoring",
-                "复核模型评分进行中",
-                completed_company_news=completed_company_news,
-                completed_industry_news=len(industry_news_counts),
-                scored_articles=latest_primary_preview,
-                score_provider="review",
-                score_failures=len(failures),
-            )
+        elif provider_label in {"review_partial", "review", "review_cached"}:
+            if review_llm_config is not None:
+                save_review_score_cache(
+                    review_score_path,
+                    news_cache_name=cache_path.name,
+                    universe_signature=universe_signature,
+                    config=review_llm_config,
+                    target_articles=target_articles,
+                    scores=scores,
+                    failures=failures,
+                    completed_batches=completed_batches,
+                    total_batches=total_batches,
+                )
+            if latest_primary_preview:
+                emit_checkpoint(
+                    "review_scoring",
+                    "复核模型评分已从缓存恢复"
+                    if provider_label == "review_cached"
+                    else (
+                        f"复核模型评分已阶段性保存（{completed_batches}/{total_batches}批），"
+                        "任务可中断后续跑"
+                    ),
+                    completed_company_news=completed_company_news,
+                    completed_industry_news=len(industry_news_counts),
+                    scored_articles=latest_primary_preview,
+                    score_provider="review_cache"
+                    if provider_label == "review_cached"
+                    else "review",
+                    score_failures=len(failures),
+                )
 
     scored_articles, scoring_warnings, skipped_articles = score_articles(
         all_articles,
         llm_config,
         review_llm_config,
+        preloaded_primary_scores=preloaded_primary_scores,
+        preloaded_review_scores=preloaded_review_scores,
         progress_callback=score_progress_callback,
     )
     warnings.extend(scoring_warnings)
@@ -3247,6 +3903,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument("--site-output", type=Path, default=DEFAULT_SITE_OUTPUT)
     parser.add_argument("--status-output", type=Path, default=DEFAULT_STATUS_OUTPUT)
     parser.add_argument("--as-of", type=date.fromisoformat, help="end-of-day cutoff (YYYY-MM-DD)")
@@ -3364,6 +4021,7 @@ def main(argv: list[str] | None = None) -> int:
             company_limit=args.company_limit,
             llm_config=primary_config,
             review_llm_config=review_config,
+            cache_dir=args.cache_dir.resolve(),
             checkpoint_callback=lambda snapshot: persist_checkpoint(
                 snapshot, "情绪任务进行中；页面显示最近一次阶段性结果。"
             ),

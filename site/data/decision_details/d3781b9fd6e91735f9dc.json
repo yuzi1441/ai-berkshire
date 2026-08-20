@@ -1,0 +1,355 @@
+{
+  "company": "金禾实业",
+  "entity_kind": "company",
+  "entity_directory": "金禾实业",
+  "ticker": "002597.SZ",
+  "market": "A股",
+  "data_cutoff": "2026-08-10",
+  "report_reference_price": {
+    "price": 20.24,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": "2026-08-10",
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "小仓位观察，不追涨",
+      "price_range": "16.5-18.0元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待确认后分批买入",
+      "price_range": "13.5-16.5元"
+    },
+    {
+      "stance": "保守型",
+      "action": "暂不参与",
+      "price_range": "10.5-13.5元"
+    }
+  ],
+  "conclusion_summary": "核心甜味剂盈利下行且自由现金流为负，20.24元安全边际不足，等待毛利、库存和现金流确认。",
+  "buy_price": "13.5-16.5元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "小仓位观察，不追涨",
+      "price_range": "16.5-18.0元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待确认后分批买入",
+      "price_range": "13.5-16.5元"
+    },
+    {
+      "stance": "保守型",
+      "action": "暂不参与",
+      "price_range": "10.5-13.5元"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "34.5 元",
+      "eps_growth": "+25%",
+      "target_pe": "28x"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "19.5 元",
+      "eps_growth": "+12%",
+      "target_pe": "22x"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "8.6 元",
+      "eps_growth": "-5%",
+      "target_pe": "16x"
+    }
+  ],
+  "valuation_section": {
+    "heading": "八、估值与安全边际",
+    "start_line": 146,
+    "end_line": 209,
+    "markdown": "## 八、估值与安全边际\n\n### 8.1 当前定价\n\nTTM 口径为 2025 年归母净利润减 2025Q1、加 2026Q1，TTM EPS = 0.353772 元；Q1 归母净资产/总股本得到 BVPS = 13.911660 元；TTM FCF/股 = -0.347820 元；TTM 收入/股 = 9.017862 元。\n\n| 指标 | 精确值 | 含义 |\n|---|---:|---|\n| PE（TTM） | 57.21x | 对当前盈利明显偏高 |\n| PB（Q1） | 1.45x | 资产负债表不贵，但资产回报率仅约 2.54% TTM |\n| PS（TTM） | 2.24x | 对低毛利化工制造不算便宜 |\n| P/FCF | -58.19x | FCF 为负，不能用现金收益率支撑估值 |\n| 股息率 | 0.99% | 以 2025 年拟派 0.20 元计；不代表中期提议已落地 |\n\n### 8.2 反向估值直觉\n\n20.24 元若给予 22x 估值，需要约 0.92 元稳定 EPS；若保持当前 0.354 元 TTM EPS，则市场隐含的是盈利在未来若干年大幅修复并且资本开支不再吞噬现金。这个隐含前提尚未被 2026Q1 数据确认。\n\n### 8.3 三情景估值（3年）\n\n以审计的 2025 EPS 0.63 元为起点，由 `financial_rigor.py` 精确计算：\n\n| 情景 | EPS年增速 | 目标PE | 三年目标价 | 相对20.24元 |\n|---|---:|---:|---:|---:|\n| 乐观 | +25% | 28x | 34.5 元 | +70.2% |\n| 中性 | +12% | 22x | 19.5 元 | -3.8% |\n| 悲观 | -5% | 16x | 8.6 元 | -57.3% |\n\n三情景不是目标价承诺，而是把盈利和估值假设显式化。当前价格接近中性情景终值，安全边际不足以补偿悲观情景的现金流风险。\n\n### 8.4 基本面价格区间\n\n| 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 |\n|---|---|---:|---|\n| 激进型 | 小仓位观察，不追涨 | 16.5-18.0 元 | 允许提前押注周期改善，但需接受 Q2 数据风险 |\n| 稳健型 | 等待确认后分批买入 | 13.5-16.5 元 | 需要毛利率、库存和现金流同步改善 |\n| 保守型 | 暂不参与 | 10.5-13.5 元 | 以资产和低盈利回报提供更厚安全边际 |\n\n> 段永平式追问：如果市场关闭五年，我愿意以 20.24 元持有吗？在 TTM PE 57x、FCF 为负且 Q1 利润下滑 60% 的组合下，答案是否定的；等待价格或证据改善更划算。\n\n## 九、最终决策与行动清单\n\n### 9.1 四大师综合判断\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量 | 工艺和循环产业链平台有价值，但核心产品周期性强 | 中 |\n| 护城河 | 工艺、规模、认证构成中等护城河，定价权正在检验 | 中低 |\n| 管理层 | 控股股东增持、分红意愿和研发投入较积极，资本开支回报未证实 | 中 |\n| 最大风险 | 甜味剂价格战叠加库存和扩产导致长期低 FCF | 中高 |\n| 文明趋势 | 健康配料、国产替代、合成生物学顺风，但价值捕获不确定 | 中低 |\n| 估值 | PB不高但盈利和现金流口径昂贵 | 高 |\n\n### 9.2 对不同持有状态的建议\n\n| 状态 | 建议 |\n|---|---|\n| 空仓者 | 当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究 |\n| 持仓者 | 不因“接近一年低点”补仓；保留小仓位观察，按失效条件控制仓位 |\n| 加仓信号 | 核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度 FCF 转正；电子化学品收入占比超过 3% 且毛利率高于集团平均 |\n| 减仓/卖出信号 | 核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升 |\n\n**结论：观察。** 这是一家有制造能力和长期选项的公司，但不是在 20.24 元就具备充分安全边际的股票。下一次复核安排在 2026-09-10，重点等待半年报和 Q2 经营数据。"
+  },
+  "recommendation": "空仓者 当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究",
+  "title": "金禾实业（002597.SZ）研究报告",
+  "report_path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+  "report_link": "金禾实业/金禾实业-investment-research-20260810.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "金禾实业",
+    "ticker": "002597.SZ",
+    "market": "A股",
+    "report_completed_at": "2026-08-10",
+    "data_cutoff": "2026-08-10",
+    "action": "观察",
+    "summary": "核心甜味剂盈利下行且自由现金流为负，20.24元安全边际不足，等待毛利、库存和现金流确认。",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "小仓位观察，不追涨",
+        "price_range": "16.5-18.0元"
+      },
+      {
+        "stance": "稳健型",
+        "action": "等待确认后分批买入",
+        "price_range": "13.5-16.5元"
+      },
+      {
+        "stance": "保守型",
+        "action": "暂不参与",
+        "price_range": "10.5-13.5元"
+      }
+    ],
+    "invalidation_triggers": "核心毛利率继续低于20%，库存和跌价损失继续上升，或连续年度FCF为负且有息负债上升。",
+    "next_review_date": "2026-09-10",
+    "confidence": "中"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-08-10",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "小仓位观察，不追涨",
+          "price_range": "16.5-18.0元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待确认后分批买入",
+          "price_range": "13.5-16.5元"
+        },
+        {
+          "stance": "保守型",
+          "action": "暂不参与",
+          "price_range": "10.5-13.5元"
+        }
+      ],
+      "conclusion_summary": "核心甜味剂盈利下行且自由现金流为负，20.24元安全边际不足，等待毛利、库存和现金流确认。",
+      "buy_price": "13.5-16.5元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "小仓位观察，不追涨",
+          "price_range": "16.5-18.0元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待确认后分批买入",
+          "price_range": "13.5-16.5元"
+        },
+        {
+          "stance": "保守型",
+          "action": "暂不参与",
+          "price_range": "10.5-13.5元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "34.5 元",
+          "eps_growth": "+25%",
+          "target_pe": "28x"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "19.5 元",
+          "eps_growth": "+12%",
+          "target_pe": "22x"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "8.6 元",
+          "eps_growth": "-5%",
+          "target_pe": "16x"
+        }
+      ],
+      "valuation_section": {
+        "heading": "八、估值与安全边际",
+        "start_line": 146,
+        "end_line": 209,
+        "markdown": "## 八、估值与安全边际\n\n### 8.1 当前定价\n\nTTM 口径为 2025 年归母净利润减 2025Q1、加 2026Q1，TTM EPS = 0.353772 元；Q1 归母净资产/总股本得到 BVPS = 13.911660 元；TTM FCF/股 = -0.347820 元；TTM 收入/股 = 9.017862 元。\n\n| 指标 | 精确值 | 含义 |\n|---|---:|---|\n| PE（TTM） | 57.21x | 对当前盈利明显偏高 |\n| PB（Q1） | 1.45x | 资产负债表不贵，但资产回报率仅约 2.54% TTM |\n| PS（TTM） | 2.24x | 对低毛利化工制造不算便宜 |\n| P/FCF | -58.19x | FCF 为负，不能用现金收益率支撑估值 |\n| 股息率 | 0.99% | 以 2025 年拟派 0.20 元计；不代表中期提议已落地 |\n\n### 8.2 反向估值直觉\n\n20.24 元若给予 22x 估值，需要约 0.92 元稳定 EPS；若保持当前 0.354 元 TTM EPS，则市场隐含的是盈利在未来若干年大幅修复并且资本开支不再吞噬现金。这个隐含前提尚未被 2026Q1 数据确认。\n\n### 8.3 三情景估值（3年）\n\n以审计的 2025 EPS 0.63 元为起点，由 `financial_rigor.py` 精确计算：\n\n| 情景 | EPS年增速 | 目标PE | 三年目标价 | 相对20.24元 |\n|---|---:|---:|---:|---:|\n| 乐观 | +25% | 28x | 34.5 元 | +70.2% |\n| 中性 | +12% | 22x | 19.5 元 | -3.8% |\n| 悲观 | -5% | 16x | 8.6 元 | -57.3% |\n\n三情景不是目标价承诺，而是把盈利和估值假设显式化。当前价格接近中性情景终值，安全边际不足以补偿悲观情景的现金流风险。\n\n### 8.4 基本面价格区间\n\n| 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 |\n|---|---|---:|---|\n| 激进型 | 小仓位观察，不追涨 | 16.5-18.0 元 | 允许提前押注周期改善，但需接受 Q2 数据风险 |\n| 稳健型 | 等待确认后分批买入 | 13.5-16.5 元 | 需要毛利率、库存和现金流同步改善 |\n| 保守型 | 暂不参与 | 10.5-13.5 元 | 以资产和低盈利回报提供更厚安全边际 |\n\n> 段永平式追问：如果市场关闭五年，我愿意以 20.24 元持有吗？在 TTM PE 57x、FCF 为负且 Q1 利润下滑 60% 的组合下，答案是否定的；等待价格或证据改善更划算。\n\n## 九、最终决策与行动清单\n\n### 9.1 四大师综合判断\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量 | 工艺和循环产业链平台有价值，但核心产品周期性强 | 中 |\n| 护城河 | 工艺、规模、认证构成中等护城河，定价权正在检验 | 中低 |\n| 管理层 | 控股股东增持、分红意愿和研发投入较积极，资本开支回报未证实 | 中 |\n| 最大风险 | 甜味剂价格战叠加库存和扩产导致长期低 FCF | 中高 |\n| 文明趋势 | 健康配料、国产替代、合成生物学顺风，但价值捕获不确定 | 中低 |\n| 估值 | PB不高但盈利和现金流口径昂贵 | 高 |\n\n### 9.2 对不同持有状态的建议\n\n| 状态 | 建议 |\n|---|---|\n| 空仓者 | 当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究 |\n| 持仓者 | 不因“接近一年低点”补仓；保留小仓位观察，按失效条件控制仓位 |\n| 加仓信号 | 核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度 FCF 转正；电子化学品收入占比超过 3% 且毛利率高于集团平均 |\n| 减仓/卖出信号 | 核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升 |\n\n**结论：观察。** 这是一家有制造能力和长期选项的公司，但不是在 20.24 元就具备充分安全边际的股票。下一次复核安排在 2026-09-10，重点等待半年报和 Q2 经营数据。"
+      },
+      "price_status": "已提取价格计划",
+      "title": "金禾实业（002597.SZ）研究报告",
+      "report_path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+      "report_link": "金禾实业/金禾实业-investment-research-20260810.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "金禾实业",
+        "ticker": "002597.SZ",
+        "market": "A股",
+        "report_completed_at": "2026-08-10",
+        "data_cutoff": "2026-08-10",
+        "action": "观察",
+        "summary": "核心甜味剂盈利下行且自由现金流为负，20.24元安全边际不足，等待毛利、库存和现金流确认。",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "小仓位观察，不追涨",
+            "price_range": "16.5-18.0元"
+          },
+          {
+            "stance": "稳健型",
+            "action": "等待确认后分批买入",
+            "price_range": "13.5-16.5元"
+          },
+          {
+            "stance": "保守型",
+            "action": "暂不参与",
+            "price_range": "10.5-13.5元"
+          }
+        ],
+        "invalidation_triggers": "核心毛利率继续低于20%，库存和跌价损失继续上升，或连续年度FCF为负且有息负债上升。",
+        "next_review_date": "2026-09-10",
+        "confidence": "中"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "当前价格观察，不买入；若跌入稳健区间（13.5-16.5元）且毛利/库存改善，再分批研究",
+    "holder_action": "不因接近一年低点补仓，保留小仓位观察，按失效条件控制仓位",
+    "trigger_condition": "价格跌至13.5-16.5元稳健区间，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度FCF转正；电子化学品收入占比超3%且毛利率高于集团平均",
+    "summary": "20.24元安全边际不足，空仓者不买入，等待价格与基本面确认后再分批研究，整体结论为观察。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "正文明确空仓者当前价格不买入，而看板契约激进型动作写‘小仓位观察，不追涨’，存在轻微表述差异，按正文执行。",
+    "evidence": [
+      {
+        "line_start": 203,
+        "line_end": 203,
+        "quote": "| 空仓者 | 当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究 |",
+        "supports": "直接说明空仓者当前不买入，需等待价格条件和基本面改善后才可行动，归为等待价格。"
+      },
+      {
+        "line_start": 208,
+        "line_end": 208,
+        "quote": "**结论：观察。** 这是一家有制造能力和长期选项的公司，但不是在 20.24 元就具备充分安全边际的股票。下一次复核安排在 2026-09-10，重点等待半年报和 Q2 经营数据。",
+        "supports": "最终结论为‘观察’，明确当前不具备安全边际，不支持买入，支持等待判断。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": false,
+    "currency": "CNY",
+    "entry_ceiling": 18.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 16.5,
+      "max": 18.0
+    },
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:25:54+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "价格跌至13.5-16.5元稳健区间，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度FCF转正；电子化学品收入占比超3%且毛利率高于集团平均",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "等待确认后分批买入",
+        "price_range": "13.5-16.5元",
+        "min": 13.5,
+        "ceiling": 16.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "价格跌至13.5-16.5元稳健区间，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度FCF转正；电子化学品收入占比超3%且毛利率高于集团平均",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓位观察，不追涨",
+        "price_range": "16.5-18.0元",
+        "min": 16.5,
+        "ceiling": 18.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "价格跌至13.5-16.5元稳健区间，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度FCF转正；电子化学品收入占比超3%且毛利率高于集团平均",
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 2,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "金禾实业",
+    "ticker": "002597.SZ",
+    "status": "ready",
+    "report_path": "reports/金禾实业/金禾实业-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 19.65,
+    "currency": "CNY",
+    "observation_zone": "数据不足",
+    "fundamental_entry_plan": "主报告未提取到可核验的建仓价格带",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "暂不能判断",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "红",
+        "meaning": "股价仍在20日均线之下。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价仍在200日均线之下。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "红",
+        "meaning": "近5日平均成交量明显低于20日平均，缺少量能确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "d3781b9fd6e91735f9dc",
+  "detail_path": "./data/decision_details/d3781b9fd6e91735f9dc.json"
+}

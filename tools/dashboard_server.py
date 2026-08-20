@@ -9,7 +9,10 @@ outside the Git checkout, so a click cannot dirty or block the after-close job.
 from __future__ import annotations
 
 import argparse
+import email.utils
+import gzip
 import hmac
+import io
 import json
 import os
 import sys
@@ -112,6 +115,11 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
     """Static files plus same-origin, bearer-token guarded API routes."""
 
     server_version = "AIBerkshireDashboard/1.0"
+    protocol_version = "HTTP/1.1"
+    compressible_suffixes = {".css", ".html", ".js", ".json", ".svg"}
+    compression_minimum_size = 1024
+    _gzip_cache: dict[tuple[str, int, int], bytes] = {}
+    _gzip_cache_lock = threading.Lock()
 
     def __init__(
         self,
@@ -132,9 +140,72 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         print(f"{self.address_string()} - {format % args}", flush=True)
 
     def end_headers(self) -> None:
-        if urlparse(self.path).path.startswith("/api/"):
+        path = urlparse(self.path).path
+        if path.startswith("/api/"):
             self.send_header("Cache-Control", "no-store")
+        elif Path(path).suffix.lower() in {".css", ".js", ".svg"}:
+            self.send_header("Cache-Control", "public, max-age=31536000, immutable")
+        elif Path(path).suffix.lower() in {".html", ".json"}:
+            self.send_header("Cache-Control", "no-cache")
         super().end_headers()
+
+    @staticmethod
+    def accepts_gzip(value: str) -> bool:
+        for part in value.lower().split(","):
+            encoding, *parameters = part.strip().split(";", 1)
+            if encoding.strip() != "gzip":
+                continue
+            return not parameters or "q=0" not in parameters[0].replace(" ", "")
+        return False
+
+    @classmethod
+    def compressed_bytes(cls, path: Path, raw: bytes, stat_result: os.stat_result) -> bytes:
+        key = (str(path), stat_result.st_mtime_ns, stat_result.st_size)
+        with cls._gzip_cache_lock:
+            cached = cls._gzip_cache.get(key)
+        if cached is not None:
+            return cached
+        compressed = gzip.compress(raw, compresslevel=6, mtime=0)
+        with cls._gzip_cache_lock:
+            cls._gzip_cache[key] = compressed
+            if len(cls._gzip_cache) > 32:
+                cls._gzip_cache.pop(next(iter(cls._gzip_cache)))
+        return compressed
+
+    def send_head(self) -> io.BufferedIOBase | None:
+        path = Path(self.translate_path(self.path))
+        if (
+            path.is_file()
+            and path.suffix.lower() in self.compressible_suffixes
+            and path.stat().st_size >= self.compression_minimum_size
+            and self.accepts_gzip(self.headers.get("Accept-Encoding", ""))
+            and "Range" not in self.headers
+        ):
+            stat_result = path.stat()
+            if "If-Modified-Since" in self.headers:
+                try:
+                    modified_since = email.utils.parsedate_to_datetime(self.headers["If-Modified-Since"])
+                    modified_since_timestamp = modified_since.timestamp()
+                except (TypeError, ValueError, OverflowError):
+                    modified_since_timestamp = None
+                if (
+                    modified_since_timestamp is not None
+                    and int(stat_result.st_mtime) <= int(modified_since_timestamp)
+                ):
+                    self.send_response(HTTPStatus.NOT_MODIFIED)
+                    self.end_headers()
+                    return None
+            raw = path.read_bytes()
+            compressed = self.compressed_bytes(path, raw, stat_result)
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-type", self.guess_type(str(path)))
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Vary", "Accept-Encoding")
+            self.send_header("Content-Length", str(len(compressed)))
+            self.send_header("Last-Modified", self.date_time_string(stat_result.st_mtime))
+            self.end_headers()
+            return io.BytesIO(compressed)
+        return super().send_head()
 
     def authorized(self) -> bool:
         if not self.review_token:

@@ -1,0 +1,298 @@
+{
+  "company": "deye",
+  "entity_kind": "company",
+  "entity_directory": "deye",
+  "ticker": "605117.SH",
+  "market": "A股",
+  "data_cutoff": "2026-06-23",
+  "report_reference_price": {
+    "price": 101.85,
+    "currency": "CNY",
+    "line": 4,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "当前价位",
+      "price_range": "100-110 元",
+      "note": "当前价位",
+      "source": "inferred_valuation_bands",
+      "buy_eligible": false
+    },
+    {
+      "stance": "稳健型",
+      "action": "安全边际较充足",
+      "price_range": "70-80 元",
+      "note": "安全边际较充足",
+      "source": "inferred_valuation_bands",
+      "buy_eligible": false
+    },
+    {
+      "stance": "保守型",
+      "action": "极端悲观（类似2023年底）",
+      "price_range": "50-60 元",
+      "note": "极端悲观（类似2023年底）",
+      "source": "inferred_valuation_bands",
+      "buy_eligible": false
+    }
+  ],
+  "conclusion_summary": "空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+  "buy_price": "70-80 元",
+  "price_plan": [],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "CNY 312",
+      "eps_growth": "35%",
+      "target_pe": "30x",
+      "upside": "+207%"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "CNY 161",
+      "eps_growth": "20%",
+      "target_pe": "22x",
+      "upside": "+58%"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "CNY 69",
+      "eps_growth": "5%",
+      "target_pe": "14x",
+      "upside": "-33%"
+    }
+  ],
+  "valuation_section": {
+    "heading": "六、估值与安全边际",
+    "start_line": 268,
+    "end_line": 340,
+    "markdown": "## 六、估值与安全边际\n\n### 当前市场定价\n\n| 估值指标 | 当前值 | 同行对比 |\n|----------|--------|---------|\n| PE（TTM，转增后） | **40.90x** | 锦浪~25x，固德威~30x，阳光电源~18x |\n| PB | **12.56x** | 同行8-15x |\n| PS（TTM） | **10.6x** | 同行3-8x |\n| ROE | **30.70%** | 同行15-25% |\n| FCF Yield | **2.16%** | — |\n| 股息率 | **~2-4%** | 分红慷慨 |\n| 2026E PE | **~14.5x** | 基于券商一致预期归母53.8亿 |\n\n> 所有指标通过 `financial_rigor.py` 精确验算。\n\n### PE历史区间\n\n| 年份 | 平均PE | 最高PE | 最低PE |\n|------|--------|--------|--------|\n| 2022 | 120.33 | 177.39 | 52.54 |\n| 2023 | 51.45 | 137.84 | **11.10** |\n| 2024 | 23.49 | 36.77 | **12.91** |\n| 2025 | 21.17 | 27.29 | 14.00 |\n| 2026（至今） | 36.82 | 50.30 | 24.65 |\n\n历史最低PE 11-13倍出现在2023年底-2024年初（欧洲去库存+板块杀估值）。当前PE 41倍处于历史偏高区间。\n\n### 反向DCF\n\n当前市值1,297亿，按10%贴现率和3%永续增长率推算：\n- 隐含2030年净利润约**80-100亿**\n- 隐含未来5年净利润CAGR约**25-30%**\n- 这要求：全球化持续成功 + 工商储放量 + 毛利率维持\n\n**是否合理？** 如果2026年净利确实达到53.8亿（+70%），则后续4年仅需~15%增速即可达到80亿。但如果2026年增速低于预期（如欧盟禁令提前影响），则当前估值偏高。\n\n### 三情景估值\n\n> 基于2026年预估EPS=4.23 CNY（券商预期归母53.8亿/12.73亿股），投射3年至2029年。所有计算经工具精确验算。\n\n| 情景 | 年增速 | 目标PE | 2029年EPS | 目标股价 | 较现价涨跌 |\n|------|--------|--------|-----------|---------|-----------|\n| **乐观**（全球化+工商储双引擎） | 35% | 30x | CNY 10.41 | **CNY 312** | +207% |\n| **中性**（国内稳健+海外温和增长） | 20% | 22x | CNY 7.31 | **CNY 161** | +58% |\n| **悲观**（欧盟禁令+价格战+增速放缓） | 5% | 14x | CNY 4.90 | **CNY 69** | -33% |\n\n### 关键价格区间\n\n| 价位（CNY） | 含义 | 对应2026E PE |\n|-------------|------|-------------|\n| 130-160 | 中性情景目标价 | 24-30x |\n| 100-110 | **当前价位** | 19-21x |\n| 70-80 | 安全边际较充足 | 13-15x |\n| 50-60 | 极端悲观（类似2023年底） | 9-11x |\n\n### 追问：如果股市明天关闭5年，你愿意以这个价格持有吗？\n\n**有条件地愿意。**\n\n以101.85元买入，5年后（2031年）如果德业成功：\n- 年营收300-500亿、净利70-100亿，市值3000-5000亿（当前1,297亿的2.3-3.9倍），回报可观\n- ROE持续>25%，高分红率意味着持有期间有真金白银回报\n\n但前提条件是：\n1. 欧盟禁令未扩散至更多西方国家\n2. 新兴市场渠道网络不被华为/Growatt大幅蚕食\n3. 工商储第二增长曲线成功起量\n\n如果上述任一条件不满足，当前价格的安全边际不够——**建议等待回调至CNY 70-80区间（2026E PE ~13-15x）再建仓**。\n\n---"
+  },
+  "recommendation": "空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+  "title": "德业股份（605117.SH）投资研究报告",
+  "report_path": "reports/deye/deye-investment-research-20260623.md",
+  "report_link": "deye/deye-investment-research-20260623.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "deye",
+    "ticker": "605117.SH",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-06-23",
+    "action": "观察",
+    "summary": "空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+    "investor_stances": [],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取三情景",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-06-23",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "当前价位",
+          "price_range": "100-110 元",
+          "note": "当前价位",
+          "source": "inferred_valuation_bands",
+          "buy_eligible": false
+        },
+        {
+          "stance": "稳健型",
+          "action": "安全边际较充足",
+          "price_range": "70-80 元",
+          "note": "安全边际较充足",
+          "source": "inferred_valuation_bands",
+          "buy_eligible": false
+        },
+        {
+          "stance": "保守型",
+          "action": "极端悲观（类似2023年底）",
+          "price_range": "50-60 元",
+          "note": "极端悲观（类似2023年底）",
+          "source": "inferred_valuation_bands",
+          "buy_eligible": false
+        }
+      ],
+      "conclusion_summary": "空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+      "buy_price": "70-80 元",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "CNY 312",
+          "eps_growth": "35%",
+          "target_pe": "30x",
+          "upside": "+207%"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "CNY 161",
+          "eps_growth": "20%",
+          "target_pe": "22x",
+          "upside": "+58%"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "CNY 69",
+          "eps_growth": "5%",
+          "target_pe": "14x",
+          "upside": "-33%"
+        }
+      ],
+      "valuation_section": {
+        "heading": "六、估值与安全边际",
+        "start_line": 268,
+        "end_line": 340,
+        "markdown": "## 六、估值与安全边际\n\n### 当前市场定价\n\n| 估值指标 | 当前值 | 同行对比 |\n|----------|--------|---------|\n| PE（TTM，转增后） | **40.90x** | 锦浪~25x，固德威~30x，阳光电源~18x |\n| PB | **12.56x** | 同行8-15x |\n| PS（TTM） | **10.6x** | 同行3-8x |\n| ROE | **30.70%** | 同行15-25% |\n| FCF Yield | **2.16%** | — |\n| 股息率 | **~2-4%** | 分红慷慨 |\n| 2026E PE | **~14.5x** | 基于券商一致预期归母53.8亿 |\n\n> 所有指标通过 `financial_rigor.py` 精确验算。\n\n### PE历史区间\n\n| 年份 | 平均PE | 最高PE | 最低PE |\n|------|--------|--------|--------|\n| 2022 | 120.33 | 177.39 | 52.54 |\n| 2023 | 51.45 | 137.84 | **11.10** |\n| 2024 | 23.49 | 36.77 | **12.91** |\n| 2025 | 21.17 | 27.29 | 14.00 |\n| 2026（至今） | 36.82 | 50.30 | 24.65 |\n\n历史最低PE 11-13倍出现在2023年底-2024年初（欧洲去库存+板块杀估值）。当前PE 41倍处于历史偏高区间。\n\n### 反向DCF\n\n当前市值1,297亿，按10%贴现率和3%永续增长率推算：\n- 隐含2030年净利润约**80-100亿**\n- 隐含未来5年净利润CAGR约**25-30%**\n- 这要求：全球化持续成功 + 工商储放量 + 毛利率维持\n\n**是否合理？** 如果2026年净利确实达到53.8亿（+70%），则后续4年仅需~15%增速即可达到80亿。但如果2026年增速低于预期（如欧盟禁令提前影响），则当前估值偏高。\n\n### 三情景估值\n\n> 基于2026年预估EPS=4.23 CNY（券商预期归母53.8亿/12.73亿股），投射3年至2029年。所有计算经工具精确验算。\n\n| 情景 | 年增速 | 目标PE | 2029年EPS | 目标股价 | 较现价涨跌 |\n|------|--------|--------|-----------|---------|-----------|\n| **乐观**（全球化+工商储双引擎） | 35% | 30x | CNY 10.41 | **CNY 312** | +207% |\n| **中性**（国内稳健+海外温和增长） | 20% | 22x | CNY 7.31 | **CNY 161** | +58% |\n| **悲观**（欧盟禁令+价格战+增速放缓） | 5% | 14x | CNY 4.90 | **CNY 69** | -33% |\n\n### 关键价格区间\n\n| 价位（CNY） | 含义 | 对应2026E PE |\n|-------------|------|-------------|\n| 130-160 | 中性情景目标价 | 24-30x |\n| 100-110 | **当前价位** | 19-21x |\n| 70-80 | 安全边际较充足 | 13-15x |\n| 50-60 | 极端悲观（类似2023年底） | 9-11x |\n\n### 追问：如果股市明天关闭5年，你愿意以这个价格持有吗？\n\n**有条件地愿意。**\n\n以101.85元买入，5年后（2031年）如果德业成功：\n- 年营收300-500亿、净利70-100亿，市值3000-5000亿（当前1,297亿的2.3-3.9倍），回报可观\n- ROE持续>25%，高分红率意味着持有期间有真金白银回报\n\n但前提条件是：\n1. 欧盟禁令未扩散至更多西方国家\n2. 新兴市场渠道网络不被华为/Growatt大幅蚕食\n3. 工商储第二增长曲线成功起量\n\n如果上述任一条件不满足，当前价格的安全边际不够——**建议等待回调至CNY 70-80区间（2026E PE ~13-15x）再建仓**。\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "德业股份（605117.SH）投资研究报告",
+      "report_path": "reports/deye/deye-investment-research-20260623.md",
+      "report_link": "deye/deye-investment-research-20260623.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "deye",
+        "ticker": "605117.SH",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-06-23",
+        "action": "观察",
+        "summary": "空仓者 等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+        "investor_stances": [],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓；若2026Q2-Q3保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓",
+    "holder_action": "持仓者持有但控制仓位在10%以内，密切关注欧盟禁令执行和应收账款趋势，触发卖出信号则减仓",
+    "trigger_condition": "股价回调至CNY 70-80区间（2026E PE 13-15x）",
+    "summary": "德业生意质量优秀但当前PE偏高，空仓者等待回调至70-80元再建仓，持仓者持有但控制仓位，关注欧盟禁令风险",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约不冲突，契约称‘观察’，正文明确给出等待价格区间，是更具体的执行指引",
+    "evidence": [
+      {
+        "line_start": 358,
+        "line_end": 358,
+        "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
+        "supports": "明确给出空仓者等待价格触发条件，归为‘等待价格/watch’"
+      },
+      {
+        "line_start": 390,
+        "line_end": 390,
+        "quote": "- **当前PE 41倍需要\"大部分乐观假设兑现\"才能获得合理回报**。如果投资者对欧盟禁令影响和业绩持续性没有高于市场共识的信心，建议等待更好的价格",
+        "supports": "最终结论再次强调等待更好价格，支持‘等待价格/watch’判断"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:49:44+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "股价回调至CNY 70-80区间（2026E PE 13-15x）",
+        "price_range": "CNY 70-80",
+        "min": 70.0,
+        "ceiling": 80.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 0,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "deye",
+    "ticker": "605117.SH",
+    "status": "ready",
+    "report_path": "reports/deye/deye-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 90.31,
+    "currency": "CNY",
+    "observation_zone": "83.16-87.58",
+    "fundamental_entry_plan": "以：101.85元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "绿",
+        "meaning": "股价在20日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "绿",
+        "meaning": "股价在200日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "绿",
+        "meaning": "近5日平均成交量高于20日平均，量能有确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "4315eee2a4d8299537f7",
+  "detail_path": "./data/decision_details/4315eee2a4d8299537f7.json"
+}

@@ -1,0 +1,676 @@
+{
+  "company": "英伟达",
+  "entity_kind": "company",
+  "entity_directory": "英伟达",
+  "ticker": null,
+  "market": "未识别",
+  "data_cutoff": "2026-08-01",
+  "report_reference_price": null,
+  "report_completed_at": "2026-08-01",
+  "action": "未提取",
+  "investor_stances": [],
+  "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+  "buy_price": "US$304",
+  "price_plan": [],
+  "scenario_valuation": [],
+  "valuation_section": {
+    "heading": "四、估值与安全边际",
+    "start_line": 270,
+    "end_line": 302,
+    "markdown": "## 四、估值与安全边际\n\n### 三情景估值（修正版）\n\n| 情景 | 2028 营收 | 毛利率 | 2028 净利润 | 合理PE | 目标价 | vs $178 |\n|-----|----------|-------|------------|--------|-------|---------|\n| 乐观（CUDA守住、推理+训练双赢） | $4,000亿 | 72% | $1,900亿 | 30x | $235 | +32% |\n| 中性（推理份额降至50%、毛利66%） | $3,200亿 | 66% | $1,400亿 | 22x | $127 | -29% |\n| 悲观（CapEx 2027见顶 + 循环融资暴雷） | $2,400亿 | 58% | $900亿 | 15x | $55 | -69% |\n\n**期望值**（概率加权：乐观25% / 中性50% / 悲观25%）：\n- 目标价 = 0.25×235 + 0.50×127 + 0.25×55 = **$136**\n- 相比 $178 **下跌空间 24%**\n\n**反向 DCF 检验**：\n- 当前股价 $178 隐含的 FCF 永续增长率（10年）≈ 12-15%\n- 这要求未来10年 FCF 从 $967亿 增至 $3,000-3,500亿\n- **可能但非高概率** —— 需要 AI 算力市场继续按当前速度增长、NVDA 保持 >60% 综合份额、毛利率不大幅回落\n\n---\n\n### 买入区间建议（修正版）\n\n| 投资者类型 | 建议 | 价格区间 | 逻辑 |\n|-----------|------|---------|------|\n| **激进型** | 当前可以1/3仓位试探 | $160–180 | 相信AI长期，接受短期-30%波动 |\n| **稳健型** | 等待回调 | **$105–130** | Forward PE ~15-18x，中性DCF区间 |\n| **保守型** | 等待恐慌 | **$70–90** | 对应市值 $1.7–2.2万亿，类似思科峰值回撤40%水平 |\n\n**基础报告原稳健型区间 $120–145 下调至 $105–130** —— 因为护城河评分、推理份额、中国TAM、循环交易风险同步恶化。\n\n---",
+    "source_report_path": "reports/英伟达/英伟达-research-20260413.md",
+    "source_note": "当前结论来自较新跟踪稿；估值原文取自更完整报告：reports/英伟达/英伟达-research-20260413.md"
+  },
+  "recommendation": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+  "title": "《看懂英伟达》系列说明（2026-08 版）",
+  "report_path": "reports/英伟达/《看懂英伟达》-20260801/00-系列说明.md",
+  "report_link": "英伟达/《看懂英伟达》-20260801/00-系列说明.md",
+  "price_status": "历史价格参照",
+  "data_status": "已标注",
+  "historical_price_reference": {
+    "source_report_path": "reports/英伟达/最终报告-安全边际-20260420.md",
+    "source_report_link": "英伟达/最终报告-安全边际-20260420.md",
+    "source_title": "英伟达（NVDA）投资研究最终报告：当前价位是否有安全边际？",
+    "source_data_cutoff": "2026-04-20",
+    "price_plan": [
+      {
+        "profile": "激进型",
+        "price_range": "$150-170",
+        "action": "当前$200不建议追高，等$150-170回调"
+      },
+      {
+        "profile": "稳健型",
+        "price_range": "$120-140",
+        "action": "等回调至$120-140建仓"
+      }
+    ],
+    "usage": "display_only"
+  },
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-08-01",
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+      "buy_price": "US$304",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "4. 市场在两头下注——卖方共识目标价 304 美元（较现价 +54%），同时空头仓位 3.24 亿股创 2023 年 4 月以来新高。",
+        "start_line": 15,
+        "end_line": 20,
+        "markdown": "4. **市场在两头下注**——卖方共识目标价 304 美元（较现价 +54%），同时空头仓位 3.24 亿股创 2023 年 4 月以来新高。\n\n这四件事的张力，就是本系列要解开的东西。\n\n**与旧版的关系**：2026 年 5 月版（《看懂英伟达》文件夹）与 2026 年 7 月 14 日版（-20260714 文件夹）均保留存档。本版为 20260714 版的**全面刷新版**：五篇架构与核心框架（七副眼镜、五层乘积护城河、五种循环结构、九盏信号灯、三情景估值、红线清单）继承，全部价格锚点与事实刷新至 2026-08-01，并纳入三组新事实——①7 月底云厂商财报季资本开支指引；②AMD Advancing AI 大会（7-22/23）后的竞争格局；③OpenAI 2500 亿美元担保谈判与 SK 集团 5000 亿美元意向书。"
+      },
+      "price_status": "已提取",
+      "title": "《看懂英伟达》系列说明（2026-08 版）",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/00-系列说明.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/00-系列说明.md"
+    },
+    {
+      "data_cutoff": "2026-04-26",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "5. 四大师对\"NVDA安全垫\"的判断",
+      "buy_price": "US$200",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "李录：\"软安全垫在估值修正期全失效\"",
+        "start_line": 324,
+        "end_line": 358,
+        "markdown": "### 李录：\"软安全垫在估值修正期全失效\"\n\n> \"NVDA的安全垫主要在'软因素'：管理层、业务韧性、长期成长、生态壁垒。这些都是真的，但有个致命问题——**在估值修正阶段全部失效**。\n>\n> 市场只看一个数字：明年EPS。当EPS增速从65%降到20%，市场会立刻把PE从40x压到20x，**和管理层多优秀、护城河多深都无关**。这就是为什么Cisco 2000年到2025年的25年里，业绩持续增长但股价不动——因为估值修正吃掉了所有增长。\n>\n> **真正的安全垫只有两个**：\n> 1. **价格本身**（$200不便宜，$90才便宜）\n> 2. **仓位控制**（3-5%能扛，30%扛不动）\n>\n> 在错误价格上，伟大公司也会让你睡不着觉。\"\n\n---\n\n## 6. 与\"真正有安全垫\"的投资对比\n\n| 案例 | 买入PE | 资产覆盖率 | 增速依赖 | 安全垫强度 |\n|------|--------|----------|---------|-----------|\n| 巴菲特买中石油（2003）| 6x | 100% | 不依赖 | ★★★★★ |\n| 巴菲特买可口可乐（1988）| 14x | 60% | 中等依赖 | ★★★★ |\n| 段永平买茅台（2013）| 9x | 50% | 中等依赖 | ★★★★ |\n| 段永平买苹果（2011）| 12x | 40% | 中等依赖 | ★★★★ |\n| 巴菲特买苹果（2016）| 11x | 35% | 中等依赖 | ★★★★ |\n| 段永平买腾讯（2022）| 12x | 30% | 中等依赖 | ★★★ |\n| **现在买NVDA（$200）** | **40x** | **3%** | **极度依赖** | **★** |\n\n**关键观察**：\n- 大师们的成功买入**几乎全部在PE 6-15x区间**\n- NVDA $200的40x PE属于 **\"必须未来5年增速>25%\"才能维持**\n- 资产覆盖率3%意味着**纯粹的成长股逻辑，没有任何后路**\n\n**唯一的辩护**：科技股估值标准不同——但**Cisco 2000年正是用同样的辩护被套25年**。\n\n---"
+      },
+      "price_status": "已提取",
+      "title": "英伟达（NVDA）\"判断错误时的安全垫\"深度分析",
+      "report_path": "reports/英伟达/英伟达-安全垫分析-20260426.md",
+      "report_link": "英伟达/英伟达-安全垫分析-20260426.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "英伟达",
+        "ticker": null,
+        "market": "未识别",
+        "report_completed_at": null,
+        "data_cutoff": "2026-04-26",
+        "action": "观察",
+        "summary": "5. 四大师对\"NVDA安全垫\"的判断",
+        "investor_stances": [],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    },
+    {
+      "data_cutoff": "2026-04-20",
+      "action": "未提取",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "当前$200不建议追高，等$150-170回调",
+          "price_range": "150-170"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等回调至$120-140建仓",
+          "price_range": "120-140"
+        },
+        {
+          "stance": "保守型",
+          "action": "等恐慌性回调（CapEx周期见顶/大客户减单）",
+          "price_range": "85-100"
+        }
+      ],
+      "conclusion_summary": "激进型：当前$200不建议追高，等$150-170回调（150-170）；稳健型：等回调至$120-140建仓（120-140）；保守型：等恐慌性回调（CapEx周期见顶/大客户减单）（85-100）",
+      "buy_price": "$120-140",
+      "price_plan": [
+        {
+          "profile": "激进型",
+          "price_range": "$150-170",
+          "action": "当前$200不建议追高，等$150-170回调"
+        },
+        {
+          "profile": "稳健型",
+          "price_range": "$120-140",
+          "action": "等回调至$120-140建仓"
+        }
+      ],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "7. 最终投资建议",
+        "start_line": 129,
+        "end_line": 166,
+        "markdown": "## 7. 最终投资建议\n\n### 7.1 定性判断\n\n| 维度 | 评级 | 说明 |\n|------|------|------|\n| 生意质量 | **A-** | 极佳但护城河在结构性侵蚀中 |\n| 管理层 | **A** | 黄仁勋是S级CEO，但继任是隐患 |\n| 估值 | **D+** | $200/40.8x PE明显偏贵，DCF高估55% |\n| 时机 | **C** | 从$95低点反弹至$200（+110%），短期涨幅已大 |\n\n### 7.2 分层操作建议\n\n| 投资者类型 | 建议 | 价格区间 | 仓位 |\n|-----------|------|---------|------|\n| **激进型** | 当前$200不建议追高，等$150-170回调 | $150-170 | 3-5% |\n| **稳健型** | 等回调至$120-140建仓 | $120-140 | 5-8% |\n| **保守型** | 等恐慌性回调（CapEx周期见顶/大客户减单） | $85-100 | 8-12% |\n\n### 7.3 关键催化剂\n\n**加仓信号**：\n1. 股价跌至$85以下（DCF中性情景内在价值附近）\n2. AI CapEx周期回调带来的30-40%下跌（历史规律2027-2028年可能发生）\n3. NVIDIA成功开拓主权AI/企业/机器人市场，降低客户集中度至50%以下\n4. Rubin架构发布后验证性能代差维持2年以上\n5. 毛利率企稳在70%以上\n\n**减仓/回避信号**：\n1. 超大规模云厂商CapEx增速首次转负\n2. Meta正式大规模采购Google TPU（2027年直购确认）\n3. 毛利率跌破65%\n4. 黄仁勋健康问题或退休信号\n5. 循环交易被SEC调查或市场重新定价\n6. NVIDIA Forward PE升至40x以上且增速降至20%以下\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "英伟达（NVDA）投资研究最终报告：当前价位是否有安全边际？",
+      "report_path": "reports/英伟达/最终报告-安全边际-20260420.md",
+      "report_link": "英伟达/最终报告-安全边际-20260420.md"
+    },
+    {
+      "data_cutoff": "2026-04-19",
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "1. 市场规模增长 > 份额下降：即使NVIDIA份额从90%降至60%，如果AI加速器总市场从$1000亿增长到$5000亿，NVIDIA绝对收入仍在增长",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "> \"你打算拿10年吗？如果10年后NVIDIA的份额可能是40-55%、毛利率65-70%——这和今天的估值匹配吗？\"",
+        "start_line": 447,
+        "end_line": 458,
+        "markdown": "> \"你打算拿10年吗？如果10年后NVIDIA的份额可能是40-55%、毛利率65-70%——这和今天的估值匹配吗？\"\n\n> \"最好的生意是消费者**不想换**的生意（茅台、苹果）。NVIDIA的问题是——它的客户**非常想换**，而且有钱有能力自己造。\"\n\n> \"不要因为一家公司今天很好就假设它永远都好。护城河是会被填平的——问题只是速度。\"\n\n### 巴菲特视角\n\n> \"当你最大的客户同时也是你最大的潜在竞争对手时，你的定价权是借来的，不是拥有的。\"\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "英伟达（NVDA）自研芯片威胁深度研究",
+      "report_path": "reports/英伟达/英伟达-自研芯片威胁-20260419.md",
+      "report_link": "英伟达/英伟达-自研芯片威胁-20260419.md"
+    },
+    {
+      "data_cutoff": "2026-04-13",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "当前可以1/3仓位试探",
+          "price_range": "160–180"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待回调",
+          "price_range": "105–130"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待恐慌",
+          "price_range": "70–90",
+          "note": "对应市值 $1.7–2.2万亿，类似思科峰值回撤40%水平"
+        }
+      ],
+      "conclusion_summary": "激进型：当前可以1/3仓位试探（160–180）；稳健型：等待回调（105–130）；保守型：等待恐慌（70–90）",
+      "buy_price": "$105–130",
+      "price_plan": [
+        {
+          "profile": "稳健型",
+          "price_range": "$105–130",
+          "action": "等待回调"
+        },
+        {
+          "profile": "保守型",
+          "price_range": "$70–90",
+          "action": "等待恐慌",
+          "rationale": "对应市值 $1.7–2.2万亿，类似思科峰值回撤40%水平"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "$235"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "$127"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "$55"
+        }
+      ],
+      "valuation_section": {
+        "heading": "四、估值与安全边际",
+        "start_line": 270,
+        "end_line": 302,
+        "markdown": "## 四、估值与安全边际\n\n### 三情景估值（修正版）\n\n| 情景 | 2028 营收 | 毛利率 | 2028 净利润 | 合理PE | 目标价 | vs $178 |\n|-----|----------|-------|------------|--------|-------|---------|\n| 乐观（CUDA守住、推理+训练双赢） | $4,000亿 | 72% | $1,900亿 | 30x | $235 | +32% |\n| 中性（推理份额降至50%、毛利66%） | $3,200亿 | 66% | $1,400亿 | 22x | $127 | -29% |\n| 悲观（CapEx 2027见顶 + 循环融资暴雷） | $2,400亿 | 58% | $900亿 | 15x | $55 | -69% |\n\n**期望值**（概率加权：乐观25% / 中性50% / 悲观25%）：\n- 目标价 = 0.25×235 + 0.50×127 + 0.25×55 = **$136**\n- 相比 $178 **下跌空间 24%**\n\n**反向 DCF 检验**：\n- 当前股价 $178 隐含的 FCF 永续增长率（10年）≈ 12-15%\n- 这要求未来10年 FCF 从 $967亿 增至 $3,000-3,500亿\n- **可能但非高概率** —— 需要 AI 算力市场继续按当前速度增长、NVDA 保持 >60% 综合份额、毛利率不大幅回落\n\n---\n\n### 买入区间建议（修正版）\n\n| 投资者类型 | 建议 | 价格区间 | 逻辑 |\n|-----------|------|---------|------|\n| **激进型** | 当前可以1/3仓位试探 | $160–180 | 相信AI长期，接受短期-30%波动 |\n| **稳健型** | 等待回调 | **$105–130** | Forward PE ~15-18x，中性DCF区间 |\n| **保守型** | 等待恐慌 | **$70–90** | 对应市值 $1.7–2.2万亿，类似思科峰值回撤40%水平 |\n\n**基础报告原稳健型区间 $120–145 下调至 $105–130** —— 因为护城河评分、推理份额、中国TAM、循环交易风险同步恶化。\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "英伟达（NVDA）深度研究报告：垄断还能持续多久？需求还能持续多久？",
+      "report_path": "reports/英伟达/英伟达-research-20260413.md",
+      "report_link": "英伟达/英伟达-research-20260413.md"
+    },
+    {
+      "data_cutoff": "2026-04-13",
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "报告基于2026-04-13可访问的一手公开信息整理。所有关键数据已附URL+日期。本报告定位为基础报告（2026-04-08）的反面证据补充，不构成独立投资建议。",
+      "buy_price": "US$175",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "- 分析师反应分裂：Bernstein维持$175目标价；Raymond James认为反加速hyperscaler紧迫感。",
+        "start_line": 172,
+        "end_line": 186,
+        "markdown": "- 分析师反应分裂：Bernstein维持$175目标价；Raymond James认为反加速hyperscaler紧迫感。\n- 1月全月NVDA -11%。\n\n### 5.3 黄仁勋/Altman的反驳\n\n- 黄仁勋CES 2025：**\"几乎全世界都搞错了AI scaling\"**——主张三层scaling（pre-training、post-training、test-time），每层都需要巨量算力。来源：[TechCrunch](https://techcrunch.com/snippet/2982546/jensen-huang-says-that-practically-the-entire-world-got-ai-scaling-wrong/)、[CDOTrends](https://www.cdotrends.com/story/4376/test-time-scaling-new-frontier-ai)\n- Altman公开表态：\"Everything starts with compute\"（NVIDIA合作公告）。来源：[NVIDIA Newsroom 2025-09](https://nvidianews.nvidia.com/news/openai-and-nvidia-announce-strategic-partnership-to-deploy-10gw-of-nvidia-systems)\n- **杰文斯悖论支持**：DeepSeek之后Anthropic ARR 5个月翻3倍，hyperscaler 2026 CapEx +67%，从市场行为看效率提升确实带来更多需求而非更少。\n\n**数据置信度：高**\n\n**判断更新**：DeepSeek事件证明市场对\"算力效率提升\"极度敏感（单日-17%）；但后续12个月需求侧爆发反证了杰文斯悖论。**风险不在\"算法效率本身\"，在于\"市场预期从效率事件触发的瞬间re-rating\"**——基础报告应增加\"叙事风险\"作为独立风险类别。\n\n---"
+      },
+      "price_status": "已提取",
+      "title": "英伟达（NVDA）反面证据深度研究",
+      "report_path": "reports/英伟达/英伟达-反面证据-20260413.md",
+      "report_link": "英伟达/英伟达-反面证据-20260413.md"
+    },
+    {
+      "data_cutoff": "2026-04-08",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "可小仓位建仓，逢回调加仓",
+          "price_range": "160-180",
+          "note": "相信AI长期增长，接受短期波动"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待更好的安全边际",
+          "price_range": "120-145"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待AI CapEx周期回调或市场恐慌",
+          "price_range": "80-110",
+          "note": "$80-110（对应市值$2-2.5万亿）"
+        }
+      ],
+      "conclusion_summary": "激进型：可小仓位建仓，逢回调加仓（160-180）；稳健型：等待更好的安全边际（120-145）；保守型：等待AI CapEx周期回调或市场恐慌（80-110）",
+      "buy_price": "$120-145",
+      "price_plan": [
+        {
+          "profile": "激进型",
+          "price_range": "$160-180",
+          "action": "可小仓位建仓，逢回调加仓",
+          "rationale": "相信AI长期增长，接受短期波动"
+        },
+        {
+          "profile": "稳健型",
+          "price_range": "$120-145",
+          "action": "等待回调至Forward PE 15-18x再建仓",
+          "rationale": "等待更好的安全边际"
+        }
+      ],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "7. 最终投资建议",
+        "start_line": 131,
+        "end_line": 167,
+        "markdown": "## 7. 最终投资建议\n\n### 7.1 定性判断表\n\n| 维度 | 评级 | 说明 |\n|------|------|------|\n| 生意质量 | A+ | 全栈AI平台，CUDA生态护城河深厚，盈利能力惊人 |\n| 管理层 | A+ | 黄仁勋是全球最优秀的科技CEO之一 |\n| 估值 | B- | Forward PE 21x合理但非便宜，DCF显示轻度高估 |\n| 时机 | B | AI CapEx高峰期，短期动力强但周期性风险积累 |\n\n### 7.2 分层操作建议表\n\n| 投资者类型 | 建议 | 价格区间（美元） | 逻辑 |\n|-----------|------|----------------|------|\n| **激进型** | 可小仓位建仓，逢回调加仓 | $160-180（当前区间） | 相信AI长期增长，接受短期波动 |\n| **稳健型** | 等待回调至Forward PE 15-18x再建仓 | $120-145 | 等待更好的安全边际 |\n| **保守型** | 等待AI CapEx周期回调或市场恐慌 | $80-110（对应市值$2-2.5万亿） | 巴菲特式安全边际（30%+折扣） |\n\n### 7.3 关键催化剂\n\n**加仓信号：**\n1. AI CapEx周期回调导致股价大幅下跌（>30%），创造安全边际\n2. Rubin架构如期交付且性能大幅超预期\n3. 推理市场证明NVIDIA仍具TCO优势（vs ASIC）\n4. 毛利率稳定在70%以上超过预期\n5. 新的大规模AI应用出现（如AI Agent大规模部署），验证算力需求持续性\n\n**减仓信号：**\n1. 超大规模客户开始削减AI CapEx预算（季度环比下降>10%）\n2. 自研芯片市场份额加速扩大（ASIC出货量增速>GPU出货量增速持续2个季度）\n3. 毛利率跌破65%，说明竞争格局实质性恶化\n4. 黄仁勋健康问题或离任信号\n5. 出口管制大幅扩大至更多市场（如中东、东南亚）\n\n---"
+      },
+      "price_status": "已提取价格计划",
+      "title": "英伟达（NVIDIA, NVDA）投资研究报告",
+      "report_path": "reports/英伟达/英伟达-research-20260408.md",
+      "report_link": "英伟达/英伟达-research-20260408.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "可小仓位（<5%）参与",
+          "price_range": "",
+          "note": "信 AI 长期趋势，接受短期波动"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待回调至 $130-150 再考虑",
+          "price_range": "130-150",
+          "note": "中性 DCF 区间，有一定安全边际"
+        }
+      ],
+      "conclusion_summary": "激进型：可小仓位（<5%）参与；稳健型：等待回调至 $130-150 再考虑（130-150）",
+      "buy_price": "US$221",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "$420+"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "$176-220"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "$75-90"
+        }
+      ],
+      "valuation_section": {
+        "heading": "三情景估值",
+        "start_line": 130,
+        "end_line": 139,
+        "markdown": "### 三情景估值\n\n| 情景 | 概率 | FY2028 EPS（估） | 合理 PE | 目标价 | vs $221 |\n|------|------|-----------------|--------|-------|---------|\n| 乐观（CUDA 守住、推理 + 训练双赢） | 25% | $14+ | 30x | $420+ | +90% |\n| 中性（推理份额降至 50%、毛利 66%） | 50% | $8-10 | 22x | $176-220 | -20% 到 0% |\n| 悲观（CapEx 2027 见顶 + 自研加速） | 25% | $5-6 | 15x | $75-90 | -60% 到 -66% |\n\n**中性情景下，当前 $221 已经 price in 了大部分增长。** 未来 2 年的预期回报率约 0-5%/年——不够补偿风险。"
+      },
+      "price_status": "已提取三情景",
+      "title": "风险、估值与决策",
+      "report_path": "reports/英伟达/《看懂英伟达》/05-风险估值与决策-终章.md",
+      "report_link": "英伟达/《看懂英伟达》/05-风险估值与决策-终章.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "减仓/卖出",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "197 美元买入等于押注情景 A",
+          "price_range": "197 美元",
+          "source": "inferred_inline_price_actions",
+          "buy_eligible": true
+        },
+        {
+          "stance": "保守型",
+          "action": "仓位纪律：利润可预测性一星 → 不配第一重仓，参考上限 5%",
+          "price_range": "92-130 美元",
+          "source": "inferred_inline_price_actions",
+          "buy_eligible": true,
+          "note": "仓位纪律：利润可预测性一星 → 不配第一重仓，参考上限 5%；期权参照案例的成本在 92-130 美元，学框架不抄作业；"
+        }
+      ],
+      "conclusion_summary": "激进型：197 美元买入等于押注情景 A（197 美元）；保守型：仓位纪律：利润可预测性一星 → 不配第一重仓，参考上限 5%（92-130 美元）",
+      "buy_price": "US$120-150",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "> 《看懂英伟达》系列 · 第 05 篇 · 终章 · 估值与决策",
+        "start_line": 3,
+        "end_line": 7,
+        "markdown": "> 《看懂英伟达》系列 · 第 05 篇 · 终章 · 估值与决策\n> 阅读时间约 20 分钟\n\n---"
+      },
+      "price_status": "已提取",
+      "title": "多少钱值得买，什么信号必须卖",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/05-决策-多少钱值得买什么信号必须卖.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/05-决策-多少钱值得买什么信号必须卖.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "FY2027-2031 EPS CAGR 25% 15% 5%",
+      "buy_price": "US$110",
+      "price_plan": [],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "$448.5"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "$246.5"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "$112.5"
+        }
+      ],
+      "valuation_section": {
+        "heading": "5.4 DCF三情景估值",
+        "start_line": 190,
+        "end_line": 226,
+        "markdown": "### 5.4 DCF三情景估值\n\n#### 假设参数\n\n| 参数 | 乐观 | 中性 | 悲观 |\n|------|------|------|------|\n| FY2027-2031 EPS CAGR | 25% | 15% | 5% |\n| 终端毛利率 | 72% | 68% | 62% |\n| 终端PE | 30x | 25x | 18x |\n\n#### 估值结果（financial_rigor.py 精确计算）\n\n| 情景 | 5年后EPS | 终端PE | 目标价 | vs $110 | 年化回报 |\n|------|---------|--------|--------|---------|---------|\n| **乐观** | $14.95 | 30x | **$448.5** | +308% | +32.4% |\n| **中性** | $9.86 | 25x | **$246.5** | +124% | +17.5% |\n| **悲观** | $6.25 | 18x | **$112.5** | +2.3% | +0.5% |\n| **概率加权**（25/50/25） | - | - | **$263.5** | +140% | **+19.1%** |\n\n#### DCF（自由现金流折现法）\n\n| 情景 | 5年后营收 | FCF利润率 | 每股价值 | vs $110 |\n|------|---------|----------|---------|---------|\n| **乐观** | $659B | 45% | **$140.5** | +28% |\n| **中性** | $434B | 40% | **$86.1** | -22% |\n| **悲观** | $276B | 32% | **$47.4** | -57% |\n| **概率加权** | - | - | **$90.0** | -18% |\n\n> **WACC**: 10% | **终端增长率**: 3%\n\n**两种方法差异解读**：\n- EPS增长法给出更高估值（$263），因为它直接用终端PE定价，反映市场愿意给予的估值溢价\n- DCF法更保守（$90），因为它用10% WACC折现，且终端价值依赖永续增长假设\n- **真实内在价值可能在两者之间**，取决于5年后市场给予英伟达的估值倍数\n\n---"
+      },
+      "price_status": "已提取三情景",
+      "title": "英伟达（NVDA）财务与估值深度分析",
+      "report_path": "reports/英伟达/英伟达-财务估值分析-20260420.md",
+      "report_link": "英伟达/英伟达-财务估值分析-20260420.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "2026E hyperscaler CapEx合计：$6,200-7,000B（同比+58-78%）",
+      "buy_price": "<US$120",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "四、三情景估值",
+        "start_line": 86,
+        "end_line": 117,
+        "markdown": "## 四、三情景估值\n\n### Agent原始算法\n\n| 情景 | 概率 | FY28E EPS | 倒推FY26 EPS | PE | 目标价 |\n|------|-----|----------|-------------|-----|--------|\n| 牛 | 20% | $11 | $2.67 | 40x | **$107** |\n| 中 | 50% | $6.2 | $2.76 | 32x | **$88** |\n| 熊 | 30% | $3.0 | $1.77 | 20x | **$35** |\n\n**Agent加权目标：$75.9**\n\n### ⚠️ 方法客观修正\n\nAgent把FY28 EPS折回到FY26水平再乘PE，这是**双重贴现**（既压缩了增长又压缩了倍数），偏保守。\n\n**更标准的算法**：直接用FY28E EPS × 远期PE，再贴现回今天。\n\n| 情景 | FY28E EPS | 合理远期PE | FY28目标 | 贴现回今（10%，2年） |\n|------|----------|----------|---------|-----------------|\n| 牛 | $11 | 30x | $330 | **$273** |\n| 中 | $6.2 | 22x | $136 | **$112** |\n| 熊 | $3.0 | 18x | $54 | **$45** |\n\n**修正加权（20/50/30）**：**$128**\n\n两种算法的共同结论：**当前$186在任何合理口径下都偏高**。\n- Agent法：上升空间-59%\n- 修正法：上升空间-31%\n\n---"
+      },
+      "price_status": "已提取",
+      "title": "英伟达（NVDA）深度估值报告",
+      "report_path": "reports/英伟达/英伟达-valuation-20260413.md",
+      "report_link": "英伟达/英伟达-valuation-20260413.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+      "buy_price": "约US$304",
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "四、错觉三：涨了这么多，估值早就贵上天了",
+        "start_line": 70,
+        "end_line": 95,
+        "markdown": "## 四、错觉三：涨了这么多，估值早就贵上天了\n\n直觉认知：三年涨了十几倍、全球市值第一，估值想必已在泡沫区。\n\n反直觉的事实：**按滚动市盈率，英伟达现在处于自己五年历史的最低分位。**\n\n- 滚动 PE 约 30 倍（按过去十二个月 GAAP 每股收益 6.53 美元、股价 197.71 美元自算）；过去五年这个数字的区间是 32-248 倍、均值 77 倍；\n- 前瞻 PE 约 21-23 倍（按 FY2027 分析师一致预期，不同口径有差异）；\n- 作为对照：它的增速（最新季度 +85%）在整个大型科技股里最高，前瞻 PE 却低于微软、亚马逊、苹果。\n\n估值分位创新低，不是股价跌出来的，是盈利追上来的：过去一年股价基本横盘，每股收益接近翻倍。\n\n那市场是傻了吗？不是。分歧不在 P（价格），在 E（盈利）的三个成色问题上：\n\n1. **E 里有水分**：滚动每股收益里含约 159 亿美元投资重估收益，剔除后\"干净\"滚动 PE 约 33 倍；\n2. **E 在周期顶部**：55% 的净利率、75% 的毛利率，是供不应求环境下的数字。如果 2027-2028 年资本开支周期回落、竞争落地，市场担心 E 本身会收缩——30 倍 PE 乘以一个会收缩的 E，不是便宜；\n3. **E 的可预测性差**：这家公司五年后的利润，诚实地说没人算得准（第 05 篇会展示：同一批数据用两种主流估值方法，结论能差三倍）。\n\n**小结：英伟达当前的估值不是\"贵上天\"，而是\"便宜得让人起疑\"。看多者看到的是史上最强业绩配史上最低分位；看空者看到的是市场在用低倍数给周期顶部的利润打预防针。这个分歧无法用一个 PE 数字裁决——它是整个系列最后一篇要正面处理的问题。**\n\n顺带一提市场的两头下注有多极端：卖方分析师共识目标价约 304 美元（较现价 +54%），而空头仓位 3.24 亿股、创 2023 年 4 月以来新高——多空双方都认为对方在犯大错。\n\n> 数据来源：财报及 10-Q；估值为 2026-07-31 收盘自算；共识目标价 MarketBeat（2026-07-21，53 位分析师）；空头数据 S3 Partners。\n\n---"
+      },
+      "price_status": "已提取",
+      "title": "你以为你看懂了英伟达，其实没有",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/01-开篇-你以为你看懂了英伟达.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/01-开篇-你以为你看懂了英伟达.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "CUDA 不是单一产品护城河，而是 NVIDIA 19 年（2006-2026）系统性投入构建的\"5 层叠加生态\"，攻方需同时攻破 5 层：",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "3.3 估值含义",
+        "start_line": 211,
+        "end_line": 217,
+        "markdown": "### 3.3 估值含义\n\n- **过去 5 年**：CUDA 软件锁定支撑 PE 35-40x，\"近完美\"叙事\n- **未来 5 年**：转向\"硬件 + 服务 + 系统化\"叙事，PE 应该收缩到 25-30x\n- **绝对营收**：仍可维持 15-20% 复合增长（基于 AI 总市场扩张）\n- **关键观察点**：Vera Rubin Ultra 2027 H2 是否准时落地且性能符合预期——若达成，护城河可再延 3 年"
+      },
+      "price_status": "价格未给出",
+      "title": "英伟达两大疑虑深度研究：推理崛起 + AI 编程冲击下的护城河演化",
+      "report_path": "reports/英伟达/英伟达推理护城河与CUDA护城河-20260424.md",
+      "report_link": "英伟达/英伟达推理护城河与CUDA护城河-20260424.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "通用 GPU 推理优化器，FP8/FP4 量化、Kernel fusion、动态形状。性能比 PyTorch 原生 5-10x。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "- 2025-12 NVIDIA $20B 收购 Groq（2.9x 估值溢价），整合到 LPX 机架（2026-03 发布）",
+        "start_line": 107,
+        "end_line": 114,
+        "markdown": "- **2025-12 NVIDIA $20B 收购 Groq**（2.9x 估值溢价），整合到 LPX 机架（2026-03 发布）\n\n### Cerebras WSE-3\n- 整片晶圆，Llama 3.1-405B 跑 1,000+ tokens/s\n- **2026-04 OpenAI $20B 采购 Cerebras**——首个超大客户外购\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "NVIDIA 推理市场护城河深度研究",
+      "report_path": "reports/英伟达/子报告2-NVIDIA推理护城河-20260424.md",
+      "report_link": "英伟达/子报告2-NVIDIA推理护城河-20260424.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "- B200/GB200 NVL72：FP4 性能 2× H100，单机架 1.4 ExaFLOPS FP4，inference cost 比 H100 低 4-6×",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "- 2026 年 4 月 OpenAI 下了 200 亿美元订单，Cerebras 已申报 IPO（350 亿估值）",
+        "start_line": 98,
+        "end_line": 111,
+        "markdown": "- **2026 年 4 月 OpenAI 下了 200 亿美元订单，Cerebras 已申报 IPO（350 亿估值）**\n\n### I. 华为 Ascend\n- 910C 推理性能约 H100 的 60%，2026 目标产能 60 万颗\n- 920（2026 上市）：填补 H20 退出后的空白\n- 950PR：1.56 PFLOP，对标更高端\n- **中国市场份额：本土厂商合计 41%**（Bernstein/IDC，2026 Q1）\n\n### J. Cambricon\n- 2026 目标 50 万颗 Siyuan 系列（首次年度盈利）\n- 限制：SMIC 7nm 良率 ~20%、HBM 受韩国厂商限制\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "AI 训练 vs 推理硬件市场分化研究",
+      "report_path": "reports/英伟达/子报告1-训练vs推理市场分化-20260424.md",
+      "report_link": "英伟达/子报告1-训练vs推理市场分化-20260424.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "CUDA 护城河三问精简版：本质、AI 编程冲击、英伟达全部护城河清单",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "PE 估值 35-40x → 25-30x（已 partly priced in）",
+        "start_line": 118,
+        "end_line": 126,
+        "markdown": "| PE 估值 | 35-40x → 25-30x（已 partly priced in） |\n| 关键时点 | Rubin Ultra 2027 H2 是验证窗口 |\n| 仍是赢家 | ✅ 但不再是\"近垄断\" |\n\n**一句话**：护城河仍是计算机行业近 30 年最深的之一，但租金会被慢慢压低；不必恐慌减仓，也别加重仓位，**观察 Rubin Ultra 2027 H2 + OpenAI Titan 量产**作为再评估窗口。\n\n---\n\n*ai-berkshire | 详细版见 `英伟达推理护城河与CUDA护城河-20260424.md` 及 4 份子报告*"
+      },
+      "price_status": "价格未给出",
+      "title": "CUDA 护城河三问精简版：本质、AI 编程冲击、英伟达全部护城河清单",
+      "report_path": "reports/英伟达/CUDA护城河三问精简版-20260424.md",
+      "report_link": "英伟达/CUDA护城河三问精简版-20260424.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "观察",
+      "investor_stances": [],
+      "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "会计处理决定了这个盘子会直接搅动利润表：上市股权按市价重估、未上市股权遇可观察交易时调整估值，损益都进\"其他收益\"。客户的估值涨，英伟达的账面利润就涨；反过来也一样，波动是双向的。这就是第 04 篇要展开的\"GAAP 利润反而高于 Non-GAAP\"怪象的来源。",
+        "start_line": 27,
+        "end_line": 30,
+        "markdown": "会计处理决定了这个盘子会直接搅动利润表：上市股权按市价重估、未上市股权遇可观察交易时调整估值，损益都进\"其他收益\"。客户的估值涨，英伟达的账面利润就涨；反过来也一样，**波动是双向的**。这就是第 04 篇要展开的\"GAAP 利润反而高于 Non-GAAP\"怪象的来源。\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "中央银行与思科之问——循环交易与资本开支周期",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/03-中央银行与思科之问-循环交易与资本开支周期.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/03-中央银行与思科之问-循环交易与资本开支周期.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "5. 不构成投资建议——所有篇章末尾免责声明",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "两派都对，但都不完整。 英伟达是一家\"增长确定、垄断松动、估值昂贵\"三件事同时为真的公司。",
+        "start_line": 18,
+        "end_line": 23,
+        "markdown": "**两派都对，但都不完整。** 英伟达是一家\"增长确定、垄断松动、估值昂贵\"三件事同时为真的公司。\n\n这个系列要做的，是**把三件事放在一起看**——先说清楚\"是什么\"，再让你自己判断\"值不值得买\"。\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "《看懂英伟达》系列说明",
+      "report_path": "reports/英伟达/《看懂英伟达》/00-系列说明.md",
+      "report_link": "英伟达/《看懂英伟达》/00-系列说明.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "训练一次前沿模型可能花费数千万美元。如果训练到第 80 天因为硬件或软件故障崩溃，就要从头来——或者至少回退到最近的检查点。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "对估值的影响不在份额，而在毛利率。推理市场更价格敏感，英伟达需要更多地靠\"量\"而非\"价\"来增长。毛利率从 75% 降至 65-70% 是大概率事件。",
+        "start_line": 176,
+        "end_line": 179,
+        "markdown": "**对估值的影响不在份额，而在毛利率**。推理市场更价格敏感，英伟达需要更多地靠\"量\"而非\"价\"来增长。毛利率从 75% 降至 65-70% 是**大概率事件**。\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "两个不同的战场",
+      "report_path": "reports/英伟达/《看懂英伟达》/03-训练与推理-两个不同的战场.md",
+      "report_link": "英伟达/《看懂英伟达》/03-训练与推理-两个不同的战场.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "英伟达的推理优化引擎，能让同一块 GPU 跑出比裸跑快 3-10 倍的推理性能。AMD 没有任何对位产品。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "对估值的影响？ 毛利率结构性下移（75% → 65-70%）的概率正在增大",
+        "start_line": 184,
+        "end_line": 187,
+        "markdown": "| 对估值的影响？ | **毛利率结构性下移**（75% → 65-70%）的概率正在增大 |\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "一座 19 年建成的软件城堡",
+      "report_path": "reports/英伟达/《看懂英伟达》/02-商业本质-一座19年建成的软件城堡.md",
+      "report_link": "英伟达/《看懂英伟达》/02-商业本质-一座19年建成的软件城堡.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "自由现金流 — $967 亿 — —",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "英伟达不是思科的翻版——它有真实的付费需求、远更健康的估值倍数、仍在扩张的利润率。",
+        "start_line": 123,
+        "end_line": 128,
+        "markdown": "**英伟达不是思科的翻版——它有真实的付费需求、远更健康的估值倍数、仍在扩张的利润率。**\n\n**但也别轻易排除类比**：英伟达的 EV/Sales（~25x）已逼近思科顶部（31x）。$5.4 万亿市值意味着市场已经为\"AI 永续繁荣\"定了价——任何一点裂缝都可能引发估值重置。\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "AI 时代的卖铲人",
+      "report_path": "reports/英伟达/《看懂英伟达》/01-开篇-AI时代的卖铲人.md",
+      "report_link": "英伟达/《看懂英伟达》/01-开篇-AI时代的卖铲人.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "小结：报表当下的成色是干净的——现金真实、哨兵健康、回报慷慨。所有的争议都在\"这个状态能持续多久\"，而那是周期问题（第 03 篇）和估值问题（第 05 篇），不是财务质量问题。",
+        "start_line": 67,
+        "end_line": 70,
+        "markdown": "**小结：报表当下的成色是干净的——现金真实、哨兵健康、回报慷慨。所有的争议都在\"这个状态能持续多久\"，而那是周期问题（第 03 篇）和估值问题（第 05 篇），不是财务质量问题。**\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "财报与掌舵人——数字的成色和唯一的钥匙",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/04-财报与掌舵人.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/04-财报与掌舵人.md"
+    },
+    {
+      "data_cutoff": null,
+      "action": "未提取",
+      "investor_stances": [],
+      "conclusion_summary": "本系列基于公开信息和价值投资框架研究，不构成任何投资建议。",
+      "buy_price": null,
+      "price_plan": [],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "小结：CUDA 护城河没有崩塌，但形态在变——从\"离开就活不了\"的锁定，退化为\"离开要花一大笔钱、承担一堆风险\"的摩擦力。摩擦力仍然是真实的商业优势，只是它支撑不了\"永久垄断\"的估值叙事。",
+        "start_line": 40,
+        "end_line": 43,
+        "markdown": "**小结：CUDA 护城河没有崩塌，但形态在变——从\"离开就活不了\"的锁定，退化为\"离开要花一大笔钱、承担一堆风险\"的摩擦力。摩擦力仍然是真实的商业优势，只是它支撑不了\"永久垄断\"的估值叙事。**\n\n---"
+      },
+      "price_status": "价格未给出",
+      "title": "从收费桥到最好的桥——CUDA 城堡与它养出的利润引擎",
+      "report_path": "reports/英伟达/《看懂英伟达》-20260801/02-生意与护城河-从收费桥到最好的桥.md",
+      "report_link": "英伟达/《看懂英伟达》-20260801/02-生意与护城河-从收费桥到最好的桥.md"
+    }
+  ],
+  "report_history_count": 23,
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "status": "missing",
+    "lights": []
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "5f53de142834fcf6482b",
+  "detail_path": "./data/decision_details/5f53de142834fcf6482b.json"
+}

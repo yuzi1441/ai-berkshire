@@ -8,6 +8,12 @@ LOCK_PATH="/run/lock/ai-berkshire-repo-update.lock"
 
 export TZ="Asia/Shanghai"
 
+publish_snapshot_commit() {
+    if ! git push origin main; then
+        echo "snapshot is published locally; GitHub push was skipped because the remote branch is ahead" >&2
+    fi
+}
+
 mkdir -p "${REPO_ROOT}/logs/vps"
 exec 9>"${LOCK_PATH}"
 if ! flock -n 9; then
@@ -47,7 +53,7 @@ if (( SNAPSHOT_EXIT != 0 )); then
     done
     if ! git diff --cached --quiet; then
         git commit -m "chore: publish partial A-share sentiment $(date +%F-%H%M)"
-        git push origin main
+        publish_snapshot_commit
     fi
     exit "${SNAPSHOT_EXIT}"
 fi
@@ -60,4 +66,4 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "chore: refresh A-share sentiment $(date +%F)"
-git push origin main
+publish_snapshot_commit

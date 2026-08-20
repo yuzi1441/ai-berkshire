@@ -1,0 +1,380 @@
+{
+  "company": "格力电器",
+  "entity_kind": "company",
+  "entity_directory": "格力电器",
+  "ticker": "000651.SZ",
+  "market": "A股",
+  "data_cutoff": "2026-07-06",
+  "report_reference_price": {
+    "price": 37.8,
+    "currency": "CNY",
+    "line": 109,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": null,
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+      "price_range": "38 元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待 32-35 元或基本面改善信号",
+      "price_range": "32-35 元"
+    },
+    {
+      "stance": "保守型",
+      "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+      "price_range": "30 元"
+    }
+  ],
+  "conclusion_summary": "生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。",
+  "buy_price": "38 元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+      "price_range": "38 元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "等待 32-35 元或基本面改善信号",
+      "price_range": "32-35 元"
+    },
+    {
+      "stance": "保守型",
+      "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+      "price_range": "30 元"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "70.3 元",
+      "eps_growth": "+4%",
+      "target_pe": "12x",
+      "target_eps": "5.86 元",
+      "upside": "+86.0%"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "52.1 元",
+      "eps_growth": "0%",
+      "target_pe": "10x",
+      "target_eps": "5.21 元",
+      "upside": "+37.8%"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "35.7 元",
+      "eps_growth": "-5%",
+      "target_pe": "8x",
+      "target_eps": "4.47 元",
+      "upside": "-5.5%"
+    }
+  ],
+  "valuation_section": {
+    "heading": "6. 财务质量与估值",
+    "start_line": 73,
+    "end_line": 126,
+    "markdown": "## 6. 财务质量与估值\n\n### 6.1 财务质量\n\n2025 年格力营业收入 1704.47 亿元、归母净利润 290.03 亿元，均同比下降 9.89%；但经营现金流净额 463.83 亿元，同比大增 57.93%。这组数据的含义是：业务增长压力真实存在，但现金回收和利润含金量仍很强。2026Q1 营收和归母净利润分别同比增长 3.52% 和 3.01%，表观企稳；扣非归母净利润 57.02 亿元，同比 -0.27%，提示核心盈利恢复仍需观察。\n\n2025 年消费电器收入 1330.55 亿元，占总收入 78.06%，毛利率 35.28%；工业制品及绿色能源收入 173.81 亿元，占 10.20%，毛利率 15.53%；智能装备收入 6.81 亿元，占 0.40%。这个结构说明格力依然靠空调/消费电器赚钱，新业务更多是制造能力外溢，而不是高回报第二曲线。\n\n### 6.2 估值基准与工具校验\n\n估值基准价：37.80 元/股。  \n说明：该价格仅作为 2026-07-06 报告估值基准，接近当日公开行情区间；由于本地行情接口未能稳定连通，交易价格需以正式行情终端为准。\n\n本地工具命令：\n\n```bash\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py verify-market-cap --price 37.8 --shares 5.586631551e9 --reported 2.111e11 --currency CNY\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py verify-valuation --price 37.8 --eps 5.21 --bvps 22.21 --dividend 3.0 --revenue-per-share 30.51\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py three-scenario --price 37.8 --eps 5.21 --shares 55.86631551 --growth 0.04 0.00 -0.05 --pe 12 10 8 --years 3 --currency CNY\n```\n\n工具输出摘要：\n\n| 项目 | 结果 |\n|---|---:|\n| 计算市值 | 2111.7 亿元 |\n| 与报告市值偏差 | 0.04% |\n| PE | 7.26x |\n| 盈利收益率 | 13.78% |\n| PB | 1.70x |\n| ROE（EPS/BVPS） | 23.46% |\n| 股息率（每股 3.0 元） | 7.94% |\n| PS | 1.24x |\n\n三情景估值：\n\n| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标股价 | 相对 37.80 元涨跌幅 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +4% | 12x | 5.86 元 | 70.3 元 | +86.0% |\n| 中性 | 0% | 10x | 5.21 元 | 52.1 元 | +37.8% |\n| 悲观 | -5% | 8x | 4.47 元 | 35.7 元 | -5.5% |\n\n估值解释：格力当前的吸引力来自低 PE 和高股息，而不是高增长。若 5.2 元 EPS 能保持，8x PE 对应约 41.7 元，10x PE 对应约 52.1 元；若利润每年下滑 5%，3 年后 8x PE 的价值约 35.7 元。因此，37-38 元附近具备一定下行保护，但安全边际并非无限，核心风险是“利润中枢下移 + 估值不重估”。\n\n### 6.3 价格区间建议\n\n| 类型   |      区间 | 动作建议    | 逻辑                             |\n| ---- | ------: | ------- | ------------------------------ |\n| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |\n| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |\n| 保守型  | 低于 30 元 | 重仓候选区   | 约 5.8x 以下正常化 EPS，需要确认基本面未永久恶化。 |\n| 持有观察 | 38-52 元 | 持有/小额定投 | 估值仍不贵，但回报更依赖利润稳定和分红。           |\n| 谨慎区  | 高于 55 元 | 降低新增买入  | 若无增长恢复，估值补偿下降。                 |"
+  },
+  "recommendation": "生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。",
+  "title": "格力电器投资研究报告（投研团队）",
+  "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+  "report_link": "格力电器/格力电器投资研究报告-20260706.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "格力电器",
+    "ticker": "000651.SZ",
+    "market": "A股",
+    "report_completed_at": null,
+    "data_cutoff": "2026-07-06",
+    "action": "观察",
+    "summary": "生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+        "price_range": "38 元"
+      },
+      {
+        "stance": "稳健型",
+        "action": "等待 32-35 元或基本面改善信号",
+        "price_range": "32-35 元"
+      },
+      {
+        "stance": "保守型",
+        "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+        "price_range": "30 元"
+      }
+    ],
+    "invalidation_triggers": "未给出",
+    "next_review_date": null,
+    "confidence": "待复核"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-07-06",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+          "price_range": "38 元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待 32-35 元或基本面改善信号",
+          "price_range": "32-35 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+          "price_range": "30 元"
+        }
+      ],
+      "conclusion_summary": "生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。",
+      "buy_price": "38 元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+          "price_range": "38 元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "等待 32-35 元或基本面改善信号",
+          "price_range": "32-35 元"
+        },
+        {
+          "stance": "保守型",
+          "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+          "price_range": "30 元"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "70.3 元",
+          "eps_growth": "+4%",
+          "target_pe": "12x",
+          "target_eps": "5.86 元",
+          "upside": "+86.0%"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "52.1 元",
+          "eps_growth": "0%",
+          "target_pe": "10x",
+          "target_eps": "5.21 元",
+          "upside": "+37.8%"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "35.7 元",
+          "eps_growth": "-5%",
+          "target_pe": "8x",
+          "target_eps": "4.47 元",
+          "upside": "-5.5%"
+        }
+      ],
+      "valuation_section": {
+        "heading": "6. 财务质量与估值",
+        "start_line": 73,
+        "end_line": 126,
+        "markdown": "## 6. 财务质量与估值\n\n### 6.1 财务质量\n\n2025 年格力营业收入 1704.47 亿元、归母净利润 290.03 亿元，均同比下降 9.89%；但经营现金流净额 463.83 亿元，同比大增 57.93%。这组数据的含义是：业务增长压力真实存在，但现金回收和利润含金量仍很强。2026Q1 营收和归母净利润分别同比增长 3.52% 和 3.01%，表观企稳；扣非归母净利润 57.02 亿元，同比 -0.27%，提示核心盈利恢复仍需观察。\n\n2025 年消费电器收入 1330.55 亿元，占总收入 78.06%，毛利率 35.28%；工业制品及绿色能源收入 173.81 亿元，占 10.20%，毛利率 15.53%；智能装备收入 6.81 亿元，占 0.40%。这个结构说明格力依然靠空调/消费电器赚钱，新业务更多是制造能力外溢，而不是高回报第二曲线。\n\n### 6.2 估值基准与工具校验\n\n估值基准价：37.80 元/股。  \n说明：该价格仅作为 2026-07-06 报告估值基准，接近当日公开行情区间；由于本地行情接口未能稳定连通，交易价格需以正式行情终端为准。\n\n本地工具命令：\n\n```bash\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py verify-market-cap --price 37.8 --shares 5.586631551e9 --reported 2.111e11 --currency CNY\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py verify-valuation --price 37.8 --eps 5.21 --bvps 22.21 --dividend 3.0 --revenue-per-share 30.51\nPYTHONIOENCODING=utf-8 python ai-berkshire/tools/financial_rigor.py three-scenario --price 37.8 --eps 5.21 --shares 55.86631551 --growth 0.04 0.00 -0.05 --pe 12 10 8 --years 3 --currency CNY\n```\n\n工具输出摘要：\n\n| 项目 | 结果 |\n|---|---:|\n| 计算市值 | 2111.7 亿元 |\n| 与报告市值偏差 | 0.04% |\n| PE | 7.26x |\n| 盈利收益率 | 13.78% |\n| PB | 1.70x |\n| ROE（EPS/BVPS） | 23.46% |\n| 股息率（每股 3.0 元） | 7.94% |\n| PS | 1.24x |\n\n三情景估值：\n\n| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标股价 | 相对 37.80 元涨跌幅 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +4% | 12x | 5.86 元 | 70.3 元 | +86.0% |\n| 中性 | 0% | 10x | 5.21 元 | 52.1 元 | +37.8% |\n| 悲观 | -5% | 8x | 4.47 元 | 35.7 元 | -5.5% |\n\n估值解释：格力当前的吸引力来自低 PE 和高股息，而不是高增长。若 5.2 元 EPS 能保持，8x PE 对应约 41.7 元，10x PE 对应约 52.1 元；若利润每年下滑 5%，3 年后 8x PE 的价值约 35.7 元。因此，37-38 元附近具备一定下行保护，但安全边际并非无限，核心风险是“利润中枢下移 + 估值不重估”。\n\n### 6.3 价格区间建议\n\n| 类型   |      区间 | 动作建议    | 逻辑                             |\n| ---- | ------: | ------- | ------------------------------ |\n| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |\n| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |\n| 保守型  | 低于 30 元 | 重仓候选区   | 约 5.8x 以下正常化 EPS，需要确认基本面未永久恶化。 |\n| 持有观察 | 38-52 元 | 持有/小额定投 | 估值仍不贵，但回报更依赖利润稳定和分红。           |\n| 谨慎区  | 高于 55 元 | 降低新增买入  | 若无增长恢复，估值补偿下降。                 |"
+      },
+      "price_status": "已提取价格计划",
+      "title": "格力电器投资研究报告（投研团队）",
+      "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "report_link": "格力电器/格力电器投资研究报告-20260706.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "格力电器",
+        "ticker": "000651.SZ",
+        "market": "A股",
+        "report_completed_at": null,
+        "data_cutoff": "2026-07-06",
+        "action": "观察",
+        "summary": "生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+            "price_range": "38 元"
+          },
+          {
+            "stance": "稳健型",
+            "action": "等待 32-35 元或基本面改善信号",
+            "price_range": "32-35 元"
+          },
+          {
+            "stance": "保守型",
+            "action": "只在 30 元以下且分红政策未恶化时考虑重仓",
+            "price_range": "30 元"
+          }
+        ],
+        "invalidation_triggers": "未给出",
+        "next_review_date": null,
+        "confidence": "待复核"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "高于38元继续观察；低于38元才进入报告允许的分批区",
+    "holder_action": "38-52元可持有观察或小额定投，高于55元降低新增买入",
+    "trigger_condition": "低于38元可分批买入；32-35元为优先买入区；或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
+    "summary": "粗标签是观察，但主报告给出了明确的价格动作表；分类应随现价跨越38、35和30元而变化。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "粗粒度观察与具体价格动作并存，执行时采用主报告更具体的价格层级。",
+    "source_basis": "人工逐行核对价格区间建议与最终操作建议",
+    "currency": "CNY",
+    "entry_ceiling": 38.0,
+    "trial_range": {
+      "min": 35.0,
+      "max": 38.0
+    },
+    "price_source": "主报告第121至125行与第200至202行",
+    "evidence": [
+      {
+        "line_start": 121,
+        "line_end": 125,
+        "quote": "低于38元可分批，32-35元优先买入，低于30元为有条件的重仓候选；38-52元持有观察。",
+        "supports": "主报告已经提供可直接用于现价分类的完整价格动作表。"
+      },
+      {
+        "line_start": 200,
+        "line_end": 202,
+        "quote": "激进型38元以下分批；稳健型等32-35元或改善信号；保守型30元以下且分红未恶化才考虑重仓。",
+        "supports": "最终操作建议与价格表一致。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-13T11:14:00+08:00",
+    "model_consensus": false,
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-13T11:14:00+08:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "低于30元且基本面未永久恶化时才考虑较高仓位",
+        "price_range": "低于30元",
+        "min": null,
+        "ceiling": 30.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "低于30元且基本面未永久恶化时才考虑较高仓位",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "32-35元为优先买入区",
+        "price_range": "32-35元",
+        "min": 32.0,
+        "ceiling": 35.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+        "price_range": "38 元",
+        "min": null,
+        "ceiling": 38.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 1,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "格力电器",
+    "ticker": "000651.SZ",
+    "status": "ready",
+    "report_path": "reports/格力电器/格力电器-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "趋势确认",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 39.9,
+    "currency": "CNY",
+    "observation_zone": "38.77-39.45",
+    "fundamental_entry_plan": "优先买入区：32-35 元；可分批买入：低于 38 元；降低新增买入：高于 55 元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "红",
+        "meaning": "股价仍在20日均线之下。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "绿",
+        "meaning": "股价在60日均线之上，且均线在上行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "黄",
+        "meaning": "股价在200日均线附近，趋势尚未充分确认。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "红",
+        "meaning": "近5日平均成交量明显低于20日平均，缺少量能确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "fef417b532e2d7bed34e",
+  "detail_path": "./data/decision_details/fef417b532e2d7bed34e.json"
+}

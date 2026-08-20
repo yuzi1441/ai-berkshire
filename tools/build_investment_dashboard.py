@@ -4521,6 +4521,83 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def dashboard_detail_id(decision: dict[str, Any]) -> str:
+    """Return a stable, collision-resistant filename key for one decision."""
+    identity = f"{decision.get('ticker') or ''}::{decision.get('company') or ''}"
+    return hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
+
+
+def split_dashboard_files(board: dict[str, Any], site_directory: Path, data_directory: Path) -> dict[str, Any]:
+    """Write a light list payload and one lazy-loaded detail payload per stock.
+
+    The legacy full board remains available for compatibility. The summary
+    removes only the fields that are expensive on the first paint; all
+    decision/filter/action fields remain in the list payload.
+    """
+    detail_fields = {"report_history", "valuation_section", "scenario_valuation"}
+    summary_decisions: list[dict[str, Any]] = []
+    site_detail_directory = site_directory / "data" / "decision_details"
+    data_detail_directory = data_directory / "decision_details"
+    for decision in board.get("decisions") or []:
+        if not isinstance(decision, dict):
+            continue
+        detail_id = dashboard_detail_id(decision)
+        detail = dict(decision)
+        detail["detail_id"] = detail_id
+        detail["detail_path"] = f"./data/decision_details/{detail_id}.json"
+        write_json(site_detail_directory / f"{detail_id}.json", detail)
+        write_json(data_detail_directory / f"{detail_id}.json", detail)
+
+        summary = {key: value for key, value in decision.items() if key not in detail_fields}
+        valuation = decision.get("valuation_section")
+        if isinstance(valuation, dict) and valuation.get("heading"):
+            summary["valuation_heading"] = valuation["heading"]
+        history = [
+            entry
+            for entry in decision.get("report_history") or []
+            if isinstance(entry, dict)
+            and entry.get("action")
+            and entry.get("action") != "未提取"
+        ]
+        if history:
+            recent = next(
+                (entry for entry in history if "最终报告" in str(entry.get("report_path") or "")),
+                history[0],
+            )
+            summary["recent_history_fallback"] = {
+                key: recent.get(key)
+                for key in ("action", "recommendation", "conclusion_summary", "data_cutoff", "report_path")
+                if recent.get(key) is not None
+            }
+        summary["detail_id"] = detail_id
+        summary["detail_path"] = detail["detail_path"]
+        summary_decisions.append(summary)
+
+    summary_board = {
+        key: value
+        for key, value in board.items()
+        if key != "decisions"
+    }
+    summary_board["schema_version"] = 7
+    summary_board["source_schema_version"] = board.get("schema_version")
+    summary_board["detail_directory"] = "decision_details/"
+    summary_board["decisions"] = summary_decisions
+    write_json(data_directory / "decision_board_summary.json", summary_board)
+    write_json(site_directory / "data" / "decision_board_summary.json", summary_board)
+    return summary_board
+
+
+def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
+    """Create split dashboard files from an existing generated full board."""
+    site_directory = repo_root / "site"
+    data_directory = repo_root / "data" / "investment-dashboard"
+    board_path = site_directory / "data" / "decision_board.json"
+    board = load_json(board_path, {})
+    if not isinstance(board.get("decisions"), list):
+        raise ValueError(f"Invalid decision board: {board_path}")
+    return split_dashboard_files(board, site_directory, data_directory)
+
+
 def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     """Load optional post-buy tracking and generated alert state.
 
@@ -4674,6 +4751,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
+    split_dashboard_files(board, site_directory, data_directory)
     write_json(site_directory / "data" / "report_history.json", history_board)
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
@@ -4692,13 +4770,19 @@ def main() -> int:
     """Run the dashboard build command."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
+    parser.add_argument(
+        "--split-only",
+        action="store_true",
+        help="Split the existing static decision board without rebuilding reports or indexes.",
+    )
     arguments = parser.parse_args()
     try:
-        board = build_dashboard(arguments.repo_root.resolve())
+        board = split_existing_dashboard(arguments.repo_root.resolve()) if arguments.split_only else build_dashboard(arguments.repo_root.resolve())
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
-    print(f"Built {board['decision_count']} current company decisions from report data cutoffs.")
+    action = "Split" if arguments.split_only else "Built"
+    print(f"{action} {board['decision_count']} current company decisions from report data cutoffs.")
     return 0
 
 

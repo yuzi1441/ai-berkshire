@@ -1,0 +1,329 @@
+{
+  "company": "三一重工",
+  "entity_kind": "company",
+  "entity_directory": "三一重工",
+  "ticker": "600031.SH",
+  "market": "A股",
+  "data_cutoff": "2026-08-07",
+  "report_reference_price": {
+    "price": 19.58,
+    "currency": "CNY",
+    "line": 5,
+    "source": "主报告明确标注的分析基准价"
+  },
+  "report_completed_at": "2026-08-08",
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "小仓分批买入",
+      "price_range": "17.0-18.0元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "分批买入",
+      "price_range": "14.5-16.0元"
+    },
+    {
+      "stance": "保守型",
+      "action": "分批买入",
+      "price_range": "12.0-13.5元"
+    }
+  ],
+  "conclusion_summary": "全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。",
+  "buy_price": "17.0-18.0元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "小仓分批买入",
+      "price_range": "17.0-18.0元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "分批买入",
+      "price_range": "14.5-16.0元"
+    },
+    {
+      "stance": "保守型",
+      "action": "分批买入",
+      "price_range": "12.0-13.5元"
+    }
+  ],
+  "scenario_valuation": [],
+  "valuation_section": {
+    "heading": "七、估值与安全边际",
+    "start_line": 186,
+    "end_line": 226,
+    "markdown": "## 七、估值与安全边际\n\n### 1. 同行与历史位置\n\n| 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |\n|---|---:|---:|---:|---:|---|\n| 三一重工 | 19.58 | 1,800 | 21.38x | 1.99x | 挖机、混凝土、起重；海外占主导 |\n| 徐工机械 | 8.30 | 972 | 14.75x | 1.61x | 产品面更宽、起重优势 |\n| 中联重科 | 7.22 | 624 | 14.41x | 1.10x | 起重、塔机、混凝土 |\n| 柳工 | 8.36 | 170 | 10.93x | 0.93x | 装载机与海外渠道 |\n| 恒立液压 | 104.00 | 1,394 | 50.37x | 8.14x | 高毛利液压核心部件，不宜直接类比 |\n\n同行行情由[东方财富同口径接口](https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.600031,0.000425,0.000157,0.000528,1.601100&fields=f2,f3,f9,f12,f14,f20,f21,f23,f37,f38,f39,f40,f41,f45,f46,f57,f100,f113,f114,f115)与腾讯、Sina 交叉核验。三一相对三家国内整机厂存在明显溢价，理由是更好的产品组合、海外毛利与全球品牌；但这些优势已经部分进入价格。\n\n历史上，当前 PE 约处于近五年序列的 39% 分位，低于约 23.4x 的五年中位数；PB 约处于较低分位。这个比较也有局限：周期谷底会抬高 PE，H 股发行又造成 PB 结构断点，不能把“低于历史中位数”直接等同于低估。[亿牛 PE 数据](https://eniu.com/chart/pea/sh600031/t/all)、[亿牛 PB 数据](https://eniu.com/chart/pba/sh600031/t/all)\n\n### 2. 三情景估值\n\n基础为最新股本摊薄 TTM EPS 0.9156 元，持有三年，不含期间股息。\n\n| 情景 | EPS 年复合增速 | 三年后 PE | 三年后 EPS | 三年后价值 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 15% | 22x | 1.39 元 | 30.6 元 | +56.5% |\n| 中性 | 10% | 18x | 1.22 元 | 21.9 元 | +12.0% |\n| 悲观 | -3% | 13x | 0.84 元 | 10.9 元 | -44.5% |\n\n乐观情景需要海外收入保持双位数增长、毛利率稳定、信用损失不扩大；中性情景是假设国内温和复苏、海外增长放缓但持续；悲观情景模拟贸易壁垒、汇率与信用损失抵消销量。\n\n反向估值更能看清预期：若三年后市场仍给 18x PE、投资者要求 10% 年化回报并忽略股息，19.58 元隐含未来三年 EPS CAGR 约 16.5%。这高于本报告 10% 的中性假设。即便加入约 2.5% 的股息率，当前价格也没有提供典型周期股所需的厚安全垫。\n\n### 3. 买入区间与卖出纪律\n\n| 风格 | 价格区间 | 隐含逻辑 | 动作 |\n|---|---:|---|---|\n| 激进 | 17.0—18.0 元 | 约 18.6—19.7x TTM PE，接受全球化溢价 | 小仓分批 |\n| 稳健 | 14.5—16.0 元 | 约 15.8—17.5x TTM PE，接近优质整机厂合理溢价 | 分批买入 |\n| 保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际 |\n| 减仓观察 | 28.0—31.0 元 | 接近乐观三年终值，除非盈利预测同步上修 | 分批兑现 |\n\n区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+  },
+  "recommendation": "- 动作：观察；已有且仓位合理者可持有。 当前 19.58 元高于三档计划买入区间，不追价。",
+  "title": "三一重工（600031.SH / 06031.HK）投资研究报告",
+  "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+  "report_link": "三一重工/三一重工研究报告-20260808.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "三一重工",
+    "ticker": "600031.SH",
+    "market": "A股",
+    "report_completed_at": "2026-08-08",
+    "data_cutoff": "2026-08-07",
+    "action": "观察",
+    "summary": "全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "小仓分批买入",
+        "price_range": "17.0-18.0元"
+      },
+      {
+        "stance": "稳健型",
+        "action": "分批买入",
+        "price_range": "14.5-16.0元"
+      },
+      {
+        "stance": "保守型",
+        "action": "分批买入",
+        "price_range": "12.0-13.5元"
+      }
+    ],
+    "invalidation_triggers": "海外收入连续两个半年度增速低于5%或国际毛利率低于28%，且经营现金流持续弱于净利润",
+    "next_review_date": "2026-09-15",
+    "confidence": "高"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-08-07",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "小仓分批买入",
+          "price_range": "17.0-18.0元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "分批买入",
+          "price_range": "14.5-16.0元"
+        },
+        {
+          "stance": "保守型",
+          "action": "分批买入",
+          "price_range": "12.0-13.5元"
+        }
+      ],
+      "conclusion_summary": "全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。",
+      "buy_price": "17.0-18.0元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "小仓分批买入",
+          "price_range": "17.0-18.0元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "分批买入",
+          "price_range": "14.5-16.0元"
+        },
+        {
+          "stance": "保守型",
+          "action": "分批买入",
+          "price_range": "12.0-13.5元"
+        }
+      ],
+      "scenario_valuation": [],
+      "valuation_section": {
+        "heading": "七、估值与安全边际",
+        "start_line": 186,
+        "end_line": 226,
+        "markdown": "## 七、估值与安全边际\n\n### 1. 同行与历史位置\n\n| 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |\n|---|---:|---:|---:|---:|---|\n| 三一重工 | 19.58 | 1,800 | 21.38x | 1.99x | 挖机、混凝土、起重；海外占主导 |\n| 徐工机械 | 8.30 | 972 | 14.75x | 1.61x | 产品面更宽、起重优势 |\n| 中联重科 | 7.22 | 624 | 14.41x | 1.10x | 起重、塔机、混凝土 |\n| 柳工 | 8.36 | 170 | 10.93x | 0.93x | 装载机与海外渠道 |\n| 恒立液压 | 104.00 | 1,394 | 50.37x | 8.14x | 高毛利液压核心部件，不宜直接类比 |\n\n同行行情由[东方财富同口径接口](https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&secids=1.600031,0.000425,0.000157,0.000528,1.601100&fields=f2,f3,f9,f12,f14,f20,f21,f23,f37,f38,f39,f40,f41,f45,f46,f57,f100,f113,f114,f115)与腾讯、Sina 交叉核验。三一相对三家国内整机厂存在明显溢价，理由是更好的产品组合、海外毛利与全球品牌；但这些优势已经部分进入价格。\n\n历史上，当前 PE 约处于近五年序列的 39% 分位，低于约 23.4x 的五年中位数；PB 约处于较低分位。这个比较也有局限：周期谷底会抬高 PE，H 股发行又造成 PB 结构断点，不能把“低于历史中位数”直接等同于低估。[亿牛 PE 数据](https://eniu.com/chart/pea/sh600031/t/all)、[亿牛 PB 数据](https://eniu.com/chart/pba/sh600031/t/all)\n\n### 2. 三情景估值\n\n基础为最新股本摊薄 TTM EPS 0.9156 元，持有三年，不含期间股息。\n\n| 情景 | EPS 年复合增速 | 三年后 PE | 三年后 EPS | 三年后价值 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 15% | 22x | 1.39 元 | 30.6 元 | +56.5% |\n| 中性 | 10% | 18x | 1.22 元 | 21.9 元 | +12.0% |\n| 悲观 | -3% | 13x | 0.84 元 | 10.9 元 | -44.5% |\n\n乐观情景需要海外收入保持双位数增长、毛利率稳定、信用损失不扩大；中性情景是假设国内温和复苏、海外增长放缓但持续；悲观情景模拟贸易壁垒、汇率与信用损失抵消销量。\n\n反向估值更能看清预期：若三年后市场仍给 18x PE、投资者要求 10% 年化回报并忽略股息，19.58 元隐含未来三年 EPS CAGR 约 16.5%。这高于本报告 10% 的中性假设。即便加入约 2.5% 的股息率，当前价格也没有提供典型周期股所需的厚安全垫。\n\n### 3. 买入区间与卖出纪律\n\n| 风格 | 价格区间 | 隐含逻辑 | 动作 |\n|---|---:|---|---|\n| 激进 | 17.0—18.0 元 | 约 18.6—19.7x TTM PE，接受全球化溢价 | 小仓分批 |\n| 稳健 | 14.5—16.0 元 | 约 15.8—17.5x TTM PE，接近优质整机厂合理溢价 | 分批买入 |\n| 保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际 |\n| 减仓观察 | 28.0—31.0 元 | 接近乐观三年终值，除非盈利预测同步上修 | 分批兑现 |\n\n区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+      },
+      "price_status": "已提取价格计划",
+      "title": "三一重工（600031.SH / 06031.HK）投资研究报告",
+      "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+      "report_link": "三一重工/三一重工研究报告-20260808.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "三一重工",
+        "ticker": "600031.SH",
+        "market": "A股",
+        "report_completed_at": "2026-08-08",
+        "data_cutoff": "2026-08-07",
+        "action": "观察",
+        "summary": "全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "小仓分批买入",
+            "price_range": "17.0-18.0元"
+          },
+          {
+            "stance": "稳健型",
+            "action": "分批买入",
+            "price_range": "14.5-16.0元"
+          },
+          {
+            "stance": "保守型",
+            "action": "分批买入",
+            "price_range": "12.0-13.5元"
+          }
+        ],
+        "invalidation_triggers": "海外收入连续两个半年度增速低于5%或国际毛利率低于28%，且经营现金流持续弱于净利润",
+        "next_review_date": "2026-09-15",
+        "confidence": "高"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "当前19.58元高于三档计划买入区间，不追价，等待价格回落至17.0-18.0（激进）、14.5-16.0（稳健）或12.0-13.5（保守）再分批买入",
+    "holder_action": "已有且仓位合理者可持有",
+    "trigger_condition": "股价跌入激进17.0-18.0、稳健14.5-16.0或保守12.0-13.5元任一买入区间",
+    "summary": "当前股价高于计划买入区间，不追价，等待价格回落至三档区间分批买入；持有者可继续持有。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "正文与看板契约一致，均为观察/等待买入，无冲突",
+    "evidence": [
+      {
+        "line_start": 243,
+        "line_end": 243,
+        "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。",
+        "supports": "明确空仓者当前不买入，等待价格回落，对应空仓建议"
+      },
+      {
+        "line_start": 293,
+        "line_end": 293,
+        "quote": "| 结论摘要 | 全球化与盈利修复成立，但当前估值已透支部分复苏，等待安全边际。 |",
+        "supports": "最终结论为等待安全边际，支持等待价格判断"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "entry_ceiling": 18.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
+    "trial_range": {
+      "min": 17.0,
+      "max": 18.0
+    },
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:05:03+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "分批买入",
+        "price_range": "12.0-13.5元",
+        "min": 12.0,
+        "ceiling": 13.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批买入",
+        "price_range": "14.5-16.0元",
+        "min": 14.5,
+        "ceiling": 16.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓分批买入",
+        "price_range": "17.0-18.0元",
+        "min": 17.0,
+        "ceiling": 18.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 3,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "三一重工",
+    "ticker": "600031.SH",
+    "status": "ready",
+    "report_path": "reports/三一重工/三一重工-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 18.75,
+    "currency": "CNY",
+    "observation_zone": "18.58-19.20",
+    "fundamental_entry_plan": "分批买入：14.5—16.0 元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "红",
+        "meaning": "股价仍在20日均线之下。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价在200日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "黄",
+        "meaning": "近5日平均成交量接近20日平均，尚无明显放量确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "19baa4077966144634a7",
+  "detail_path": "./data/decision_details/19baa4077966144634a7.json"
+}

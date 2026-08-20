@@ -1593,6 +1593,16 @@ tbody tr.detail-inline-row .detail-panel {
   border-top: 1px solid var(--line);
   background: var(--bg-inset);
 }
+
+.load-more-rows {
+  display: block;
+  margin: 12px auto;
+  min-width: 180px;
+}
+.load-more-rows[hidden] { display: none; }
+.detail-loading-card {
+  border-style: dashed;
+}
 .table-hint kbd {
   display: inline-block;
   border: 1px solid var(--line-2);

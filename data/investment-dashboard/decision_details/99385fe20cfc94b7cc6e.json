@@ -1,0 +1,333 @@
+{
+  "company": "伊利股份",
+  "entity_kind": "company",
+  "entity_directory": "伊利股份",
+  "ticker": "600887.SH",
+  "market": "A股",
+  "data_cutoff": "2026-08-03",
+  "report_reference_price": null,
+  "report_completed_at": "2026-08-03",
+  "action": "观察",
+  "investor_stances": [
+    {
+      "stance": "激进型",
+      "action": "21-24元等待确认后逐步增加",
+      "price_range": "21-24元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "不高于21元分批研究性建仓",
+      "price_range": "不高于21元"
+    },
+    {
+      "stance": "保守型",
+      "action": "等待更厚安全边际"
+    }
+  ],
+  "conclusion_summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+  "buy_price": "不高于21元",
+  "price_plan": [
+    {
+      "stance": "激进型",
+      "action": "21-24元等待确认后逐步增加",
+      "price_range": "21-24元"
+    },
+    {
+      "stance": "稳健型",
+      "action": "不高于21元分批研究性建仓",
+      "price_range": "不高于21元"
+    },
+    {
+      "stance": "保守型",
+      "action": "等待更厚安全边际"
+    }
+  ],
+  "scenario_valuation": [
+    {
+      "scenario": "乐观",
+      "target_price": "43.5 元",
+      "eps_growth": "+8%",
+      "target_pe": "18x"
+    },
+    {
+      "scenario": "中性",
+      "target_price": "32.4 元",
+      "eps_growth": "+4%",
+      "target_pe": "15x"
+    },
+    {
+      "scenario": "悲观",
+      "target_price": "19.7 元",
+      "eps_growth": "-5%",
+      "target_pe": "12x"
+    }
+  ],
+  "valuation_section": {
+    "heading": "七、估值与安全边际",
+    "start_line": 152,
+    "end_line": 197,
+    "markdown": "## 七、估值与安全边际\n\n### 当前市场定价（2026-08-03）\n\n| 指标 | 数值 | 口径 |\n|---|---:|---|\n| 收盘价 | 27.12 元 | 东方财富、腾讯/新浪行情一致 |\n| 总股本 | 6,325,360,667 股 | 2026Q1/利润分配公告 |\n| 总市值 | 1,715.44 亿元 | 27.12 × 总股本；`financial_rigor.py` 偏差 0.00% |\n| 2025 EPS | 1.83 元 | 年报基本 EPS |\n| TTM EPS | 约 1.91 元 | 1.83 - 2025Q1 0.77 + 2026Q1 0.85 |\n| 静态 PE | 14.82x | 27.12 / 1.83 |\n| TTM PE | 约 14.20x | 27.12 / 1.91 |\n| 2026Q1 BVPS | 约 9.42 元 | 归母权益 595.88 亿元 / 股本 |\n| PB | 约 2.88x | 以 2026Q1 归母权益计算；东财 PB 3.18x 是另一滚动口径 |\n| 2025 简化 FCF/股 | 约 1.92 元 | OCF 143.44 - 资本开支 22.23 亿元 |\n| P/FCF | 约 14.15x | 2025 简化 FCF 口径 |\n| 年度现金股息 | 1.38 元/股 | 2025 中期 0.48 + 年度 0.90 |\n| 股息率 | 5.09% | 1.38 / 27.12 |\n\n东财动态 PE 7.95x 采用其自身年化口径，不能与 TTM PE 直接比较，也不能用来宣称“只有 8 倍 PE”。\n\n### 反向 DCF 的直觉检查\n\n27.12 元对应 TTM EPS 约 1.91 元，相当于市场给一家成熟消费龙头约 14 倍利润倍数。这个价格隐含的不是 15%-20% 高增长，而是未来几年利润低个位数增长、同时分红维持高比例。若液体乳继续收缩、奶粉和冷饮保持中个位数增长，当前估值大致可解释；若高毛利业务不能持续，PE 可能被压到 11-12 倍。\n\n### 三情景估值（3 年，精确工具计算）\n\n假设以 TTM EPS 1.9196 元为起点，目标 PE 和 EPS 增速只代表估值情景，不是公司指引：\n\n| 情景 | 年 EPS 增速 | 3 年目标 PE | 3 年目标 EPS | 目标价 | 相对 27.12 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +8% | 18x | 2.42 | 43.5 元 | +60.5% |\n| 中性 | +4% | 15x | 2.16 | 32.4 元 | +19.4% |\n| 悲观 | -5% | 12x | 1.65 | 19.7 元 | -27.2% |\n\n**估值与安全边际：**\n\n- **≤21 元：** 接近悲观情景下的安全边际，若现金流没有恶化，可分批研究性建仓；\n- **21-24 元：** 有吸引力区间，适合等待业绩和渠道数据确认后逐步增加；\n- **24-32 元：** 合理价值区间，27.12 元处于其中，偏“观察/持有”，不属于深度低估；\n- **32-35 元：** 需要奶粉、冷饮和液体乳企稳共同证明，单靠分红不足以支撑追高；\n- **>35 元：** 除非 TTM EPS 已上修并且现金流同步改善，否则安全边际偏薄。\n\n> **段永平式追问：** 如果股市明天关闭五年，你愿意以 27.12 元持有伊利，只依赖分红和经营现金流，而不是依赖 PE 扩张吗？"
+  },
+  "recommendation": "空仓者 观察。27.12 元可放入研究清单，但优先等待 24 元以下或 2026H1/H2 证明液体乳跌幅收窄、经营现金流恢复。",
+  "title": "伊利股份（600887.SH）四大师投资研究报告",
+  "report_path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+  "report_link": "伊利股份/伊利股份-investment-research-20260803.md",
+  "decision_source": "看板决策契约",
+  "decision_contract": {
+    "version": "1",
+    "report_type": "company-fundamental",
+    "company": "伊利股份",
+    "ticker": "600887.SH",
+    "market": "A股",
+    "report_completed_at": "2026-08-03",
+    "data_cutoff": "2026-08-03",
+    "action": "观察",
+    "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+    "investor_stances": [
+      {
+        "stance": "激进型",
+        "action": "21-24元等待确认后逐步增加",
+        "price_range": "21-24元"
+      },
+      {
+        "stance": "稳健型",
+        "action": "不高于21元分批研究性建仓",
+        "price_range": "不高于21元"
+      },
+      {
+        "stance": "保守型",
+        "action": "等待更厚安全边际"
+      }
+    ],
+    "invalidation_triggers": "液体乳收入连续两期加速下滑；销售费用率和返利上升而毛利率回落；经营现金流持续低于归母净利；食品安全事件；短期借款继续升而现金和合同负债恶化。",
+    "next_review_date": null,
+    "confidence": "中"
+  },
+  "price_status": "已提取价格计划",
+  "data_status": "已标注",
+  "selection_basis": "报告数据截止日",
+  "report_history": [
+    {
+      "data_cutoff": "2026-08-03",
+      "action": "观察",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "21-24元等待确认后逐步增加",
+          "price_range": "21-24元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "不高于21元分批研究性建仓",
+          "price_range": "不高于21元"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待更厚安全边际"
+        }
+      ],
+      "conclusion_summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+      "buy_price": "不高于21元",
+      "price_plan": [
+        {
+          "stance": "激进型",
+          "action": "21-24元等待确认后逐步增加",
+          "price_range": "21-24元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "不高于21元分批研究性建仓",
+          "price_range": "不高于21元"
+        },
+        {
+          "stance": "保守型",
+          "action": "等待更厚安全边际"
+        }
+      ],
+      "scenario_valuation": [
+        {
+          "scenario": "乐观",
+          "target_price": "43.5 元",
+          "eps_growth": "+8%",
+          "target_pe": "18x"
+        },
+        {
+          "scenario": "中性",
+          "target_price": "32.4 元",
+          "eps_growth": "+4%",
+          "target_pe": "15x"
+        },
+        {
+          "scenario": "悲观",
+          "target_price": "19.7 元",
+          "eps_growth": "-5%",
+          "target_pe": "12x"
+        }
+      ],
+      "valuation_section": {
+        "heading": "七、估值与安全边际",
+        "start_line": 152,
+        "end_line": 197,
+        "markdown": "## 七、估值与安全边际\n\n### 当前市场定价（2026-08-03）\n\n| 指标 | 数值 | 口径 |\n|---|---:|---|\n| 收盘价 | 27.12 元 | 东方财富、腾讯/新浪行情一致 |\n| 总股本 | 6,325,360,667 股 | 2026Q1/利润分配公告 |\n| 总市值 | 1,715.44 亿元 | 27.12 × 总股本；`financial_rigor.py` 偏差 0.00% |\n| 2025 EPS | 1.83 元 | 年报基本 EPS |\n| TTM EPS | 约 1.91 元 | 1.83 - 2025Q1 0.77 + 2026Q1 0.85 |\n| 静态 PE | 14.82x | 27.12 / 1.83 |\n| TTM PE | 约 14.20x | 27.12 / 1.91 |\n| 2026Q1 BVPS | 约 9.42 元 | 归母权益 595.88 亿元 / 股本 |\n| PB | 约 2.88x | 以 2026Q1 归母权益计算；东财 PB 3.18x 是另一滚动口径 |\n| 2025 简化 FCF/股 | 约 1.92 元 | OCF 143.44 - 资本开支 22.23 亿元 |\n| P/FCF | 约 14.15x | 2025 简化 FCF 口径 |\n| 年度现金股息 | 1.38 元/股 | 2025 中期 0.48 + 年度 0.90 |\n| 股息率 | 5.09% | 1.38 / 27.12 |\n\n东财动态 PE 7.95x 采用其自身年化口径，不能与 TTM PE 直接比较，也不能用来宣称“只有 8 倍 PE”。\n\n### 反向 DCF 的直觉检查\n\n27.12 元对应 TTM EPS 约 1.91 元，相当于市场给一家成熟消费龙头约 14 倍利润倍数。这个价格隐含的不是 15%-20% 高增长，而是未来几年利润低个位数增长、同时分红维持高比例。若液体乳继续收缩、奶粉和冷饮保持中个位数增长，当前估值大致可解释；若高毛利业务不能持续，PE 可能被压到 11-12 倍。\n\n### 三情景估值（3 年，精确工具计算）\n\n假设以 TTM EPS 1.9196 元为起点，目标 PE 和 EPS 增速只代表估值情景，不是公司指引：\n\n| 情景 | 年 EPS 增速 | 3 年目标 PE | 3 年目标 EPS | 目标价 | 相对 27.12 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +8% | 18x | 2.42 | 43.5 元 | +60.5% |\n| 中性 | +4% | 15x | 2.16 | 32.4 元 | +19.4% |\n| 悲观 | -5% | 12x | 1.65 | 19.7 元 | -27.2% |\n\n**估值与安全边际：**\n\n- **≤21 元：** 接近悲观情景下的安全边际，若现金流没有恶化，可分批研究性建仓；\n- **21-24 元：** 有吸引力区间，适合等待业绩和渠道数据确认后逐步增加；\n- **24-32 元：** 合理价值区间，27.12 元处于其中，偏“观察/持有”，不属于深度低估；\n- **32-35 元：** 需要奶粉、冷饮和液体乳企稳共同证明，单靠分红不足以支撑追高；\n- **>35 元：** 除非 TTM EPS 已上修并且现金流同步改善，否则安全边际偏薄。\n\n> **段永平式追问：** 如果股市明天关闭五年，你愿意以 27.12 元持有伊利，只依赖分红和经营现金流，而不是依赖 PE 扩张吗？"
+      },
+      "price_status": "已提取价格计划",
+      "title": "伊利股份（600887.SH）四大师投资研究报告",
+      "report_path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+      "report_link": "伊利股份/伊利股份-investment-research-20260803.md",
+      "decision_source": "看板决策契约",
+      "decision_contract": {
+        "version": "1",
+        "report_type": "company-fundamental",
+        "company": "伊利股份",
+        "ticker": "600887.SH",
+        "market": "A股",
+        "report_completed_at": "2026-08-03",
+        "data_cutoff": "2026-08-03",
+        "action": "观察",
+        "summary": "27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。",
+        "investor_stances": [
+          {
+            "stance": "激进型",
+            "action": "21-24元等待确认后逐步增加",
+            "price_range": "21-24元"
+          },
+          {
+            "stance": "稳健型",
+            "action": "不高于21元分批研究性建仓",
+            "price_range": "不高于21元"
+          },
+          {
+            "stance": "保守型",
+            "action": "等待更厚安全边际"
+          }
+        ],
+        "invalidation_triggers": "液体乳收入连续两期加速下滑；销售费用率和返利上升而毛利率回落；经营现金流持续低于归母净利；食品安全事件；短期借款继续升而现金和合同负债恶化。",
+        "next_review_date": null,
+        "confidence": "中"
+      }
+    }
+  ],
+  "report_history_count": 1,
+  "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "当前不追高，空仓者等待价格跌至24元以下或业绩确认后再考虑介入，激进型可在21-24元等待确认后逐步增加，稳健型不高于21元分批研究性建仓",
+    "holder_action": "当前观察为主，不追加仓位，等待更明确的价格或基本面信号，同时关注买入失效条件",
+    "trigger_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
+    "summary": "伊利股份27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认，不同风险偏好有各自建仓价格区间。",
+    "confidence": "high",
+    "report_field_conflict": false,
+    "conflict_note": "无冲突，正文与看板契约一致。",
+    "evidence": [
+      {
+        "line_start": 271,
+        "line_end": 271,
+        "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
+        "supports": "该证据明确给出空仓者当前不追高，需等待价格触发条件或业绩确认，属于等待价格/验证动作。"
+      },
+      {
+        "line_start": 270,
+        "line_end": 270,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "该证据表明报告对当前股票的基本面建议是观察而非买入或回避，支持空仓者等待的结论。"
+      },
+      {
+        "line_start": 272,
+        "line_end": 274,
+        "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
+        "supports": "该证据进一步说明只有价格进入更低区间或业绩确认后才可行动，当前空仓者应等待。"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "ready",
+    "source_matches": true,
+    "generated_at": "2026-08-14T10:10:53+00:00",
+    "models": {
+      "primary": "deepseek-v4-flash",
+      "review": "mimo-v2.5-pro"
+    }
+  },
+  "execution_policy": {
+    "schema_version": 1,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
+    "guard_condition": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "不高于21元分批研究性建仓",
+        "price_range": "不高于21元",
+        "min": null,
+        "ceiling": 21.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": null,
+    "report_rule_count": 1,
+    "reliability": "high",
+    "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
+  },
+  "checklist": {
+    "status": "missing",
+    "gates": [],
+    "history": []
+  },
+  "technical_analysis": {
+    "company": "伊利股份",
+    "ticker": "600887.SH",
+    "status": "ready",
+    "report_path": "reports/伊利股份/伊利股份-technical-analysis-20260814.md",
+    "analysis_date": "2026-08-14",
+    "data_cutoff": "2026-08-14",
+    "analysis_mode": "daily_close",
+    "state": "防守观察",
+    "confidence": "高",
+    "publishable": true,
+    "latest_price": 25.51,
+    "currency": "CNY",
+    "observation_zone": "数据不足",
+    "fundamental_entry_plan": "主报告明确建仓条件：≤21 元；| 加仓信号 | 2026H1/H2 液体乳跌幅明显收窄；奶粉/冷饮保持双位数且现金转换正常；短期借款回落或被经营现金流覆盖；价格进入：21-24 元；| 稳健型动作 |：不高于21元",
+    "combined_candidate_zone": "无交集",
+    "valid_buy_candidate": "否",
+    "lights": [
+      {
+        "dimension": "短期（20日）",
+        "light": "红",
+        "meaning": "股价仍在20日均线之下。"
+      },
+      {
+        "dimension": "中期（60日）",
+        "light": "红",
+        "meaning": "股价在60日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "长期（200日）",
+        "light": "红",
+        "meaning": "股价在200日均线之下，且均线在下行。"
+      },
+      {
+        "dimension": "量能确认",
+        "light": "红",
+        "meaning": "近5日平均成交量明显低于20日平均，缺少量能确认。"
+      }
+    ]
+  },
+  "post_buy_tracking": {
+    "status": "not_tracked",
+    "alerts": []
+  },
+  "detail_id": "99385fe20cfc94b7cc6e",
+  "detail_path": "./data/decision_details/99385fe20cfc94b7cc6e.json"
+}
