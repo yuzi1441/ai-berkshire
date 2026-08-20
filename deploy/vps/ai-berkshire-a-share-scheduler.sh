@@ -272,4 +272,5 @@ if (( job_rc != 0 )); then
 fi
 status_finish "${JOB}" "${job_status}" "${duration}" \
     "$([[ ${job_rc} -eq 0 ]] && echo '任务完成' || echo '任务部分失败，请查看日志')"
+commit_generated "chore: finalize ${JOB} automation status ${AS_OF}"
 exit "${job_rc}"
