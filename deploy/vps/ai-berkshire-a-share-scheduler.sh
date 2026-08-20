@@ -111,6 +111,7 @@ stage_generated() {
         data/investment-dashboard/automation_status.json \
         data/investment-dashboard/decision_board.json \
         data/investment-dashboard/decision_board_summary.json \
+        data/investment-dashboard/decision_details \
         data/investment-dashboard/intraday_technical.json \
         data/investment-dashboard/opportunity_scans.json \
         data/investment-dashboard/post_buy_alerts.json \
