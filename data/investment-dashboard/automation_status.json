@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-20T18:10:20+08:00",
+  "updated_at": "2026-08-20T21:30:08+08:00",
   "schedules": [
     {
       "job_id": "annual",
@@ -159,6 +159,15 @@
       "status": "running",
       "scheduled_for": "2026-08-20T18:10:20+08:00",
       "started_at": "2026-08-20T18:10:20+08:00",
+      "finished_at": null,
+      "duration_seconds": null,
+      "message": "A股统一调度器正在执行"
+    },
+    "reconcile": {
+      "job_id": "reconcile",
+      "status": "running",
+      "scheduled_for": "2026-08-20T21:30:08+08:00",
+      "started_at": "2026-08-20T21:30:08+08:00",
       "finished_at": null,
       "duration_seconds": null,
       "message": "A股统一调度器正在执行"
