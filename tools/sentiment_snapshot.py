@@ -33,7 +33,7 @@ from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Callable, Iterable
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlencode
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 from zoneinfo import ZoneInfo
@@ -48,6 +48,9 @@ DEFAULT_CACHE_DIR = ROOT / "data" / "sentiment" / "cache"
 DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
 DEFAULT_STATUS_OUTPUT = ROOT / "site" / "data" / "sentiment_status.json"
 NEWS_CACHE_SCHEMA_VERSION = 1
+NEWS_CATALOG_SCHEMA_VERSION = 1
+NEWS_CATALOG_FILENAME = "news-catalog.json"
+NEWS_SCORING_POLICY_VERSION = 1
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 DEFAULT_LLM_TIMEOUT_SECONDS = 600
@@ -1616,12 +1619,71 @@ def source_priority(article: dict[str, Any]) -> int:
     return {"A": 4, "B": 3, "C": 2, "D": 1}.get(article.get("source_tier"), 0)
 
 
+def normalized_news_title(value: Any) -> str:
+    """Normalize a headline for cross-source and cross-run identity matching."""
+    return re.sub(r"\W+", "", clean_text(value)).casefold()
+
+
+def canonical_news_url(value: Any) -> str:
+    """Remove tracking-only URL differences before using a URL as a fallback key."""
+    raw = clean_text(value)
+    if not raw:
+        return ""
+    try:
+        parsed = urlsplit(raw)
+    except ValueError:
+        return raw
+    if not parsed.netloc:
+        return raw
+    query = [
+        (key, item)
+        for key, item in parse_qsl(parsed.query, keep_blank_values=True)
+        if not key.casefold().startswith("utm_")
+        and key.casefold() not in {"spm", "from", "source", "ref"}
+    ]
+    return urlunsplit(
+        (
+            parsed.scheme.casefold(),
+            parsed.netloc.casefold(),
+            re.sub(r"/{2,}", "/", parsed.path).rstrip("/") or "/",
+            urlencode(sorted(query)),
+            "",
+        )
+    )
+
+
+def news_identity_key(article: dict[str, Any]) -> str:
+    """Return a stable identity shared by repeated runs and different feeds.
+
+    Headlines are intentionally the primary key so an official announcement
+    replacing a secondary-media copy reuses the same model result.  URLs and
+    source-specific IDs are fallbacks for items without a usable headline.
+    """
+    market = clean_text(article.get("market")) or "unknown-market"
+    scope = clean_text(article.get("scope")) or "company"
+    ticker = clean_text(article.get("ticker")) or clean_text(article.get("company"))
+    title_key = normalized_news_title(article.get("title"))
+    if title_key:
+        identity = f"{market}|{scope}|{ticker}|title:{title_key}"
+    else:
+        url_key = canonical_news_url(article.get("url"))
+        identity = f"{market}|{scope}|{ticker}|url:{url_key}"
+        if not url_key:
+            identity = f"{identity}|id:{clean_text(article.get('id'))}"
+    return identity
+
+
+def stable_news_id(identity: str) -> str:
+    """Create a compact deterministic ID for a catalog entry."""
+    return hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
+
+
 def merge_news_sources(articles: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Deduplicate identical headlines across official and discovery feeds."""
     by_title: dict[str, dict[str, Any]] = {}
     order: list[str] = []
     for article in articles:
-        title_key = re.sub(r"\W+", "", clean_text(article.get("title"))).casefold()
+        title_key = normalized_news_title(article.get("title"))
         key = title_key or clean_text(article.get("id"))
         if not key:
             continue
@@ -3057,6 +3119,86 @@ def save_news_cache(
     )
 
 
+def news_catalog_path(cache_dir: Path) -> Path:
+    """Return the cross-day news catalog shared by all daily snapshots."""
+    return cache_dir / NEWS_CATALOG_FILENAME
+
+
+def load_news_catalog(path: Path) -> dict[str, Any]:
+    """Load the persistent news catalog, tolerating an absent or bad file."""
+    if not path.exists():
+        return {"schema_version": NEWS_CATALOG_SCHEMA_VERSION, "articles": {}}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"schema_version": NEWS_CATALOG_SCHEMA_VERSION, "articles": {}}
+    if not isinstance(payload, dict) or payload.get("schema_version") != NEWS_CATALOG_SCHEMA_VERSION:
+        return {"schema_version": NEWS_CATALOG_SCHEMA_VERSION, "articles": {}}
+    articles = payload.get("articles")
+    if not isinstance(articles, dict):
+        return {"schema_version": NEWS_CATALOG_SCHEMA_VERSION, "articles": {}}
+    payload["articles"] = {
+        str(identity): entry
+        for identity, entry in articles.items()
+        if isinstance(entry, dict) and isinstance(entry.get("article"), dict)
+    }
+    return payload
+
+
+def save_news_catalog(path: Path, catalog: dict[str, Any]) -> None:
+    """Persist raw news identities and reusable model scores atomically."""
+    write_json(
+        path,
+        {
+            "schema_version": NEWS_CATALOG_SCHEMA_VERSION,
+            "updated_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+            "articles": catalog.get("articles", {}),
+        },
+    )
+
+
+def merge_news_catalog(
+    articles: list[dict[str, Any]],
+    catalog: dict[str, Any],
+    *,
+    seen_at: datetime,
+) -> list[dict[str, Any]]:
+    """Attach stable IDs and preserve prior analysis for repeated headlines."""
+    entries = catalog.setdefault("articles", {})
+    merged: list[dict[str, Any]] = []
+    seen_timestamp = seen_at.astimezone(SHANGHAI_TIMEZONE).isoformat()
+    for article in articles:
+        identity = news_identity_key(article)
+        existing = entries.get(identity)
+        current = dict(article)
+        if existing:
+            previous = dict(existing.get("article") or {})
+            if source_priority(current) >= source_priority(previous):
+                canonical = {**previous, **current}
+            else:
+                canonical = {**current, **previous}
+            canonical["id"] = previous.get("id") or current.get("id") or stable_news_id(identity)
+            entry = existing
+        else:
+            canonical = current
+            canonical["id"] = current.get("id") or stable_news_id(identity)
+            entry = {
+                "article": canonical,
+                "first_seen_at": seen_timestamp,
+                "last_seen_at": seen_timestamp,
+                "primary_scores": {},
+                "review_scores": {},
+            }
+        entry["article"] = canonical
+        entry["last_seen_at"] = seen_timestamp
+        entry.setdefault("first_seen_at", seen_timestamp)
+        entry.setdefault("primary_scores", {})
+        entry.setdefault("review_scores", {})
+        entries[identity] = entry
+        merged.append(canonical)
+    return merged
+
+
 def primary_score_cache_path(news_cache: Path) -> Path:
     """Return the durable score cache paired with one raw-news cache."""
     return news_cache.with_name(f"{news_cache.stem}-primary-scores.json")
@@ -3069,6 +3211,7 @@ def review_score_cache_path(news_cache: Path) -> Path:
 
 def score_config_signature(config: LLMConfig) -> dict[str, Any]:
     return {
+        "policy_version": NEWS_SCORING_POLICY_VERSION,
         "model": config.model,
         "batch_size": config.batch_size,
         "thinking_mode": config.thinking_mode,
@@ -3076,6 +3219,64 @@ def score_config_signature(config: LLMConfig) -> dict[str, Any]:
         "json_mode": config.json_mode,
         "max_tokens": config.max_tokens,
     }
+
+
+def score_config_key(config: LLMConfig) -> str:
+    """Serialize a model configuration for durable score-cache lookup."""
+    return json.dumps(score_config_signature(config), ensure_ascii=False, sort_keys=True)
+
+
+def catalog_score_maps(
+    catalog: dict[str, Any],
+    articles: list[dict[str, Any]],
+    *,
+    role: str,
+    config: LLMConfig,
+) -> dict[str, dict[str, Any]]:
+    """Return scores from prior runs whose model configuration still matches."""
+    config_key = score_config_key(config)
+    scores: dict[str, dict[str, Any]] = {}
+    entries = catalog.get("articles") or {}
+    for article in articles:
+        entry = entries.get(news_identity_key(article))
+        if not isinstance(entry, dict):
+            continue
+        role_scores = entry.get(f"{role}_scores") or {}
+        score = role_scores.get(config_key)
+        if isinstance(score, dict):
+            scores[article["id"]] = dict(score)
+    return scores
+
+
+def update_catalog_scores(
+    catalog: dict[str, Any],
+    target_articles: list[dict[str, Any]],
+    scores: dict[str, dict[str, Any]],
+    *,
+    role: str,
+    config: LLMConfig,
+    updated_at: datetime,
+) -> None:
+    """Store successful primary/review scores for reuse in later snapshots."""
+    config_key = score_config_key(config)
+    timestamp = updated_at.astimezone(SHANGHAI_TIMEZONE).isoformat()
+    entries = catalog.setdefault("articles", {})
+    for article in target_articles:
+        score = scores.get(article.get("id"))
+        if not isinstance(score, dict):
+            continue
+        identity = news_identity_key(article)
+        entry = entries.setdefault(
+            identity,
+            {
+                "article": dict(article),
+                "first_seen_at": timestamp,
+                "last_seen_at": timestamp,
+                "primary_scores": {},
+                "review_scores": {},
+            },
+        )
+        entry.setdefault(f"{role}_scores", {})[config_key] = dict(score)
 
 
 def load_primary_score_cache(
@@ -3320,6 +3521,8 @@ def build_snapshot(
         universe_signature=universe_signature,
         parameters=cache_parameters,
     )
+    catalog_path = news_catalog_path(resolved_cache_dir)
+    news_catalog = load_news_catalog(catalog_path)
     primary_score_path = primary_score_cache_path(cache_path)
     review_score_path = review_score_cache_path(cache_path)
     preloaded_primary_scores = (
@@ -3366,6 +3569,10 @@ def build_snapshot(
         item["ticker"]: cached_company_news.get(item["ticker"], [])
         for item in universe
     }
+    for ticker, rows in list(articles_by_ticker.items()):
+        articles_by_ticker[ticker] = merge_news_catalog(
+            rows, news_catalog, seen_at=now
+        )
     company_news_counts: dict[str, int] = {
         ticker: len(rows) for ticker, rows in articles_by_ticker.items()
         if ticker in cached_company_news
@@ -3373,6 +3580,10 @@ def build_snapshot(
     industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
         industry: cached_industry_news.get(industry, []) for industry in industry_names
     }
+    for industry, rows in list(industry_articles_by_name.items()):
+        industry_articles_by_name[industry] = merge_news_catalog(
+            rows, news_catalog, seen_at=now
+        )
     industry_news_counts: dict[str, int] = {
         industry: len(rows)
         for industry, rows in industry_articles_by_name.items()
@@ -3384,6 +3595,7 @@ def build_snapshot(
         warnings.extend(f"industry:{industry} source warning: {item}" for item in source_warnings)
 
     cache_write_counter = 0
+    catalog_write_counter = 0
 
     def persist_news_cache(*, force: bool = False) -> None:
         nonlocal cache_write_counter
@@ -3400,6 +3612,38 @@ def build_snapshot(
             industry_news=industry_articles_by_name,
             industry_warnings=industry_source_warnings,
         )
+
+    def persist_news_catalog(*, force: bool = False) -> None:
+        nonlocal catalog_write_counter
+        catalog_write_counter += 1
+        if not force and catalog_write_counter % 5:
+            return
+        save_news_catalog(catalog_path, news_catalog)
+
+    persist_news_catalog(force=True)
+
+    if llm_config:
+        preloaded_primary_scores = {
+            **catalog_score_maps(
+                news_catalog,
+                [article for rows in articles_by_ticker.values() for article in rows]
+                + [article for rows in industry_articles_by_name.values() for article in rows],
+                role="primary",
+                config=llm_config,
+            ),
+            **preloaded_primary_scores,
+        }
+    if review_llm_config:
+        preloaded_review_scores = {
+            **catalog_score_maps(
+                news_catalog,
+                [article for rows in articles_by_ticker.values() for article in rows]
+                + [article for rows in industry_articles_by_name.values() for article in rows],
+                role="review",
+                config=review_llm_config,
+            ),
+            **preloaded_review_scores,
+        }
 
     def pending_sentiment(label: str = "待评分") -> dict[str, Any]:
         return {
@@ -3580,6 +3824,7 @@ def build_snapshot(
             item = futures[future]
             try:
                 rows, source_warnings = future.result()
+                rows = merge_news_catalog(rows, news_catalog, seen_at=now)
                 articles_by_ticker[item["ticker"]] = rows
                 company_news_counts[item["ticker"]] = len(rows)
                 company_source_warnings[item["ticker"]] = source_warnings
@@ -3592,6 +3837,7 @@ def build_snapshot(
                 warnings.append(f"news failed for {item['ticker']}: {exc}")
                 company_news_counts[item["ticker"]] = 0
             persist_news_cache()
+            persist_news_catalog()
             completed_company_news = len(company_news_counts)
             if completed_company_news % 10 == 0 or completed_company_news == len(universe):
                 emit_checkpoint(
@@ -3601,6 +3847,7 @@ def build_snapshot(
                 )
 
     persist_news_cache(force=True)
+    persist_news_catalog(force=True)
     completed_company_news = len(company_news_counts)
     if not pending_company_items:
         emit_checkpoint(
@@ -3630,7 +3877,9 @@ def build_snapshot(
         for future in as_completed(futures):
             industry = futures[future]
             try:
-                industry_articles_by_name[industry] = future.result()
+                industry_articles_by_name[industry] = merge_news_catalog(
+                    future.result(), news_catalog, seen_at=now
+                )
                 industry_news_counts[industry] = len(industry_articles_by_name[industry])
                 industry_source_warnings[industry] = []
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
@@ -3639,6 +3888,7 @@ def build_snapshot(
                 warnings.append(f"industry news failed for {industry}: {exc}")
                 industry_news_counts[industry] = 0
             persist_news_cache()
+            persist_news_catalog()
             if len(industry_news_counts) % 5 == 0 or len(industry_news_counts) == len(industry_names):
                 emit_checkpoint(
                     "industry_news",
@@ -3648,6 +3898,7 @@ def build_snapshot(
                 )
 
     persist_news_cache(force=True)
+    persist_news_catalog(force=True)
     if not pending_industries:
         emit_checkpoint(
             "industry_news",
@@ -3658,6 +3909,29 @@ def build_snapshot(
 
     all_articles = [article for items in articles_by_ticker.values() for article in items]
     all_articles.extend(article for items in industry_articles_by_name.values() for article in items)
+
+    catalog_primary_scores = (
+        catalog_score_maps(
+            news_catalog,
+            all_articles,
+            role="primary",
+            config=llm_config,
+        )
+        if llm_config
+        else {}
+    )
+    catalog_review_scores = (
+        catalog_score_maps(
+            news_catalog,
+            all_articles,
+            role="review",
+            config=review_llm_config,
+        )
+        if review_llm_config
+        else {}
+    )
+    preloaded_primary_scores = {**catalog_primary_scores, **preloaded_primary_scores}
+    preloaded_review_scores = {**catalog_review_scores, **preloaded_review_scores}
 
     latest_primary_preview: list[dict[str, Any]] = []
 
@@ -3683,6 +3957,15 @@ def build_snapshot(
                     completed_batches=completed_batches,
                     total_batches=total_batches,
                 )
+                update_catalog_scores(
+                    news_catalog,
+                    target_articles,
+                    scores,
+                    role="primary",
+                    config=llm_config,
+                    updated_at=now,
+                )
+                persist_news_catalog(force=True)
             latest_primary_preview = [
                 {
                     **article,
@@ -3726,6 +4009,15 @@ def build_snapshot(
                     completed_batches=completed_batches,
                     total_batches=total_batches,
                 )
+                update_catalog_scores(
+                    news_catalog,
+                    target_articles,
+                    scores,
+                    role="review",
+                    config=review_llm_config,
+                    updated_at=now,
+                )
+                persist_news_catalog(force=True)
             if latest_primary_preview:
                 emit_checkpoint(
                     "review_scoring",
@@ -3861,6 +4153,9 @@ def build_snapshot(
                 "Sina Finance individual-stock news",
                 "Baidu News via read-only text proxy",
             ],
+            "cross_run_news_catalog": True,
+            "cross_run_primary_scores_reused": len(catalog_primary_scores),
+            "cross_run_review_scores_reused": len(catalog_review_scores),
         },
         "source_policy": {
             "A": "一手披露：直连巨潮资讯公告、交易所、监管机构、公司公告或公司投资者关系页面；可评分",
@@ -3888,6 +4183,7 @@ def build_snapshot(
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
             "A股和行业新闻由主模型与复核模型共同评分；C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
+            "跨运行新闻目录按股票/行业、市场和规范化标题去重；相同模型配置已有评分直接复用，模型或规则变化时才重新评分。",
             "个股情绪保留正式来源分，同时展示含辅助AI分析的上下文分；A/B进入正式分，C/D只按降权上下文进入。",
             "行业权威来源可标为行业A级，但行业范围和对个股的传导系数仍单独记录。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",

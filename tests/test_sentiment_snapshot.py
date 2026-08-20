@@ -1128,6 +1128,98 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(articles[0]["source_via"], "cninfo_direct")
         self.assertEqual(articles[0]["source_tier"], "A")
 
+    def test_news_catalog_reuses_identity_and_primary_score_across_runs(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        first_article = {
+            "id": "secondary-id",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "scope": "company",
+            "title": "示例公司发布回购公告",
+            "summary": "首次抓取摘要",
+            "publisher": "财联社",
+            "url": "https://example.com/news/1?utm_source=feed",
+            "source_tier": "B",
+            "score_eligible": True,
+        }
+        score = {
+            "direction": 0.4,
+            "impact": 2,
+            "relevance": 0.9,
+            "confidence": 0.8,
+            "event_type": "回购",
+            "scoring_method": "llm:primary:test-model",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "news-catalog.json"
+            catalog = {"schema_version": sentiment_snapshot.NEWS_CATALOG_SCHEMA_VERSION, "articles": {}}
+            first = sentiment_snapshot.merge_news_catalog(
+                [first_article],
+                catalog,
+                seen_at=datetime(2026, 8, 18, tzinfo=SHANGHAI),
+            )
+            sentiment_snapshot.update_catalog_scores(
+                catalog,
+                first,
+                {first[0]["id"]: score},
+                role="primary",
+                config=config,
+                updated_at=datetime(2026, 8, 18, tzinfo=SHANGHAI),
+            )
+            sentiment_snapshot.save_news_catalog(path, catalog)
+            loaded = sentiment_snapshot.load_news_catalog(path)
+            second = sentiment_snapshot.merge_news_catalog(
+                [{**first_article, "id": "new-source-id", "url": "https://example.com/news/1?ref=homepage"}],
+                loaded,
+                seen_at=datetime(2026, 8, 19, tzinfo=SHANGHAI),
+            )
+            reused = sentiment_snapshot.catalog_score_maps(
+                loaded, second, role="primary", config=config
+            )
+        self.assertEqual(second[0]["id"], first[0]["id"])
+        self.assertEqual(reused, {first[0]["id"]: score})
+
+    def test_score_articles_skips_model_for_reused_primary_and_review_scores(self):
+        article = {
+            "id": "catalog-score-1",
+            "scope": "company",
+            "company": "缓存公司",
+            "display_name": "缓存公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "source_tier": "A",
+            "score_eligible": True,
+            "title": "缓存公司公告",
+            "summary": "经营稳定",
+        }
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        score = {
+            "direction": 0.2,
+            "impact": 2,
+            "relevance": 0.9,
+            "confidence": 0.8,
+            "event_type": "经营事件",
+            "scoring_method": "test",
+        }
+        with patch.object(sentiment_snapshot, "score_with_llm") as score_with_llm:
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                [article],
+                config,
+                config,
+                preloaded_primary_scores={article["id"]: score},
+                preloaded_review_scores={article["id"]: score},
+            )
+        score_with_llm.assert_not_called()
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(scored[0]["scoring_method"], "llm:dual:test-model+test-model")
+
     def test_company_news_falls_back_to_thirty_days_when_recent_window_is_empty(self):
         response = {
             "result": {
