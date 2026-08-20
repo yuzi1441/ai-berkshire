@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-20T22:04:24+08:00",
+  "updated_at": "2026-08-20T23:20:00+08:00",
   "schedules": [
     {
       "job_id": "annual",
@@ -138,30 +138,45 @@
     },
     "heavy": {
       "job_id": "heavy",
-      "status": "running",
+      "status": "partial",
       "scheduled_for": "2026-08-20T18:10:19+08:00",
       "started_at": "2026-08-20T18:10:19+08:00",
-      "finished_at": null,
-      "duration_seconds": null,
-      "message": "A股统一调度器正在执行"
+      "finished_at": "2026-08-20T23:20:00+08:00",
+      "duration_seconds": 249.0,
+      "message": "重任务已结束：情绪部分失败，机会扫描已完成",
+      "data_cutoff": "2026-08-20",
+      "record_count": null,
+      "failed_count": null,
+      "last_success_at": "2026-08-20T23:20:00+08:00",
+      "last_success_status": "partial"
     },
     "sentiment": {
       "job_id": "sentiment",
-      "status": "running",
+      "status": "partial",
       "scheduled_for": "2026-08-20T18:10:19+08:00",
       "started_at": "2026-08-20T18:10:19+08:00",
-      "finished_at": null,
-      "duration_seconds": null,
-      "message": "A股统一调度器正在执行"
+      "finished_at": "2026-08-20T23:20:00+08:00",
+      "duration_seconds": 0.0,
+      "message": "A股情绪任务未正常完成，沿用上一份成功快照",
+      "data_cutoff": "2026-08-20",
+      "record_count": null,
+      "failed_count": null,
+      "last_success_at": "2026-08-20T23:20:00+08:00",
+      "last_success_status": "partial"
     },
     "opportunity": {
       "job_id": "opportunity",
-      "status": "running",
+      "status": "partial",
       "scheduled_for": "2026-08-20T18:10:20+08:00",
       "started_at": "2026-08-20T18:10:20+08:00",
-      "finished_at": null,
-      "duration_seconds": null,
-      "message": "A股统一调度器正在执行"
+      "finished_at": "2026-08-20T23:20:00+08:00",
+      "duration_seconds": 249.0,
+      "message": "A股机会扫描已完成：93/93，85条有效，8条沿用旧结果",
+      "data_cutoff": "2026-08-20",
+      "record_count": 93,
+      "failed_count": 0,
+      "last_success_at": "2026-08-20T23:20:00+08:00",
+      "last_success_status": "partial"
     },
     "reconcile": {
       "job_id": "reconcile",
