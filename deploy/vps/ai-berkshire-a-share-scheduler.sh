@@ -5,6 +5,8 @@ IFS=$'\n\t'
 REPO_ROOT="${REPO_ROOT:-/opt/ai-berkshire}"
 PYTHON="${REPO_ROOT}/.venv/bin/python"
 LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-repo-update.lock}"
+SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
+GENERATED_BRANCH="${GENERATED_BRANCH:-vps-generated}"
 export TZ="Asia/Shanghai"
 
 if [[ $# -ne 1 || ! "$1" =~ ^(annual|morning|market|intraday|close|daily|heavy|reconcile)$ ]]; then
@@ -50,8 +52,16 @@ status_finish() {
 }
 
 sync_repo() {
+    local current_branch
+    current_branch="$(git branch --show-current)"
+    if [[ "${current_branch}" != "${GENERATED_BRANCH}" ]]; then
+        echo "scheduler must run on ${GENERATED_BRANCH}; current branch is ${current_branch:-detached}" >&2
+        return 1
+    fi
     if git diff --quiet && [[ -z "$(git status --porcelain --untracked-files=all)" ]]; then
-        git pull --ff-only origin main
+        git fetch origin "${SOURCE_BRANCH}"
+        git merge --no-edit -X ours "origin/${SOURCE_BRANCH}"
+        git push origin "${GENERATED_BRANCH}"
     else
         echo "pre-existing repository changes detected; skip pull to protect VPS outputs"
     fi
@@ -149,7 +159,7 @@ commit_generated() {
         return 0
     fi
     git commit -m "${message} [skip ci]"
-    git push origin main || echo "generated data is committed locally; push failed" >&2
+    git push origin "${GENERATED_BRANCH}" || echo "generated data is committed locally; push failed" >&2
 }
 
 run_annual() {

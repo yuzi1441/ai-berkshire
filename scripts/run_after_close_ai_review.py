@@ -30,6 +30,8 @@ SCAN_RELATIVE = Path("data/investment-dashboard/opportunity_scans.json")
 STATUS_RELATIVE = Path("data/investment-dashboard/opportunity_scan_status.json")
 SITE_STATUS_RELATIVE = Path("site/data/opportunity_scan_status.json")
 LOCK_PATH = Path("/run/lock/ai-berkshire-repo-update.lock")
+SOURCE_BRANCH = os.environ.get("AI_BERKSHIRE_SOURCE_BRANCH", "main")
+GENERATED_BRANCH = os.environ.get("AI_BERKSHIRE_GENERATED_BRANCH", "vps-generated")
 
 GENERATED_PATHS = (
     "data/investment-dashboard/decision_board.json",
@@ -142,7 +144,7 @@ def stage_and_push(repo_root: Path, message: str) -> None:
         print("No close-review dashboard changes to commit.", flush=True)
         return
     subprocess.run(["git", "commit", "-m", message], cwd=repo_root, check=True)
-    subprocess.run(["git", "push", "origin", "main"], cwd=repo_root, check=True)
+    subprocess.run(["git", "push", "origin", GENERATED_BRANCH], cwd=repo_root, check=True)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -185,7 +187,23 @@ def main() -> int:
                 flush=True,
             )
         if not arguments.skip_git_sync and publish_to_git:
-            run_step(repo_root, "同步远端主分支", ["git", "pull", "--ff-only", "origin", "main"])
+            current_branch = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=repo_root,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            if current_branch != GENERATED_BRANCH:
+                raise JobError(
+                    f"close-review job must run on {GENERATED_BRANCH}; current branch is {current_branch or 'detached'}"
+                )
+            run_step(repo_root, "同步主分支代码", ["git", "fetch", "origin", SOURCE_BRANCH])
+            run_step(
+                repo_root,
+                "合并主分支代码并保留 VPS 生成结果",
+                ["git", "merge", "--no-edit", "-X", "ours", f"origin/{SOURCE_BRANCH}"],
+            )
 
         run_step(repo_root, "刷新 A/H 收盘行情", [str(python), "tools/market_snapshot.py", "--force"])
         run_step(repo_root, "重建含最新价格的决策板", [str(python), "tools/build_investment_dashboard.py"])

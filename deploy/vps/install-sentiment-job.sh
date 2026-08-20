@@ -3,10 +3,29 @@ set -Eeuo pipefail
 IFS=$'\n\t'
 
 REPO_ROOT="${REPO_ROOT:-/opt/ai-berkshire}"
+SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
+GENERATED_BRANCH="${GENERATED_BRANCH:-vps-generated}"
 
 if [[ ! -x "${REPO_ROOT}/.venv/bin/python" ]]; then
     echo "missing VPS Python environment: ${REPO_ROOT}/.venv/bin/python" >&2
     exit 1
+fi
+
+cd "${REPO_ROOT}"
+if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
+    echo "refusing to switch branches with pre-existing repository changes" >&2
+    exit 1
+fi
+git fetch origin "${SOURCE_BRANCH}" "${GENERATED_BRANCH}" 2>/dev/null || git fetch origin "${SOURCE_BRANCH}"
+if git show-ref --verify --quiet "refs/remotes/origin/${GENERATED_BRANCH}"; then
+    if git show-ref --verify --quiet "refs/heads/${GENERATED_BRANCH}"; then
+        git switch "${GENERATED_BRANCH}"
+    else
+        git switch --track -c "${GENERATED_BRANCH}" "origin/${GENERATED_BRANCH}"
+    fi
+else
+    git switch -c "${GENERATED_BRANCH}" "origin/${SOURCE_BRANCH}"
+    git push -u origin "${GENERATED_BRANCH}"
 fi
 
 install -D -m 0755 \

@@ -5,11 +5,13 @@ IFS=$'\n\t'
 REPO_ROOT="${REPO_ROOT:-/opt/ai-berkshire}"
 PYTHON="${REPO_ROOT}/.venv/bin/python"
 LOCK_PATH="/run/lock/ai-berkshire-repo-update.lock"
+SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
+GENERATED_BRANCH="${GENERATED_BRANCH:-vps-generated}"
 
 export TZ="Asia/Shanghai"
 
 publish_snapshot_commit() {
-    if ! git push origin main; then
+    if ! git push origin "${GENERATED_BRANCH}"; then
         echo "snapshot is published locally; GitHub push was skipped because the remote branch is ahead" >&2
     fi
 }
@@ -22,11 +24,16 @@ if ! flock -n 9; then
 fi
 
 cd "${REPO_ROOT}"
+if [[ "$(git branch --show-current)" != "${GENERATED_BRANCH}" ]]; then
+    echo "legacy sentiment updater must run on ${GENERATED_BRANCH}" >&2
+    exit 1
+fi
 # A previous interrupted run may have left generated snapshots or local VPS
 # patches unstaged.  Do not overwrite those outputs with a pull; the job can
 # still run against the current checkout and publish its own checkpoint.
 if git diff --quiet && [[ -z "$(git status --porcelain --untracked-files=all)" ]]; then
-    git pull --ff-only origin main
+    git fetch origin "${SOURCE_BRANCH}"
+    git merge --no-edit -X ours "origin/${SOURCE_BRANCH}"
 else
     echo "pre-existing repository changes detected; skip pull to protect VPS outputs"
 fi
