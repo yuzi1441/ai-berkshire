@@ -276,6 +276,41 @@ class OpportunityReviewTests(unittest.TestCase):
         selected.assert_called_once_with("scan_flash")
         self.assertEqual([item["model"] for item in result["models"]], ["deepseek-v4-flash"])
 
+    def test_full_scan_checkpoints_each_tenth_and_writes_final_payload(self):
+        config = opportunity.ModelConfig(
+            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        decisions = [{"ticker": f"60000{index}.SH"} for index in range(10)]
+
+        def fake_scan_one(decision, **_kwargs):
+            return {
+                "ticker": decision["ticker"],
+                "models": {config.model: {"status": "ready", "model": config.model}},
+            }
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            checkpoint_path = Path(temporary_directory) / "opportunity_scans.json"
+            with (
+                patch.object(opportunity, "model_config", return_value=config),
+                patch.object(opportunity, "find_decisions", return_value=decisions),
+                patch.object(opportunity, "snapshot_maps", return_value=({}, {}, {})),
+                patch.object(opportunity, "scan_one", side_effect=fake_scan_one),
+                patch.object(opportunity, "write_json", wraps=opportunity.write_json) as writer,
+            ):
+                result = opportunity.scan_all(Path(temporary_directory), checkpoint_path=checkpoint_path)
+
+            self.assertEqual(writer.call_count, 10)
+            first_checkpoint = writer.call_args_list[0].args[1]
+            self.assertTrue(first_checkpoint["checkpoint"])
+            self.assertEqual(first_checkpoint["scan_count"], 1)
+            self.assertEqual(first_checkpoint["expected_scan_count"], 10)
+            self.assertEqual(first_checkpoint["progress_percent"], 10.0)
+            self.assertFalse(result["checkpoint"])
+            self.assertEqual(result["scan_count"], 10)
+            self.assertEqual(result["expected_scan_count"], 10)
+            self.assertEqual(result["progress_percent"], 100.0)
+            self.assertEqual(json.loads(checkpoint_path.read_text())["scan_count"], 10)
+
     def test_luna_defaults_to_highest_supported_reasoning_effort(self):
         with patch.dict("os.environ", {"OPENCODE_GO_API_KEY": "test-key"}, clear=True):
             config = opportunity.model_config("deep_luna")

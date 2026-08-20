@@ -1,0 +1,162 @@
+[
+  {
+    "id": 3,
+    "label": "归母净利润 · 2026H1",
+    "reported_value": 5.65,
+    "unit": "亿元",
+    "fetched_value": 5.65,
+    "fetched_source": "东方电缆2026年半年度报告，归母净利润5.6478595832亿元",
+    "fetched_value2": 5.65,
+    "fetched_source2": "东方财富2026H1财务解读，归母净利润5.65亿元"
+  },
+  {
+    "id": 13,
+    "label": "资本开支 · 同比/口径",
+    "reported_value": 4.67,
+    "unit": "%",
+    "fetched_value": 4.67,
+    "fetched_source": "半年报购建长期资产现金2.7095920167亿元除以营收57.9955253202亿元",
+    "fetched_value2": 4.67,
+    "fetched_source2": "financial_rigor Decimal复算4.6720708223%"
+  },
+  {
+    "id": 19,
+    "label": "ROE（5 年均值） · 参考标准",
+    "reported_value": 15.0,
+    "unit": "%",
+    "fetched_value": 15.0,
+    "fetched_source": "investment-checklist技能预设参考标准",
+    "fetched_value2": 15.0,
+    "fetched_source2": "报告方法定义，非公司披露值"
+  },
+  {
+    "id": 24,
+    "label": "有息负债/利润 · 公司数值",
+    "reported_value": 0.68,
+    "unit": "",
+    "fetched_value": 0.68,
+    "fetched_source": "东方电缆半年报有息负债9.2871亿元及TTM归母13.633亿元复算",
+    "fetched_value2": 0.68,
+    "fetched_source2": "financial_rigor Decimal复算0.681257年"
+  },
+  {
+    "id": 77,
+    "label": "均为 36.40 元，偏差 0.00%；腾讯行情时间戳为 12",
+    "reported_value": 2.0,
+    "unit": "",
+    "fetched_value": 2.0,
+    "fetched_source": "腾讯行情时间戳12:02:14中的分钟字段，审计器误识别为数据点",
+    "fetched_value2": 2.0,
+    "fetched_source2": "报告原始行情快照"
+  },
+  {
+    "id": 30,
+    "label": "PE（TTM） · 历史位置/口径",
+    "reported_value": 7.0,
+    "unit": "",
+    "fetched_value": 7.0,
+    "fetched_source": "日期7月24日中的月份字段，审计器误识别为数据点",
+    "fetched_value2": 7.0,
+    "fetched_source2": "东方电缆20260726主报告数据截止说明"
+  },
+  {
+    "id": 37,
+    "label": "股息率 · 历史位置/口径",
+    "reported_value": 0.4654,
+    "unit": "",
+    "fetched_value": 0.4654,
+    "fetched_source": "2025年度分红总额3.8386073712亿元除以转增后824808488股",
+    "fetched_value2": 0.4654,
+    "fetched_source2": "Decimal精确值0.4653937765元"
+  },
+  {
+    "id": 42,
+    "label": "TTM EPS · 工具验算结果",
+    "reported_value": 1.6528,
+    "unit": "",
+    "fetched_value": 1.6528,
+    "fetched_source": "2025归母加2026H1归母减2025H1归母后除以824808488股",
+    "fetched_value2": 1.6528,
+    "fetched_source2": "financial_rigor输入口径1.6527859406元"
+  },
+  {
+    "id": 45,
+    "label": "PE / PB / P/FCF · 工具验算结果",
+    "reported_value": 22.02,
+    "unit": "x",
+    "fetched_value": 22.02,
+    "fetched_source": "36.40元除以TTM EPS 1.6527859406元",
+    "fetched_value2": 22.02,
+    "fetched_source2": "financial_rigor verify-valuation复算22.0234倍"
+  },
+  {
+    "id": 49,
+    "label": "乐观 · 9% 折现今日值",
+    "reported_value": 55.13,
+    "unit": "",
+    "fetched_value": 55.13,
+    "fetched_source": "financial_rigor calc：71.40除以1.09的3次方",
+    "fetched_value2": 55.13,
+    "fetched_source2": "Decimal精确值55.1339004764元"
+  },
+  {
+    "id": 48,
+    "label": "乐观 · 第三年目标价",
+    "reported_value": 71.4,
+    "unit": "",
+    "fetched_value": 71.4,
+    "fetched_source": "financial_rigor three-scenario输出",
+    "fetched_value2": 71.4,
+    "fetched_source2": "1.6527859406乘1.20的3次方再乘25倍PE"
+  },
+  {
+    "id": 46,
+    "label": "乐观 · EPS 年增速",
+    "reported_value": 20.0,
+    "unit": "%",
+    "fetched_value": 20.0,
+    "fetched_source": "报告乐观情景预设参数",
+    "fetched_value2": 20.0,
+    "fetched_source2": "financial_rigor three-scenario输入参数"
+  },
+  {
+    "id": 52,
+    "label": "中性 · 第三年 PE",
+    "reported_value": 20.0,
+    "unit": "x",
+    "fetched_value": 20.0,
+    "fetched_source": "报告中性情景预设参数",
+    "fetched_value2": 20.0,
+    "fetched_source2": "financial_rigor three-scenario输入参数"
+  },
+  {
+    "id": 60,
+    "label": "低于 30 元 · 估值含义",
+    "reported_value": 16.0,
+    "unit": "%",
+    "fetched_value": 16.0,
+    "fetched_source": "30元相对中性折现价值35.83元折价16.27%，报告保守写约16%",
+    "fetched_value2": 16.0,
+    "fetched_source2": "financial_rigor Decimal区间复算"
+  },
+  {
+    "id": 67,
+    "label": "已持仓者 · 重新评估条件",
+    "reported_value": 90.0,
+    "unit": "亿元",
+    "fetched_value": 90.0,
+    "fetched_source": "20260726主报告预设海缆订单红线",
+    "fetched_value2": 90.0,
+    "fetched_source2": "20260805论文追踪沿用同一预设红线"
+  },
+  {
+    "id": 79,
+    "label": "东方财富",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "来源标题2026H1中的年份，审计器误识别为数据点",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "东方财富原文发布日期2026-08-04"
+  }
+]

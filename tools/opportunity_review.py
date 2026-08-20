@@ -17,6 +17,7 @@ import argparse
 import concurrent.futures
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -667,6 +668,66 @@ def union_result(models: dict[str, dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_scan_payload(
+    configs: list[ModelConfig],
+    scans: list[dict[str, Any] | None],
+    *,
+    workers: int,
+    expected_scan_count: int,
+    checkpoint: bool,
+) -> dict[str, Any]:
+    """Build a durable full-scan payload for a checkpoint or final write."""
+    completed_scans = [item for item in scans if isinstance(item, dict)]
+    model_results = [
+        result
+        for item in completed_scans
+        for result in (item.get("models") or {}).values()
+        if isinstance(result, dict)
+    ]
+    ready = sum(1 for item in model_results if item.get("status") == "ready")
+    stale = sum(1 for item in model_results if item.get("status") == "stale")
+    errors = sum(1 for item in model_results if item.get("status") == "error")
+    complete = bool(expected_scan_count) and len(completed_scans) >= expected_scan_count
+    status = (
+        "ok"
+        if complete and not errors and not stale
+        else "partial"
+        if completed_scans
+        else "missing"
+    )
+    progress_percent = (
+        round(min(100.0, len(completed_scans) * 100 / expected_scan_count), 1)
+        if expected_scan_count
+        else 0.0
+    )
+    return {
+        "schema_version": SCAN_SCHEMA_VERSION,
+        "generated_at": now_iso(),
+        "status": status,
+        "market": MARKET,
+        "models": [
+            {
+                "role": config.role,
+                "model": config.model,
+                "transport": config.transport,
+                "reasoning_policy": "highest supported only",
+            }
+            for config in configs
+        ],
+        "scan_count": len(completed_scans),
+        "expected_scan_count": expected_scan_count,
+        "progress_percent": progress_percent,
+        "checkpoint": checkpoint,
+        "company_concurrency": workers,
+        "model_result_count": len(model_results),
+        "ready_count": ready,
+        "stale_count": stale,
+        "error_count": errors,
+        "inclusion_rule": "Flash 判为当前机会才进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
+        "scans": completed_scans,
+    }
+
+
 def previous_model(
     previous: dict[str, Any],
     ticker: str,
@@ -753,6 +814,7 @@ def scan_all(
     ticker: str | None = None,
     limit: int | None = None,
     previous: dict[str, Any] | None = None,
+    checkpoint_path: Path | None = None,
 ) -> dict[str, Any]:
     configs = [model_config("scan_flash")]
     decisions = find_decisions(repo_root, ticker)
@@ -765,6 +827,11 @@ def scan_all(
     # could exhaust provider concurrency or rate limits.
     workers = parse_integer(os.environ.get("OPPORTUNITY_SCAN_CONCURRENCY"), 3, 1, 6)
     scans: list[dict[str, Any] | None] = [None] * len(decisions)
+    checkpoint_targets = {
+        math.ceil(len(decisions) * step / 10)
+        for step in range(1, 11)
+        if decisions
+    }
     with concurrent.futures.ThreadPoolExecutor(max_workers=min(workers, len(decisions) or 1)) as executor:
         futures = {
             executor.submit(
@@ -788,39 +855,31 @@ def scan_all(
                 f"{scanned.get('ticker') or 'unknown'} · {scanned.get('status') or 'unknown'}",
                 flush=True,
             )
-    completed_scans = [item for item in scans if isinstance(item, dict)]
-    model_results = [
-        result
-        for item in completed_scans
-        for result in (item.get("models") or {}).values()
-        if isinstance(result, dict)
-    ]
-    ready = sum(1 for item in model_results if item.get("status") == "ready")
-    stale = sum(1 for item in model_results if item.get("status") == "stale")
-    errors = sum(1 for item in model_results if item.get("status") == "error")
-    return {
-        "schema_version": SCAN_SCHEMA_VERSION,
-        "generated_at": now_iso(),
-        "status": "ok" if completed_scans and not errors and not stale else "partial" if completed_scans else "missing",
-        "market": MARKET,
-        "models": [
-            {
-                "role": config.role,
-                "model": config.model,
-                "transport": config.transport,
-                "reasoning_policy": "highest supported only",
-            }
-            for config in configs
-        ],
-        "scan_count": len(completed_scans),
-        "company_concurrency": min(workers, len(decisions) or 1),
-        "model_result_count": len(model_results),
-        "ready_count": ready,
-        "stale_count": stale,
-        "error_count": errors,
-        "inclusion_rule": "Flash 判为当前机会才进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
-        "scans": completed_scans,
-    }
+            if (
+                checkpoint_path
+                and completed in checkpoint_targets
+                and completed < len(decisions)
+            ):
+                write_json(
+                    checkpoint_path,
+                    build_scan_payload(
+                        configs,
+                        scans,
+                        workers=min(workers, len(decisions) or 1),
+                        expected_scan_count=len(decisions),
+                        checkpoint=True,
+                    ),
+                )
+    payload = build_scan_payload(
+        configs,
+        scans,
+        workers=min(workers, len(decisions) or 1),
+        expected_scan_count=len(decisions),
+        checkpoint=False,
+    )
+    if checkpoint_path:
+        write_json(checkpoint_path, payload)
+    return payload
 
 
 def deep_review_one(repo_root: Path, ticker: str) -> dict[str, Any]:
@@ -880,8 +939,13 @@ def command_scan(arguments: argparse.Namespace) -> int:
     repo_root = arguments.repo_root.resolve()
     output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
     prior = load_json(output, {})
-    payload = scan_all(repo_root, ticker=arguments.ticker, limit=arguments.limit, previous=prior)
-    write_json(output, payload)
+    payload = scan_all(
+        repo_root,
+        ticker=arguments.ticker,
+        limit=arguments.limit,
+        previous=prior,
+        checkpoint_path=output,
+    )
     print(
         f"Wrote {output} · {payload['ready_count']} ready · {payload['stale_count']} stale · {payload['error_count']} error",
         flush=True,
