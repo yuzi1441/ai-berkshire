@@ -563,7 +563,9 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
     wait_event: "unavailable",
     hold: "unavailable",
     no: "unavailable",
+    paused: "unavailable",
     review: "unavailable",
+    research: "unavailable",
   }[execution.key] || "unavailable";
   wrap.className = `primary-judgment-aux primary-judgment-aux-${tone}`;
   const label = document.createElement("strong");
@@ -2720,6 +2722,7 @@ function renderSummary(visible) {
     ["下个交易日候选", nextCandidateCount],
     ["价格已到待验证", counts.validation || 0],
     ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
+    ["行情/时段暂停", counts.paused || 0],
     ["待人工复核", manualReviewCount],
   ];
   els.summary.replaceChildren();

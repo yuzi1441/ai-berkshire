@@ -145,7 +145,9 @@ function executionRank(key) {
     wait_event: 35,
     hold: 25,
     no: 15,
+    paused: 5,
     review: 0,
+    research: -5,
   }[key] ?? 0;
 }
 
@@ -424,7 +426,7 @@ function policyExecutionState(item, quote, fallbackKind = "unknown") {
 export function currentExecutionState(item, quote, fallbackKind = "unknown", context = {}) {
   if (item?.market !== "A股") {
     return executionResult(
-      "review",
+      "research",
       "仅供研究",
       `${item?.market || "该市场"}保留报告与估值浏览，不计入实时可执行决策`,
       { marketSessionState: "research_only", quoteFreshness: "not_applicable" },
@@ -471,7 +473,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
   if (sessionState !== "open") {
     const nextCandidate = ["actionable", "trial"].includes(manual.execution_key);
     return executionResult(
-      "review",
+      "paused",
       nextCandidate ? "下个交易日候选" : "非交易时段",
       sessionState === "lunch"
         ? "A股午间休市，当前可执行数量归零；开市后用最新行情重新守门"
@@ -487,7 +489,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
   }
   if (freshness.state !== "fresh") {
     return executionResult(
-      "review",
+      "paused",
       "行情陈旧，暂停执行",
       freshness.state === "missing"
         ? "缺少同源行情快照时间，不能形成当前可执行信号"

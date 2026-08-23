@@ -272,13 +272,14 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result["fresh"]["key"], "actionable")
         self.assertEqual(result["fresh"]["marketSessionState"], "open")
         self.assertEqual(result["fresh"]["quoteFreshness"], "fresh")
-        self.assertEqual(result["staleQuote"]["key"], "review")
+        self.assertEqual(result["staleQuote"]["key"], "paused")
         self.assertEqual(result["staleQuote"]["quoteFreshness"], "stale")
-        self.assertEqual(result["closed"]["key"], "review")
+        self.assertEqual(result["closed"]["key"], "paused")
         self.assertTrue(result["closed"]["nextTradingDayCandidate"])
         self.assertEqual(result["staleReview"]["key"], "review")
         self.assertEqual(result["hardVeto"]["key"], "no")
         self.assertEqual(result["hongKong"]["label"], "仅供研究")
+        self.assertEqual(result["hongKong"]["key"], "research")
 
     def test_dashboard_controls_filter_current_executability(self):
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
@@ -292,6 +293,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
             "wait_event",
             "hold",
             "no",
+            "paused",
             "review",
         ):
             self.assertIn(f'data-action="{key}"', html)
