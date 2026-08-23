@@ -78,6 +78,11 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 避免多个任务同时写同一份看板。VPS 在 `vps-generated` 分支运行：它从 `main` 获取你的代码和研报，
 把自动生成结果只推回 `vps-generated`，不会再把生成文件推回 `main`。
 
+此外，`ai-berkshire-a-share-deploy.timer` 会全天候每 5 分钟检查一次 `origin/main`。
+只有发现新提交时才合并、重建并发布看板；没有新提交时立即退出。因此日常只需推送
+`main`，不需要再手工登录 VPS 执行 reconcile。调度器会先保存已知的 VPS 生成文件；
+如果仍存在不属于生成清单的修改，则安全失败并打印文件清单，不会覆盖未知改动。
+
 ## 新闻来源分级与模型路由
 
 `SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek V4 Flash），只处理 A/B 级新闻；

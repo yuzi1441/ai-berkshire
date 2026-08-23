@@ -130,22 +130,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "回避当前价位，不建仓；将80-100元设为观察区，到达后重新评估",
+    "holder_action": "考虑减仓30%-50%锁定利润，保留底仓跟踪长期成长",
+    "trigger_condition": "股价回落至80-100元后重新评估；自研燃气轮机突破或毛利率连续多季度回升至35%以上时再复核",
+    "summary": "公司质量较好，但159元和57.7倍PE已透支乐观预期；空仓者当前应回避，持仓者宜部分止盈。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约写观察，但正文最终决策对空仓者明确写回避当前价位，并要求持仓者减仓30%-50%。",
+    "source_basis": "人工逐行核对主报告最终决策、加仓信号与看板决策契约",
+    "currency": "CNY",
+    "price_source": "主报告第401至404行",
+    "evidence": [
+      {
+        "line_start": 401,
+        "line_end": 402,
+        "quote": "空仓者回避当前价位；观察价位80-100元。持仓者考虑部分止盈，建议至少减仓30%-50%。",
+        "supports": "分别明确空仓回避和持仓减仓动作。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:47:58+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -153,15 +165,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "自研燃气轮机突破或毛利率连续多季度回升至35%以上时再复核",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "股价回落至80-100元后重新评估",
+        "price_range": "回落至80-100元",
+        "min": 80.0,
+        "ceiling": 100.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

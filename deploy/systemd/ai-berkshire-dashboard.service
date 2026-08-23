@@ -9,6 +9,7 @@ User=root
 WorkingDirectory=/opt/ai-berkshire
 Environment=DASHBOARD_RUNTIME_DIR=/var/lib/ai-berkshire
 EnvironmentFile=-/etc/ai-berkshire/dashboard-review.env
+EnvironmentFile=-/etc/ai-berkshire/sentiment.env
 StateDirectory=ai-berkshire
 ExecStart=/usr/bin/python3 tools/dashboard_server.py --repo-root /opt/ai-berkshire --directory /opt/ai-berkshire/site --bind 0.0.0.0 --port 80
 Restart=always

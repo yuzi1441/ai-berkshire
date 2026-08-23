@@ -342,22 +342,39 @@
   ],
   "report_history_count": 4,
   "primary_judgment": {
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "仅有较强跟踪优势的激进型投资者可在95-110元建立小仓观察；一般空仓者等待80-95元或现金流改善",
+    "holder_action": "可继续持有，但不因国产替代叙事加仓；高于120元且现金流未改善时考虑降低估值风险",
+    "trigger_condition": "80-95元进入重点研究或分批区，同时要求经营现金流连续改善；上调仓位还需服务占比、FCF和ROE改善",
+    "summary": "106.75元处于激进型95-110元小仓观察区，但该许可仅适用于有跟踪优势者；一般空仓者仍应等待。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "一句话结论要求一般空仓者等待80-95元，最终分层表允许有跟踪优势的激进型在95-110元小仓观察。",
+    "source_basis": "人工逐行核对一句话结论、分层操作建议与加仓信号",
+    "currency": "CNY",
+    "entry_ceiling": 110.0,
+    "trial_range": {
+      "min": 95.0,
+      "max": 110.0
+    },
+    "price_source": "主报告第25行、第208至213行",
+    "evidence": [
+      {
+        "line_start": 208,
+        "line_end": 213,
+        "quote": "激进型95-110元仅适合有跟踪优势者小仓观察；稳健型80-95元等待；已持仓者可持有但不宜无脑加仓。",
+        "supports": "当前价格只具备条件化的小仓许可。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:56:13+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -365,15 +382,47 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "80-95元进入重点研究或分批区，同时要求经营现金流连续改善；上调仓位还需服务占比、FCF和ROE改善",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "80-95元进入重点研究或分批区，同时要求经营现金流连续改善",
+        "price_range": "80-95元",
+        "min": 80.0,
+        "ceiling": 95.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "80-95元进入重点研究或分批区，同时要求经营现金流连续改善",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓位观察，不做重仓",
+        "price_range": "95-110 元",
+        "min": 95.0,
+        "ceiling": 110.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "仅有较强跟踪优势的激进型投资者可在95-110元建立小仓观察；一般空仓者等待80-95元或现金流改善",
+      "currency": "CNY",
+      "reference_price": 106.75,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

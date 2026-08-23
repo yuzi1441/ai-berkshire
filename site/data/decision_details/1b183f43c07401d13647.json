@@ -497,22 +497,39 @@
   ],
   "report_history_count": 7,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "145元以上不追高，等待正式中报、H2经营兑现或股价进入报告价格带",
+    "holder_action": "已有仓位可持有验证，按季度检查核心业务毛利率、海外回款、现金转化和应收账龄",
+    "trigger_condition": "125-145元仅适合激进型小仓；110-125元且核心毛利和现金流未恶化时风险收益开始合理",
+    "summary": "公司质量通过筛选，但报告基准价154.27元未通过安全边际筛选；空仓等待价格，持仓有纪律验证。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "看板观察与正文空仓不追高、持仓验证一致。",
+    "source_basis": "人工逐行核对价格行动带、最终建议及空仓和持仓者行动",
+    "currency": "CNY",
+    "entry_ceiling": 145.0,
+    "trial_range": {
+      "min": 125.0,
+      "max": 145.0
+    },
+    "price_source": "主报告第341至347行",
+    "evidence": [
+      {
+        "line_start": 343,
+        "line_end": 346,
+        "quote": "145元以上空仓者以跟踪为主；125-145元仅小仓分批；110-125元需确认核心毛利和现金流。",
+        "supports": "明确当前空仓等待及更低价格的分层动作。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:53:26+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -520,15 +537,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
     "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "guard_condition": "110-125元且核心毛利和现金流未恶化时风险收益开始合理",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "110-125元且核心毛利和现金流未恶化时风险收益开始合理",
+        "price_range": "110-125元",
+        "min": 110.0,
+        "ceiling": 125.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "110-125元且核心毛利和现金流未恶化时风险收益开始合理",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "trial",
+        "action": "仅小仓分批，接受估值压缩",
+        "price_range": "125-145 元",
+        "min": 125.0,
+        "ceiling": 145.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

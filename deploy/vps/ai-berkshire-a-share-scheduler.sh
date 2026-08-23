@@ -9,8 +9,8 @@ SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
 GENERATED_BRANCH="${GENERATED_BRANCH:-vps-generated}"
 export TZ="Asia/Shanghai"
 
-if [[ $# -ne 1 || ! "$1" =~ ^(annual|morning|market|intraday|close|daily|heavy|reconcile)$ ]]; then
-    echo "usage: $0 annual|morning|market|intraday|close|daily|heavy|reconcile" >&2
+if [[ $# -ne 1 || ! "$1" =~ ^(deploy|annual|morning|market|intraday|close|daily|heavy|reconcile)$ ]]; then
+    echo "usage: $0 deploy|annual|morning|market|intraday|close|daily|heavy|reconcile" >&2
     exit 2
 fi
 
@@ -51,6 +51,8 @@ status_finish() {
         --message "${message}" || true
 }
 
+SYNC_CHANGED=0
+
 sync_repo() {
     local current_branch
     current_branch="$(git branch --show-current)"
@@ -58,13 +60,22 @@ sync_repo() {
         echo "scheduler must run on ${GENERATED_BRANCH}; current branch is ${current_branch:-detached}" >&2
         return 1
     fi
-    if git diff --quiet && [[ -z "$(git status --porcelain --untracked-files=all)" ]]; then
-        git fetch origin "${SOURCE_BRANCH}"
-        git merge --no-edit -X ours "origin/${SOURCE_BRANCH}"
-        git push origin "${GENERATED_BRANCH}"
-    else
-        echo "pre-existing repository changes detected; skip pull to protect VPS outputs"
+    if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
+        echo "preserving generated VPS outputs before source sync"
+        commit_generated "chore: preserve generated outputs before source sync ${AS_OF}"
     fi
+    if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
+        echo "unexpected repository changes remain after preserving generated outputs" >&2
+        git status --short >&2
+        return 1
+    fi
+
+    git fetch origin "${SOURCE_BRANCH}"
+    if ! git merge-base --is-ancestor "origin/${SOURCE_BRANCH}" HEAD; then
+        git merge --no-edit -X ours "origin/${SOURCE_BRANCH}"
+        SYNC_CHANGED=1
+    fi
+    git push origin "${GENERATED_BRANCH}"
 }
 
 build_dashboard() {
@@ -116,7 +127,7 @@ PY
 }
 
 stage_generated() {
-    git add -- \
+    local candidates=(
         data/investment-dashboard/annual_report_dates.json \
         data/investment-dashboard/automation_status.json \
         data/investment-dashboard/decision_board.json \
@@ -146,9 +157,23 @@ stage_generated() {
         site/data/reports_catalog.json \
         site/data/sentiment.json \
         site/data/sentiment_status.json \
-        site/data/decision_details \
-        reports/*/*-technical-analysis-${AS_OF//-/}.md \
-        2>/dev/null || true
+        site/data/decision_details
+    )
+    local technical_reports=()
+    local existing=()
+    local path
+    shopt -s nullglob
+    technical_reports=(reports/*/*-technical-analysis-${AS_OF//-/}.md)
+    shopt -u nullglob
+    candidates+=("${technical_reports[@]}")
+    for path in "${candidates[@]}"; do
+        if [[ -e "${path}" ]]; then
+            existing+=("${path}")
+        fi
+    done
+    if (( ${#existing[@]} > 0 )); then
+        git add -- "${existing[@]}"
+    fi
 }
 
 commit_generated() {
@@ -258,6 +283,16 @@ run_reconcile() {
 }
 
 sync_repo
+if [[ "${JOB}" == "deploy" ]]; then
+    if (( SYNC_CHANGED == 0 )); then
+        echo "No new ${SOURCE_BRANCH} commit to deploy."
+        exit 0
+    fi
+    post_buy_check
+    build_dashboard
+    commit_generated "chore: deploy ${SOURCE_BRANCH} to dashboard ${AS_OF}"
+    exit 0
+fi
 status_start "${JOB}"
 started_at="$(date +%s)"
 set +e
