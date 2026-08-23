@@ -59,7 +59,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -119,57 +120,24 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 观望。除非股价回到 200-260 美元，或 Robotaxi/FSD 出现可审计的规模化单位经济模型",
-      "buy_price": "US$200-260",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "299.1 美元",
-          "eps_growth": "45%",
-          "target_pe": "90x",
-          "target_eps": "3.32"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "155.7 美元",
-          "eps_growth": "30%",
-          "target_pe": "65x",
-          "target_eps": "2.39"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "50.8 美元",
-          "eps_growth": "10%",
-          "target_pe": "35x",
-          "target_eps": "1.45"
-        }
-      ],
-      "valuation_section": {
-        "heading": "7. 估值与安全边际",
-        "start_line": 184,
-        "end_line": 224,
-        "markdown": "## 7. 估值与安全边际\n\n### 7.1 当前估值\n\n| 指标 | 数值 | 工具验算 |\n|---|---:|---|\n| 股价 | 379.71 美元 | Nasdaq / StockAnalysis |\n| 市值 | 1.426 万亿美元 | 379.71 × 37.557 亿股，偏差 0.00% |\n| 企业价值 EV | 约 1.390 万亿美元 | 市值 - 现金及短投 + 债务 |\n| PE（TTM） | 348.36x | `financial_rigor.py verify-valuation` |\n| PB | 15.94x | 同上 |\n| P/FCF | 191.51x | 同上 |\n| FCF Yield | 0.52% | 同上 |\n| EV / 2025 Revenue | 约 14.7x | 工具精算 EV / 收入 |\n\n### 7.2 反向估值\n\n若投资者愿意给 3 年后 65x PE，则当前 379.71 美元股价隐含 3 年后 EPS 约 5.84 美元。以当前 TTM EPS 1.09 美元为基数，隐含 EPS 未来三年 CAGR 约 75.0%。这不是普通制造业增长假设，而是自动驾驶/软件/储能利润显著爆发的假设。\n\n### 7.3 三情景 EPS 估值\n\n工具输入：当前价格 379.71 美元，EPS 1.09 美元，3 年期。\n\n| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 45% | 90x | 3.32 | 299.1 美元 | -21.2% |\n| 中性 | 30% | 65x | 2.39 | 155.7 美元 | -59.0% |\n| 悲观 | 10% | 35x | 1.45 | 50.8 美元 | -86.6% |\n\n结论：**传统 EPS 估值区间约 50-300 美元，无法覆盖当前价格**。若加入 Robotaxi / FSD / Optimus 期权，合理价格区间高度依赖主观概率：\n\n| 估值框架 | 合理价格区间 | 前提 |\n|---|---:|---|\n| 仅汽车+储能+服务 | 120-220 美元 | 储能增长，汽车低个位数增长，PE/FCF 回归 |\n| 汽车+储能+有限 FSD 软件 | 220-320 美元 | FSD 订阅改善利润，但无大规模无人 Robotaxi |\n| 平台期权兑现 | 380 美元以上 | Robotaxi 在多个城市无安全员运营，单位经济模型清晰 |\n\n安全边际判断：当前价格没有明显安全边际，更像“技术期权票”。对空仓者，等待更低价格或更强业务验证更合理。我的买入观察区间为 **200-260 美元**；若 Robotaxi 商业化数据真实改善，可重新提高估值锚。\n\n**段永平式追问**：如果股市明天关闭 5 年，你愿意以这个价格持有吗？我只会在我能承受 Robotaxi 失败、且仍接受汽车+储能回报偏低的前提下持有；否则不愿意。"
-      },
-      "price_status": "已提取三情景",
-      "title": "特斯拉（Tesla, TSLA）投资研究报告",
-      "report_path": "reports/Tesla/特斯拉投资研究报告-20260702.md",
-      "report_link": "Tesla/特斯拉投资研究报告-20260702.md"
     }
   ],
-  "report_history_count": 2,
+  "report_history_count": 1,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "Tesla",
     "ticker": "TSLA",
@@ -214,6 +182,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "edcf56f2a295d57c2521",
   "detail_path": "./data/decision_details/edcf56f2a295d57c2521.json"
 }

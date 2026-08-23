@@ -2,11 +2,11 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-REPO_ROOT="${REPO_ROOT:-/opt/ai-berkshire}"
-PYTHON="${REPO_ROOT}/.venv/bin/python"
-LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-repo-update.lock}"
-SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
-GENERATED_BRANCH="${GENERATED_BRANCH:-vps-generated}"
+REPO_ROOT="${REPO_ROOT:-/srv/ai-berkshire/current}"
+PYTHON="${PYTHON:-${REPO_ROOT}/.venv/bin/python}"
+LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-runtime.lock}"
+LOCK_RETRY_EXIT=75
+LOCK_RETRY_COUNTER="/run/ai-berkshire-${1:-unknown}-lock-retries"
 export TZ="Asia/Shanghai"
 
 if [[ $# -ne 1 || ! "$1" =~ ^(deploy|annual|morning|market|intraday|close|daily|heavy|reconcile)$ ]]; then
@@ -16,178 +16,102 @@ fi
 
 JOB="$1"
 AS_OF="$(date +%F)"
-mkdir -p "${REPO_ROOT}/logs/vps"
-exec 9>"${LOCK_PATH}"
-LOCK_WAIT_SECONDS="${LOCK_WAIT_SECONDS:-180}"
-if ! flock -w "${LOCK_WAIT_SECONDS}" 9; then
-    echo "another repository update is still running; ${JOB} will be retried at its next scheduled time"
-    exit 0
+STARTED_AT="$(date +%s)"
+STATUS_STARTED=0
+STATUS_FINISHED=0
+
+if [[ ! -x "${PYTHON}" ]]; then
+    PYTHON=/usr/bin/python3
 fi
 
-cd "${REPO_ROOT}"
-
 status_start() {
-    local job_id="$1"
-    "${PYTHON}" tools/automation_status.py start \
-        --job-id "${job_id}" \
+    STATUS_STARTED=1
+    "${PYTHON}" "${REPO_ROOT}/tools/automation_status.py" start \
+        --job-id "${JOB}" \
         --scheduled-for "$(date --iso-8601=seconds)" \
         --message "A股统一调度器正在执行"
 }
 
 status_finish() {
-    local job_id="$1"
-    local status="$2"
-    local duration="$3"
-    local message="$4"
-    local record_count="${5:-}"
-    local failed_count="${6:-}"
-    "${PYTHON}" tools/automation_status.py finish \
-        --job-id "${job_id}" \
+    local status="$1"
+    local message="$2"
+    local duration=$(( $(date +%s) - STARTED_AT ))
+    "${PYTHON}" "${REPO_ROOT}/tools/automation_status.py" finish \
+        --job-id "${JOB}" \
         --status "${status}" \
         --duration "${duration}" \
         --data-cutoff "${AS_OF}" \
-        ${record_count:+--record-count "${record_count}"} \
-        ${failed_count:+--failed-count "${failed_count}"} \
         --message "${message}" || true
+    STATUS_FINISHED=1
 }
 
-SYNC_CHANGED=0
-
-sync_repo() {
-    local current_branch
-    current_branch="$(git branch --show-current)"
-    if [[ "${current_branch}" != "${GENERATED_BRANCH}" ]]; then
-        echo "scheduler must run on ${GENERATED_BRANCH}; current branch is ${current_branch:-detached}" >&2
-        return 1
+handle_signal() {
+    local signal_name="$1"
+    if (( STATUS_STARTED == 1 && STATUS_FINISHED == 0 )); then
+        status_finish interrupted "任务收到 ${signal_name}；线上保留上一次成功结果"
     fi
-    if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
-        echo "preserving generated VPS outputs before source sync"
-        commit_generated "chore: preserve generated outputs before source sync ${AS_OF}"
-    fi
-    if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
-        echo "unexpected repository changes remain after preserving generated outputs" >&2
-        git status --short >&2
-        return 1
-    fi
-
-    git fetch origin "${SOURCE_BRANCH}"
-    if ! git merge-base --is-ancestor "origin/${SOURCE_BRANCH}" HEAD; then
-        git merge --no-edit -X ours "origin/${SOURCE_BRANCH}"
-        SYNC_CHANGED=1
-    fi
-    git push origin "${GENERATED_BRANCH}"
+    exit 130
 }
+
+handle_exit() {
+    local rc=$?
+    if (( rc != 0 && STATUS_STARTED == 1 && STATUS_FINISHED == 0 )); then
+        status_finish error "任务异常退出（exit ${rc}）；请查看 journal"
+    fi
+}
+
+trap 'handle_signal SIGTERM' TERM
+trap 'handle_signal SIGINT' INT
+trap handle_exit EXIT
+
+mkdir -p /run/lock
+exec 9>"${LOCK_PATH}"
+case "${JOB}" in
+    market|intraday|deploy) LOCK_WAIT_SECONDS="${LOCK_WAIT_SECONDS:-180}" ;;
+    *) LOCK_WAIT_SECONDS="${LOCK_WAIT_SECONDS:-900}" ;;
+esac
+if ! flock -w "${LOCK_WAIT_SECONDS}" 9; then
+    if [[ -f "${REPO_ROOT}/tools/automation_status.py" ]]; then
+        status_start
+        status_finish deferred "等待运行锁 ${LOCK_WAIT_SECONDS} 秒后延后；systemd 将在 5 分钟后重试"
+    fi
+    retry_count=0
+    if [[ -f "${LOCK_RETRY_COUNTER}" ]]; then
+        read -r retry_count < "${LOCK_RETRY_COUNTER}" || retry_count=0
+    fi
+    retry_count=$(( retry_count + 1 ))
+    printf '%s\n' "${retry_count}" > "${LOCK_RETRY_COUNTER}"
+    if (( retry_count < 3 )); then
+        systemd-run \
+            --unit="ai-berkshire-${JOB}-lock-retry-${retry_count}-$(date +%s)" \
+            --on-active=5min \
+            /bin/systemctl start "ai-berkshire-a-share-scheduler@${JOB}.service" >/dev/null
+    fi
+    exit "${LOCK_RETRY_EXIT}"
+fi
+if [[ -f "${LOCK_RETRY_COUNTER}" ]]; then
+    unlink "${LOCK_RETRY_COUNTER}"
+fi
+
+if [[ "${JOB}" == "deploy" ]]; then
+    status_start
+    if /usr/local/sbin/ai-berkshire-publish-release; then
+        status_finish ok "main 已构建、验证并原子切换 release"
+        exit 0
+    fi
+    status_finish error "main 发布失败，current 保持上一 release"
+    exit 1
+fi
+
+cd "${REPO_ROOT}"
+status_start
 
 build_dashboard() {
-    "${PYTHON}" tools/build_investment_dashboard.py
+    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}"
 }
 
 post_buy_check() {
     "${PYTHON}" tools/post_buy_tracking.py check
-}
-
-stock_count() {
-    local path="$1"
-    "${PYTHON}" - "${path}" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except (OSError, json.JSONDecodeError):
-    print("", end="")
-else:
-    for key in ("record_count", "company_count", "quote_count", "generated_count", "scan_count"):
-        if isinstance(payload.get(key), int):
-            print(payload[key])
-            break
-PY
-}
-
-failed_count() {
-    local path="$1"
-    "${PYTHON}" - "${path}" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except (OSError, json.JSONDecodeError):
-    print("", end="")
-else:
-    for key in ("failed_count", "error_count"):
-        if isinstance(payload.get(key), int):
-            print(payload[key])
-            break
-PY
-}
-
-stage_generated() {
-    local candidates=(
-        data/investment-dashboard/annual_report_dates.json \
-        data/investment-dashboard/automation_status.json \
-        data/investment-dashboard/decision_board.json \
-        data/investment-dashboard/decision_board_summary.json \
-        data/investment-dashboard/decision_reviews.json \
-        data/investment-dashboard/decision_details \
-        data/investment-dashboard/intraday_technical.json \
-        data/investment-dashboard/opportunity_scans.json \
-        data/investment-dashboard/post_buy_alerts.json \
-        data/investment-dashboard/post_buy_tracking.json \
-        data/investment-dashboard/quotes/latest.json \
-        data/investment-dashboard/report_history.json \
-        data/investment-dashboard/reports_catalog.json \
-        data/investment-dashboard/report_judgments \
-        data/sentiment \
-        logs/technical-analysis-batch-*.json \
-        reports/00-index/投资决策总表.md \
-        reports/00-index/报告库-MOC.md \
-        site/data/annual_report_dates.json \
-        site/data/automation_status.json \
-        site/data/decision_board.json \
-        site/data/decision_board_summary.json \
-        site/data/decision_reviews.json \
-        site/data/intraday_technical.json \
-        site/data/opportunity_scans.json \
-        site/data/post_buy_alerts.json \
-        site/data/post_buy_tracking.json \
-        site/data/quotes/latest.json \
-        site/data/report_history.json \
-        site/data/reports_catalog.json \
-        site/data/sentiment.json \
-        site/data/sentiment_status.json \
-        site/data/decision_details
-    )
-    local technical_reports=()
-    local existing=()
-    local path
-    shopt -s nullglob
-    technical_reports=(reports/*/*-technical-analysis-${AS_OF//-/}.md)
-    shopt -u nullglob
-    candidates+=("${technical_reports[@]}")
-    for path in "${candidates[@]}"; do
-        if [[ -e "${path}" ]]; then
-            existing+=("${path}")
-        fi
-    done
-    if (( ${#existing[@]} > 0 )); then
-        git add -- "${existing[@]}"
-    fi
-}
-
-commit_generated() {
-    local message="$1"
-    stage_generated
-    if git diff --cached --quiet; then
-        echo "No generated changes to commit."
-        return 0
-    fi
-    git commit -m "${message} [skip ci]"
-    git push origin "${GENERATED_BRANCH}" || echo "generated data is committed locally; push failed" >&2
 }
 
 run_annual() {
@@ -219,7 +143,6 @@ run_close() {
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股 --force
     post_buy_check
     build_dashboard
-    commit_generated "chore: close A-share dashboard ${AS_OF}"
 }
 
 run_daily() {
@@ -233,71 +156,33 @@ run_daily() {
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股 --force
     post_buy_check
     build_dashboard
-    commit_generated "chore: daily A-share dashboard ${AS_OF}"
 }
 
 run_heavy() {
-    local sentiment_rc=0
-    local opportunity_rc=0
-    local started
-    started="$(date +%s)"
-
-    status_start sentiment
-    set +e
+    # Daily model-led opportunity scanning is intentionally disabled. This job
+    # refreshes sentiment only; the opportunity panel uses valid human reviews.
     "${PYTHON}" tools/sentiment_snapshot.py \
+        --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
+        --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
+        --output "/var/lib/ai-berkshire/sentiment-last-success.json" \
+        --working-output "/var/lib/ai-berkshire/sentiment-work-in-progress.json" \
+        --cache-dir "/var/lib/ai-berkshire/sentiment-cache" \
+        --archive-dir "/var/lib/ai-berkshire/sentiment-snapshots" \
+        --site-output "${REPO_ROOT}/site/data/sentiment.json" \
+        --status-output "${REPO_ROOT}/site/data/sentiment_status.json" \
         --lookback-days 7 \
         --fallback-lookback-days 30 \
         --news-limit 8 \
         --workers 3 \
         --markets A股
-    sentiment_rc=$?
-    set -e
-    local sentiment_duration=$(( $(date +%s) - started ))
-    if (( sentiment_rc == 0 )); then
-        status_finish sentiment ok "${sentiment_duration}" "A股情绪更新完成" "$(stock_count data/sentiment/latest.json)" "$(failed_count site/data/sentiment_status.json)"
-    else
-        status_finish sentiment partial "${sentiment_duration}" "情绪更新部分失败，已保留阶段性结果" "$(stock_count data/sentiment/latest.json)" "$(failed_count site/data/sentiment_status.json)"
-    fi
-
-    status_start opportunity
-    started="$(date +%s)"
-    set +e
-    "${PYTHON}" tools/opportunity_review.py scan \
-        --repo-root "${REPO_ROOT}" \
-        --output "${REPO_ROOT}/data/investment-dashboard/opportunity_scans.json"
-    opportunity_rc=$?
-    set -e
-    local opportunity_duration=$(( $(date +%s) - started ))
-    if (( opportunity_rc == 0 )); then
-        status_finish opportunity ok "${opportunity_duration}" "A股机会扫描完成" "$(stock_count data/investment-dashboard/opportunity_scans.json)" "$(failed_count data/investment-dashboard/opportunity_scans.json)"
-    else
-        status_finish opportunity partial "${opportunity_duration}" "机会扫描部分失败，已保留扫描结果" "$(stock_count data/investment-dashboard/opportunity_scans.json)" "$(failed_count data/investment-dashboard/opportunity_scans.json)"
-    fi
-
     build_dashboard
-    commit_generated "chore: A-share sentiment and opportunity refresh ${AS_OF}"
-    (( sentiment_rc == 0 && opportunity_rc == 0 ))
 }
 
 run_reconcile() {
     post_buy_check
     build_dashboard
-    commit_generated "chore: reconcile A-share dashboard ${AS_OF}"
 }
 
-sync_repo
-if [[ "${JOB}" == "deploy" ]]; then
-    if (( SYNC_CHANGED == 0 )); then
-        echo "No new ${SOURCE_BRANCH} commit to deploy."
-        exit 0
-    fi
-    post_buy_check
-    build_dashboard
-    commit_generated "chore: deploy ${SOURCE_BRANCH} to dashboard ${AS_OF}"
-    exit 0
-fi
-status_start "${JOB}"
-started_at="$(date +%s)"
 set +e
 case "${JOB}" in
     annual) run_annual ;;
@@ -309,15 +194,12 @@ case "${JOB}" in
     heavy) run_heavy ;;
     reconcile) run_reconcile ;;
 esac
-job_rc=$?
+JOB_RC=$?
 set -e
-duration=$(( $(date +%s) - started_at ))
 
-job_status="ok"
-if (( job_rc != 0 )); then
-    job_status="partial"
+if (( JOB_RC == 0 )); then
+    status_finish ok "任务完成；运行数据未提交到 Git"
+    exit 0
 fi
-status_finish "${JOB}" "${job_status}" "${duration}" \
-    "$([[ ${job_rc} -eq 0 ]] && echo '任务完成' || echo '任务部分失败，请查看日志')"
-commit_generated "chore: finalize ${JOB} automation status ${AS_OF}"
-exit "${job_rc}"
+status_finish error "任务失败；线上保留上一份成功数据，昂贵模型调用不自动重试"
+exit 1

@@ -64,7 +64,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -124,7 +125,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -200,11 +202,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
@@ -214,8 +219,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "688361.SH",
+      "main_report": {
+        "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+        "sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "d7177e0e2d0758da813fd4e7fb12b6e2d048df0345ac69525234c9b05dba3726",
+    "current_source_fingerprint_sha256": "d7177e0e2d0758da813fd4e7fb12b6e2d048df0345ac69525234c9b05dba3726"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "d7177e0e2d0758da813fd4e7fb12b6e2d048df0345ac69525234c9b05dba3726",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "skyverse-tech",
     "ticker": "688361.SH",
@@ -260,6 +288,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "5f8fa1608e3820b3bad7",
   "detail_path": "./data/decision_details/5f8fa1608e3820b3bad7.json"
 }

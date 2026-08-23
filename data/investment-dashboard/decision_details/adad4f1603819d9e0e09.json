@@ -103,7 +103,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -202,7 +203,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -301,7 +303,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -391,7 +394,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -544,6 +548,7 @@
     "market": "A股",
     "report_path": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
     "report_link": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
+    "report_sha256": "a33194fb798fba7983d7e99750365640389d9f1e69f922487edd7511f7b2f99a",
     "title": "巴菲特 Checklist：迈瑞医疗（300760.SZ）",
     "source_type": "standalone",
     "decision_contract": null,
@@ -589,6 +594,7 @@
       }
     ],
     "hard_veto": false,
+    "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
     "mirror_test": "待复核",
     "action": "待复核",
@@ -611,11 +617,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -625,8 +634,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "300760.SZ",
+      "main_report": {
+        "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+        "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489"
+      },
+      "checklist": {
+        "path": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
+        "sha256": "a33194fb798fba7983d7e99750365640389d9f1e69f922487edd7511f7b2f99a"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
+    "current_source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "迈瑞医疗",
     "ticker": "300760.SZ",
@@ -671,6 +703,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "adad4f1603819d9e0e09",
   "detail_path": "./data/decision_details/adad4f1603819d9e0e09.json"
 }

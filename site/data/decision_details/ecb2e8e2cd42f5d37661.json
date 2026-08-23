@@ -83,7 +83,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -162,71 +163,12 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": "2026-06-24",
-      "action": "分批买入",
-      "investor_stances": [
-        {
-          "stance": "激进型",
-          "action": "Forward PE 17-23x，需要增长兑现",
-          "price_range": "260-360元",
-          "note": "合理估值区：Forward PE 17-23x，需要增长兑现",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        },
-        {
-          "stance": "稳健型",
-          "action": "Forward PE 13-17x，当前所处位置",
-          "price_range": "200-260元",
-          "note": "合理低估区：Forward PE 13-17x，当前所处位置",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        },
-        {
-          "stance": "保守型",
-          "action": "Forward PE<13x，悲观情景已充分定价",
-          "price_range": "<200元",
-          "note": "深度价值区：Forward PE<13x，悲观情景已充分定价",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        }
-      ],
-      "conclusion_summary": "激进型：Forward PE 17-23x，需要增长兑现（260-360元）；稳健型：Forward PE 13-17x，当前所处位置（200-260元）；保守型：Forward PE<13x，悲观情景已充分定价（<200元）",
-      "buy_price": "200-220 元",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "676元",
-          "upside": "+180%"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "429元",
-          "upside": "+78%"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "219元",
-          "upside": "-9%"
-        }
-      ],
-      "valuation_section": {
-        "heading": "第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"",
-        "start_line": 354,
-        "end_line": 466,
-        "markdown": "## 第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 7.1 当前市场定价\n\n| 指标 | 春风动力 | 同行对比 |\n|------|---------|---------|\n| PE（TTM） | 21.94x | Polaris 亏损、BRP 22.1x、隆鑫 14.6x |\n| PE（Forward） | ~15.2x | Polaris 31.1x、BRP 29.7x、隆鑫 ~12.8x |\n| PB | 4.90x | Polaris 5.21x、BRP 8.51x、隆鑫 2.49x |\n| PS | 1.87x | Polaris 0.53x、BRP 0.67x、隆鑫 1.30x |\n| P/FCF | 14.67x | — |\n| 股息率 | 1.74% | 隆鑫 6.16%、Polaris/BRP <1% |\n| PEG | 0.66 | — |\n| 净现金占市值比 | **25.2%** | 极为罕见的高比例 |\n\n**关键发现**：\n1. PE和PB与BRP/Polaris基本持平，但春风的增速远超对手（+31% vs +3-6%）\n2. PS是同行最高（1.87x vs 0.5-0.7x），说明市场对春风的收入增长给予了溢价\n3. Forward PE仅15.2x，如果2026年利润增长达到一致预期（+31-44%），估值并不贵\n4. **净现金93亿占市值25%**，扣除净现金后的\"企业价值\"仅277亿，EV/净利润仅16.5x\n\n### 7.2 反向DCF：当前股价隐含了什么增长预期？\n\n当前股价241元，PE 21.94x，隐含的假设是：\n- 如果给予15x终端PE（制造业合理水平），需要未来3年EPS从10.99元增长至16.07元，即复合增速**13.5%**\n- 这远低于一致预期的27-30%增速\n- **结论**：当前股价隐含的增长预期较为保守，市场已经price in了一定的关税和增速放缓风险\n\n### 7.3 三情景估值（工具精确计算 ✅）\n\n| 情景 | 假设 | 3年后EPS | 给予PE | 目标股价 | 较当前涨跌幅 |\n|------|------|---------|--------|---------|------------|\n| **乐观** | 年增速35%（关税缓解+极核盈利+份额提升） | 27.04元 | 25x | **676元** | **+180%** |\n| **中性** | 年增速25%（一致预期水平） | 21.46元 | 20x | **429元** | **+78%** |\n| **悲观** | 年增速10%（关税恶化+需求放缓） | 14.63元 | 15x | **219元** | **-9%** |\n\n**概率加权目标价**：乐观20% × 676 + 中性50% × 429 + 悲观30% × 219 = **416元**（较当前+73%）\n\n### 7.4 历史估值对比\n\n| 指标 | 近5年中位数 | 当前 | 分位 |\n|------|-----------|------|------|\n| PE | 27.81x | 21.94x | **37%**（中低） |\n| PB | 4.79x | 4.90x | 37%（中低） |\n\n当前估值处于近5年偏低位置，但需注意2021年50x+的估值是泡沫状态，以2023-2025年20-25x的区间作为参考更合理。\n\n### 7.5 同行估值对比\n\n| 公司 | PE(TTM) | Forward PE | PB | PS | 营收增速 | 净现金/负债 |\n|------|---------|-----------|------|------|---------|------------|\n| **春风动力** | 21.9x | 15.2x | 4.9x | 1.87x | +31% | 净现金93亿 |\n| Polaris | 亏损 | 31.1x | 5.2x | 0.53x | +3% | 高负债 D/E 2.92 |\n| BRP | 22.1x | 29.7x | 8.5x | 0.67x | +6% | 高负债 D/E 4.16 |\n| 隆鑫通用 | 14.6x | 12.8x | 2.5x | 1.30x | +47-61% | — |\n\n**对比结论**：春风的Forward PE（15.2x）是同行中最低的，同时增速最快（+31%）、资产负债表最健康（净现金93亿）。如果对标BRP的Forward PE（29.7x），春风的合理股价应为15.7元×29.7 = 466元，较当前+93%。但PS维度（1.87x vs 0.5-0.7x）显示市场已给予收入端溢价。\n\n### 段永平式追问\n\n> **如果股市明天关闭5年，你愿意以这个价格持有吗？**\n\n**愿意，但需要接受两个前提**：(1) 关税不会彻底封死美国市场——墨西哥/泰国路径仍然可行；(2) 极核电动在2年内实现盈利。如果这两个前提成立，5年后春风的收入有望从200亿增长至400-500亿，净利润30-50亿，以15-20x PE计，市值450-1000亿，较当前370亿有明显上升空间。净现金93亿（占市值25%）提供了一定的安全垫。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 汇总评估\n\n| 维度 | 结论 | 信心度 |\n|------|------|--------|\n| **生意质量（段永平）** | 中上——纵向一体化制造+三赛道发力，但硬件制造缺乏复购粘性，毛利率在下行 | ★★★★☆ 较高 |\n| **护城河（巴菲特）** | 中等偏强——规模效应和渠道网络是核心，品牌力在积累中，但尚无定价权 | ★★★☆☆ 中等 |\n| **管理层（段永平+巴菲特）** | 中上——创始人有远见（KTM合作、全球化布局），接班人尚待检验，高位减持是污点 | ★★★☆☆ 中等 |\n| **最大风险（芒格）** | 关税+KTM变局双重打击——2025年关税成本9.8亿元相当于净利润的58% | ★★★★☆ 较高确定性 |\n| **文明趋势（李录）** | 顺势——中国制造出海+消费升级双重红利，但非文明级范式转移 | ★★★★☆ 较高 |\n| **估值（巴菲特+段永平）** | 合理偏低——Forward PE 15x处于历史低位，PEG 0.66，净现金占市值25%提供安全垫 | ★★★★☆ 较高 |\n\n### 最终决策\n\n| 策略 | 建议 |\n|------|------|\n| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |\n| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |\n| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |\n| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |\n\n### 价格区间总结\n\n| 区间 | 股价 | 含义 |\n|------|------|------|\n| 深度价值区 | <200元 | Forward PE<13x，悲观情景已充分定价 |\n| 合理低估区 | 200-260元 | Forward PE 13-17x，当前所处位置 |\n| 合理估值区 | 260-360元 | Forward PE 17-23x，需要增长兑现 |\n| 高估区 | >360元 | Forward PE>23x，透支未来2年增长 |\n\n### 四位大师的模拟点评\n\n> **巴菲特**：\n> \"春风动力让我想起了上世纪80年代的日本制造企业——优秀的成本控制、不断提升的品质、正在建立的全球品牌。净现金93亿占市值25%让我感到安心。但我担忧的是27%的毛利率和缺乏定价权——在关税压力下，这家公司是在用利润换市场份额。我会等到它证明能在关税环境下维持住利润率再出手。\"\n\n> **芒格**：\n> \"反过来想——如果我要做空春风动力，我会赌关税持续升级和毛利率继续下滑。2023年32%的毛利率降到了2025年的27%，如果2026年再降到24%怎么办？这家公司收入增长31%但利润只增长14%，这是一个危险的信号——越卖越多但越赚越少。另外，控股股东在股价最高点减持，这说明什么？要么他们觉得估值到顶了，要么需要钱——两种可能都不是好事。\"\n\n> **段永平**：\n> \"这门生意的本质是制造业出海，核心是'对的事情'——用好产品赢得全球用户。赖国贵从1989年小作坊做起，35年坚持一个方向，这是我欣赏的企业家。接班人赖民杰入职18年再接班，过渡期充分，比很多二代接班靠谱。我担心的是高位减持这件事——做'对的事情'包括对股东负责。如果你觉得公司值得长期持有，为什么在最高点卖？这个动作让我对管理层的长期主义打了个折扣。估值上，以当前的增速和质地，15倍Forward PE是不贵的。\"\n\n> **李录**：\n> \"从文明演进的角度看，春风动力代表的是中国制造业价值链攀升的大趋势。中国已经在家电、手机、新能源汽车上实现了全球化，动力运动装备是下一个品类。但这不是一个10倍股的故事——动力运动市场全球也就500-700亿美元，远小于汽车和手机。春风的价值在于：它是这个品类中唯一有机会从区域品牌成长为全球品牌的中国企业，赛道虽窄，但护城河可以很深。20年后回看，如果它成功了，就是'中国的BRP'。\"\n\n---"
-      },
-      "price_status": "已提取三情景",
-      "title": "春风动力（603129.SH）投资研究报告",
-      "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.conflict-from-root-20260723.md",
-      "report_link": "chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.conflict-from-root-20260723.md"
     }
   ],
-  "report_history_count": 2,
+  "report_history_count": 1,
   "primary_judgment": {
     "label": "可分批买入",
     "action_kind": "buy",
@@ -292,11 +234,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -306,8 +251,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "603129.SH",
+      "main_report": {
+        "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+        "sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "151492dd496cde7dca82922456b4db9014725e16bc55d131df03ff53bd245213",
+    "current_source_fingerprint_sha256": "151492dd496cde7dca82922456b4db9014725e16bc55d131df03ff53bd245213"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "151492dd496cde7dca82922456b4db9014725e16bc55d131df03ff53bd245213",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "chunfeng-dongli",
     "ticker": "603129.SH",
@@ -352,6 +320,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "ecb2e8e2cd42f5d37661",
   "detail_path": "./data/decision_details/ecb2e8e2cd42f5d37661.json"
 }

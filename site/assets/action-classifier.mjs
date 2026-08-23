@@ -171,6 +171,108 @@ function legacyExecutionState(fallbackKind) {
   }[fallbackKind] || executionResult("review", "待人工复核", "主报告尚未形成可执行判断");
 }
 
+function shanghaiDateTimeParts(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (!Number.isFinite(date.getTime())) return null;
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+    weekday: "short",
+  }).formatToParts(date);
+  const byType = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return {
+    dateKey: `${byType.year}-${byType.month}-${byType.day}`,
+    minutes: Number(byType.hour) * 60 + Number(byType.minute),
+    weekday: byType.weekday,
+  };
+}
+
+export function aShareMarketSessionState(now = new Date()) {
+  const parts = shanghaiDateTimeParts(now);
+  if (!parts) return "closed";
+  if (["Sat", "Sun"].includes(parts.weekday)) return "closed";
+  if (parts.minutes >= 570 && parts.minutes <= 690) return "open";
+  if (parts.minutes > 690 && parts.minutes < 780) return "lunch";
+  if (parts.minutes >= 780 && parts.minutes <= 900) return "open";
+  return "closed";
+}
+
+export function quoteFreshnessState(quote, now = new Date()) {
+  const timestamp = quote?.snapshot_generated_at || quote?.generated_at || quote?.checked_at;
+  if (!timestamp) return { state: "missing", age_minutes: null, timestamp: null };
+  const observedAt = new Date(timestamp);
+  const current = now instanceof Date ? now : new Date(now);
+  if (!Number.isFinite(observedAt.getTime()) || !Number.isFinite(current.getTime())) {
+    return { state: "invalid", age_minutes: null, timestamp };
+  }
+  const ageMinutes = (current.getTime() - observedAt.getTime()) / 60_000;
+  const observedParts = shanghaiDateTimeParts(observedAt);
+  const currentParts = shanghaiDateTimeParts(current);
+  const providerMatch = String(quote?.provider_timestamp || "").match(
+    /^(20\d{2})(\d{2})(\d{2})/,
+  );
+  const providerDateKey = providerMatch
+    ? `${providerMatch[1]}-${providerMatch[2]}-${providerMatch[3]}`
+    : null;
+  const sameSnapshotDate = observedParts?.dateKey === currentParts?.dateKey;
+  const sameProviderDate = providerDateKey === currentParts?.dateKey;
+  const sameTradingDate = sameSnapshotDate && sameProviderDate;
+  const fresh = sameTradingDate && ageMinutes >= -2 && ageMinutes <= 10;
+  return {
+    state: fresh ? "fresh" : "stale",
+    age_minutes: Math.round(ageMinutes * 10) / 10,
+    timestamp,
+    same_trading_date: sameTradingDate,
+    provider_date: providerDateKey,
+  };
+}
+
+function manualExecutionResult(manual, policy) {
+  const key = String(manual?.execution_key || "review");
+  const defaults = {
+    actionable: ["当前可分批", "人工复核允许小比例分批执行"],
+    trial: ["仅激进小仓", "人工复核只允许能承受波动者建立观察仓"],
+    validation: ["价格已到，等待验证", "人工复核认为仍有经营或治理条件未通过"],
+    wait_price: ["等待价格/下一期财报", "人工复核认为当前赔率不足"],
+    wait_event: ["等待事件/经营验证", "人工复核认为经营条件尚未通过"],
+    hold: ["持有但不新买", "人工复核只允许已有持仓继续观察"],
+    no: ["回避/不买", "人工复核明确不允许当前新增买入"],
+    review: ["待人工复核", "人工复核记录不完整"],
+  }[key] || ["待人工复核", "人工复核记录无法识别"];
+  return executionResult(
+    key,
+    manual?.label || defaults[0],
+    manual?.detail || defaults[1],
+    { manualReview: manual, policy },
+  );
+}
+
+function conservativeExecutionResult(manualResult, policyResult) {
+  const conservatism = {
+    no: 0,
+    review: 1,
+    hold: 2,
+    wait_event: 3,
+    validation: 4,
+    wait_price: 5,
+    trial: 6,
+    actionable: 7,
+  };
+  const manualScore = conservatism[manualResult.key] ?? 1;
+  const policyScore = conservatism[policyResult.key] ?? 1;
+  if (manualScore <= policyScore) return manualResult;
+  return executionResult(policyResult.key, policyResult.label, policyResult.detail, {
+    ...policyResult,
+    manualReview: manualResult.manualReview,
+  });
+}
+
 function comparableExecutionRules(policy, quote) {
   const currency = String(quote?.currency || "");
   return (Array.isArray(policy?.price_rules) ? policy.price_rules : [])
@@ -214,27 +316,8 @@ function conditionWaitState(policy, price, rules) {
   );
 }
 
-export function currentExecutionState(item, quote, fallbackKind = "unknown") {
+function policyExecutionState(item, quote, fallbackKind = "unknown") {
   const manual = item?.manual_execution_review;
-  if (item?.market === "A股" && manual?.status === "ready" && manual?.source === "human_review") {
-    const key = String(manual.execution_key || "review");
-    const defaults = {
-      actionable: ["当前可分批", "人工复核允许小比例分批执行"],
-      trial: ["仅激进小仓", "人工复核只允许能承受波动者建立观察仓"],
-      validation: ["价格已到，等待验证", "人工复核认为仍有经营或治理条件未通过"],
-      wait_price: ["等待价格/下一期财报", "人工复核认为当前赔率不足"],
-      wait_event: ["等待事件/经营验证", "人工复核认为经营条件尚未通过"],
-      hold: ["持有但不新买", "人工复核只允许已有持仓继续观察"],
-      no: ["回避/不买", "人工复核明确不允许当前新增买入"],
-      review: ["待人工复核", "人工复核记录不完整"],
-    }[key] || ["待人工复核", "人工复核记录无法识别"];
-    return executionResult(
-      key,
-      manual.label || defaults[0],
-      manual.detail || defaults[1],
-      { manualReview: manual, policy: item?.execution_policy },
-    );
-  }
   const policy = item?.execution_policy;
   if (!policy || item?.market !== "A股") return legacyExecutionState(fallbackKind);
   const mode = String(policy.condition_mode || "review");
@@ -336,6 +419,99 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown") {
     executionRuleDetail(price, rule),
     { policy, rule },
   );
+}
+
+export function currentExecutionState(item, quote, fallbackKind = "unknown", context = {}) {
+  if (item?.market !== "A股") {
+    return executionResult(
+      "review",
+      "仅供研究",
+      `${item?.market || "该市场"}保留报告与估值浏览，不计入实时可执行决策`,
+      { marketSessionState: "research_only", quoteFreshness: "not_applicable" },
+    );
+  }
+
+  const policy = item?.execution_policy;
+  const checklist = item?.checklist || {};
+  if (checklist.hard_veto === true || checklist.hard_veto_state === "triggered") {
+    return executionResult(
+      "no",
+      "硬性否决已触发",
+      "Checklist 的真实硬性否决优先于人工复核、行情和价格策略",
+      {
+        policy,
+        marketSessionState: aShareMarketSessionState(context.now),
+        quoteFreshness: quoteFreshnessState(quote, context.now).state,
+      },
+    );
+  }
+
+  const manual = item?.manual_execution_review;
+  if (manual && (manual.status !== "ready" || manual.source !== "human_review")) {
+    return executionResult(
+      "review",
+      "待人工复核",
+      manual.invalidation_reason || manual.detail || "人工复核缺失、过期或来源指纹已变化",
+      {
+        policy,
+        manualReview: manual,
+        validityState: manual.validity_state || manual.status || "invalid",
+        invalidationReason: manual.invalidation_reason || "manual_review_invalid",
+      },
+    );
+  }
+
+  // Compatibility for raw policy-only callers. Production dashboard records
+  // always carry a per-stock manual review object, including missing/stale ones.
+  if (!manual) return policyExecutionState(item, quote, fallbackKind);
+
+  const now = context.now || new Date();
+  const sessionState = aShareMarketSessionState(now);
+  const freshness = quoteFreshnessState(quote, now);
+  if (sessionState !== "open") {
+    const nextCandidate = ["actionable", "trial"].includes(manual.execution_key);
+    return executionResult(
+      "review",
+      nextCandidate ? "下个交易日候选" : "非交易时段",
+      sessionState === "lunch"
+        ? "A股午间休市，当前可执行数量归零；开市后用最新行情重新守门"
+        : "A股当前未开市，当前可执行数量归零；下个交易日重新核对行情",
+      {
+        policy,
+        manualReview: manual,
+        marketSessionState: sessionState,
+        quoteFreshness: freshness.state,
+        nextTradingDayCandidate: nextCandidate,
+      },
+    );
+  }
+  if (freshness.state !== "fresh") {
+    return executionResult(
+      "review",
+      "行情陈旧，暂停执行",
+      freshness.state === "missing"
+        ? "缺少同源行情快照时间，不能形成当前可执行信号"
+        : `行情不是当日 10 分钟内快照（约 ${freshness.age_minutes ?? "未知"} 分钟），暂停执行`,
+      {
+        policy,
+        manualReview: manual,
+        marketSessionState: sessionState,
+        quoteFreshness: freshness.state,
+        quoteFreshnessDetail: freshness,
+      },
+    );
+  }
+
+  const manualResult = manualExecutionResult(manual, policy);
+  const policyResult = policyExecutionState(item, quote, fallbackKind);
+  const result = conservativeExecutionResult(manualResult, policyResult);
+  return executionResult(result.key, result.label, result.detail, {
+    ...result,
+    manualReview: manual,
+    marketSessionState: sessionState,
+    quoteFreshness: freshness.state,
+    quoteFreshnessDetail: freshness,
+  });
 }
 
 export function executionFilterKey(item, quote, fallbackKind = "unknown") {

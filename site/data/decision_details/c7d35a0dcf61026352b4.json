@@ -104,7 +104,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -204,7 +205,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -285,7 +287,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -384,7 +387,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -489,7 +493,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -724,6 +729,7 @@
     "market": "A股",
     "report_path": "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md",
     "report_link": "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md",
+    "report_sha256": "962dcaa07a5735f619977fdcc2ecce5d132177a98ccb2611dabddcb1ce289945",
     "title": "巴菲特买入前 Checklist：沪电股份（002463.SZ）",
     "source_type": "standalone",
     "decision_contract": null,
@@ -763,7 +769,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "待复核",
     "action": "待复核",
     "summary": "❓ 灰色地带 / 未通过立即买入 Checklist（4/6 关质量通过，价格与纪律不过关）",
@@ -785,11 +792,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -799,8 +809,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "002463.SZ",
+      "main_report": {
+        "path": "reports/沪电股份/沪电股份-research-20260726.md",
+        "sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45"
+      },
+      "checklist": {
+        "path": "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md",
+        "sha256": "962dcaa07a5735f619977fdcc2ecce5d132177a98ccb2611dabddcb1ce289945"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f",
+    "current_source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "沪电股份",
     "ticker": "002463.SZ",
@@ -845,6 +878,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "c7d35a0dcf61026352b4",
   "detail_path": "./data/decision_details/c7d35a0dcf61026352b4.json"
 }

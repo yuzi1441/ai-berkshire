@@ -76,7 +76,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取",
   "data_status": "已标注",
@@ -153,154 +154,24 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "主业现金流为正 加分项 游戏业务OCF为正 ✅",
-      "buy_price": "US$22",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "中性",
-          "target_price": "$25"
-        }
-      ],
-      "valuation_section": {
-        "heading": "8.1 三情景估值",
-        "start_line": 220,
-        "end_line": 231,
-        "markdown": "### 8.1 三情景估值\n\n| 情景 | 假设 | 目标价 | 上行/下行 |\n|------|------|--------|----------|\n| **熊市** | 价值陷阱持续，业务继续萎缩，分红再度停止 | $8 | **-49%** |\n| **中性** | 维持当前回购+偶发分红，PB回升至0.5× | **$25** | **+59%** |\n| **牛市** | 张朝阳启动私有化，60–100%溢价 | **$30–32** | **+91%–104%** |\n\n期望值估算（30%熊/55%中/15%牛）：\n$8×0.30 + $25×0.55 + $31×0.15 = $2.40 + $13.75 + $4.65 = **$20.80**\n对当前价$15.72的隐含上行 = **+32%**"
-      },
-      "price_status": "已提取三情景",
-      "title": "搜狐(SOHU) 财务深度分析报告：净现金折价的烟蒂股标的（巴菲特视角）",
-      "report_path": "reports/搜狐/02-财务估值分析-巴菲特视角.md",
-      "report_link": "搜狐/02-财务估值分析-巴菲特视角.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注。投资有风险，决策需谨慎。",
-      "buy_price": "US$14.4",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "五、分部加总估值（Sum-of-the-Parts）",
-        "start_line": 163,
-        "end_line": 178,
-        "markdown": "## 五、分部加总估值（Sum-of-the-Parts）\n\n| 资产 | 保守估值 | 合理估值 | 乐观估值 |\n|------|---------|---------|---------|\n| 净现金（调整后） | $8.4 亿 | $9.5 亿 | $11.5 亿 |\n| 畅游游戏 | $5 亿 | $10 亿 | $15 亿 |\n| 媒体/视频 | $0 | $0 | $1 亿 |\n| 不动产+品牌 | $1 亿 | $2 亿 | $4 亿 |\n| **合计** | **$14.4 亿** | **$21.5 亿** | **$31.5 亿** |\n| 当前市值 | $3.6 亿 | $3.6 亿 | $3.6 亿 |\n| **折价率** | **75%** | **83%** | **89%** |\n\n**即使按最保守的估值（$14.4 亿），搜狐的市值仍然只有合理价值的 25%。**\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "资产价值——净现金与隐含资产分析",
-      "report_path": "reports/搜狐/《看懂搜狐》/03-资产价值-净现金与隐含资产分析.md",
-      "report_link": "搜狐/《看懂搜狐》/03-资产价值-净现金与隐含资产分析.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注。投资有风险，决策需谨慎。",
-      "buy_price": "约US$8-12",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "方法 畅游估值 逻辑",
-        "start_line": 182,
-        "end_line": 206,
-        "markdown": "| 方法 | 畅游估值 | 逻辑 |\n|------|---------|------|\n| 运营利润 × 倍数 | $2.37 亿 × 5-8 倍 = **$11.9-19 亿** | 游戏公司通常给 5-10 倍运营利润 |\n| 收入 × 倍数 | $5.06 亿 × 1.5-3 倍 = **$7.6-15.2 亿** | 中小型游戏公司 P/S 参考 |\n| 参考畅游私有化估值 | 2020 年总对价约 **$5.79 亿** | 来源：畅游私有化公告 |\n\n**取保守中位数：畅游合理估值约 $8-12 亿。**（详细分析见第 03 篇）\n\n然后：\n\n| 项目 | 估值 |\n|------|------|\n| 畅游游戏 | $8-12 亿 |\n| 净现金 | $11.5 亿 |\n| 媒体/视频业务 | 约 $0（持续亏损） |\n| **搜狐合理总价值** | **$19.5-23.5 亿** |\n| 当前市值 | **$3.6 亿** |\n| **折价幅度** | **约 82-85%** |\n\n**搜狐的市值仅相当于合理价值的约 15-18%。** 这个折价的极端程度，在正常的资本市场里几乎不可能出现。\n\n**但它确实出现了——说明市场在对某些东西进行极端定价。** 那些\"某些东西\"是什么？下一篇讨论隐含资产价值时会展开，第四篇讨论风险时会给出完整答案。\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "业务拆解——搜狗出售后的业务版图",
-      "report_path": "reports/搜狐/《看懂搜狐》/02-业务拆解-搜狗出售后的业务版图.md",
-      "report_link": "搜狐/《看懂搜狐》/02-业务拆解-搜狗出售后的业务版图.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注。投资有风险，决策需谨慎。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "- 净现金 $11.5 亿，是市值 $3.6 亿的 3.2 倍；分部加总合理估值 $14-22 亿，折价 75-83%",
-        "start_line": 14,
-        "end_line": 18,
-        "markdown": "- **净现金 $11.5 亿，是市值 $3.6 亿的 3.2 倍；分部加总合理估值 $14-22 亿，折价 75-83%**\n- **2025 年完成 $1.5 亿回购，管理层开始向股东返还**\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "风险与判断——管理层、业务前景、投资价值",
-      "report_path": "reports/搜狐/《看懂搜狐》/04-风险与判断-管理层-业务前景-投资价值.md",
-      "report_link": "搜狐/《看懂搜狐》/04-风险与判断-管理层-业务前景-投资价值.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注。投资有风险，决策需谨慎。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "2000 年纳斯达克上市的搜狐，和 26 年后这家公司的实际状态之间，存在一道几乎无法用正常逻辑解释的裂缝。账上趴着 12 亿美元现金，市值只有 3.6 亿。你花 1 块钱买入，对应账面 3.2 块钱的净现金——业务部分的市场估值是负数。",
-        "start_line": 10,
-        "end_line": 32,
-        "markdown": "2000 年纳斯达克上市的搜狐，和 26 年后这家公司的实际状态之间，存在一道几乎无法用正常逻辑解释的裂缝。账上趴着 12 亿美元现金，市值只有 3.6 亿。你花 1 块钱买入，对应账面 3.2 块钱的净现金——业务部分的市场估值是负数。\n\n这不是笔误。以下是截至 2026 年 5 月的真实数据：\n\n| 指标 | 最新数据 | 备注 |\n|------|----------|------|\n| 当前股价（2026 年 5 月） | **约 $14** | 来源：Yahoo Finance |\n| 当前市值 | **约 $3.6 亿** | 约 26M ADS 流通 |\n| 账上现金+短期投资+长期定存 | **约 $12 亿** | 来源：2025 年报 |\n| 净现金（扣除全部负债） | **约 $11.6 亿** | 有息负债仅 $0.36 亿 |\n| 净现金 / 市值 | **约 3.2 倍** | 账上现金是市值的 3 倍多 |\n| 企业价值（EV） | **约 -$8 亿** | 负数——市场\"倒贴\"你接走业务 |\n| 2025 全年营收 | **$5.84 亿**（-2.4%） | 5 年累计萎缩约 30% |\n| 2025 Non-GAAP 净亏损 | **-$0.51 亿** | 剔除一次性税项转回后的真实亏损 |\n| P/B | **0.32 倍** | 3 折破净 |\n\n**市场不仅给业务估值为零，还倒贴你 8 亿美元来\"接走\"它。这在全球资本市场都是极端案例。**\n\n但如果你以为这是\"捡钱\"——你大概率没看懂。\n如果你以为这是\"价值陷阱\"——你也不一定看懂了。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "一家被遗忘的互联网公司",
-      "report_path": "reports/搜狐/《看懂搜狐》/01-开篇-一家被遗忘的互联网公司.md",
-      "report_link": "搜狐/《看懂搜狐》/01-开篇-一家被遗忘的互联网公司.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本报告基于公开信息，不构成投资建议。私有化进程、张朝阳个人决策、中美关系等关键变量存在重大不确定性。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "估值安全边际 必须有 有（净现金>市值）✓",
-        "start_line": 232,
-        "end_line": 246,
-        "markdown": "| 估值安全边际 | 必须有 | 有（净现金>市值）✓ |\n| 治理质量 | 必须高 | 中等 ➖ |\n\n**结论**：**李录100%不会买搜狐**。搜狐是典型的\"价值陷阱\"——便宜，但没有催化剂、没有复利、没有伟大企业的特质。\n\n### 7.3 李录的\"价值陷阱\"识别框架\n\n李录公开演讲中多次强调：\"**便宜不是买入理由，伟大才是**\"。搜狐符合所有\"价值陷阱\"特征：\n- 估值低但盈利持续下滑\n- 管理层无破局能力\n- 行业已过beta周期\n- 现金多但不会用\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "搜狐(SOHU) 风险与管理层深度分析报告（李录视角）",
-      "report_path": "reports/搜狐/04-风险管理层评估-李录视角.md",
-      "report_link": "搜狐/04-风险管理层评估-李录视角.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "二、核心生意定义：身份分裂的\"挂名门户\"",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "> 关键判断：张朝阳个人IP估值≠搜狐企业估值。如果对IP估5亿美元，那也是张朝阳个人的5亿，不归SOHU股东所有。",
-        "start_line": 70,
-        "end_line": 73,
-        "markdown": "> **关键判断**：张朝阳个人IP估值≠搜狐企业估值。如果对IP估5亿美元，那也是**张朝阳个人**的5亿，不归SOHU股东所有。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "搜狐(NASDAQ: SOHU) 商业模式深度分析（段永平视角）",
-      "report_path": "reports/搜狐/01-商业模式分析-段永平视角.md",
-      "report_link": "搜狐/01-商业模式分析-段永平视角.md"
     }
   ],
-  "report_history_count": 8,
+  "report_history_count": 1,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "搜狐",
     "ticker": "SOHU",
@@ -345,6 +216,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "a9a81ca84f1bacf28272",
   "detail_path": "./data/decision_details/a9a81ca84f1bacf28272.json"
 }

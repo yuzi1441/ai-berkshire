@@ -109,7 +109,8 @@
     ],
     "invalidation_triggers": "连续四季毛利率低于15%或主要新项目稳产后ROIC低于8%",
     "next_review_date": "2026-08-21",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -214,7 +215,8 @@
         ],
         "invalidation_triggers": "连续四季毛利率低于15%或主要新项目稳产后ROIC低于8%",
         "next_review_date": "2026-08-21",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -319,6 +321,7 @@
     "market": "A股",
     "report_path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260812.md",
     "report_link": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260812.md",
+    "report_sha256": "9bb65402e7c7fcda1aeb5ea8eb46757993b9352d941e4c723ef652526d4cc1ad",
     "title": "华鲁恒升（600426.SH）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": {
@@ -350,7 +353,8 @@
       ],
       "invalidation_triggers": "连续四季毛利率低于15%或主要新项目稳产后ROIC低于8%",
       "next_review_date": "2026-08-21",
-      "confidence": "高"
+      "confidence": "高",
+      "hard_veto_state": "unknown"
     },
     "status": "灰色地带",
     "passed_count": 3,
@@ -394,6 +398,7 @@
       }
     ],
     "hard_veto": false,
+    "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
     "mirror_test": "未通过",
     "action": "观察",
@@ -416,22 +421,48 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
-    "status": "ready",
+    "schema_version": 2,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "人工复核已于 2026-08-21 到期",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-08-21",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "B",
-    "execution_key": "trial",
+    "execution_key": "review",
     "label": "人工复核：仅激进观察仓",
     "detail": "经营改善得到中报支持，但周期与价格安全边际仍有限，只适合能承受波动者的小仓观察。",
-    "opportunity_tier": "near",
-    "opportunity_summary": "基本面改善已出现，但安全边际尚不足；只列临近机会，不列正式可执行机会。",
+    "opportunity_tier": null,
+    "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600426.SH",
+      "main_report": {
+        "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+        "sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31"
+      },
+      "checklist": {
+        "path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260812.md",
+        "sha256": "9bb65402e7c7fcda1aeb5ea8eb46757993b9352d941e4c723ef652526d4cc1ad"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5",
+    "current_source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5"
   },
+  "validity_state": "stale",
+  "invalidation_reason": "人工复核已于 2026-08-21 到期",
+  "valid_until": "2026-08-21",
+  "source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "山东华鲁恒升化工股份有限公司",
     "ticker": "600426.SH",
@@ -476,6 +507,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "e9d0c05a603101abb89b",
   "detail_path": "./data/decision_details/e9d0c05a603101abb89b.json"
 }

@@ -91,7 +91,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -178,7 +179,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -265,7 +267,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -348,7 +351,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -516,7 +520,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -684,6 +689,7 @@
     "market": "A股",
     "report_path": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
     "report_link": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
+    "report_sha256": "ed71bf47a73f0db2127aeca6ce27f118056d5bdacae18741832178fa7c94d2fd",
     "title": "巴菲特买入前 Checklist：华明装备（002270.SZ）",
     "source_type": "standalone",
     "decision_contract": null,
@@ -729,7 +735,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "未通过",
     "action": "待复核",
     "summary": "总判定：4/6 关通过，未通过现在买入。 不是公司差，是价格没有给足保护。",
@@ -751,11 +758,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -765,8 +775,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "002270.SZ",
+      "main_report": {
+        "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+        "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd"
+      },
+      "checklist": {
+        "path": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
+        "sha256": "ed71bf47a73f0db2127aeca6ce27f118056d5bdacae18741832178fa7c94d2fd"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
+    "current_source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "华明装备",
     "ticker": "002270.SZ",
@@ -811,6 +844,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "137ae527471b5c46baa0",
   "detail_path": "./data/decision_details/137ae527471b5c46baa0.json"
 }

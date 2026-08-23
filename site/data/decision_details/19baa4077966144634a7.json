@@ -90,7 +90,8 @@
     ],
     "invalidation_triggers": "海外收入连续两个半年度增速低于5%或国际毛利率低于28%，且经营现金流持续弱于净利润",
     "next_review_date": "2026-09-15",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -176,7 +177,8 @@
         ],
         "invalidation_triggers": "海外收入连续两个半年度增速低于5%或国际毛利率低于28%，且经营现金流持续弱于净利润",
         "next_review_date": "2026-09-15",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -281,11 +283,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -295,8 +300,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600031.SH",
+      "main_report": {
+        "path": "reports/三一重工/三一重工研究报告-20260808.md",
+        "sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "9af6017b96af9c1dfba41b70528e0d8eae94834dca9b745883aa32802271e92c",
+    "current_source_fingerprint_sha256": "9af6017b96af9c1dfba41b70528e0d8eae94834dca9b745883aa32802271e92c"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "9af6017b96af9c1dfba41b70528e0d8eae94834dca9b745883aa32802271e92c",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "三一重工",
     "ticker": "600031.SH",
@@ -341,6 +369,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "19baa4077966144634a7",
   "detail_path": "./data/decision_details/19baa4077966144634a7.json"
 }

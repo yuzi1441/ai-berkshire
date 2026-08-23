@@ -115,7 +115,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -226,7 +227,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -247,66 +249,9 @@
       "title": "平高电气（600312.SH）管理层纵深研究：买股票就是买人",
       "report_path": "reports/平高电气/平高电气-management-20260707.md",
       "report_link": "平高电气/平高电气-management-20260707.md"
-    },
-    {
-      "data_cutoff": "2026-07-07",
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "> 本文仅作学习研究，不构成投资建议。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "五、估值：不贵到离谱，也不便宜到不用思考",
-        "start_line": 58,
-        "end_line": 65,
-        "markdown": "## 五、估值：不贵到离谱，也不便宜到不用思考\n\n截至 2026-07-06 收盘，新浪和腾讯行情均显示平高电气收盘价约 **17.64 元**。腾讯行情显示总市值约 **239.36 亿元**，PE 约 **21.37 倍**。\n\n我用工具按总股本验算，市值约 **239.34 亿元**，与行情显示基本一致；按 2025 年 EPS **0.8253 元**算，PE 约 **21.37 倍**；PB 约 **2.13 倍**。\n\n这个估值不是离谱泡沫，但也不是闭眼便宜。它隐含了市场对特高压景气、利润率改善的期待。后面如果现金流修复，估值有支撑；如果现金流继续拖后腿，市场会重新打折。"
-      },
-      "price_status": "价格未给出",
-      "title": "平高电气 2026Q1 财报精读：利润表变强了，现金流还没跟上",
-      "report_path": "reports/平高电气/平高电气-earnings-2026Q1.md",
-      "report_link": "平高电气/平高电气-earnings-2026Q1.md"
-    },
-    {
-      "data_cutoff": "2026-07-07",
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "> 研究用途：学习与研究，不构成投资建议。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "估值与行情交叉核验",
-        "start_line": 40,
-        "end_line": 49,
-        "markdown": "## 估值与行情交叉核验\n\n截至 2026-07-06 收盘：新浪行情显示收盘价 **17.64 元**；腾讯行情同样显示现价/收盘 **17.64 元**，总市值约 **239.36 亿元**，PE 约 **21.37 倍**。\n\n用工具验算：\n\n- 市值 = 17.64 × 1,356,921,309 股 = **239.34 亿元**，与腾讯显示 **239.36 亿元**偏差约 **0.01%**；\n- PE = 17.64 / 0.8253 = **21.37 倍**；\n- PB = 17.64 / 8.2889 = **2.13 倍**。"
-      },
-      "price_status": "价格未给出",
-      "title": "平高电气-earnings-2026Q1-研究底稿",
-      "report_path": "reports/平高电气/平高电气-earnings-2026Q1-研究底稿.md",
-      "report_link": "平高电气/平高电气-earnings-2026Q1-研究底稿.md"
-    },
-    {
-      "data_cutoff": "2026-07-07",
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "> 研究用途：学习与研究，不构成投资建议。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "风险 5：估值与预期",
-        "start_line": 45,
-        "end_line": 53,
-        "markdown": "## 风险 5：估值与预期\n\n截至 2026-07-06 收盘，新浪与腾讯行情均显示平高电气收盘价约 **17.64 元**；腾讯行情显示总市值约 **239.36 亿元**，PE 约 **21.37 倍**。按 2025 年 EPS **0.8253 元**和每股净资产 **8.2889 元**验算，PE 约 **21.37 倍**、PB 约 **2.13 倍**。\n\n这个估值不算离谱，但也不是明显“坏消息充分定价”。如果市场按特高压景气给估值，而现金流没有修复，估值会受压。\n\n风险等级：中。  \n跟踪指标：2026H1 利润增速、现金流修复、国网特高压招标节奏、毛利率是否维持。"
-      },
-      "price_status": "价格未给出",
-      "title": "平高电气-earnings-2026Q1-李录：风险信号分析",
-      "report_path": "reports/平高电气/平高电气-earnings-2026Q1-李录.md",
-      "report_link": "平高电气/平高电气-earnings-2026Q1-李录.md"
     }
   ],
-  "report_history_count": 5,
+  "report_history_count": 2,
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
@@ -407,6 +352,7 @@
     "market": "A股",
     "report_path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
     "report_link": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+    "report_sha256": "0d01f80ef517ab59297521bf7efa0d3fb2ed348c267bd560e3a3c8fe9a5737ce",
     "title": "平高电气（600312.SH）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": null,
@@ -446,7 +392,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "未通过",
     "action": "待复核",
     "summary": "❓ 灰色地带——未通过买入 Checklist，可以继续深度跟踪",
@@ -477,11 +424,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -491,8 +441,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600312.SH",
+      "main_report": {
+        "path": "reports/平高电气/平高电气研究报告-20260707.md",
+        "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7"
+      },
+      "checklist": {
+        "path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+        "sha256": "0d01f80ef517ab59297521bf7efa0d3fb2ed348c267bd560e3a3c8fe9a5737ce"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
+    "current_source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "平高电气",
     "ticker": "600312.SH",
@@ -537,6 +510,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "f95a45f9adc96e17cb04",
   "detail_path": "./data/decision_details/f95a45f9adc96e17cb04.json"
 }

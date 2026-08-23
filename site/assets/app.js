@@ -5,13 +5,10 @@ import {
   fallbackActionKind,
   parseReportPriceBand,
   primaryJudgmentForItem,
-} from "./action-classifier.mjs?v=20260823-human-review";
+} from "./action-classifier.mjs";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
-const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
 const TRACKING_HIDDEN_STORAGE_KEY = "ai-berkshire.hidden-post-buy-tracking.v1";
-const DEEP_REVIEW_TOKEN_STORAGE_KEY = "ai-berkshire.deep-review-token.v1";
-const LIVE_INTERVAL_MS = 300_000;
 const SNAPSHOT_INTERVAL_MS = 300_000;
 const ROW_PAGE_SIZE = 50;
 const A_SHARE_INDEX_WATCH = [
@@ -30,13 +27,8 @@ const state = {
   detailRequests: new Map(),
   detailErrors: new Map(),
   intradayTechnical: new Map(),
-  opportunityScans: new Map(),
-  opportunityScansGeneratedAt: null,
-  opportunityScanStatus: null,
-  opportunityScanModels: [],
   deepReviews: new Map(),
   deepReviewLoadingTicker: null,
-  deepReviewTokenRequestedFor: null,
   sentimentSnapshot: null,
   sentiments: new Map(),
   sentimentStatus: null,
@@ -46,6 +38,7 @@ const state = {
   annualReportDates: null,
   automationStatus: null,
   selectedKey: null,
+  generationId: null,
   view: "decision",
   market: "all",
   action: "all",
@@ -53,13 +46,17 @@ const state = {
   hiddenTrackingKeys: new Set(),
   sort: "execution",
   detailTab: "technical",
-  quoteMode: "idle", // live | snapshot | idle | error
+  quoteMode: "idle", // snapshot | idle | error
   quoteUpdatedAt: null,
   liveTimer: null,
   snapshotTimer: null,
   focusIndex: -1,
   page: 1,
 };
+
+function isAdminOrigin() {
+  return window.location.protocol === "https:" && window.location.port === "8443";
+}
 
 const els = {
   rows: document.querySelector("#decision-rows"),
@@ -615,37 +612,10 @@ function appendReviewList(card, title, values, className = "") {
   card.append(section);
 }
 
-function storedDeepReviewToken() {
-  try {
-    return sessionStorage.getItem(DEEP_REVIEW_TOKEN_STORAGE_KEY) || "";
-  } catch {
-    return "";
-  }
-}
-
-function rememberDeepReviewToken(token) {
-  try {
-    if (token) sessionStorage.setItem(DEEP_REVIEW_TOKEN_STORAGE_KEY, token);
-  } catch {
-    // The request can still continue during this page session if storage is blocked.
-  }
-}
-
-function clearDeepReviewToken() {
-  try {
-    sessionStorage.removeItem(DEEP_REVIEW_TOKEN_STORAGE_KEY);
-  } catch {
-    // Nothing else is required when storage is unavailable.
-  }
-}
-
 async function deepReviewRequest(url, options = {}) {
-  const token = storedDeepReviewToken();
-  if (!token) throw new Error("请先输入深度复核访问令牌");
   const response = await fetch(url, {
     ...options,
     headers: {
-      Authorization: `Bearer ${token}`,
       ...(options.headers || {}),
     },
   });
@@ -655,13 +625,12 @@ async function deepReviewRequest(url, options = {}) {
   } catch {
     payload = { error: "服务器返回了无效响应" };
   }
-  if (response.status === 401) clearDeepReviewToken();
   if (!response.ok) throw new Error(payload.error || `深度复核请求失败（${response.status}）`);
   return payload;
 }
 
 async function loadDeepReviews() {
-  if (!storedDeepReviewToken()) return;
+  if (!isAdminOrigin()) return;
   try {
     const payload = await deepReviewRequest("/api/deep-reviews");
     state.deepReviews = new Map(
@@ -675,18 +644,11 @@ async function loadDeepReviews() {
 }
 
 async function startDeepReview(item, button) {
-  if (!item?.ticker || item.market !== "A股") return;
-  if (!storedDeepReviewToken()) {
-    state.deepReviewTokenRequestedFor = item.ticker;
-    state.detailTab = "deep-review";
-    openDetail(item);
-    return;
-  }
+  if (!item?.ticker || item.market !== "A股" || !isAdminOrigin()) return;
   if (state.deepReviewLoadingTicker) {
     showToast("已有深度复核正在进行，请等待完成");
     return;
   }
-  state.deepReviewTokenRequestedFor = null;
   state.deepReviewLoadingTicker = item.ticker;
   const previousText = button?.textContent;
   if (button) {
@@ -797,35 +759,6 @@ function renderDeepReviewDetail(item) {
     const empty = document.createElement("p");
     empty.className = "technical-empty";
     empty.textContent = "尚未进行深度复核。点击后会调用 V4 Pro 和 GPT‑5.6 Luna 的最高推理档；结果只保存在服务器运行目录，不写入公开静态站。";
-    if (state.deepReviewTokenRequestedFor === item.ticker && !storedDeepReviewToken()) {
-      const form = document.createElement("form");
-      form.className = "deep-review-token-form";
-      const label = document.createElement("label");
-      label.textContent = "深度复核访问令牌";
-      const input = document.createElement("input");
-      input.type = "password";
-      input.name = "deep-review-token";
-      input.autocomplete = "off";
-      input.required = true;
-      input.placeholder = "仅本次浏览器会话保存";
-      const submit = document.createElement("button");
-      submit.type = "submit";
-      submit.className = "btn primary";
-      submit.textContent = "保存并启动 V4 Pro + Luna 复核";
-      form.append(label, input, submit);
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const token = input.value.trim();
-        if (!token) return;
-        rememberDeepReviewToken(token);
-        state.deepReviewTokenRequestedFor = null;
-        startDeepReview(item, submit);
-      });
-      card.append(empty, form);
-      els.detailBody.append(card);
-      input.focus();
-      return;
-    }
     const start = document.createElement("button");
     start.type = "button";
     start.className = "btn primary deep-review-start";
@@ -971,6 +904,22 @@ function selectedItem() {
   return detail ? { ...item, ...detail } : item;
 }
 
+async function fetchDecisionBoard() {
+  let response = await fetch(`./data/decision_board_summary.json?t=${Date.now()}`, { cache: "no-cache" });
+  if (!response.ok) response = await fetch(`./data/decision_board.json?t=${Date.now()}`, { cache: "no-cache" });
+  if (!response.ok) throw new Error("无法加载 decision_board_summary.json 或 decision_board.json");
+  return response.json();
+}
+
+async function reloadBoardGeneration() {
+  const board = await fetchDecisionBoard();
+  state.decisions = board.decisions || [];
+  state.generationId = board.generation_id || null;
+  state.details.clear();
+  state.detailErrors.clear();
+  return board;
+}
+
 async function loadDecisionDetail(item) {
   if (!item?.detail_path) return item;
   const key = itemKey(item);
@@ -979,7 +928,24 @@ async function loadDecisionDetail(item) {
   const request = fetch(item.detail_path, { cache: "no-cache" })
     .then(async (response) => {
       if (!response.ok) throw new Error(`详细研报加载失败（${response.status}）`);
-      const detail = await response.json();
+      let detail = await response.json();
+      if (
+        state.generationId
+        && detail?.generation_id
+        && detail.generation_id !== state.generationId
+      ) {
+        await reloadBoardGeneration();
+        const latestItem = state.decisions.find(
+          (candidate) => candidate.market === item.market && candidate.ticker === item.ticker,
+        );
+        if (!latestItem?.detail_path) throw new Error("摘要与个股明细代次不一致，请稍后重试");
+        const retry = await fetch(`${latestItem.detail_path}?t=${Date.now()}`, { cache: "no-cache" });
+        if (!retry.ok) throw new Error(`详细研报重新加载失败（${retry.status}）`);
+        detail = await retry.json();
+        if (detail?.generation_id !== state.generationId) {
+          throw new Error("摘要与个股明细仍处于不同发布代次，请稍后重试");
+        }
+      }
       state.details.set(key, detail);
       state.detailErrors.delete(key);
       return detail;
@@ -1013,21 +979,6 @@ function showToast(message) {
     els.toast.hidden = true;
   }, 2200);
 }
-
-function tencentSymbol(ticker, market) {
-  if (!ticker) return null;
-  const raw = String(ticker).trim().toUpperCase();
-  if (raw.endsWith(".HK") || market === "港股") {
-    const code = raw.replace(/\.HK$/, "");
-    return /^\d+$/.test(code) ? `hk${code.padStart(5, "0")}` : null;
-  }
-  if (raw.endsWith(".SH")) return `sh${raw.slice(0, -3)}`;
-  if (raw.endsWith(".SZ")) return `sz${raw.slice(0, -3)}`;
-  if (raw.endsWith(".BJ")) return `bj${raw.slice(0, -3)}`;
-  if (/^\d{6}$/.test(raw)) return raw.startsWith("6") || raw.startsWith("9") ? `sh${raw}` : `sz${raw}`;
-  return null;
-}
-
 
 function isHolderOnlyPriceRow(row) {
   const profile = String(row?.profile || "");
@@ -1595,6 +1546,8 @@ function automationStatusLabel(status) {
   return {
     ok: "正常",
     partial: "部分成功",
+    deferred: "延后重试",
+    interrupted: "已中断",
     running: "运行中",
     error: "失败",
     skipped: "跳过",
@@ -1652,119 +1605,6 @@ function renderAutomationStatus() {
   els.automationStatusContent.append(table);
 }
 
-function isLikelyMarketOpen() {
-  try {
-    const parts = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Shanghai",
-      weekday: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).formatToParts(new Date());
-    const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
-    const weekday = map.weekday;
-    if (["Sat", "Sun"].includes(weekday)) return false;
-    const minutes = Number(map.hour) * 60 + Number(map.minute);
-    // A: 9:30-11:30, 13:00-15:00; H: 9:30-12:00, 13:00-16:00 -> union 9:30-16:00 with lunch gap ignored for simplicity of polling
-    return (minutes >= 9 * 60 + 15 && minutes <= 11 * 60 + 45) || (minutes >= 12 * 60 + 50 && minutes <= 16 * 60 + 10);
-  } catch {
-    return false;
-  }
-}
-
-function loadScript(url) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = url;
-    script.async = true;
-    script.onload = () => {
-      script.remove();
-      resolve();
-    };
-    script.onerror = () => {
-      script.remove();
-      reject(new Error(`quote script failed: ${url}`));
-    };
-    document.head.append(script);
-  });
-}
-
-function parseTencentFieldString(raw, meta) {
-  if (!raw) return null;
-  const fields = String(raw).split("~");
-  if (fields.length < 5) return null;
-  const price = Number(fields[3]);
-  const previous = Number(fields[4]);
-  if (!Number.isFinite(price) || price <= 0) return null;
-  let changePct = null;
-  if (Number.isFinite(previous) && previous > 0) {
-    changePct = ((price - previous) / previous) * 100;
-  }
-  // Prefer provider percent field when present.
-  const maybePct = Number(fields[32]);
-  if (Number.isFinite(maybePct) && Math.abs(maybePct) < 50) changePct = maybePct;
-  return {
-    ticker: meta.ticker,
-    market: meta.market,
-    symbol: meta.symbol,
-    name: fields[1] || meta.company,
-    kind: meta.kind || "stock",
-    index_id: meta.index_id || null,
-    price,
-    previous_close: previous,
-    change_pct: changePct,
-    currency: meta.market === "港股" ? "HKD" : "CNY",
-    provider_timestamp: fields[30] || null,
-    source: "Tencent live",
-  };
-}
-
-async function fetchLiveQuotes() {
-  const watch = [];
-  for (const item of state.decisions) {
-    if (!item.ticker || !["A股", "港股"].includes(item.market)) continue;
-    const symbol = tencentSymbol(item.ticker, item.market);
-    if (!symbol) continue;
-    watch.push({
-      symbol,
-      ticker: item.ticker,
-      market: item.market,
-      company: item.company,
-      kind: "stock",
-    });
-  }
-  for (const index of A_SHARE_INDEX_WATCH) {
-    watch.push({
-      ...index,
-      market: "A股",
-      kind: "index",
-    });
-  }
-  if (!watch.length) return 0;
-
-  let loaded = 0;
-  for (let i = 0; i < watch.length; i += 40) {
-    const batch = watch.slice(i, i + 40);
-    const url = `${TENCENT_QUOTE_URL}${batch.map((x) => x.symbol).join(",")}`;
-    await loadScript(url);
-    for (const meta of batch) {
-      const raw = window[`v_${meta.symbol}`];
-      const quote = parseTencentFieldString(raw, meta);
-      if (quote) {
-        if (quote.kind === "index") state.indices.set(quote.index_id || quote.ticker, quote);
-        else state.quotes.set(quote.ticker, quote);
-        loaded += 1;
-      }
-      try {
-        delete window[`v_${meta.symbol}`];
-      } catch {
-        /* ignore */
-      }
-    }
-  }
-  return loaded;
-}
-
 async function loadSnapshotQuotes() {
   const response = await fetch(`./data/quotes/latest.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("snapshot missing");
@@ -1786,6 +1626,7 @@ async function loadSnapshotQuotes() {
       previous_close: previous,
       change_pct: changePct,
       source: quote.source || "snapshot",
+      snapshot_generated_at: payload.generated_at || null,
     });
     count += 1;
   }
@@ -1805,6 +1646,7 @@ async function loadSnapshotQuotes() {
       previous_close: previous,
       change_pct: changePct,
       source: index.source || "snapshot",
+      snapshot_generated_at: payload.generated_at || null,
     });
   }
   state.quoteUpdatedAt = payload.generated_at || new Date().toISOString();
@@ -1812,23 +1654,8 @@ async function loadSnapshotQuotes() {
   return count;
 }
 
-async function refreshQuotes({ forceLive = false, silent = false } = {}) {
+async function refreshQuotes({ silent = false } = {}) {
   try {
-    // Always try the browser live endpoint first. Outside sessions Tencent still
-    // returns the latest official close, which is better than a stale snapshot.
-    try {
-      const liveCount = await fetchLiveQuotes();
-      if (liveCount > 0) {
-        state.quoteUpdatedAt = new Date().toISOString();
-        const label = isLikelyMarketOpen() || forceLive ? "实时行情" : "最新收盘";
-        setLiveStatus("live", `${label} · ${liveCount} 只 · ${new Date().toLocaleTimeString()}`);
-        renderAll();
-        if (!silent) showToast(`已刷新${label} ${liveCount} 只`);
-        return;
-      }
-    } catch (liveError) {
-      console.warn("live quotes failed", liveError);
-    }
     const snapCount = await loadSnapshotQuotes();
     setLiveStatus(
       "snapshot",
@@ -1846,13 +1673,8 @@ function startQuoteTimers() {
   clearInterval(state.liveTimer);
   clearInterval(state.snapshotTimer);
   state.liveTimer = setInterval(() => {
-    // Trade session: denser live refresh. Off hours: still poll for latest close.
-    const open = isLikelyMarketOpen();
-    if (open || !state._offHoursTick) {
-      refreshQuotes({ forceLive: open, silent: true });
-    }
-    state._offHoursTick = open ? 0 : ((state._offHoursTick || 0) + 1) % Math.max(1, Math.round(SNAPSHOT_INTERVAL_MS / LIVE_INTERVAL_MS));
-  }, LIVE_INTERVAL_MS);
+    refreshQuotes({ silent: true });
+  }, SNAPSHOT_INTERVAL_MS);
 }
 
 function isSeparatorRow(cells) {
@@ -2090,11 +1912,6 @@ function technicalLight(technical, dimension) {
 function intradayTechnicalForItem(item) {
   if (item?.market !== "A股") return { status: "not_applicable", lights: [] };
   return state.intradayTechnical.get(item?.ticker) || item?.intraday_technical_analysis || { status: "missing", lights: [] };
-}
-
-function opportunityScanForItem(item) {
-  if (item?.market !== "A股") return { status: "missing" };
-  return state.opportunityScans.get(item?.ticker) || { status: "missing" };
 }
 
 function deepReviewForItem(item) {
@@ -2670,52 +2487,7 @@ function opportunityCandidateForItem(item) {
       tone: tier === "near" ? "notice" : "opportunity",
     };
   }
-  const scan = opportunityScanForItem(item);
-  const union = scan?.union || {};
-  const quote = state.quotes.get(item.ticker);
-  const judgment = primaryJudgmentForItem(item);
-  const allModels = Object.entries(scan.models || {})
-    .filter(([, result]) => result && ["ready", "stale"].includes(result.status));
-  // Old fallback results remain visible for audit, but cannot create a
-  // current/near opportunity after the latest model refresh failed.
-  const models = allModels.filter(([, result]) => result.status === "ready");
-  const normalizeState = (value) => ({
-    "机会": "当前机会",
-    "条件机会": "临近机会",
-    "暂不构成机会": "暂不构成当前机会",
-  })[value] || value;
-  const currentModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "当前机会");
-  const nearModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "临近机会");
-  const tier = currentModels.length ? "current" : nearModels.length ? "near" : null;
-  if (!tier) return null;
-  const confidenceScore = models.reduce((score, [, result]) => {
-    const confidence = result.assessment?.confidence;
-    return score + (confidence === "high" ? 2 : confidence === "medium" ? 1 : 0);
-  }, 0);
-  const staleModels = allModels.filter(([, result]) => result.status === "stale");
-  const priority = (tier === "current" ? 20 : 10) + confidenceScore;
-
-  return {
-    item,
-    scan,
-    union,
-    models,
-    quote,
-    judgment,
-    staleModels,
-    relevantModels: tier === "current" ? currentModels : nearModels,
-    priority,
-    tier,
-    label: tier === "current" ? "当前机会" : "临近机会",
-    tone: tier === "near" ? "notice" : "opportunity",
-  };
-}
-
-function attentionTimestamp(value) {
-  if (!value) return "时间待复核";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+  return null;
 }
 
 function renderOpportunityCard(candidate) {
@@ -2841,9 +2613,6 @@ function renderAttentionPanel() {
 
   const aShares = state.decisions.filter((item) => item.market === "A股");
   const manualReviews = aShares.filter((item) => item.manual_execution_review?.status === "ready");
-  const scans = aShares.map((item) => opportunityScanForItem(item));
-  const modelResults = scans.flatMap((scan) => Object.values(scan?.models || {}));
-  const readyModelResults = modelResults.filter((result) => result?.status === "ready");
   const candidates = aShares
     .map(opportunityCandidateForItem)
     .filter(Boolean)
@@ -2852,28 +2621,13 @@ function renderAttentionPanel() {
   const nearCandidates = candidates.filter((candidate) => candidate.tier === "near");
 
   els.attentionPanel.hidden = false;
-  const scanStatus = state.opportunityScanStatus;
-  const freshness = state.opportunityScansGeneratedAt
-    ? ` · 快照 ${attentionTimestamp(state.opportunityScansGeneratedAt)}`
-    : "";
-  const failure = scanStatus?.status === "error";
-  const failureNote = failure
-    ? ` · 本次失败，沿用${scanStatus.last_success_scan_generated_at ? `${attentionTimestamp(scanStatus.last_success_scan_generated_at)}的` : "上次成功的"}结果`
-    : "";
-  const expectedModelResults = aShares.length * Math.max(1, state.opportunityScanModels.length);
   const fullManualCoverage = manualReviews.length === aShares.length && aShares.length > 0;
-  const metaText = fullManualCoverage
-    ? `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 人工复核 ${manualReviews.length}/${aShares.length} · 截至 8/23`
-    : `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · Flash 结果 ${readyModelResults.length}/${expectedModelResults}${freshness}${failureNote}`;
+  const metaText = `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 有效人工复核 ${manualReviews.length}/${aShares.length}`;
   els.attentionMeta.textContent = metaText;
-  els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
+  els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
   if (els.attentionToggleMeta) {
-    els.attentionToggleMeta.textContent = fullManualCoverage
-      ? `人工复核 93 只 · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}`
-      : failure
-      ? `本次失败 · 沿用上次结果 · ${candidates.length} 项候选`
-      : `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}${state.opportunityScansGeneratedAt ? ` · ${attentionTimestamp(state.opportunityScansGeneratedAt)}` : ""}`;
-    els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
+    els.attentionToggleMeta.textContent = `有效人工复核 ${manualReviews.length}/${aShares.length} · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}`;
+    els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
   els.attentionList.replaceChildren();
@@ -2881,9 +2635,9 @@ function renderAttentionPanel() {
   if (!candidates.length) {
     const empty = document.createElement("p");
     empty.className = "attention-empty";
-    empty.textContent = failure
-      ? "本次收盘后 AI 机会扫描失败，当前继续沿用上次成功结果。"
-      : readyModelResults.length ? "当前没有模型认为值得立刻人工决策的机会；这不是自动买卖建议。" : "Flash 全量扫描数据尚未加载，暂不生成机会面板。";
+    empty.textContent = manualReviews.length
+      ? "有效人工复核中没有进入当前或临近机会的股票。"
+      : "当前没有有效人工复核记录，机会面板暂停生成。";
     els.attentionList.append(empty);
     return;
   }
@@ -2892,7 +2646,7 @@ function renderAttentionPanel() {
     els.attentionList.append(renderOpportunityGroup(
       currentCandidates,
       "当前机会",
-      fullManualCoverage ? "逐股人工核对主报告、最新财报与价格后保留；是否行动仍由你判断。" : "Flash 已说明为什么是现在；是否行动仍由你判断。",
+      "逐股人工核对主报告、最新财报与价格后保留；是否行动仍由你判断。",
     ));
   } else {
     const emptyCurrent = document.createElement("p");
@@ -2941,9 +2695,12 @@ function renderSummary(visible) {
     }
     return;
   }
+  let nextCandidateCount = 0;
   const counts = visible.reduce((acc, item) => {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
-    const key = executionFilterKey(item, state.quotes.get(item.ticker), advice.key);
+    const execution = currentExecutionState(item, state.quotes.get(item.ticker), advice.key);
+    const key = execution.key;
+    if (execution.nextTradingDayCandidate) nextCandidateCount += 1;
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
@@ -2953,6 +2710,7 @@ function renderSummary(visible) {
     ["港股", visible.filter((i) => i.market === "港股").length],
     ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.status === "ok").length}/${visible.length}`],
     ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
+    ["下个交易日候选", nextCandidateCount],
     ["价格已到待验证", counts.validation || 0],
     ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
     ["待人工复核", counts.review || 0],
@@ -3131,7 +2889,7 @@ function renderRows() {
     quoteTd.className = "quote-block";
     quoteTd.innerHTML = `
       <div class="quote-price">${formatPrice(quote)}</div>
-      <div class="quote-change ${change.className}">${change.text}${quote?.source ? ` · ${quote.source === "Tencent live" ? "实时" : "快照"}` : ""}</div>
+      <div class="quote-change ${change.className}">${change.text}${quote?.source ? " · 同源快照" : ""}</div>
     `;
     tr.append(quoteTd);
 
@@ -3359,8 +3117,8 @@ function renderDetail() {
   const deepReviewTab = document.querySelector(".deep-review-tab");
   const isAShare = item.market === "A股";
   if (deepReviewTab) {
-    deepReviewTab.hidden = !isAShare;
-    if (!isAShare && state.detailTab === "deep-review") state.detailTab = "overview";
+    deepReviewTab.hidden = !isAShare || !isAdminOrigin();
+    if ((!isAShare || !isAdminOrigin()) && state.detailTab === "deep-review") state.detailTab = "overview";
   }
   const hasChecklist = Boolean(checklistForItem(item));
   if (checklistTab) {
@@ -3753,7 +3511,7 @@ function bindEvents() {
       showToast(url);
     }
   });
-  els.refreshQuotes.addEventListener("click", () => refreshQuotes({ forceLive: true }));
+  els.refreshQuotes.addEventListener("click", () => refreshQuotes());
   els.attentionPanel?.addEventListener("toggle", () => {
     if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
   });
@@ -3831,33 +3589,6 @@ async function loadIntradayTechnicalSnapshot() {
   );
 }
 
-async function loadOpportunityScansSnapshot() {
-  const response = await fetch("./data/opportunity_scans.json", { cache: "no-cache" });
-  if (!response.ok) {
-    state.opportunityScans = new Map();
-    state.opportunityScansGeneratedAt = null;
-    state.opportunityScanModels = [];
-    return;
-  }
-  const snapshot = await response.json();
-  state.opportunityScansGeneratedAt = snapshot.generated_at || null;
-  state.opportunityScanModels = Array.isArray(snapshot.models) ? snapshot.models : [];
-  state.opportunityScans = new Map(
-    (snapshot.scans || [])
-      .filter((item) => item?.ticker && item.market === "A股")
-      .map((item) => [item.ticker, item]),
-  );
-}
-
-async function loadOpportunityScanStatus() {
-  const response = await fetch("./data/opportunity_scan_status.json", { cache: "no-cache" });
-  if (!response.ok) {
-    state.opportunityScanStatus = null;
-    return;
-  }
-  state.opportunityScanStatus = await response.json();
-}
-
 async function loadAnnualReportDates() {
   const response = await fetch("./data/annual_report_dates.json", { cache: "no-cache" });
   if (!response.ok) throw new Error("annual report dates missing");
@@ -3874,11 +3605,9 @@ async function loadAutomationStatus() {
 
 async function loadDashboard() {
   setLiveStatus("idle", "加载决策数据…");
-  let response = await fetch("./data/decision_board_summary.json", { cache: "no-cache" });
-  if (!response.ok) response = await fetch("./data/decision_board.json", { cache: "no-cache" });
-  if (!response.ok) throw new Error("无法加载 decision_board_summary.json 或 decision_board.json");
-  const board = await response.json();
+  const board = await fetchDecisionBoard();
   state.decisions = board.decisions || [];
+  state.generationId = board.generation_id || null;
   state.page = 1;
   state.hiddenTrackingKeys = loadHiddenTrackingKeys();
   updateTrackingControls();
@@ -3889,11 +3618,9 @@ async function loadDashboard() {
   setLiveStatus("idle", "列表已载入，补充行情和辅助数据…");
   renderAll();
 
-  const [intradayResult, scansResult, scanStatusResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult] =
+  const [intradayResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult] =
     await Promise.allSettled([
       loadIntradayTechnicalSnapshot(),
-      loadOpportunityScansSnapshot(),
-      loadOpportunityScanStatus(),
       loadSentimentSnapshot(),
       loadDeepReviews(),
       loadSnapshotQuotes(),
@@ -3904,16 +3631,6 @@ async function loadDashboard() {
   if (intradayResult.status === "rejected") {
     console.warn("intraday technical snapshot failed", intradayResult.reason);
     state.intradayTechnical = new Map();
-  }
-  if (scansResult.status === "rejected") {
-    console.warn("opportunity scan snapshot failed", scansResult.reason);
-    state.opportunityScans = new Map();
-    state.opportunityScansGeneratedAt = null;
-    state.opportunityScanModels = [];
-  }
-  if (scanStatusResult.status === "rejected") {
-    console.warn("opportunity scan status failed", scanStatusResult.reason);
-    state.opportunityScanStatus = null;
   }
   if (sentimentResult.status === "rejected") {
     const error = sentimentResult.reason;
@@ -3941,7 +3658,7 @@ async function loadDashboard() {
   performance.mark("dashboard-data-ready");
   renderAll();
   applyHashRoute();
-  await refreshQuotes({ forceLive: isLikelyMarketOpen(), silent: true });
+  await refreshQuotes({ silent: true });
   startQuoteTimers();
 }
 

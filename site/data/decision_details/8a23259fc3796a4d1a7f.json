@@ -101,7 +101,8 @@
     ],
     "invalidation_triggers": "通信收入连续两期下降超2%，或FCF连续两年低于股息，或派息率下调",
     "next_review_date": "2026-08-14",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -203,7 +204,8 @@
         ],
         "invalidation_triggers": "通信收入连续两期下降超2%，或FCF连续两年低于股息，或派息率下调",
         "next_review_date": "2026-08-14",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -238,7 +240,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -287,6 +290,7 @@
     "market": "港股",
     "report_path": "reports/中国移动/中国移动-investment-checklist-20260808.md",
     "report_link": "reports/中国移动/中国移动-investment-checklist-20260808.md",
+    "report_sha256": "bf833b4a880460a3d7d661beeea43b553061986503a8c25b33bb70e102eed70a",
     "title": "中国移动（00941.HK）买入前 Checklist",
     "source_type": "standalone",
     "decision_contract": {
@@ -318,7 +322,8 @@
       ],
       "invalidation_triggers": "主营收入连续两期降超2%，或FCF连续两年低于股息，或派息率下调",
       "next_review_date": "2026-08-14",
-      "confidence": "高"
+      "confidence": "高",
+      "hard_veto_state": "unknown"
     },
     "status": "灰色地带",
     "passed_count": 5,
@@ -362,6 +367,7 @@
       }
     ],
     "hard_veto": false,
+    "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
     "mirror_test": "通过",
     "action": "观察",
@@ -383,6 +389,13 @@
       }
     ]
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "中国移动",
     "ticker": "00941.HK",
@@ -427,6 +440,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "8a23259fc3796a4d1a7f",
   "detail_path": "./data/decision_details/8a23259fc3796a4d1a7f.json"
 }

@@ -89,7 +89,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -174,7 +175,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -250,11 +252,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -264,8 +269,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "601127.SH",
+      "main_report": {
+        "path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+        "sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e",
+    "current_source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "赛力斯",
     "ticker": "601127.SH",
@@ -310,6 +338,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "d195338e757e54b4d7c1",
   "detail_path": "./data/decision_details/d195338e757e54b4d7c1.json"
 }

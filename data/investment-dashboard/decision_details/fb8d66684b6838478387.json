@@ -109,7 +109,8 @@
     ],
     "invalidation_triggers": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。",
     "next_review_date": null,
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -214,7 +215,8 @@
         ],
         "invalidation_triggers": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。",
         "next_review_date": null,
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -297,7 +299,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -402,11 +405,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -416,8 +422,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "000933.SZ",
+      "main_report": {
+        "path": "reports/神火股份/神火股份研究报告-20260803.md",
+        "sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0",
+    "current_source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "神火股份",
     "ticker": "000933.SZ",
@@ -462,6 +491,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "fb8d66684b6838478387",
   "detail_path": "./data/decision_details/fb8d66684b6838478387.json"
 }

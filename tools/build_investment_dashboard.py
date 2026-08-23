@@ -17,9 +17,10 @@ import argparse
 import hashlib
 import json
 import re
+import os
 import sys
 from collections import defaultdict
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -125,6 +126,7 @@ DECISION_CONTRACT_FIELDS = (
     "下次复核日期",
     "研究置信度",
 )
+DECISION_CONTRACT_OPTIONAL_FIELDS = ("硬性否决",)
 DECISION_CONTRACT_ACTIONS = {"买入", "分批买入", "持有", "观察", "减仓/卖出", "待复核"}
 DECISION_CONTRACT_MARKETS = {"A股", "港股", "美股", "未识别"}
 DECISION_CONTRACT_NULL_VALUES = {"", "-", "--", "无", "不适用", "未给出", "待复核"}
@@ -530,7 +532,15 @@ def load_manual_execution_reviews(data_directory: Path) -> dict[str, Any]:
         data_directory / "manual_execution_reviews.json",
         {"schema_version": 1, "status": "missing", "categories": {}},
     )
-    if payload.get("schema_version") != 1 or not isinstance(payload.get("categories"), dict):
+    schema_version = payload.get("schema_version")
+    valid = (
+        schema_version == 1
+        and isinstance(payload.get("categories"), dict)
+    ) or (
+        schema_version == 2
+        and isinstance(payload.get("reviews"), dict)
+    )
+    if not valid:
         raise ValueError("Invalid manual execution review payload")
     return payload
 
@@ -549,35 +559,82 @@ def a_share_selection_manifest(decisions: list[dict[str, Any]]) -> str:
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 
-def attach_manual_execution_reviews(
-    decisions: list[dict[str, Any]], payload: dict[str, Any]
-) -> None:
-    """Attach human conclusions only when the complete reviewed universe still matches."""
-    if payload.get("status") != "ready":
-        return
-    expected_manifest = str(payload.get("selection_manifest_sha256") or "")
-    actual_manifest = a_share_selection_manifest(decisions)
-    if not re.fullmatch(r"[0-9a-f]{64}", expected_manifest) or expected_manifest != actual_manifest:
-        raise ValueError(
-            "Manual execution reviews are stale: the selected A-share report universe changed"
-        )
+def file_sha256(repo_root: Path, relative_path: str | None) -> str | None:
+    """Hash one repository file without allowing paths to escape the checkout."""
+    if not relative_path:
+        return None
+    candidate = (repo_root / str(relative_path)).resolve()
+    try:
+        candidate.relative_to(repo_root.resolve())
+    except ValueError:
+        return None
+    if not candidate.is_file():
+        return None
+    return hashlib.sha256(candidate.read_bytes()).hexdigest()
 
-    by_ticker: dict[str, dict[str, Any]] = {}
-    for category, definition in payload["categories"].items():
+
+def manual_review_source_snapshot(
+    decision: dict[str, Any], source_report: str | None, repo_root: Path
+) -> dict[str, Any]:
+    """Return the exact per-stock inputs that keep a human review valid."""
+    report_path = str(decision.get("report_path") or "")
+    checklist = decision.get("checklist") if isinstance(decision.get("checklist"), dict) else {}
+    checklist_path = str(checklist.get("report_path") or "") or None
+    return {
+        "ticker": str(decision.get("ticker") or "").upper(),
+        "main_report": {
+            "path": report_path or None,
+            "sha256": file_sha256(repo_root, report_path),
+        },
+        "checklist": {
+            "path": checklist_path,
+            "sha256": file_sha256(repo_root, checklist_path),
+        },
+        "review_report": {
+            "path": source_report or None,
+            "sha256": file_sha256(repo_root, source_report),
+        },
+    }
+
+
+def manual_review_fingerprint(snapshot: dict[str, Any]) -> str:
+    serialized = json.dumps(snapshot, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def manual_review_valid_until(
+    reviewed_at: str | None, explicit: str | None, next_review_date: str | None
+) -> str | None:
+    candidates: list[date] = []
+    if explicit:
+        try:
+            candidates.append(date.fromisoformat(str(explicit)[:10]))
+        except ValueError:
+            pass
+    if reviewed_at:
+        try:
+            candidates.append(datetime.fromisoformat(str(reviewed_at)).date() + timedelta(days=30))
+        except ValueError:
+            pass
+    if next_review_date:
+        try:
+            candidates.append(date.fromisoformat(str(next_review_date)[:10]))
+        except ValueError:
+            pass
+    return min(candidates).isoformat() if candidates else None
+
+
+def legacy_manual_review_records(payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Read schema v1 without retaining its universe-wide failure behavior."""
+    records: dict[str, dict[str, Any]] = {}
+    for category, definition in (payload.get("categories") or {}).items():
         if not isinstance(definition, dict) or not isinstance(definition.get("tickers"), list):
-            raise ValueError(f"Invalid manual execution review category: {category}")
+            continue
         for raw_ticker in definition["tickers"]:
             ticker = str(raw_ticker).upper()
-            if ticker in by_ticker:
-                raise ValueError(f"Duplicate manual execution review ticker: {ticker}")
-            by_ticker[ticker] = {
-                "schema_version": 1,
-                "status": "ready",
-                "source": "human_review",
-                "reviewer": payload.get("reviewer") or "人工复核",
-                "reviewed_at": payload.get("reviewed_at"),
-                "price_as_of": payload.get("price_as_of"),
-                "source_report": payload.get("source_report"),
+            if ticker in records:
+                continue
+            records[ticker] = {
                 "category": category,
                 "execution_key": definition.get("execution_key"),
                 "label": definition.get("label"),
@@ -585,24 +642,125 @@ def attach_manual_execution_reviews(
                 "opportunity_tier": definition.get("opportunity_tier"),
                 "opportunity_summary": definition.get("opportunity_summary"),
                 "checklist_blocked": definition.get("checklist_blocked") is True,
-                "selection_manifest_sha256": actual_manifest,
+                "reviewed_at": payload.get("reviewed_at"),
+                "price_as_of": payload.get("price_as_of"),
+                "source_report": payload.get("source_report"),
+                "reviewer": payload.get("reviewer"),
             }
+    return records
 
-    a_share_tickers = {
-        str(item.get("ticker") or "").upper()
-        for item in decisions
-        if item.get("market") == "A股"
-    }
-    if set(by_ticker) != a_share_tickers or len(by_ticker) != int(payload.get("reviewed_count") or 0):
-        missing = sorted(a_share_tickers - set(by_ticker))
-        extra = sorted(set(by_ticker) - a_share_tickers)
-        raise ValueError(
-            f"Manual execution review coverage mismatch: missing={missing}, extra={extra}"
-        )
+
+def attach_manual_execution_reviews(
+    decisions: list[dict[str, Any]],
+    payload: dict[str, Any],
+    repo_root: Path = ROOT,
+    as_of: date | None = None,
+) -> None:
+    """Attach independent per-stock reviews and fail closed only for stale records."""
+    records = (
+        payload.get("reviews")
+        if payload.get("schema_version") == 2
+        else legacy_manual_review_records(payload)
+    )
+    records = records if isinstance(records, dict) else {}
+    current_date = as_of or datetime.now().astimezone().date()
     for decision in decisions:
+        if decision.get("market") != "A股":
+            decision.update(
+                {
+                    "validity_state": "research_only",
+                    "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+                    "valid_until": None,
+                    "source_fingerprint_sha256": None,
+                    "market_session_state": "research_only",
+                    "quote_freshness": "not_applicable",
+                    "next_trading_day_candidate": False,
+                }
+            )
+            continue
         ticker = str(decision.get("ticker") or "").upper()
-        if decision.get("market") == "A股":
-            decision["manual_execution_review"] = by_ticker[ticker]
+        raw = records.get(ticker)
+        if not isinstance(raw, dict):
+            snapshot = manual_review_source_snapshot(decision, None, repo_root)
+            current_fingerprint = manual_review_fingerprint(snapshot)
+            missing = {
+                "schema_version": 2,
+                "status": "missing",
+                "validity_state": "missing",
+                "invalidation_reason": "该股票尚无逐股人工复核记录",
+                "execution_key": "review",
+                "source": "human_review",
+                "valid_until": None,
+                "source_snapshot": snapshot,
+                "source_fingerprint_sha256": current_fingerprint,
+                "current_source_fingerprint_sha256": current_fingerprint,
+            }
+            decision["manual_execution_review"] = missing
+            decision.update(
+                {
+                    "validity_state": "missing",
+                    "invalidation_reason": missing["invalidation_reason"],
+                    "valid_until": None,
+                    "source_fingerprint_sha256": current_fingerprint,
+                    "market_session_state": "runtime_required",
+                    "quote_freshness": "runtime_required",
+                    "next_trading_day_candidate": False,
+                }
+            )
+            continue
+        source_report = str(raw.get("source_report") or payload.get("source_report") or "") or None
+        snapshot = manual_review_source_snapshot(decision, source_report, repo_root)
+        current_fingerprint = manual_review_fingerprint(snapshot)
+        expected_fingerprint = str(raw.get("source_fingerprint_sha256") or "")
+        valid_until = manual_review_valid_until(
+            str(raw.get("reviewed_at") or payload.get("reviewed_at") or "") or None,
+            str(raw.get("valid_until") or "") or None,
+            str((decision.get("checklist") or {}).get("next_review_date") or "") or None,
+        )
+        reason = None
+        if payload.get("status") != "ready":
+            reason = "人工复核数据未处于 ready 状态"
+        elif payload.get("schema_version") == 2 and expected_fingerprint != current_fingerprint:
+            reason = "主报告、Checklist 或人工复核依据已经变化"
+        elif valid_until and current_date > date.fromisoformat(valid_until):
+            reason = f"人工复核已于 {valid_until} 到期"
+        validity_state = "stale" if reason else "ready"
+        record = {
+            "schema_version": 2,
+            "status": "stale" if reason else "ready",
+            "validity_state": validity_state,
+            "invalidation_reason": reason,
+            "source": "human_review",
+            "reviewer": raw.get("reviewer") or payload.get("reviewer") or "人工复核",
+            "reviewed_at": raw.get("reviewed_at") or payload.get("reviewed_at"),
+            "valid_until": valid_until,
+            "price_as_of": raw.get("price_as_of") or payload.get("price_as_of"),
+            "source_report": source_report,
+            "category": raw.get("category"),
+            "execution_key": "review" if reason else raw.get("execution_key"),
+            "label": raw.get("label"),
+            "detail": raw.get("detail"),
+            "opportunity_tier": None if reason else raw.get("opportunity_tier"),
+            "opportunity_summary": None if reason else raw.get("opportunity_summary"),
+            "checklist_blocked": raw.get("checklist_blocked") is True,
+            "source_snapshot": snapshot,
+            "source_fingerprint_sha256": expected_fingerprint or current_fingerprint,
+            "current_source_fingerprint_sha256": current_fingerprint,
+        }
+        decision["manual_execution_review"] = record
+        decision.update(
+            {
+                "validity_state": validity_state,
+                "invalidation_reason": reason,
+                "valid_until": valid_until,
+                "source_fingerprint_sha256": expected_fingerprint or current_fingerprint,
+                "market_session_state": "runtime_required",
+                "quote_freshness": "runtime_required",
+                "next_trading_day_candidate": (
+                    not reason and raw.get("execution_key") in {"actionable", "trial"}
+                ),
+            }
+        )
 
 
 def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
@@ -682,6 +840,30 @@ def extract_ticker(text: str) -> str | None:
     if match:
         code = match.group(1)
         return f"{code}.SH" if code.startswith(("6", "9")) else f"{code}.SZ"
+    return None
+
+
+def extract_subject_ticker(lines: list[str], company: str) -> str | None:
+    """Extract only a ticker explicitly bound to the report subject.
+
+    Arbitrary six-digit values in valuation tables and competitor sections are
+    not stock identity. A ticker is accepted only from frontmatter, a labelled
+    code field, or a heading that also names the subject company.
+    """
+    frontmatter_ticker = str(parse_frontmatter(lines).get("ticker") or "").strip()
+    if frontmatter_ticker:
+        return extract_ticker(frontmatter_ticker)
+    normalized_company = normalize_company_name(company)
+    for line in lines[:120]:
+        cleaned = clean_markdown(line)
+        if re.search(r"(?:股票代码|证券代码|股份代码|公司代码|Ticker)\s*[:：]", cleaned, re.I):
+            ticker = extract_ticker(cleaned)
+            if ticker:
+                return ticker
+        if line.lstrip().startswith("#") and normalized_company in normalize_company_name(cleaned):
+            ticker = extract_ticker(cleaned)
+            if ticker:
+                return ticker
     return None
 
 
@@ -974,11 +1156,11 @@ def extract_decision_contract(lines: list[str]) -> dict[str, Any] | None:
             if not table_started:
                 continue
             field, value = cells[0], cells[1]
-            if field not in DECISION_CONTRACT_FIELDS or field in values:
+            if field not in (*DECISION_CONTRACT_FIELDS, *DECISION_CONTRACT_OPTIONAL_FIELDS) or field in values:
                 return None
             values[field] = value
 
-        if set(values) != set(DECISION_CONTRACT_FIELDS):
+        if not set(DECISION_CONTRACT_FIELDS).issubset(values):
             continue
         if values["契约版本"] != DECISION_CONTRACT_VERSION:
             continue
@@ -1019,6 +1201,18 @@ def extract_decision_contract(lines: list[str]) -> dict[str, Any] | None:
                 item["price_range"] = price_range
             stances.append(item)
 
+        hard_veto_value = clean_markdown(values.get("硬性否决") or "")
+        hard_veto_state = {
+            "已触发": "triggered",
+            "是": "triggered",
+            "true": "triggered",
+            "未触发": "clear",
+            "否": "clear",
+            "false": "clear",
+            "0项": "clear",
+            "待复核": "unknown",
+            "未给出": "unknown",
+        }.get(hard_veto_value, "unknown")
         return {
             "version": DECISION_CONTRACT_VERSION,
             "report_type": values["报告类型"],
@@ -1033,6 +1227,7 @@ def extract_decision_contract(lines: list[str]) -> dict[str, Any] | None:
             "invalidation_triggers": clean_markdown(values["买入失效条件"]),
             "next_review_date": parse_date(values["下次复核日期"]),
             "confidence": confidence,
+            "hard_veto_state": hard_veto_state,
         }
     return None
 
@@ -1153,9 +1348,27 @@ def extract_checklist_status(
 ) -> dict[str, Any]:
     """Build a display-only Checklist summary without changing the main decision."""
     text = "\n".join(lines) + "\n" + str(contract.get("summary") or "")
-    hard_veto = bool(
-        re.search(r"(?<![未有不])触发硬性否决|硬性否决[：: ]{0,10}(?:已触发|[1-9]\s*项)", text)
-    )
+    hard_veto_state = str(contract.get("hard_veto_state") or "unknown")
+    if hard_veto_state not in {"triggered", "clear", "unknown"}:
+        hard_veto_state = "unknown"
+    if hard_veto_state == "unknown":
+        explicit_states: list[str] = []
+        for line in lines:
+            cleaned = clean_markdown(line)
+            if re.search(
+                r"(?:暂未|尚未|未|没有|暂无|未发现)[^。；\n]{0,18}触发硬性否决"
+                r"|硬性否决\s*[：:]\s*(?:0\s*项|未触发|没有触发|未发现|无|否)",
+                cleaned,
+            ):
+                explicit_states.append("clear")
+            elif re.search(
+                r"(?:触发硬性否决|硬性否决)\s*[：:]\s*(?:已触发|是|[1-9]\d*\s*项)",
+                cleaned,
+            ):
+                explicit_states.append("triggered")
+        if explicit_states:
+            hard_veto_state = explicit_states[-1]
+    hard_veto = hard_veto_state == "triggered"
     summary_text = str(contract.get("summary") or "")
     if hard_veto:
         status = "否决"
@@ -1196,7 +1409,12 @@ def extract_checklist_status(
         "total_gates": total_gates,
         "gates": gates,
         "hard_veto": hard_veto,
-        "hard_veto_label": "已触发" if hard_veto else "未触发/未发现",
+        "hard_veto_state": hard_veto_state,
+        "hard_veto_label": {
+            "triggered": "已触发",
+            "clear": "未触发/未发现",
+            "unknown": "待复核",
+        }[hard_veto_state],
         "mirror_test": mirror_status,
         "action": contract.get("action") or "待复核",
         "summary": contract.get("summary") or "",
@@ -1271,6 +1489,7 @@ def checklist_record(
         "market": market,
         "report_path": relative.as_posix(),
         "report_link": relative.as_posix(),
+        "report_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
         "title": extract_title(lines, report_path.stem),
         "source_type": source_type,
         "decision_contract": metadata_contract,
@@ -4030,7 +4249,7 @@ def candidate_record(
 
     entity, entity_kind, market_hint, entity_directory = entity_from_path(relative)
     entity = normalize_company_name(decision_contract["company"] if decision_contract else entity)
-    ticker = (decision_contract or {}).get("ticker") or extract_ticker("\n".join(lines[:120]))
+    ticker = (decision_contract or {}).get("ticker") or extract_subject_ticker(lines, entity)
     registry_entry = registry_company(registry, entity, ticker)
     if registry_entry:
         entity = str(registry_entry["canonical_name"])
@@ -4040,7 +4259,11 @@ def candidate_record(
     report_override = overrides.get("reports", {}).get(report_relative, {})
     if not isinstance(report_override, dict):
         raise ValueError(f"Report override must be an object: {report_relative}")
-    effective_ticker = report_override.get("ticker", (decision_contract or {}).get("ticker") or ticker)
+    registry_tickers = registry_entry.get("tickers") if isinstance(registry_entry, dict) else []
+    registry_ticker = str(registry_tickers[0]) if isinstance(registry_tickers, list) and registry_tickers else None
+    effective_ticker = report_override.get(
+        "ticker", (decision_contract or {}).get("ticker") or ticker or registry_ticker
+    )
     effective_market = report_override.get(
         "market", (decision_contract or {}).get("market") or market_for_ticker(effective_ticker, market_hint)
     )
@@ -4340,16 +4563,24 @@ def normalize_primary_judgment(value: Any, company: str) -> dict[str, Any] | Non
 
 
 def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -> list[dict[str, Any]]:
-    """Select one latest stock conclusion per company and attach historical report conclusions."""
+    """Select one conclusion per tradable market+ticker and merge alias histories."""
     groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
-        if is_company_equity(record) and not is_post_buy_tracking_report(record):
-            groups[str(record["company"])].append(record)
+        ticker = str(record.get("ticker") or "").upper()
+        market = str(record.get("market") or "")
+        if (
+            is_company_equity(record)
+            and not is_post_buy_tracking_report(record)
+            and ticker
+            and market in {"A股", "港股", "美股"}
+        ):
+            groups[f"{market}:{ticker}"].append(record)
 
     selections: list[dict[str, Any]] = []
-    for company, candidates in groups.items():
+    for candidates in groups.values():
         ordered = sorted(candidates, key=record_rank, reverse=True)
         selected = ordered[0].copy()
+        company = str(selected["company"])
         company_override = overrides.get("companies", {}).get(company, {})
         if not isinstance(company_override, dict):
             raise ValueError(f"Company override must be an object: {company}")
@@ -4599,7 +4830,13 @@ def write_library_moc(path: Path, reports_directory: Path, decisions: list[dict[
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     """Write stable UTF-8 JSON for the website and review workflow."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    encoded = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
+    with temporary.open("w", encoding="utf-8") as handle:
+        handle.write(encoded)
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, path)
 
 
 def dashboard_detail_id(decision: dict[str, Any]) -> str:
@@ -4619,13 +4856,17 @@ def split_dashboard_files(board: dict[str, Any], site_directory: Path, data_dire
     summary_decisions: list[dict[str, Any]] = []
     site_detail_directory = site_directory / "data" / "decision_details"
     data_detail_directory = data_directory / "decision_details"
+    generation_id = str(board.get("generation_id") or "")
+    expected_filenames: set[str] = set()
     for decision in board.get("decisions") or []:
         if not isinstance(decision, dict):
             continue
         detail_id = dashboard_detail_id(decision)
         detail = dict(decision)
+        detail["generation_id"] = generation_id
         detail["detail_id"] = detail_id
         detail["detail_path"] = f"./data/decision_details/{detail_id}.json"
+        expected_filenames.add(f"{detail_id}.json")
         write_json(site_detail_directory / f"{detail_id}.json", detail)
         write_json(data_detail_directory / f"{detail_id}.json", detail)
 
@@ -4661,10 +4902,15 @@ def split_dashboard_files(board: dict[str, Any], site_directory: Path, data_dire
     }
     summary_board["schema_version"] = 7
     summary_board["source_schema_version"] = board.get("schema_version")
+    summary_board["generation_id"] = generation_id
     summary_board["detail_directory"] = "decision_details/"
     summary_board["decisions"] = summary_decisions
     write_json(data_directory / "decision_board_summary.json", summary_board)
     write_json(site_directory / "data" / "decision_board_summary.json", summary_board)
+    for directory in (site_detail_directory, data_detail_directory):
+        for orphan in directory.glob("*.json"):
+            if orphan.name not in expected_filenames:
+                orphan.unlink()
     return summary_board
 
 
@@ -4787,7 +5033,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
     attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
-    attach_manual_execution_reviews(decisions, manual_execution_reviews)
+    attach_manual_execution_reviews(decisions, manual_execution_reviews, repo_root)
     technical_snapshots = [
         snapshot
         for report_path in report_paths
@@ -4796,6 +5042,12 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    generation_id = hashlib.sha256(
+        (
+            f"{datetime.now().astimezone().isoformat()}|{len(decisions)}|"
+            f"{a_share_selection_manifest(decisions)}"
+        ).encode("utf-8")
+    ).hexdigest()[:20]
     catalog = {
         "schema_version": 1,
         "generated_at": generated_at,
@@ -4804,11 +5056,20 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "records": records,
     }
     board = {
-        "schema_version": 6,
+        "schema_version": 7,
         "generated_at": generated_at,
+        "generation_id": generation_id,
         "scope": "individual-stocks-only",
         "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
+        "real_time_execution_scope": "A股",
+        "a_share_execution_summary": {
+            "current_executable_count": 0,
+            "current_executable_requires_runtime_quote": True,
+            "next_trading_day_candidate_count": sum(
+                1 for item in decisions if item.get("next_trading_day_candidate") is True
+            ),
+        },
         "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,
         "decisions": decisions,

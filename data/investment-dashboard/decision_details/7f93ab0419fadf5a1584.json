@@ -87,7 +87,8 @@
     ],
     "invalidation_triggers": "净息差跌破1.60%且无企稳，信用卡风险向其他零售贷款扩散，CET1缓冲低于2个百分点，或出现重大治理事件。",
     "next_review_date": "2026-09-05",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -173,7 +174,8 @@
         ],
         "invalidation_triggers": "净息差跌破1.60%且无企稳，信用卡风险向其他零售贷款扩散，CET1缓冲低于2个百分点，或出现重大治理事件。",
         "next_review_date": "2026-09-05",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -272,7 +274,8 @@
         ],
         "invalidation_triggers": "零售不良率超过1.50%且继续上行，或净息差跌破1.60%无企稳，或出现重大治理事件",
         "next_review_date": "2026-09-05",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -329,27 +332,9 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": "2026-05-16",
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "当前判断：观察仓位 / 等待更好时机",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "综合评级：★★★★☆（4/5）— 优质资产，安全边际尚可但非极端",
-        "start_line": 5,
-        "end_line": 8,
-        "markdown": "## 综合评级：★★★★☆（4/5）— 优质资产，安全边际尚可但非极端\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "招商银行（3968.HK）— Team Lead 综合判断",
-      "report_path": "reports/港股召回池/招商银行/最终报告.md",
-      "report_link": "港股召回池/招商银行/最终报告.md"
     },
     {
       "data_cutoff": "2026-05-16",
@@ -390,7 +375,7 @@
       "report_link": "港股召回池/招商银行/02-财务估值分析-巴菲特视角.md"
     }
   ],
-  "report_history_count": 6,
+  "report_history_count": 5,
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
@@ -480,11 +465,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -494,8 +482,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600036.SH",
+      "main_report": {
+        "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+        "sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4",
+    "current_source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "招商银行",
     "ticker": "600036.SH",
@@ -540,6 +551,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "7f93ab0419fadf5a1584",
   "detail_path": "./data/decision_details/7f93ab0419fadf5a1584.json"
 }

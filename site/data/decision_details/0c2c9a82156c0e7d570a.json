@@ -104,7 +104,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -207,7 +208,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -247,50 +249,6 @@
       "title": "长光辰芯（03277.HK）未上市公司深度研究报告",
       "report_path": "reports/长光辰芯/长光辰芯-private-20260409.duplicate-from-root-20260723.md",
       "report_link": "长光辰芯/长光辰芯-private-20260409.duplicate-from-root-20260723.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [
-        {
-          "stance": "激进型",
-          "action": "开始有安全边际，值得关注",
-          "price_range": "28-32 港元",
-          "note": "开始有安全边际，值得关注",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        },
-        {
-          "stance": "稳健型",
-          "action": "有吸引力，风险补偿开始充分",
-          "price_range": "22-28 港元",
-          "note": "有吸引力，风险补偿开始充分",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        },
-        {
-          "stance": "保守型",
-          "action": "如果基本面没恶化，是好价格",
-          "price_range": "<22 港元",
-          "note": "如果基本面没恶化，是好价格",
-          "source": "inferred_valuation_bands",
-          "buy_eligible": false
-        }
-      ],
-      "conclusion_summary": "激进型：开始有安全边际，值得关注（28-32 港元）；稳健型：有吸引力，风险补偿开始充分（22-28 港元）；保守型：如果基本面没恶化，是好价格（<22 港元）",
-      "buy_price": "HK$39.88",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "三情景估值",
-        "start_line": 166,
-        "end_line": 181,
-        "markdown": "### 三情景估值\n\n| 情景 | 假设 | 2028 年净利润 | 目标 PE | 对应市值 | 涨跌幅（vs 首日） |\n|------|------|-------------|---------|---------|------------------|\n| 乐观 | 年增 30%，医疗突破 | ~6.4 亿 人民币 | 60x | ~385 亿 | +27% |\n| 中性 | 年增 20%，份额稳步提升 | ~5.1 亿 人民币 | 45x | ~228 亿 | -25% |\n| 悲观 | 年增 10%，天花板显现 | ~3.9 亿 人民币 | 30x | ~117 亿 | -62% |\n\n（以首日收盘市值 ~304 亿港元为基准，2028 年净利润按 2025 年 2.93 亿元为基数复合增长计算）\n\n**中性情景下，从首日收盘价买入，3 年后可能亏 25%。** 只有在乐观情景下（30% 年增速持续 3 年 + 医疗/汽车突破 + 市场给 60x PE），才有 27% 的回报——而这个假设过于激进。\n\n**如果从 IPO 发售价 39.88 港元算**，情况好一些：中性情景对应约 52 港元（+30%），悲观情景对应约 27 港元（-32%）。\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "好公司不等于好价格",
-      "report_path": "reports/长光辰芯-team-20260409/《看懂长光辰芯》/04-风险与判断-好公司不等于好价格.md",
-      "report_link": "长光辰芯-team-20260409/《看懂长光辰芯》/04-风险与判断-好公司不等于好价格.md"
     },
     {
       "data_cutoff": null,
@@ -361,71 +319,21 @@
       "title": "长光辰芯（03277.HK）四大师框架 IPO 综合分析",
       "report_path": "reports/长光辰芯-team-20260409/长光辰芯-team-20260409.md",
       "report_link": "长光辰芯-team-20260409/长光辰芯-team-20260409.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "5. 不构成投资建议——所有篇章末尾免责声明",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "04 好公司不等于好价格（终章） 五层风险 + 估值判断 + 什么价格值得关注",
-        "start_line": 29,
-        "end_line": 32,
-        "markdown": "| 04 | 好公司不等于好价格（终章） | 五层风险 + 估值判断 + 什么价格值得关注 |\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "《看懂长光辰芯》系列说明",
-      "report_path": "reports/长光辰芯-team-20260409/《看懂长光辰芯》/00-系列说明.md",
-      "report_link": "长光辰芯-team-20260409/《看懂长光辰芯》/00-系列说明.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注，估算数据均注明\"估计\"。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "- 坏处：天花板低。即使长光辰芯在工业+科学 CIS 拿到 30% 份额（目前 15%），也就约 7-10 亿美元 收入。按 30% 净利率算，净利润约 2-3 亿美元（15-20 亿元人民币）。以当前 300 亿港元 市值算，你需要它收入翻 3 倍才能\"长进\"这个估值。",
-        "start_line": 30,
-        "end_line": 33,
-        "markdown": "- **坏处**：天花板低。即使长光辰芯在工业+科学 CIS 拿到 30% 份额（目前 15%），也就约 **7-10 亿美元** 收入。按 30% 净利率算，净利润约 2-3 亿美元（15-20 亿元人民币）。以当前 **300 亿港元** 市值算，你需要它收入翻 3 倍才能\"长进\"这个估值。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "小池塘里的大鱼",
-      "report_path": "reports/长光辰芯-team-20260409/《看懂长光辰芯》/03-竞争格局-小池塘里的大鱼.md",
-      "report_link": "长光辰芯-team-20260409/《看懂长光辰芯》/03-竞争格局-小池塘里的大鱼.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源已在文中标注，估算数据均注明\"估计\"。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "3. PE 54.6 倍——不便宜。你需要它连续保持 30% 以上增长 5 年，才能把这个估值消化到合理水平。",
-        "start_line": 61,
-        "end_line": 66,
-        "markdown": "3. **PE 54.6 倍**——不便宜。你需要它连续保持 30% 以上增长 5 年，才能把这个估值消化到合理水平。\n\n这三个数字放在一起，构成了长光辰芯最核心的矛盾：**好生意，小池塘，贵价格**。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "一颗你没听过的芯片",
-      "report_path": "reports/长光辰芯-team-20260409/《看懂长光辰芯》/01-开篇-一颗你没听过的芯片.md",
-      "report_link": "长光辰芯-team-20260409/《看懂长光辰芯》/01-开篇-一颗你没听过的芯片.md"
     }
   ],
-  "report_history_count": 9,
+  "report_history_count": 5,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "长光辰芯",
     "ticker": "03277.HK",
@@ -470,6 +378,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "0c2c9a82156c0e7d570a",
   "detail_path": "./data/decision_details/0c2c9a82156c0e7d570a.json"
 }

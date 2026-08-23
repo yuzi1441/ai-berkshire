@@ -1,160 +1,2801 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "ready",
   "reviewer": "Codex 人工复核",
   "reviewed_at": "2026-08-23T22:30:00+08:00",
   "price_as_of": "2026-08-21",
   "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
   "reviewed_count": 93,
-  "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a",
-  "categories": {
-    "A": {
-      "execution_key": "actionable",
-      "label": "人工复核：当前可分批",
-      "detail": "人工逐项复核主报告、最新中报与周五收盘价后，当前具备小比例分批执行条件。",
-      "opportunity_tier": "current",
-      "opportunity_summary": "当前唯一进入可执行小比例分批名单的 A 股；仍应按报告价格纪律控制仓位。",
-      "tickers": [
-        "605499.SH"
-      ]
+  "reviews": {
+    "000333.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000333.SZ",
+        "main_report": {
+          "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "e466ac8a28a6acb6ed8ef9035b32af63e7dc441479fa0349c3c1e61357c9310c"
     },
-    "B": {
-      "execution_key": "trial",
-      "label": "人工复核：仅激进观察仓",
-      "detail": "经营改善得到中报支持，但周期与价格安全边际仍有限，只适合能承受波动者的小仓观察。",
-      "opportunity_tier": "near",
-      "opportunity_summary": "基本面改善已出现，但安全边际尚不足；只列临近机会，不列正式可执行机会。",
-      "tickers": [
-        "600426.SH"
-      ]
+    "000400.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000400.SZ",
+        "main_report": {
+          "path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6"
+        },
+        "checklist": {
+          "path": "reports/许继电气/巴菲特Checklist-许继电气.md",
+          "sha256": "21d89f1f6d88f7e5a9a785bcea8504782b727e4ce5164f3313fe4f6d2ada7b38"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "72b47b0e63c4ae4b555c9e8d4bd4a55b80fde60ccee114cdb3096531ad1a31a5"
     },
-    "C": {
+    "000408.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000408.SZ",
+        "main_report": {
+          "path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "76b8c3567030960b2395df1515160c543ffea80f09a7e244ad2bf1d2b05b09e1"
+    },
+    "000568.SZ": {
+      "category": "C",
       "execution_key": "validation",
       "label": "人工复核：价格已到，等待验证",
       "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
       "opportunity_tier": null,
       "opportunity_summary": null,
-      "tickers": [
-        "000682.SZ",
-        "002246.SZ",
-        "600276.SH",
-        "300124.SZ",
-        "000568.SZ",
-        "603659.SH",
-        "688271.SH",
-        "002352.SZ",
-        "600309.SH",
-        "600809.SH",
-        "600519.SH"
-      ]
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000568.SZ",
+        "main_report": {
+          "path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ad36a0627f625e5a8b38654d19ce035a2a1add5fbf84f3d79a1a7a1f78557327"
     },
-    "D": {
+    "000651.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000651.SZ",
+        "main_report": {
+          "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "b998eee8d3c9b248c5aec8a3e50f246fb4194c1cbabd590b1d755ae1e5876004"
+    },
+    "000657.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000657.SZ",
+        "main_report": {
+          "path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "8417a6058cb1d56c13233c4d200e310fd4e3c425fc67d649ba3b983965891e49"
+    },
+    "000682.SZ": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000682.SZ",
+        "main_report": {
+          "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd"
+        },
+        "checklist": {
+          "path": "reports/东方电子/巴菲特Checklist-东方电子.md",
+          "sha256": "948509810c806ba7e2906ab04f23e061601d682904f487467a5da3c030bee444"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "3b7bd613afd31bf96f1d885ab81e67b396faf33333a3c5c2793aa215e35c0b82"
+    },
+    "000858.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000858.SZ",
+        "main_report": {
+          "path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "56c16614d56cda30fdcc6689d4823db364c30229a3ce053cb4f2807a18598c74"
+    },
+    "000933.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000933.SZ",
+        "main_report": {
+          "path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0"
+    },
+    "000988.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "000988.SZ",
+        "main_report": {
+          "path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d1ebe8f5f4543c8fa055fac560b63bd8710ca2ad429d0016c72a9b3541399042"
+    },
+    "002027.SZ": {
+      "category": "D",
       "execution_key": "no",
       "label": "人工复核：Checklist 硬性否决",
       "detail": "买入前 Checklist 存在硬性否决；即使价格进入主报告区间，也不得进入当前可买名单。",
       "opportunity_tier": null,
       "opportunity_summary": null,
       "checklist_blocked": true,
-      "tickers": [
-        "002027.SZ",
-        "603606.SH"
-      ]
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-05",
+      "source_snapshot": {
+        "ticker": "002027.SZ",
+        "main_report": {
+          "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5"
+        },
+        "checklist": {
+          "path": "reports/分众传媒/巴菲特Checklist-分众传媒.md",
+          "sha256": "c9974370d65cd2b25d736d63bcd4077e5f596684dc1558537226c00cedc89e44"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4"
     },
-    "E": {
-      "execution_key": "no",
-      "label": "人工复核：当前不买",
-      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
-      "opportunity_tier": null,
-      "opportunity_summary": null,
-      "tickers": [
-        "301666.SZ",
-        "002353.SZ",
-        "601727.SH",
-        "600549.SH",
-        "301308.SZ",
-        "002272.SZ",
-        "000988.SZ",
-        "688017.SH",
-        "688361.SH",
-        "002837.SZ",
-        "000408.SZ",
-        "002600.SZ",
-        "002916.SZ",
-        "688008.SH",
-        "000400.SZ"
-      ]
-    },
-    "F": {
+    "002028.SZ": {
+      "category": "F",
       "execution_key": "wait_price",
       "label": "人工复核：等待更低价格或下一期财报",
       "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
       "opportunity_tier": null,
       "opportunity_summary": null,
-      "tickers": [
-        "002594.SZ",
-        "603993.SH",
-        "002202.SZ",
-        "603129.SH",
-        "605117.SH",
-        "002683.SZ",
-        "600795.SH",
-        "603005.SH",
-        "601038.SH",
-        "600031.SH",
-        "601156.SH",
-        "601717.SH",
-        "600176.SH",
-        "601318.SH",
-        "003816.SZ",
-        "601088.SH",
-        "600941.SH",
-        "601179.SH",
-        "002179.SZ",
-        "600372.SH",
-        "601919.SH",
-        "000657.SZ",
-        "000858.SZ",
-        "600887.SH",
-        "600141.SH",
-        "002270.SZ",
-        "601020.SH",
-        "601126.SH",
-        "600406.SH",
-        "600420.SH",
-        "600161.SH",
-        "002142.SZ",
-        "601138.SH",
-        "601398.SH",
-        "600312.SH",
-        "002028.SZ",
-        "601975.SH",
-        "600036.SH",
-        "603228.SH",
-        "603298.SH",
-        "000651.SZ",
-        "002226.SZ",
-        "002463.SZ",
-        "002050.SZ",
-        "600000.SH",
-        "603288.SH",
-        "002415.SZ",
-        "002155.SZ",
-        "600089.SH",
-        "600183.SH",
-        "688235.SH",
-        "000933.SZ",
-        "002049.SZ",
-        "601899.SH",
-        "000333.SZ",
-        "600167.SH",
-        "601127.SH",
-        "300760.SZ",
-        "688676.SH",
-        "002597.SZ",
-        "600900.SH",
-        "688825.SH",
-        "300274.SZ"
-      ]
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002028.SZ",
+        "main_report": {
+          "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef"
+        },
+        "checklist": {
+          "path": "reports/思源电气/巴菲特Checklist-思源电气.md",
+          "sha256": "da8237e3865443a31076822c3648d7f15c977fcff29071814d75f0ec7eec2d85"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ccea7354ca399350e503648381131766748f9495a3a7fbde6dc05b21918b1d00"
+    },
+    "002049.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002049.SZ",
+        "main_report": {
+          "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "e68a512899c26d455721be29c98bab1369ef2afdd4caf7e62ce268964a21fd7e"
+    },
+    "002050.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002050.SZ",
+        "main_report": {
+          "path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "bb02c03856826ba0fd3bcbc4a2b133ace784e370acdb2d82a385c4246c6fe656"
+    },
+    "002142.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002142.SZ",
+        "main_report": {
+          "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "82c8abc726af5d691e07a05ceb602c293d9add8ab57fde0c52ffca34b48685e1"
+    },
+    "002155.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002155.SZ",
+        "main_report": {
+          "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+          "sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "a4bfa080dd020cfe30e2f50d5033719190f3a0c9a2608153b03339de4562f362"
+    },
+    "002179.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002179.SZ",
+        "main_report": {
+          "path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "sha256": "9afce21252d49e59c2cc384012bad9f27ae24d964547d1b807f850e60e914b67"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "c5bb55df18f1e5c69ab108e7037f89ee81dde771ddf7897cfd39333cfe6214cc"
+    },
+    "002202.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002202.SZ",
+        "main_report": {
+          "path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "582c522c7cf0497eea604668d3ac1a05bb77f929548e09759964af8e19d37435"
+    },
+    "002226.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002226.SZ",
+        "main_report": {
+          "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d3d38ba58db79a419074f7b1cd199f9ab58c6538982cfc470ef6142116fbd6e0"
+    },
+    "002246.SZ": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002246.SZ",
+        "main_report": {
+          "path": "reports/北化股份/北化股份研究报告-20260709.md",
+          "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c"
+    },
+    "002270.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002270.SZ",
+        "main_report": {
+          "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd"
+        },
+        "checklist": {
+          "path": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
+          "sha256": "ed71bf47a73f0db2127aeca6ce27f118056d5bdacae18741832178fa7c94d2fd"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930"
+    },
+    "002272.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002272.SZ",
+        "main_report": {
+          "path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "18634b8fb95bdf3706a3f5aa6b2fbab0a92e83600f83a445cd2d37161da6fc97"
+    },
+    "002352.SZ": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-08-31",
+      "source_snapshot": {
+        "ticker": "002352.SZ",
+        "main_report": {
+          "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e"
+        },
+        "checklist": {
+          "path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+          "sha256": "b9b10a3095400e3e188eb014026001be708f0c390370e9d98133e3a367d8fe1a"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e"
+    },
+    "002353.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002353.SZ",
+        "main_report": {
+          "path": "reports/Jereh/Jereh-research-20260624.md",
+          "sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "670d6f91b6fa7774d6a1baa073dd1319f0010859969b039967146c8535523860"
+    },
+    "002415.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002415.SZ",
+        "main_report": {
+          "path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "e96033c7eaf369e30bbdd5642e4e66d0a10bb742a9dae870f437496d8a3c8017"
+    },
+    "002463.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002463.SZ",
+        "main_report": {
+          "path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45"
+        },
+        "checklist": {
+          "path": "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md",
+          "sha256": "962dcaa07a5735f619977fdcc2ecce5d132177a98ccb2611dabddcb1ce289945"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f"
+    },
+    "002594.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002594.SZ",
+        "main_report": {
+          "path": "reports/BYD/BYD-research-20260624.md",
+          "sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "2cb14303b3ad0fde5b9af41b8bbeb8d748e8ca34109c593d7a858432fc9d7bc2"
+    },
+    "002597.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002597.SZ",
+        "main_report": {
+          "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+          "sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "96bfb205f22b03951dc7fcb49e9521d96ca2bda9335a930666003f4647d0627f"
+    },
+    "002600.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002600.SZ",
+        "main_report": {
+          "path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ab84b3bf643c1c6cc301f1566ae7d0d1e05b029e7edc31ed77603c29c82c79ec"
+    },
+    "002683.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002683.SZ",
+        "main_report": {
+          "path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "861eaeb8c8f1dfcefb4587316bf181a1ee661f5620b135c7eef28bc10f5e2cde"
+    },
+    "002837.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002837.SZ",
+        "main_report": {
+          "path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "fcaeab10d19069f5bb93ddd5cc485ed50e9cb4be56adc1ec5dc9522362ff2e3b"
+    },
+    "002916.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "002916.SZ",
+        "main_report": {
+          "path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab"
+    },
+    "003816.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "003816.SZ",
+        "main_report": {
+          "path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "sha256": "19959c035e90135a56505c16c12ffb62b23fe1351a42cfb4c4b97e8df247add4"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "4bbcfc44a77b584ebcd635606caac016496615fd0b8b571197593bf0ecc5f450"
+    },
+    "300124.SZ": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "300124.SZ",
+        "main_report": {
+          "path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "0d154931ee8a00164c01ce38889afcbe48f3728ae4203f96b0de4c7147f61af9"
+    },
+    "300274.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "300274.SZ",
+        "main_report": {
+          "path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "3c48edb17a57c9ac8d4fdee4c246a79cfaa38f57e29ed67544e6b46a434eb8a9"
+    },
+    "300760.SZ": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "300760.SZ",
+        "main_report": {
+          "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489"
+        },
+        "checklist": {
+          "path": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
+          "sha256": "a33194fb798fba7983d7e99750365640389d9f1e69f922487edd7511f7b2f99a"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6"
+    },
+    "301308.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "301308.SZ",
+        "main_report": {
+          "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6"
+    },
+    "301666.SZ": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "301666.SZ",
+        "main_report": {
+          "path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "edb23aa0cf0fd7a877c0e2f498475e2e23d9ab992bbdf0eb9016466f127bd67f"
+    },
+    "600000.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600000.SH",
+        "main_report": {
+          "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f"
+    },
+    "600031.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600031.SH",
+        "main_report": {
+          "path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9af6017b96af9c1dfba41b70528e0d8eae94834dca9b745883aa32802271e92c"
+    },
+    "600036.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600036.SH",
+        "main_report": {
+          "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4"
+    },
+    "600089.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600089.SH",
+        "main_report": {
+          "path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "sha256": "93282d9268561c7bdfabc8471605530bcce155730f7182bbd36307a48215c294"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "148aca553e650190e3002224be56d250261475ebb8e8c6066928d4a20ba5bd02"
+    },
+    "600141.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600141.SH",
+        "main_report": {
+          "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72"
+    },
+    "600161.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600161.SH",
+        "main_report": {
+          "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6"
+    },
+    "600167.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600167.SH",
+        "main_report": {
+          "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3"
+    },
+    "600176.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600176.SH",
+        "main_report": {
+          "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "121c464d5095b1faa5318e2f17d40b4ba4f8739528bc4995e99a96f583beae5a"
+    },
+    "600183.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600183.SH",
+        "main_report": {
+          "path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "f01847472a4b74a333a5141487e9729b5e2b9890da90427a730b16e16d640220"
+    },
+    "600276.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600276.SH",
+        "main_report": {
+          "path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34"
+        },
+        "checklist": {
+          "path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
+          "sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e"
+    },
+    "600309.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600309.SH",
+        "main_report": {
+          "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a"
+    },
+    "600312.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600312.SH",
+        "main_report": {
+          "path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7"
+        },
+        "checklist": {
+          "path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
+          "sha256": "0d01f80ef517ab59297521bf7efa0d3fb2ed348c267bd560e3a3c8fe9a5737ce"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a"
+    },
+    "600372.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600372.SH",
+        "main_report": {
+          "path": "reports/中航机载/中航机载研究报告-20260709.md",
+          "sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "7cebe0ecf3fe96e17d89e053865a5b4d2336303926bba4e7e326b0570342fa24"
+    },
+    "600406.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600406.SH",
+        "main_report": {
+          "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db"
+        },
+        "checklist": {
+          "path": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
+          "sha256": "a624c64c1d6b1932bac89d444a7baad1d381f290d7b5c99fc3d32f24a95a5e28"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01"
+    },
+    "600420.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600420.SH",
+        "main_report": {
+          "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "fd20ea5d168771ee988bcdae9ebbc87f0355af87dde251a628769c06bd7852be"
+    },
+    "600426.SH": {
+      "category": "B",
+      "execution_key": "trial",
+      "label": "人工复核：仅激进观察仓",
+      "detail": "经营改善得到中报支持，但周期与价格安全边际仍有限，只适合能承受波动者的小仓观察。",
+      "opportunity_tier": "near",
+      "opportunity_summary": "基本面改善已出现，但安全边际尚不足；只列临近机会，不列正式可执行机会。",
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-08-21",
+      "source_snapshot": {
+        "ticker": "600426.SH",
+        "main_report": {
+          "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+          "sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31"
+        },
+        "checklist": {
+          "path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260812.md",
+          "sha256": "9bb65402e7c7fcda1aeb5ea8eb46757993b9352d941e4c723ef652526d4cc1ad"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5"
+    },
+    "600519.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600519.SH",
+        "main_report": {
+          "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
+          "sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb"
+    },
+    "600549.SH": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600549.SH",
+        "main_report": {
+          "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+          "sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "fc66c492a9411a7b5f55579238863dfa4de782e5447cbfb190a08242dfe7d1b1"
+    },
+    "600795.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600795.SH",
+        "main_report": {
+          "path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d41078a94844ad909df04b7b0174aa447b72d6835d0994e37d50c77ca12e3dab"
+    },
+    "600809.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600809.SH",
+        "main_report": {
+          "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "890ca85cc2f00f5e1291f2542e5960ac3455335a8c810a136154da1ef85c1854"
+    },
+    "600887.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600887.SH",
+        "main_report": {
+          "path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+          "sha256": "259a2cfd325dd08b522483ac629e01840860f404728f08c4bd598b8e3220bcc9"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "2bcb84e1f181ac722aee55364109657c5939929772a789bb652258074f262eb6"
+    },
+    "600900.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600900.SH",
+        "main_report": {
+          "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99"
+        },
+        "checklist": {
+          "path": "reports/长江电力/巴菲特Checklist-长江电力.md",
+          "sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d"
+    },
+    "600941.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "600941.SH",
+        "main_report": {
+          "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+          "sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "b7452d2263c7e404e9d4f671b00e4f1930cc3083f85f36c0dd872f11dab81c81"
+    },
+    "601020.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601020.SH",
+        "main_report": {
+          "path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "44f022a498f035e49b809328ce2190cec3152dcfd4bea1ce1e5a6ec3415ae350"
+    },
+    "601038.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601038.SH",
+        "main_report": {
+          "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "f507abae8e3b67ab7ac7b5a69398e45aaf92a705ef339e821975e9b15a8a93e2"
+    },
+    "601088.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601088.SH",
+        "main_report": {
+          "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf"
+        },
+        "checklist": {
+          "path": "reports/中国神华/巴菲特Checklist-中国神华.md",
+          "sha256": "0382bc52de9913e9713804d07fc521f863c188a6e9ca76a250dbfeb170260cda"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "51de54e67f4c19b17c6de4fc38891c9cc700f3420058555e5b27c1a8eb65c20f"
+    },
+    "601126.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601126.SH",
+        "main_report": {
+          "path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+          "sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07"
+        },
+        "checklist": {
+          "path": "reports/四方股份/巴菲特Checklist-四方股份.md",
+          "sha256": "9e74150e010203777568bde788fa4c894ff8a2a9da65da7f2c147a206d9fef54"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "73ce7fd2e7f0af6dd8e511ce9dd172b40704fb5234f2febb0b9f1cc8372697d3"
+    },
+    "601127.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601127.SH",
+        "main_report": {
+          "path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+          "sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e"
+    },
+    "601138.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601138.SH",
+        "main_report": {
+          "path": "reports/工业富联/工业富联-research-20260726.md",
+          "sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "32fe090452565af7fcbd1af3c7fd847855e01a3547879e3ee6b5dc40bd7b674d"
+    },
+    "601156.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601156.SH",
+        "main_report": {
+          "path": "reports/东航物流/东航物流-investment-research-20260807.md",
+          "sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "7c7ca2144cfdd15406d6e1e9b8f94dd6234cf2058ad7ba785b36f4bffd2cdf97"
+    },
+    "601179.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601179.SH",
+        "main_report": {
+          "path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "1e2524b7ae25b93ea15e4256f99a200e48275d7929b8c0e40ca418d9f6d7f1a2"
+    },
+    "601318.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-01",
+      "source_snapshot": {
+        "ticker": "601318.SH",
+        "main_report": {
+          "path": "reports/平安集团/中国平安-investment-research-20260810.md",
+          "sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73"
+        },
+        "checklist": {
+          "path": "reports/平安集团/平安集团-checklist-20260807.md",
+          "sha256": "b5140689f71a9b1d2afa7d3ded7a85602d5b880ad074f4785306bd8d4e4f800c"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ed819b87d5d1ca40b7ee082ea099a4bc8edc9a4862e2939ed5be85f064e285de"
+    },
+    "601398.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601398.SH",
+        "main_report": {
+          "path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671"
+        },
+        "checklist": {
+          "path": "reports/工商银行/巴菲特Checklist-工商银行-20260707.md",
+          "sha256": "fc99a88d6830d78b378a650bb955c4f1ce83c28232683cb47d108a83e7926d87"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "f89d73dfdd20e4019387ed15c22da3b1379046c53120e290a879ed21dd520b3a"
+    },
+    "601717.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601717.SH",
+        "main_report": {
+          "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+          "sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "c4db49b14ec7e4cfee668bba8e4fe621d1f4aca1e333cf860cf807cf49162861"
+    },
+    "601727.SH": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601727.SH",
+        "main_report": {
+          "path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "1ad7403a9a2e0080007382c80f1a29b0d1cc72aff18ae375ee8d1cb40b26fda4"
+    },
+    "601899.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601899.SH",
+        "main_report": {
+          "path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+          "sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9c9a1b244734044e91916d09c1add0eaaad2191effd88c07b1ba395c762e63d1"
+    },
+    "601919.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601919.SH",
+        "main_report": {
+          "path": "reports/中远海控/中远海控-research-20260707.md",
+          "sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "1abbf9d2cb6bfbb5d80c945bf3818e22fd6ed56455d51739d4b5683316139dd0"
+    },
+    "601975.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "601975.SH",
+        "main_report": {
+          "path": "reports/招商南油/招商南油-investment-research-20260810.md",
+          "sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "aab89380368a98a4b0d50b9ff0ef5d10a7a228e5ce909b4bc397010466e0a704"
+    },
+    "603005.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603005.SH",
+        "main_report": {
+          "path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "181d25e349d0a359c1e046f5bc4f0f47418aeff22671b177ee58cb310d8d07f9"
+    },
+    "603129.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603129.SH",
+        "main_report": {
+          "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "151492dd496cde7dca82922456b4db9014725e16bc55d131df03ff53bd245213"
+    },
+    "603228.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603228.SH",
+        "main_report": {
+          "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+          "sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "7a3407c6e1adc10c580789b17bf295ac0826be3303df210a195f094013977c50"
+    },
+    "603288.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603288.SH",
+        "main_report": {
+          "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+          "sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e"
+    },
+    "603298.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603298.SH",
+        "main_report": {
+          "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9015c410dfc6dd6cb1d4b5399e4fe0b3a2703fb1d639d3e90e854fdb6eb32221"
+    },
+    "603606.SH": {
+      "category": "D",
+      "execution_key": "no",
+      "label": "人工复核：Checklist 硬性否决",
+      "detail": "买入前 Checklist 存在硬性否决；即使价格进入主报告区间，也不得进入当前可买名单。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": true,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603606.SH",
+        "main_report": {
+          "path": "reports/东方电缆/东方电缆-research-20260726.md",
+          "sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3"
+        },
+        "checklist": {
+          "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "7477106651076e961a23b962af9f359f37d168b76fbd05b482485482b73c5263"
+    },
+    "603659.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603659.SH",
+        "main_report": {
+          "path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6"
+        },
+        "checklist": {
+          "path": "reports/Putailai/璞泰来-checklist-20260731.md",
+          "sha256": "1c204ef1f7150dab7f1e8e128bc99541a0a7f5d4b81a2c3adc0446e735f7bceb"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397"
+    },
+    "603993.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "603993.SH",
+        "main_report": {
+          "path": "reports/CMOC/CMOC-research-20260623.md",
+          "sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "4b2eeea38802ab8c1a9d66920642c11b7b6f2ef24c61ced6416dad7bf4e0c182"
+    },
+    "605117.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "605117.SH",
+        "main_report": {
+          "path": "reports/deye/deye-investment-research-20260623.md",
+          "sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9280b06c65ccff61c9922c871e32d10516b353be6a060f06d0fe5437c2f1c918"
+    },
+    "605499.SH": {
+      "category": "A",
+      "execution_key": "actionable",
+      "label": "人工复核：当前可分批",
+      "detail": "人工逐项复核主报告、最新中报与周五收盘价后，当前具备小比例分批执行条件。",
+      "opportunity_tier": "current",
+      "opportunity_summary": "当前唯一进入可执行小比例分批名单的 A 股；仍应按报告价格纪律控制仓位。",
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "605499.SH",
+        "main_report": {
+          "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+          "sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c"
+        },
+        "checklist": {
+          "path": "reports/东鹏饮料/东鹏饮料-investment-checklist-20260812.md",
+          "sha256": "5af91cd868aec2ff41fb1288543207bf9f5a3217b8f04162b63522fd52bd64fb"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13"
+    },
+    "688008.SH": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688008.SH",
+        "main_report": {
+          "path": "reports/montage-tech/montage-tech-investment-research-20260623.md",
+          "sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "f7d72c8ee828e10008fcf9268cb9c05638f447ffc0bae4b8d85ad9eb51f351f2"
+    },
+    "688017.SH": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688017.SH",
+        "main_report": {
+          "path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "0e8e7a8e867715df93c5f1f77994735186f835aed87c76a1081dd39308810072"
+    },
+    "688235.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688235.SH",
+        "main_report": {
+          "path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263"
+        },
+        "checklist": {
+          "path": "reports/百济神州/巴菲特Checklist-百济神州-20260706.md",
+          "sha256": "ad2a82741e1e63177ef1291d65a8f47aa8a36dd253130a0652ad527aeb07d4ff"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4"
+    },
+    "688271.SH": {
+      "category": "C",
+      "execution_key": "validation",
+      "label": "人工复核：价格已到，等待验证",
+      "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688271.SH",
+        "main_report": {
+          "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+          "sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf"
+        },
+        "checklist": {
+          "path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+          "sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db"
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8"
+    },
+    "688361.SH": {
+      "category": "E",
+      "execution_key": "no",
+      "label": "人工复核：当前不买",
+      "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688361.SH",
+        "main_report": {
+          "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+          "sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "d7177e0e2d0758da813fd4e7fb12b6e2d048df0345ac69525234c9b05dba3726"
+    },
+    "688676.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688676.SH",
+        "main_report": {
+          "path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "a3937f3be3a142253b5aa747d8917faa4301e237df1470604daae8ae23c1e611"
+    },
+    "688825.SH": {
+      "category": "F",
+      "execution_key": "wait_price",
+      "label": "人工复核：等待更低价格或下一期财报",
+      "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
+      "opportunity_tier": null,
+      "opportunity_summary": null,
+      "checklist_blocked": false,
+      "reviewed_at": "2026-08-23T22:30:00+08:00",
+      "price_as_of": "2026-08-21",
+      "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+      "reviewer": "Codex 人工复核",
+      "valid_until": "2026-09-22",
+      "source_snapshot": {
+        "ticker": "688825.SH",
+        "main_report": {
+          "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d"
+        },
+        "checklist": {
+          "path": null,
+          "sha256": null
+        },
+        "review_report": {
+          "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+          "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        }
+      },
+      "source_fingerprint_sha256": "fe8e97b826bd2a444ff7a291f37c6ce963bead1a41a26a6fc961b27da9667890"
     }
   }
 }

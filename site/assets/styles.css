@@ -333,7 +333,9 @@ h1 {
 .annual-date-table .date-warn { color: var(--watch); }
 .automation-status-table .status-ok { color: var(--buy); }
 .automation-status-table .status-partial,
-.automation-status-table .status-running { color: var(--watch); }
+.automation-status-table .status-running,
+.automation-status-table .status-deferred,
+.automation-status-table .status-interrupted { color: var(--watch); }
 .automation-status-table .status-error { color: var(--sell); }
 .automation-status-table .status-skipped,
 .automation-status-table .status-pending { color: var(--ink-faint); }
@@ -1163,34 +1165,6 @@ tbody tr.detail-inline-row .detail-panel {
   overflow-wrap: anywhere;
 }
 .deep-review-start { justify-self: start; }
-.deep-review-token-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: end;
-  max-width: 620px;
-}
-.deep-review-token-form label {
-  display: grid;
-  gap: 5px;
-  color: var(--ink-soft);
-  font-size: 12px;
-  line-height: 1.4;
-}
-.deep-review-token-form input {
-  min-width: 0;
-  min-height: 38px;
-  padding: 8px 10px;
-  border: 1px solid rgba(142, 111, 255, 0.46);
-  border-radius: 7px;
-  background: rgba(8, 15, 28, 0.86);
-  color: var(--ink);
-  font: inherit;
-}
-.deep-review-token-form input:focus {
-  outline: 2px solid rgba(142, 111, 255, 0.52);
-  outline-offset: 1px;
-}
 .deep-review-model {
   display: grid;
   gap: 10px;
@@ -1225,11 +1199,6 @@ tbody tr.detail-inline-row .detail-panel {
   border-left: 3px solid var(--brand);
   background: rgba(46, 230, 168, 0.07);
   color: #afeed7;
-}
-
-@media (max-width: 560px) {
-  .deep-review-token-form { grid-template-columns: 1fr; }
-  .deep-review-token-form .btn { justify-self: start; }
 }
 
 /* 可执行状态辅助块 */

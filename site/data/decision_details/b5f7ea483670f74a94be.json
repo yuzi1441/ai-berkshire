@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -298,49 +300,12 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": "2026-07-06",
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "- 全球员工总数突破8,700名；",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "如果张强明天离开，公司能正常运转吗？ 大概率能维持运转，但估值叙事会受冲击。公司已有联席CEO、总经理、总裁、CTO、事业部技术负责人体系，组织不完全依赖单一CEO；但张强对技术路线、全球化和资本市场信心仍是关键符号。",
-        "start_line": 230,
-        "end_line": 237,
-        "markdown": "| 如果张强明天离开，公司能正常运转吗？ | 大概率能维持运转，但估值叙事会受冲击。公司已有联席CEO、总经理、总裁、CTO、事业部技术负责人体系，组织不完全依赖单一CEO；但张强对技术路线、全球化和资本市场信心仍是关键符号。 |\n| 如果薛敏/联影集团发生变化，影响是否更大？ | 是。实际控制人与集团生态对资源、AI/智能协同、资本配置边界影响更大。市场可能更关注集团层面稳定性。 |\n| 现有管理团队深度如何？ | 技术和经营层次较深，多名核心技术人员长期任职，海外与服务团队正在扩张；CFO任期较短是观察点。 |\n| 竞争优势依赖CEO个人还是组织/系统？ | 更偏组织/系统：研发平台、核心部件、产品矩阵、供应链、服务网络、客户装机基础共同构成护城河。但战略方向仍高度依赖核心团队。 |\n| 历史管理层交接是否顺利？ | 2022年后张强从董事长/总经理/CEO调整为董事长/联席CEO，GUOSHENG TAN、JUN BAO等分担经营角色；2024年CFO由王建保接任。公开资料未见交接失控迹象，但时间仍不长。 |\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "联影医疗-management-20260706",
-      "report_path": "reports/联影医疗/联影医疗-management-20260706.md",
-      "report_link": "联影医疗/联影医疗-management-20260706.md"
-    },
-    {
-      "data_cutoff": "2026-07-06",
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "- 研究用途：仅供学习和研究，不构成投资建议。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "4. 市场与估值快照",
-        "start_line": 56,
-        "end_line": 61,
-        "markdown": "## 4. 市场与估值快照\n\n2026-07-06 收盘后行情交叉：新浪与腾讯均显示联影医疗收盘价 106.75 元；腾讯口径显示总市值约 879.79 亿元。用总股本 824,157,988 股验算，市值约 879.79 亿元。以 2025 年归母净利润 18.69 亿元计算，静态 PE 约 47.07 倍；若假设 2026 年利润在 2025 年基础上增长 15%，前瞻 PE 约 40.93 倍。\n\n这个估值隐含市场相信公司能持续全球化、高端化和利润爬坡。若 2026Q1 的现金流与扣非压力延续，估值会变脆；若后续合同负债恢复、存货转销售、服务收入占比继续提升，估值才有支撑。"
-      },
-      "price_status": "价格未给出",
-      "title": "联影医疗财报精读团队研究底稿",
-      "report_path": "reports/联影医疗/联影医疗-earnings-2025年报及2026Q1-研究底稿.md",
-      "report_link": "联影医疗/联影医疗-earnings-2025年报及2026Q1-研究底稿.md"
     }
   ],
-  "report_history_count": 4,
+  "report_history_count": 2,
   "primary_judgment": {
     "label": "小仓验证",
     "action_kind": "trial",
@@ -431,6 +396,7 @@
     "market": "A股",
     "report_path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
     "report_link": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+    "report_sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db",
     "title": "巴菲特Checklist-联影医疗",
     "source_type": "standalone",
     "decision_contract": null,
@@ -464,7 +430,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "待复核",
     "action": "待复核",
     "summary": "❓灰色地带 — 不通过当前买入 Checklist。",
@@ -486,11 +453,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
@@ -500,8 +470,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "688271.SH",
+      "main_report": {
+        "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+        "sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf"
+      },
+      "checklist": {
+        "path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
+        "sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
+    "current_source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "联影医疗",
     "ticker": "688271.SH",
@@ -546,6 +539,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "b5f7ea483670f74a94be",
   "detail_path": "./data/decision_details/b5f7ea483670f74a94be.json"
 }

@@ -64,7 +64,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "待复核：未标注数据截止日",
@@ -124,7 +125,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -134,6 +136,13 @@
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "NewbornTown",
     "ticker": "09911.HK",
@@ -178,6 +187,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "71bcbc418998697001a2",
   "detail_path": "./data/decision_details/71bcbc418998697001a2.json"
 }

@@ -42,7 +42,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取",
   "data_status": "待复核：未标注数据截止日",
@@ -80,35 +81,24 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "本文不构成任何投资建议。投资有风险，决策需谨慎。",
-      "buy_price": "US$49",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "情景 假设 合理估值 上行/下行",
-        "start_line": 139,
-        "end_line": 146,
-        "markdown": "| 情景 | 假设 | 合理估值 | 上行/下行 |\n|------|------|---------|----------|\n| **乐观** | 品牌结账恢复5%增长 + Venmo加速 + 广告贡献 | 700-800亿美元 | **股价翻倍** |\n| **中性** | 品牌结账低个位数增长 + 利润率稳定 + 回购驱动每股收益 | 500-600亿美元 | **+30-50%** |\n| **悲观** | 品牌结账持续丢份额 + 利润率下行 + 商品化 | 300-350亿美元 | **-15-25%** |\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "PayPal：8倍市盈率的支付巨头，是捡便宜还是接飞刀？",
-      "report_path": "reports/PayPal/《看懂PayPal》/01-PayPal-8倍PE的支付巨头是捡便宜还是接飞刀.md",
-      "report_link": "PayPal/《看懂PayPal》/01-PayPal-8倍PE的支付巨头是捡便宜还是接飞刀.md"
     }
   ],
-  "report_history_count": 2,
+  "report_history_count": 1,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "PayPal",
     "ticker": "PYPL",
@@ -153,6 +143,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "0a28cd604823118a7d0d",
   "detail_path": "./data/decision_details/0a28cd604823118a7d0d.json"
 }

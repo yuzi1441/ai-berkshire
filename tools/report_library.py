@@ -144,7 +144,9 @@ def apply_plan(repo_root: Path, plan: dict[str, Any], log_path: Path) -> dict[st
 
     validated = [validate_operation(repo_root, operation) for operation in plan["operations"]]
     applied: list[dict[str, Any]] = []
-    for operation, (source, destination) in zip(plan["operations"], validated, strict=True):
+    # Python 3.9 has no ``strict=`` argument; validation above creates one
+    # validated pair for every operation, so the lengths already match.
+    for operation, (source, destination) in zip(plan["operations"], validated):
         destination.parent.mkdir(parents=True, exist_ok=True)
         source.rename(destination)
         applied.append({**operation, "status": "moved"})

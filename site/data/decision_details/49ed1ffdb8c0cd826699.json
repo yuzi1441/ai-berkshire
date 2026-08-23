@@ -81,7 +81,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -158,137 +159,24 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [
-        {
-          "stance": "稳健型",
-          "action": "适合谁",
-          "price_range": "",
-          "note": "高不确定性套利型"
-        }
-      ],
-      "conclusion_summary": "稳健型：适合谁",
-      "buy_price": "US$188",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "~$420",
-          "upside": "+123%"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "~$270",
-          "upside": "+44%"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "~$140",
-          "upside": "-26%"
-        }
-      ],
-      "valuation_section": {
-        "heading": "估值拆解：当前价格隐含什么预期",
-        "start_line": 132,
-        "end_line": 183,
-        "markdown": "## 估值拆解：当前价格隐含什么预期\n\n### 反向 DCF 分析\n\n以当前股价 **~$188** 计算，假设终端 PE 25倍、折现率 10%：\n\n| 隐含条件 | 需要达到的水平 |\n|----------|-------------|\n| FY2029 EPS | **~$7.0**（当前 $3.07 的 2.3 倍） |\n| FY2029 收入 | **~$180 亿**（当前 $82 亿的 2.2 倍） |\n| 4 年收入 CAGR | **~22%** |\n| 4 年 EPS CAGR | **~23%** |\n\n**判断：** 市场定价隐含的 4 年 22% 收入 CAGR，与管理层指引（FY2027 +30%、FY2028 +35-40%）大致匹配。**如果管理层完全兑现指引，当前价格大致合理但没有安全边际。如果增速低于预期——哪怕只低 5-10 个百分点——股价下行空间 20-30%。**\n\n### 与同行对比\n\n| 指标 | 迈威尔 | 博通 | 英伟达 |\n|------|--------|------|--------|\n| Trailing PE（Non-GAAP）| **~66倍** | ~62倍 | ~41倍 |\n| Trailing PE（GAAP含一次性）| **~61倍** | — | — |\n| Forward PE | **~47倍** | — | ~28倍 |\n| PS（TTM） | **~19倍** | ~15倍 | ~25倍 |\n| P/FCF | **~111倍** | ~35倍 | ~45倍 |\n| PEG | **~1.12** | ~1.5 | ~0.9 |\n| Non-GAAP 毛利率 | 61% | 70%+ | 75%+ |\n| 客户集中度 | 极高 | 高 | 中等 |\n\n数据来源：各公司最新财报、StockAnalysis.com\n\n**几个对比结论：**\n\n1. **PEG 看起来便宜（迈威尔 1.12，博通 1.5），但 PEG 只在增速确定时有意义。** 迈威尔的增速确定性不如博通（博通跟 Google 的 TPU 合同到 2031 年）和英伟达（CUDA 生态锁定），所以 PEG 的\"折价\"可能是合理的风险溢价。\n\n2. **P/FCF 111 倍——这是一个危险信号。** 说明迈威尔的自由现金流生成能力远远跟不上市值。FY2026 自由现金流约 **14-15 亿美元**（经营现金流 16.8 亿扣除资本支出），市值 **1,600 亿**——你需要等约 **110 年**才能靠自由现金流回本（当然，增长会改变这个数字，但它揭示了当前估值对增长的依赖程度）。\n\n3. **英伟达 28倍 Forward PE，迈威尔 47倍**——如果你要买 AI 芯片股票，英伟达的风险收益比目前看起来比迈威尔更好：市场地位更稳固、客户更分散、估值更低。\n\n### 三情景测算\n\n| 情景 | 假设 | 3 年目标价 | 涨跌幅 |\n|------|------|-----------|--------|\n| **乐观** | 收入 CAGR 40%，目标 PE 50倍 | ~$420 | +123% |\n| **中性** | 收入 CAGR 30%，目标 PE 40倍 | ~$270 | +44% |\n| **悲观** | 收入 CAGR 15%，目标 PE 30倍 | ~$140 | **-26%** |\n\n**中性情景下 3 年 44% 回报（年化约 13%），需要一切基本按计划进行。悲观情景下亏 26%，只需要增速比预期低一些。**\n\n这就是 58 倍 PE 的代价——**上行需要一切顺利，下行只需要一件事不对。**\n\n---"
-      },
-      "price_status": "已提取三情景",
-      "title": "58 倍 PE 在赌什么",
-      "report_path": "reports/Marvell/《看懂迈威尔》/04-风险与估值-58倍PE在赌什么.md",
-      "report_link": "Marvell/《看懂迈威尔》/04-风险与估值-58倍PE在赌什么.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "空仓者 观望等待。当前$177估值已充分定价未来3年增长，风险收益比不佳。建议等待回调至$120-135区间（对应forward PE 30-35x）再考虑建仓",
-      "buy_price": "US$177",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "$421",
-          "eps_growth": "40%/年",
-          "target_pe": "50x",
-          "upside": "+138%"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "$270",
-          "eps_growth": "30%/年",
-          "target_pe": "40x",
-          "upside": "+53%"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "$140",
-          "eps_growth": "15%/年",
-          "target_pe": "30x",
-          "upside": "-21%"
-        }
-      ],
-      "valuation_section": {
-        "heading": "第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"",
-        "start_line": 306,
-        "end_line": 395,
-        "markdown": "## 第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 当前市场定价\n\n| 指标 | Marvell | Broadcom | Nvidia | 行业平均 |\n|------|---------|----------|--------|----------|\n| trailing PE | 57.6x | ~62x | ~41x | ~35x |\n| Forward PE | ~46.5x | — | ~28x | ~30x |\n| PS (TTM) | 18.9x | ~15x | ~25x | ~8x |\n| P/FCF | 110.6x | ~35x | ~45x | ~30x |\n| PEG | 1.12 | ~1.5 | ~0.9 | 1.0-1.5 |\n\n### 反向DCF：当前股价隐含什么预期？\n\n以$176.89计算，假设终端PE 25x、折现率10%：\n- 隐含FY2029 EPS需达到~$7.0（当前$3.07的2.3倍）\n- 隐含收入需达到~$18B（当前$8.2B的2.2倍）\n- 隐含4年收入CAGR ~22%\n\n**判断：** 市场定价隐含的增长预期（4年CAGR 22%）与管理层指引（FY2027 +30%，FY2028 +40-50%）基本一致。如果管理层兑现指引，当前价格大致合理；如果增速低于预期，下行空间显著。\n\n### 三情景估值（工具精确计算）\n\n| 情景 | 3年EPS增速 | 目标PE | 3年目标价 | 涨跌幅 |\n|------|-----------|--------|-----------|--------|\n| **乐观** | 40%/年 | 50x | $421 | +138% |\n| **中性** | 30%/年 | 40x | $270 | +53% |\n| **悲观** | 15%/年 | 30x | $140 | -21% |\n\n**概率加权期望值：** 假设乐观25%/中性50%/悲观25%\n- 期望目标价 = $421×0.25 + $270×0.50 + $140×0.25 = $275\n- 期望收益率 = +55%（3年），年化约16%\n\n### 历史估值对比\n\n- Marvell过去3年Forward PE区间：25x-65x\n- 当前46.5x处于中等偏高位置\n- 2022年底低谷时Forward PE约25x（当时增速放缓+行业库存调整）\n\n### 同行估值对比\n\nMarvell的PEG（1.12）看起来比Broadcom便宜（~1.5），但：\n- Broadcom客户更分散、利润率更高、规模更大\n- Nvidia的PEG更低（~0.9），且市场地位更稳固\n- Marvell的\"便宜\"可能反映了市场对客户集中度风险的折价\n\n### 段永平式追问\n\n> 如果股市明天关闭5年，你愿意以这个价格持有吗？\n\n**答案：偏向犹豫。** $177的价格要求一切顺利——AI资本支出持续增长、Marvell保持客户关系、Broadcom不打价格战、中国风险不爆发。任何一个假设不成立，5年后的回报可能令人失望。\n\n如果价格在$120-130（对应30-35x forward PE），安全边际更充分。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 汇总评估\n\n| 维度 | 结论 | 信心度 |\n|------|------|--------|\n| 生意质量（段永平） | 中上——定制ASIC有技术壁垒和客户锁定，但本质是\"大客户外包设计\"，议价能力有限 | ★★★ |\n| 护城河（巴菲特） | 中等偏强——转换成本和技术壁垒是核心，但规模不如Broadcom、客户可换 | ★★★ |\n| 管理层（段永平+巴菲特） | 优秀——Murphy的战略眼光和并购执行力属业内一流 | ★★★★ |\n| 最大风险（芒格） | 客户集中度+估值过高——任何增速低于预期的迹象都会导致暴跌 | ★★★★ |\n| 文明趋势（李录） | 顺势——AI数据中心是确定性趋势，Marvell位于价值链关键位置 | ★★★★ |\n| 估值（巴菲特+段永平） | 偏贵——当前价格已充分反映乐观预期，安全边际不足 | ★★ |\n\n### 最终决策\n\n| 策略 | 建议 |\n|------|------|\n| **空仓者** | 观望等待。当前$177估值已充分定价未来3年增长，风险收益比不佳。建议等待回调至$120-135区间（对应forward PE 30-35x）再考虑建仓 |\n| **持仓者** | 可继续持有但设止损。如果持仓成本远低于当前价格，享受趋势但保持警惕。FY2027Q1业绩（5月27日）是关键验证点 |\n| **卖出信号** | ① 任何大客户（AWS/微软）ASIC项目延迟或取消的消息 ② AI资本支出增速连续两季下滑 ③ Broadcom赢得Marvell现有客户的下一代合同 ④ 中美关系进一步恶化导致供应链受阻 |\n| **加仓信号** | ① 股价回调30%+至$120-135区间 ② FY2027收入增速超预期（>35%）③ 新增重量级ASIC客户（如Meta/字节跳动）④ Celestial AI技术提前验证成功 |\n\n### 四位大师模拟点评\n\n> **巴菲特：** \"这是一家好公司，处在一个好行业。但好公司在错误的价格上也可以是一笔坏投资。在57倍市盈率的价格上买入，你需要很多事情都对了才能赚钱。我更愿意在30倍以下出手。\"\n\n> **芒格：** \"反过来想。当所有人都在兴奋地谈论AI芯片时，问问自己：如果AI资本支出明年下降30%会怎样？如果AWS决定像Google做TPU一样自研会怎样？在1547亿美元市值上，你赌的不是公司好不好，而是它是否好到超过市场所有人的预期。\"\n\n> **段永平：** \"公司是对的公司，CEO是对的人。Murphy的收购决策一个比一个准，这种判断力很稀缺。但价格不太对——我想在一个让我'怎么也亏不了多少'的价格上买入。$177不是那个价格。\"\n\n> **李录：** \"AI是文明演进的确定趋势，Marvell站在了正确的一边。但历史告诉我们，技术范式转移中'卖铲子'的公司最终表现参差不齐——你需要区分谁是Cisco（2000年后20年没回前高），谁是台积电（持续创造价值）。Marvell目前更像前者的估值，期望后者的增长。\"\n\n---"
-      },
-      "price_status": "已提取三情景",
-      "title": "Marvell Technology (MRVL) 投资研究报告",
-      "report_path": "reports/Marvell/Marvell-research-20260516.md",
-      "report_link": "Marvell/Marvell-research-20260516.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "买入",
-      "investor_stances": [],
-      "conclusion_summary": "Forward PE说明： 62-77倍范围取决于使用FY2027共识（Non-GAAP EPS $4.05）还是日历年前瞻估计。按$281.69 / $4.05 = ~69.6倍。",
-      "buy_price": "US$241.79",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "四、估值",
-        "start_line": 358,
-        "end_line": 426,
-        "markdown": "## 四、估值\n\n### 4.1 当前估值倍数\n\n| 指标 | 数值 | 来源 |\n|------|------|------|\n| **PE (TTM)** | 96.47–105.45 | Yahoo Finance / StockAnalysis |\n| **Forward PE** | 62.06–76.58 | StockAnalysis / GuruFocus |\n| **P/Sales (TTM)** | 30.87–30.90 | Yahoo Finance / StockAnalysis |\n| **P/Book** | 14.78–14.80 | Yahoo Finance / StockAnalysis |\n| **EV/Revenue** | 31.06 | StockAnalysis |\n| **EV/EBITDA (TTM)** | 99.83 | StockAnalysis |\n| **EV/EBITDA (NTM)** | ~54x | TIKR |\n| **PEG Ratio** | 1.74–1.92 | Yahoo Finance / StockAnalysis |\n| **EPS (TTM)** | $2.92 (GAAP) | Yahoo Finance |\n\n**Forward PE说明：** 62-77倍范围取决于使用FY2027共识（Non-GAAP EPS $4.05）还是日历年前瞻估计。按$281.69 / $4.05 = ~69.6倍。\n\n---\n\n### 4.2 分析师估计与评级\n\n| 指标 | 数值 | 来源 |\n|------|------|------|\n| **覆盖分析师数** | 44 | StockAnalysis |\n| **共识评级** | **强烈买入** | StockAnalysis |\n| 强烈买入/买入 | 31 + 7 = 38 | StockAnalysis |\n| 持有 | 5 | StockAnalysis |\n| 卖出/强烈卖出 | 1 / 0 | StockAnalysis |\n| **平均目标价** | $241.79 | StockAnalysis |\n| **中位目标价** | $240.00 | StockAnalysis |\n| **最高目标价** | $385.00（KeyBanc, 6月18日） | Benzinga |\n| **最低目标价** | $110.00（Goldman Sachs, 2025年12月） | Benzinga |\n\n#### 共识预测\n\n| 财年 | 营收共识 | Non-GAAP EPS共识 |\n|------|---------|-----------------|\n| **FY2027**（截至2027年2月） | $11.52B | $4.05 |\n| **FY2028**（截至2028年2月） | ~$16.5B（管理层指引） | ~$5.44–$6.11 |\n\n**注意：** 平均目标价$241.79**低于**当前股价$281.69，表明股价已跑在共识前面。但多位分析师在纳入标普500后近期上调了目标价。\n\n---\n\n### 4.3 可比公司估值\n\n| 指标 | **MRVL** | **AVGO** | **AMD** | **NVDA** | **LSCC** | **MPWR** |\n|------|----------|----------|---------|----------|----------|----------|\n| **市值** | $247B | $1,810B | $849B | $4,880B | $19.9B | $70.5B |\n| **企业价值** | $271B | $1,910B | $891B | $5,010B | $21.2B | $74.2B |\n| **PE (TTM)** | 97 | 65 | 184 | 32 | 1,029 | 103 |\n| **PE (Forward)** | 62 | 25 | 63 | 21 | 75 | 56 |\n| **P/Sales** | 30.9 | 24.7 | 24.0 | 19.9 | 37.1 | 25.6 |\n| **EV/Revenue** | 31.1 | 25.3 | 23.8 | 19.8 | 36.9 | 25.1 |\n| **EV/EBITDA** | 100 (TTM) | 45 | 120 | 30 | 302 | 87 |\n| **近季营收增速 (YoY)** | +28% | +48% | +38% | +85% | 复苏中 | +55% |\n| **TTM营收** | $8.2B | $75.5B | $37.5B | $253.5B | $0.57B | $2.96B |\n\n> 来源：[StockAnalysis](https://stockanalysis.com/stocks/mrvl/statistics/) 及各公司页面，数据截至2026年6月23日\n\n**估值观察：**\n- **Forward PE约62倍**在大型半导体公司中第二高（仅次于AMD 63倍），远高于NVDA（21倍）和AVGO（25倍）\n- **EV/Revenue 31倍**在大型同行中最高，反映市场对FY2027 40%+营收增长的预期\n- **PEG约1.8倍**，若公司实现FY2027-FY2028 40%+增长轨迹则合理\n- 当前股价已超过共识分析师目标价，市场在定价上调预期\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "Marvell Technology (NASDAQ: MRVL) — 综合数据收集",
-      "report_path": "reports/Marvell/MRVL_data_collection.md",
-      "report_link": "Marvell/MRVL_data_collection.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "迈威尔科技（Marvell Technology, NASDAQ: MRVL），总部位于美国特拉华州，是一家无晶圆厂（Fabless）半导体公司——自己设计芯片，由台积电代工制造。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "当前 PE（GAAP TTM） ~61倍（基于 $188 股价） 高估值",
-        "start_line": 42,
-        "end_line": 50,
-        "markdown": "| 当前 PE（GAAP TTM） | **~61倍**（基于 $188 股价） | 高估值 |\n| Forward PE（FY2027E） | **~47倍** | 市场定价 30%+ 增速 |\n\n数据来源：Marvell FY2026 年报、StockAnalysis.com\n\n**一句话概括：迈威尔是一家年收入 82 亿美元、四分之三收入来自数据中心的 AI 基础设施芯片公司，当前市值 1,600 亿美元，GAAP PE 约 61 倍。**\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "迈威尔——定制芯片赛道的关键玩家",
-      "report_path": "reports/Marvell/《看懂迈威尔》/01-开篇-定制芯片赛道的关键玩家.md",
-      "report_link": "Marvell/《看懂迈威尔》/01-开篇-定制芯片赛道的关键玩家.md"
     }
   ],
-  "report_history_count": 5,
+  "report_history_count": 1,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "Marvell",
     "ticker": "MRVL",
@@ -333,6 +221,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "49ed1ffdb8c0cd826699",
   "detail_path": "./data/decision_details/49ed1ffdb8c0cd826699.json"
 }

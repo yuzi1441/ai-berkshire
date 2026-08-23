@@ -55,7 +55,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "待复核：未标注数据截止日",
@@ -111,42 +112,24 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [
-        {
-          "stance": "保守型",
-          "action": "回避",
-          "price_range": "US$57",
-          "note": "回避。一家从未盈利的矿业公司以US$57亿市值交易，无论故事多好，风险收益比不适合保守投资者"
-        }
-      ],
-      "conclusion_summary": "保守型：回避（US$57）",
-      "buy_price": "US$36.00",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "五、估值分析",
-        "start_line": 132,
-        "end_line": 170,
-        "markdown": "## 五、估值分析\n\n### 5.1 当前估值\n\n| 指标 | 数值 | 说明 |\n|------|------|------|\n| 市值 | US$56.9亿 | |\n| TTM营收 | ~US$35.8M | |\n| **Trailing P/S** | **~159x** | 极端高估 |\n| TTM净利润 | -US$95.0M | 尚未盈利 |\n| P/E | N/A | 亏损状态 |\n| Forward P/E | 33.81x | 基于分析师预测 |\n| 现金 | US$259.9M | 充裕 |\n\n### 5.2 前瞻估值（含钼矿收入，2027年全产能）\n\n假设2027年全产能运转：\n- Sangdong钨矿收入：估计US$1.5-2.0亿/年（取决于APT价格）\n- 钼矿收入：US$2.34亿/年（底价保障）\n- Panasqueira收入：US$1.0-1.2亿/年（当前APT价格下）\n- **合计前瞻收入：约US$5.0-5.5亿/年**\n- **前瞻P/S：约10-11x**\n\n### 5.3 分析师评级\n\n| 机构 | 评级 | 目标价 | 日期 |\n|------|------|--------|------|\n| Oppenheimer | Outperform | US$25.00 | 2026年6月 |\n| D.A. Davidson | Buy | US$25.00 | 2026年5月 |\n| 共识（9位分析师） | **Strong Buy** | US$23.88 | — |\n| 最高目标价 | — | C$36.00 | — |\n| 最低目标价 | — | C$7.50 | — |\n\n**估值矛盾：** 以当前营收衡量，Almonty极度昂贵（P/S 159x）。但市场定价的是12-18个月后的收入爆发——Sangdong钨矿满产 + 钼矿投产 + APT高价持续。目标价分歧巨大（C$7.50 vs C$36.00），反映出对执行能力和矿产价格的根本分歧。\n\n**数据来源：** [StockAnalysis](https://stockanalysis.com/stocks/alm/)、[Investing.com](https://www.investing.com/news/analyst-ratings/oppenheimer-raises-almonty-industries-stock-price-target-to-25-on-tungsten-prices-93CH-4723984)、[Public.com](https://public.com/stocks/alm/forecast-price-target)\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "Almonty Industries (TSX:AII / NASDAQ:ALM) 深度投资研究",
-      "report_path": "reports/Almonty-Industries/Almonty-Industries-深度研究-20260604.duplicate-from-root-20260723.md",
-      "report_link": "Almonty-Industries/Almonty-Industries-深度研究-20260604.duplicate-from-root-20260723.md"
     }
   ],
-  "report_history_count": 2,
+  "report_history_count": 1,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "Almonty-Industries",
     "ticker": "ALM",
@@ -191,6 +174,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "c80d5095654404546c68",
   "detail_path": "./data/decision_details/c80d5095654404546c68.json"
 }

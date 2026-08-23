@@ -162,11 +162,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -176,8 +179,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600000.SH",
+      "main_report": {
+        "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+        "sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f",
+    "current_source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "浦发银行",
     "ticker": "600000.SH",
@@ -222,6 +248,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "3c4babf294273ae35657",
   "detail_path": "./data/decision_details/3c4babf294273ae35657.json"
 }

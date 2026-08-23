@@ -3,7 +3,7 @@ Description=Run serial A-share sentiment and opportunity jobs
 
 [Timer]
 OnCalendar=Mon..Fri *-*-* 18:10:00 Asia/Shanghai
-Persistent=false
+Persistent=true
 Unit=ai-berkshire-a-share-scheduler@heavy.service
 
 [Install]
