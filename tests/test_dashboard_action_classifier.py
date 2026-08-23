@@ -303,3 +303,6 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertNotIn("sessionStorage", app)
         self.assertNotIn("Bearer ", app)
         self.assertIn("generation_id", app)
+        self.assertIn('const aShareVisible = visible.filter((item) => item.market === "A股")', app)
+        self.assertIn('["待人工复核", manualReviewCount]', app)
+        self.assertIn("人工机会筛选", html)

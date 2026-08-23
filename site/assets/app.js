@@ -2622,11 +2622,11 @@ function renderAttentionPanel() {
 
   els.attentionPanel.hidden = false;
   const fullManualCoverage = manualReviews.length === aShares.length && aShares.length > 0;
-  const metaText = `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 有效人工复核 ${manualReviews.length}/${aShares.length}`;
+  const metaText = `人工机会 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 有效人工复核 ${manualReviews.length}/${aShares.length}`;
   els.attentionMeta.textContent = metaText;
   els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
   if (els.attentionToggleMeta) {
-    els.attentionToggleMeta.textContent = `有效人工复核 ${manualReviews.length}/${aShares.length} · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}`;
+    els.attentionToggleMeta.textContent = `有效人工复核 ${manualReviews.length}/${aShares.length} · 人工机会 ${currentCandidates.length} · 临近 ${nearCandidates.length}`;
     els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
@@ -2645,13 +2645,13 @@ function renderAttentionPanel() {
   if (currentCandidates.length) {
     els.attentionList.append(renderOpportunityGroup(
       currentCandidates,
-      "当前机会",
+      "人工机会",
       "逐股人工核对主报告、最新财报与价格后保留；是否行动仍由你判断。",
     ));
   } else {
     const emptyCurrent = document.createElement("p");
     emptyCurrent.className = "attention-empty attention-current-empty";
-    emptyCurrent.textContent = "当前没有满足“为什么是现在”的机会。";
+    emptyCurrent.textContent = "当前没有被人工复核保留为机会的股票。";
     els.attentionList.append(emptyCurrent);
   }
 
@@ -2695,8 +2695,9 @@ function renderSummary(visible) {
     }
     return;
   }
+  const aShareVisible = visible.filter((item) => item.market === "A股");
   let nextCandidateCount = 0;
-  const counts = visible.reduce((acc, item) => {
+  const counts = aShareVisible.reduce((acc, item) => {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
     const execution = currentExecutionState(item, state.quotes.get(item.ticker), advice.key);
     const key = execution.key;
@@ -2704,16 +2705,22 @@ function renderSummary(visible) {
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
+  const manualReviewCount = aShareVisible.filter(
+    (item) => item.validity_state !== "ready" || item.manual_execution_review?.status !== "ready",
+  ).length;
+  const sentimentReadyCount = aShareVisible.filter(
+    (item) => sentimentForItem(item)?.combined_sentiment?.status === "ok",
+  ).length;
   const metrics = [
     ["当前个股", visible.length],
-    ["A股", visible.filter((i) => i.market === "A股").length],
+    ["A股", aShareVisible.length],
     ["港股", visible.filter((i) => i.market === "港股").length],
-    ["情绪可用", `${visible.filter((i) => sentimentForItem(i)?.combined_sentiment?.status === "ok").length}/${visible.length}`],
+    ["A股情绪可用", `${sentimentReadyCount}/${aShareVisible.length}`],
     ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
     ["下个交易日候选", nextCandidateCount],
     ["价格已到待验证", counts.validation || 0],
     ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
-    ["待人工复核", counts.review || 0],
+    ["待人工复核", manualReviewCount],
   ];
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {

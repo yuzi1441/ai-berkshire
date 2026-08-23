@@ -60,11 +60,32 @@ install -d -o ai-berkshire -g ai-berkshire -m 0750 \
     /var/lib/ai-berkshire/sentiment-snapshots
 install -d -m 0750 /etc/ai-berkshire
 
-if [[ ! -f /var/lib/ai-berkshire/sentiment-last-success.json \
-    && -f "${LEGACY_ROOT}/data/sentiment/latest.json" ]]; then
-    install -o ai-berkshire -g ai-berkshire -m 0640 \
-        "${LEGACY_ROOT}/data/sentiment/latest.json" \
-        /var/lib/ai-berkshire/sentiment-last-success.json
+if [[ ! -f /var/lib/ai-berkshire/sentiment-last-success.json ]]; then
+    LEGACY_SUCCESS_SNAPSHOT="$(python3 - "${LEGACY_ROOT}/data/sentiment" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+candidates = []
+for path in [root / "latest.json", *(root / "snapshots").glob("*.json")]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        continue
+    companies = payload.get("companies")
+    if payload.get("status") != "ok" or not isinstance(companies, list) or not companies:
+        continue
+    candidates.append((str(payload.get("generated_at") or ""), str(path)))
+if candidates:
+    print(max(candidates)[1])
+PY
+)"
+    if [[ -n "${LEGACY_SUCCESS_SNAPSHOT}" ]]; then
+        install -o ai-berkshire -g ai-berkshire -m 0640 \
+            "${LEGACY_SUCCESS_SNAPSHOT}" \
+            /var/lib/ai-berkshire/sentiment-last-success.json
+    fi
 fi
 if [[ -d "${LEGACY_ROOT}/data/sentiment/cache" ]]; then
     rsync -a --ignore-existing \
