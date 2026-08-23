@@ -9,14 +9,16 @@ BACKUP_DIR="$(mktemp -d /var/lib/ai-berkshire/service-backup.XXXXXX)"
 backup_file() {
     local path="$1"
     if [[ -f "${path}" ]]; then
-        install -D -m 0600 "${path}" "${BACKUP_DIR}${path}"
+        mkdir -p "$(dirname "${BACKUP_DIR}${path}")"
+        cp -a "${path}" "${BACKUP_DIR}${path}"
     fi
 }
 
 restore_file() {
     local path="$1"
     if [[ -f "${BACKUP_DIR}${path}" ]]; then
-        install -D -m 0644 "${BACKUP_DIR}${path}" "${path}"
+        mkdir -p "$(dirname "${path}")"
+        cp -a "${BACKUP_DIR}${path}" "${path}"
     fi
 }
 
