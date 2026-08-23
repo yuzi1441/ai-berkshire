@@ -524,6 +524,87 @@ def load_decision_reviews(data_directory: Path) -> dict[str, Any]:
     return payload
 
 
+def load_manual_execution_reviews(data_directory: Path) -> dict[str, Any]:
+    """Load the auditable human decision layer for the reviewed A-share universe."""
+    payload = load_json(
+        data_directory / "manual_execution_reviews.json",
+        {"schema_version": 1, "status": "missing", "categories": {}},
+    )
+    if payload.get("schema_version") != 1 or not isinstance(payload.get("categories"), dict):
+        raise ValueError("Invalid manual execution review payload")
+    return payload
+
+
+def a_share_selection_manifest(decisions: list[dict[str, Any]]) -> str:
+    """Hash the exact ticker/report pairs whose conclusions were manually reviewed."""
+    rows = sorted(
+        (
+            str(item.get("ticker") or "").upper(),
+            str(item.get("report_path") or ""),
+        )
+        for item in decisions
+        if item.get("market") == "A股"
+    )
+    serialized = "\n".join(f"{ticker}|{report_path}" for ticker, report_path in rows)
+    return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def attach_manual_execution_reviews(
+    decisions: list[dict[str, Any]], payload: dict[str, Any]
+) -> None:
+    """Attach human conclusions only when the complete reviewed universe still matches."""
+    if payload.get("status") != "ready":
+        return
+    expected_manifest = str(payload.get("selection_manifest_sha256") or "")
+    actual_manifest = a_share_selection_manifest(decisions)
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_manifest) or expected_manifest != actual_manifest:
+        raise ValueError(
+            "Manual execution reviews are stale: the selected A-share report universe changed"
+        )
+
+    by_ticker: dict[str, dict[str, Any]] = {}
+    for category, definition in payload["categories"].items():
+        if not isinstance(definition, dict) or not isinstance(definition.get("tickers"), list):
+            raise ValueError(f"Invalid manual execution review category: {category}")
+        for raw_ticker in definition["tickers"]:
+            ticker = str(raw_ticker).upper()
+            if ticker in by_ticker:
+                raise ValueError(f"Duplicate manual execution review ticker: {ticker}")
+            by_ticker[ticker] = {
+                "schema_version": 1,
+                "status": "ready",
+                "source": "human_review",
+                "reviewer": payload.get("reviewer") or "人工复核",
+                "reviewed_at": payload.get("reviewed_at"),
+                "price_as_of": payload.get("price_as_of"),
+                "source_report": payload.get("source_report"),
+                "category": category,
+                "execution_key": definition.get("execution_key"),
+                "label": definition.get("label"),
+                "detail": definition.get("detail"),
+                "opportunity_tier": definition.get("opportunity_tier"),
+                "opportunity_summary": definition.get("opportunity_summary"),
+                "checklist_blocked": definition.get("checklist_blocked") is True,
+                "selection_manifest_sha256": actual_manifest,
+            }
+
+    a_share_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in decisions
+        if item.get("market") == "A股"
+    }
+    if set(by_ticker) != a_share_tickers or len(by_ticker) != int(payload.get("reviewed_count") or 0):
+        missing = sorted(a_share_tickers - set(by_ticker))
+        extra = sorted(set(by_ticker) - a_share_tickers)
+        raise ValueError(
+            f"Manual execution review coverage mismatch: missing={missing}, extra={extra}"
+        )
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        if decision.get("market") == "A股":
+            decision["manual_execution_review"] = by_ticker[ticker]
+
+
 def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
     """Load model-led opportunity scans without changing report decisions.
 
@@ -4676,6 +4757,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
+    manual_execution_reviews = load_manual_execution_reviews(data_directory)
     opportunity_scans = load_opportunity_scans(data_directory)
     registry = load_registry(repo_root / "data" / "report-routing" / "company_registry.json")
     overrides = load_json(
@@ -4705,6 +4787,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
     attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
+    attach_manual_execution_reviews(decisions, manual_execution_reviews)
     technical_snapshots = [
         snapshot
         for report_path in report_paths
@@ -4748,6 +4831,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "report_history.json", history_board)
     write_json(data_directory / "intraday_technical.json", intraday_technical)
     write_json(data_directory / "decision_reviews.json", decision_reviews)
+    write_json(data_directory / "manual_execution_reviews.json", manual_execution_reviews)
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
@@ -4755,6 +4839,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(site_directory / "data" / "report_history.json", history_board)
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
+    write_json(site_directory / "data" / "manual_execution_reviews.json", manual_execution_reviews)
     write_json(
         site_directory / "data" / "opportunity_scans.json",
         public_opportunity_scans(opportunity_scans),

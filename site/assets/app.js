@@ -5,7 +5,7 @@ import {
   fallbackActionKind,
   parseReportPriceBand,
   primaryJudgmentForItem,
-} from "./action-classifier.mjs?v=20260813-main-report-review";
+} from "./action-classifier.mjs?v=20260823-human-review";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const TENCENT_QUOTE_URL = "https://qt.gtimg.cn/q=";
@@ -589,7 +589,9 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
     }
     const note = document.createElement("p");
     note.className = "primary-judgment-aux-note";
-    note.textContent = "当前可执行状态由主报告动作许可、报告价格档、经营前提和现价共同生成；Checklist、技术面与情绪面不参与该归类。";
+    note.textContent = execution.manualReview
+      ? "当前状态来自逐股人工复核；Checklist 硬性否决优先，技术面与情绪面仅作辅助。"
+      : "当前可执行状态由主报告动作许可、报告价格档、经营前提和现价共同生成；Checklist、技术面与情绪面不参与该归类。";
     wrap.append(note);
   }
   return wrap;
@@ -2648,6 +2650,26 @@ function renderSentimentDetail(item) {
 
 function opportunityCandidateForItem(item) {
   if (item?.market !== "A股") return null;
+  const manual = item?.manual_execution_review;
+  if (manual?.status === "ready" && manual?.source === "human_review") {
+    const tier = manual.opportunity_tier;
+    if (!['current', 'near'].includes(tier)) return null;
+    return {
+      item,
+      manual,
+      scan: null,
+      union: {},
+      models: [],
+      quote: state.quotes.get(item.ticker),
+      judgment: primaryJudgmentForItem(item),
+      staleModels: [],
+      relevantModels: [],
+      priority: tier === "current" ? 100 : 90,
+      tier,
+      label: tier === "current" ? "人工复核 · 当前机会" : "人工复核 · 临近机会",
+      tone: tier === "near" ? "notice" : "opportunity",
+    };
+  }
   const scan = opportunityScanForItem(item);
   const union = scan?.union || {};
   const quote = state.quotes.get(item.ticker);
@@ -2697,7 +2719,7 @@ function attentionTimestamp(value) {
 }
 
 function renderOpportunityCard(candidate) {
-  const { item, scan, models, relevantModels, judgment, quote } = candidate;
+  const { item, manual, scan, models, relevantModels, judgment, quote } = candidate;
   const card = document.createElement("article");
   card.className = `attention-card attention-${candidate.tone}`;
 
@@ -2735,10 +2757,12 @@ function renderOpportunityCard(candidate) {
 
   const focus = document.createElement("p");
   focus.className = "attention-card-focus";
-  focus.textContent = models.map(([model, result]) => `${model}：${result.assessment?.opportunity_state || "待复核"}`).join(" · ");
+  focus.textContent = manual
+    ? `${manual.reviewer || "人工复核"} · ${manual.reviewed_at?.slice(0, 10) || "日期待复核"} · 分组 ${manual.category}`
+    : models.map(([model, result]) => `${model}：${result.assessment?.opportunity_state || "待复核"}`).join(" · ");
   card.append(focus);
 
-  const whyNow = relevantModels
+  const whyNow = manual?.opportunity_summary || relevantModels
     .map(([, result]) => result.assessment?.why_now)
     .filter(Boolean)
     .join(" ");
@@ -2751,10 +2775,10 @@ function renderOpportunityCard(candidate) {
 
   const explanation = document.createElement("p");
   explanation.className = "attention-card-reason";
-  explanation.textContent = relevantModels
+  explanation.textContent = manual?.detail || relevantModels
     .map(([, result]) => result.assessment?.opportunity_summary)
     .filter(Boolean)
-    .join(" ") || "模型未提供机会摘要，请启动深度复核。";
+    .join(" ") || "机会摘要待复核。";
   card.append(explanation);
 
   const flags = document.createElement("div");
@@ -2777,10 +2801,11 @@ function renderOpportunityCard(candidate) {
   const open = document.createElement("button");
   open.type = "button";
   open.className = "btn ghost attention-open";
-  open.textContent = "启动深度复核";
+  open.textContent = manual ? "查看个股详情" : "启动深度复核";
   open.addEventListener("click", (event) => {
     event.stopPropagation();
-    startDeepReview(item, open);
+    if (manual) openDetail(item);
+    else startDeepReview(item, open);
   });
   foot.append(open);
   card.append(foot);
@@ -2815,6 +2840,7 @@ function renderAttentionPanel() {
   }
 
   const aShares = state.decisions.filter((item) => item.market === "A股");
+  const manualReviews = aShares.filter((item) => item.manual_execution_review?.status === "ready");
   const scans = aShares.map((item) => opportunityScanForItem(item));
   const modelResults = scans.flatMap((scan) => Object.values(scan?.models || {}));
   const readyModelResults = modelResults.filter((result) => result?.status === "ready");
@@ -2835,14 +2861,19 @@ function renderAttentionPanel() {
     ? ` · 本次失败，沿用${scanStatus.last_success_scan_generated_at ? `${attentionTimestamp(scanStatus.last_success_scan_generated_at)}的` : "上次成功的"}结果`
     : "";
   const expectedModelResults = aShares.length * Math.max(1, state.opportunityScanModels.length);
-  const metaText = `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · Flash 结果 ${readyModelResults.length}/${expectedModelResults}${freshness}${failureNote}`;
+  const fullManualCoverage = manualReviews.length === aShares.length && aShares.length > 0;
+  const metaText = fullManualCoverage
+    ? `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 人工复核 ${manualReviews.length}/${aShares.length} · 截至 8/23`
+    : `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · Flash 结果 ${readyModelResults.length}/${expectedModelResults}${freshness}${failureNote}`;
   els.attentionMeta.textContent = metaText;
-  els.attentionMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
+  els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
   if (els.attentionToggleMeta) {
-    els.attentionToggleMeta.textContent = failure
+    els.attentionToggleMeta.textContent = fullManualCoverage
+      ? `人工复核 93 只 · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}`
+      : failure
       ? `本次失败 · 沿用上次结果 · ${candidates.length} 项候选`
       : `当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}${state.opportunityScansGeneratedAt ? ` · ${attentionTimestamp(state.opportunityScansGeneratedAt)}` : ""}`;
-    els.attentionToggleMeta.dataset.status = failure ? "error" : (scanStatus?.status || "ready");
+    els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
   els.attentionList.replaceChildren();
@@ -2861,7 +2892,7 @@ function renderAttentionPanel() {
     els.attentionList.append(renderOpportunityGroup(
       currentCandidates,
       "当前机会",
-      "Flash 已说明为什么是现在；是否行动仍由你判断。",
+      fullManualCoverage ? "逐股人工核对主报告、最新财报与价格后保留；是否行动仍由你判断。" : "Flash 已说明为什么是现在；是否行动仍由你判断。",
     ));
   } else {
     const emptyCurrent = document.createElement("p");
@@ -3444,7 +3475,7 @@ function renderDetail() {
     const tip = document.createElement("div");
     tip.className = "card";
     tip.innerHTML = primaryJudgment
-      ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；“当前可执行状态”只在报告明确允许的价格档已经命中、且报告要求的经营前提无需再等待时，才进入可买筛选。价格已到但事件未验证会单独列出，模型分歧则不进入可买列表。Checklist、技术面和情绪面均保持独立辅助展示。</p>`
+      ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；已完成的逐股人工复核优先决定“当前可执行状态”，并覆盖旧的机械价格归类。未完成人工复核时，才按报告价格档与经营前提推导。Checklist 硬性否决不得进入可买列表；技术面和情绪面保持独立辅助展示。</p>`
       : `<h3>筛选依据</h3><p class="source-note">尚无双模型主报告判断的非 A 股，暂按旧报告结论兼容归类；完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;

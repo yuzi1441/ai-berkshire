@@ -215,6 +215,26 @@ function conditionWaitState(policy, price, rules) {
 }
 
 export function currentExecutionState(item, quote, fallbackKind = "unknown") {
+  const manual = item?.manual_execution_review;
+  if (item?.market === "A股" && manual?.status === "ready" && manual?.source === "human_review") {
+    const key = String(manual.execution_key || "review");
+    const defaults = {
+      actionable: ["当前可分批", "人工复核允许小比例分批执行"],
+      trial: ["仅激进小仓", "人工复核只允许能承受波动者建立观察仓"],
+      validation: ["价格已到，等待验证", "人工复核认为仍有经营或治理条件未通过"],
+      wait_price: ["等待价格/下一期财报", "人工复核认为当前赔率不足"],
+      wait_event: ["等待事件/经营验证", "人工复核认为经营条件尚未通过"],
+      hold: ["持有但不新买", "人工复核只允许已有持仓继续观察"],
+      no: ["回避/不买", "人工复核明确不允许当前新增买入"],
+      review: ["待人工复核", "人工复核记录不完整"],
+    }[key] || ["待人工复核", "人工复核记录无法识别"];
+    return executionResult(
+      key,
+      manual.label || defaults[0],
+      manual.detail || defaults[1],
+      { manualReview: manual, policy: item?.execution_policy },
+    );
+  }
   const policy = item?.execution_policy;
   if (!policy || item?.market !== "A股") return legacyExecutionState(fallbackKind);
   const mode = String(policy.condition_mode || "review");
