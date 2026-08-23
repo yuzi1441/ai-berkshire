@@ -1,22 +1,30 @@
 {
-  "status": "ok",
-  "generated_at": "2026-08-19T20:56:48.260688+08:00",
-  "data_cutoff": "2026-08-19",
+  "status": "partial",
+  "generated_at": "2026-08-23T21:34:19.229787+08:00",
+  "data_cutoff": "2026-08-23",
   "scoring_mode": "remote-mixed-llm:deepseek-v4-flash+A股/行业复核:mimo-v2.5",
   "company_count": 93,
   "industry_count": 38,
-  "industry_news_available_count": 36,
+  "industry_news_available_count": 0,
   "skipped_count": 0,
   "skipped_articles": [],
-  "warnings": [],
+  "warnings": [
+    "任务收到终止信号 15；已发布最近一次阶段性快照，未完成部分未计入。",
+    "任务收到终止信号 15；已发布最近一次阶段性快照，未完成部分未计入。",
+    "任务收到终止信号 15；已发布最近一次阶段性快照，未完成部分未计入。"
+  ],
   "progress": {
-    "stage": "complete",
-    "stage_label": "完整情绪评分已完成",
-    "company_news_completed": 93,
+    "stage": "interrupted",
+    "stage_label": "任务中断，保留已完成阶段",
+    "company_news_completed": 20,
     "company_news_total": 93,
-    "industry_news_completed": 38,
+    "industry_news_completed": 0,
     "industry_news_total": 38,
-    "checkpoint_at": "2026-08-19T20:56:58.387433+08:00"
+    "score_provider": null,
+    "scored_article_count": 0,
+    "score_failures": 0,
+    "checkpoint_at": "2026-08-23T21:38:24.632363+08:00",
+    "interrupted_by_signal": 15
   },
-  "message": "情绪数据更新完成。"
+  "message": "任务中断；页面已切换到最近一次阶段性结果。"
 }
