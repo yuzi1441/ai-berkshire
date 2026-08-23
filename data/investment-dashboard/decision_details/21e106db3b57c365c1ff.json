@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "特种 IC 连续两期下滑且毛利率低于65%，或 LTM CFO/归母净利连续两期低于50%，或并购后重大商誉减值/治理异常",
     "next_review_date": "2026-08-17",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "特种 IC 连续两期下滑且毛利率低于65%，或 LTM CFO/归母净利连续两期低于50%，或并购后重大商誉减值/治理异常",
         "next_review_date": "2026-08-17",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -309,11 +311,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -323,8 +328,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "002049.SZ",
+      "main_report": {
+        "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+        "sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "e68a512899c26d455721be29c98bab1369ef2afdd4caf7e62ce268964a21fd7e",
+    "current_source_fingerprint_sha256": "e68a512899c26d455721be29c98bab1369ef2afdd4caf7e62ce268964a21fd7e"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "e68a512899c26d455721be29c98bab1369ef2afdd4caf7e62ce268964a21fd7e",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "紫光国微",
     "ticker": "002049.SZ",
@@ -369,6 +397,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "21e106db3b57c365c1ff",
   "detail_path": "./data/decision_details/21e106db3b57c365c1ff.json"
 }

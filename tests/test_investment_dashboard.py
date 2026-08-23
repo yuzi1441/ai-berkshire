@@ -4,6 +4,7 @@ import os
 import sys
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 
@@ -82,10 +83,11 @@ class InvestmentDashboardTests(unittest.TestCase):
         dashboard.attach_manual_execution_reviews(decisions, payload)
         a_shares = [item for item in decisions if item.get("market") == "A股"]
         self.assertEqual(len(a_shares), 93)
-        self.assertTrue(all(item["manual_execution_review"]["status"] == "ready" for item in a_shares))
         by_ticker = {item["ticker"]: item["manual_execution_review"] for item in a_shares}
         self.assertEqual(by_ticker["605499.SH"]["execution_key"], "actionable")
-        self.assertEqual(by_ticker["600426.SH"]["execution_key"], "trial")
+        self.assertEqual(by_ticker["600426.SH"]["status"], "stale")
+        self.assertEqual(by_ticker["600426.SH"]["execution_key"], "review")
+        self.assertIn("2026-08-21", by_ticker["600426.SH"]["invalidation_reason"])
         self.assertEqual(by_ticker["600519.SH"]["execution_key"], "validation")
         self.assertEqual(by_ticker["000400.SZ"]["execution_key"], "no")
         self.assertTrue(by_ticker["002027.SZ"]["checklist_blocked"])
@@ -96,12 +98,12 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.setup_repository(root)
             older = root / "reports" / "示例公司" / "older.md"
             older.write_text(
-                "# 旧报告\n\n数据截止：2026-06-01\n\n## 最终建议\n\n建议分批买入，15-18 元。\n",
+                "# 旧报告\n\n数据截止：2026-06-01\n股票代码：600000.SH\n\n## 最终建议\n\n建议分批买入，15-18 元。\n",
                 encoding="utf-8",
             )
             newer = root / "reports" / "示例公司" / "newer.md"
             newer.write_text(
-                "# 新报告\n\n数据截止：2026-07-01\n\n## 最终建议\n\n继续观察，等待基本面验证。\n",
+                "# 新报告\n\n数据截止：2026-07-01\n股票代码：600000.SH\n\n## 最终建议\n\n继续观察，等待基本面验证。\n",
                 encoding="utf-8",
             )
             os.utime(older, (2_000_000_000, 2_000_000_000))
@@ -147,6 +149,146 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(summary["status"], "灰色地带")
         self.assertFalse(summary["hard_veto"])
         self.assertEqual(summary["mirror_test"], "通过")
+
+    def test_checklist_hard_veto_language_is_three_state(self):
+        base_contract = {
+            "action": "观察",
+            "summary": "等待验证",
+            "data_cutoff": "2026-08-23",
+            "report_completed_at": "2026-08-23",
+            "next_review_date": "2026-09-01",
+            "confidence": "中",
+            "invalidation_triggers": "治理恶化",
+        }
+        cases = [
+            ("**硬性否决：未发现触发。**", "clear", False),
+            ("**硬性否决：没有触发。**", "clear", False),
+            ("**硬性否决：0项。**", "clear", False),
+            ("**硬性否决：已触发。**", "triggered", True),
+            ("报告没有说明硬性否决状态。", "unknown", False),
+        ]
+        for text, expected_state, expected_bool in cases:
+            with self.subTest(text=text):
+                summary = dashboard.extract_checklist_status(
+                    text.splitlines(), base_contract, []
+                )
+                self.assertEqual(summary["hard_veto_state"], expected_state)
+                self.assertEqual(summary["hard_veto"], expected_bool)
+
+    def test_one_changed_report_invalidates_only_that_stock(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            (root / "reports" / "甲").mkdir(parents=True)
+            (root / "reports" / "乙").mkdir(parents=True)
+            (root / "reports" / "甲" / "main.md").write_text("甲 v1", encoding="utf-8")
+            (root / "reports" / "乙" / "main.md").write_text("乙 v1", encoding="utf-8")
+            decisions = [
+                {
+                    "company": "甲",
+                    "ticker": "600001.SH",
+                    "market": "A股",
+                    "report_path": "reports/甲/main.md",
+                    "checklist": {"status": "missing"},
+                },
+                {
+                    "company": "乙",
+                    "ticker": "600002.SH",
+                    "market": "A股",
+                    "report_path": "reports/乙/main.md",
+                    "checklist": {"status": "missing"},
+                },
+            ]
+            reviews = {}
+            for item in decisions:
+                snapshot = dashboard.manual_review_source_snapshot(item, None, root)
+                reviews[item["ticker"]] = {
+                    "reviewed_at": "2026-08-23T12:00:00+08:00",
+                    "valid_until": "2026-09-22",
+                    "execution_key": "wait_price",
+                    "source_fingerprint_sha256": dashboard.manual_review_fingerprint(snapshot),
+                }
+            payload = {"schema_version": 2, "status": "ready", "reviews": reviews}
+            (root / "reports" / "甲" / "main.md").write_text("甲 v2", encoding="utf-8")
+            dashboard.attach_manual_execution_reviews(
+                decisions, payload, root, as_of=date(2026, 8, 24)
+            )
+            by_ticker = {item["ticker"]: item for item in decisions}
+            self.assertEqual(by_ticker["600001.SH"]["validity_state"], "stale")
+            self.assertEqual(by_ticker["600002.SH"]["validity_state"], "ready")
+            self.assertEqual(
+                by_ticker["600002.SH"]["source_fingerprint_sha256"],
+                reviews["600002.SH"]["source_fingerprint_sha256"],
+            )
+
+    def test_manual_review_expires_after_thirty_calendar_days(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            report = root / "reports" / "示例" / "main.md"
+            report.parent.mkdir(parents=True)
+            report.write_text("报告", encoding="utf-8")
+            decision = {
+                "company": "示例",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "report_path": "reports/示例/main.md",
+                "checklist": {"status": "missing"},
+            }
+            snapshot = dashboard.manual_review_source_snapshot(decision, None, root)
+            payload = {
+                "schema_version": 2,
+                "status": "ready",
+                "reviews": {
+                    "600000.SH": {
+                        "reviewed_at": "2026-07-01T12:00:00+08:00",
+                        "execution_key": "actionable",
+                        "source_fingerprint_sha256": dashboard.manual_review_fingerprint(snapshot),
+                    }
+                },
+            }
+            dashboard.attach_manual_execution_reviews(
+                [decision], payload, root, as_of=date(2026, 8, 1)
+            )
+            self.assertEqual(decision["manual_execution_review"]["valid_until"], "2026-07-31")
+            self.assertEqual(decision["validity_state"], "stale")
+
+    def test_selection_uses_market_and_ticker_and_excludes_missing_ticker(self):
+        def record(company, ticker, market, cutoff, path):
+            return {
+                "company": company,
+                "entity_kind": "company",
+                "entity_directory": company,
+                "ticker": ticker,
+                "market": market,
+                "data_cutoff": cutoff,
+                "report_completed_at": cutoff,
+                "action": "观察",
+                "investor_stances": [],
+                "conclusion_summary": "等待验证",
+                "buy_price": None,
+                "price_plan": [],
+                "scenario_valuation": [],
+                "valuation_section": None,
+                "recommendation": "等待验证",
+                "title": company,
+                "report_path": path,
+                "report_link": path.removeprefix("reports/"),
+                "price_status": "价格未给出",
+            }
+
+        selected = dashboard.select_decisions(
+            [
+                record("旧名称", "600000.SH", "A股", "2026-08-01", "reports/旧/old.md"),
+                record("新名称", "600000.SH", "A股", "2026-08-20", "reports/新/new.md"),
+                record("同代码港股", "600000.SH", "港股", "2026-08-20", "reports/港/one.md"),
+                record("无代码公司", None, "未识别", "2026-08-20", "reports/无/main.md"),
+            ],
+            {"companies": {}, "reports": {}},
+        )
+        self.assertEqual(len(selected), 2)
+        a_share = next(item for item in selected if item["market"] == "A股")
+        self.assertEqual(a_share["company"], "新名称")
+        self.assertEqual(a_share["report_history_count"], 2)
+        self.assertNotIn("无代码公司", {item["company"] for item in selected})
 
     def test_recognizes_legacy_standalone_checklist_without_contract(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

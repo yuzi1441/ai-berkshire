@@ -79,7 +79,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
@@ -159,7 +160,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -308,6 +310,7 @@
     "market": "A股",
     "report_path": "reports/Putailai/璞泰来-checklist-20260731.md",
     "report_link": "reports/Putailai/璞泰来-checklist-20260731.md",
+    "report_sha256": "1c204ef1f7150dab7f1e8e128bc99541a0a7f5d4b81a2c3adc0446e735f7bceb",
     "title": "璞泰来（603659.SH）价值投资买入前 Checklist",
     "source_type": "standalone",
     "decision_contract": null,
@@ -353,7 +356,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "待复核",
     "action": "待复核",
     "summary": "❓灰色地带，Checklist 通过 4/6 关，不进入积极买入阶段。 没有公司层面的硬性否决，但第二关和第五关不够强：这是一家有优质资产、也有周期和资本强度的公司。当前 23.80 元可以进入观察或小仓位验证区，不足以支持重仓。",
@@ -375,11 +379,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
@@ -389,8 +396,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "603659.SH",
+      "main_report": {
+        "path": "reports/Putailai/Putailai-investment-research-20260624.md",
+        "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6"
+      },
+      "checklist": {
+        "path": "reports/Putailai/璞泰来-checklist-20260731.md",
+        "sha256": "1c204ef1f7150dab7f1e8e128bc99541a0a7f5d4b81a2c3adc0446e735f7bceb"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
+    "current_source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "璞泰来",
     "ticker": "603659.SH",
@@ -477,6 +507,7 @@
     "latest_event": null,
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "4ad310e5c1e4d2579400",
   "detail_path": "./data/decision_details/4ad310e5c1e4d2579400.json"
 }

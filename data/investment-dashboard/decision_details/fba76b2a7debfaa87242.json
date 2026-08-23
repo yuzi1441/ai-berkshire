@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "移动ARPU跌破45元且客户下降，或自由现金流连续两年不足覆盖现金股利",
     "next_review_date": "2026-08-14",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "移动ARPU跌破45元且客户下降，或自由现金流连续两年不足覆盖现金股利",
         "next_review_date": "2026-08-14",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -321,11 +323,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -335,8 +340,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600941.SH",
+      "main_report": {
+        "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+        "sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "b7452d2263c7e404e9d4f671b00e4f1930cc3083f85f36c0dd872f11dab81c81",
+    "current_source_fingerprint_sha256": "b7452d2263c7e404e9d4f671b00e4f1930cc3083f85f36c0dd872f11dab81c81"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "b7452d2263c7e404e9d4f671b00e4f1930cc3083f85f36c0dd872f11dab81c81",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "中国移动有限公司",
     "ticker": "600941.SH",
@@ -381,6 +409,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "fba76b2a7debfaa87242",
   "detail_path": "./data/decision_details/fba76b2a7debfaa87242.json"
 }

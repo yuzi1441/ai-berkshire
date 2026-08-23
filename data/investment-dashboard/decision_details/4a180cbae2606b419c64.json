@@ -37,7 +37,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "价格未给出",
   "data_status": "已标注",
@@ -75,7 +76,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -96,52 +98,21 @@
       "title": "建设银行（0939.HK）— 财务估值分析",
       "report_path": "reports/港股召回池/建设银行/02-财务估值分析-巴菲特视角.md",
       "report_link": "港股召回池/建设银行/02-财务估值分析-巴菲特视角.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "建设银���（0939.HK）— 风险与管理层评估",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "- H股估值长期低于A股（AH溢价）",
-        "start_line": 70,
-        "end_line": 75,
-        "markdown": "- H股估值长期低于A股（AH溢价）\n- 外资对中资银行持续减持\n- 港股通资金是主要边际买家\n\n**影响**：H股投资者承受额外的流动性折价和汇率风险"
-      },
-      "price_status": "价格未给出",
-      "title": "建设银���（0939.HK）— 风险与管理层评估",
-      "report_path": "reports/港股召回池/建设银行/04-风险管理层评估-李录视角.md",
-      "report_link": "港股召回池/建设银行/04-风险管理层评估-李录视角.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "建设银���（0939.HK���— 行业竞争分析",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "- PE最低（4.4倍）→ 估值最便宜",
-        "start_line": 77,
-        "end_line": 90,
-        "markdown": "- PE最低（4.4倍）→ 估值最便宜\n- 两者组合意味着：在同类标的中，建行的\"性价比\"可能最高\n\n### \"均值回归\"思维\n- 六大行的估值历史上高度相关，长期趋同\n- 如果建行当前4.4倍PE显著低于工行5-6倍PE，且基本面并不更差\n- 则存在\"均值回归\"式的估值修复机会\n\n### \"反脆弱\"分析\n- 住房贷款在楼市下行期看似脆弱\n- 但中国按揭的LTV限制+首付比例高+违约率历史极低\n- 实际上按揭资产可能是中国银行体系中最\"反脆弱\"的资产类别\n- 只有极端情景（楼价跌50%+大规模断供）才会造成真实损失"
-      },
-      "price_status": "价格未给出",
-      "title": "建设银���（0939.HK���— 行业竞争分析",
-      "report_path": "reports/港股召回池/建设银行/03-行业竞争分析-芒格视角.md",
-      "report_link": "港股召回池/建设银行/03-行业竞争分析-芒格视角.md"
     }
   ],
-  "report_history_count": 4,
+  "report_history_count": 2,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "建设银行",
     "ticker": "00939.HK",
@@ -186,6 +157,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "4a180cbae2606b419c64",
   "detail_path": "./data/decision_details/4a180cbae2606b419c64.json"
 }

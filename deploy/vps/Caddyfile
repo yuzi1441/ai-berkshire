@@ -1,0 +1,34 @@
+{
+	auto_https disable_redirects
+}
+
+(dashboard_security_headers) {
+	header {
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+	}
+}
+
+http://vps.06070419.xyz {
+	@private path /api/* /admin /admin/*
+	respond @private 404
+
+	reverse_proxy 127.0.0.1:8080 {
+		header_up -X-Dashboard-Admin
+	}
+	import dashboard_security_headers
+}
+
+https://vps.06070419.xyz:8443 {
+	basic_auth {
+		{$DASHBOARD_ADMIN_USER} {$DASHBOARD_ADMIN_PASSWORD_HASH}
+	}
+
+	reverse_proxy 127.0.0.1:8080 {
+		header_up X-Dashboard-Admin 1
+	}
+	import dashboard_security_headers
+}

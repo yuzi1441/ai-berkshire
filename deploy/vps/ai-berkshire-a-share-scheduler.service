@@ -6,8 +6,10 @@ After=network-online.target
 [Service]
 Type=oneshot
 User=root
-WorkingDirectory=/opt/ai-berkshire
+WorkingDirectory=/srv/ai-berkshire/current
 Environment=TZ=Asia/Shanghai
 EnvironmentFile=-/etc/ai-berkshire/sentiment.env
 ExecStart=/usr/local/sbin/ai-berkshire-a-share-scheduler %i
 TimeoutStartSec=6h
+Restart=no
+SuccessExitStatus=75

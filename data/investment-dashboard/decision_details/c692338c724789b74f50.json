@@ -103,7 +103,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -202,7 +203,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -256,7 +258,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -339,64 +342,9 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [
-        {
-          "stance": "激进型",
-          "action": "见报告",
-          "price_range": ""
-        },
-        {
-          "stance": "保守型",
-          "action": "见报告",
-          "price_range": ""
-        }
-      ],
-      "conclusion_summary": "激进型：见报告；保守型：见报告",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "10.1 当前估值定位",
-        "start_line": 262,
-        "end_line": 269,
-        "markdown": "### 10.1 当前估值定位\n- 当前股价 ¥100.65\n- PE 14x（10年0.7%分位）\n- PB 3.05x（10年地板）\n- 股息率 5.15-6.8%\n- DCF合理估值 ¥122-165\n- **安全边际 17%-39%**"
-      },
-      "price_status": "价格未给出",
-      "title": "泸州老窖（000568）护城河深度研究",
-      "report_path": "reports/泸州老窖/泸州老窖护城河深度研究-team-20260503.md",
-      "report_link": "泸州老窖/泸州老窖护城河深度研究-team-20260503.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [
-        {
-          "stance": "稳健型",
-          "action": "适合的投资者",
-          "price_range": "",
-          "note": "能接受波动的价值型"
-        }
-      ],
-      "conclusion_summary": "稳健型：适合的投资者",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "四、估值判断——三情景推演",
-        "start_line": 171,
-        "end_line": 215,
-        "markdown": "## 四、估值判断——三情景推演\n\n**声明**：以下情景分析中的概率权重是主观判断，仅供参考。不同的投资者可以有完全不同的概率分配。\n\n### 4.1 三年目标价测算（指向 2028 年末）\n\n| 假设项 | 悲观 | 中性 | 乐观 |\n|--------|------|------|------|\n| 行业判断 | 深度调整持续 3 年 | 2027 年触底回升 | 2026 下半年企稳 |\n| 2028 年净利 | 95 亿 | 120 亿 | 140 亿 |\n| 合理 PE | 15倍 | 20倍 | 25倍 |\n| 目标市值 | 1,425 亿 | 2,400 亿 | 3,500 亿 |\n| 目标股价 | ~97 元 | ~163 元 | ~238 元 |\n| 累计分红（3 年） | ~17 元/股 | ~17 元/股 | ~18 元/股 |\n| **3 年总回报** | **+24%** | **+96%** | **+178%** |\n| **年化回报** | **+7.4%** | **+25%** | **+40%** |\n\n> 计算过程示例（中性情景）：目标股价 = 2,400 / 14.72 = 163 元；总回报 = (163 + 17 - 92) / 92 = 95.7%\n\n### 4.2 关键发现\n\n1. **悲观情景下，3 年总回报仍为正（+24%）**，年化 7.4%——主要由高分红托底。这意味着在最坏情况下，你大概率不会亏钱，只是赚得少\n2. **中性情景下，年化回报 25%**——对于一只蓝筹白酒股而言非常可观\n3. **核心逻辑不是\"赌上涨\"，而是\"分红兜底 + 等待估值修复\"**\n\n### 4.3 与茅台的抉择\n\n| 指标 | 茅台（~20倍 PE） | 泸州老窖（~12.5倍 PE） |\n|------|----------------|---------------------|\n| 确定性 | **极高** | 中-高 |\n| 当前股息率 | ~4.0% | **~6.3%** |\n| 估值安全边际 | 合理偏便宜 | **显著便宜** |\n| 10 年增长确定性 | 高 | 中 |\n| 管理层风险 | 低 | **中-高** |\n| 适合的投资者 | \"睡得着觉\"的稳健型 | 能接受波动的价值型 |\n\n茅台给你**确定性**——你几乎可以确信 10 年后茅台仍是中国最贵的酒。\n泸州老窖给你**赔率**——12.5 倍 PE 的价格买一家毛利率 87% 的公司，如果行业回暖，回报会非常可观。\n\n**但代价是：你无法确定行业什么时候回暖、下一任管理层是谁、浓香赛道萎缩多快。**\n\n从确定性到概率，估值打七折（20倍对比 12.5倍）是市场的合理定价。如果你认为这个折价过度了，泸州老窖就是更好的选择；如果你更在意确定性，茅台仍然是更稳的选择。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "便宜不等于值得买",
-      "report_path": "reports/泸州老窖/《看懂泸州老窖》/04-终章-便宜不等于值得买.md",
-      "report_link": "泸州老窖/《看懂泸州老窖》/04-终章-便宜不等于值得买.md"
     },
     {
       "data_cutoff": null,
@@ -429,66 +377,9 @@
       "title": "泸州老窖（000568.SZ）财务估值深度分析",
       "report_path": "reports/泸州老窖/泸州老窖-财务估值深度分析-20260516.md",
       "report_link": "泸州老窖/泸州老窖-财务估值深度分析-20260516.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "股息率 ~5.8% 10 年历史 95% 分位（极高）",
-      "buy_price": "900 元",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "但它的股价从高点跌去 70%，PE 只有 12-13 倍，市场给它的估值甚至低于洋河——那家 2025 年净利暴跌 65% 的公司。这家公司叫泸州老窖。一张财务数据，看清楚这六年发生了什么：",
-        "start_line": 12,
-        "end_line": 52,
-        "markdown": "但它的股价从高点跌去 70%，PE 只有 12-13 倍，市场给它的估值甚至低于洋河——那家 2025 年净利暴跌 65% 的公司。这家公司叫泸州老窖。一张财务数据，看清楚这六年发生了什么：\n\n| 年份 | 营收（亿元） | 同比 | 归母净利（亿元） | 同比 | 净利率 |\n|------|-----------|------|---------------|------|--------|\n| 2020 | 166.5 | +5.3% | 60.1 | +29.4% | 36.1% |\n| 2021 | 206.4 | +24.0% | 79.6 | +32.5% | 38.6% |\n| 2022 | 251.2 | +21.7% | 103.6 | +30.2% | 41.2% |\n| 2023 | 302.3 | +20.3% | 132.5 | +27.8% | 43.8% |\n| 2024 | 312.0 | +3.2% | 134.7 | +1.7% | 43.2% |\n| **2025** | **257.3** | **-17.5%** | **108.3** | **-19.6%** | **42.1%** |\n\n> 数据来源：泸州老窖各年度年报\n\n2020-2023 年，连续四年高速增长，营收复合增速 **22%**，净利复合增速 **30%+**。2024 年急刹车。2025 年直接掉头——营收下滑 **17.5%**，净利下滑 **19.6%**，**10 年来首次双降**。\n\n再看当前（2026 年 5 月）的估值：\n\n| 指标 | 当前值 | 量级判断 |\n|------|--------|---------|\n| 股价 | **~92 元**（2026.5.20） | 较 2021 年高点跌去约 **70%** |\n| 总市值 | **~1,360 亿元** | 白酒板块第四 |\n| PE-TTM | **~12.5倍** | 10 年历史 **6% 分位**（极低） |\n| 毛利率 | **87.5%** | 仅次于茅台 |\n| ROE（2024） | **~35%** | 连续 5 年超 25% |\n| 净现金 | **~250 亿元** | 占市值约 18% |\n| 股息率 | **~5.8%** | 10 年历史 **95% 分位**（极高） |\n| 2025 年分红总额 | **~85 亿元** | 分红率 **78%** |\n\n> 数据来源：泸州老窖 2025 年报、Investing.com、亿牛网。股价为 2026 年 5 月 20 日数据。\n\n把这两组数字放在一起，你会发现一个矛盾：\n\n**一家毛利率 87.5%、ROE 35%、净现金 250 亿、分红率 78% 的公司，PE 只有 12-13 倍，股价较高点跌去 70%。**\n\n如果你以为这是\"价值低估\"——你大概率只看到了一半。\n如果你以为这是\"价值陷阱\"——你也大概率只看到了一半。\n\n这个系列要做的，是**把两半拼在一起**。\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "一家尴尬的好公司",
-      "report_path": "reports/泸州老窖/《看懂泸州老窖》/01-开篇-一家尴尬的好公司.md",
-      "report_link": "泸州老窖/《看懂泸州老窖》/01-开篇-一家尴尬的好公司.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "5. 长期确定性（10-20年视角） 【风险评级：中-高】",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "6.1 估值差距",
-        "start_line": 330,
-        "end_line": 362,
-        "markdown": "### 6.1 估值差距\n\n| 指标 | 茅台 | 泸州老窖 | 差距 |\n|------|------|---------|------|\n| PE-TTM（近期） | ~20x | ~13x | 茅台溢价约50% |\n| 历史PE中枢 | 25-35x | 18-25x | 系统性折价 |\n| 当前PE（2025E） | ~22x | ~14x | — |\n\n### 6.2 为什么市场给茅台更高估值？这个折价合理吗？\n\n**六大差距**：\n\n| 维度 | 茅台 | 泸州老窖 | 差距是否合理 |\n|------|------|---------|------------|\n| **品牌力** | \"国酒\"心智垄断，自带社交货币属性 | \"浓香鼻祖\"认知局限在酒圈，大众认知度弱 | **合理** |\n| **定价权** | 飞天茅台终端价长期高于出厂价，自然溢价 | 国窖1573批价低于出厂价，长期倒挂 | **合理** |\n| **渠道控制** | i茅台直销占比超40%，渠道利润回收 | 以传统经销为主，直销占比约20-30% | **合理** |\n| **利润率** | 毛利率>90%，净利率~50% | 毛利率~87%，净利率~43% | 合理但差距不大 |\n| **治理结构** | 省级国资，管理层市场化程度更高 | 市级国资，人事受地方政治影响更大 | **合理** |\n| **增长确定性** | 行业唯一在下行周期仍正增长 | 2025年营收净利双降 | **合理** |\n\n**结论：估值折价完全合理，甚至可能还不够。**\n\n从李录的\"确定性折价\"框架看：\n- 茅台是白酒行业唯一接近\"确定性\"的资产——你几乎可以确信10年后茅台仍是中国最贵的酒，仍是社交硬通货\n- 泸州老窖是\"大概率\"的资产——大概率10年后仍存在且盈利，但确定性明显低于茅台\n- 从\"确定性\"到\"大概率\"，估值打7折（20x vs 14x）是市场合理定价\n- 如果泸州老窖能持续证明自己的定价权和品牌力，估值差距可能缩小到6折；反之可能扩大到5折\n\n> **李录视角**：\"真正的价值投资，投的是确定性。茅台给你确定性，泸州老窖给你概率。两者都能赚钱，但你需要为不确定性留足安全边际。如果泸州老窖14倍PE已经反映了所有风险，那它可能是更好的投资——因为你用七折价格买了一个八成确定的生意。\"\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "泸州老窖（000568）风险与管理层评估",
-      "report_path": "reports/泸州老窖/泸州老窖-风险与管理层评估-李录视角-20260516.md",
-      "report_link": "泸州老窖/泸州老窖-风险与管理层评估-李录视角-20260516.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "5. 不构成投资建议——所有篇章末尾免责声明",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "04 便宜不等于值得买（终章） 风险全景、估值判断、什么信号出现才值得行动",
-        "start_line": 29,
-        "end_line": 32,
-        "markdown": "| 04 | 便宜不等于值得买（终章） | 风险全景、估值判断、什么信号出现才值得行动 |\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "《看懂泸州老窖》系列说明",
-      "report_path": "reports/泸州老窖/《看懂泸州老窖》/00-系列说明.md",
-      "report_link": "泸州老窖/《看懂泸州老窖》/00-系列说明.md"
     }
   ],
-  "report_history_count": 9,
+  "report_history_count": 4,
   "primary_judgment": {
     "label": "小仓验证",
     "action_kind": "trial",
@@ -609,11 +500,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
@@ -623,8 +517,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "000568.SZ",
+      "main_report": {
+        "path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+        "sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "ad36a0627f625e5a8b38654d19ce035a2a1add5fbf84f3d79a1a7a1f78557327",
+    "current_source_fingerprint_sha256": "ad36a0627f625e5a8b38654d19ce035a2a1add5fbf84f3d79a1a7a1f78557327"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "ad36a0627f625e5a8b38654d19ce035a2a1add5fbf84f3d79a1a7a1f78557327",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "泸州老窖",
     "ticker": "000568.SZ",
@@ -669,6 +586,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "c692338c724789b74f50",
   "detail_path": "./data/decision_details/c692338c724789b74f50.json"
 }

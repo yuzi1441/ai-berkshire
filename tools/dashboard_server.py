@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Serve the static dashboard plus a protected on-demand deep-review API.
 
-The public dashboard remains readable without a login.  Cost-incurring V4 Pro
-+ GPT-5.6 Luna requests require a separate admin token and store their output
-outside the Git checkout, so a click cannot dirty or block the after-close job.
+The public dashboard remains readable without a login. Caddy exposes the same
+server on a Basic-Auth protected admin origin and marks those loopback proxy
+requests with a trusted header. Model output stays outside the Git checkout.
 """
 
 from __future__ import annotations
@@ -11,7 +11,6 @@ from __future__ import annotations
 import argparse
 import email.utils
 import gzip
-import hmac
 import io
 import json
 import os
@@ -92,7 +91,7 @@ class DeepReviewStore:
                 return review
         return None
 
-    def start_allowed(self) -> None:
+    def ensure_allowed(self) -> None:
         today = datetime.now().astimezone().date().isoformat()
         usage = self.load_json(self.usage_path, {"schema_version": 1, "events": []})
         events = [
@@ -102,7 +101,20 @@ class DeepReviewStore:
         ]
         if len(events) >= self.daily_limit:
             raise DashboardServerError(f"今日深度复核已到上限（{self.daily_limit} 次），明日会自动恢复。")
-        events.append({"date": today, "started_at": datetime.now().astimezone().isoformat(timespec="seconds")})
+
+    def record_success(self, ticker: str, report_hash: str) -> None:
+        """Charge quota only after an uncached review was saved successfully."""
+        today = datetime.now().astimezone().date().isoformat()
+        usage = self.load_json(self.usage_path, {"schema_version": 1, "events": []})
+        events = [item for item in usage.get("events", []) if isinstance(item, dict)]
+        events.append(
+            {
+                "date": today,
+                "completed_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+                "ticker": ticker,
+                "report_sha256": report_hash,
+            }
+        )
         self.write_json(self.usage_path, {"schema_version": 1, "events": events})
 
     def save_review(self, review: dict[str, Any]) -> dict[str, Any]:
@@ -112,7 +124,7 @@ class DeepReviewStore:
 
 
 class DashboardRequestHandler(SimpleHTTPRequestHandler):
-    """Static files plus same-origin, bearer-token guarded API routes."""
+    """Static files plus same-origin API routes trusted only from Caddy."""
 
     server_version = "AIBerkshireDashboard/1.0"
     protocol_version = "HTTP/1.1"
@@ -126,12 +138,10 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         *args: Any,
         directory: str | None = None,
         repo_root: Path,
-        review_token: str,
         store: DeepReviewStore,
         **kwargs: Any,
     ) -> None:
         self.repo_root = repo_root
-        self.review_token = review_token
         self.store = store
         super().__init__(*args, directory=directory, **kwargs)
 
@@ -143,10 +153,11 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         path = urlparse(self.path).path
         if path.startswith("/api/"):
             self.send_header("Cache-Control", "no-store")
-        elif Path(path).suffix.lower() in {".css", ".js", ".svg"}:
-            self.send_header("Cache-Control", "public, max-age=31536000, immutable")
-        elif Path(path).suffix.lower() in {".html", ".json"}:
+        elif Path(path).suffix.lower() in {".css", ".html", ".js", ".json", ".mjs", ".svg"}:
             self.send_header("Cache-Control", "no-cache")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
         super().end_headers()
 
     @staticmethod
@@ -208,13 +219,8 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         return super().send_head()
 
     def authorized(self) -> bool:
-        if not self.review_token:
-            return False
-        value = self.headers.get("Authorization", "")
-        prefix = "Bearer "
-        if not value.startswith(prefix):
-            return False
-        return hmac.compare_digest(value[len(prefix) :].strip(), self.review_token)
+        client_ip = str(self.client_address[0])
+        return client_ip in {"127.0.0.1", "::1"} and self.headers.get("X-Dashboard-Admin") == "1"
 
     def json_response(self, status: HTTPStatus, payload: dict[str, Any]) -> None:
         encoded = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -225,14 +231,8 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         self.wfile.write(encoded)
 
     def require_auth(self) -> bool:
-        if not self.review_token:
-            self.json_response(
-                HTTPStatus.SERVICE_UNAVAILABLE,
-                {"error": "深度复核接口尚未启用：服务器未配置 DASHBOARD_REVIEW_TOKEN。"},
-            )
-            return False
         if not self.authorized():
-            self.json_response(HTTPStatus.UNAUTHORIZED, {"error": "需要深度复核访问令牌。"})
+            self.json_response(HTTPStatus.FORBIDDEN, {"error": "深度复核接口仅允许从管理入口访问。"})
             return False
         return True
 
@@ -275,9 +275,10 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
             if cached:
                 self.json_response(HTTPStatus.OK, {"status": "cached", "review": cached})
                 return
-            self.store.start_allowed()
+            self.store.ensure_allowed()
             review = opportunity_review.deep_review_one(self.repo_root, ticker)
             self.store.save_review(review)
+            self.store.record_success(ticker, report_hash)
             self.json_response(HTTPStatus.OK, {"status": "completed", "review": review})
         except (DashboardServerError, opportunity_review.OpportunityReviewError, OSError) as error:
             self.json_response(HTTPStatus.BAD_REQUEST, {"error": str(error)})
@@ -304,7 +305,6 @@ def main() -> int:
     if not site_directory.is_dir():
         print(f"error: static site directory does not exist: {site_directory}", file=sys.stderr)
         return 2
-    token = os.environ.get("DASHBOARD_REVIEW_TOKEN", "").strip()
     runtime_directory = Path(os.environ.get("DASHBOARD_RUNTIME_DIR", "/var/lib/ai-berkshire"))
     store = DeepReviewStore(
         runtime_directory,
@@ -314,15 +314,13 @@ def main() -> int:
         *args,
         directory=str(site_directory),
         repo_root=repo_root,
-        review_token=token,
         store=store,
         **kwargs,
     )
     server = ThreadingHTTPServer((arguments.bind, arguments.port), handler)
-    enabled = "enabled" if token else "disabled"
     print(
         f"AI Berkshire dashboard serving {site_directory} at http://{arguments.bind}:{arguments.port} "
-        f"(deep review {enabled})",
+        "(deep review available only through the Caddy admin origin)",
         flush=True,
     )
     try:

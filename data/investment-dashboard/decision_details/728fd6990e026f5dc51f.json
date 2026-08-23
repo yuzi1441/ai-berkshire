@@ -112,7 +112,8 @@
     ],
     "invalidation_triggers": "清洁能源毛利率持续低于28%或平均供暖面积连续两年下降或旧煤资产改造显著侵蚀净现金",
     "next_review_date": "2026-10-31",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -220,7 +221,8 @@
         ],
         "invalidation_triggers": "清洁能源毛利率持续低于28%或平均供暖面积连续两年下降或旧煤资产改造显著侵蚀净现金",
         "next_review_date": "2026-10-31",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -337,11 +339,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -351,8 +356,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600167.SH",
+      "main_report": {
+        "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+        "sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3",
+    "current_source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "联美量子股份有限公司",
     "ticker": "600167.SH",
@@ -397,6 +425,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "728fd6990e026f5dc51f",
   "detail_path": "./data/decision_details/728fd6990e026f5dc51f.json"
 }

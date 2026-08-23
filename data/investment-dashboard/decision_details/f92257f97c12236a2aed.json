@@ -107,7 +107,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -210,7 +211,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -297,7 +299,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -384,7 +387,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -486,7 +490,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -594,7 +599,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -988,6 +994,7 @@
     "market": "A股",
     "report_path": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
     "report_link": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
+    "report_sha256": "a624c64c1d6b1932bac89d444a7baad1d381f290d7b5c99fc3d32f24a95a5e28",
     "title": "国电南瑞（600406.SH）巴菲特价值投资买入前 Checklist",
     "source_type": "standalone",
     "decision_contract": null,
@@ -1033,6 +1040,7 @@
       }
     ],
     "hard_veto": false,
+    "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
     "mirror_test": "待复核",
     "action": "待复核",
@@ -1064,11 +1072,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -1078,8 +1089,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600406.SH",
+      "main_report": {
+        "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+        "sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db"
+      },
+      "checklist": {
+        "path": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
+        "sha256": "a624c64c1d6b1932bac89d444a7baad1d381f290d7b5c99fc3d32f24a95a5e28"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01",
+    "current_source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "国电南瑞",
     "ticker": "600406.SH",
@@ -1124,6 +1158,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "f92257f97c12236a2aed",
   "detail_path": "./data/decision_details/f92257f97c12236a2aed.json"
 }

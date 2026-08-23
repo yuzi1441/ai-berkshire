@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "航空速运毛利率连续两个报告期低于12%或租赁调整后自由现金流转负",
     "next_review_date": "2026-09-07",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "航空速运毛利率连续两个报告期低于12%或租赁调整后自由现金流转负",
         "next_review_date": "2026-09-07",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -307,7 +309,8 @@
         ],
         "invalidation_triggers": "航空速运毛利率连续两个报告期低于12%或租赁调整后自由现金流转负",
         "next_review_date": "2026-09-07",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -408,11 +411,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -422,8 +428,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "601156.SH",
+      "main_report": {
+        "path": "reports/东航物流/东航物流-investment-research-20260807.md",
+        "sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "7c7ca2144cfdd15406d6e1e9b8f94dd6234cf2058ad7ba785b36f4bffd2cdf97",
+    "current_source_fingerprint_sha256": "7c7ca2144cfdd15406d6e1e9b8f94dd6234cf2058ad7ba785b36f4bffd2cdf97"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "7c7ca2144cfdd15406d6e1e9b8f94dd6234cf2058ad7ba785b36f4bffd2cdf97",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "东方航空物流股份有限公司",
     "ticker": "601156.SH",
@@ -468,6 +497,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "777c39697b20ad269909",
   "detail_path": "./data/decision_details/777c39697b20ad269909.json"
 }

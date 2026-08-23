@@ -61,7 +61,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "历史价格参照",
   "data_status": "已标注",
@@ -137,7 +138,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -511,25 +513,6 @@
       "report_link": "泡泡玛特/泡泡玛特-research-20260408.md"
     },
     {
-      "data_cutoff": "2026-03-25",
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "泡泡玛特深度研究素材库（供上下篇写作共用）",
-      "buy_price": "HK$150-162.5",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "估值与投资人",
-        "start_line": 90,
-        "end_line": 93,
-        "markdown": "## 估值与投资人\n- TTM PE 约 15.5x（2026-06）；2026E 卖方 11.8x（浦银）到 25x（花旗）。目标价花旗 350、大摩 278、中金 218、交银 218.9；德银一度下调至卖出。分歧本质是\"平台股 vs 周期股\"。\n- 段永平：2025-08 明说\"看不懂\"（守能力圈）；2026-03/30 后启动建仓（卖 put、读《因为独特》、看王宁访谈、实地看店），5/25 举牌至 5.69%，把神华等仓位换成泡泡玛特。其后一路加仓：5/28 增至 6.04%（均价 162.5）→ 2026-07-06 增至 **7.65%**（合计 1.02 亿股，第二大股东；已披露各笔均价 150-162.5 港元，2026-07-14 核查港交所披露）。改口锚点是\"人\"而非\"潮玩\"——\"看懂王宁有多厉害、还年轻、至少能干 25 年以上\"，前提句是\"只要潮玩有持续性，就是非常好的生意\"——这个\"只要\"恰是全部争议所在。"
-      },
-      "price_status": "已提取",
-      "title": "泡泡玛特深度研究素材库（供上下篇写作共用）",
-      "report_path": "reports/泡泡玛特/素材库.md",
-      "report_link": "泡泡玛特/素材库.md"
-    },
-    {
       "data_cutoff": "2025-12-31",
       "action": "分批买入",
       "investor_stances": [],
@@ -572,73 +555,6 @@
     },
     {
       "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [
-        {
-          "stance": "激进型",
-          "action": "平均建仓成本约256港元",
-          "price_range": "约256港元",
-          "source": "inferred_inline_price_actions",
-          "buy_eligible": true
-        },
-        {
-          "stance": "保守型",
-          "action": "支持加仓的信号",
-          "price_range": "120港元",
-          "source": "inferred_inline_price_actions",
-          "buy_eligible": true,
-          "note": "支持加仓的信号：中报确认20%指引兑现且星星人等新IP占比继续提升；或股价跌破120港元而基本面指标未恶化——那个价位约等于7倍前瞻市盈率，接近把此后的增长定价为负。"
-        }
-      ],
-      "conclusion_summary": "激进型：平均建仓成本约256港元（约256港元）；保守型：支持加仓的信号（120港元）",
-      "buy_price": "约HK$256",
-      "price_plan": [],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "约476港元"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "约218港元"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "约73港元"
-        }
-      ],
-      "valuation_section": {
-        "heading": "这就是泡泡玛特（9992.HK）此刻的格局。股价从2025年8月的339.8港元跌到153.3港元（2026年7月3日收盘），回撤55%，市盈率从峰值的179倍压缩到14倍，处在上市以来最低估值区。",
-        "start_line": 9,
-        "end_line": 14,
-        "markdown": "这就是泡泡玛特（9992.HK）此刻的格局。股价从2025年8月的339.8港元跌到153.3港元（2026年7月3日收盘），回撤55%，市盈率从峰值的179倍压缩到14倍，处在上市以来最低估值区。\n\n两边都不是傻钱，分歧也不是信息差：这家公司年报完整、二十多位分析师覆盖、多空论点全部公开。分歧只有一个——同一组事实，到底该读成\"IP工厂\"，还是\"一次性爆款\"。\n\n这篇文章把两边的证据链都摆出来，答案留给你。"
-      },
-      "price_status": "已提取三情景",
-      "title": "炒价跌99%，段永平却买成二股东：泡泡玛特到底谁看错了",
-      "report_path": "reports/泡泡玛特/泡泡玛特-公众号-20260708.md",
-      "report_link": "泡泡玛特/泡泡玛特-公众号-20260708.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [],
-      "conclusion_summary": "2025 年，THE MONSTERS 系列（也就是 Labubu 所在的系列）单系列做到 141.6 亿，同比增长 365.7%，占总营收约 38%。这是潮玩史上第一个百亿 IP。",
-      "buy_price": "HK$350",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "估值与我的判断",
-        "start_line": 139,
-        "end_line": 160,
-        "markdown": "## 估值与我的判断\n\n市场的分歧，浓缩成对同一个数字的两种读法。\n\n2026 年 6 月，泡泡玛特的滚动市盈率约 15.5 倍。卖方对 2026 年的预测从 11.8 倍到 25 倍不等，目标价从德银的\"卖出\"到花旗的 350 港元，跨度大得离谱。\n\n多头看到 15 倍，觉得这是错杀——一家营收翻倍、净利翻三倍、海外刚起步的平台公司，凭什么只值 15 倍？这是把它当\"平台股\"，认为当前利润是可持续利润，该用平台的估值去乘。\n\n空头看到同样的 15 倍，觉得这是陷阱——如果 Labubu 是一轮潮流的顶点，那么现在这个利润就是\"周期顶部利润\"。周期股在利润最高、估值最低的时候，恰恰最危险。市盈率再低，乘的是一个即将回落的分子，也是假便宜。\n\n同一个 15 倍，一个人看到黄金坑，一个人看到周期顶。这就是泡泡玛特今天所有争议的最终收口。\n\n我不喊买卖。但作为一个价值投资者，我可以说清楚在什么条件下我才敢下注。\n\n我要盯的不是季度营收，也不是 Labubu 这个月又火没火。我要盯的是一个指标：**Labubu 所在系列占总营收的比重，能不能主动降下来。**\n\n如果未来两三年，这个占比从 38% 掉回 30% 以下，同时公司总营收还在稳健增长——那说明第二、第三个爆款起来了、渠道和乐园扛住了流量、它正在从\"一个爆款的公司\"长成\"一个 IP 平台\"。那时候它就该值平台的估值，现在的 15 倍就是错杀。\n\n反过来，如果这个占比继续往上走，或者靠 Labubu 硬撑到 40% 以上——那不管财报多漂亮，我都会当它是周期顶部利润，一分钱不碰。因为那意味着它离豆豆娃更近，离三丽鸥更远。\n\n在这个占比拐头向下之前，这门生意对我而言是个精彩的观察对象，而不是可以下重注的标的。看懂王宁不够，我还要看到它在没有 Labubu 的日子里也能活得一样好。"
-      },
-      "price_status": "已提取",
-      "title": "段永平为什么改口买泡泡玛特：赌人，还是赌生意｜下",
-      "report_path": "reports/泡泡玛特/泡泡玛特-公众号-下-20260710.md",
-      "report_link": "泡泡玛特/泡泡玛特-公众号-下-20260710.md"
-    },
-    {
-      "data_cutoff": null,
       "action": "观察",
       "investor_stances": [],
       "conclusion_summary": "情景 概率 2028E营收 净利 PE 估值（亿RMB） 每股HKD",
@@ -655,25 +571,6 @@
       "title": "泡泡玛特（9992.HK）深度估值报告",
       "report_path": "reports/泡泡玛特/泡泡玛特-valuation-20260413.md",
       "report_link": "泡泡玛特/泡泡玛特-valuation-20260413.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "减仓/卖出",
-      "investor_stances": [],
-      "conclusion_summary": "看懂泡泡玛特（四）：3年后利润会是多少？该不该投？",
-      "buy_price": "HK$150-162.5",
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "四、估值：当前价格贵不贵？",
-        "start_line": 76,
-        "end_line": 108,
-        "markdown": "## 四、估值：当前价格贵不贵？\n\n| 指标 | 数值 |\n|------|------|\n| 当前股价 | 161港元（2026-07-24收盘） |\n| 总市值 | 约2160亿港元 |\n| 静态市盈率（基于2025利润） | 约15.5倍 |\n| 动态市盈率（基于2026预期） | 12-14倍 |\n| 主流投行目标价 | 219-350港元（交银219、大摩278、美银300、花旗350，分歧极大） |\n\n15倍出头的静态市盈率，对于一家刚刚实现利润翻三倍、一季度仍在高速增长的公司来说，不高。\n\n但市盈率从来不是孤立看的。\n\n**往回倒推：** 如果中性假设成立（2028年利润160亿），给20倍市盈率，对应市值3200亿港元，较当前涨约50%。如果悲观假设成立（利润99亿），市场可能只给12倍，对应市值1200亿，较当前下跌约45%。\n\n全球同行对比：\n\n| 公司 | 市盈率 | 营收增速 | 毛利率 |\n|------|-------|---------|--------|\n| 三丽鸥 | 38倍 | 约15% | 约50% |\n| 万代 | 22倍 | 约10% | 约40% |\n| 迪士尼 | 15倍 | 约5% | 约40% |\n| **泡泡玛特** | **15.5倍** | **75-80%（Q1）** | **72%** |\n\n增速是同行的5-15倍，毛利率碾压所有人，市盈率却跟增速只有5%的迪士尼在同一档。\n\n一个有意思的参考坐标：段永平在2024年12月公开说\"不投泡泡玛特\"，2026年3月30日收回了这个说法，4到5月间清仓了持有15年的中国神华，换入泡泡玛特——2026年5月25日举牌（持股5.69%），5月28日增至6.04%，7月6日进一步增至7.65%（约1.02亿股），已是第二大股东，披露的各笔买入均价在150-162.5港元之间（核查时点：2026-07-25）。他的核心逻辑变化：**不是看懂了消费者，而是看懂了管理层。** \"王宁还年轻，至少还能好好干25年。\"\n\n这个判断对不对，见仁见智。但它指向了泡泡玛特最核心的估值分歧点。\n\n---"
-      },
-      "price_status": "已提取",
-      "title": "看懂泡泡玛特（四）：3年后利润会是多少？该不该投？",
-      "report_path": "reports/泡泡玛特/《看懂泡泡玛特》/04-3年后利润会是多少-该不该投.md",
-      "report_link": "泡泡玛特/《看懂泡泡玛特》/04-3年后利润会是多少-该不该投.md"
     },
     {
       "data_cutoff": null,
@@ -715,25 +612,6 @@
     },
     {
       "data_cutoff": null,
-      "action": "减仓/卖出",
-      "investor_stances": [],
-      "conclusion_summary": "看懂泡泡玛特（一）：3个关于泡泡玛特的常见错觉",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "因为\"盲盒公司\"意味着天花板很低——盲盒就那么大的市场，热度一过就完了。但\"IP运营平台\"的天花板取决于IP本身的生命力和变现路径的宽度。这是两种完全不同的估值逻辑。",
-        "start_line": 56,
-        "end_line": 61,
-        "markdown": "因为\"盲盒公司\"意味着天花板很低——盲盒就那么大的市场，热度一过就完了。但\"IP运营平台\"的天花板取决于IP本身的生命力和变现路径的宽度。这是两种完全不同的估值逻辑。\n\n当然，能不能真正走通迪士尼那条路，是另一个问题。但至少，你得先把它放对分析框架里。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "看懂泡泡玛特（一）：3个关于泡泡玛特的常见错觉",
-      "report_path": "reports/泡泡玛特/《看懂泡泡玛特》/01-增长能持续吗.md",
-      "report_link": "泡泡玛特/《看懂泡泡玛特》/01-增长能持续吗.md"
-    },
-    {
-      "data_cutoff": null,
       "action": "未提取",
       "investor_stances": [],
       "conclusion_summary": "- 美国市场增长748%不可持续，基数效应显现",
@@ -752,12 +630,19 @@
       "report_link": "泡泡玛特/03-行业竞争分析-芒格视角.md"
     }
   ],
-  "report_history_count": 21,
+  "report_history_count": 16,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "泡泡玛特",
     "ticker": "09992.HK",
@@ -802,6 +687,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "18a045469558c0179383",
   "detail_path": "./data/decision_details/18a045469558c0179383.json"
 }

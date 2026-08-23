@@ -98,7 +98,8 @@
     ],
     "invalidation_triggers": "聚氨酯毛利率连续两期低于 20%；净债务/EBITDA 持续高于 4.5 倍；建设高峰后连续两年自由现金流为负",
     "next_review_date": "2026-09-05",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -197,7 +198,8 @@
         ],
         "invalidation_triggers": "聚氨酯毛利率连续两期低于 20%；净债务/EBITDA 持续高于 4.5 倍；建设高峰后连续两年自由现金流为负",
         "next_review_date": "2026-09-05",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -292,11 +294,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
@@ -306,8 +311,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "600309.SH",
+      "main_report": {
+        "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+        "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
+    "current_source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "万华化学",
     "ticker": "600309.SH",
@@ -352,6 +380,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "adf58943f3103970b529",
   "detail_path": "./data/decision_details/adf58943f3103970b529.json"
 }

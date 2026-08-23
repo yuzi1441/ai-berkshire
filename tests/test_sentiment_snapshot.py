@@ -641,6 +641,49 @@ class SentimentSnapshotTests(unittest.TestCase):
             self.assertEqual(status["status"], "error")
             self.assertIn("主模型配置不完整", status["error"])
 
+    def test_partial_run_keeps_last_success_snapshot_and_writes_working_checkpoint(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://example.com", api_key="test", model="test-model"
+        )
+        partial = {
+            "schema_version": 1,
+            "status": "partial",
+            "generated_at": "2026-08-23T18:00:00+08:00",
+            "data_cutoff": "2026-08-22",
+            "company_count": 1,
+            "companies": [
+                {"ticker": "600000.SH", "combined_sentiment": {"status": "ok"}}
+            ],
+            "skipped_count": 1,
+            "warnings": ["one failed item"],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output = root / "latest.json"
+            site = root / "site.json"
+            working = root / "working.json"
+            status = root / "status.json"
+            sentinel = {"status": "ok", "generated_at": "2026-08-22T18:00:00+08:00"}
+            output.write_text(json.dumps(sentinel), encoding="utf-8")
+            site.write_text(json.dumps(sentinel), encoding="utf-8")
+            with patch.object(
+                sentiment_snapshot.LLMConfig, "from_environment", return_value=config
+            ), patch.object(sentiment_snapshot, "build_snapshot", return_value=partial):
+                result = sentiment_snapshot.main(
+                    [
+                        "--output", str(output),
+                        "--site-output", str(site),
+                        "--working-output", str(working),
+                        "--status-output", str(status),
+                        "--no-archive",
+                    ]
+                )
+            self.assertEqual(result, 1)
+            self.assertEqual(json.loads(output.read_text(encoding="utf-8")), sentinel)
+            self.assertEqual(json.loads(site.read_text(encoding="utf-8")), sentinel)
+            self.assertEqual(json.loads(working.read_text(encoding="utf-8"))["status"], "partial")
+            self.assertEqual(json.loads(status.read_text(encoding="utf-8"))["status"], "partial")
+
     def test_load_universe_keeps_only_unique_a_h_tickers(self):
         board = {
             "decisions": [

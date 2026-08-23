@@ -43,6 +43,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BOARD = ROOT / "data" / "investment-dashboard" / "decision_board.json"
 DEFAULT_REGISTRY = ROOT / "data" / "report-routing" / "company_registry.json"
 DEFAULT_OUTPUT = ROOT / "data" / "sentiment" / "latest.json"
+DEFAULT_WORKING_OUTPUT = ROOT / "data" / "sentiment" / "work-in-progress.json"
 DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
 DEFAULT_CACHE_DIR = ROOT / "data" / "sentiment" / "cache"
 DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
@@ -3022,11 +3023,12 @@ def combined_company_score(
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary_path = path.with_name(f".{path.name}.tmp")
-    temporary_path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    temporary_path.replace(path)
+    temporary_path = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    with temporary_path.open("w", encoding="utf-8") as handle:
+        handle.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary_path, path)
 
 
 def news_cache_path(
@@ -4198,6 +4200,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--board", type=Path, default=DEFAULT_BOARD)
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--working-output", type=Path, default=DEFAULT_WORKING_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
     parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
     parser.add_argument("--site-output", type=Path, default=DEFAULT_SITE_OUTPUT)
@@ -4246,19 +4249,52 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     now = datetime.now(tz=SHANGHAI_TIMEZONE)
     as_of = effective_as_of(now, args.as_of)
+    run_id = hashlib.sha256(f"{now.isoformat()}|{os.getpid()}".encode("utf-8")).hexdigest()[:20]
     last_checkpoint: dict[str, Any] | None = None
+
+    def last_success_metadata() -> dict[str, Any]:
+        try:
+            payload = json.loads(args.output.resolve().read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {"last_success_at": None, "last_success_data_cutoff": None}
+        return {
+            "last_success_at": payload.get("generated_at"),
+            "last_success_data_cutoff": payload.get("data_cutoff"),
+        }
+
+    def write_run_status(status: str, message: str, **extra: Any) -> None:
+        write_json(
+            args.status_output.resolve(),
+            {
+                "schema_version": 2,
+                "status": status,
+                "run_id": run_id,
+                "generated_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
+                "data_cutoff": as_of.isoformat(),
+                "message": message,
+                **last_success_metadata(),
+                **extra,
+            },
+        )
 
     def persist_checkpoint(snapshot: dict[str, Any], message: str) -> None:
         nonlocal last_checkpoint
-        last_checkpoint = snapshot
-        write_json(args.output.resolve(), snapshot)
-        write_json(args.site_output.resolve(), snapshot)
-        write_json(args.status_output.resolve(), snapshot_status_payload(snapshot, message))
+        last_checkpoint = {**snapshot, "run_id": run_id, "run_state": "working"}
+        write_json(args.working_output.resolve(), last_checkpoint)
+        progress = snapshot_status_payload(snapshot, message)
+        write_run_status(
+            "running",
+            message,
+            company_count=progress.get("company_count", 0),
+            skipped_count=progress.get("skipped_count", 0),
+            progress=progress.get("progress"),
+        )
 
     def handle_termination(signum: int, _frame: Any) -> None:
         if last_checkpoint is not None:
             interrupted = dict(last_checkpoint)
             interrupted["status"] = "partial"
+            interrupted["run_state"] = "interrupted"
             interrupted["warnings"] = [
                 *interrupted.get("warnings", []),
                 f"任务收到终止信号 {signum}；已发布最近一次阶段性快照，未完成部分未计入。",
@@ -4271,7 +4307,13 @@ def main(argv: list[str] | None = None) -> int:
                 "checkpoint_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
             }
             try:
-                persist_checkpoint(interrupted, "任务中断；页面已切换到最近一次阶段性结果。")
+                write_json(args.working_output.resolve(), interrupted)
+                write_run_status(
+                    "interrupted",
+                    "任务中断；线上继续显示上一次成功快照。",
+                    progress=interrupted.get("progress"),
+                    interrupted_by_signal=signum,
+                )
             except OSError:
                 pass
         raise SystemExit(128 + signum)
@@ -4322,8 +4364,33 @@ def main(argv: list[str] | None = None) -> int:
                 snapshot, "情绪任务进行中；页面显示最近一次阶段性结果。"
             ),
         )
+        snapshot = {**snapshot, "run_id": run_id, "run_state": "complete"}
+        usable_count = sum(
+            1
+            for company in snapshot.get("companies", [])
+            if isinstance(company, dict)
+            and str((company.get("combined_sentiment") or {}).get("status"))
+            in {"ok", "context_only"}
+        )
+        if snapshot.get("status") != "ok" or usable_count <= 0:
+            write_json(args.working_output.resolve(), snapshot)
+            write_run_status(
+                "error" if usable_count <= 0 else "partial",
+                (
+                    "本次运行没有可用公司结果；线上继续显示上一次成功快照。"
+                    if usable_count <= 0
+                    else "本次运行未完整成功；阶段性结果仅保存在工作检查点。"
+                ),
+                company_count=snapshot.get("company_count", 0),
+                usable_company_count=usable_count,
+                skipped_count=snapshot.get("skipped_count", 0),
+                warnings=snapshot.get("warnings", []),
+                progress=snapshot.get("progress"),
+            )
+            return 1
         write_json(args.output.resolve(), snapshot)
         write_json(args.site_output.resolve(), snapshot)
+        write_json(args.working_output.resolve(), {**snapshot, "run_state": "promoted"})
         status = snapshot_status_payload(
             snapshot,
             (
@@ -4331,6 +4398,15 @@ def main(argv: list[str] | None = None) -> int:
                 if snapshot.get("skipped_count", 0)
                 else "情绪数据更新完成。"
             ),
+        )
+        status.update(
+            {
+                "schema_version": 2,
+                "run_id": run_id,
+                "usable_company_count": usable_count,
+                "last_success_at": snapshot.get("generated_at"),
+                "last_success_data_cutoff": snapshot.get("data_cutoff"),
+            }
         )
         write_json(args.status_output.resolve(), status)
         if not args.no_archive:
@@ -4342,10 +4418,12 @@ def main(argv: list[str] | None = None) -> int:
     except Exception as exc:  # noqa: BLE001 - status must be published for every failed run
         status = {
             "status": "error",
+            "run_id": run_id,
             "generated_at": now.isoformat(),
             "data_cutoff": as_of.isoformat(),
             "error": str(exc),
             "message": "情绪更新失败；看板继续显示上一份成功快照。",
+            **last_success_metadata(),
         }
         try:
             write_json(args.status_output.resolve(), status)

@@ -103,7 +103,8 @@
     ],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -202,7 +203,8 @@
         ],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -302,101 +304,9 @@
       "title": "杭叉集团（603298.SH）财务估值分析报告",
       "report_path": "reports/杭叉集团-deepseek分析/02-财务估值分析-巴菲特视角.md",
       "report_link": "杭叉集团-deepseek分析/02-财务估值分析-巴菲特视角.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "观察",
-      "investor_stances": [
-        {
-          "stance": "激进型",
-          "action": "轻仓观察",
-          "price_range": "24-26 元"
-        },
-        {
-          "stance": "稳健型",
-          "action": "等待更大安全边际",
-          "price_range": "20-23 元"
-        },
-        {
-          "stance": "保守型",
-          "action": "回避或等待极端低位",
-          "price_range": "18 元"
-        }
-      ],
-      "conclusion_summary": "激进型：轻仓观察（24-26 元）；稳健型：等待更大安全边际（20-23 元）；保守型：回避或等待极端低位（18 元）",
-      "buy_price": "20-23 元",
-      "price_plan": [
-        {
-          "profile": "激进型",
-          "price_range": "24-26 元",
-          "action": "轻仓观察"
-        },
-        {
-          "profile": "稳健型",
-          "price_range": "20-23 元",
-          "action": "等待更大安全边际"
-        },
-        {
-          "profile": "保守型",
-          "price_range": "18 元以下",
-          "action": "回避或等待极端低位"
-        }
-      ],
-      "scenario_valuation": [
-        {
-          "scenario": "乐观",
-          "target_price": "约 40 元",
-          "eps_growth": "10%",
-          "target_pe": "18 倍",
-          "upside": "约 +51%"
-        },
-        {
-          "scenario": "中性",
-          "target_price": "约 32 元",
-          "eps_growth": "8%",
-          "target_pe": "15 倍",
-          "upside": "约 +19%"
-        },
-        {
-          "scenario": "悲观",
-          "target_price": "约 22 元",
-          "eps_growth": "3%",
-          "target_pe": "12 倍",
-          "upside": "约 -17%"
-        }
-      ],
-      "valuation_section": {
-        "heading": "什么价位可以考虑？",
-        "start_line": 243,
-        "end_line": 270,
-        "markdown": "## 什么价位可以考虑？\n\n不同类型投资者的参考（非投资建议）：\n\n| 投资者类型 | 策略 | 参考价格区间 |\n|:----------|:----|:-----------:|\n| 激进型 | 轻仓观察 | 24-26 元 |\n| 稳健型 | 等待更大安全边际 | 20-23 元（PE 12-13 倍）|\n| 保守型 | 回避或等待极端低位 | 18 元以下（PE < 11 倍）|\n\n### 值得关注的催化剂\n\n**加仓信号**：\n- 应收账款周转天数连续 2 个季度改善\n- 2026Q2-Q3 毛利率回升至 24%+\n- 泰国工厂如期投产且海外增速维持 25%+\n- 发布股权激励计划绑定管理层\n- PE 跌至 12-13 倍\n\n**减仓/警惕信号**：\n- 应收账款继续恶化 + 坏账计提大增\n- 实控人进行不利的关联交易\n- 赵礼敏退休但接班人安排被市场质疑\n- 欧美对中国叉车加征高额关税\n- 行业价格战爆发，毛利率骤降\n\n---"
-      },
-      "price_status": "已提取价格计划",
-      "title": "好公司未必是好股票",
-      "report_path": "reports/杭叉集团-deepseek分析/《看懂杭叉集团》/04-风险与估值-好公司未必是好股票.md",
-      "report_link": "杭叉集团-deepseek分析/《看懂杭叉集团》/04-风险与估值-好公司未必是好股票.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "持有",
-      "investor_stances": [],
-      "conclusion_summary": "本系列不构成任何投资建议。所有数据来源于公司年报及公开信息，估算数据已标注。投资有风险，入市需谨慎。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "叉车是工业搬运的基础设备，只要有工厂、仓库、港口、物流中心，就需要叉车。全球叉车市场 2024 年估值约 818 亿美元（Fortune Business Insights 数据），预计未来十年复合增长率约 5.6%。",
-        "start_line": 55,
-        "end_line": 101,
-        "markdown": "叉车是工业搬运的基础设备，只要有工厂、仓库、港口、物流中心，就需要叉车。全球叉车市场 2024 年估值约 **818 亿美元**（Fortune Business Insights 数据），预计未来十年复合增长率约 **5.6%**。\n\n更重要的是，叉车有两个常被忽视的属性：\n\n1. **\"耗材\"属性**——叉车平均更换周期 5-7 年，不是一锤子买卖。企业买了叉车之后，配件、维修、电池更换会持续产生收入。后市场的毛利率高达 **30-40%**，远高于整车。\n2. **电动化正在重塑行业**——从铅酸到锂电，从内燃到纯电，中国企业在锂电池全产业链上的优势正在转化为叉车领域的竞争优势。这不是渐进式的变化，是结构性的拐点。\n\n**但反方观点也值得听**：叉车行业增速不快（全球 5-6%），天花板有限（全球市场约 1000 亿美元），不会产生\"十年十倍\"的爆发式增长。这是一门稳定但不性感的生意。\n\n### 错觉二：杭叉是\"低端制造\"\n\n这个标签越来越不准确了。\n\n4 年前（2021 年），杭叉的毛利率只有 **15.51%**——确实像一家低端制造商。但到 2025 年，毛利率已经升至 **24.78%**，4 年提升了将近 **10 个百分点**。净利润从 **9.08 亿** 翻到 **21.91 亿**，增幅 **141%**。\n\n这背后有两个驱动力：\n\n| 驱动力 | 贡献 | 可持续性 |\n|-------|------|---------|\n| 产品结构升级（电动化+海外高毛利）| 约 60% | 结构性因素，可持续性较高 |\n| 钢材价格下跌（周期因素）| 约 40% | 周期性，若钢价反弹将承压 |\n\n（来源：基于杭叉集团 2021-2025 年年报数据的分析估算）\n\n杭叉 2018 年就与宁德时代成立合资公司鹏成新能源，开发叉车专用锂电池。到 2025 年，已经实现\"三电\"（电池、电驱、电控）**完全自研自制**。氢燃料电池叉车也已落地超 **400 台**。\n\n**但反方观点**：毛利率提升有约 40% 靠钢价下跌，如果钢价回到 2021 年高点，毛利率可能回落 3-5 个百分点。电动化的技术壁垒也会随着全行业普及而减弱。\n\n### 错觉三：杭叉是国企\n\n**不是。**\n\n杭叉集团的实际控制人是**仇建平**——一位典型的浙商企业家。仇建平通过浙江杭叉控股持有杭叉集团约 **41.34%** 的股份。杭州市国资委通过杭实集团持有约 **20.39%** 的股份，是第二大股东。\n\n仇建平同时控制巨星科技（002444.SZ）、新柴股份（301032.SZ），正在推进中策橡胶 IPO，形成了一个复杂的\"巨星系\"资本网络。\n\n这意味着什么？意味着杭叉的治理结构，不是一般人以为的\"国企安全感\"，而是一个民营资本控制、关联交易频繁的结构。这既是效率优势（决策快、激励灵活），也是治理风险（利益冲突、关联交易）。\n\n**关于这一点，看多派和看空派的分歧很大**：\n\n- 看多派说：仇建平入主后杭叉营收从 70 亿做到 177 亿，实控人有能力\n- 看空派说：\"巨星系\"交叉持股太复杂，国自机器人收购就是关联交易的典型案例\n\n后面的文章会详细拆这个问题。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "中国叉车龙头的真实面目",
-      "report_path": "reports/杭叉集团-deepseek分析/《看懂杭叉集团》/01-开篇-中国叉车龙头的真实面目.md",
-      "report_link": "杭叉集团-deepseek分析/《看懂杭叉集团》/01-开篇-中国叉车龙头的真实面目.md"
     }
   ],
-  "report_history_count": 7,
+  "report_history_count": 5,
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
@@ -486,11 +396,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -500,8 +413,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "603298.SH",
+      "main_report": {
+        "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+        "sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "9015c410dfc6dd6cb1d4b5399e4fe0b3a2703fb1d639d3e90e854fdb6eb32221",
+    "current_source_fingerprint_sha256": "9015c410dfc6dd6cb1d4b5399e4fe0b3a2703fb1d639d3e90e854fdb6eb32221"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "9015c410dfc6dd6cb1d4b5399e4fe0b3a2703fb1d639d3e90e854fdb6eb32221",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "杭叉集团",
     "ticker": "603298.SH",
@@ -546,6 +482,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "56b50cce3ee832977f31",
   "detail_path": "./data/decision_details/56b50cce3ee832977f31.json"
 }

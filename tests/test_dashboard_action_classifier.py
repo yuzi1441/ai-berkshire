@@ -223,14 +223,14 @@ class DashboardActionClassifierTests(unittest.TestCase):
               }, execution_policy: {
                 main_action_kind: "buy", condition_mode: "current_action",
                 current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
-              }}, {price: 90, currency: "CNY"}),
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824095500", snapshot_generated_at: "2026-08-24T01:55:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")}),
               classifier.currentExecutionState({market: "A股", manual_execution_review: {
                 status: "ready", source: "human_review", execution_key: "no",
                 label: "人工复核：Checklist 硬性否决", detail: "治理红线"
               }, execution_policy: {
                 main_action_kind: "buy", condition_mode: "current_action",
                 current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
-              }}, {price: 90, currency: "CNY"})
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824095500", snapshot_generated_at: "2026-08-24T01:55:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")})
             ]"""
         )
         self.assertEqual(result[0]["key"], "validation")
@@ -238,8 +238,51 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result[1]["key"], "no")
         self.assertFalse(result[1]["actionable"])
 
+    def test_execution_requires_valid_review_open_session_and_fresh_quote(self):
+        result = self.run_classifier(
+            """{
+              fresh: classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "actionable"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824095500", snapshot_generated_at: "2026-08-24T01:55:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")}),
+              staleQuote: classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "actionable"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824093000", snapshot_generated_at: "2026-08-24T01:30:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")}),
+              closed: classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "trial"
+              }, execution_policy: {main_action_kind: "trial", condition_mode: "current_action"}},
+              {price: 90, currency: "CNY", provider_timestamp: "20260824150000", snapshot_generated_at: "2026-08-24T08:00:00Z"}, "trial", {now: new Date("2026-08-24T08:01:00Z")}),
+              staleReview: classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "stale", source: "human_review", execution_key: "review",
+                invalidation_reason: "主报告已经变化"
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824095500", snapshot_generated_at: "2026-08-24T01:55:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")}),
+              hardVeto: classifier.currentExecutionState({market: "A股", checklist: {
+                hard_veto_state: "triggered"
+              }, manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "actionable"
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260824095500", snapshot_generated_at: "2026-08-24T01:55:00Z"}, "buy", {now: new Date("2026-08-24T02:00:00Z")}),
+              hongKong: classifier.currentExecutionState({market: "港股"}, {price: 20, currency: "HKD"}, "buy")
+            }"""
+        )
+        self.assertEqual(result["fresh"]["key"], "actionable")
+        self.assertEqual(result["fresh"]["marketSessionState"], "open")
+        self.assertEqual(result["fresh"]["quoteFreshness"], "fresh")
+        self.assertEqual(result["staleQuote"]["key"], "review")
+        self.assertEqual(result["staleQuote"]["quoteFreshness"], "stale")
+        self.assertEqual(result["closed"]["key"], "review")
+        self.assertTrue(result["closed"]["nextTradingDayCandidate"])
+        self.assertEqual(result["staleReview"]["key"], "review")
+        self.assertEqual(result["hardVeto"]["key"], "no")
+        self.assertEqual(result["hongKong"]["label"], "仅供研究")
+
     def test_dashboard_controls_filter_current_executability(self):
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
         self.assertIn('aria-label="当前可执行筛选"', html)
         for key in (
             "actionable",
@@ -255,3 +298,8 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn('value="execution"', html)
         self.assertNotIn("综合操作筛选", html)
         self.assertNotIn("按综合操作", html)
+        self.assertIn('data-tab="deep-review" hidden', html)
+        self.assertNotIn("qt.gtimg.cn", app)
+        self.assertNotIn("sessionStorage", app)
+        self.assertNotIn("Bearer ", app)
+        self.assertIn("generation_id", app)

@@ -42,7 +42,8 @@
     "investor_stances": [],
     "invalidation_triggers": "未给出",
     "next_review_date": null,
-    "confidence": "待复核"
+    "confidence": "待复核",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取",
   "data_status": "待复核：未标注数据截止日",
@@ -80,7 +81,8 @@
         "investor_stances": [],
         "invalidation_triggers": "未给出",
         "next_review_date": null,
-        "confidence": "待复核"
+        "confidence": "待复核",
+        "hard_veto_state": "unknown"
       }
     },
     {
@@ -101,33 +103,21 @@
       "title": "药明康德：Team Lead 综合判断",
       "report_path": "reports/港股召回池/药明康德/最终报告.md",
       "report_link": "港股召回池/药明康德/最终报告.md"
-    },
-    {
-      "data_cutoff": null,
-      "action": "未提取",
-      "investor_stances": [],
-      "conclusion_summary": "- 高薪争议：2024年李革薪酬4,180万元（含长期股权激励摊销），为A股最高薪董事长之一。虽然对标欧美同行并不算极端，但在持续减持的背景下，高薪显得更加刺眼。",
-      "buy_price": null,
-      "price_plan": [],
-      "scenario_valuation": [],
-      "valuation_section": {
-        "heading": "乐观：未被列入名单 20-30% 利好，估值修复至30倍PE",
-        "start_line": 120,
-        "end_line": 137,
-        "markdown": "| 乐观：未被列入名单 | 20-30% | 利好，估值修复至30倍PE |\n| 基准：被列入，但\"祖父条款\"+私营不受限 | 50-60% | 中性偏负面，联邦业务（占美国收入~15-20%）逐步流失 |\n| 悲观：被列入，且引发私营客户恐慌性转移 | 15-20% | 显著负面，美国收入可能下降20-30% |\n| 极端：中美全面脱钩 | <5% | 颠覆性，商业模式受根本性挑战 |\n\n**关键数据**：2025年来自美国客户的收入为312.5亿元，占总收入的68.7%。这意味着美国市场对药明康德至关重要，任何程度的美国业务流失都会产生实质影响。\n\n### 公司的应对措施\n\n1. **美国本土化**：特拉华州工厂预计2026年投产，创造约500个就业岗位，可部分缓解\"中国供应商\"的政治敏感性\n2. **全球化分散**：新加坡基地已运营，降低对中国单一生产基地的依赖\n3. **客户绑定**：580亿在手订单提供了缓冲，短期内客户不太可能大规模转移\n4. **游说与沟通**：公司聘请了华盛顿游说团队，积极与政策制定者沟通\n\n**李录式评价**：公司在\"可控范围内\"做了该做的事情，但地缘政治风险的本质是\"不可控\"的。投资者不能指望公司的应对措施能完全对冲法案的影响。\n\n---"
-      },
-      "price_status": "价格未给出",
-      "title": "药明康德：风险管理层评估",
-      "report_path": "reports/港股召回池/药明康德/04-风险管理层评估-李录视角.md",
-      "report_link": "港股召回池/药明康德/04-风险管理层评估-李录视角.md"
     }
   ],
-  "report_history_count": 3,
+  "report_history_count": 2,
   "checklist": {
     "status": "missing",
     "gates": [],
     "history": []
   },
+  "validity_state": "research_only",
+  "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+  "valid_until": null,
+  "source_fingerprint_sha256": null,
+  "market_session_state": "research_only",
+  "quote_freshness": "not_applicable",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "药明康德",
     "ticker": "02359.HK",
@@ -172,6 +162,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "20c307c3e3bad2e40f29",
   "detail_path": "./data/decision_details/20c307c3e3bad2e40f29.json"
 }

@@ -90,7 +90,8 @@
     ],
     "invalidation_triggers": "亚太 MR TCE 连续两个季度低于约 20000 美元/天，或新船交付后 ROIC 下滑并伴随净债务上升、减值",
     "next_review_date": "2026-09-01",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -176,7 +177,8 @@
         ],
         "invalidation_triggers": "亚太 MR TCE 连续两个季度低于约 20000 美元/天，或新船交付后 ROIC 下滑并伴随净债务上升、减值",
         "next_review_date": "2026-09-01",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -277,11 +279,14 @@
     "history": []
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
@@ -291,8 +296,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "601975.SH",
+      "main_report": {
+        "path": "reports/招商南油/招商南油-investment-research-20260810.md",
+        "sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb"
+      },
+      "checklist": {
+        "path": null,
+        "sha256": null
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "aab89380368a98a4b0d50b9ff0ef5d10a7a228e5ce909b4bc397010466e0a704",
+    "current_source_fingerprint_sha256": "aab89380368a98a4b0d50b9ff0ef5d10a7a228e5ce909b4bc397010466e0a704"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "aab89380368a98a4b0d50b9ff0ef5d10a7a228e5ce909b4bc397010466e0a704",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "招商局南京油运股份有限公司",
     "ticker": "601975.SH",
@@ -337,6 +365,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "6c0ca0fa4052a57796a9",
   "detail_path": "./data/decision_details/6c0ca0fa4052a57796a9.json"
 }

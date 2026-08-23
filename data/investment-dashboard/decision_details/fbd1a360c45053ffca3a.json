@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负、经营现金流低于资本支出",
     "next_review_date": "2026-08-31",
-    "confidence": "中"
+    "confidence": "中",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负、经营现金流低于资本支出",
         "next_review_date": "2026-08-31",
-        "confidence": "中"
+        "confidence": "中",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -303,6 +305,7 @@
     "market": "A股",
     "report_path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
     "report_link": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+    "report_sha256": "b9b10a3095400e3e188eb014026001be708f0c390370e9d98133e3a367d8fe1a",
     "title": "顺丰控股（002352.SZ）巴菲特买入前 Checklist",
     "source_type": "standalone",
     "decision_contract": {
@@ -334,9 +337,10 @@
       ],
       "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负，经营现金流低于资本支出",
       "next_review_date": "2026-08-31",
-      "confidence": "中"
+      "confidence": "中",
+      "hard_veto_state": "unknown"
     },
-    "status": "否决",
+    "status": "灰色地带",
     "passed_count": 5,
     "total_gates": 6,
     "gates": [
@@ -377,8 +381,9 @@
         "reason": ""
       }
     ],
-    "hard_veto": true,
-    "hard_veto_label": "已触发",
+    "hard_veto": false,
+    "hard_veto_state": "clear",
+    "hard_veto_label": "未触发/未发现",
     "mirror_test": "通过",
     "action": "观察",
     "summary": "灰色地带，护城河较强但当前A股安全边际一般",
@@ -389,7 +394,7 @@
     "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负，经营现金流低于资本支出",
     "history": [
       {
-        "status": "否决",
+        "status": "灰色地带",
         "action": "观察",
         "data_cutoff": "2026-08-10",
         "report_date": "2026-08-11",
@@ -400,11 +405,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-08-31",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
@@ -414,8 +422,31 @@
     "opportunity_tier": null,
     "opportunity_summary": null,
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "002352.SZ",
+      "main_report": {
+        "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+        "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e"
+      },
+      "checklist": {
+        "path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
+        "sha256": "b9b10a3095400e3e188eb014026001be708f0c390370e9d98133e3a367d8fe1a"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
+    "current_source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-08-31",
+  "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": false,
   "technical_analysis": {
     "company": "顺丰控股股份有限公司",
     "ticker": "002352.SZ",
@@ -460,6 +491,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "fbd1a360c45053ffca3a",
   "detail_path": "./data/decision_details/fbd1a360c45053ffca3a.json"
 }

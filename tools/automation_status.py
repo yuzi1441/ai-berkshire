@@ -82,11 +82,11 @@ def update(arguments: argparse.Namespace) -> int:
                 "message": arguments.message or "",
             }
         )
-        if status in {"ok", "partial"}:
+        if status == "ok":
             current["last_success_at"] = timestamp
             current["last_success_status"] = status
     jobs[job_id] = current
-    payload["schema_version"] = 1
+    payload["schema_version"] = 2
     payload["updated_at"] = timestamp
     write(path, payload)
     return 0
@@ -102,7 +102,11 @@ def main() -> int:
     start.add_argument("--message")
     finish = subparsers.add_parser("finish")
     finish.add_argument("--job-id", required=True)
-    finish.add_argument("--status", choices=("ok", "partial", "error", "skipped"), default="ok")
+    finish.add_argument(
+        "--status",
+        choices=("ok", "partial", "deferred", "interrupted", "error", "skipped"),
+        default="ok",
+    )
     finish.add_argument("--duration", type=float)
     finish.add_argument("--data-cutoff")
     finish.add_argument("--record-count", type=int)

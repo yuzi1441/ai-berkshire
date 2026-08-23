@@ -5,17 +5,21 @@ After=network-online.target
 
 [Service]
 Type=simple
-User=root
-WorkingDirectory=/opt/ai-berkshire
+User=ai-berkshire
+Group=ai-berkshire
+WorkingDirectory=/srv/ai-berkshire/current
 Environment=DASHBOARD_RUNTIME_DIR=/var/lib/ai-berkshire
-EnvironmentFile=-/etc/ai-berkshire/dashboard-review.env
 EnvironmentFile=-/etc/ai-berkshire/sentiment.env
 StateDirectory=ai-berkshire
-ExecStart=/usr/bin/python3 tools/dashboard_server.py --repo-root /opt/ai-berkshire --directory /opt/ai-berkshire/site --bind 0.0.0.0 --port 80
+ExecStart=/usr/bin/python3 tools/dashboard_server.py --repo-root /srv/ai-berkshire/current --directory /srv/ai-berkshire/current/site --bind 127.0.0.1 --port 8080
 Restart=always
 RestartSec=3
 NoNewPrivileges=true
 PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/ai-berkshire
+UMask=0027
 
 [Install]
 WantedBy=multi-user.target

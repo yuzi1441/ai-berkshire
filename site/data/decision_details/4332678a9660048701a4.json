@@ -106,7 +106,8 @@
     ],
     "invalidation_triggers": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点，或销售费用持续显著快于收入且扣非利润恶化",
     "next_review_date": "2026-10-31",
-    "confidence": "高"
+    "confidence": "高",
+    "hard_veto_state": "unknown"
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
@@ -208,7 +209,8 @@
         ],
         "invalidation_triggers": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点，或销售费用持续显著快于收入且扣非利润恶化",
         "next_review_date": "2026-10-31",
-        "confidence": "高"
+        "confidence": "高",
+        "hard_veto_state": "unknown"
       }
     }
   ],
@@ -304,6 +306,7 @@
     "market": "A股",
     "report_path": "reports/东鹏饮料/东鹏饮料-investment-checklist-20260812.md",
     "report_link": "reports/东鹏饮料/东鹏饮料-investment-checklist-20260812.md",
+    "report_sha256": "5af91cd868aec2ff41fb1288543207bf9f5a3217b8f04162b63522fd52bd64fb",
     "title": "东鹏饮料（605499.SH）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": {
@@ -335,7 +338,8 @@
       ],
       "invalidation_triggers": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点，或发生重大食品安全治理及低回报并购事件",
       "next_review_date": "2026-10-31",
-      "confidence": "高"
+      "confidence": "高",
+      "hard_veto_state": "unknown"
     },
     "status": "灰色地带",
     "passed_count": 5,
@@ -379,6 +383,7 @@
       }
     ],
     "hard_veto": false,
+    "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
     "mirror_test": "待复核",
     "action": "观察",
@@ -401,11 +406,14 @@
     ]
   },
   "manual_execution_review": {
-    "schema_version": 1,
+    "schema_version": 2,
     "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
+    "valid_until": "2026-09-22",
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "A",
@@ -415,8 +423,31 @@
     "opportunity_tier": "current",
     "opportunity_summary": "当前唯一进入可执行小比例分批名单的 A 股；仍应按报告价格纪律控制仓位。",
     "checklist_blocked": false,
-    "selection_manifest_sha256": "1fd24b505682720d85d0ff4ebed949f5fa89b79c0f294fc8c8944ca9e3b7fa6a"
+    "source_snapshot": {
+      "ticker": "605499.SH",
+      "main_report": {
+        "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+        "sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c"
+      },
+      "checklist": {
+        "path": "reports/东鹏饮料/东鹏饮料-investment-checklist-20260812.md",
+        "sha256": "5af91cd868aec2ff41fb1288543207bf9f5a3217b8f04162b63522fd52bd64fb"
+      },
+      "review_report": {
+        "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+      }
+    },
+    "source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13",
+    "current_source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13"
   },
+  "validity_state": "ready",
+  "invalidation_reason": null,
+  "valid_until": "2026-09-22",
+  "source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13",
+  "market_session_state": "runtime_required",
+  "quote_freshness": "runtime_required",
+  "next_trading_day_candidate": true,
   "technical_analysis": {
     "company": "东鹏饮料（集团）股份有限公司",
     "ticker": "605499.SH",
@@ -461,6 +492,7 @@
     "status": "not_tracked",
     "alerts": []
   },
+  "generation_id": "45479ffbb61dacfc8a3d",
   "detail_id": "4332678a9660048701a4",
   "detail_path": "./data/decision_details/4332678a9660048701a4.json"
 }
