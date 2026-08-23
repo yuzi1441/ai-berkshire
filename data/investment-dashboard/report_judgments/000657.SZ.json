@@ -1,38 +1,50 @@
 {
   "schema_version": 1,
-  "status": "review",
-  "generated_at": "2026-08-14T10:51:00+00:00",
+  "status": "ready",
+  "generated_at": "2026-08-23T13:32:42+00:00",
   "company": "中钨高新",
   "ticker": "000657.SZ",
   "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
   "report_sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
   "judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型核心动作不一致或置信度不足，暂停自动归类",
-    "holder_action": "报告未明确给出持仓者动作，但整体不建议追高，持有者宜观望等待",
-    "trigger_condition": "人工核对主报告原文后再恢复筛选",
-    "summary": "报告按投资者类型区分：激进型小仓观察，稳健型等待35-45元，保守型暂不买入等待25-35元",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应依据风险偏好操作：激进型可小仓位观察（约58.5元），稳健型等待价格回落至35-45元，保守型暂不买入（等待25-35元）。",
+    "holder_action": "报告未明确持仓者动作，但整体建议观察，可能意味着持有不动。",
+    "trigger_condition": "价格回落至35-45元（稳健型）或25-35元（保守型）时再考虑买入。",
+    "summary": "报告按投资者类型区分：激进型可小仓位观察，稳健型等待价格回落，保守型暂不买入，整体建议观察。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "无冲突，正文与契约一致",
+    "conflict_note": "无正文对比，仅看板契约，无冲突。",
     "evidence": [
       {
         "line_start": 303,
-        "line_end": 306,
-        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 投资者类型 当前建议 价格/触发区间 解释 | | 激进型动作 | 只适合小仓位观察，不建议追高 | | 激进型价格区间 | 约 58.5 元 |",
-        "supports": "空仓者中激进型只适合小仓位观察，不建议追高，属于等待价格而非买入"
+        "line_end": 303,
+        "quote": "| 基本面建议动作 | 观察 |",
+        "supports": "最终结论为观察，支持空仓者当前不宜追高，应等待或小仓验证。"
+      },
+      {
+        "line_start": 305,
+        "line_end": 305,
+        "quote": "| 激进型动作 | 只适合小仓位观察，不建议追高 |",
+        "supports": "空仓者中激进型可小仓位验证，但不可追高。"
       },
       {
         "line_start": 307,
+        "line_end": 308,
+        "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 |",
+        "supports": "稳健型空仓者应等待价格回落至35-45元，属于等待价格触发条件。"
+      },
+      {
+        "line_start": 309,
         "line_end": 310,
-        "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
-        "supports": "稳健型和保守型均要求等待更低价格且给出触发区间，整体判断为等待价格"
+        "quote": "| 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
+        "supports": "保守型空仓者暂不买入，等待更低价格区间，仍属等待价格。"
       }
     ],
     "enabled": true,
     "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": false,
+    "model_consensus": true,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -44,53 +56,65 @@
       "result": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "激进型可小仓位观察但不建议追高，稳健型等待价格回调至35-45元区间，保守型暂不买入等待25-35元区间",
-        "holder_action": "报告未明确给出持仓者动作，但整体不建议追高，持有者宜观望等待",
-        "trigger_condition": "稳健型触发区间35-45元，保守型触发区间25-35元",
-        "summary": "报告按投资者类型区分：激进型小仓观察，稳健型等待35-45元，保守型暂不买入等待25-35元",
+        "empty_position_action": "空仓者应依据风险偏好操作：激进型可小仓位观察（约58.5元），稳健型等待价格回落至35-45元，保守型暂不买入（等待25-35元）。",
+        "holder_action": "报告未明确持仓者动作，但整体建议观察，可能意味着持有不动。",
+        "trigger_condition": "价格回落至35-45元（稳健型）或25-35元（保守型）时再考虑买入。",
+        "summary": "报告按投资者类型区分：激进型可小仓位观察，稳健型等待价格回落，保守型暂不买入，整体建议观察。",
         "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "无冲突，正文与契约一致",
-        "evidence": [
-          {
-            "line_start": 303,
-            "line_end": 306,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 投资者类型 当前建议 价格/触发区间 解释 | | 激进型动作 | 只适合小仓位观察，不建议追高 | | 激进型价格区间 | 约 58.5 元 |",
-            "supports": "空仓者中激进型只适合小仓位观察，不建议追高，属于等待价格而非买入"
-          },
-          {
-            "line_start": 307,
-            "line_end": 310,
-            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
-            "supports": "稳健型和保守型均要求等待更低价格且给出触发区间，整体判断为等待价格"
-          }
-        ]
-      }
-    },
-    "review": {
-      "model": "mimo-v2.5-pro",
-      "result": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "空仓投资者应根据风险偏好等待价格回调至指定区间，激进型可小仓位观察，稳健型等待，保守型暂不买入。",
-        "holder_action": "报告未提及相关动作",
-        "trigger_condition": "价格达到激进型约58.5元、稳健型35-45元、保守型25-35元区间",
-        "summary": "报告建议投资者类型分别采取观察、等待或暂不买入，并给出价格区间，基本面建议观察。",
-        "confidence": "low",
-        "report_field_conflict": false,
-        "conflict_note": "无冲突，报告仅提供契约表格，无正文内容。",
+        "conflict_note": "无正文对比，仅看板契约，无冲突。",
         "evidence": [
           {
             "line_start": 303,
             "line_end": 303,
             "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "该证据支持整体建议为观察，是最终结论的一部分。"
+            "supports": "最终结论为观察，支持空仓者当前不宜追高，应等待或小仓验证。"
           },
           {
             "line_start": 305,
             "line_end": 305,
             "quote": "| 激进型动作 | 只适合小仓位观察，不建议追高 |",
-            "supports": "该证据支持空仓者应小仓位观察或等待价格的建议。"
+            "supports": "空仓者中激进型可小仓位验证，但不可追高。"
+          },
+          {
+            "line_start": 307,
+            "line_end": 308,
+            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 |",
+            "supports": "稳健型空仓者应等待价格回落至35-45元，属于等待价格触发条件。"
+          },
+          {
+            "line_start": 309,
+            "line_end": 310,
+            "quote": "| 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
+            "supports": "保守型空仓者暂不买入，等待更低价格区间，仍属等待价格。"
+          }
+        ]
+      }
+    },
+    "review": {
+      "model": "mimo-v2.5",
+      "result": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "报告未针对空仓者给出明确买入行动建议，建议等待更低价格或验证。",
+        "holder_action": "报告未针对持仓者给出明确操作建议。",
+        "trigger_condition": "股价回落至35-45元（稳健型）或25-35元（保守型）的价格区间。",
+        "summary": "报告对空仓者建议观察等待，稳健型和保守型投资者应等待股价回落至特定价格区间。",
+        "confidence": "high",
+        "report_field_conflict": false,
+        "conflict_note": "正文与契约无冲突。契约中‘基本面建议动作’为‘观察’，正文建议空仓者等待价格，两者一致。",
+        "evidence": [
+          {
+            "line_start": 307,
+            "line_end": 308,
+            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 |",
+            "supports": "证据表明稳健型空仓投资者应等待股价回落至35-45元区间。"
+          },
+          {
+            "line_start": 309,
+            "line_end": 310,
+            "quote": "| 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
+            "supports": "证据表明保守型空仓投资者应等待股价回落至25-35元区间再考虑。"
           }
         ]
       }
