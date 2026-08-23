@@ -126,6 +126,17 @@
           <button type="button" class="chip advice-unknown" data-action="paused">行情/时段暂停</button>
           <button type="button" class="chip advice-unknown" data-action="review">待人工复核</button>
         </div>
+        <div class="chip-row advice-filter-row" id="reference-action-chips" role="tablist" aria-label="最近行情参考分区筛选">
+          <span class="filter-label">最近行情参考分区（非实时，不代表可下单）</span>
+          <button type="button" class="chip active" data-reference-action="all">全部</button>
+          <button type="button" class="chip advice-conservative" data-reference-action="actionable">参考可分批</button>
+          <button type="button" class="chip advice-trial" data-reference-action="trial">参考小仓</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="validation">参考待验证</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="wait_price">参考等待价格</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="wait_event">参考等待条件</button>
+          <button type="button" class="chip advice-balanced" data-reference-action="hold">参考持有不新买</button>
+          <button type="button" class="chip advice-no" data-reference-action="no">参考回避/不买</button>
+        </div>
         <div class="chip-row tracking-filter-row" id="tracking-filter-row" role="tablist" aria-label="持仓跟踪筛选" hidden>
           <span class="filter-label">跟踪状态</span>
           <button type="button" class="chip active" data-tracking-filter="all">全部</button>
@@ -138,6 +149,7 @@
             <span>排序</span>
             <select id="sort-select">
               <option value="execution">按当前可执行性</option>
+              <option value="reference">按最近行情参考分区</option>
               <option value="action">按主报告判断</option>
               <option value="change">按当日涨跌</option>
               <option value="cutoff">按研报截止日</option>
@@ -160,7 +172,7 @@
                   <th scope="col">情绪</th>
                   <th scope="col">主报告判断</th>
                   <th scope="col">现价</th>
-                  <th scope="col">当前可执行状态</th>
+                  <th scope="col">当前状态 / 非实时参考</th>
                   <th scope="col">技术面</th>
                   <th scope="col">技术价 / 基本面交叉</th>
                 </tr>
@@ -205,6 +217,7 @@
 
       <footer class="app-footer">
         仅收录个股研究；A股实时执行须同时通过人工复核、Checklist、交易时段和 10 分钟内同源行情守门，技术面只辅助观察节奏，不构成投资建议。
+        盘前、午休和盘后保留“最近行情参考分区”，仅用于研究与准备，不代表当时可以下单。
         港股与美股仅供研究浏览，不计入“当前可执行”。
       </footer>
     </div>

@@ -5,6 +5,7 @@ import {
   fallbackActionKind,
   parseReportPriceBand,
   primaryJudgmentForItem,
+  referenceExecutionState,
 } from "./action-classifier.mjs";
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
@@ -42,6 +43,7 @@ const state = {
   view: "decision",
   market: "all",
   action: "all",
+  referenceAction: "all",
   trackingFilter: "all",
   hiddenTrackingKeys: new Set(),
   sort: "execution",
@@ -75,6 +77,7 @@ const els = {
   clearFilters: document.querySelector("#clear-filters"),
   marketChips: document.querySelector("#market-chips"),
   actionChips: document.querySelector("#action-chips"),
+  referenceActionChips: document.querySelector("#reference-action-chips"),
   viewTabs: document.querySelector("#view-tabs"),
   trackingFilterRow: document.querySelector("#tracking-filter-row"),
   trackingCount: document.querySelector("#tracking-count"),
@@ -573,6 +576,18 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
   const detail = document.createElement("p");
   detail.textContent = execution.detail;
   wrap.append(label, detail);
+  if (execution.key === "paused" && execution.referenceExecution) {
+    const reference = document.createElement("p");
+    reference.className = "primary-judgment-aux-note";
+    reference.textContent = `非实时参考分区：${execution.referenceExecution.label}。按最近行情快照与有效人工结论归类，仅供盘前/盘后研究，不是当前可下单信号。`;
+    wrap.append(reference);
+    if (execution.referenceExecution.referenceCaveat) {
+      const caveat = document.createElement("p");
+      caveat.className = "primary-judgment-aux-note";
+      caveat.textContent = `参考限制：${execution.referenceExecution.referenceCaveat}`;
+      wrap.append(caveat);
+    }
+  }
   if (execution.policy?.reliability === "conservative") {
     const consensus = document.createElement("p");
     consensus.className = "primary-judgment-aux-note";
@@ -1386,6 +1401,8 @@ function filteredDecisions() {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
     const adviceMatch = state.action === "all"
       || executionFilterKey(item, state.quotes.get(item.ticker), advice.key) === state.action;
+    const reference = referenceExecutionState(item, state.quotes.get(item.ticker), advice.key);
+    const referenceMatch = state.referenceAction === "all" || reference.key === state.referenceAction;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -1395,6 +1412,7 @@ function filteredDecisions() {
     const searchable = `${item.company} ${item.ticker || ""} ${item.title || ""}`.toLocaleLowerCase();
     return marketMatch
       && (state.view === "tracking" ? true : adviceMatch)
+      && (state.view === "tracking" ? true : referenceMatch)
       && trackingMatch
       && (!phrase || searchable.includes(phrase));
   });
@@ -1411,6 +1429,13 @@ function filteredDecisions() {
     if (state.sort === "execution") {
       const aa = currentExecutionState(a, state.quotes.get(a.ticker), buyAdviceForItem(a, state.quotes.get(a.ticker)).key);
       const bb = currentExecutionState(b, state.quotes.get(b.ticker), buyAdviceForItem(b, state.quotes.get(b.ticker)).key);
+      const d = (bb.rank || 0) - (aa.rank || 0);
+      if (d) return d;
+      return a.company.localeCompare(b.company, "zh");
+    }
+    if (state.sort === "reference") {
+      const aa = referenceExecutionState(a, state.quotes.get(a.ticker), buyAdviceForItem(a, state.quotes.get(a.ticker)).key);
+      const bb = referenceExecutionState(b, state.quotes.get(b.ticker), buyAdviceForItem(b, state.quotes.get(b.ticker)).key);
       const d = (bb.rank || 0) - (aa.rank || 0);
       if (d) return d;
       return a.company.localeCompare(b.company, "zh");
@@ -2699,12 +2724,15 @@ function renderSummary(visible) {
   }
   const aShareVisible = visible.filter((item) => item.market === "A股");
   let nextCandidateCount = 0;
+  const referenceCounts = {};
   const counts = aShareVisible.reduce((acc, item) => {
     const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
     const execution = currentExecutionState(item, state.quotes.get(item.ticker), advice.key);
     const key = execution.key;
     if (execution.nextTradingDayCandidate) nextCandidateCount += 1;
     acc[key] = (acc[key] || 0) + 1;
+    const reference = referenceExecutionState(item, state.quotes.get(item.ticker), advice.key);
+    referenceCounts[reference.key] = (referenceCounts[reference.key] || 0) + 1;
     return acc;
   }, {});
   const manualReviewCount = aShareVisible.filter(
@@ -2724,6 +2752,9 @@ function renderSummary(visible) {
     ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
     ["行情/时段暂停", counts.paused || 0],
     ["待人工复核", manualReviewCount],
+    ["参考可分批/小仓", (referenceCounts.actionable || 0) + (referenceCounts.trial || 0)],
+    ["参考待验证", referenceCounts.validation || 0],
+    ["参考等待价格/条件", (referenceCounts.wait_price || 0) + (referenceCounts.wait_event || 0)],
   ];
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {
@@ -3409,6 +3440,7 @@ function setView(view) {
     chip.classList.toggle("active", chip.dataset.view === state.view);
   });
   if (els.actionChips) els.actionChips.hidden = state.view === "tracking";
+  if (els.referenceActionChips) els.referenceActionChips.hidden = state.view === "tracking";
   if (els.trackingFilterRow) els.trackingFilterRow.hidden = state.view !== "tracking";
   renderAll();
 }
@@ -3446,6 +3478,7 @@ function bindEvents() {
   els.clearFilters.addEventListener("click", () => {
     state.market = "all";
     state.action = "all";
+    state.referenceAction = "all";
     state.trackingFilter = "all";
     state.sort = "execution";
     resetRowPage();
@@ -3456,6 +3489,9 @@ function bindEvents() {
     });
     els.actionChips.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.action === "all");
+    });
+    els.referenceActionChips?.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.referenceAction === "all");
     });
     els.trackingFilterRow?.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.trackingFilter === "all");
@@ -3483,6 +3519,16 @@ function bindEvents() {
     state.action = chip.dataset.action;
     resetRowPage();
     els.actionChips.querySelectorAll(".chip").forEach((node) => {
+      node.classList.toggle("active", node === chip);
+    });
+    renderRows();
+  });
+  els.referenceActionChips?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    state.referenceAction = chip.dataset.referenceAction;
+    resetRowPage();
+    els.referenceActionChips.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
     renderRows();

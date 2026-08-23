@@ -281,6 +281,40 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result["hongKong"]["label"], "仅供研究")
         self.assertEqual(result["hongKong"]["key"], "research")
 
+    def test_reference_partition_remains_visible_when_real_time_execution_is_paused(self):
+        result = self.run_classifier(
+            """{
+              current: classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "actionable"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260823150000", snapshot_generated_at: "2026-08-23T07:00:00Z"}, "buy", {now: new Date("2026-08-24T08:01:00Z")}),
+              reference: classifier.referenceExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "actionable"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY", provider_timestamp: "20260823150000", snapshot_generated_at: "2026-08-23T07:00:00Z"}, "buy"),
+              noQuoteReference: classifier.referenceExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "trial"
+              }, execution_policy: {main_action_kind: "trial", condition_mode: "current_action"}}, null, "trial"),
+              staleReview: classifier.referenceExecutionState({market: "A股", manual_execution_review: {
+                status: "stale", source: "human_review", execution_key: "review"
+              }}, {price: 90, currency: "CNY"}, "buy"),
+              hongKong: classifier.referenceExecutionState({market: "港股"}, {price: 20, currency: "HKD"}, "buy")
+            }"""
+        )
+        self.assertEqual(result["current"]["key"], "paused")
+        self.assertEqual(result["current"]["referenceExecution"]["key"], "actionable")
+        self.assertFalse(result["current"]["actionable"])
+        self.assertEqual(result["reference"]["key"], "actionable")
+        self.assertEqual(result["reference"]["label"], "参考可分批")
+        self.assertEqual(result["noQuoteReference"]["key"], "trial")
+        self.assertIn("referenceCaveat", result["noQuoteReference"])
+        self.assertEqual(result["staleReview"]["key"], "review")
+        self.assertEqual(result["hongKong"]["key"], "research")
+
     def test_dashboard_controls_filter_current_executability(self):
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
@@ -298,6 +332,11 @@ class DashboardActionClassifierTests(unittest.TestCase):
         ):
             self.assertIn(f'data-action="{key}"', html)
         self.assertIn('value="execution"', html)
+        self.assertIn('aria-label="最近行情参考分区筛选"', html)
+        for key in ("actionable", "trial", "validation", "wait_price", "wait_event", "hold", "no"):
+            self.assertIn(f'data-reference-action="{key}"', html)
+        self.assertIn('value="reference"', html)
+        self.assertIn("referenceExecutionState", app)
         self.assertNotIn("综合操作筛选", html)
         self.assertNotIn("按综合操作", html)
         self.assertIn('data-tab="deep-review" hidden', html)

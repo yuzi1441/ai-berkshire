@@ -423,6 +423,93 @@ function policyExecutionState(item, quote, fallbackKind = "unknown") {
   );
 }
 
+function referenceLabel(key) {
+  return {
+    actionable: "参考可分批",
+    trial: "参考小仓",
+    validation: "参考待验证",
+    wait_price: "参考等待价格",
+    wait_event: "参考等待条件",
+    hold: "参考持有不新买",
+    no: "参考回避/不买",
+    review: "参考待人工复核",
+    research: "仅供研究",
+  }[key] || "参考待人工复核";
+}
+
+function asReferenceResult(result, extra = {}) {
+  return executionResult(
+    result.key,
+    referenceLabel(result.key),
+    result.detail,
+    {
+      ...result,
+      label: referenceLabel(result.key),
+      referenceMode: "latest_snapshot",
+      ...extra,
+    },
+  );
+}
+
+export function referenceExecutionState(item, quote, fallbackKind = "unknown") {
+  if (item?.market !== "A股") {
+    return executionResult(
+      "research",
+      "仅供研究",
+      `${item?.market || "该市场"}不进入 A 股最近行情参考分区`,
+      { referenceMode: "research_only" },
+    );
+  }
+
+  const policy = item?.execution_policy;
+  const checklist = item?.checklist || {};
+  if (checklist.hard_veto === true || checklist.hard_veto_state === "triggered") {
+    return executionResult(
+      "no",
+      referenceLabel("no"),
+      "Checklist 的真实硬性否决已触发，任何行情时点都不进入买入参考分区",
+      { policy, referenceMode: "latest_snapshot" },
+    );
+  }
+
+  const manual = item?.manual_execution_review;
+  if (manual && (manual.status !== "ready" || manual.source !== "human_review")) {
+    return executionResult(
+      "review",
+      referenceLabel("review"),
+      manual.invalidation_reason || manual.detail || "人工复核缺失、过期或来源指纹已变化",
+      {
+        policy,
+        manualReview: manual,
+        referenceMode: "latest_snapshot",
+        validityState: manual.validity_state || manual.status || "invalid",
+      },
+    );
+  }
+
+  // Compatibility for policy-only fixtures. Production records always include
+  // a per-stock manual review object, including missing/stale placeholders.
+  if (!manual) return asReferenceResult(policyExecutionState(item, quote, fallbackKind));
+
+  const manualResult = manualExecutionResult(manual, policy);
+  const policyResult = policyExecutionState(item, quote, fallbackKind);
+  // A missing or incomparable latest quote must block real-time execution, but
+  // it should not erase a still-valid human conclusion from the research view.
+  // Keep the manual partition and surface the price-policy gap as a caveat.
+  if (policyResult.key === "review") {
+    return asReferenceResult(manualResult, {
+      manualReview: manual,
+      referenceCaveat: policyResult.detail,
+      quotePolicyState: "unavailable",
+    });
+  }
+  const result = conservativeExecutionResult(manualResult, policyResult);
+  return asReferenceResult(result, {
+    manualReview: manual,
+    quotePolicyState: "comparable",
+  });
+}
+
 export function currentExecutionState(item, quote, fallbackKind = "unknown", context = {}) {
   if (item?.market !== "A股") {
     return executionResult(
@@ -467,6 +554,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
   // always carry a per-stock manual review object, including missing/stale ones.
   if (!manual) return policyExecutionState(item, quote, fallbackKind);
 
+  const referenceExecution = referenceExecutionState(item, quote, fallbackKind);
   const now = context.now || new Date();
   const sessionState = aShareMarketSessionState(now);
   const freshness = quoteFreshnessState(quote, now);
@@ -484,6 +572,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
         marketSessionState: sessionState,
         quoteFreshness: freshness.state,
         nextTradingDayCandidate: nextCandidate,
+        referenceExecution,
       },
     );
   }
@@ -500,6 +589,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
         marketSessionState: sessionState,
         quoteFreshness: freshness.state,
         quoteFreshnessDetail: freshness,
+        referenceExecution,
       },
     );
   }
