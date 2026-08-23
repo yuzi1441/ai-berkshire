@@ -132,6 +132,7 @@ stage_generated() {
         data/investment-dashboard/automation_status.json \
         data/investment-dashboard/decision_board.json \
         data/investment-dashboard/decision_board_summary.json \
+        data/investment-dashboard/decision_reviews.json \
         data/investment-dashboard/decision_details \
         data/investment-dashboard/intraday_technical.json \
         data/investment-dashboard/opportunity_scans.json \
@@ -140,6 +141,7 @@ stage_generated() {
         data/investment-dashboard/quotes/latest.json \
         data/investment-dashboard/report_history.json \
         data/investment-dashboard/reports_catalog.json \
+        data/investment-dashboard/report_judgments \
         data/sentiment \
         logs/technical-analysis-batch-*.json \
         reports/00-index/投资决策总表.md \
@@ -148,6 +150,7 @@ stage_generated() {
         site/data/automation_status.json \
         site/data/decision_board.json \
         site/data/decision_board_summary.json \
+        site/data/decision_reviews.json \
         site/data/intraday_technical.json \
         site/data/opportunity_scans.json \
         site/data/post_buy_alerts.json \
