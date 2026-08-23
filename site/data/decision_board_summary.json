@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-23T21:31:20+08:00",
+  "generated_at": "2026-08-23T21:55:16+08:00",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 250,
@@ -999,7 +999,7 @@
         "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -7295,40 +7295,52 @@
       "primary_judgment": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "激进型可小仓位观察但不建议追高，稳健型等待价格回调至35-45元区间，保守型暂不买入等待25-35元区间",
-        "holder_action": "报告未明确给出持仓者动作，但整体不建议追高，持有者宜观望等待",
-        "trigger_condition": "稳健型触发区间35-45元，保守型触发区间25-35元",
-        "summary": "报告按投资者类型区分：激进型小仓观察，稳健型等待35-45元，保守型暂不买入等待25-35元",
-        "confidence": "medium",
+        "empty_position_action": "空仓者应依据风险偏好操作：激进型可小仓位观察（约58.5元），稳健型等待价格回落至35-45元，保守型暂不买入（等待25-35元）。",
+        "holder_action": "报告未明确持仓者动作，但整体建议观察，可能意味着持有不动。",
+        "trigger_condition": "价格回落至35-45元（稳健型）或25-35元（保守型）时再考虑买入。",
+        "summary": "报告按投资者类型区分：激进型可小仓位观察，稳健型等待价格回落，保守型暂不买入，整体建议观察。",
+        "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "无冲突，正文与契约一致",
+        "conflict_note": "无正文对比，仅看板契约，无冲突。",
         "evidence": [
           {
             "line_start": 303,
-            "line_end": 306,
-            "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 投资者类型 当前建议 价格/触发区间 解释 | | 激进型动作 | 只适合小仓位观察，不建议追高 | | 激进型价格区间 | 约 58.5 元 |",
-            "supports": "空仓者中激进型只适合小仓位观察，不建议追高，属于等待价格而非买入"
+            "line_end": 303,
+            "quote": "| 基本面建议动作 | 观察 |",
+            "supports": "最终结论为观察，支持空仓者当前不宜追高，应等待或小仓验证。"
+          },
+          {
+            "line_start": 305,
+            "line_end": 305,
+            "quote": "| 激进型动作 | 只适合小仓位观察，不建议追高 |",
+            "supports": "空仓者中激进型可小仓位验证，但不可追高。"
           },
           {
             "line_start": 307,
+            "line_end": 308,
+            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 |",
+            "supports": "稳健型空仓者应等待价格回落至35-45元，属于等待价格触发条件。"
+          },
+          {
+            "line_start": 309,
             "line_end": 310,
-            "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
-            "supports": "稳健型和保守型均要求等待更低价格且给出触发区间，整体判断为等待价格"
+            "quote": "| 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
+            "supports": "保守型空仓者暂不买入，等待更低价格区间，仍属等待价格。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
-        "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
+        "source_basis": "双模型核对主报告空仓行动表与最终结论",
+        "model_consensus": true,
+        "label_detail_consensus": true,
+        "conflict_flag_consensus": true,
         "currency": "CNY",
         "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "artifact_status": "ready",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:51:00+00:00",
+        "generated_at": "2026-08-23T13:32:42+00:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -7354,7 +7366,7 @@
         ],
         "current_action": null,
         "report_rule_count": 1,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -7492,47 +7504,47 @@
       "primary_judgment": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "激进型空仓者等待股价跌至60元以下分批试探；保守型空仓者建议回避。当前价位未触发买入条件。",
-        "holder_action": "基本面建议动作为观察，持仓者暂不加仓；稳健型未给出动作，保守型建议回避。",
-        "trigger_condition": "股价跌至60元以下（激进型分批试探），58元以下赔率明显改善。",
-        "summary": "报告建议激进型在60元以下分批试探，58元以下赔率改善；保守型回避；整体观察等待。",
-        "confidence": "medium",
+        "empty_position_action": "激进型空仓者等待价格跌至60元以下再分批试探，未达到前保持观察；保守型空仓者建议回避",
+        "holder_action": "已持仓者维持观察仓或小仓位（≤3%），逐季验证信号后再考虑加仓",
+        "trigger_condition": "股价跌至60元以下；58元以下赔率明显改善",
+        "summary": "报告区分风险类型：激进型60元以下可分批试探，先观察仓≤3%，逐季验证后再加；保守型回避；整体观察等待。",
+        "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文未提供，仅看板契约，无冲突。",
+        "conflict_note": "正文与契约一致，无冲突。",
         "evidence": [
           {
             "line_start": 198,
             "line_end": 198,
             "quote": "| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |",
-            "supports": "明确给出空仓者（激进型）的买入触发价为60元以下，当前未达到该价格，应等待价格。"
+            "supports": "该证据明确给出空仓者（激进型）的动作前提是等待60元以下价格触发，属于等待价格/watch。"
           },
           {
-            "line_start": 203,
-            "line_end": 203,
-            "quote": "| 保守型动作 | 回避 |",
-            "supports": "对于保守型空仓者，报告明确要求回避，进一步支持当前不应立即买入。"
+            "line_start": 199,
+            "line_end": 199,
+            "quote": "| 激进型动作 | 60元以下分批试探 |",
+            "supports": "该证据确认价格触发条件为60元以下，进一步支持空仓者当前需等待价格而非立即买入。"
           },
           {
             "line_start": 197,
             "line_end": 197,
             "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "总体建议为观察，表明当前不是买入时机，需等待价格或验证。"
+            "supports": "该证据表明整体看板契约动作为‘观察’，与等待价格分类一致，且非回避或买入。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
-        "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
+        "source_basis": "双模型核对主报告空仓行动表与最终结论",
+        "model_consensus": true,
+        "label_detail_consensus": true,
+        "conflict_flag_consensus": true,
         "currency": "CNY",
         "entry_ceiling": 60.0,
         "price_source": "本地程序从主报告价格行动表确定性提取",
-        "artifact_status": "review",
+        "artifact_status": "ready",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:51:37+00:00",
+        "generated_at": "2026-08-23T13:33:02+00:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -7540,7 +7552,7 @@
         "main_action_kind": "watch",
         "main_label": "等待价格",
         "condition_mode": "price_and_event",
-        "event_condition": "股价跌至60元以下（激进型分批试探），58元以下赔率明显改善",
+        "event_condition": "58元以下赔率明显改善",
         "guard_condition": null,
         "price_rules": [
           {
@@ -7552,13 +7564,13 @@
             "mode": "ceiling",
             "currency": "CNY",
             "requires_validation": true,
-            "validation_condition": "股价跌至60元以下（激进型分批试探），58元以下赔率明显改善",
+            "validation_condition": "58元以下赔率明显改善",
             "source": "report_price_plan"
           }
         ],
         "current_action": null,
         "report_rule_count": 1,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -9445,47 +9457,41 @@
       "primary_judgment": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者观望，不要追高；等待价格回落至35-45元区间再分批研究买点",
-        "holder_action": "报告未明确给出持仓者动作，基于基本面观察建议，可视为继续持有观望",
-        "trigger_condition": "价格回落至35-45元区间",
-        "summary": "基本面建议观察，空仓者观望不追高，保守型在35-45元分批研究买点",
-        "confidence": "medium",
+        "empty_position_action": "空仓者观望，不要在60元以上追高；保守型可在35-45元区间分批研究买点",
+        "holder_action": "报告未给出持仓者明确动作",
+        "trigger_condition": "价格触发条件：60元以上不追高，回调至35-45元区间可分批研究买点",
+        "summary": "空仓者观望，不追高，保守型可在35-45元分批研究买点",
+        "confidence": "high",
         "report_field_conflict": false,
-        "conflict_note": "正文与契约无冲突",
+        "conflict_note": "暂无正文与契约冲突，看板信息自洽",
         "evidence": [
           {
             "line_start": 349,
             "line_end": 349,
             "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
-            "supports": "明确空仓者当前应观望，不追高"
-          },
-          {
-            "line_start": 350,
-            "line_end": 350,
-            "quote": "| 激进型动作 | 空仓不追 |",
-            "supports": "激进型空仓者不追高，等待价格"
+            "supports": "明确空仓者当前动作是观望，且给出不追高的价格边界，支持等待价格判断"
           },
           {
             "line_start": 354,
             "line_end": 355,
             "quote": "| 保守型动作 | 分批研究买点 | | 保守型价格区间 | 35-45 元 |",
-            "supports": "保守型在35-45元区间才考虑分批研究买点，属于价格触发等待"
+            "supports": "保守型在35-45元区间分批研究买点，表明需等待价格回调至该区间才行动，归为等待价格"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
-        "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
+        "source_basis": "双模型核对主报告空仓行动表与最终结论",
+        "model_consensus": true,
+        "label_detail_consensus": true,
+        "conflict_flag_consensus": true,
         "currency": "CNY",
         "entry_ceiling": 45.0,
         "price_source": "本地程序从主报告价格行动表确定性提取",
-        "artifact_status": "review",
+        "artifact_status": "ready",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:52:38+00:00",
+        "generated_at": "2026-08-23T13:33:02+00:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -9511,7 +9517,7 @@
         ],
         "current_action": null,
         "report_rule_count": 1,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -15786,7 +15792,7 @@
         "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -18556,7 +18562,7 @@
         "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {
@@ -20653,7 +20659,7 @@
         "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
-          "review": "mimo-v2.5-pro"
+          "review": "mimo-v2.5"
         }
       },
       "execution_policy": {

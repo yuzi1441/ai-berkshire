@@ -436,47 +436,41 @@
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "空仓者观望，不要追高；等待价格回落至35-45元区间再分批研究买点",
-    "holder_action": "报告未明确给出持仓者动作，基于基本面观察建议，可视为继续持有观望",
-    "trigger_condition": "价格回落至35-45元区间",
-    "summary": "基本面建议观察，空仓者观望不追高，保守型在35-45元分批研究买点",
-    "confidence": "medium",
+    "empty_position_action": "空仓者观望，不要在60元以上追高；保守型可在35-45元区间分批研究买点",
+    "holder_action": "报告未给出持仓者明确动作",
+    "trigger_condition": "价格触发条件：60元以上不追高，回调至35-45元区间可分批研究买点",
+    "summary": "空仓者观望，不追高，保守型可在35-45元分批研究买点",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约无冲突",
+    "conflict_note": "暂无正文与契约冲突，看板信息自洽",
     "evidence": [
       {
         "line_start": 349,
         "line_end": 349,
         "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
-        "supports": "明确空仓者当前应观望，不追高"
-      },
-      {
-        "line_start": 350,
-        "line_end": 350,
-        "quote": "| 激进型动作 | 空仓不追 |",
-        "supports": "激进型空仓者不追高，等待价格"
+        "supports": "明确空仓者当前动作是观望，且给出不追高的价格边界，支持等待价格判断"
       },
       {
         "line_start": 354,
         "line_end": 355,
         "quote": "| 保守型动作 | 分批研究买点 | | 保守型价格区间 | 35-45 元 |",
-        "supports": "保守型在35-45元区间才考虑分批研究买点，属于价格触发等待"
+        "supports": "保守型在35-45元区间分批研究买点，表明需等待价格回调至该区间才行动，归为等待价格"
       }
     ],
     "enabled": true,
-    "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
-    "model_consensus": false,
-    "screening_consensus": true,
-    "screening_resolution": "conservative_intersection",
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 45.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "review",
+    "artifact_status": "ready",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:52:38+00:00",
+    "generated_at": "2026-08-23T13:33:02+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
-      "review": "mimo-v2.5-pro"
+      "review": "mimo-v2.5"
     }
   },
   "execution_policy": {
@@ -502,7 +496,7 @@
     ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "conservative",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
