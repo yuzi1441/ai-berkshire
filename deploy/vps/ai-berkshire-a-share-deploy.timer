@@ -1,0 +1,13 @@
+[Unit]
+Description=Poll main and deploy new AI Berkshire dashboard revisions
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+RandomizedDelaySec=15s
+Persistent=false
+Unit=ai-berkshire-a-share-scheduler@deploy.service
+
+[Install]
+WantedBy=timers.target

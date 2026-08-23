@@ -42,7 +42,7 @@ install -D -m 0644 \
     /etc/systemd/system/ai-berkshire-a-share-scheduler@.service
 
 for timer in \
-    annual morning market intraday close daily heavy reconcile; do
+    deploy annual morning market intraday close daily heavy reconcile; do
     install -D -m 0644 \
         "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-${timer}.timer" \
         "/etc/systemd/system/ai-berkshire-a-share-${timer}.timer"
@@ -65,6 +65,7 @@ systemctl disable --now \
     ai-berkshire-after-close-review.timer 2>/dev/null || true
 
 systemctl enable --now \
+    ai-berkshire-a-share-deploy.timer \
     ai-berkshire-a-share-annual.timer \
     ai-berkshire-a-share-morning.timer \
     ai-berkshire-a-share-market.timer \
