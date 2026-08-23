@@ -222,37 +222,38 @@
   "primary_judgment": {
     "label": "小仓验证",
     "action_kind": "trial",
-    "empty_position_action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
-    "holder_action": "报告未明确持仓者动作，但激进型建议小仓位跟踪，保守型建议观察不追高，均未要求减仓或卖出",
-    "trigger_condition": "未给出明确的买入触发条件；保守型价格区间为250-300元，但不构成买入触发点",
-    "summary": "报告对深南电路给出观察评级，激进型可小仓位跟踪，保守型不追高，结论待复核",
-    "confidence": "medium",
-    "report_field_conflict": false,
-    "conflict_note": "无正文可对比，仅依据看板契约输出",
+    "empty_position_action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
+    "holder_action": "低成本持仓可继续持有并设置反证清单；成本接近报告基准价者谨慎持有或分批降低暴露",
+    "trigger_condition": "当前小仓仅适用于能承受30%-45%回撤的进取型；保守型等待250-300元或PE约45-55倍且基本面未恶化",
+    "summary": "好公司但当前昂贵；只允许进取型小仓研究验证，保守型等待更低估值，持仓者按成本和反证管理。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "契约粗字段写观察且结论摘要待复核，但正文分层操作明确允许进取型当前小仓研究仓。",
+    "source_basis": "人工逐行核对一句话结论、分层操作建议与最终总结",
+    "currency": "CNY",
+    "price_source": "主报告第305至308行",
     "evidence": [
       {
-        "line_start": 384,
-        "line_end": 384,
-        "quote": "| 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
-        "supports": "明确给出激进型空仓者可小仓位跟踪，故归为小仓验证"
+        "line_start": 305,
+        "line_end": 306,
+        "quote": "保守型观察不追高，等待250-300元；进取型只有能承受30%-45%回撤时才考虑小仓研究仓。",
+        "supports": "支持条件化小仓而非普通买入。"
       },
       {
-        "line_start": 388,
-        "line_end": 388,
-        "quote": "| 保守型动作 | 观察，不追高 |",
-        "supports": "保守型建议观察不追高，未要求回避或卖出，支持不归为回避/卖出"
+        "line_start": 307,
+        "line_end": 308,
+        "quote": "低成本持仓可继续持有并设置反证；成本接近当前价者谨慎持有或分批降低暴露。",
+        "supports": "报告已明确区分两类持仓动作。"
       }
     ],
     "enabled": true,
-    "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T21:38:00+08:00",
     "model_consensus": false,
-    "screening_consensus": true,
-    "screening_resolution": "conservative_intersection",
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:55:53+00:00",
+    "generated_at": "2026-08-23T21:38:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -264,18 +265,31 @@
     "main_label": "小仓验证",
     "condition_mode": "current_action",
     "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "guard_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+        "price_range": "250-300元",
+        "min": 250.0,
+        "ceiling": 300.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": {
       "action_kind": "trial",
-      "action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
+      "action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
       "currency": "CNY",
       "reference_price": 414.8,
       "reference_source": "主报告明确标注的分析基准价",
       "requires_validation": false
     },
     "report_rule_count": 0,
-    "reliability": "conservative",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

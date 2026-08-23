@@ -965,37 +965,38 @@
       "primary_judgment": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者应回避当前，等待估值回归至7-11元区间（PB 2.5-3倍）再考虑",
-        "holder_action": "持仓者应减仓至清仓，因股价已实现172%涨幅且估值无安全边际",
-        "trigger_condition": "股价回落至7-11元区间（PB 2.5-3倍）",
-        "summary": "空仓者回避当前，等待估值回归7-11元；持仓者减至清仓，实控人减持风险。",
-        "confidence": "medium",
+        "empty_position_action": "当前回避、不建仓；等待估值回归至7-11元后再重新评估，不把到价等同于自动买入",
+        "holder_action": "减仓至清仓；报告认为当前估值无安全边际，且实控人减持削弱利益一致性",
+        "trigger_condition": "股价回落至7-11元后重新评估；液冷订单超过5亿元每年、连续两个季度盈利或实控人停止减持并增持可构成进一步复核信号",
+        "summary": "空仓者当前回避但保留7-11元重估入口，故主分类是等待价格；持仓者减仓至清仓。",
+        "confidence": "high",
         "report_field_conflict": true,
-        "conflict_note": "正文和契约一致，均建议空仓者回避并等待价格回落至7-11元区间",
+        "conflict_note": "正文明确当前回避并等待7-11元，契约粗字段仅写观察；细分动作以正文为准。",
+        "source_basis": "人工逐行核对主报告合理估值、最终决策表与看板契约",
+        "currency": "CNY",
+        "price_source": "主报告第284至287行、第316至319行",
         "evidence": [
           {
-            "line_start": 316,
-            "line_end": 316,
-            "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。 |",
-            "supports": "该证据直接给出空仓者回避并等待价格触发点，支持等待价格分类"
+            "line_start": 284,
+            "line_end": 287,
+            "quote": "PB、PS与2027E PE三种口径对应综合合理区间7-11元，当前价格高出70%-160%。",
+            "supports": "7-11元重估区来自报告估值正文。"
           },
           {
-            "line_start": 317,
+            "line_start": 316,
             "line_end": 317,
-            "quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。 |",
-            "supports": "该证据明确持仓者减仓至清仓，与空仓者回避形成一致的风险规避态度，印证最终结论"
+            "quote": "空仓者回避，等待估值回归至7-11元再考虑；持仓者减仓至清仓。",
+            "supports": "直接明确空仓与持仓动作。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-23T21:38:00+08:00",
         "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:48:52+00:00",
+        "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -1005,13 +1006,13 @@
         "schema_version": 1,
         "main_action_kind": "watch",
         "main_label": "等待价格",
-        "condition_mode": "price_only",
-        "event_condition": null,
+        "condition_mode": "price_or_event",
+        "event_condition": "液冷订单超过5亿元每年、连续两个季度盈利或实控人停止减持并增持可构成进一步复核信号",
         "guard_condition": null,
         "price_rules": [
           {
-            "action_kind": "buy",
-            "action": "股价回落至7-11元区间（PB 2.5-3倍）",
+            "action_kind": "trial",
+            "action": "股价回落至7-11元后重新评估",
             "price_range": "回落至7-11元",
             "min": 7.0,
             "ceiling": 11.0,
@@ -1024,7 +1025,7 @@
         ],
         "current_action": null,
         "report_rule_count": 0,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -15751,37 +15752,38 @@
       "primary_judgment": {
         "label": "小仓验证",
         "action_kind": "trial",
-        "empty_position_action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
-        "holder_action": "报告未明确持仓者动作，但激进型建议小仓位跟踪，保守型建议观察不追高，均未要求减仓或卖出",
-        "trigger_condition": "未给出明确的买入触发条件；保守型价格区间为250-300元，但不构成买入触发点",
-        "summary": "报告对深南电路给出观察评级，激进型可小仓位跟踪，保守型不追高，结论待复核",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "无正文可对比，仅依据看板契约输出",
+        "empty_position_action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
+        "holder_action": "低成本持仓可继续持有并设置反证清单；成本接近报告基准价者谨慎持有或分批降低暴露",
+        "trigger_condition": "当前小仓仅适用于能承受30%-45%回撤的进取型；保守型等待250-300元或PE约45-55倍且基本面未恶化",
+        "summary": "好公司但当前昂贵；只允许进取型小仓研究验证，保守型等待更低估值，持仓者按成本和反证管理。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约粗字段写观察且结论摘要待复核，但正文分层操作明确允许进取型当前小仓研究仓。",
+        "source_basis": "人工逐行核对一句话结论、分层操作建议与最终总结",
+        "currency": "CNY",
+        "price_source": "主报告第305至308行",
         "evidence": [
           {
-            "line_start": 384,
-            "line_end": 384,
-            "quote": "| 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
-            "supports": "明确给出激进型空仓者可小仓位跟踪，故归为小仓验证"
+            "line_start": 305,
+            "line_end": 306,
+            "quote": "保守型观察不追高，等待250-300元；进取型只有能承受30%-45%回撤时才考虑小仓研究仓。",
+            "supports": "支持条件化小仓而非普通买入。"
           },
           {
-            "line_start": 388,
-            "line_end": 388,
-            "quote": "| 保守型动作 | 观察，不追高 |",
-            "supports": "保守型建议观察不追高，未要求回避或卖出，支持不归为回避/卖出"
+            "line_start": 307,
+            "line_end": 308,
+            "quote": "低成本持仓可继续持有并设置反证；成本接近当前价者谨慎持有或分批降低暴露。",
+            "supports": "报告已明确区分两类持仓动作。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-23T21:38:00+08:00",
         "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:55:53+00:00",
+        "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -15793,18 +15795,31 @@
         "main_label": "小仓验证",
         "condition_mode": "current_action",
         "event_condition": null,
-        "guard_condition": null,
-        "price_rules": [],
+        "guard_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+        "price_rules": [
+          {
+            "action_kind": "trial",
+            "action": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+            "price_range": "250-300元",
+            "min": 250.0,
+            "ceiling": 300.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
+            "source": "validated_judgment_trigger"
+          }
+        ],
         "current_action": {
           "action_kind": "trial",
-          "action": "激进型空仓者可以小仓位跟踪，但不把它当低估值投资；保守型空仓者建议观察、不追高",
+          "action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
           "currency": "CNY",
           "reference_price": 414.8,
           "reference_source": "主报告明确标注的分析基准价",
           "requires_validation": false
         },
         "report_rule_count": 0,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -18506,37 +18521,39 @@
       "primary_judgment": {
         "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "当前回避，建议等待股价跌至30元以下（市值380亿以下）再考虑参与",
-        "holder_action": "建议减仓至可承受-60%回撤的比例，等待海外订单公告落地验证",
-        "trigger_condition": "股价跌至30元以下（市值380亿以下）",
-        "summary": "空仓者应回避，好行业+好卡位+错误的价格=坏投资，等30元以下再谈安全边际",
-        "confidence": "medium",
+        "empty_position_action": "当前回避；30-50元仅观察；跌至30元以下且至少一项经营验证兑现后再考虑参与",
+        "holder_action": "减仓至可完全承受60%回撤的比例；仅成本很低且仓位很小时可保留观察仓等待半年报验证海外收入",
+        "trigger_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
+        "summary": "当前价格回避；30元以下并叠加经营验证，才构成重新评估条件。",
+        "confidence": "high",
         "report_field_conflict": true,
-        "conflict_note": "正文空仓者建议'回避'但指定等待价格触发点，契约基本建议动作为'观察'；根据优先级和分类规则，应采用正文归类为'等待价格/watch'而非'回避/卖出/no'或'等待验证/watch'",
+        "conflict_note": "正文明确当前空仓者回避、持仓者减仓，契约粗标签仅写观察；更低价格入口仍须叠加经营验证。",
+        "source_basis": "人工逐行核对估值区间、空仓者和持仓者动作及加仓条件",
+        "currency": "CNY",
+        "entry_ceiling": 30.0,
+        "price_source": "主报告第240至243行、第266至269行",
         "evidence": [
           {
-            "line_start": 266,
-            "line_end": 266,
-            "quote": "| **空仓者** | **回避。** 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
-            "supports": "该证据支持空仓者当前回避，但等待价格跌至30元以下再考虑参与，符合'等待价格/watch'分类"
+            "line_start": 240,
+            "line_end": 243,
+            "quote": "内在价值24-32元，30元以下才进入安全边际区，30-50元为观望区，当前属于显著高估区。",
+            "supports": "明确价格前置条件。"
           },
           {
-            "line_start": 269,
+            "line_start": 266,
             "line_end": 269,
-            "quote": "| **加仓信号（需先跌入安全区）** | ①股价跌至30元下方且②以下任一兑现：公司公告形式披露海外大客户批量订单、海外收入占比升至25%+、净现比回到0.7以上、毛利率连续两季回升 |",
-            "supports": "该证据支持价格触发条件为股价跌至30元下方，强化'等待价格/watch'判断"
+            "quote": "空仓者当前回避；持仓者减仓；跌入30元以下后仍须至少一项经营验证。",
+            "supports": "确认价格与事件必须同时满足。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-23T21:38:00+08:00",
         "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:56:59+00:00",
+        "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -18546,26 +18563,26 @@
         "schema_version": 1,
         "main_action_kind": "watch",
         "main_label": "等待价格",
-        "condition_mode": "price_only",
-        "event_condition": null,
+        "condition_mode": "price_or_event",
+        "event_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
         "guard_condition": null,
         "price_rules": [
           {
             "action_kind": "buy",
-            "action": "股价跌至30元以下（市值380亿以下）",
+            "action": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
             "price_range": "跌至30元以下",
             "min": null,
             "ceiling": 30.0,
             "mode": "ceiling",
             "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
+            "requires_validation": true,
+            "validation_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
             "source": "validated_judgment_trigger"
           }
         ],
         "current_action": null,
         "report_rule_count": 0,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -20599,39 +20616,41 @@
       "selection_basis": "报告数据截止日",
       "report_history_count": 1,
       "primary_judgment": {
-        "label": "等待验证",
+        "label": "等待价格",
         "action_kind": "watch",
-        "empty_position_action": "空仓者应保持观察，暂不买入，等待G5量产时间与国产设备验证进度等关键信息明确后再决策",
-        "holder_action": "持仓者应继续持有但不加仓，保持观察，等待验证结果",
-        "trigger_condition": "G5量产时间和国产设备验证进度",
-        "summary": "报告提示代际差距拉大，公司或退化为中国南亚科，估值逻辑崩塌风险高，建议观察等待验证",
-        "confidence": "medium",
-        "report_field_conflict": false,
-        "conflict_note": "正文未提供，仅看板契约，无冲突",
+        "empty_position_action": "45元以上回避、不追；24-45元继续观望；16-24元仅在未列入实体清单且HBM未证伪时允许不超过2%的观察仓",
+        "holder_action": "主报告未单列持仓者动作，不自行推断持仓；按报告明确的回避或清仓信号管理",
+        "trigger_condition": "16-24元且未列入实体清单、HBM未证伪时才允许2%以内观察仓；15元以下且基本面未坏时才进入系统性建仓区",
+        "summary": "当前价位回避，核心入口是显著更低价格，并受制裁、HBM及基本面条件约束。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "详细决策表明确45元以上回避，契约粗标签仅写观察；按报告价格动作表归入等待价格。",
+        "source_basis": "人工逐行核对三情景估值、分层价格动作表及回避清仓信号",
+        "currency": "CNY",
+        "entry_ceiling": 24.0,
+        "price_source": "主报告第308行、第333至344行",
         "evidence": [
           {
-            "line_start": 392,
-            "line_end": 392,
-            "quote": "| 基本面建议动作 | 观察 |",
-            "supports": "契约明确建议动作是观察，对应空仓者应等待验证，不急于行动"
+            "line_start": 337,
+            "line_end": 340,
+            "quote": "45元以上回避；24-45元观望；16-24元在事件条件满足时可建2%内观察仓；15元以下才进入价值区。",
+            "supports": "明确当前回避和未来分层价格入口。"
           },
           {
-            "line_start": 393,
-            "line_end": 393,
-            "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
-            "supports": "最终结论强调风险与待验证点，支持观察等待验证而非立即买入或明确卖出"
+            "line_start": 344,
+            "line_end": 344,
+            "quote": "实体清单、周期价格转负和G5延期等属于回避或清仓信号。",
+            "supports": "价格条件还受到事件守门约束。"
           }
         ],
         "enabled": true,
-        "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+        "human_reviewed": true,
+        "human_reviewed_at": "2026-08-23T21:38:00+08:00",
         "model_consensus": false,
-        "screening_consensus": true,
-        "screening_resolution": "conservative_intersection",
-        "currency": "CNY",
-        "price_source": "主报告未提取到可执行买入价格档",
-        "artifact_status": "review",
+        "screening_consensus": false,
+        "artifact_status": "human_reviewed",
         "source_matches": true,
-        "generated_at": "2026-08-14T10:58:47+00:00",
+        "generated_at": "2026-08-23T21:38:00+08:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -20640,14 +20659,39 @@
       "execution_policy": {
         "schema_version": 1,
         "main_action_kind": "watch",
-        "main_label": "等待验证",
-        "condition_mode": "event_only",
-        "event_condition": "G5量产时间和国产设备验证进度",
-        "guard_condition": null,
-        "price_rules": [],
+        "main_label": "等待价格",
+        "condition_mode": "price_only",
+        "event_condition": null,
+        "guard_condition": "15元以下且基本面未坏时才进入系统性建仓区",
+        "price_rules": [
+          {
+            "action_kind": "buy",
+            "action": "15元以下且基本面未坏时才进入系统性建仓区",
+            "price_range": "15元以下",
+            "min": null,
+            "ceiling": 15.0,
+            "mode": "ceiling",
+            "currency": "CNY",
+            "requires_validation": true,
+            "validation_condition": "15元以下且基本面未坏时才进入系统性建仓区",
+            "source": "validated_judgment_trigger"
+          },
+          {
+            "action_kind": "trial",
+            "action": "16-24元且未列入实体清单、HBM未证伪时才允许2%以内观察仓",
+            "price_range": "16-24元",
+            "min": 16.0,
+            "ceiling": 24.0,
+            "mode": "range",
+            "currency": "CNY",
+            "requires_validation": false,
+            "validation_condition": null,
+            "source": "validated_judgment_trigger"
+          }
+        ],
         "current_action": null,
         "report_rule_count": 0,
-        "reliability": "conservative",
+        "reliability": "high",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {

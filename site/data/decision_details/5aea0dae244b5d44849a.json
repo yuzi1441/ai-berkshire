@@ -160,37 +160,39 @@
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "当前回避，建议等待股价跌至30元以下（市值380亿以下）再考虑参与",
-    "holder_action": "建议减仓至可承受-60%回撤的比例，等待海外订单公告落地验证",
-    "trigger_condition": "股价跌至30元以下（市值380亿以下）",
-    "summary": "空仓者应回避，好行业+好卡位+错误的价格=坏投资，等30元以下再谈安全边际",
-    "confidence": "medium",
+    "empty_position_action": "当前回避；30-50元仅观察；跌至30元以下且至少一项经营验证兑现后再考虑参与",
+    "holder_action": "减仓至可完全承受60%回撤的比例；仅成本很低且仓位很小时可保留观察仓等待半年报验证海外收入",
+    "trigger_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
+    "summary": "当前价格回避；30元以下并叠加经营验证，才构成重新评估条件。",
+    "confidence": "high",
     "report_field_conflict": true,
-    "conflict_note": "正文空仓者建议'回避'但指定等待价格触发点，契约基本建议动作为'观察'；根据优先级和分类规则，应采用正文归类为'等待价格/watch'而非'回避/卖出/no'或'等待验证/watch'",
+    "conflict_note": "正文明确当前空仓者回避、持仓者减仓，契约粗标签仅写观察；更低价格入口仍须叠加经营验证。",
+    "source_basis": "人工逐行核对估值区间、空仓者和持仓者动作及加仓条件",
+    "currency": "CNY",
+    "entry_ceiling": 30.0,
+    "price_source": "主报告第240至243行、第266至269行",
     "evidence": [
       {
-        "line_start": 266,
-        "line_end": 266,
-        "quote": "| **空仓者** | **回避。** 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |",
-        "supports": "该证据支持空仓者当前回避，但等待价格跌至30元以下再考虑参与，符合'等待价格/watch'分类"
+        "line_start": 240,
+        "line_end": 243,
+        "quote": "内在价值24-32元，30元以下才进入安全边际区，30-50元为观望区，当前属于显著高估区。",
+        "supports": "明确价格前置条件。"
       },
       {
-        "line_start": 269,
+        "line_start": 266,
         "line_end": 269,
-        "quote": "| **加仓信号（需先跌入安全区）** | ①股价跌至30元下方且②以下任一兑现：公司公告形式披露海外大客户批量订单、海外收入占比升至25%+、净现比回到0.7以上、毛利率连续两季回升 |",
-        "supports": "该证据支持价格触发条件为股价跌至30元下方，强化'等待价格/watch'判断"
+        "quote": "空仓者当前回避；持仓者减仓；跌入30元以下后仍须至少一项经营验证。",
+        "supports": "确认价格与事件必须同时满足。"
       }
     ],
     "enabled": true,
-    "source_basis": "双模型对当前是否可买取交集；细分口径分歧时采用不放入可买列表的保守结果",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T21:38:00+08:00",
     "model_consensus": false,
-    "screening_consensus": true,
-    "screening_resolution": "conservative_intersection",
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:56:59+00:00",
+    "generated_at": "2026-08-23T21:38:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -200,26 +202,26 @@
     "schema_version": 1,
     "main_action_kind": "watch",
     "main_label": "等待价格",
-    "condition_mode": "price_only",
-    "event_condition": null,
+    "condition_mode": "price_or_event",
+    "event_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
     "guard_condition": null,
     "price_rules": [
       {
         "action_kind": "buy",
-        "action": "股价跌至30元以下（市值380亿以下）",
+        "action": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
         "price_range": "跌至30元以下",
         "min": null,
         "ceiling": 30.0,
         "mode": "ceiling",
         "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
+        "requires_validation": true,
+        "validation_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
         "source": "validated_judgment_trigger"
       }
     ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "conservative",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

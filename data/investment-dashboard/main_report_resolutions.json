@@ -701,6 +701,148 @@
           }
         ]
       }
+    },
+    {
+      "company": "chuanrun",
+      "ticker": "002272.SZ",
+      "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+      "report_sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
+      "reviewed_at": "2026-08-23T21:38:00+08:00",
+      "judgment": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前回避、不建仓；等待估值回归至7-11元后再重新评估，不把到价等同于自动买入",
+        "holder_action": "减仓至清仓；报告认为当前估值无安全边际，且实控人减持削弱利益一致性",
+        "trigger_condition": "股价回落至7-11元后重新评估；液冷订单超过5亿元每年、连续两个季度盈利或实控人停止减持并增持可构成进一步复核信号",
+        "summary": "空仓者当前回避但保留7-11元重估入口，故主分类是等待价格；持仓者减仓至清仓。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "正文明确当前回避并等待7-11元，契约粗字段仅写观察；细分动作以正文为准。",
+        "source_basis": "人工逐行核对主报告合理估值、最终决策表与看板契约",
+        "currency": "CNY",
+        "price_source": "主报告第284至287行、第316至319行",
+        "evidence": [
+          {
+            "line_start": 284,
+            "line_end": 287,
+            "quote": "PB、PS与2027E PE三种口径对应综合合理区间7-11元，当前价格高出70%-160%。",
+            "supports": "7-11元重估区来自报告估值正文。"
+          },
+          {
+            "line_start": 316,
+            "line_end": 317,
+            "quote": "空仓者回避，等待估值回归至7-11元再考虑；持仓者减仓至清仓。",
+            "supports": "直接明确空仓与持仓动作。"
+          }
+        ]
+      }
+    },
+    {
+      "company": "深南电路",
+      "ticker": "002916.SZ",
+      "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+      "report_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+      "reviewed_at": "2026-08-23T21:38:00+08:00",
+      "judgment": {
+        "label": "小仓验证",
+        "action_kind": "trial",
+        "empty_position_action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
+        "holder_action": "低成本持仓可继续持有并设置反证清单；成本接近报告基准价者谨慎持有或分批降低暴露",
+        "trigger_condition": "当前小仓仅适用于能承受30%-45%回撤的进取型；保守型等待250-300元或PE约45-55倍且基本面未恶化",
+        "summary": "好公司但当前昂贵；只允许进取型小仓研究验证，保守型等待更低估值，持仓者按成本和反证管理。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "契约粗字段写观察且结论摘要待复核，但正文分层操作明确允许进取型当前小仓研究仓。",
+        "source_basis": "人工逐行核对一句话结论、分层操作建议与最终总结",
+        "currency": "CNY",
+        "price_source": "主报告第305至308行",
+        "evidence": [
+          {
+            "line_start": 305,
+            "line_end": 306,
+            "quote": "保守型观察不追高，等待250-300元；进取型只有能承受30%-45%回撤时才考虑小仓研究仓。",
+            "supports": "支持条件化小仓而非普通买入。"
+          },
+          {
+            "line_start": 307,
+            "line_end": 308,
+            "quote": "低成本持仓可继续持有并设置反证；成本接近当前价者谨慎持有或分批降低暴露。",
+            "supports": "报告已明确区分两类持仓动作。"
+          }
+        ]
+      }
+    },
+    {
+      "company": "长鑫存储",
+      "ticker": "688825.SH",
+      "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+      "report_sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
+      "reviewed_at": "2026-08-23T21:38:00+08:00",
+      "judgment": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "45元以上回避、不追；24-45元继续观望；16-24元仅在未列入实体清单且HBM未证伪时允许不超过2%的观察仓",
+        "holder_action": "主报告未单列持仓者动作，不自行推断持仓；按报告明确的回避或清仓信号管理",
+        "trigger_condition": "16-24元且未列入实体清单、HBM未证伪时才允许2%以内观察仓；15元以下且基本面未坏时才进入系统性建仓区",
+        "summary": "当前价位回避，核心入口是显著更低价格，并受制裁、HBM及基本面条件约束。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "详细决策表明确45元以上回避，契约粗标签仅写观察；按报告价格动作表归入等待价格。",
+        "source_basis": "人工逐行核对三情景估值、分层价格动作表及回避清仓信号",
+        "currency": "CNY",
+        "entry_ceiling": 24.0,
+        "price_source": "主报告第308行、第333至344行",
+        "evidence": [
+          {
+            "line_start": 337,
+            "line_end": 340,
+            "quote": "45元以上回避；24-45元观望；16-24元在事件条件满足时可建2%内观察仓；15元以下才进入价值区。",
+            "supports": "明确当前回避和未来分层价格入口。"
+          },
+          {
+            "line_start": 344,
+            "line_end": 344,
+            "quote": "实体清单、周期价格转负和G5延期等属于回避或清仓信号。",
+            "supports": "价格条件还受到事件守门约束。"
+          }
+        ]
+      }
+    },
+    {
+      "company": "英维克",
+      "ticker": "002837.SZ",
+      "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "report_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+      "reviewed_at": "2026-08-23T21:38:00+08:00",
+      "judgment": {
+        "label": "等待价格",
+        "action_kind": "watch",
+        "empty_position_action": "当前回避；30-50元仅观察；跌至30元以下且至少一项经营验证兑现后再考虑参与",
+        "holder_action": "减仓至可完全承受60%回撤的比例；仅成本很低且仓位很小时可保留观察仓等待半年报验证海外收入",
+        "trigger_condition": "股价跌至30元以下，且海外订单、海外收入占比、净现比或毛利率验证至少一项兑现",
+        "summary": "当前价格回避；30元以下并叠加经营验证，才构成重新评估条件。",
+        "confidence": "high",
+        "report_field_conflict": true,
+        "conflict_note": "正文明确当前空仓者回避、持仓者减仓，契约粗标签仅写观察；更低价格入口仍须叠加经营验证。",
+        "source_basis": "人工逐行核对估值区间、空仓者和持仓者动作及加仓条件",
+        "currency": "CNY",
+        "entry_ceiling": 30.0,
+        "price_source": "主报告第240至243行、第266至269行",
+        "evidence": [
+          {
+            "line_start": 240,
+            "line_end": 243,
+            "quote": "内在价值24-32元，30元以下才进入安全边际区，30-50元为观望区，当前属于显著高估区。",
+            "supports": "明确价格前置条件。"
+          },
+          {
+            "line_start": 266,
+            "line_end": 269,
+            "quote": "空仓者当前回避；持仓者减仓；跌入30元以下后仍须至少一项经营验证。",
+            "supports": "确认价格与事件必须同时满足。"
+          }
+        ]
+      }
     }
   ]
 }
