@@ -74,6 +74,22 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(public["scans"][0]["input_context"]["current_quote"]["price"], 10.5)
             self.assertNotIn("excerpt", public["scans"][0]["input_context"])
 
+    def test_production_manual_review_covers_exact_a_share_universe(self):
+        data_directory = ROOT / "data" / "investment-dashboard"
+        board = json.loads((data_directory / "decision_board.json").read_text(encoding="utf-8"))
+        payload = dashboard.load_manual_execution_reviews(data_directory)
+        decisions = board["decisions"]
+        dashboard.attach_manual_execution_reviews(decisions, payload)
+        a_shares = [item for item in decisions if item.get("market") == "A股"]
+        self.assertEqual(len(a_shares), 93)
+        self.assertTrue(all(item["manual_execution_review"]["status"] == "ready" for item in a_shares))
+        by_ticker = {item["ticker"]: item["manual_execution_review"] for item in a_shares}
+        self.assertEqual(by_ticker["605499.SH"]["execution_key"], "actionable")
+        self.assertEqual(by_ticker["600426.SH"]["execution_key"], "trial")
+        self.assertEqual(by_ticker["600519.SH"]["execution_key"], "validation")
+        self.assertEqual(by_ticker["000400.SZ"]["execution_key"], "no")
+        self.assertTrue(by_ticker["002027.SZ"]["checklist_blocked"])
+
     def test_uses_data_cutoff_not_filesystem_modification_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

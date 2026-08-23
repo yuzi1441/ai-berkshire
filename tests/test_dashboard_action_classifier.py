@@ -214,6 +214,30 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result["key"], "review")
         self.assertFalse(result["actionable"])
 
+    def test_completed_human_review_overrides_legacy_price_classification(self):
+        result = self.run_classifier(
+            """[
+              classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "validation",
+                label: "人工复核：价格已到，等待验证", detail: "中报条件未通过"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY"}),
+              classifier.currentExecutionState({market: "A股", manual_execution_review: {
+                status: "ready", source: "human_review", execution_key: "no",
+                label: "人工复核：Checklist 硬性否决", detail: "治理红线"
+              }, execution_policy: {
+                main_action_kind: "buy", condition_mode: "current_action",
+                current_action: {action_kind: "buy", currency: "CNY", reference_price: 100}
+              }}, {price: 90, currency: "CNY"})
+            ]"""
+        )
+        self.assertEqual(result[0]["key"], "validation")
+        self.assertFalse(result[0]["actionable"])
+        self.assertEqual(result[1]["key"], "no")
+        self.assertFalse(result[1]["actionable"])
+
     def test_dashboard_controls_filter_current_executability(self):
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
         self.assertIn('aria-label="当前可执行筛选"', html)
