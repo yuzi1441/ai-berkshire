@@ -337,6 +337,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
             self.assertIn(f'data-reference-action="{key}"', html)
         self.assertIn('value="reference"', html)
         self.assertIn("referenceExecutionState", app)
+        self.assertIn('"当前状态 / 非实时参考"', app)
         self.assertNotIn("综合操作筛选", html)
         self.assertNotIn("按综合操作", html)
         self.assertIn('data-tab="deep-review" hidden', html)

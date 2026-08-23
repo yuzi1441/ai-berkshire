@@ -2886,7 +2886,7 @@ function renderRows() {
     "情绪",
     "主报告判断",
     "现价",
-    "当前可执行状态",
+    "当前状态 / 非实时参考",
     "技术面（辅助）",
     "技术价 / 基本面交叉",
   ]);
@@ -3209,7 +3209,7 @@ function renderDetail() {
 
       const auxiliaryCard = document.createElement("div");
       auxiliaryCard.className = "card primary-judgment-aux-card";
-      auxiliaryCard.innerHTML = "<h3>当前可执行状态</h3>";
+      auxiliaryCard.innerHTML = "<h3>当前状态 / 非实时参考</h3>";
       auxiliaryCard.append(renderExecutionState(item, quote, { compact: false }));
       els.detailBody.append(auxiliaryCard);
     }
