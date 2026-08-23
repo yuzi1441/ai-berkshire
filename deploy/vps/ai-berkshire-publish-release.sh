@@ -115,4 +115,16 @@ if ! /usr/local/sbin/ai-berkshire-refresh-services; then
     exit 1
 fi
 
+CURRENT_RELEASE="$(readlink -f "${CURRENT_LINK}")"
+RELEASE_ROOT_REAL="$(readlink -f "${RELEASE_ROOT}")"
+for candidate in "${RELEASE_ROOT}"/*; do
+    [[ -d "${candidate}" ]] || continue
+    CANDIDATE_REAL="$(readlink -f "${candidate}")"
+    [[ "$(dirname "${CANDIDATE_REAL}")" == "${RELEASE_ROOT_REAL}" ]] || continue
+    if [[ "${CANDIDATE_REAL}" == "${CURRENT_RELEASE}" || "${CANDIDATE_REAL}" == "${OLD_RELEASE}" ]]; then
+        continue
+    fi
+    rm -rf -- "${CANDIDATE_REAL}"
+done
+
 echo "published ${SOURCE_SHA} to ${FINAL_RELEASE}"
