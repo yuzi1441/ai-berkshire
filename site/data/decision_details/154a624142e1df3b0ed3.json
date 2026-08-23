@@ -352,22 +352,39 @@
   ],
   "report_history_count": 5,
   "primary_judgment": {
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "激进型在20-22元仅可建立小仓观察，不追高；稳健型等待16-18元及半年报修复",
+    "holder_action": "可持有观察，但在利润率和订单修复确认前不追加；利润继续大幅下滑或应收恶化则减仓或回避",
+    "trigger_condition": "确认半年报或三季报利润增速恢复、毛利率未继续下降、订单改善、应收下降且经营现金流覆盖净利润",
+    "summary": "21.11元落在激进型20-22元观察仓区，因此只允许小仓验证；稳健资金仍需等待价格和半年报证据。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "一句话结论和粗字段偏向等待，但最终分层表明确允许激进型在当前价格区建立小仓观察。",
+    "source_basis": "人工逐行核对一句话结论、分层操作建议及加减仓信号",
+    "currency": "CNY",
+    "entry_ceiling": 22.0,
+    "trial_range": {
+      "min": 20.0,
+      "max": 22.0
+    },
+    "price_source": "主报告第153至166行",
+    "evidence": [
+      {
+        "line_start": 153,
+        "line_end": 157,
+        "quote": "激进型20-22元小仓观察、不追高；稳健型16-18元等待安全边际；保守型暂不买入。",
+        "supports": "当前价格只获得激进型小仓许可。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:56:48+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -375,15 +392,35 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "确认半年报或三季报利润增速恢复、毛利率未继续下降、订单改善、应收下降且经营现金流覆盖净利润",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "小仓观察，不追高",
+        "price_range": "约20-22元",
+        "min": 20.0,
+        "ceiling": 22.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "激进型在20-22元仅可建立小仓观察，不追高；稳健型等待16-18元及半年报修复",
+      "currency": "CNY",
+      "reference_price": 21.11,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

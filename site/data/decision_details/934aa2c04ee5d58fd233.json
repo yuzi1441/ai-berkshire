@@ -464,22 +464,39 @@
   ],
   "report_history_count": 10,
   "primary_judgment": {
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价7.12元处于观望或小仓配置区，可作为高股息底仓小仓研究，不宜重仓追求高弹性",
+    "holder_action": "可继续作为高股息低波动底仓持有；息差、ROE和资产质量改善前不宜积极加仓",
+    "trigger_condition": "6.5元以下且资产质量未恶化时吸引力提高；6.0-6.5元可分批；净息差和ROE改善可构成加仓验证",
+    "summary": "正文允许当前价格附近小仓配置，但更高确信买点仍要求价格低于6.5元或经营指标改善。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约粗字段写观察，正文基准判断和当前价格带同时明确允许小仓配置。",
+    "source_basis": "人工逐行核对主报告基准判断、价格区间建议和加减仓信号",
+    "currency": "CNY",
+    "entry_ceiling": 7.5,
+    "trial_range": {
+      "min": 6.5,
+      "max": 7.5
+    },
+    "price_source": "主报告第26行及第352至360行",
+    "evidence": [
+      {
+        "line_start": 358,
+        "line_end": 358,
+        "quote": "当前附近，观望或小仓配置，重在股息而非弹性。",
+        "supports": "报告基准价所在区间允许小仓配置。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:53:11+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -487,15 +504,47 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "净息差和ROE改善可构成加仓验证",
+    "guard_condition": "6.5元以下且资产质量未恶化时吸引力提高",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "6.5元以下且资产质量未恶化时吸引力提高",
+        "price_range": "6.5元以下",
+        "min": null,
+        "ceiling": 6.5,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "6.0-6.5元可分批",
+        "price_range": "6.0-6.5元",
+        "min": 6.0,
+        "ceiling": 6.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价7.12元处于观望或小仓配置区，可作为高股息底仓小仓研究，不宜重仓追求高弹性",
+      "currency": "CNY",
+      "reference_price": 6.5,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {

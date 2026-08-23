@@ -152,22 +152,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "A股当前不买、回避；即使进入2.5-3.0元也只研究，须不高于2.1元且基本面通过验证后才考虑分批",
+    "holder_action": "不因订单主题加仓；仓位显著者利用主题情绪评估降低仓位，等待扣非盈利、归母比例和营运资本连续改善",
+    "trigger_condition": "价格不高于2.1元且扣非盈利、营运资本及归母利润占比改善后才可分批",
+    "summary": "本条对应601727.SH A股，正文最终结论为明确回避；当前估值要求过高增长且治理和盈利质量安全垫不足。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约将A股动作写成观察，但正文对601727.SH的最终结论明确为回避；H股条件不适用于本ticker。",
+    "source_basis": "人工逐行核对A/H分市场结论、A股价格纪律和持仓者动作",
+    "currency": "CNY",
+    "price_source": "主报告第391至398行、第441行",
+    "evidence": [
+      {
+        "line_start": 441,
+        "line_end": 441,
+        "quote": "A股601727.SH：回避。当前价格同时要求高增长、高退出估值和治理稳定，三项安全垫都不足。",
+        "supports": "锁定本ticker最终标签为回避。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:49:24+00:00",
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -175,15 +187,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "价格不高于2.1元且扣非盈利、营运资本及归母利润占比改善后才可分批",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "基本面通过验证后分批买入",
+        "price_range": "不高于 2.1 元",
+        "min": null,
+        "ceiling": 2.1,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "基本面通过验证后分批买入",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
