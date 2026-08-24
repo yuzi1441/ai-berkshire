@@ -19,6 +19,7 @@ AS_OF="$(date +%F)"
 STARTED_AT="$(date +%s)"
 STATUS_STARTED=0
 STATUS_FINISHED=0
+JOB_PARTIAL=0
 
 if [[ ! -x "${PYTHON}" ]]; then
     PYTHON=/usr/bin/python3
@@ -186,6 +187,9 @@ run_heavy() {
     if (( scan_rc != 0 )); then
         return "${scan_rc}"
     fi
+    if (( sentiment_rc != 0 )); then
+        JOB_PARTIAL=1
+    fi
     return 0
 }
 
@@ -208,6 +212,10 @@ esac
 JOB_RC=$?
 set -e
 
+if (( JOB_RC == 0 && JOB_PARTIAL == 1 )); then
+    status_finish partial "机会扫描完成；情绪快照失败，详见情绪状态"
+    exit 0
+fi
 if (( JOB_RC == 0 )); then
     status_finish ok "任务完成；运行数据未提交到 Git"
     exit 0
