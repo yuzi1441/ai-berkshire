@@ -41,3 +41,12 @@ class AutomationStatusTests(unittest.TestCase):
             automation_status.update(self.arguments(path, "deferred"))
             third = json.loads(path.read_text(encoding="utf-8"))["jobs"]["heavy"]
             self.assertEqual(third["last_success_at"], success_at)
+
+    def test_dashboard_status_does_not_advertise_disabled_opportunity_scan(self):
+        payload = json.loads(
+            (ROOT / "data" / "investment-dashboard" / "automation_status.json").read_text(encoding="utf-8")
+        )
+        heavy = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "heavy")
+        self.assertIn("情绪快照", heavy["label"])
+        self.assertIn("人工复核", heavy["description"])
+        self.assertNotIn("opportunity", payload["jobs"])
