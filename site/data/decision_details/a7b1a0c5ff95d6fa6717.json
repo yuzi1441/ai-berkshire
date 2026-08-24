@@ -328,6 +328,7 @@
     "market": "A股",
     "report_path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
     "report_link": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+    "report_sha256": "4c4d53d904b3d69df050a25e8d47a8399ee7e8bc1e8ca00a7933b8ffbfd456e9",
     "title": "北化股份（002246.SZ）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": {
@@ -359,7 +360,8 @@
       ],
       "invalidation_triggers": "重大安全或环保处罚；硝化棉毛利连续两期低于30%；年度FCF转负且应收显著跑赢收入；控制权变更损害独立性",
       "next_review_date": "2026-10-31",
-      "confidence": "中"
+      "confidence": "中",
+      "hard_veto_state": "unknown"
     },
     "status": "未通过",
     "passed_count": 2,
@@ -403,7 +405,8 @@
       }
     ],
     "hard_veto": false,
-    "hard_veto_label": "未触发/未发现",
+    "hard_veto_state": "unknown",
+    "hard_veto_label": "待复核",
     "mirror_test": "未通过",
     "action": "观察",
     "summary": "未通过Checklist，长期回报未证明且当前安全边际不足",
@@ -426,9 +429,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -436,7 +439,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -449,8 +452,8 @@
         "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c"
       },
       "checklist": {
-        "path": null,
-        "sha256": null
+        "path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+        "sha256": "4c4d53d904b3d69df050a25e8d47a8399ee7e8bc1e8ca00a7933b8ffbfd456e9"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -458,10 +461,10 @@
       }
     },
     "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c",
-    "current_source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c"
+    "current_source_fingerprint_sha256": "57e28853e0bbc97e5e83d089986af299da9f0230b659052c1a08ae2fa36bc28e"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c",
   "market_session_state": "runtime_required",
@@ -511,7 +514,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "45479ffbb61dacfc8a3d",
+  "generation_id": "338fce117509e14ec56c",
   "detail_id": "a7b1a0c5ff95d6fa6717",
   "detail_path": "./data/decision_details/a7b1a0c5ff95d6fa6717.json"
 }

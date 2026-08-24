@@ -721,7 +721,14 @@ def attach_manual_execution_reviews(
         if payload.get("status") != "ready":
             reason = "人工复核数据未处于 ready 状态"
         elif payload.get("schema_version") == 2 and expected_fingerprint != current_fingerprint:
-            reason = "主报告、Checklist 或人工复核依据已经变化"
+            checklist_cutoff = str((decision.get("checklist") or {}).get("data_cutoff") or "")
+            if checklist_cutoff:
+                reason = (
+                    "主报告、Checklist 或人工复核依据已经变化"
+                    f"（当前 Checklist 数据截止：{checklist_cutoff}）"
+                )
+            else:
+                reason = "主报告、Checklist 或人工复核依据已经变化"
         elif valid_until and current_date > date.fromisoformat(valid_until):
             reason = f"人工复核已于 {valid_until} 到期"
         validity_state = "stale" if reason else "ready"
