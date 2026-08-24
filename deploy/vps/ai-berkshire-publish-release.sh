@@ -7,6 +7,7 @@ RELEASE_ROOT="${RELEASE_ROOT:-/srv/ai-berkshire/releases}"
 CURRENT_LINK="${CURRENT_LINK:-/srv/ai-berkshire/current}"
 LEGACY_DIR="${LEGACY_DIR:-/opt/ai-berkshire}"
 RUNTIME_DIR="${RUNTIME_DIR:-/var/lib/ai-berkshire}"
+RUNTIME_SENTIMENT_STATUS="${RUNTIME_SENTIMENT_STATUS:-${RUNTIME_DIR}/sentiment-status.json}"
 ORIGIN_URL="${ORIGIN_URL:-https://github.com/yuzi1441/ai-berkshire.git}"
 SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
 PYTHON="${PYTHON:-/opt/ai-berkshire-venv/bin/python}"
@@ -33,6 +34,14 @@ fi
 STAMP="$(date +%Y%m%d-%H%M%S)"
 FINAL_RELEASE="${RELEASE_ROOT}/${SOURCE_SHA:0:12}-${STAMP}"
 STAGING_RELEASE="${FINAL_RELEASE}.next"
+cleanup_staging() {
+    local rc=$?
+    if (( rc != 0 )) && [[ -n "${STAGING_RELEASE}" && -d "${STAGING_RELEASE}" ]]; then
+        rm -rf -- "${STAGING_RELEASE}"
+    fi
+    exit "${rc}"
+}
+trap cleanup_staging EXIT
 mkdir -p "${STAGING_RELEASE}"
 rsync -a --exclude='.git' --exclude='.venv' "${SOURCE_DIR}/" "${STAGING_RELEASE}/"
 ln -s "/opt/ai-berkshire-venv" "${STAGING_RELEASE}/.venv"
@@ -61,6 +70,7 @@ for relative in \
     data/investment-dashboard/post_buy_alerts.json \
     data/investment-dashboard/post_buy_tracking.json \
     data/investment-dashboard/quotes/latest.json \
+    data/sentiment/latest.json \
     site/data/annual_report_dates.json \
     site/data/automation_status.json \
     site/data/intraday_technical.json \
@@ -68,7 +78,8 @@ for relative in \
     site/data/opportunity_scan_status.json \
     site/data/post_buy_alerts.json \
     site/data/post_buy_tracking.json \
-    site/data/quotes/latest.json; do
+    site/data/quotes/latest.json \
+    site/data/sentiment_status.json; do
     copy_runtime_file "${relative}"
 done
 
@@ -90,6 +101,10 @@ if [[ -f "${RUNTIME_DIR}/sentiment-last-success.json" ]]; then
         "${STAGING_RELEASE}/data/sentiment/latest.json"
     install -D -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
         "${STAGING_RELEASE}/site/data/sentiment.json"
+fi
+if [[ -f "${RUNTIME_SENTIMENT_STATUS}" ]]; then
+    install -D -m 0644 "${RUNTIME_SENTIMENT_STATUS}" \
+        "${STAGING_RELEASE}/site/data/sentiment_status.json"
 fi
 
 "${PYTHON}" "${STAGING_RELEASE}/tools/migrate_manual_execution_reviews.py" \

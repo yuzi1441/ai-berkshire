@@ -4,6 +4,7 @@ IFS=$'\n\t'
 
 REPO_ROOT="${REPO_ROOT:-/srv/ai-berkshire/current}"
 PYTHON="${PYTHON:-${REPO_ROOT}/.venv/bin/python}"
+RUNTIME_DIR="${RUNTIME_DIR:-/var/lib/ai-berkshire}"
 LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-runtime.lock}"
 LOCK_RETRY_EXIT=75
 LOCK_RETRY_COUNTER="/run/ai-berkshire-${1:-unknown}-lock-retries"
@@ -115,6 +116,19 @@ post_buy_check() {
     "${PYTHON}" tools/post_buy_tracking.py check
 }
 
+publish_sentiment_runtime() {
+    if [[ -f "${RUNTIME_DIR}/sentiment-last-success.json" ]]; then
+        install -D -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
+            "${REPO_ROOT}/data/sentiment/latest.json"
+        install -D -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
+            "${REPO_ROOT}/site/data/sentiment.json"
+    fi
+    if [[ -f "${RUNTIME_DIR}/sentiment-status.json" ]]; then
+        install -D -m 0644 "${RUNTIME_DIR}/sentiment-status.json" \
+            "${REPO_ROOT}/site/data/sentiment_status.json"
+    fi
+}
+
 run_annual() {
     build_dashboard
     "${PYTHON}" tools/annual_report_dates.py --repo-root "${REPO_ROOT}" --as-of "${AS_OF}"
@@ -168,17 +182,18 @@ run_heavy() {
     "${PYTHON}" tools/sentiment_snapshot.py \
         --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
         --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
-        --output "/var/lib/ai-berkshire/sentiment-last-success.json" \
-        --working-output "/var/lib/ai-berkshire/sentiment-work-in-progress.json" \
-        --cache-dir "/var/lib/ai-berkshire/sentiment-cache" \
-        --archive-dir "/var/lib/ai-berkshire/sentiment-snapshots" \
+        --output "${RUNTIME_DIR}/sentiment-last-success.json" \
+        --working-output "${RUNTIME_DIR}/sentiment-work-in-progress.json" \
+        --cache-dir "${RUNTIME_DIR}/sentiment-cache" \
+        --archive-dir "${RUNTIME_DIR}/sentiment-snapshots" \
         --site-output "${REPO_ROOT}/site/data/sentiment.json" \
-        --status-output "${REPO_ROOT}/site/data/sentiment_status.json" \
+        --status-output "${RUNTIME_DIR}/sentiment-status.json" \
         --lookback-days 7 \
         --fallback-lookback-days 30 \
         --news-limit 8 \
         --workers 3 \
         --markets A股 || sentiment_rc=$?
+    publish_sentiment_runtime
     "${PYTHON}" scripts/run_after_close_ai_review.py \
         --repo-root "${REPO_ROOT}" \
         --skip-git-sync \

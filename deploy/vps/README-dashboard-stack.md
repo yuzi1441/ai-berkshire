@@ -42,6 +42,13 @@ new release and installs changed scripts, services, timers and Caddy config.
 Runtime jobs never commit or push generated data. A failed activation restores
 the previous `current` symlink and service configuration.
 
+Reports are source files, so a new report is synchronized only after it is
+committed and merged into `main`. An uncommitted report on either development
+computer remains local and is intentionally not copied by a runtime job. The
+VPS never pushes reports or generated data back to `main`; it only pulls the
+merged source, validates/builds a release, and keeps sentiment checkpoints,
+quotes, scan results and review state under `/var/lib/ai-berkshire`.
+
 Useful checks:
 
 ```bash

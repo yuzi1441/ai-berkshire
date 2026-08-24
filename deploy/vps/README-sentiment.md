@@ -5,10 +5,11 @@
 
 ## 产物
 
-- `data/sentiment/latest.json`：最新快照
-- `data/sentiment/snapshots/YYYY-MM-DD.json`：每日历史快照
-- `data/sentiment/cache/news-catalog.json`：跨天新闻去重和模型评分缓存
-- `site/data/sentiment.json`：看板读取的同一份最新快照
+- `/var/lib/ai-berkshire/sentiment-last-success.json`：最新成功快照（运行库）
+- `/var/lib/ai-berkshire/sentiment-snapshots/YYYY-MM-DD.json`：每日历史快照（运行库）
+- `/var/lib/ai-berkshire/sentiment-cache/news-catalog.json`：跨天新闻去重和模型评分缓存（运行库）
+- `data/sentiment/latest.json` 与 `site/data/sentiment.json`：当前 release 中供构建和看板读取的副本
+- `/var/lib/ai-berkshire/sentiment-status.json`：最近一次任务状态（运行库，发布时带入新 release）
 
 数据包括：
 
