@@ -151,6 +151,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
     parser.add_argument("--skip-git-sync", action="store_true")
+    parser.add_argument("--markets", default="A股", help="market list for the close quote refresh")
     return parser
 
 
@@ -205,7 +206,11 @@ def main() -> int:
                 ["git", "merge", "--no-edit", "-X", "ours", f"origin/{SOURCE_BRANCH}"],
             )
 
-        run_step(repo_root, "刷新 A/H 收盘行情", [str(python), "tools/market_snapshot.py", "--force"])
+        run_step(
+            repo_root,
+            "刷新收盘行情",
+            [str(python), "tools/market_snapshot.py", "--markets", arguments.markets, "--force"],
+        )
         run_step(repo_root, "重建含最新价格的决策板", [str(python), "tools/build_investment_dashboard.py"])
 
         if scan_path.is_file():

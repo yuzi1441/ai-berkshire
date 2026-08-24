@@ -28,6 +28,10 @@ const state = {
   detailRequests: new Map(),
   detailErrors: new Map(),
   intradayTechnical: new Map(),
+  opportunityScans: new Map(),
+  opportunityScansGeneratedAt: null,
+  opportunityScanStatus: null,
+  opportunityScanModels: [],
   deepReviews: new Map(),
   deepReviewLoadingTicker: null,
   sentimentSnapshot: null,
@@ -1941,6 +1945,11 @@ function intradayTechnicalForItem(item) {
   return state.intradayTechnical.get(item?.ticker) || item?.intraday_technical_analysis || { status: "missing", lights: [] };
 }
 
+function opportunityScanForItem(item) {
+  if (item?.market !== "A股") return { status: "missing" };
+  return state.opportunityScans.get(item?.ticker) || { status: "missing" };
+}
+
 function deepReviewForItem(item) {
   if (item?.market !== "A股") return { status: "missing" };
   return state.deepReviews.get(item?.ticker) || { status: "missing" };
@@ -2497,24 +2506,65 @@ function opportunityCandidateForItem(item) {
   const manual = item?.manual_execution_review;
   if (manual?.status === "ready" && manual?.source === "human_review") {
     const tier = manual.opportunity_tier;
-    if (!['current', 'near'].includes(tier)) return null;
-    return {
-      item,
-      manual,
-      scan: null,
-      union: {},
-      models: [],
-      quote: state.quotes.get(item.ticker),
-      judgment: primaryJudgmentForItem(item),
-      staleModels: [],
-      relevantModels: [],
-      priority: tier === "current" ? 100 : 90,
-      tier,
-      label: tier === "current" ? "人工复核 · 当前机会" : "人工复核 · 临近机会",
-      tone: tier === "near" ? "notice" : "opportunity",
-    };
+    if (['current', 'near'].includes(tier)) {
+      return {
+        item,
+        manual,
+        scan: null,
+        union: {},
+        models: [],
+        quote: state.quotes.get(item.ticker),
+        judgment: primaryJudgmentForItem(item),
+        staleModels: [],
+        relevantModels: [],
+        priority: tier === "current" ? 100 : 90,
+        tier,
+        label: tier === "current" ? "人工复核 · 当前机会" : "人工复核 · 临近机会",
+        tone: tier === "near" ? "notice" : "opportunity",
+      };
+    }
+    // A valid weekend review that found no current/near opportunity must not
+    // suppress the next daily Flash scan. Only an explicit positive manual
+    // opportunity overrides the model result.
   }
-  return null;
+  const scan = opportunityScanForItem(item);
+  const union = scan?.union || {};
+  const quote = state.quotes.get(item.ticker);
+  const judgment = primaryJudgmentForItem(item);
+  const allModels = Object.entries(scan.models || {})
+    .filter(([, result]) => result && ["ready", "stale"].includes(result.status));
+  // A failed refresh may retain stale results for audit, but stale output must
+  // never promote a stock into today's opportunity panel.
+  const models = allModels.filter(([, result]) => result.status === "ready");
+  const normalizeState = (value) => ({
+    "机会": "当前机会",
+    "条件机会": "临近机会",
+    "暂不构成机会": "暂不构成当前机会",
+  })[value] || value;
+  const currentModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "当前机会");
+  const nearModels = models.filter(([, result]) => normalizeState(result.assessment?.opportunity_state) === "临近机会");
+  const tier = currentModels.length ? "current" : nearModels.length ? "near" : null;
+  if (!tier) return null;
+  const confidenceScore = models.reduce((score, [, result]) => {
+    const confidence = result.assessment?.confidence;
+    return score + (confidence === "high" ? 2 : confidence === "medium" ? 1 : 0);
+  }, 0);
+  const staleModels = allModels.filter(([, result]) => result.status === "stale");
+  const priority = (tier === "current" ? 20 : 10) + confidenceScore;
+  return {
+    item,
+    scan,
+    union,
+    models,
+    quote,
+    judgment,
+    staleModels,
+    relevantModels: tier === "current" ? currentModels : nearModels,
+    priority,
+    tier,
+    label: tier === "current" ? "当前机会" : "临近机会",
+    tone: tier === "near" ? "notice" : "opportunity",
+  };
 }
 
 function renderOpportunityCard(candidate) {
@@ -2600,11 +2650,10 @@ function renderOpportunityCard(candidate) {
   const open = document.createElement("button");
   open.type = "button";
   open.className = "btn ghost attention-open";
-  open.textContent = manual ? "查看个股详情" : "启动深度复核";
+  open.textContent = "查看个股详情";
   open.addEventListener("click", (event) => {
     event.stopPropagation();
-    if (manual) openDetail(item);
-    else startDeepReview(item, open);
+    openDetail(item);
   });
   foot.append(open);
   card.append(foot);
@@ -2640,6 +2689,9 @@ function renderAttentionPanel() {
 
   const aShares = state.decisions.filter((item) => item.market === "A股");
   const manualReviews = aShares.filter((item) => item.manual_execution_review?.status === "ready");
+  const scans = aShares.map((item) => opportunityScanForItem(item));
+  const modelResults = scans.flatMap((scan) => Object.values(scan?.models || {}));
+  const readyModelResults = modelResults.filter((result) => result?.status === "ready");
   const candidates = aShares
     .map(opportunityCandidateForItem)
     .filter(Boolean)
@@ -2648,13 +2700,29 @@ function renderAttentionPanel() {
   const nearCandidates = candidates.filter((candidate) => candidate.tier === "near");
 
   els.attentionPanel.hidden = false;
-  const fullManualCoverage = manualReviews.length === aShares.length && aShares.length > 0;
-  const metaText = `人工机会 ${currentCandidates.length} · 临近 ${nearCandidates.length} · 有效人工复核 ${manualReviews.length}/${aShares.length}`;
+  const scanStatus = state.opportunityScanStatus;
+  const freshness = state.opportunityScansGeneratedAt
+    ? ` · 快照 ${attentionTimestamp(state.opportunityScansGeneratedAt)}`
+    : "";
+  const failure = ["error", "partial"].includes(scanStatus?.status) && !readyModelResults.length;
+  const failureNote = failure
+    ? ` · 本次失败，沿用${scanStatus.last_success_scan_generated_at ? `${attentionTimestamp(scanStatus.last_success_scan_generated_at)}的` : "上次成功的"}结果`
+    : "";
+  const expectedModelResults = aShares.length * Math.max(1, state.opportunityScanModels.length);
+  const fullManualCoverage = manualReviews.length === aShares.length && aShares.length > 0
+    && manualReviews.every((item) => ["current", "near"].includes(item.manual_execution_review?.opportunity_tier));
+  const metaText = fullManualCoverage
+    ? `人工确认 ${currentCandidates.length} · 临近 ${nearCandidates.length} · ${manualReviews.length}/${aShares.length}`
+    : `每日扫描当前 ${currentCandidates.length} · 临近 ${nearCandidates.length} · Flash ${readyModelResults.length}/${expectedModelResults}${freshness}${failureNote}`;
   els.attentionMeta.textContent = metaText;
-  els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
+  els.attentionMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
   if (els.attentionToggleMeta) {
-    els.attentionToggleMeta.textContent = `有效人工复核 ${manualReviews.length}/${aShares.length} · 人工机会 ${currentCandidates.length} · 临近 ${nearCandidates.length}`;
-    els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : "partial";
+    els.attentionToggleMeta.textContent = fullManualCoverage
+      ? `人工确认 ${manualReviews.length} 只 · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}`
+      : failure
+      ? `本次扫描失败 · 沿用上次成功结果 · ${candidates.length} 项候选`
+      : `每日扫描 · 当前 ${currentCandidates.length} · 临近 ${nearCandidates.length}${freshness}`;
+    els.attentionToggleMeta.dataset.status = fullManualCoverage ? "ready" : (failure ? "error" : (scanStatus?.status || "ready"));
   }
   if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
   els.attentionList.replaceChildren();
@@ -2662,9 +2730,9 @@ function renderAttentionPanel() {
   if (!candidates.length) {
     const empty = document.createElement("p");
     empty.className = "attention-empty";
-    empty.textContent = manualReviews.length
-      ? "有效人工复核中没有进入当前或临近机会的股票。"
-      : "当前没有有效人工复核记录，机会面板暂停生成。";
+    empty.textContent = failure
+      ? "本次收盘后机会扫描失败，当前继续沿用上次成功结果。"
+      : readyModelResults.length ? "当前每日扫描没有筛出值得立即决策的机会。" : "每日机会扫描结果尚未加载，暂不生成机会面板。";
     els.attentionList.append(empty);
     return;
   }
@@ -2672,13 +2740,13 @@ function renderAttentionPanel() {
   if (currentCandidates.length) {
     els.attentionList.append(renderOpportunityGroup(
       currentCandidates,
-      "人工机会",
-      "逐股人工核对主报告、最新财报与价格后保留；是否行动仍由你判断。",
+      fullManualCoverage ? "人工机会" : "当前机会",
+      fullManualCoverage ? "周末人工确认结果优先；是否行动仍由你判断。" : "每日 Flash 扫描已说明为什么是现在；是否行动仍由你判断。",
     ));
   } else {
     const emptyCurrent = document.createElement("p");
     emptyCurrent.className = "attention-empty attention-current-empty";
-    emptyCurrent.textContent = "当前没有被人工复核保留为机会的股票。";
+    emptyCurrent.textContent = "当前没有满足“为什么是现在”的机会。";
     els.attentionList.append(emptyCurrent);
   }
 
@@ -3645,6 +3713,33 @@ async function loadIntradayTechnicalSnapshot() {
   );
 }
 
+async function loadOpportunityScansSnapshot() {
+  const response = await fetch("./data/opportunity_scans.json", { cache: "no-cache" });
+  if (!response.ok) {
+    state.opportunityScans = new Map();
+    state.opportunityScansGeneratedAt = null;
+    state.opportunityScanModels = [];
+    return;
+  }
+  const snapshot = await response.json();
+  state.opportunityScansGeneratedAt = snapshot.generated_at || null;
+  state.opportunityScanModels = Array.isArray(snapshot.models) ? snapshot.models : [];
+  state.opportunityScans = new Map(
+    (snapshot.scans || [])
+      .filter((item) => item?.ticker && item.market === "A股")
+      .map((item) => [item.ticker, item]),
+  );
+}
+
+async function loadOpportunityScanStatus() {
+  const response = await fetch("./data/opportunity_scan_status.json", { cache: "no-cache" });
+  if (!response.ok) {
+    state.opportunityScanStatus = null;
+    return;
+  }
+  state.opportunityScanStatus = await response.json();
+}
+
 async function loadAnnualReportDates() {
   const response = await fetch("./data/annual_report_dates.json", { cache: "no-cache" });
   if (!response.ok) throw new Error("annual report dates missing");
@@ -3674,9 +3769,11 @@ async function loadDashboard() {
   setLiveStatus("idle", "列表已载入，补充行情和辅助数据…");
   renderAll();
 
-  const [intradayResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult] =
+  const [intradayResult, scansResult, scanStatusResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult] =
     await Promise.allSettled([
       loadIntradayTechnicalSnapshot(),
+      loadOpportunityScansSnapshot(),
+      loadOpportunityScanStatus(),
       loadSentimentSnapshot(),
       loadDeepReviews(),
       loadSnapshotQuotes(),
@@ -3687,6 +3784,16 @@ async function loadDashboard() {
   if (intradayResult.status === "rejected") {
     console.warn("intraday technical snapshot failed", intradayResult.reason);
     state.intradayTechnical = new Map();
+  }
+  if (scansResult.status === "rejected") {
+    console.warn("opportunity scan snapshot failed", scansResult.reason);
+    state.opportunityScans = new Map();
+    state.opportunityScansGeneratedAt = null;
+    state.opportunityScanModels = [];
+  }
+  if (scanStatusResult.status === "rejected") {
+    console.warn("opportunity scan status failed", scanStatusResult.reason);
+    state.opportunityScanStatus = null;
   }
   if (sentimentResult.status === "rejected") {
     const error = sentimentResult.reason;

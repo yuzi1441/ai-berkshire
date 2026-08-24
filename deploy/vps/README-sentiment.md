@@ -72,8 +72,8 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 ```
 
 安装脚本会启用统一的A股调度：08:30年报日期、盘中5分钟行情和指数、30分钟盘中技术面、
-15:05收盘检查和机会刷新、16:30日线技术面和机会刷新、18:10情绪快照、21:30最终核对。每日模型机会扫描已停用，
-但机会面板会在收盘和日线任务中使用最新行情与有效的逐股人工复核结果重建；任务状态写入 `data/investment-dashboard/automation_status.json`
+15:05收盘检查、16:30日线技术面、18:10收盘后情绪与机会扫描、21:30最终核对。机会扫描每天使用最新 A 股收盘行情运行，
+结果只进入研究机会面板，不改变实时执行状态；周末可再进行一次人工复核确认。任务状态写入 `data/investment-dashboard/automation_status.json`
 和 `site/data/automation_status.json`。安装时会停用旧的 A/H、US、独立情绪和独立盘后扫描定时器，
 避免多个任务同时写同一份看板。VPS 在 `vps-generated` 分支运行：它从 `main` 获取你的代码和研报，
 把自动生成结果只推回 `vps-generated`，不会再把生成文件推回 `main`。

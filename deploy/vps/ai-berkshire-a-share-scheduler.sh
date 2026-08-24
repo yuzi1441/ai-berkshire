@@ -159,8 +159,11 @@ run_daily() {
 }
 
 run_heavy() {
-    # Daily model-led opportunity scanning is intentionally disabled. This job
-    # refreshes sentiment only; the opportunity panel uses valid human reviews.
+    # The close-after opportunity scan is intentionally separate from the
+    # deterministic current-execution gate. It may populate the research
+    # opportunity panel, but never changes a stock's executable status.
+    local sentiment_rc=0
+    local scan_rc=0
     "${PYTHON}" tools/sentiment_snapshot.py \
         --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
         --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
@@ -174,8 +177,16 @@ run_heavy() {
         --fallback-lookback-days 30 \
         --news-limit 8 \
         --workers 3 \
-        --markets A股
+        --markets A股 || sentiment_rc=$?
+    "${PYTHON}" scripts/run_after_close_ai_review.py \
+        --repo-root "${REPO_ROOT}" \
+        --skip-git-sync \
+        --markets A股 || scan_rc=$?
     build_dashboard
+    if (( scan_rc != 0 )); then
+        return "${scan_rc}"
+    fi
+    return 0
 }
 
 run_reconcile() {

@@ -47,8 +47,8 @@ class AutomationStatusTests(unittest.TestCase):
             (ROOT / "data" / "investment-dashboard" / "automation_status.json").read_text(encoding="utf-8")
         )
         heavy = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "heavy")
-        self.assertIn("情绪快照", heavy["label"])
-        self.assertIn("机会面板每日", heavy["description"])
+        self.assertIn("机会扫描", heavy["label"])
+        self.assertIn("A 股机会扫描", heavy["description"])
         self.assertNotIn("opportunity", payload["jobs"])
         close = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "close")
         daily = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "daily")
@@ -78,3 +78,8 @@ class AutomationStatusTests(unittest.TestCase):
             payload = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual([item["job_id"] for item in payload["schedules"]], ["heavy"])
             self.assertEqual(payload["jobs"], {"heavy": {"status": "ok", "last_success_at": "keep"}})
+
+    def test_scheduler_runs_close_opportunity_scan(self):
+        scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
+        self.assertIn("scripts/run_after_close_ai_review.py", scheduler)
+        self.assertIn("--markets A股", scheduler)
