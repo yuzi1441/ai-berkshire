@@ -323,9 +323,106 @@
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
-    "status": "missing",
-    "gates": [],
-    "history": []
+    "company": "北方化学工业股份有限公司",
+    "ticker": "002246.SZ",
+    "market": "A股",
+    "report_path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+    "report_link": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+    "title": "北化股份（002246.SZ）买入前 Checklist 研究报告",
+    "source_type": "standalone",
+    "decision_contract": {
+      "version": "1",
+      "report_type": "company-checklist",
+      "company": "北方化学工业股份有限公司",
+      "ticker": "002246.SZ",
+      "market": "A股",
+      "report_completed_at": "2026-08-23",
+      "data_cutoff": "2026-08-21",
+      "action": "观察",
+      "summary": "未通过Checklist，长期回报未证明且当前安全边际不足",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观察，不买重组预期",
+          "price_range": "16—18.2元，仅为复核区而非自动买入区"
+        },
+        {
+          "stance": "稳健型",
+          "action": "观察，等待利润中枢和现金转化验证",
+          "price_range": "13—16元，需同时满足至少两项经营验证条件"
+        },
+        {
+          "stance": "保守型",
+          "action": "观察，先排除价值陷阱",
+          "price_range": "8—13元，低于8元仍需重做事故与治理核查"
+        }
+      ],
+      "invalidation_triggers": "重大安全或环保处罚；硝化棉毛利连续两期低于30%；年度FCF转负且应收显著跑赢收入；控制权变更损害独立性",
+      "next_review_date": "2026-10-31",
+      "confidence": "中"
+    },
+    "status": "未通过",
+    "passed_count": 2,
+    "total_gates": 6,
+    "gates": [
+      {
+        "name": "能力圈",
+        "score": "★★★☆☆",
+        "result": "通过",
+        "reason": "业务可解释，但军品订单和价格不透明"
+      },
+      {
+        "name": "好生意",
+        "score": "★★☆☆☆",
+        "result": "未通过",
+        "reason": "五年 ROE 与 FCF 转化率太低"
+      },
+      {
+        "name": "护城河",
+        "score": "★★★☆☆",
+        "result": "通过",
+        "reason": "资质、认证、安全许可构成硬门槛，但无网络效应"
+      },
+      {
+        "name": "管理层",
+        "score": "★★★☆☆",
+        "result": "灰色",
+        "reason": "审计内控干净；关联交易、资金集中与控制权未定"
+      },
+      {
+        "name": "安全边际",
+        "score": "★☆☆☆☆",
+        "result": "未通过",
+        "reason": "中性三年目标价低于当前价，FCF yield 仅 2.26%"
+      },
+      {
+        "name": "仓位纪律",
+        "score": "★★★☆☆",
+        "result": "待确认",
+        "reason": "缺用户动机、风险承受和仓位信息"
+      }
+    ],
+    "hard_veto": false,
+    "hard_veto_label": "未触发/未发现",
+    "mirror_test": "未通过",
+    "action": "观察",
+    "summary": "未通过Checklist，长期回报未证明且当前安全边际不足",
+    "data_cutoff": "2026-08-21",
+    "report_date": "2026-08-23",
+    "next_review_date": "2026-10-31",
+    "confidence": "中",
+    "invalidation_triggers": "重大安全或环保处罚；硝化棉毛利连续两期低于30%；年度FCF转负且应收显著跑赢收入；控制权变更损害独立性",
+    "history": [
+      {
+        "status": "未通过",
+        "action": "观察",
+        "data_cutoff": "2026-08-21",
+        "report_date": "2026-08-23",
+        "report_path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+        "report_link": "reports/北化股份/北化股份-investment-checklist-20260823.md",
+        "source_type": "standalone"
+      }
+    ]
   },
   "manual_execution_review": {
     "schema_version": 2,
