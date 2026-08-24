@@ -68,6 +68,12 @@ for relative in \
     copy_runtime_file "${relative}"
 done
 
+# Keep runtime timestamps/results, but always apply the source-controlled
+# schedule contract so retired jobs cannot remain stuck in the public status.
+"${PYTHON}" "${STAGING_RELEASE}/tools/automation_status.py" normalize \
+    --path "${STAGING_RELEASE}/data/investment-dashboard/automation_status.json" \
+    --template "${SOURCE_DIR}/data/investment-dashboard/automation_status.json"
+
 if [[ -n "${PREVIOUS}" && -d "${PREVIOUS}/reports" ]]; then
     rsync -a \
         --include='*/' \

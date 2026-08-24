@@ -92,6 +92,30 @@ def update(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def normalize_contract(path: Path, template: Path) -> int:
+    """Refresh the schedule contract while preserving runtime job history."""
+    payload = load(path)
+    contract = load(template)
+    schedules = contract.get("schedules", [])
+    if not isinstance(schedules, list):
+        raise ValueError(f"invalid schedule contract: {template}")
+    active_job_ids = {
+        schedule.get("job_id")
+        for schedule in schedules
+        if isinstance(schedule, dict) and schedule.get("job_id")
+    }
+    jobs = payload.get("jobs", {})
+    payload["schedules"] = schedules
+    payload["jobs"] = {
+        job_id: jobs[job_id]
+        for job_id in active_job_ids
+        if job_id in jobs and isinstance(jobs[job_id], dict)
+    }
+    payload["schema_version"] = max(int(payload.get("schema_version") or 1), 2)
+    write(path, payload)
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--path", type=Path, default=DEFAULT_PATH)
@@ -112,8 +136,12 @@ def main() -> int:
     finish.add_argument("--record-count", type=int)
     finish.add_argument("--failed-count", type=int)
     finish.add_argument("--message")
+    normalize = subparsers.add_parser("normalize")
+    normalize.add_argument("--template", type=Path, required=True)
     arguments = parser.parse_args()
     try:
+        if arguments.command == "normalize":
+            return normalize_contract(arguments.path.resolve(), arguments.template.resolve())
         return update(arguments)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)

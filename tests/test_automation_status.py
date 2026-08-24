@@ -48,5 +48,33 @@ class AutomationStatusTests(unittest.TestCase):
         )
         heavy = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "heavy")
         self.assertIn("情绪快照", heavy["label"])
-        self.assertIn("人工复核", heavy["description"])
+        self.assertIn("机会面板每日", heavy["description"])
         self.assertNotIn("opportunity", payload["jobs"])
+        close = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "close")
+        daily = next(schedule for schedule in payload["schedules"] if schedule["job_id"] == "daily")
+        self.assertIn("机会刷新", close["label"])
+        self.assertIn("机会刷新", daily["label"])
+
+    def test_normalize_applies_schedule_contract_and_preserves_active_history(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "runtime.json"
+            template = root / "template.json"
+            path.write_text(json.dumps({
+                "schema_version": 1,
+                "updated_at": "2026-08-24T18:00:00+08:00",
+                "schedules": [{"job_id": "opportunity"}],
+                "jobs": {
+                    "heavy": {"status": "ok", "last_success_at": "keep"},
+                    "opportunity": {"status": "running"},
+                },
+            }), encoding="utf-8")
+            template.write_text(json.dumps({
+                "schema_version": 2,
+                "schedules": [{"job_id": "heavy"}],
+                "jobs": {},
+            }), encoding="utf-8")
+            automation_status.normalize_contract(path, template)
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual([item["job_id"] for item in payload["schedules"]], ["heavy"])
+            self.assertEqual(payload["jobs"], {"heavy": {"status": "ok", "last_success_at": "keep"}})

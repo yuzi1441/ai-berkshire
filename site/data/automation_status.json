@@ -28,21 +28,21 @@
     },
     {
       "job_id": "close",
-      "label": "收盘检查",
+      "label": "收盘检查＋机会刷新",
       "schedule": "交易日 15:05",
-      "description": "收盘行情、持仓提醒和看板"
+      "description": "收盘行情、持仓提醒并重建机会面板"
     },
     {
       "job_id": "daily",
-      "label": "日线技术面",
+      "label": "日线技术面＋机会刷新",
       "schedule": "交易日 16:30",
-      "description": "A股日线技术分析"
+      "description": "A股日线技术分析并重建机会面板"
     },
     {
       "job_id": "heavy",
-      "label": "情绪快照（机会面板使用人工复核）",
+      "label": "情绪快照",
       "schedule": "交易日 18:10",
-      "description": "情绪快照；机会面板使用有效人工复核结果"
+      "description": "情绪快照；机会面板每日使用人工复核与最新行情刷新"
     },
     {
       "job_id": "reconcile",
