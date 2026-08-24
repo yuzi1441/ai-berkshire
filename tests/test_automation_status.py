@@ -83,3 +83,13 @@ class AutomationStatusTests(unittest.TestCase):
         scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
         self.assertIn("scripts/run_after_close_ai_review.py", scheduler)
         self.assertIn("--markets A股", scheduler)
+
+    def test_release_persists_opportunity_scan_runtime_files(self):
+        publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")
+        for relative in (
+            "data/investment-dashboard/opportunity_scans.json",
+            "data/investment-dashboard/opportunity_scan_status.json",
+            "site/data/opportunity_scans.json",
+            "site/data/opportunity_scan_status.json",
+        ):
+            self.assertIn(relative, publisher)
