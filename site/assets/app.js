@@ -54,6 +54,7 @@ const state = {
   detailTab: "technical",
   quoteMode: "idle", // snapshot | idle | error
   quoteUpdatedAt: null,
+  quoteSnapshotMeta: null,
   liveTimer: null,
   snapshotTimer: null,
   focusIndex: -1,
@@ -97,6 +98,7 @@ const els = {
   workspace: document.querySelector("#workspace"),
   tableWrap: document.querySelector(".table-wrap"),
   liveDot: document.querySelector("#live-dot"),
+  liveStatus: document.querySelector("#live-status"),
   liveText: document.querySelector("#live-text"),
   refreshQuotes: document.querySelector("#refresh-quotes"),
   toast: document.querySelector("#toast"),
@@ -576,10 +578,16 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
   }[execution.key] || "unavailable";
   wrap.className = `primary-judgment-aux primary-judgment-aux-${tone}`;
   const label = document.createElement("strong");
-  label.textContent = execution.label;
+  label.textContent = `当前执行分区：${execution.label}`;
   const detail = document.createElement("p");
   detail.textContent = execution.detail;
   wrap.append(label, detail);
+  if (execution.rule?.price_range) {
+    const priceBand = document.createElement("p");
+    priceBand.className = "primary-judgment-aux-note";
+    priceBand.textContent = `当前价格对应报告区间：${execution.rule.price_range}`;
+    wrap.append(priceBand);
+  }
   if (execution.key === "paused" && execution.referenceExecution) {
     const reference = document.createElement("p");
     reference.className = "primary-judgment-aux-note";
@@ -1475,6 +1483,10 @@ function filteredDecisions() {
 function setLiveStatus(mode, text) {
   state.quoteMode = mode;
   els.liveText.textContent = text;
+  if (els.liveStatus) {
+    els.liveStatus.dataset.mode = mode;
+    els.liveStatus.title = text;
+  }
   els.liveDot.classList.remove("on", "warn", "off");
   if (mode === "live") els.liveDot.classList.add("on");
   else if (mode === "snapshot") els.liveDot.classList.add("warn");
@@ -1517,7 +1529,7 @@ function renderIndexCards() {
     els.indexCards.append(card);
   }
   if (els.indexBandMeta) {
-    els.indexBandMeta.textContent = `${records.length}/${A_SHARE_INDEX_WATCH.length} 个指数 · ${state.quoteUpdatedAt ? new Date(state.quoteUpdatedAt).toLocaleString() : "时间待复核"}`;
+    els.indexBandMeta.textContent = `${records.length}/${A_SHARE_INDEX_WATCH.length} 个指数 · ${state.quoteUpdatedAt ? quoteSnapshotStatusText() : "时间待复核"}`;
   }
 }
 
@@ -1640,6 +1652,13 @@ async function loadSnapshotQuotes() {
   const response = await fetch(`./data/quotes/latest.json?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error("snapshot missing");
   const payload = await response.json();
+  const generatedAt = payload?.generated_at;
+  if (!generatedAt || !Number.isFinite(new Date(generatedAt).getTime())) {
+    throw new Error("snapshot timestamp invalid");
+  }
+  if (!Array.isArray(payload.quotes)) throw new Error("snapshot quotes invalid");
+
+  const nextQuotes = new Map();
   let count = 0;
   for (const quote of payload.quotes || []) {
     if (!quote?.ticker || !Number.isFinite(Number(quote.price))) continue;
@@ -1651,17 +1670,19 @@ async function loadSnapshotQuotes() {
         : Number.isFinite(previous) && previous > 0
           ? ((price - previous) / previous) * 100
           : null;
-    state.quotes.set(quote.ticker, {
+    nextQuotes.set(quote.ticker, {
       ...quote,
       price,
       previous_close: previous,
       change_pct: changePct,
       source: quote.source || "snapshot",
-      snapshot_generated_at: payload.generated_at || null,
+      snapshot_generated_at: generatedAt,
     });
     count += 1;
   }
-  state.indices.clear();
+  if (!count) throw new Error("snapshot contains no valid quotes");
+
+  const nextIndices = new Map();
   for (const index of payload.indices || []) {
     if (!index?.ticker || !Number.isFinite(Number(index.price))) continue;
     const previous = Number(index.previous_close);
@@ -1671,31 +1692,70 @@ async function loadSnapshotQuotes() {
       : Number.isFinite(previous) && previous > 0
         ? ((price - previous) / previous) * 100
         : null;
-    state.indices.set(index.index_id || index.ticker, {
+    nextIndices.set(index.index_id || index.ticker, {
       ...index,
       price,
       previous_close: previous,
       change_pct: changePct,
       source: index.source || "snapshot",
-      snapshot_generated_at: payload.generated_at || null,
+      snapshot_generated_at: generatedAt,
     });
   }
-  state.quoteUpdatedAt = payload.generated_at || new Date().toISOString();
+
+  // Replace the complete snapshot only after validating it. This prevents a
+  // partial provider response from silently mixing new and old prices.
+  state.quotes = nextQuotes;
+  state.indices = nextIndices;
+  state.quoteUpdatedAt = generatedAt;
+  state.quoteSnapshotMeta = {
+    generatedAt,
+    source: payload.quotes.find((quote) => quote?.source)?.source || "snapshot",
+    marketStatus: payload.market_status || "unknown",
+    requestedMarkets: Array.isArray(payload.requested_markets) ? payload.requested_markets : [],
+    trackedCount: Number(payload.tracked_count) || count,
+    quoteCount: count,
+    indexCount: nextIndices.size,
+  };
   renderIndexCards();
   return count;
+}
+
+function quoteSnapshotAgeMinutes(timestamp, now = new Date()) {
+  const observed = new Date(timestamp || "");
+  const current = now instanceof Date ? now : new Date(now);
+  if (!Number.isFinite(observed.getTime()) || !Number.isFinite(current.getTime())) return null;
+  return Math.max(0, (current.getTime() - observed.getTime()) / 60_000);
+}
+
+function quoteSnapshotAgeText(timestamp) {
+  const age = quoteSnapshotAgeMinutes(timestamp);
+  if (age === null) return "时间未知";
+  if (age < 1) return "刚刚";
+  if (age < 60) return `约${Math.max(1, Math.round(age))}分钟前`;
+  if (age < 1440) return `约${Math.floor(age / 60)}小时前`;
+  return `约${Math.floor(age / 1440)}天前`;
+}
+
+function quoteSnapshotStatusText() {
+  if (!state.quoteUpdatedAt) return "行情快照未加载";
+  const count = state.quoteSnapshotMeta?.quoteCount || state.quotes.size;
+  const age = quoteSnapshotAgeMinutes(state.quoteUpdatedAt);
+  const freshness = age !== null && age > 10 ? "行情陈旧" : "行情快照";
+  const timestamp = new Date(state.quoteUpdatedAt).toLocaleString();
+  return `${freshness} · ${count}只 · ${quoteSnapshotAgeText(state.quoteUpdatedAt)} · ${timestamp}`;
 }
 
 async function refreshQuotes({ silent = false } = {}) {
   try {
     const snapCount = await loadSnapshotQuotes();
-    setLiveStatus(
-      "snapshot",
-      `快照行情 · ${snapCount} 只 · ${state.quoteUpdatedAt ? new Date(state.quoteUpdatedAt).toLocaleString() : "未知"}`,
-    );
+    setLiveStatus("snapshot", quoteSnapshotStatusText());
     renderAll();
     if (!silent) showToast(`已加载行情快照 ${snapCount} 只`);
   } catch (error) {
-    setLiveStatus("error", `行情不可用 · ${error.message}`);
+    const previous = state.quoteUpdatedAt
+      ? `；保留上次成功快照（${quoteSnapshotStatusText()}）`
+      : "；暂无可用旧快照";
+    setLiveStatus("error", `行情加载失败 · ${error.message}${previous}`);
     if (!silent) showToast("行情刷新失败");
   }
 }
@@ -3807,7 +3867,7 @@ async function loadDashboard() {
     console.warn("deep reviews are unavailable", deepReviewsResult.reason);
   }
   if (snapshotQuotesResult.status === "fulfilled" && snapshotQuotesResult.value > 0) {
-    setLiveStatus("snapshot", `行情快照 · ${snapshotQuotesResult.value} 只 · ${new Date().toLocaleTimeString()}`);
+    setLiveStatus("snapshot", quoteSnapshotStatusText());
   }
   if (annualDatesResult.status === "rejected") {
     console.warn("annual report dates snapshot failed", annualDatesResult.reason);

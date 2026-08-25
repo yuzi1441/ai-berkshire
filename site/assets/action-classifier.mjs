@@ -268,7 +268,13 @@ function conservativeExecutionResult(manualResult, policyResult) {
   };
   const manualScore = conservatism[manualResult.key] ?? 1;
   const policyScore = conservatism[policyResult.key] ?? 1;
-  if (manualScore <= policyScore) return manualResult;
+  if (manualScore <= policyScore) {
+    return executionResult(manualResult.key, manualResult.label, manualResult.detail, {
+      ...manualResult,
+      policy: policyResult.policy || manualResult.policy,
+      rule: manualResult.rule || policyResult.rule,
+    });
+  }
   return executionResult(policyResult.key, policyResult.label, policyResult.detail, {
     ...policyResult,
     manualReview: manualResult.manualReview,
