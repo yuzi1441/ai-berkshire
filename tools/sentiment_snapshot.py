@@ -4372,15 +4372,16 @@ def main(argv: list[str] | None = None) -> int:
             and str((company.get("combined_sentiment") or {}).get("status"))
             in {"ok", "context_only"}
         )
-        if snapshot.get("status") != "ok" or usable_count <= 0:
+        # Source warnings and per-article skips are visible quality signals,
+        # but they do not make the completed portion unusable.  Promote any
+        # snapshot that has at least one usable company result so a timeout or
+        # flaky auxiliary source cannot strand the dashboard on an old date.
+        # A run with no usable company result still fails closed.
+        if usable_count <= 0:
             write_json(args.working_output.resolve(), snapshot)
             write_run_status(
-                "error" if usable_count <= 0 else "partial",
-                (
-                    "本次运行没有可用公司结果；线上继续显示上一次成功快照。"
-                    if usable_count <= 0
-                    else "本次运行未完整成功；阶段性结果仅保存在工作检查点。"
-                ),
+                "error",
+                "本次运行没有可用公司结果；线上继续显示上一次成功快照。",
                 company_count=snapshot.get("company_count", 0),
                 usable_company_count=usable_count,
                 skipped_count=snapshot.get("skipped_count", 0),
@@ -4394,8 +4395,8 @@ def main(argv: list[str] | None = None) -> int:
         status = snapshot_status_payload(
             snapshot,
             (
-                "情绪部分更新；失败项目已重试后跳过，其余成功结果已写入。"
-                if snapshot.get("skipped_count", 0)
+                "情绪快照已发布；部分新闻或来源异常，其余成功结果已写入。"
+                if snapshot.get("skipped_count", 0) or snapshot.get("warnings")
                 else "情绪数据更新完成。"
             ),
         )

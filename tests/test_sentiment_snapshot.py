@@ -641,7 +641,7 @@ class SentimentSnapshotTests(unittest.TestCase):
             self.assertEqual(status["status"], "error")
             self.assertIn("主模型配置不完整", status["error"])
 
-    def test_partial_run_keeps_last_success_snapshot_and_writes_working_checkpoint(self):
+    def test_partial_run_publishes_usable_results_and_writes_partial_status(self):
         config = sentiment_snapshot.LLMConfig(
             endpoint="https://example.com", api_key="test", model="test-model"
         )
@@ -678,11 +678,19 @@ class SentimentSnapshotTests(unittest.TestCase):
                         "--no-archive",
                     ]
                 )
-            self.assertEqual(result, 1)
-            self.assertEqual(json.loads(output.read_text(encoding="utf-8")), sentinel)
-            self.assertEqual(json.loads(site.read_text(encoding="utf-8")), sentinel)
-            self.assertEqual(json.loads(working.read_text(encoding="utf-8"))["status"], "partial")
+            self.assertEqual(result, 0)
+            published = json.loads(output.read_text(encoding="utf-8"))
+            published_site = json.loads(site.read_text(encoding="utf-8"))
+            for snapshot in (published, published_site):
+                self.assertEqual(snapshot["status"], "partial")
+                self.assertEqual(snapshot["data_cutoff"], partial["data_cutoff"])
+                self.assertEqual(snapshot["companies"], partial["companies"])
+            self.assertEqual(json.loads(working.read_text(encoding="utf-8"))["run_state"], "promoted")
             self.assertEqual(json.loads(status.read_text(encoding="utf-8"))["status"], "partial")
+            self.assertEqual(
+                json.loads(status.read_text(encoding="utf-8"))["last_success_data_cutoff"],
+                partial["data_cutoff"],
+            )
 
     def test_load_universe_keeps_only_unique_a_h_tickers(self):
         board = {

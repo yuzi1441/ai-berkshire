@@ -288,6 +288,35 @@ function sentimentRecencyText(news) {
   return news?.recency_state || news?.state || "暂无新闻时效信息";
 }
 
+function attentionTimestamp(timestamp) {
+  const date = new Date(timestamp || "");
+  if (!Number.isFinite(date.getTime())) return "时间未知";
+  return date.toLocaleString("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+}
+
+function timestampMillis(value) {
+  const millis = new Date(value || "").getTime();
+  return Number.isFinite(millis) ? millis : null;
+}
+
+function manualReviewIsFreshForScan(item) {
+  const manual = item?.manual_execution_review;
+  if (!manual || manual.status !== "ready") return false;
+  const scan = opportunityScanForItem(item);
+  const scanAt = timestampMillis(scan?.generated_at || state.opportunityScansGeneratedAt);
+  const reviewAt = timestampMillis(manual.reviewed_at);
+  // If either side has no timestamp, retain the existing manual-review
+  // behavior. Once both are known, the newest evidence wins.
+  return scanAt === null || reviewAt === null || reviewAt >= scanAt;
+}
+
 function updateSentimentAlert() {
   if (!els.sentimentAlert) return;
   const status = state.sentimentStatus;
@@ -2563,7 +2592,7 @@ function renderSentimentDetail(item) {
 
 function opportunityCandidateForItem(item) {
   if (item?.market !== "A股") return null;
-  const manual = item?.manual_execution_review;
+  const manual = manualReviewIsFreshForScan(item) ? item?.manual_execution_review : null;
   if (manual?.status === "ready" && manual?.source === "human_review") {
     const tier = manual.opportunity_tier;
     if (['current', 'near'].includes(tier)) {
@@ -2583,9 +2612,8 @@ function opportunityCandidateForItem(item) {
         tone: tier === "near" ? "notice" : "opportunity",
       };
     }
-    // A valid weekend review that found no current/near opportunity must not
-    // suppress the next daily Flash scan. Only an explicit positive manual
-    // opportunity overrides the model result.
+    // A manual review older than the latest Flash scan must not suppress the
+    // new daily result. Only a review completed after that scan overrides it.
   }
   const scan = opportunityScanForItem(item);
   const union = scan?.union || {};
@@ -2748,7 +2776,7 @@ function renderAttentionPanel() {
   }
 
   const aShares = state.decisions.filter((item) => item.market === "A股");
-  const manualReviews = aShares.filter((item) => item.manual_execution_review?.status === "ready");
+  const manualReviews = aShares.filter((item) => manualReviewIsFreshForScan(item));
   const scans = aShares.map((item) => opportunityScanForItem(item));
   const modelResults = scans.flatMap((scan) => Object.values(scan?.models || {}));
   const readyModelResults = modelResults.filter((result) => result?.status === "ready");
@@ -3740,11 +3768,11 @@ function bindEvents() {
 }
 
 async function loadSentimentSnapshot() {
-  const statusResponse = await fetch("./data/sentiment_status.json", { cache: "no-cache" });
+  const statusResponse = await fetch("./data/sentiment_status.json", { cache: "no-store" });
   state.sentimentStatus = statusResponse.ok
     ? await statusResponse.json()
     : {status: "unknown"};
-  const response = await fetch("./data/sentiment.json", { cache: "no-cache" });
+  const response = await fetch("./data/sentiment.json", { cache: "no-store" });
   if (!response.ok) throw new Error("无法加载 sentiment.json");
   const snapshot = await response.json();
   state.sentimentSnapshot = snapshot;
@@ -3774,7 +3802,7 @@ async function loadIntradayTechnicalSnapshot() {
 }
 
 async function loadOpportunityScansSnapshot() {
-  const response = await fetch("./data/opportunity_scans.json", { cache: "no-cache" });
+  const response = await fetch("./data/opportunity_scans.json", { cache: "no-store" });
   if (!response.ok) {
     state.opportunityScans = new Map();
     state.opportunityScansGeneratedAt = null;
@@ -3792,7 +3820,7 @@ async function loadOpportunityScansSnapshot() {
 }
 
 async function loadOpportunityScanStatus() {
-  const response = await fetch("./data/opportunity_scan_status.json", { cache: "no-cache" });
+  const response = await fetch("./data/opportunity_scan_status.json", { cache: "no-store" });
   if (!response.ok) {
     state.opportunityScanStatus = null;
     return;
