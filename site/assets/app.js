@@ -1,7 +1,6 @@
 import {
   currentExecutionState,
   currentActionKind,
-  executionFilterKey,
   fallbackActionKind,
   parseReportPriceBand,
   primaryJudgmentForItem,
@@ -56,7 +55,6 @@ const state = {
   quoteUpdatedAt: null,
   quoteSnapshotMeta: null,
   liveTimer: null,
-  snapshotTimer: null,
   focusIndex: -1,
   page: 1,
 };
@@ -1436,14 +1434,37 @@ function researchJudgmentRank(item) {
 
 function filteredDecisions() {
   const phrase = els.companyFilter.value.trim().toLocaleLowerCase();
+  // Advice / execution states are expensive to compute; cache one value per
+  // item for this pass so the sort comparator does not recompute them O(n log n) times.
+  const adviceCache = new Map();
+  const executionCache = new Map();
+  const referenceCache = new Map();
+  const adviceFor = (item) => {
+    const key = itemKey(item);
+    if (!adviceCache.has(key)) adviceCache.set(key, buyAdviceForItem(item, state.quotes.get(item.ticker)));
+    return adviceCache.get(key);
+  };
+  const executionFor = (item) => {
+    const key = itemKey(item);
+    if (!executionCache.has(key)) {
+      executionCache.set(key, currentExecutionState(item, state.quotes.get(item.ticker), adviceFor(item).key));
+    }
+    return executionCache.get(key);
+  };
+  const referenceFor = (item) => {
+    const key = itemKey(item);
+    if (!referenceCache.has(key)) {
+      referenceCache.set(key, referenceExecutionState(item, state.quotes.get(item.ticker), adviceFor(item).key));
+    }
+    return referenceCache.get(key);
+  };
   let list = state.decisions.filter((item) => {
     const marketMatch = state.market === "all" || item.market === state.market;
     const tracking = trackingForItem(item);
-    const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
+    const advice = adviceFor(item);
     const adviceMatch = state.action === "all"
-      || executionFilterKey(item, state.quotes.get(item.ticker), advice.key) === state.action;
-    const reference = referenceExecutionState(item, state.quotes.get(item.ticker), advice.key);
-    const referenceMatch = state.referenceAction === "all" || reference.key === state.referenceAction;
+      || executionFor(item).key === state.action;
+    const referenceMatch = state.referenceAction === "all" || referenceFor(item).key === state.referenceAction;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -1468,15 +1489,15 @@ function filteredDecisions() {
       return String(aa?.next_review_date || "9999-12-31").localeCompare(String(bb?.next_review_date || "9999-12-31"));
     }
     if (state.sort === "execution") {
-      const aa = currentExecutionState(a, state.quotes.get(a.ticker), buyAdviceForItem(a, state.quotes.get(a.ticker)).key);
-      const bb = currentExecutionState(b, state.quotes.get(b.ticker), buyAdviceForItem(b, state.quotes.get(b.ticker)).key);
+      const aa = executionFor(a);
+      const bb = executionFor(b);
       const d = (bb.rank || 0) - (aa.rank || 0);
       if (d) return d;
       return a.company.localeCompare(b.company, "zh");
     }
     if (state.sort === "reference") {
-      const aa = referenceExecutionState(a, state.quotes.get(a.ticker), buyAdviceForItem(a, state.quotes.get(a.ticker)).key);
-      const bb = referenceExecutionState(b, state.quotes.get(b.ticker), buyAdviceForItem(b, state.quotes.get(b.ticker)).key);
+      const aa = referenceFor(a);
+      const bb = referenceFor(b);
       const d = (bb.rank || 0) - (aa.rank || 0);
       if (d) return d;
       return a.company.localeCompare(b.company, "zh");
@@ -1487,8 +1508,8 @@ function filteredDecisions() {
       return a.company.localeCompare(b.company, "zh");
     }
     if (state.sort === "buy_advice") {
-      const aa = buyAdviceForItem(a, state.quotes.get(a.ticker));
-      const bb = buyAdviceForItem(b, state.quotes.get(b.ticker));
+      const aa = adviceFor(a);
+      const bb = adviceFor(b);
       const d = (bb.rank || 0) - (aa.rank || 0);
       if (d) return d;
       return a.company.localeCompare(b.company, "zh");
@@ -1791,7 +1812,6 @@ async function refreshQuotes({ silent = false } = {}) {
 
 function startQuoteTimers() {
   clearInterval(state.liveTimer);
-  clearInterval(state.snapshotTimer);
   state.liveTimer = setInterval(() => {
     refreshQuotes({ silent: true });
   }, SNAPSHOT_INTERVAL_MS);
@@ -1824,6 +1844,11 @@ function rowToneClass(cells) {
   if (/悲观|保守|谨慎|减仓|卖出|回避/.test(blob)) return "tone-bear";
   if (/中性|稳健|基准|持有|观察/.test(blob)) return "tone-base";
   return "";
+}
+
+function safeExternalHref(url) {
+  const value = String(url || "").trim();
+  return /^https?:\/\//i.test(value) ? value : "";
 }
 
 function fillInlineMarkdown(el, text) {
@@ -2211,7 +2236,12 @@ function renderTechnicalDetail(item) {
     const light = technicalLight(technical, dimension);
     const itemNode = document.createElement("div");
     itemNode.className = "technical-light-card";
-    itemNode.innerHTML = `<span>${label}期</span><strong class="${light?.light === "绿" ? "green" : light?.light === "黄" ? "yellow" : "red"}">${light?.light || "待复核"}</strong>`;
+    const lightLabel = document.createElement("span");
+    lightLabel.textContent = `${label}期`;
+    const signal = document.createElement("strong");
+    signal.className = light?.light === "绿" ? "green" : light?.light === "黄" ? "yellow" : "red";
+    signal.textContent = light?.light || "待复核";
+    itemNode.append(lightLabel, signal);
     const meaning = document.createElement("p");
     meaning.textContent = light?.meaning || "未提供说明";
     itemNode.append(meaning);
@@ -2352,10 +2382,11 @@ function renderNewsList(title, news, {emptyText = "暂无抓取新闻"} = {}) {
     row.className = `sentiment-news-item ${included ? "included" : "filtered"}`;
     const header = document.createElement("div");
     header.className = "sentiment-news-head";
-    const titleNode = item.url ? document.createElement("a") : document.createElement("strong");
+    const href = safeExternalHref(item.url);
+    const titleNode = href ? document.createElement("a") : document.createElement("strong");
     titleNode.textContent = item.title || "无标题新闻";
-    if (item.url) {
-      titleNode.href = item.url;
+    if (href) {
+      titleNode.href = href;
       titleNode.target = "_blank";
       titleNode.rel = "noreferrer";
     }
@@ -2940,7 +2971,13 @@ function renderTrackingRows(visible) {
 
     const companyTd = document.createElement("td");
     companyTd.className = "company-cell";
-    companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.market || "未识别"} · ${item.ticker || "无代码"}</div>`;
+    const companyName = document.createElement("div");
+    companyName.className = "company-name";
+    companyName.textContent = item.company;
+    const companyMeta = document.createElement("div");
+    companyMeta.className = "company-meta";
+    companyMeta.textContent = `${item.market || "未识别"} · ${item.ticker || "无代码"}`;
+    companyTd.append(companyName, companyMeta);
     tr.append(companyTd);
 
     const statusTd = document.createElement("td");
@@ -3058,7 +3095,13 @@ function renderRows() {
 
     const companyTd = document.createElement("td");
     companyTd.className = "company-cell";
-    companyTd.innerHTML = `<div class="company-name">${item.company}</div><div class="company-meta">${item.technical_analysis?.status === "ready" ? "已接入技术面" : "技术面待补"}</div>`;
+    const companyName = document.createElement("div");
+    companyName.className = "company-name";
+    companyName.textContent = item.company;
+    const companyMeta = document.createElement("div");
+    companyMeta.className = "company-meta";
+    companyMeta.textContent = item.technical_analysis?.status === "ready" ? "已接入技术面" : "技术面待补";
+    companyTd.append(companyName, companyMeta);
     const checklist = item.checklist;
     const checklistBadge = document.createElement("span");
     checklistBadge.className = `checklist-badge ${checklistStatusClass(checklist?.status)}`;
@@ -3067,7 +3110,13 @@ function renderRows() {
     tr.append(companyTd);
 
     const marketTd = document.createElement("td");
-    marketTd.innerHTML = `<span class="market-badge ${marketBadgeClass(item.market)}">${item.market || "未识别"}</span><div class="ticker-code">${item.ticker || "无代码"}</div>`;
+    const marketBadge = document.createElement("span");
+    marketBadge.className = `market-badge ${marketBadgeClass(item.market)}`;
+    marketBadge.textContent = item.market || "未识别";
+    const tickerCode = document.createElement("div");
+    tickerCode.className = "ticker-code";
+    tickerCode.textContent = item.ticker || "无代码";
+    marketTd.append(marketBadge, tickerCode);
     tr.append(marketTd);
 
     tr.append(renderSentimentCell(item));
@@ -3084,10 +3133,13 @@ function renderRows() {
     const change = formatChange(quote);
     const quoteTd = document.createElement("td");
     quoteTd.className = "quote-block";
-    quoteTd.innerHTML = `
-      <div class="quote-price">${formatPrice(quote)}</div>
-      <div class="quote-change ${change.className}">${change.text}${quote?.source ? " · 同源快照" : ""}</div>
-    `;
+    const quotePrice = document.createElement("div");
+    quotePrice.className = "quote-price";
+    quotePrice.textContent = formatPrice(quote);
+    const quoteChange = document.createElement("div");
+    quoteChange.className = `quote-change ${change.className}`;
+    quoteChange.textContent = `${change.text}${quote?.source ? " · 同源快照" : ""}`;
+    quoteTd.append(quotePrice, quoteChange);
     tr.append(quoteTd);
 
     const adviceTd = document.createElement("td");
@@ -3328,10 +3380,15 @@ function renderDetail() {
 
   const detailNeeded = ["overview", "history"].includes(state.detailTab);
   if (detailNeeded && !detailLoaded(item)) {
+    const error = state.detailErrors.get(itemKey(item));
     const loading = document.createElement("div");
     loading.className = "card detail-loading-card";
-    const error = state.detailErrors.get(itemKey(item));
-    loading.innerHTML = `<h3>${error ? "详细研报加载失败" : "正在加载完整研报上下文"}</h3><p class="source-note">${error || "首屏只加载决策所需字段；历史研报和估值内容在打开详情后读取。"}</p>`;
+    const loadingTitle = document.createElement("h3");
+    loadingTitle.textContent = error ? "详细研报加载失败" : "正在加载完整研报上下文";
+    const loadingNote = document.createElement("p");
+    loadingNote.className = "source-note";
+    loadingNote.textContent = error || "首屏只加载决策所需字段；历史研报和估值内容在打开详情后读取。";
+    loading.append(loadingTitle, loadingNote);
     if (error) {
       const retry = document.createElement("button");
       retry.type = "button";
@@ -3469,7 +3526,12 @@ function renderDetail() {
     const card = document.createElement("article");
     card.className = "history-card";
     const head = document.createElement("header");
-    head.innerHTML = `<strong>${snap.data_cutoff || "待复核"}</strong><span class="decision ${decisionClass(snap.action)}">${snap.action || "-"}</span>`;
+    const cutoffText = document.createElement("strong");
+    cutoffText.textContent = snap.data_cutoff || "待复核";
+    const decisionBadge = document.createElement("span");
+    decisionBadge.className = `decision ${decisionClass(snap.action)}`;
+    decisionBadge.textContent = snap.action || "-";
+    head.append(cutoffText, decisionBadge);
     card.append(head);
     if (snap.conclusion_summary || (snap.investor_stances || []).length) {
       const histLine = document.createElement("div");
@@ -3590,7 +3652,7 @@ function setView(view) {
   if (state.view === "tracking") {
     state.detailTab = "tracking";
   } else if (state.detailTab === "tracking") {
-    state.detailTab = "valuation";
+    state.detailTab = "technical";
   }
   els.viewTabs?.querySelectorAll(".chip").forEach((chip) => {
     chip.classList.toggle("active", chip.dataset.view === state.view);
@@ -3757,7 +3819,8 @@ function bindEvents() {
       event.preventDefault();
       state.focusIndex = Math.max(0, (state.focusIndex < 0 ? 0 : state.focusIndex) - 1);
       openDetail(visible[state.focusIndex]);
-    } else if (event.key === "Enter" && state.focusIndex >= 0) {
+    } else if (event.key === "Enter" && state.focusIndex >= 0 && !event.target.closest?.("tr[data-key]")) {
+      // Rows handle their own Enter activation; avoid double-handling here.
       openDetail(visible[state.focusIndex]);
       state.detailTab = "technical";
       renderDetail();

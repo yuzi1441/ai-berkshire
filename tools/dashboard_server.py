@@ -16,7 +16,7 @@ import json
 import os
 import sys
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -104,13 +104,21 @@ class DeepReviewStore:
 
     def record_success(self, ticker: str, report_hash: str) -> None:
         """Charge quota only after an uncached review was saved successfully."""
-        today = datetime.now().astimezone().date().isoformat()
+        now = datetime.now().astimezone()
+        today = now.date().isoformat()
+        retention_start = (now - timedelta(days=7)).date().isoformat()
         usage = self.load_json(self.usage_path, {"schema_version": 1, "events": []})
-        events = [item for item in usage.get("events", []) if isinstance(item, dict)]
+        # Only current-day events count against the quota; prune older ones so
+        # the durable counter file cannot grow without bound.
+        events = [
+            item
+            for item in usage.get("events", [])
+            if isinstance(item, dict) and str(item.get("date") or "") >= retention_start
+        ]
         events.append(
             {
                 "date": today,
-                "completed_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+                "completed_at": now.isoformat(timespec="seconds"),
                 "ticker": ticker,
                 "report_sha256": report_hash,
             }
@@ -132,6 +140,7 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
     compression_minimum_size = 1024
     _gzip_cache: dict[tuple[str, int, int], bytes] = {}
     _gzip_cache_lock = threading.Lock()
+    _max_api_body_bytes = 4096
 
     def __init__(
         self,
@@ -166,7 +175,15 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
             encoding, *parameters = part.strip().split(";", 1)
             if encoding.strip() != "gzip":
                 continue
-            return not parameters or "q=0" not in parameters[0].replace(" ", "")
+            quality = 1.0
+            for parameter in parameters:
+                name, _, raw = parameter.strip().partition("=")
+                if name.strip() == "q":
+                    try:
+                        quality = float(raw)
+                    except ValueError:
+                        return False
+            return quality > 0.0
         return False
 
     @classmethod
@@ -244,22 +261,39 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
             return
         super().do_GET()
 
+    def drain_request_body(self) -> bytes | None:
+        """Consume the bounded request body before any response is sent.
+
+        HTTP/1.1 keep-alive requires every request byte to be read before the
+        next request on the same connection is parsed, so error paths must not
+        skip this step. An unknown or oversized length cannot be drained
+        safely, so the connection is closed instead.
+        """
+        try:
+            length = int(self.headers.get("Content-Length") or "0")
+        except ValueError:
+            self.close_connection = True
+            return None
+        if length < 0 or length > self._max_api_body_bytes:
+            self.close_connection = True
+            return None
+        if length == 0:
+            return b""
+        return self.rfile.read(length)
+
     def do_POST(self) -> None:  # noqa: N802 - HTTP handler API
         path = urlparse(self.path).path
+        body = self.drain_request_body()
         if path != "/api/deep-reviews":
             self.json_response(HTTPStatus.NOT_FOUND, {"error": "unknown API route"})
+            return
+        if not body:
+            self.json_response(HTTPStatus.BAD_REQUEST, {"error": "request body is invalid"})
             return
         if not self.require_auth():
             return
         try:
-            length = int(self.headers.get("Content-Length", "0"))
-        except ValueError:
-            length = 0
-        if length <= 0 or length > 4096:
-            self.json_response(HTTPStatus.BAD_REQUEST, {"error": "request body is invalid"})
-            return
-        try:
-            payload = json.loads(self.rfile.read(length).decode("utf-8"))
+            payload = json.loads(body.decode("utf-8"))
             ticker = clean_ticker(payload.get("ticker") if isinstance(payload, dict) else None)
         except (UnicodeDecodeError, json.JSONDecodeError, DashboardServerError) as error:
             self.json_response(HTTPStatus.BAD_REQUEST, {"error": str(error)})
