@@ -627,15 +627,15 @@
   ],
   "report_history_count": 9,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "激进型空仓者等A股36元以下或H股39港元以下再分批，避免追价；稳健型等半年报验证且A股33元以下、H股36港元以下；保守型等短借去化和完整年度数据且明显折价才参与",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "A股现有持有人以持有收息为主不新增，46元以上且盈利未上修时控制机会成本；H股现有持有人可持有，核算股息税、汇率和流动性",
-    "trigger_condition": "A股36元以下或H股39港元以下（激进型）；A股33元以下、H股36港元以下（稳健型）且正式半年报验证OCF、ROIC和分部利润",
-    "summary": "中国神华是好公司但A股一般价格、H股合理价格，空仓者不宜追价，需等待更低价格或半年报验证；现有股东以持有为主。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "契约摘要写‘持有’，但正文对空仓者明确给出价格触发条件要求等待，正文优先级更高，故采用正文并标记冲突。",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 358,
@@ -651,8 +651,8 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -663,7 +663,7 @@
       "max": 40.0
     },
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:08:19+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -672,28 +672,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "A股33元以下、H股36港元以下（稳健型）且正式半年报验证OCF、ROIC和分部利润",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "A股36元以下或H股39港元以下（激进型）",
-        "price_range": "36元以下",
-        "min": null,
-        "ceiling": 36.0,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -772,9 +759,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -782,7 +769,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -792,22 +779,22 @@
       "ticker": "601088.SH",
       "main_report": {
         "path": "reports/中国神华/中国神华-investment-team-20260714.md",
-        "sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf"
+        "sha256": "f24421adc6abf0f81c292620f61ca4a2a2efbf7dbd22d16c2b928ae0eca5f614"
       },
       "checklist": {
         "path": "reports/中国神华/巴菲特Checklist-中国神华.md",
-        "sha256": "0382bc52de9913e9713804d07fc521f863c188a6e9ca76a250dbfeb170260cda"
+        "sha256": "a514ab3b396e0979f8c6644373d99488131bdbc2a7dae06f99543f9880614ae1"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "51de54e67f4c19b17c6de4fc38891c9cc700f3420058555e5b27c1a8eb65c20f",
-    "current_source_fingerprint_sha256": "51de54e67f4c19b17c6de4fc38891c9cc700f3420058555e5b27c1a8eb65c20f"
+    "current_source_fingerprint_sha256": "5d9138a267f37ef7203f2df4833a041bd9fa024092429e0a3f7595f993eaccaf"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "51de54e67f4c19b17c6de4fc38891c9cc700f3420058555e5b27c1a8eb65c20f",
   "market_session_state": "runtime_required",
@@ -857,7 +844,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "7f416f574e7dfd61319e",
   "detail_path": "./data/decision_details/7f416f574e7dfd61319e.json"
 }

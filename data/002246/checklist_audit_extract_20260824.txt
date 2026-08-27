@@ -1,0 +1,188 @@
+======================================================================
+报告数据抽检清单
+文件：reports\北化股份\北化股份-investment-checklist-20260824.md
+总提取数据点：86  |  抽样比例：15%  |  抽检数量：13
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  4     11  最新行情 / 市值 · 口径                              19.38  
+  5     27  营业收入 · 数值                                   13.37  亿元
+ 12     30  经营现金流 · 时间与来源                             2026.00  
+ 14     31  2026H1简化FCF · 时间与来源                          2.43  亿
+ 15     32  TTM归母净利润 / 简化FCF / 每股FCF · 数值                3.82  亿元
+ 18     33  2026H1 ROE / 毛利率 / 净利率 · Checklist解       2025.00  
+ 29     39  硝化棉相关产品 · 时间与来源                           2026.00  
+ 32     41  防护器材 · 数值                                    2.15  亿元
+ 36     43  股息率 · 数值                                     0.31  %
+ 55    119  乐观 · EPS年增速                                 15.00  %
+ 70    127  激进型 · 基本面价格区间                               16.00  
+ 76    236  数据截止日 · 内容                                2026.00  
+ 82    243  保守型动作 · 内容                                  10.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 4,
+    "label": "最新行情 / 市值 · 口径",
+    "reported_value": 19.38,
+    "unit": "",
+    "line_number": 11,
+    "raw_text": "| 最新行情 / 市值 | 19.38元（腾讯14:46）/ 106.44亿元（东方财富盘中） |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 5,
+    "label": "营业收入 · 数值",
+    "reported_value": 13.37,
+    "unit": "亿元",
+    "line_number": 27,
+    "raw_text": "| 营业收入 | 13.37亿元，同比+18.16% | 2026H1公司中报；东方财富一致 | 增长延续，但防护器材收入同比-25.30% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 12,
+    "label": "经营现金流 · 时间与来源",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 30,
+    "raw_text": "| 经营现金流 | 2.43亿元，同比+130.43% | 2026H1公司中报；东方财富一致 | 现金转化改善 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 14,
+    "label": "2026H1简化FCF · 时间与来源",
+    "reported_value": 2.43,
+    "unit": "亿",
+    "line_number": 31,
+    "raw_text": "| 2026H1简化FCF | 0.78亿元（估计） | 经营现金流2.43亿-购建长期资产1.65亿 | 增长项目已消耗较多现金 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "TTM归母净利润 / 简化FCF / 每股FCF · 数值",
+    "reported_value": 3.82,
+    "unit": "亿元",
+    "line_number": 32,
+    "raw_text": "| TTM归母净利润 / 简化FCF / 每股FCF | 3.82亿元 / 2.50亿元（估计）/ 0.455元（估计） | 2025年报+2026H1-2025H1 | FCF为正，但仍低于归母净利润 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "2026H1 ROE / 毛利率 / 净利率 · Checklist解读",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 33,
+    "raw_text": "| 2026H1 ROE / 毛利率 / 净利率 | 7.12% / 37.26% / 16.77% | 东方财富；ROE与公司中报加权口径一致 | 盈利能力较2025年继续改善 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 29,
+    "label": "硝化棉相关产品 · 时间与来源",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 39,
+    "raw_text": "| 硝化棉相关产品 | 6.06亿元，毛利率47.17%，收入+42.12% | 2026H1公司中报 | 当前最重要利润池，仍有周期风险 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "防护器材 · 数值",
+    "reported_value": 2.15,
+    "unit": "亿元",
+    "line_number": 41,
+    "raw_text": "| 防护器材 | 2.15亿元，毛利率37.10%，收入-25.30% | 2026H1公司中报 | 资质壁垒强，但订单节奏不稳定 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "股息率 · 数值",
+    "reported_value": 0.31,
+    "unit": "%",
+    "line_number": 43,
+    "raw_text": "| 股息率 | 约0.31%（按每股0.06元历史年度股息估计） | 2025年度分红口径；2026H1不派中期股息 | 现金回报保护弱 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 55,
+    "label": "乐观 · EPS年增速",
+    "reported_value": 15.0,
+    "unit": "%",
+    "line_number": 119,
+    "raw_text": "| 乐观 | +15% | 1.06元 | 28倍 | **29.6元** | +52.7% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 70,
+    "label": "激进型 · 基本面价格区间",
+    "reported_value": 16.0,
+    "unit": "",
+    "line_number": 127,
+    "raw_text": "| 激进型 | 16-18元 | 仅在中报后续数据不恶化时小仓观察 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 76,
+    "label": "数据截止日 · 内容",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 236,
+    "raw_text": "| 数据截止日 | 2026-08-24 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 82,
+    "label": "保守型动作 · 内容",
+    "reported_value": 10.0,
+    "unit": "",
+    "line_number": 243,
+    "raw_text": "| 保守型动作 | 10-13元且治理安全风险未恶化再研究 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

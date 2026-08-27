@@ -205,34 +205,22 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "当前观察、不追涨；优先等待63-69元，70-75元仅适合小仓试错，也可等待正式半年报验证",
-    "holder_action": "合理仓位继续持有，不因半年报预告追高；重仓者控制集中度",
-    "trigger_condition": "63-69元进入主要分批观察区；70-75元仅小仓试错；正式半年报需验证利润、现金流和债务",
-    "summary": "当前价处于合理价值下沿但不属显著低估，空仓者以等待更好价格为主，正式半年报验证为备选条件。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "看板观察与正文空仓观察、持仓持有相符；70-75元的小仓试错只是激进仓位层级。",
-    "source_basis": "人工逐行核对主报告行动结论、买入区间和看板契约",
-    "currency": "CNY",
-    "price_source": "主报告第188至192行、第200至201行",
-    "evidence": [
-      {
-        "line_start": 200,
-        "line_end": 201,
-        "quote": "空仓者观察，优先等待63-69元或正式半年报验证；已有合理仓位者持有，不因短期预告追高。",
-        "supports": "直接区分空仓者与持仓者动作。"
-      }
-    ],
     "enabled": true,
-    "human_reviewed": true,
-    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "evidence": [],
+    "source_basis": "报告判断缓存状态检查",
     "model_consensus": false,
-    "screening_consensus": false,
-    "artifact_status": "human_reviewed",
-    "source_matches": true,
-    "generated_at": "2026-08-23T16:15:00+08:00",
+    "artifact_status": "error",
+    "source_matches": false,
+    "generated_at": "2026-08-14T10:49:15+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -240,52 +228,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "正式半年报需验证利润、现金流和债务",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "扩大仓位",
-        "price_range": "55—60 元",
-        "min": 55.0,
-        "ceiling": 60.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "正式半年报需验证利润、现金流和债务",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批买入",
-        "price_range": "63—69 元",
-        "min": 63.0,
-        "ceiling": 69.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "正式半年报需验证利润、现金流和债务",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "trial",
-        "action": "小仓试买，不追高",
-        "price_range": "70—75 元",
-        "min": 70.0,
-        "ceiling": 75.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "正式半年报需验证利润、现金流和债务",
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -295,9 +246,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -305,7 +256,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -315,7 +266,7 @@
       "ticker": "600309.SH",
       "main_report": {
         "path": "reports/万华化学/万华化学-投资研究-20260808.md",
-        "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037"
+        "sha256": "7f7184559522b848cfcbe8af91edb8f7492054ac153c35c021a381a1783a67c7"
       },
       "checklist": {
         "path": null,
@@ -323,14 +274,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
-    "current_source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a"
+    "current_source_fingerprint_sha256": "07452978caa7035acd241e90186ee21b6e328940ea07c3332cf081f467bb62d8"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
   "market_session_state": "runtime_required",
@@ -380,7 +331,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "adf58943f3103970b529",
   "detail_path": "./data/decision_details/adf58943f3103970b529.json"
 }

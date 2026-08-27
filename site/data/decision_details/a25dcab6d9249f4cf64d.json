@@ -156,15 +156,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓价值投资者不追高，列入观察清单，等待17-20元价格带或资产注入细节证明每股价值显著增厚；空仓趋势投资者可小仓跟踪但不应误认为低估",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "已持有成本较低者可继续持有但分批管理仓位；成本接近当前价者降低预期收益率，若跌破关键趋势或中报利润弱于预期应减仓复盘",
-    "trigger_condition": "股价回到17-20元且金锑钨价格未系统性反转，或资产注入细节证明每股价值显著增厚",
-    "summary": "湖南黄金当前弹性强但安全边际不足，24.26元附近价值投资者宜观察不宜追高，真正买点来自价格回落或资产注入与自产资源利润验证",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约均指向观察等待，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 326,
@@ -180,14 +180,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:20:25+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -196,28 +196,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_only",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "股价回到17-20元且金锑钨价格未系统性反转，或资产注入细节证明每股价值显著增厚",
-        "price_range": "17-20元",
-        "min": 17.0,
-        "ceiling": 20.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -227,9 +214,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -237,7 +224,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -247,7 +234,7 @@
       "ticker": "002155.SZ",
       "main_report": {
         "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
-        "sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1"
+        "sha256": "b81140ea4ad68c6c819d455ffb33c802cfa3fc8d3f89fcfa9d8eb0c26963540f"
       },
       "checklist": {
         "path": null,
@@ -255,14 +242,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "a4bfa080dd020cfe30e2f50d5033719190f3a0c9a2608153b03339de4562f362",
-    "current_source_fingerprint_sha256": "a4bfa080dd020cfe30e2f50d5033719190f3a0c9a2608153b03339de4562f362"
+    "current_source_fingerprint_sha256": "0c51438ab6d6c3192f91428f8192f51e492c039d98cc452fa4ca167bd40e3b2f"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "a4bfa080dd020cfe30e2f50d5033719190f3a0c9a2608153b03339de4562f362",
   "market_session_state": "runtime_required",
@@ -312,7 +299,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "a25dcab6d9249f4cf64d",
   "detail_path": "./data/decision_details/a25dcab6d9249f4cf64d.json"
 }

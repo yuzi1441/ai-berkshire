@@ -222,40 +222,39 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "小仓验证",
-    "action_kind": "trial",
-    "empty_position_action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
-    "holder_action": "低成本持仓可继续持有并设置反证清单；成本接近报告基准价者谨慎持有或分批降低暴露",
-    "trigger_condition": "当前小仓仅适用于能承受30%-45%回撤的进取型；保守型等待250-300元或PE约45-55倍且基本面未恶化",
-    "summary": "好公司但当前昂贵；只允许进取型小仓研究验证，保守型等待更低估值，持仓者按成本和反证管理。",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "契约粗字段写观察且结论摘要待复核，但正文分层操作明确允许进取型当前小仓研究仓。",
-    "source_basis": "人工逐行核对一句话结论、分层操作建议与最终总结",
-    "currency": "CNY",
-    "price_source": "主报告第305至308行",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "报告未明确持仓者动作，但激进型建议小仓位跟踪，保守型建议观察不追高，均未要求减仓或卖出",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
-        "line_start": 305,
-        "line_end": 306,
-        "quote": "保守型观察不追高，等待250-300元；进取型只有能承受30%-45%回撤时才考虑小仓研究仓。",
-        "supports": "支持条件化小仓而非普通买入。"
+        "line_start": 384,
+        "line_end": 384,
+        "quote": "| 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
+        "supports": "明确给出激进型空仓者可小仓位跟踪，故归为小仓验证"
       },
       {
-        "line_start": 307,
-        "line_end": 308,
-        "quote": "低成本持仓可继续持有并设置反证；成本接近当前价者谨慎持有或分批降低暴露。",
-        "supports": "报告已明确区分两类持仓动作。"
+        "line_start": 388,
+        "line_end": 388,
+        "quote": "| 保守型动作 | 观察，不追高 |",
+        "supports": "保守型建议观察不追高，未要求回避或卖出，支持不归为回避/卖出"
       }
     ],
     "enabled": true,
-    "human_reviewed": true,
-    "human_reviewed_at": "2026-08-23T21:38:00+08:00",
+    "source_basis": "报告判断缓存状态检查",
     "model_consensus": false,
-    "screening_consensus": false,
-    "artifact_status": "human_reviewed",
-    "source_matches": true,
-    "generated_at": "2026-08-23T21:38:00+08:00",
+    "label_detail_consensus": true,
+    "conflict_flag_consensus": true,
+    "currency": "CNY",
+    "price_source": "主报告未提取到可执行买入价格档",
+    "artifact_status": "review",
+    "source_matches": false,
+    "generated_at": "2026-08-14T10:55:53+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -263,35 +262,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "trial",
-    "main_label": "小仓验证",
-    "condition_mode": "current_action",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
     "event_condition": null,
-    "guard_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
-        "price_range": "250-300元",
-        "min": 250.0,
-        "ceiling": 300.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "保守型等待250-300元或PE约45-55倍且基本面未恶化",
-        "source": "validated_judgment_trigger"
-      }
-    ],
-    "current_action": {
-      "action_kind": "trial",
-      "action": "仅进取型可用小仓研究仓跟踪，不得视为低估值投资；保守型等待250-300元或PE回到约45-55倍且基本面未恶化后重评",
-      "currency": "CNY",
-      "reference_price": 414.8,
-      "reference_source": "主报告明确标注的分析基准价",
-      "requires_validation": false
-    },
+    "guard_condition": null,
+    "price_rules": [],
+    "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -301,9 +280,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -311,7 +290,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "no",
+    "execution_key": "review",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -321,7 +300,7 @@
       "ticker": "002916.SZ",
       "main_report": {
         "path": "reports/深南电路/深南电路研究报告-20260709.md",
-        "sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05"
+        "sha256": "8a3b3e3d368851f6548036101de031de92396c27e2b465fbdfdd076c996aed10"
       },
       "checklist": {
         "path": null,
@@ -329,14 +308,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab",
-    "current_source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab"
+    "current_source_fingerprint_sha256": "7409770bd3b7e39d6c15464f7f17181587060033b2f15132b3d2f12918a27f57"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab",
   "market_session_state": "runtime_required",
@@ -386,7 +365,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "44232bd379e7a7a42b68",
   "detail_path": "./data/decision_details/44232bd379e7a7a42b68.json"
 }

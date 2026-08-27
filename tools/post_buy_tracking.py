@@ -323,7 +323,7 @@ def build_parser() -> argparse.ArgumentParser:
     register.add_argument("--market", required=True, choices=MARKETS)
     register.add_argument("--buy-date", required=True)
     register.add_argument("--cost-basis", type=float)
-    register.add_argument("--position-weight", type=float, help="portfolio weight in percent, e.g. 5 for 5%")
+    register.add_argument("--position-weight", type=float, help="portfolio weight in percent, e.g. 5 for 5 percent")
     register.add_argument("--next-review")
     register.add_argument("--thesis-report")
     register.add_argument("--metrics", help="JSON list of 3-5 tracked metrics")

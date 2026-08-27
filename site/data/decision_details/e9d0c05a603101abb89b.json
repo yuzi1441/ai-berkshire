@@ -222,15 +222,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者当前观察，不急于买入；激进型可在18-21元小仓试探，稳健资金等待15-17元或半年报显著上修所有者收益后再行动",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持仓者可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持",
-    "trigger_condition": "股价进入15-17元且基本面未恶化，或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC",
-    "summary": "华鲁恒升是优秀周期制造商，但21.11元安全边际不足，中性情景回报偏低，最终结论观察，等更低价格或半年报验证",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约均给出观察及价格触发条件，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 356,
@@ -246,8 +246,8 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -258,7 +258,7 @@
       "max": 21.0
     },
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:13:16+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -267,61 +267,24 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "股价进入15-17元且基本面未恶化，或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC",
-    "guard_condition": "股价进入15-17元且基本面未恶化，或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC",
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "分批买入",
-        "price_range": "11-14元",
-        "min": 11.0,
-        "ceiling": 14.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批买入",
-        "price_range": "15-17元",
-        "min": 15.0,
-        "ceiling": 17.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "trial",
-        "action": "小仓分批",
-        "price_range": "18-21元",
-        "min": 18.0,
-        "ceiling": 21.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
     "company": "山东华鲁恒升化工股份有限公司",
     "ticker": "600426.SH",
     "market": "A股",
-    "report_path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260823.md",
-    "report_link": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260823.md",
-    "report_sha256": "eff3ad482faaeaee83c6740046162e96764378ae0fd368795ac45a372c8f84fb",
+    "report_path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260824.md",
+    "report_link": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260824.md",
+    "report_sha256": "29342b80495dad727ca377eda9428d9029a998f607b8287f8c0e2a97c9ca7064",
     "title": "华鲁恒升（600426.SH）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": {
@@ -330,29 +293,29 @@
       "company": "山东华鲁恒升化工股份有限公司",
       "ticker": "600426.SH",
       "market": "A股",
-      "report_completed_at": "2026-08-23",
-      "data_cutoff": "2026-08-21",
+      "report_completed_at": "2026-08-24",
+      "data_cutoff": "2026-08-24",
       "action": "观察",
-      "summary": "灰色地带：半年报改善但现金回报仍弱，20.77元安全边际不足",
+      "summary": "灰色地带：中报改善但历史现金转化和20.77元赔率仍不足",
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "小仓分批并持续验证现金流",
+          "action": "Q3经营不逆转时小仓分批",
           "price_range": "18-20元"
         },
         {
           "stance": "稳健型",
-          "action": "基本面未恶化时分批买入",
+          "action": "基本面未恶化时分批研究",
           "price_range": "15-17元"
         },
         {
           "stance": "保守型",
-          "action": "接近悲观价值时分批买入",
-          "price_range": "10-13元"
+          "action": "接近悲观价值时再评估",
+          "price_range": "11-14元"
         }
       ],
-      "invalidation_triggers": "连续四季毛利率低于15%或主要新项目稳产后ROIC低于8%",
-      "next_review_date": "2026-10-31",
+      "invalidation_triggers": "连续四季毛利率低于15%或主要项目稳产后ROIC低于8%或净债务持续上升",
+      "next_review_date": "2026-10-30",
       "confidence": "高",
       "hard_veto_state": "unknown"
     },
@@ -369,25 +332,25 @@
       {
         "name": "好生意",
         "score": "★★☆☆☆",
-        "result": "未通过；现金转化和资本强度不合格",
+        "result": "暂未满足，现金趋势改善",
         "reason": ""
       },
       {
         "name": "护城河",
         "score": "★★★★☆",
-        "result": "通过；成本型而非定价权型",
+        "result": "通过",
         "reason": ""
       },
       {
         "name": "管理层",
         "score": "★★★★☆",
-        "result": "通过，但新项目资本配置待验证",
+        "result": "通过，资本配置待验收",
         "reason": ""
       },
       {
         "name": "安全边际",
         "score": "★★☆☆☆",
-        "result": "未通过；当前价高于中性折现价值",
+        "result": "暂未满足",
         "reason": ""
       },
       {
@@ -400,15 +363,24 @@
     "hard_veto": false,
     "hard_veto_state": "clear",
     "hard_veto_label": "未触发/未发现",
-    "mirror_test": "未通过",
+    "mirror_test": "待复核",
     "action": "观察",
-    "summary": "灰色地带：半年报改善但现金回报仍弱，20.77元安全边际不足",
-    "data_cutoff": "2026-08-21",
-    "report_date": "2026-08-23",
-    "next_review_date": "2026-10-31",
+    "summary": "灰色地带：中报改善但历史现金转化和20.77元赔率仍不足",
+    "data_cutoff": "2026-08-24",
+    "report_date": "2026-08-24",
+    "next_review_date": "2026-10-30",
     "confidence": "高",
-    "invalidation_triggers": "连续四季毛利率低于15%或主要新项目稳产后ROIC低于8%",
+    "invalidation_triggers": "连续四季毛利率低于15%或主要项目稳产后ROIC低于8%或净债务持续上升",
     "history": [
+      {
+        "status": "灰色地带",
+        "action": "观察",
+        "data_cutoff": "2026-08-24",
+        "report_date": "2026-08-24",
+        "report_path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260824.md",
+        "report_link": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260824.md",
+        "source_type": "standalone"
+      },
       {
         "status": "灰色地带",
         "action": "观察",
@@ -433,7 +405,7 @@
     "schema_version": 2,
     "status": "stale",
     "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-24）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -451,22 +423,22 @@
       "ticker": "600426.SH",
       "main_report": {
         "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
-        "sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31"
+        "sha256": "a00386e1ae573fb83442d0d288b732fc3f184e850abcf204d2d414556d869477"
       },
       "checklist": {
-        "path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260823.md",
-        "sha256": "eff3ad482faaeaee83c6740046162e96764378ae0fd368795ac45a372c8f84fb"
+        "path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260824.md",
+        "sha256": "3f48a4067d9fa1e62b4ad873936c3b3ca8b2629ac208cb8ce4a6cdb4f250a5c6"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5",
-    "current_source_fingerprint_sha256": "7d796cc7e4a1e7cb744df3442f4e81b5f3503e205d128cdf37af71b5098dadaa"
+    "current_source_fingerprint_sha256": "dd1afa1f2b0f9d55bef4ec6e145fa01403e04aed44b4669174750a4b82f9178a"
   },
   "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-24）",
   "valid_until": "2026-08-21",
   "source_fingerprint_sha256": "6b05ca8288bd423bf1775c10fe8a9f3d3e00268782753d0235b4074ddeefefc5",
   "market_session_state": "runtime_required",
@@ -516,7 +488,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "e9d0c05a603101abb89b",
   "detail_path": "./data/decision_details/e9d0c05a603101abb89b.json"
 }

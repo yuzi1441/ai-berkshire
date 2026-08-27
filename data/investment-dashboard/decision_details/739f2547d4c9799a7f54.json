@@ -184,39 +184,22 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待验证",
-    "action_kind": "watch",
-    "empty_position_action": "不追A股，优先等待32元以下，或等待2026半年报证明核心业务重新提速和新业务形成可核验收入",
-    "holder_action": "A股基本面未坏可持有但当前不加仓；若显著高于50元且利润未上修，可考虑降低估值风险",
-    "trigger_condition": "28-32元进入激进型小额分批区；行动还需TTM扣非利润保持双位数增长且经营现金流不弱于利润",
-    "summary": "A股公司质量高但当前估值偏贵，空仓等待价格或业绩验证；已有合理成本仓位可持有但不加仓。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "看板观察、价格带和正文空仓及持仓动作一致。",
-    "source_basis": "人工逐行核对A股明确结论、空仓及持仓策略和加仓条件",
-    "currency": "CNY",
-    "entry_ceiling": 32.0,
-    "trial_range": {
-      "min": 28.0,
-      "max": 32.0
-    },
-    "price_source": "主报告第291至300行",
-    "evidence": [
-      {
-        "line_start": 297,
-        "line_end": 300,
-        "quote": "空仓者不追A股，优先等待32元以下或半年报证据；A股持仓者基本面未坏可持有，但当前不加仓。",
-        "supports": "分别明确空仓与持仓者动作。"
-      }
-    ],
     "enabled": true,
-    "human_reviewed": true,
-    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "evidence": [],
+    "source_basis": "报告判断缓存状态检查",
     "model_consensus": false,
-    "screening_consensus": false,
-    "artifact_status": "human_reviewed",
-    "source_matches": true,
-    "generated_at": "2026-08-23T16:15:00+08:00",
+    "artifact_status": "error",
+    "source_matches": false,
+    "generated_at": "2026-08-14T10:54:29+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -224,52 +207,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待验证",
-    "condition_mode": "price_and_event",
-    "event_condition": "行动还需TTM扣非利润保持双位数增长且经营现金流不弱于利润",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "重点研究并分批买入",
-        "price_range": "16-23元",
-        "min": 16.0,
-        "ceiling": 23.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "行动还需TTM扣非利润保持双位数增长且经营现金流不弱于利润",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批买入",
-        "price_range": "23-28元",
-        "min": 23.0,
-        "ceiling": 28.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "行动还需TTM扣非利润保持双位数增长且经营现金流不弱于利润",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "小额分批买入",
-        "price_range": "28-32元",
-        "min": 28.0,
-        "ceiling": 32.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "行动还需TTM扣非利润保持双位数增长且经营现金流不弱于利润",
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -279,9 +225,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -289,7 +235,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -299,7 +245,7 @@
       "ticker": "002050.SZ",
       "main_report": {
         "path": "reports/三花智控/三花智控-investment-research-20260810.md",
-        "sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e"
+        "sha256": "d78ac5704cfb108edf049fe6711d9e60c5843db7cd485095eeb7c5def2ed2d56"
       },
       "checklist": {
         "path": null,
@@ -307,14 +253,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "bb02c03856826ba0fd3bcbc4a2b133ace784e370acdb2d82a385c4246c6fe656",
-    "current_source_fingerprint_sha256": "bb02c03856826ba0fd3bcbc4a2b133ace784e370acdb2d82a385c4246c6fe656"
+    "current_source_fingerprint_sha256": "abd203bfbaf7772621be856b6fe4348be54b6c50d8b3293bf830d5b32553af57"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "bb02c03856826ba0fd3bcbc4a2b133ace784e370acdb2d82a385c4246c6fe656",
   "market_session_state": "runtime_required",
@@ -364,7 +310,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "739f2547d4c9799a7f54",
   "detail_path": "./data/decision_details/739f2547d4c9799a7f54.json"
 }

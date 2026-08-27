@@ -228,15 +228,15 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者观望为主，等待更好的买入时机；若股价回到25元以下且Q2/Q3业绩持续向好，可考虑建立小仓位。",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持仓者持有，但需密切关注宁德时代采购量、负极出货量恢复至25万吨、涂覆隔膜市占率保持40%+三个信号。",
-    "trigger_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）。",
-    "summary": "空仓者观望等待，当前29元不贵不便宜，理想买入区间22-25元；回到25元以下且业绩向好可建小仓。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约结论一致，无冲突。",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 427,
@@ -252,14 +252,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:22:03+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -268,40 +268,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
-        "price_range": "25元以下",
-        "min": null,
-        "ceiling": 25.0,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
-        "source": "validated_judgment_trigger"
-      },
-      {
-        "action_kind": "buy",
-        "action": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
-        "price_range": "22-25元",
-        "min": 22.0,
-        "ceiling": 25.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -380,9 +355,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-31）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -390,7 +365,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -400,22 +375,22 @@
       "ticker": "603659.SH",
       "main_report": {
         "path": "reports/Putailai/Putailai-investment-research-20260624.md",
-        "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6"
+        "sha256": "18a09f876d0c34d147013c84ea4bd9ab05d7f6b713feea48f2cb2e54469028a8"
       },
       "checklist": {
         "path": "reports/Putailai/璞泰来-checklist-20260731.md",
-        "sha256": "1c204ef1f7150dab7f1e8e128bc99541a0a7f5d4b81a2c3adc0446e735f7bceb"
+        "sha256": "dc1d22052dc7ace52fc6a13dcd31d0fab18ae6ec655d0e2c0ae59bd7d4511be4"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
-    "current_source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397"
+    "current_source_fingerprint_sha256": "a814ad18c87c55308384b5531eb470bcce7116e8578d6aea1817067cfba79176"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-31）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
   "market_session_state": "runtime_required",
@@ -507,7 +482,7 @@
     "latest_event": null,
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "4ad310e5c1e4d2579400",
   "detail_path": "./data/decision_details/4ad310e5c1e4d2579400.json"
 }

@@ -138,34 +138,22 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "当前回避或观望，不新建仓；等待股价回到35-40元附近且基本面未恶化后重新评估",
-    "holder_action": "逢高分批减仓、兑现部分涨幅并降低仓位，可保留底仓；当前不追加",
-    "trigger_condition": "股价回落至35-40元且基本面未恶化；进一步确认麻米措成本、巨龙扩产和商品周期",
-    "summary": "报告认为74.72元安全边际为负，空仓者明确不建仓；持仓者以分批减仓、保留底仓为主。",
-    "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "看板观察与正文空仓观望一致；持仓者减仓是持仓状态下的独立动作。",
-    "source_basis": "人工逐行核对综合决策备忘录的空仓者、持仓者及加仓信号",
-    "currency": "CNY",
-    "price_source": "主报告第247至252行",
-    "evidence": [
-      {
-        "line_start": 249,
-        "line_end": 252,
-        "quote": "空仓者回避或观望，不建议新建仓；持仓者逢高分批减仓。股价回落至35-40元且基本面未恶化后再评估。",
-        "supports": "直接给出两类动作和重新评估条件。"
-      }
-    ],
     "enabled": true,
-    "human_reviewed": true,
-    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "打开主报告人工核对",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "low",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "evidence": [],
+    "source_basis": "报告判断缓存状态检查",
     "model_consensus": false,
-    "screening_consensus": false,
-    "artifact_status": "human_reviewed",
-    "source_matches": true,
-    "generated_at": "2026-08-23T16:15:00+08:00",
+    "artifact_status": "error",
+    "source_matches": false,
+    "generated_at": "2026-08-14T10:56:30+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -173,28 +161,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "进一步确认麻米措成本、巨龙扩产和商品周期",
-    "guard_condition": "股价回落至35-40元且基本面未恶化",
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "股价回落至35-40元且基本面未恶化",
-        "price_range": "回落至35-40元",
-        "min": 35.0,
-        "ceiling": 40.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "进一步确认麻米措成本、巨龙扩产和商品周期",
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -204,9 +179,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -214,7 +189,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "no",
+    "execution_key": "review",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -224,7 +199,7 @@
       "ticker": "000408.SZ",
       "main_report": {
         "path": "reports/藏格矿业/藏格矿业投资研究报告.md",
-        "sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3"
+        "sha256": "95b9147f6e516ef4919ab6065893c0390bf9f8230123b9d6bd53fc4effe0b2f5"
       },
       "checklist": {
         "path": null,
@@ -232,14 +207,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "76b8c3567030960b2395df1515160c543ffea80f09a7e244ad2bf1d2b05b09e1",
-    "current_source_fingerprint_sha256": "76b8c3567030960b2395df1515160c543ffea80f09a7e244ad2bf1d2b05b09e1"
+    "current_source_fingerprint_sha256": "0e7cb99bd77fa7f24babe8ca8e1997ab08c1b965578179ddbb49b5f58fd6aaec"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "76b8c3567030960b2395df1515160c543ffea80f09a7e244ad2bf1d2b05b09e1",
   "market_session_state": "runtime_required",
@@ -289,7 +264,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "03f2df2a73f3a35309c0",
   "detail_path": "./data/decision_details/03f2df2a73f3a35309c0.json"
 }

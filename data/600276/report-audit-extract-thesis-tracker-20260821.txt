@@ -1,0 +1,149 @@
+======================================================================
+报告数据抽检清单
+文件：reports\恒瑞医疗\恒瑞医药-thesis-tracker-20260821.md
+总提取数据点：66  |  抽样比例：15%  |  抽检数量：10
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+ 66     21  本次状态为                                        2.00  
+  4     36  产品销售收入 · 同比 / 期末变化                           1.87  %
+  7     38  毛利率 / 净利率 · 2026H1                          86.30  %
+  9     39  创新药销售 · 2026H1                              88.09  亿元
+ 15     41  非肿瘤创新药 · 同比 / 期末变化                          74.00  %
+ 16     42  仿制药销售 · 2026H1                              51.39  亿元
+ 36     82  创新药销售连续两个半年/年度窗口低于 15% · 证据与动作              16.38  %
+ 44    102  静态 PE · 当前值                                 40.12  x
+ 48    104  股息率 · 当前值                                    0.42  %
+ 60    179  契约版本 · 内容                                    1.00  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 66,
+    "label": "本次状态为",
+    "reported_value": 2.0,
+    "unit": "",
+    "line_number": 21,
+    "raw_text": "本次状态为：2 项成立、5 项边际弱化、0 项受损、0 项破裂、0 条红线。",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 4,
+    "label": "产品销售收入 · 同比 / 期末变化",
+    "reported_value": 1.87,
+    "unit": "%",
+    "line_number": 36,
+    "raw_text": "| 产品销售收入 | 139.48 亿元 | +1.87% | 产品基本盘接近停滞，但占总收入约 90.25% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "毛利率 / 净利率 · 2026H1",
+    "reported_value": 86.3,
+    "unit": "%",
+    "line_number": 38,
+    "raw_text": "| 毛利率 / 净利率 | 86.3% / 28.9% | 毛利率 -0.3pct | 高毛利仍在，净利率受成本效率和公允价值收益影响 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "创新药销售 · 2026H1",
+    "reported_value": 88.09,
+    "unit": "亿元",
+    "line_number": 39,
+    "raw_text": "| 创新药销售 | 88.09 亿元 | +16.38% | 占药品销售 63.16%，主线仍成立但低于 20%阈值 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "非肿瘤创新药 · 同比 / 期末变化",
+    "reported_value": 74.0,
+    "unit": "%",
+    "line_number": 41,
+    "raw_text": "| 非肿瘤创新药 | 25.45 亿元 | +74.0% | 第二曲线继续增长，占创新药 28.89% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "仿制药销售 · 2026H1",
+    "reported_value": 51.39,
+    "unit": "亿元",
+    "line_number": 42,
+    "raw_text": "| 仿制药销售 | 51.39 亿元 | -16.1% | 集采压力仍在，旧业务继续收缩 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 36,
+    "label": "创新药销售连续两个半年/年度窗口低于 15% · 证据与动作",
+    "reported_value": 16.38,
+    "unit": "%",
+    "line_number": 82,
+    "raw_text": "| 创新药销售连续两个半年/年度窗口低于 15% | 未触发 | 本期 +16.38%，高于 15%；下一窗口继续观察 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 44,
+    "label": "静态 PE · 当前值",
+    "reported_value": 40.12,
+    "unit": "x",
+    "line_number": 102,
+    "raw_text": "| 静态 PE | 40.12x | 47.74 ÷ 2025 年 EPS 1.19 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "股息率 · 当前值",
+    "reported_value": 0.42,
+    "unit": "%",
+    "line_number": 104,
+    "raw_text": "| 股息率 | 0.42% | 2025 年度每股 0.20 元 ÷ 47.74 元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "契约版本 · 内容",
+    "reported_value": 1.0,
+    "unit": "",
+    "line_number": 179,
+    "raw_text": "| 契约版本 | 1 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

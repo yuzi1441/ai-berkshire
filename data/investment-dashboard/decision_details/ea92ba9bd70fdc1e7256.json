@@ -402,15 +402,15 @@
   ],
   "report_history_count": 6,
   "primary_judgment": {
-    "label": "可分批买入",
-    "action_kind": "buy",
-    "empty_position_action": "可分批建仓，不要一次打满；当前1168元已进入可接受区间",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持有；在900-1100元区间可在2026Q2/Q3利润恢复至+5%以上时条件加仓，否则持有不追高",
-    "trigger_condition": "最舒服加仓区间为1000-1100元；当前1168元已可分批介入",
-    "summary": "报告明确可分批买入，非满仓机会；1100-1300元合理偏低可分批，1000-1100元为舒服加仓区间，空仓者可分批建仓。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，均为分批买入，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 269,
@@ -432,15 +432,15 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 1300.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:24:32+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -449,59 +449,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "buy",
-    "main_label": "可分批买入",
-    "condition_mode": "current_action",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "分批建仓",
-        "price_range": "900 元以下",
-        "min": null,
-        "ceiling": 900.0,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批建仓",
-        "price_range": "900-1100 元",
-        "min": 900.0,
-        "ceiling": 1100.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批建仓",
-        "price_range": "1100-1300 元",
-        "min": 1100.0,
-        "ceiling": 1300.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
-    "current_action": {
-      "action_kind": "buy",
-      "action": "可分批建仓，不要一次打满；当前1168元已进入可接受区间",
-      "currency": "CNY",
-      "reference_price": 1168.63,
-      "reference_source": "主报告明确标注的分析基准价",
-      "requires_validation": false
-    },
+    "price_rules": [],
+    "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -511,9 +467,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -521,7 +477,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -531,7 +487,7 @@
       "ticker": "600519.SH",
       "main_report": {
         "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
-        "sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071"
+        "sha256": "164f51831af85337f4548bcc655665f2153fbb2135ca26bb98f7516ca978d2c9"
       },
       "checklist": {
         "path": null,
@@ -539,14 +495,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb",
-    "current_source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb"
+    "current_source_fingerprint_sha256": "c870a5d4257bba82a042bae1c97767cd737855f494d2e534d81589673413fbb8"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb",
   "market_session_state": "runtime_required",
@@ -596,7 +552,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "ea92ba9bd70fdc1e7256",
   "detail_path": "./data/decision_details/ea92ba9bd70fdc1e7256.json"
 }

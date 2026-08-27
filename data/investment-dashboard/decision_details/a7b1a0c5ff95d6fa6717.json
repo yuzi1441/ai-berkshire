@@ -229,15 +229,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待验证",
-    "action_kind": "watch",
-    "empty_position_action": "观察优先，不追高，等待2026中报/三季报验证硝化棉毛利、防护订单、经营现金流后再评估",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持有但设验证线，若业绩靠重组预期支撑应降低仓位",
-    "trigger_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流；保守投资者可等待股价低于13-15元",
-    "summary": "综合评分3.2/5，可跟踪有弹性但需安全边际，空仓观察优先不追高，等业绩验证",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约均为‘观察’，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 308,
@@ -253,8 +253,8 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -265,7 +265,7 @@
       "max": 20.0
     },
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:11:11+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -274,61 +274,24 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待验证",
-    "condition_mode": "price_and_event",
-    "event_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "才进入深度研究/小仓试错",
-        "price_range": "≤13元",
-        "min": null,
-        "ceiling": 13.0,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批观察",
-        "price_range": "13-16.5元",
-        "min": 13.0,
-        "ceiling": 16.5,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "trial",
-        "action": "只能小仓位主题/景气跟踪",
-        "price_range": "16.5-20元",
-        "min": 16.5,
-        "ceiling": 20.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "2026年中报/三季报验证硝化棉毛利率、防护订单及经营现金流",
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
     "company": "北方化学工业股份有限公司",
     "ticker": "002246.SZ",
     "market": "A股",
-    "report_path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
-    "report_link": "reports/北化股份/北化股份-investment-checklist-20260823.md",
-    "report_sha256": "4c4d53d904b3d69df050a25e8d47a8399ee7e8bc1e8ca00a7933b8ffbfd456e9",
+    "report_path": "reports/北化股份/北化股份-investment-checklist-20260824.md",
+    "report_link": "reports/北化股份/北化股份-investment-checklist-20260824.md",
+    "report_sha256": "e3e59907bfea781aab8888423c01d66928ebf148ffbfff25dc9b4d19d8c42632",
     "title": "北化股份（002246.SZ）买入前 Checklist 研究报告",
     "source_type": "standalone",
     "decision_contract": {
@@ -337,85 +300,94 @@
       "company": "北方化学工业股份有限公司",
       "ticker": "002246.SZ",
       "market": "A股",
-      "report_completed_at": "2026-08-23",
-      "data_cutoff": "2026-08-21",
+      "report_completed_at": "2026-08-24",
+      "data_cutoff": "2026-08-24",
       "action": "观察",
-      "summary": "未通过Checklist，长期回报未证明且当前安全边际不足",
+      "summary": "中报盈利改善但估值已透支部分乐观情景，19.38元观察不追价",
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "观察，不买重组预期",
-          "price_range": "16—18.2元，仅为复核区而非自动买入区"
+          "action": "16-18元且毛利现金流不恶化时小仓观察",
+          "price_range": "16-18元"
         },
         {
           "stance": "稳健型",
-          "action": "观察，等待利润中枢和现金转化验证",
-          "price_range": "13—16元，需同时满足至少两项经营验证条件"
+          "action": "13-16元且连续验证后分批评估",
+          "price_range": "13-16元"
         },
         {
           "stance": "保守型",
-          "action": "观察，先排除价值陷阱",
-          "price_range": "8—13元，低于8元仍需重做事故与治理核查"
+          "action": "10-13元且治理安全风险未恶化再研究",
+          "price_range": "10-13元"
         }
       ],
-      "invalidation_triggers": "重大安全或环保处罚；硝化棉毛利连续两期低于30%；年度FCF转负且应收显著跑赢收入；控制权变更损害独立性",
+      "invalidation_triggers": "硝化棉毛利率连续回落、经营现金流转负、重大安全环保事故或控制权变更损害上市公司独立性",
       "next_review_date": "2026-10-31",
       "confidence": "中",
       "hard_veto_state": "unknown"
     },
-    "status": "未通过",
-    "passed_count": 2,
+    "status": "灰色地带",
+    "passed_count": 3,
     "total_gates": 6,
     "gates": [
       {
         "name": "能力圈",
-        "score": "★★★☆☆",
+        "score": "★★★★☆",
         "result": "通过",
-        "reason": "业务可解释，但军品订单和价格不透明"
+        "reason": ""
       },
       {
         "name": "好生意",
         "score": "★★☆☆☆",
-        "result": "未通过",
-        "reason": "五年 ROE 与 FCF 转化率太低"
+        "result": "未达标",
+        "reason": ""
       },
       {
         "name": "护城河",
-        "score": "★★★☆☆",
+        "score": "★★★★☆",
         "result": "通过",
-        "reason": "资质、认证、安全许可构成硬门槛，但无网络效应"
+        "reason": ""
       },
       {
         "name": "管理层",
         "score": "★★★☆☆",
-        "result": "灰色",
-        "reason": "审计内控干净；关联交易、资金集中与控制权未定"
+        "result": "合格，资本配置待验证",
+        "reason": ""
       },
       {
         "name": "安全边际",
-        "score": "★☆☆☆☆",
-        "result": "未通过",
-        "reason": "中性三年目标价低于当前价，FCF yield 仅 2.26%"
+        "score": "★★☆☆☆",
+        "result": "未达标",
+        "reason": ""
       },
       {
         "name": "仓位纪律",
         "score": "★★★☆☆",
-        "result": "待确认",
-        "reason": "缺用户动机、风险承受和仓位信息"
+        "result": "待投资者自评",
+        "reason": ""
       }
     ],
     "hard_veto": false,
-    "hard_veto_state": "unknown",
-    "hard_veto_label": "待复核",
+    "hard_veto_state": "clear",
+    "hard_veto_label": "未触发/未发现",
     "mirror_test": "未通过",
     "action": "观察",
-    "summary": "未通过Checklist，长期回报未证明且当前安全边际不足",
-    "data_cutoff": "2026-08-21",
-    "report_date": "2026-08-23",
+    "summary": "中报盈利改善但估值已透支部分乐观情景，19.38元观察不追价",
+    "data_cutoff": "2026-08-24",
+    "report_date": "2026-08-24",
     "next_review_date": "2026-10-31",
     "confidence": "中",
-    "invalidation_triggers": "重大安全或环保处罚；硝化棉毛利连续两期低于30%；年度FCF转负且应收显著跑赢收入；控制权变更损害独立性",
+    "invalidation_triggers": "硝化棉毛利率连续回落、经营现金流转负、重大安全环保事故或控制权变更损害上市公司独立性",
     "history": [
+      {
+        "status": "灰色地带",
+        "action": "观察",
+        "data_cutoff": "2026-08-24",
+        "report_date": "2026-08-24",
+        "report_path": "reports/北化股份/北化股份-investment-checklist-20260824.md",
+        "report_link": "reports/北化股份/北化股份-investment-checklist-20260824.md",
+        "source_type": "standalone"
+      },
       {
         "status": "未通过",
         "action": "观察",
@@ -431,7 +403,7 @@
     "schema_version": 2,
     "status": "stale",
     "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-24）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -449,22 +421,22 @@
       "ticker": "002246.SZ",
       "main_report": {
         "path": "reports/北化股份/北化股份研究报告-20260709.md",
-        "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c"
+        "sha256": "abda107ca51347f9fa60ec23fb8179e66df5aa1921ba0989cd07daf22e34baca"
       },
       "checklist": {
-        "path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
-        "sha256": "4c4d53d904b3d69df050a25e8d47a8399ee7e8bc1e8ca00a7933b8ffbfd456e9"
+        "path": "reports/北化股份/北化股份-investment-checklist-20260824.md",
+        "sha256": "137a92ca6b00433e60bd57bbc8318433de35b9f4879991e6671658de848bd47d"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c",
-    "current_source_fingerprint_sha256": "57e28853e0bbc97e5e83d089986af299da9f0230b659052c1a08ae2fa36bc28e"
+    "current_source_fingerprint_sha256": "52ff8d2399d2472e695ac1f26417ba1c16a79e9f49e620c609fe5f07360b25ca"
   },
   "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-21）",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-24）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c",
   "market_session_state": "runtime_required",
@@ -514,7 +486,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "a7b1a0c5ff95d6fa6717",
   "detail_path": "./data/decision_details/a7b1a0c5ff95d6fa6717.json"
 }

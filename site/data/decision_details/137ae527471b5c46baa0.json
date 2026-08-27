@@ -584,15 +584,15 @@
   ],
   "report_history_count": 8,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者17.81元不追高，优先等待14—16元价格区间，或等待Q2/Q3核心收入、扣非、毛利和现金流同步恢复后再考虑买入。",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "小仓持有者持有观察不加仓；大仓持有者复核集中度与成本，若20—24元以上无业绩上修则考虑降低仓位。",
-    "trigger_condition": "价格触发为14—16元区间；事件触发为Q2/Q3核心收入、扣非、毛利和现金流同步恢复。",
-    "summary": "华明装备是好公司但当前17.81元安全边际不足，空仓者不追高，应等待14-16元或业绩验证后再行动。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文最终判断与看板契约结论摘要一致，均建议空仓者不追、等待14-16元，无冲突。",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 385,
@@ -614,8 +614,8 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -626,7 +626,7 @@
       "max": 16.0
     },
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:51:46+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -635,52 +635,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "事件触发为Q2/Q3核心收入、扣非、毛利和现金流同步恢复",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "基本面未损时分批买入",
-        "price_range": "≤13.90 元",
-        "min": null,
-        "ceiling": 13.9,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "事件触发为Q2/Q3核心收入、扣非、毛利和现金流同步恢复",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "较有吸引力，分批建仓",
-        "price_range": "13.90—14.67 元",
-        "min": 13.9,
-        "ceiling": 14.67,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "事件触发为Q2/Q3核心收入、扣非、毛利和现金流同步恢复",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "trial",
-        "action": "小仓分批，等待季报验证",
-        "price_range": "14.67—16.00 元",
-        "min": 14.67,
-        "ceiling": 16.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "事件触发为Q2/Q3核心收入、扣非、毛利和现金流同步恢复",
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -759,9 +722,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -769,7 +732,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -779,22 +742,22 @@
       "ticker": "002270.SZ",
       "main_report": {
         "path": "reports/华明装备/华明装备-investment-team-20260713.md",
-        "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd"
+        "sha256": "766eb1b0f2014bd44b458c7718ee5ed8256302832e92cae7364cfe66ef7052bf"
       },
       "checklist": {
         "path": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
-        "sha256": "ed71bf47a73f0db2127aeca6ce27f118056d5bdacae18741832178fa7c94d2fd"
+        "sha256": "8aabcc9274b5bbc4d09a22e69e3961e1a2d93f881425878765790deb52a64cfa"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
-    "current_source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930"
+    "current_source_fingerprint_sha256": "dfd298fc99ea6e95e96cd988850c4652fb9a9132972928ee3c031a317d128223"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
   "market_session_state": "runtime_required",
@@ -844,7 +807,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "137ae527471b5c46baa0",
   "detail_path": "./data/decision_details/137ae527471b5c46baa0.json"
 }

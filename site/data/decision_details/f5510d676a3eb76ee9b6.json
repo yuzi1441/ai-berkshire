@@ -317,15 +317,15 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "观望偏积极，等待以下信号之一出现再建仓：2026Q2/Q3财报确认利润拐点、A股跌至75元以下、欧盟关税政策明朗化",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "继续持有，若仓位超过投资组合20%建议适度减至15%以下",
-    "trigger_condition": "A股跌至75元以下（对应PE~21倍）或2026Q2/Q3财报确认利润拐点或欧盟关税政策明朗化",
-    "summary": "空仓者观望偏积极，等待财报拐点、跌至75元以下或关税明朗化再建仓；持仓者继续持有，超20%仓位可适度减仓。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约结论一致，均为观望偏积极，无冲突。",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 395,
@@ -347,15 +347,15 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 85.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:00:18+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -364,40 +364,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "A股跌至75元以下（对应PE~21倍）或2026Q2/Q3财报确认利润拐点或欧盟关税政策明朗化",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "积极建仓",
-        "price_range": "<70元",
-        "min": null,
-        "ceiling": 70.0,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批建仓",
-        "price_range": "70-85元",
-        "min": 70.0,
-        "ceiling": 85.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -407,9 +382,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -417,7 +392,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -427,7 +402,7 @@
       "ticker": "002594.SZ",
       "main_report": {
         "path": "reports/BYD/BYD-research-20260624.md",
-        "sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136"
+        "sha256": "bf86222be570d77044abc8b7734594d13524a0490756da134ca6d5e998ab2548"
       },
       "checklist": {
         "path": null,
@@ -435,14 +410,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "2cb14303b3ad0fde5b9af41b8bbeb8d748e8ca34109c593d7a858432fc9d7bc2",
-    "current_source_fingerprint_sha256": "2cb14303b3ad0fde5b9af41b8bbeb8d748e8ca34109c593d7a858432fc9d7bc2"
+    "current_source_fingerprint_sha256": "d4e9fa7e158cf410afeca70411648a6fafce3d8a42d2e2f28ed344dfec758fa3"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "2cb14303b3ad0fde5b9af41b8bbeb8d748e8ca34109c593d7a858432fc9d7bc2",
   "market_session_state": "runtime_required",
@@ -492,7 +467,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "f5510d676a3eb76ee9b6",
   "detail_path": "./data/decision_details/f5510d676a3eb76ee9b6.json"
 }

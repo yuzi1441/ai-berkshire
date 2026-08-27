@@ -899,15 +899,15 @@
   ],
   "report_history_count": 10,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "不买入，纳入核心观察池；等待价格≤21.84元开始分批，≤17.48元积极建仓",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持有，不加仓；若仓位>15%不再投入新资金，等待2026-08-27中报",
-    "trigger_condition": "价格≤21.84元（分批）或≤17.48元（积极建仓），且需卖出信号未触发加仓正向证据",
-    "summary": "好公司但现价无安全边际，空仓者不买，等17.48元；持仓者持有不加仓",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 1056,
@@ -923,15 +923,15 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 21.84,
     "price_source": "本地程序从主报告价格行动表确定性提取",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:12:11+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -940,52 +940,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_only",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
     "event_condition": null,
-    "guard_condition": "价格≤21.84元（分批）或≤17.48元（积极建仓），且需卖出信号未触发加仓正向证据",
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "30% 安全边际，重仓候选",
-        "price_range": "≤ 15.29 元",
-        "min": null,
-        "ceiling": 15.29,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "20% 安全边际，可积极买入（红线未触发为前提）",
-        "price_range": "≤ 17.48 元",
-        "min": null,
-        "ceiling": 17.48,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "中性现值 21.84 × 0.8",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "分批建仓",
-        "price_range": "17.48–21.84 元",
-        "min": 17.48,
-        "ceiling": 21.84,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -1073,9 +1036,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-13）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -1083,7 +1046,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -1093,22 +1056,22 @@
       "ticker": "600406.SH",
       "main_report": {
         "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
-        "sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db"
+        "sha256": "7db62af524142ef7e78ca80f0772d18e744837cdf5d8698e1f7314a7b047c608"
       },
       "checklist": {
         "path": "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md",
-        "sha256": "a624c64c1d6b1932bac89d444a7baad1d381f290d7b5c99fc3d32f24a95a5e28"
+        "sha256": "b6ea66371b2a5cd874b475eee49d6617a37371fa65b95e4326de521b53e56467"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01",
-    "current_source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01"
+    "current_source_fingerprint_sha256": "296afc1829e72661b599283cb60143a3d73ded0fa8cebf664dac996382e13681"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-13）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "85933614634d307bb6f1e65d0d36a51c1c696f898d7e2b973a899c0ea5f07f01",
   "market_session_state": "runtime_required",
@@ -1158,7 +1121,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "f92257f97c12236a2aed",
   "detail_path": "./data/decision_details/f92257f97c12236a2aed.json"
 }

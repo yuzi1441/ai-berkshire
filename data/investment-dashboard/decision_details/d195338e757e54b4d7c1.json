@@ -182,15 +182,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "观望为主，不建议现价大举买入；等待催化剂出现或股价回调至45-50元区间再考虑建仓",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "可继续持有但不宜加仓；若跌破45元减半仓，若连续两个季度扣非净利低于5亿元考虑减仓",
-    "trigger_condition": "股价回调至45-50元区间，或2026年中报扣非净利改善且经营现金流转正，或赛豆品牌首款车型上市反馈良好",
-    "summary": "空仓者观望为主，不建议现价买入，等待中报改善、赛豆上市或股价回调至45-50元再建仓；持仓者继续持有不加仓。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约结论一致，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 414,
@@ -206,14 +206,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:58:13+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -222,28 +222,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "股价回调至45-50元区间，或2026年中报扣非净利改善且经营现金流转正，或赛豆品牌首款车型上市反馈良好",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "股价回调至45-50元区间，或2026年中报扣非净利改善且经营现金流转正，或赛豆品牌首款车型上市反馈良好",
-        "price_range": "45-50元",
-        "min": 45.0,
-        "ceiling": 50.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "股价回调至45-50元区间，或2026年中报扣非净利改善且经营现金流转正，或赛豆品牌首款车型上市反馈良好",
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -253,9 +240,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -263,7 +250,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -273,7 +260,7 @@
       "ticker": "601127.SH",
       "main_report": {
         "path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
-        "sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7"
+        "sha256": "c46b1a2a91b9f2170adf97182d6fe381e07e29d007e06f92e6ea62acd0ed2201"
       },
       "checklist": {
         "path": null,
@@ -281,14 +268,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e",
-    "current_source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e"
+    "current_source_fingerprint_sha256": "a40084143b0313974cc391887d96d8d59f3cf8e39db1da8601e7429ad62a5bf2"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "0a7d6f58a79943602bb3bbf008362a8319099b4d668bc68af52c7dd25522ca4e",
   "market_session_state": "runtime_required",
@@ -338,7 +325,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "d195338e757e54b4d7c1",
   "detail_path": "./data/decision_details/d195338e757e54b4d7c1.json"
 }
