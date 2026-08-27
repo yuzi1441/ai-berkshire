@@ -253,44 +253,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "若成本低于14元可继续持有，关注2026半年报现金流和高压板块毛利率；若仓位过重可在22-25元区间逐步降低预期收益率",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
+    "holder_action": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
+    "trigger_condition": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
+    "summary": "契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第258至298行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 287,
-        "line_end": 287,
-        "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**",
-        "supports": "最终结论明确空仓者不应追高，需等待更低价格区间"
-      },
-      {
-        "line_start": 295,
-        "line_end": 295,
-        "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |",
-        "supports": "空仓者当前动作是等待价格触发（14元以下）再建仓，而非立即行动"
+        "line_start": 258,
+        "line_end": 298,
+        "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+        "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 17.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 14.0,
-      "max": 17.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:14:26+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -298,15 +288,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "可以列为积极买入区，但需确认利润未结构性下滑。",
+        "price_range": "≤ 12 元",
+        "min": null,
+        "ceiling": 12.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "可以列为积极买入区，但需确认利润未结构性下滑。",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批建仓区，适合愿意承受项目周期波动的投资者。",
+        "price_range": "12-14 元",
+        "min": 12.0,
+        "ceiling": 14.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "观察/小仓位，等待订单或现金流验证。",
+        "price_range": "14-17 元",
+        "min": 14.0,
+        "ceiling": 17.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "观察/小仓位，等待订单或现金流验证。",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -388,9 +415,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-11）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -398,7 +425,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -408,22 +435,22 @@
       "ticker": "600312.SH",
       "main_report": {
         "path": "reports/平高电气/平高电气研究报告-20260707.md",
-        "sha256": "4a394df4120cf04bef77b41f4c3242fa79198e3fa5ab7cc522fd2d15cc280c28"
+        "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7"
       },
       "checklist": {
         "path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
-        "sha256": "f332d656d1980e369b2092b999f27a21b85420c4386ddd48520e0de684de8cd7"
+        "sha256": "0d01f80ef517ab59297521bf7efa0d3fb2ed348c267bd560e3a3c8fe9a5737ce"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
-    "current_source_fingerprint_sha256": "1f92260b694e50cc6b48ad534c6498e0e40b1443e8336ca4cb37043e4d946f84"
+    "current_source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-11）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
   "market_session_state": "runtime_required",
@@ -473,7 +500,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "f95a45f9adc96e17cb04",
   "detail_path": "./data/decision_details/f95a45f9adc96e17cb04.json"
 }

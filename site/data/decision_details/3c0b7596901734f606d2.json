@@ -115,39 +115,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者应继续持有但不加仓，保持观察，等待验证结果",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "medium",
+    "label": "当前回避，等待周期与估值重置",
+    "action_kind": "no",
+    "empty_position_action": "报告基准价 49 元、3 万亿元以上市值区间任何理由都不追；24-45 元仍只观望，16-24 元且无实体清单落地、HBM 未证伪时最多建 2% 观察仓，15 元以下且仅周期杀估值、基本面未坏时才进入系统性价值建仓区。",
+    "holder_action": "当前高估值区应控制或退出风险暴露；发行申购的巨大赔率已经过去，不能把发行价机会迁移到二级市场。",
+    "trigger_condition": "HBM3/3E 综合良率突破 60%的第三方证据、华为昇腾规模采用、实体清单风险实质解除、G5 按期量产且拆解确认，或周期下行仍保持正毛利可上调；列入实体清单、DRAM 合约价转负叠加三巨头扩产、G5 延期超过两个季度、关联交易异常或解禁前估值仍超 2 万亿元即回避/清仓。",
+    "summary": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第11行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 392,
-        "line_end": 392,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "契约明确建议动作是观察，对应空仓者应等待验证，不急于行动"
-      },
-      {
-        "line_start": 393,
-        "line_end": 393,
-        "quote": "| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |",
-        "supports": "最终结论强调风险与待验证点，支持观察等待验证而非立即买入或明确卖出"
+        "line_start": 11,
+        "line_end": 11,
+        "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+        "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:58:47+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -155,15 +150,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
+    "main_action_kind": "no",
+    "main_label": "当前回避，等待周期与估值重置",
+    "condition_mode": "no_buy",
+    "event_condition": "HBM3/3E 综合良率突破 60%的第三方证据、华为昇腾规模采用、实体清单风险实质解除、G5 按期量产且拆解确认，或周期下行仍保持正毛利可上调",
+    "guard_condition": "列入实体清单、DRAM 合约价转负叠加三巨头扩产、G5 延期超过两个季度、关联交易异常或解禁前估值仍超 2 万亿元即回避/清仓",
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -173,9 +168,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -183,7 +178,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -193,7 +188,7 @@
       "ticker": "688825.SH",
       "main_report": {
         "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
-        "sha256": "f61d138263824656d6eedc4ff696e2ef05de27fa4490ea91872d7ae100137779"
+        "sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d"
       },
       "checklist": {
         "path": null,
@@ -201,14 +196,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "fe8e97b826bd2a444ff7a291f37c6ce963bead1a41a26a6fc961b27da9667890",
-    "current_source_fingerprint_sha256": "023bbd16b476ff2e2a3fb8e8277bd13bc91eed99e0b49d181879ea4ed3c2d00f"
+    "current_source_fingerprint_sha256": "fe8e97b826bd2a444ff7a291f37c6ce963bead1a41a26a6fc961b27da9667890"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "fe8e97b826bd2a444ff7a291f37c6ce963bead1a41a26a6fc961b27da9667890",
   "market_session_state": "runtime_required",
@@ -222,7 +217,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "3c0b7596901734f606d2",
   "detail_path": "./data/decision_details/3c0b7596901734f606d2.json"
 }

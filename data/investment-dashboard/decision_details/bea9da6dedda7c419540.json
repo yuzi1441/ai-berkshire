@@ -316,46 +316,34 @@
   ],
   "report_history_count": 3,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "报告未明确给出持仓者动作，基于基本面观察建议，可视为继续持有观望",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "60 元以上不因新型电力系统、AIDC 或 SST 叙事追高。",
+    "holder_action": "可持有跟踪，但需前置仓位上限和卖出纪律。",
+    "trigger_condition": "45-55 元只进入研究区，35-45 元且基本面未恶化才接近分批研究买点；同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上。",
+    "summary": "公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第12至21行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 349,
-        "line_end": 349,
-        "quote": "| 结论摘要 | 空仓者 观望。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |",
-        "supports": "明确空仓者当前应观望，不追高"
-      },
-      {
-        "line_start": 350,
-        "line_end": 350,
-        "quote": "| 激进型动作 | 空仓不追 |",
-        "supports": "激进型空仓者不追高，等待价格"
-      },
-      {
-        "line_start": 354,
-        "line_end": 355,
-        "quote": "| 保守型动作 | 分批研究买点 | | 保守型价格区间 | 35-45 元 |",
-        "supports": "保守型在35-45元区间才考虑分批研究买点，属于价格触发等待"
+        "line_start": 12,
+        "line_end": 21,
+        "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+        "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 45.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:52:38+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -363,15 +351,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上",
+    "guard_condition": "45-55 元只进入研究区，35-45 元且基本面未恶化才接近分批研究买点",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "分批研究买点",
+        "price_range": "35-45 元",
+        "min": 35.0,
+        "ceiling": 45.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -450,9 +451,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -460,7 +461,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -470,22 +471,22 @@
       "ticker": "601126.SH",
       "main_report": {
         "path": "reports/四方股份/四方股份投资研究报告-20260707.md",
-        "sha256": "5cfdfc8a439d244b1e29a9c2a565abbf70ee8aa7861e67d11c5377278731c1c4"
+        "sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07"
       },
       "checklist": {
         "path": "reports/四方股份/巴菲特Checklist-四方股份.md",
-        "sha256": "1da0e8734f8054349ae95a57d4ee9d3a72a3c576923cb83f74a0a367bfcb9b32"
+        "sha256": "9e74150e010203777568bde788fa4c894ff8a2a9da65da7f2c147a206d9fef54"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "73ce7fd2e7f0af6dd8e511ce9dd172b40704fb5234f2febb0b9f1cc8372697d3",
-    "current_source_fingerprint_sha256": "a8a0967cdfa4032db5ecd2f504e6157f05fbbe81f09e7b8243cc364f83e6d6cc"
+    "current_source_fingerprint_sha256": "73ce7fd2e7f0af6dd8e511ce9dd172b40704fb5234f2febb0b9f1cc8372697d3"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "73ce7fd2e7f0af6dd8e511ce9dd172b40704fb5234f2febb0b9f1cc8372697d3",
   "market_session_state": "runtime_required",
@@ -535,7 +536,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "bea9da6dedda7c419540",
   "detail_path": "./data/decision_details/bea9da6dedda7c419540.json"
 }

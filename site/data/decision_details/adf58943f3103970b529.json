@@ -205,22 +205,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 75.72 元没有足够安全边际；70-75 元只允许小仓试错，63-69 元稳健分批，55-60 元才适合扩大研究仓位。",
+    "holder_action": "合理仓位可持有但不追半年预告；重仓者应控制强周期重资产集中度，必须能承受悲观情景约 34% 的回撤。",
+    "trigger_condition": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间；聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审。",
+    "summary": "正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第196至212行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 196,
+        "line_end": 212,
+        "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+        "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:49:15+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -228,15 +240,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间；聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "扩大仓位",
+        "price_range": "55—60 元",
+        "min": 55.0,
+        "ceiling": 60.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批买入",
+        "price_range": "63—69 元",
+        "min": 63.0,
+        "ceiling": 69.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓试买，不追高",
+        "price_range": "70—75 元",
+        "min": 70.0,
+        "ceiling": 75.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -246,9 +295,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -256,7 +305,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -266,7 +315,7 @@
       "ticker": "600309.SH",
       "main_report": {
         "path": "reports/万华化学/万华化学-投资研究-20260808.md",
-        "sha256": "7f7184559522b848cfcbe8af91edb8f7492054ac153c35c021a381a1783a67c7"
+        "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037"
       },
       "checklist": {
         "path": null,
@@ -274,14 +323,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
-    "current_source_fingerprint_sha256": "07452978caa7035acd241e90186ee21b6e328940ea07c3332cf081f467bb62d8"
+    "current_source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "7259be9f597008c7e42031d8fcd1efac2b097eb668275c91c6fb2c9a9ff8508a",
   "market_session_state": "runtime_required",
@@ -331,7 +380,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "adf58943f3103970b529",
   "detail_path": "./data/decision_details/adf58943f3103970b529.json"
 }

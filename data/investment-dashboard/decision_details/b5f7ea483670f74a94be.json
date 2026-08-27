@@ -307,22 +307,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "仅限有跟踪优势者小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价 106.75 元位于 95-110 元激进型小仓观察区，但许可只适用于能持续跟踪现金流、毛利率与海外质量者，不得当作普通低估买点；一般空仓者等待 80-95 元，保守型等待 70-80 元或更强经营证据。",
+    "holder_action": "可持有但不因国产替代叙事盲目加仓；高于 120 元且现金流未同步改善时，应降低估值风险暴露。",
+    "trigger_condition": "80-95 元并伴随经营现金流连续改善，或服务占比提升、海外高增且回款不恶化、ROE 回到 12%-15%后可上调；毛利率跌破 45%、应收存货持续快于收入、经营现金流连续两个半年度为负、海外失速、研发资本化/关联交易扩大或质量合规事件即暂停。",
+    "summary": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第182行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 182,
+        "line_end": 182,
+        "quote": "## 7. 估值与最终投资建议",
+        "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:56:13+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -330,15 +342,35 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "main_action_kind": "trial",
+    "main_label": "仅限有跟踪优势者小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "80-95 元并伴随经营现金流连续改善，或服务占比提升、海外高增且回款不恶化、ROE 回到 12%-15%后可上调；毛利率跌破 45%、应收存货持续快于收入、经营现金流连续两个半年度为负、海外失速、研发资本化/关联交易扩大或质量合规事件即暂停",
+    "guard_condition": "80-95 元并伴随经营现金流连续改善，或服务占比提升、海外高增且回款不恶化、ROE 回到 12%-15%后可上调",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "小仓位观察，不做重仓",
+        "price_range": "95-110 元",
+        "min": 95.0,
+        "ceiling": 110.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价 106.75 元位于 95-110 元激进型小仓观察区，但许可只适用于能持续跟踪现金流、毛利率与海外质量者，不得当作普通低估买点；一般空仓者等待 80-95 元，保守型等待 70-80 元或更强经营证据。",
+      "currency": "CNY",
+      "reference_price": 106.75,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -405,9 +437,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -415,7 +447,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -425,22 +457,22 @@
       "ticker": "688271.SH",
       "main_report": {
         "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
-        "sha256": "940b2fdb64e5de6d758838a725d18daf76b18ad8627c2bd454be7ca301992d95"
+        "sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf"
       },
       "checklist": {
         "path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
-        "sha256": "2ebfd2b486e0a2ba75ff943889ba82044f0b0755fef81d71e56e9b7bcaafd921"
+        "sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
-    "current_source_fingerprint_sha256": "9e1e31479a6bb9188c6cb911b510cf2595a386654e1d27f2474ee61b4d8f45d8"
+    "current_source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
   "market_session_state": "runtime_required",
@@ -490,7 +522,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "b5f7ea483670f74a94be",
   "detail_path": "./data/decision_details/b5f7ea483670f74a94be.json"
 }

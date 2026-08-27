@@ -216,40 +216,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者以持有为主，低于127元且H2扣非利润保持双位数增长时再评估增加",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "当前可小额分批",
+    "action_kind": "buy",
+    "empty_position_action": "报告基准价 130.83 元位于 127-140 元激进型区间，可小额首批而非一次买满；114-127 元进入稳健分批区，100-114 元在基本面未恶化时重点关注，高于 140 元不追。",
+    "holder_action": "以持有为主；低于 127 元且 H2 扣非利润仍保持双位数增长时，再评估增加。",
+    "trigger_condition": "东鹏特饮恢复 10%以上增长、茶饮料高增同时销售费用率不升、海外或新基地披露明确回报可增强判断；销售费用连续两个报告期比收入多增 10 个百分点、扣非增速持续低于收入、核心能量饮料连续两个半年度零增长或份额下降超过 3 个百分点、低回报并购、治理或食品安全事件即暂停或退出。",
+    "summary": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第311行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 326,
-        "line_end": 326,
-        "quote": "**基本面建议动作：分批买入。**",
-        "supports": "最终判断明确为分批买入，对应label为可分批买入"
-      },
-      {
-        "line_start": 332,
-        "line_end": 332,
-        "quote": "| 空仓者 | 130.83元可小额首批；114-127元进入稳健分批区；100-114元在基本面不恶化时重点关注 |",
-        "supports": "给出空仓者明确的分批买入动作及价格区间"
+        "line_start": 311,
+        "line_end": 311,
+        "quote": "## 第八步：最终决策与行动清单",
+        "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 127.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:50:14+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -257,15 +251,47 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "buy",
+    "main_label": "当前可小额分批",
+    "condition_mode": "current_action",
+    "event_condition": "东鹏特饮恢复 10%以上增长、茶饮料高增同时销售费用率不升、海外或新基地披露明确回报可增强判断；销售费用连续两个报告期比收入多增 10 个百分点、扣非增速持续低于收入、核心能量饮料连续两个半年度零增长或份额下降超过 3 个百分点、低回报并购、治理或食品安全事件即暂停或退出",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "分批增加",
+        "price_range": "114-127元",
+        "min": 114.0,
+        "ceiling": 127.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小额首批",
+        "price_range": "127-140元",
+        "min": 127.0,
+        "ceiling": 140.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "buy",
+      "action": "报告基准价 130.83 元位于 127-140 元激进型区间，可小额首批而非一次买满；114-127 元进入稳健分批区，100-114 元在基本面未恶化时重点关注，高于 140 元不追。",
+      "currency": "CNY",
+      "reference_price": 130.83,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -375,9 +401,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-12）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -385,37 +411,37 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "A",
-    "execution_key": "review",
+    "execution_key": "actionable",
     "label": "人工复核：当前可分批",
     "detail": "人工逐项复核主报告、最新中报与周五收盘价后，当前具备小比例分批执行条件。",
-    "opportunity_tier": null,
-    "opportunity_summary": null,
+    "opportunity_tier": "current",
+    "opportunity_summary": "当前唯一进入可执行小比例分批名单的 A 股；仍应按报告价格纪律控制仓位。",
     "checklist_blocked": false,
     "source_snapshot": {
       "ticker": "605499.SH",
       "main_report": {
         "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
-        "sha256": "28ea827ee7fe45bd77994650ff76b8b8fc4a364b5e647acb1da2f7aea4c7e0b0"
+        "sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c"
       },
       "checklist": {
         "path": "reports/东鹏饮料/东鹏饮料-investment-checklist-20260812.md",
-        "sha256": "3a4c47258ad9addca070bf7aa1ba499aada6c162e859f179ac6c0a3f6802f888"
+        "sha256": "5af91cd868aec2ff41fb1288543207bf9f5a3217b8f04162b63522fd52bd64fb"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13",
-    "current_source_fingerprint_sha256": "5a657710ad38db05097b8578297df3945c6476e6f125c068f36f71ff78378c50"
+    "current_source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-12）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "c1de3490f8013d0c13f6177e25fe7aeebe874225dcf6b8a6880122762799fc13",
   "market_session_state": "runtime_required",
   "quote_freshness": "runtime_required",
-  "next_trading_day_candidate": false,
+  "next_trading_day_candidate": true,
   "technical_analysis": {
     "company": "东鹏饮料（集团）股份有限公司",
     "ticker": "605499.SH",
@@ -460,7 +486,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "4332678a9660048701a4",
   "detail_path": "./data/decision_details/4332678a9660048701a4.json"
 }

@@ -210,44 +210,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "已持有且仓位正常者继续持有核心观察仓，但不在44.38元附近加仓，用H1正式报告和产品认证检验论文；仓位过重者利用景气高位降低集中度，若股价超55元而盈利/高端订单未同步上修则考虑减仓。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "44.38 元不追；30-34 元且高端认证或批量订单有可核验证据时只可小仓，24-28 元且景气正常化后 ROE 与 FCF 仍改善时稳健分批，24 元以下才研究较大仓位。",
+    "holder_action": "正常仓位可继续持有核心观察仓但不加仓；仓位过重应在景气与情绪高位降低集中度，55 元以上而盈利或高端订单未上修时减仓。",
+    "trigger_condition": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际；普通电子布价格和库存反转或特种认证持续失败即重审。",
+    "summary": "正文与契约一致；当前估值已透支高端电子布尚未验证的成功。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第310至338行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 361,
-        "line_end": 361,
-        "quote": "| 空仓者 | 不追涨；优先等待 30—34 元试投区间，稳健投资者等待 24—28 元 |",
-        "supports": "明确空仓者当前动作是等待更低价格区间，属于等待价格。"
-      },
-      {
-        "line_start": 355,
-        "line_end": 355,
-        "quote": "**基本面建议：观察。** 中国巨石是好公司、行业复苏也是真的，但 44.38 元不是一个能容忍普通布价格回落、特种布认证延迟或扩产超支的价格。当前最合理的选择是等待价格进入安全边际，或等待高端产品订单把盈利质量的不确定性变成事实。",
-        "supports": "最终结论是观察并等待价格或验证，支持等待价格/watch。"
+        "line_start": 310,
+        "line_end": 338,
+        "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+        "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 34.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 30.0,
-      "max": 34.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:07:01+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -255,15 +245,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际；普通电子布价格和库存反转或特种认证持续失败即重审",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "景气正常化后ROE与FCF仍改善时分批买入",
+        "price_range": "24—28元",
+        "min": 24.0,
+        "ceiling": 28.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "景气正常化后ROE与FCF仍改善时分批买入",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "高端认证或批量订单有证据后小仓试投",
+        "price_range": "30—34元",
+        "min": 30.0,
+        "ceiling": 34.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -273,9 +288,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -283,7 +298,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -293,7 +308,7 @@
       "ticker": "600176.SH",
       "main_report": {
         "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
-        "sha256": "b7fb51bfc4625552bb9e61de47911176f55079e4282c00e0fcb3b100f44567ac"
+        "sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3"
       },
       "checklist": {
         "path": null,
@@ -301,14 +316,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "121c464d5095b1faa5318e2f17d40b4ba4f8739528bc4995e99a96f583beae5a",
-    "current_source_fingerprint_sha256": "1550c025d02ce2f8661684c03eb92ead436359faac082c550d2a4631cead8060"
+    "current_source_fingerprint_sha256": "121c464d5095b1faa5318e2f17d40b4ba4f8739528bc4995e99a96f583beae5a"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "121c464d5095b1faa5318e2f17d40b4ba4f8739528bc4995e99a96f583beae5a",
   "market_session_state": "runtime_required",
@@ -358,7 +373,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "66233961d14ee4d6e3ff",
   "detail_path": "./data/decision_details/66233961d14ee4d6e3ff.json"
 }

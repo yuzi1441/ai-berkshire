@@ -229,44 +229,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持有但设验证线，若业绩靠重组预期支撑应降低仓位",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价 18.60 元处于 16.5-20 元激进型景气跟踪区，只能小仓且不当作价值低估；稳健型等 13-16.5 元并验证利润，保守型等 13 元以下。",
+    "holder_action": "可持有但设验证线，不应把硝化棉景气、军工资质和重组预期直接当作长期利润。",
+    "trigger_condition": "中报/三季报继续证明硝化棉毛利、国外业务、防护订单和经营现金流，并确认扩产回报及实控人变更不损害上市公司。",
+    "summary": "正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第232至250行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 308,
-        "line_end": 308,
-        "quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |",
-        "supports": "明确空仓投资者当前动作是观察等待验证，而非买入或回避"
-      },
-      {
-        "line_start": 265,
-        "line_end": 265,
-        "quote": "**综合评分：3.2 / 5。** 结论是“可跟踪、有弹性、需安全边际”，不是“无脑买入型长期复利公司”。",
-        "supports": "最终结论为可跟踪但需安全边际，支持等待验证而非立即行动"
+        "line_start": 232,
+        "line_end": 250,
+        "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+        "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 20.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 16.5,
-      "max": 20.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:11:11+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -274,15 +264,59 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "中报/三季报继续证明硝化棉毛利、国外业务、防护订单和经营现金流，并确认扩产回报及实控人变更不损害上市公司",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "才进入深度研究/小仓试错",
+        "price_range": "≤13元",
+        "min": null,
+        "ceiling": 13.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批观察",
+        "price_range": "13-16.5元",
+        "min": 13.0,
+        "ceiling": 16.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "只能小仓位主题/景气跟踪",
+        "price_range": "16.5-20元",
+        "min": 16.5,
+        "ceiling": 20.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价 18.60 元处于 16.5-20 元激进型景气跟踪区，只能小仓且不当作价值低估；稳健型等 13-16.5 元并验证利润，保守型等 13 元以下。",
+      "currency": "CNY",
+      "reference_price": null,
+      "reference_source": null,
+      "requires_validation": false
+    },
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -396,6 +430,15 @@
         "report_path": "reports/北化股份/北化股份-investment-checklist-20260823.md",
         "report_link": "reports/北化股份/北化股份-investment-checklist-20260823.md",
         "source_type": "standalone"
+      },
+      {
+        "status": "未通过",
+        "action": "观察",
+        "data_cutoff": "2026-08-21",
+        "report_date": "2026-08-23",
+        "report_path": "reports/北化股份/北化股份-investment-checklist-20260823 2.md",
+        "report_link": "reports/北化股份/北化股份-investment-checklist-20260823 2.md",
+        "source_type": "standalone"
       }
     ]
   },
@@ -421,19 +464,19 @@
       "ticker": "002246.SZ",
       "main_report": {
         "path": "reports/北化股份/北化股份研究报告-20260709.md",
-        "sha256": "abda107ca51347f9fa60ec23fb8179e66df5aa1921ba0989cd07daf22e34baca"
+        "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c"
       },
       "checklist": {
         "path": "reports/北化股份/北化股份-investment-checklist-20260824.md",
-        "sha256": "137a92ca6b00433e60bd57bbc8318433de35b9f4879991e6671658de848bd47d"
+        "sha256": "e3e59907bfea781aab8888423c01d66928ebf148ffbfff25dc9b4d19d8c42632"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d05b811e95a521421c3b3a29c187f479c92e0eee2991047947b27b0934050c1c",
-    "current_source_fingerprint_sha256": "52ff8d2399d2472e695ac1f26417ba1c16a79e9f49e620c609fe5f07360b25ca"
+    "current_source_fingerprint_sha256": "515819b0fd3f052fa2749a333e677b583e250f9beaeb74a0504abfadccf53ab9"
   },
   "validity_state": "stale",
   "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-24）",
@@ -486,7 +529,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "a7b1a0c5ff95d6fa6717",
   "detail_path": "./data/decision_details/a7b1a0c5ff95d6fa6717.json"
 }

@@ -361,56 +361,34 @@
   ],
   "report_history_count": 5,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持有者可继续持有，但需关注失效条件并定期复核",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "可分批买入",
+    "action_kind": "buy",
+    "empty_position_action": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓。",
+    "holder_action": "5.3-7.4 元以持有、不追为主；基本面未同步改善而股价达到 7.5 元以上时可考虑减仓。",
+    "trigger_condition": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流。",
+    "summary": "正文与契约一致，无字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第247至257行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 273,
-        "line_end": 273,
-        "quote": "| **综合** | **6.8/10** | **分批买入，但不是高确定性重仓机会** |",
-        "supports": "最终结论明确建议分批买入，且说明不是重仓机会，支持当前可分批买入但需控制仓位"
-      },
-      {
-        "line_start": 374,
-        "line_end": 375,
-        "quote": "| 基本面建议动作 | 分批买入 | | 结论摘要 | 核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。 |",
-        "supports": "看板契约明确基本面建议为分批买入，且结论摘要指出现价可分批，直接支持空仓者当前可行动"
-      },
-      {
-        "line_start": 376,
-        "line_end": 377,
-        "quote": "| 激进型动作 | 现价附近小仓分批 | | 激进型价格区间 | 4.8-5.3 元 |",
-        "supports": "激进型动作明确现价附近小仓分批，当前价5.14元在4.8-5.3元区间内，为可操作提供具体依据"
-      },
-      {
-        "line_start": 287,
-        "line_end": 287,
-        "quote": "**买入论文：** 核心楼宇密度与全国交付能力维持稳定，广告收入中低个位数增长，年均经济 FCF 维持 40—50 亿元，且管理层通过分红或合理投资将现金返还给股东。以 4.3—5.3 元买入，不需要新潮协同即有接近 6%的现金流收益率。",
-        "supports": "买入论文给出明确买入价格区间，当前价5.14元落在此区间，强化当前可买入的判断"
+        "line_start": 247,
+        "line_end": 257,
+        "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+        "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 5.3,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 4.8,
-      "max": 5.3
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:11:20+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -418,15 +396,47 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "buy",
+    "main_label": "可分批买入",
+    "condition_mode": "current_action",
+    "event_condition": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "仅在深度折价时买入",
+        "price_range": "3.8-4.2 元",
+        "min": 3.8,
+        "ceiling": 4.2,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "现价附近小仓分批",
+        "price_range": "4.8-5.3 元",
+        "min": 4.8,
+        "ceiling": 5.3,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "buy",
+      "action": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓。",
+      "currency": "CNY",
+      "reference_price": 5.14,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -533,9 +543,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -543,7 +553,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "D",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：Checklist 硬性否决",
     "detail": "买入前 Checklist 存在硬性否决；即使价格进入主报告区间，也不得进入当前可买名单。",
     "opportunity_tier": null,
@@ -553,22 +563,22 @@
       "ticker": "002027.SZ",
       "main_report": {
         "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
-        "sha256": "b92d58656ddb9a83b880977c67362622641fdbc78e85559b95d7adbe5276de00"
+        "sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5"
       },
       "checklist": {
         "path": "reports/分众传媒/巴菲特Checklist-分众传媒.md",
-        "sha256": "5042e8d11173afec405156a9f176d188638d55ded85cd8976ffa6d0c1cb02296"
+        "sha256": "c9974370d65cd2b25d736d63bcd4077e5f596684dc1558537226c00cedc89e44"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4",
-    "current_source_fingerprint_sha256": "2bd69b22b2677092ff385fecccf3a9f877146c4a11e818fbeabe7089349286c9"
+    "current_source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-05",
   "source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4",
   "market_session_state": "runtime_required",
@@ -618,7 +628,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "e1493b1e9f6e0d424a3b",
   "detail_path": "./data/decision_details/e1493b1e9f6e0d424a3b.json"
 }

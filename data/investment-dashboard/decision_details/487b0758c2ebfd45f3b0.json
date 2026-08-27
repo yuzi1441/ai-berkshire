@@ -325,40 +325,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "已持仓成本低者持有但不加仓；明显超配者逢强降低集中度",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格与正式财报验证",
+    "action_kind": "watch",
+    "empty_position_action": "60.25 元不追高；进取型不高于 55 元才可小仓，稳健型不高于 50 元且中报确认现金流，保守型不高于 43 元。",
+    "holder_action": "低成本仓可持有但不加仓；明显超配者在利好兑现时降低集中度。",
+    "trigger_condition": "正式中报确认 FCF 转正、短债下降、存货增速低于收入、云计算毛利额同步增长，并核实下一代平台份额；Rubin 延期、毛利率或现金流恶化即重审。",
+    "summary": "正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第730至889行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 834,
-        "line_end": 834,
-        "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |",
-        "supports": "明确空仓保守型继续等待且给出价格触发点，支持‘等待价格’判断"
-      },
-      {
-        "line_start": 1003,
-        "line_end": 1003,
-        "quote": "| 结论 | 持有/观望，55 元以下进取型 | **观望，50 元以下稳健型分批** | 估值锚从\"近 3 年\"改为\"上市以来\" |",
-        "supports": "最终结论为观望并给出分批价格，进一步确认空仓者当前不急于买入"
+        "line_start": 730,
+        "line_end": 889,
+        "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+        "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 50.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:53:50+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -366,15 +360,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格与正式财报验证",
+    "condition_mode": "price_or_event",
+    "event_condition": "正式中报确认 FCF 转正、短债下降、存货增速低于收入、云计算毛利额同步增长，并核实下一代平台份额；Rubin 延期、毛利率或现金流恶化即重审",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "等待，分批观察",
+        "price_range": "≤ 50 元",
+        "min": null,
+        "ceiling": 50.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "可小仓试错",
+        "price_range": "≤ 55 元",
+        "min": null,
+        "ceiling": 55.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -384,9 +403,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -394,7 +413,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -404,7 +423,7 @@
       "ticker": "601138.SH",
       "main_report": {
         "path": "reports/工业富联/工业富联-research-20260726.md",
-        "sha256": "0580ffe1c5c6f91c001171d08cdd5c37863312981eb3f8e43555d8d2c3341e78"
+        "sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc"
       },
       "checklist": {
         "path": null,
@@ -412,14 +431,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "32fe090452565af7fcbd1af3c7fd847855e01a3547879e3ee6b5dc40bd7b674d",
-    "current_source_fingerprint_sha256": "f05739967ce0bae99531865e8e8e11ae8b1c34664ff7602dc5b3668edc7d1d3b"
+    "current_source_fingerprint_sha256": "32fe090452565af7fcbd1af3c7fd847855e01a3547879e3ee6b5dc40bd7b674d"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "32fe090452565af7fcbd1af3c7fd847855e01a3547879e3ee6b5dc40bd7b674d",
   "market_session_state": "runtime_required",
@@ -469,7 +488,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "487b0758c2ebfd45f3b0",
   "detail_path": "./data/decision_details/487b0758c2ebfd45f3b0.json"
 }

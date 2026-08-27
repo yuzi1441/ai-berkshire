@@ -377,45 +377,34 @@
   ],
   "report_history_count": 5,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者维持观察，不追加仓位，关注信用风险与价格是否触发买入失效条件。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "38.80 元、5.20% 税前静态股息率仅属合理偏低；36.65 元以下才开始小仓研究，34-36 元为稳健研究区，33.60 元以下提供更厚收益率缓冲。",
+    "holder_action": "分红覆盖与资本缓冲仍强时可长期持有，但不能把银行当成债券；持仓和加仓仍需受银行股总暴露约束。",
+    "trigger_condition": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复。",
+    "summary": "正文与契约一致；收益率门槛必须与信用和资本条件同时满足。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第137至217行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 273,
-        "line_end": 273,
-        "quote": "| 结论摘要 | 分红覆盖和资本缓冲较强，但38.80元仅有5.20%税前静态收益率，等待半年报验证信用风险或34-36元价格带。 |",
-        "supports": "空仓者当前不能行动，需等待价格或事件验证。"
-      },
-      {
-        "line_start": 276,
-        "line_end": 277,
-        "quote": "| 稳健型动作 | 基本面确认后分批研究 | | 稳健型价格区间 | 34-36元 |",
-        "supports": "空仓者的买入需在基本面确认且价格落入34-36元区间，当前价格不满足。"
-      },
-      {
-        "line_start": 272,
-        "line_end": 272,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "整体动作是观察，不支持立即买入。"
+        "line_start": 137,
+        "line_end": 217,
+        "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+        "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:16:03+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -423,15 +412,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "基本面确认后分批研究",
+        "price_range": "34-36元",
+        "min": 34.0,
+        "ceiling": 36.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "仅在信用指标不恶化时小仓研究",
+        "price_range": "36.65元以下",
+        "min": null,
+        "ceiling": 36.65,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -441,9 +455,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -451,7 +465,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -461,7 +475,7 @@
       "ticker": "600036.SH",
       "main_report": {
         "path": "reports/招商银行/招商银行-income-investment-20260807.md",
-        "sha256": "346c9b5772f2c74f84fdeffb6a35f22583f7ee57eca234671f801296b2e265f6"
+        "sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51"
       },
       "checklist": {
         "path": null,
@@ -469,14 +483,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4",
-    "current_source_fingerprint_sha256": "6b286980164a702699b6e0fd63afb107e2478a07cca0b0bcacdc8887f5b86266"
+    "current_source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "3ee93b0ef4c77894ae24300d78ddfa1a1746d0d595e4ba3bd2c70175e6e229c4",
   "market_session_state": "runtime_required",
@@ -526,7 +540,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "7f93ab0419fadf5a1584",
   "detail_path": "./data/decision_details/7f93ab0419fadf5a1584.json"
 }

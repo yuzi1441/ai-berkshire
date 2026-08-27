@@ -222,51 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "自动化增长和汽车利润率未恶化时持有，不追涨加仓；若股价高于85-90元但盈利预期未上修或汽车毛利、现金流继续恶化，则降低风险",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 64.34 元高于激进型价格带；56-62 元且基本面未恶化时仅可小仓分批，48-55 元为稳健分批区，45 元以下才提供更厚安全边际。",
+    "holder_action": "工业自动化增长和新能源汽车业务毛利率未恶化时可以持有，但不因机器人或 AI 叙事追价。",
+    "trigger_condition": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复。",
+    "summary": "正文与契约方向一致，无字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第183至237行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 225,
-        "line_end": 225,
-        "quote": "**基本面建议动作：观察。** 汇川是一家值得持续跟踪的高质量制造业公司，但不是在当前盈利压力下可以忽略价格的公司。",
-        "supports": "最终结论为观察，等待价格，而非立即买入。"
-      },
-      {
-        "line_start": 229,
-        "line_end": 229,
-        "quote": "| 空仓者 | 当前观察，不因机器人或 AI 叙事追高 |",
-        "supports": "空仓者当前动作是观察，不追高，隐含等待价格条件。"
-      },
-      {
-        "line_start": 230,
-        "line_end": 232,
-        "quote": "| 激进型 | 56-62 元可小仓分批，前提是基本面未进一步恶化 | | 稳健型 | 48-55 元分批买入，以中性情景折现后价值为约束 | | 保守型 | 不高于 45 元才考虑，要求更充分的汽车与周期安全边际 |",
-        "supports": "给出明确价格触发点，空仓者需等待价格回落至对应区间再行动。"
-      },
-      {
-        "line_start": 233,
-        "line_end": 233,
-        "quote": "| 持仓者 | 自动化增长和汽车利润率未恶化时持有，不追涨加仓 |",
-        "supports": "持仓者动作是持有但不加仓。"
+        "line_start": 183,
+        "line_end": 237,
+        "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+        "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:17:08+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -274,15 +257,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "分批买入",
+        "price_range": "48-55元",
+        "min": 48.0,
+        "ceiling": 55.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓分批",
+        "price_range": "56-62元",
+        "min": 56.0,
+        "ceiling": 62.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -292,9 +300,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -302,7 +310,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -312,7 +320,7 @@
       "ticker": "300124.SZ",
       "main_report": {
         "path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
-        "sha256": "edf5cb364efd935d19aeaa41f6a305ccb698797485c18f82919700288fb145cb"
+        "sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f"
       },
       "checklist": {
         "path": null,
@@ -320,14 +328,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "0d154931ee8a00164c01ce38889afcbe48f3728ae4203f96b0de4c7147f61af9",
-    "current_source_fingerprint_sha256": "4f1bf99a5b692c4fdd74c93a39f7f280d982018199423e719cad94fa5e7918ce"
+    "current_source_fingerprint_sha256": "0d154931ee8a00164c01ce38889afcbe48f3728ae4203f96b0de4c7147f61af9"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "0d154931ee8a00164c01ce38889afcbe48f3728ae4203f96b0de4c7147f61af9",
   "market_session_state": "runtime_required",
@@ -377,7 +385,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "0f0555bb400a8f668263",
   "detail_path": "./data/decision_details/0f0555bb400a8f668263.json"
 }

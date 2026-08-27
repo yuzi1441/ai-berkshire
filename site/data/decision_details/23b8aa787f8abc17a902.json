@@ -222,44 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "小仓持有继续观察；较重持仓审视机会成本，成本显著低于9.5元可持有，接近现价需与更高ROIC公司比较",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "11.69 元不追价，优先等待 9.5 元附近，或正式财报证明利润中枢显著上修。",
+    "holder_action": "可继续观察，但不把单季改善当成加仓理由。",
+    "trigger_condition": "9.5-10.5 元只适合小仓试错，9.0-9.5 元进入稳健买入区，不高于 9.0 元才有更强安全边际；同时验证回款、海外毛利和高端产品商业化。",
+    "summary": "正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第274至285行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 322,
-        "line_end": 322,
-        "quote": "| 空仓 | **等待，不在 11.69 元追价** | 价格进入 9.5 元附近，或正式财报证明利润中枢显著上修 |",
-        "supports": "明确空仓者当前动作是等待，不追价，支持等待价格判断"
-      },
-      {
-        "line_start": 347,
-        "line_end": 347,
-        "quote": "一拖值得进入长期观察池，但当前还不是高赔率买点。公司在品牌、服务、渠道和核心部件上有真实复合优势，且资产负债表强、现金流和分红纪律合格；问题在于行业利润率低、客户可替换、雷沃竞争强，高端与出海尚未证明能持续抬升 ROIC。11.69 元对应 15.55x TTM PE，看似不贵，但中性五年资本利得年化仅约 2.8%。空仓者优先等待 9.5 元附近或更强的利润上修证据；持仓者可继续观察，不应把单季改善当成重仓理由。",
-        "supports": "最终结论明确空仓者应等待9.5元附近或更强利润上修证据，支持等待价格"
+        "line_start": 274,
+        "line_end": 285,
+        "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+        "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 10.5,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 9.5,
-      "max": 10.5
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:04:32+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -267,15 +257,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "同时验证回款、海外毛利和高端产品商业化",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "保守型可分批买入",
+        "price_range": "不高于 9.0 元",
+        "min": null,
+        "ceiling": 9.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "同时验证回款、海外毛利和高端产品商业化",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "稳健型重点买入区",
+        "price_range": "9.0-9.5 元",
+        "min": 9.0,
+        "ceiling": 9.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "同时验证回款、海外毛利和高端产品商业化",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "激进型可小仓试错",
+        "price_range": "9.5-10.5 元",
+        "min": 9.5,
+        "ceiling": 10.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "同时验证回款、海外毛利和高端产品商业化",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -285,9 +312,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -295,7 +322,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -305,7 +332,7 @@
       "ticker": "601038.SH",
       "main_report": {
         "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
-        "sha256": "877eb0ba762dadd1cc2edad9ec83a076f28081ffa3fcf47b17337412a2a02af5"
+        "sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364"
       },
       "checklist": {
         "path": null,
@@ -313,14 +340,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "f507abae8e3b67ab7ac7b5a69398e45aaf92a705ef339e821975e9b15a8a93e2",
-    "current_source_fingerprint_sha256": "d95e02b1bfc38fe4801351b512064c442af99614caf6935a68523f278c318f7b"
+    "current_source_fingerprint_sha256": "f507abae8e3b67ab7ac7b5a69398e45aaf92a705ef339e821975e9b15a8a93e2"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "f507abae8e3b67ab7ac7b5a69398e45aaf92a705ef339e821975e9b15a8a93e2",
   "market_session_state": "runtime_required",
@@ -370,7 +397,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "23b8aa787f8abc17a902",
   "detail_path": "./data/decision_details/23b8aa787f8abc17a902.json"
 }

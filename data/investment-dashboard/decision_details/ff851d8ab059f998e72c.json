@@ -316,22 +316,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
+    "label": "回避/不买",
+    "action_kind": "no",
+    "empty_position_action": "48.39 元回避，不因较高点腰斩就抄底；33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价。",
+    "holder_action": "持有但不加仓并降低到可承受仓位；报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓。",
+    "trigger_condition": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上；重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审。",
+    "summary": "契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第690至727行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 690,
+        "line_end": 727,
+        "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+        "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:51:54+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -339,15 +351,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "no",
+    "main_label": "回避/不买",
+    "condition_mode": "no_buy",
+    "event_condition": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上",
+    "guard_condition": "重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "主要建仓区。对应 20% 安全边际及 PB 2.5–3.0x。",
+        "price_range": "28 – 33.5 元",
+        "min": 28.0,
+        "ceiling": 33.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。",
+        "price_range": "33.5 – 42 元",
+        "min": 33.5,
+        "ceiling": 42.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "研究性小仓候选区。需先确认下跌不是论文破裂（存货减值幅度、Q3 利润）。",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -357,9 +394,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -367,7 +404,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -377,7 +414,7 @@
       "ticker": "600549.SH",
       "main_report": {
         "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
-        "sha256": "5feae5084ea2ed2050ce241ceb4b05a58bb51df1da2775fe917d242ce218f975"
+        "sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf"
       },
       "checklist": {
         "path": null,
@@ -385,14 +422,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "fc66c492a9411a7b5f55579238863dfa4de782e5447cbfb190a08242dfe7d1b1",
-    "current_source_fingerprint_sha256": "a1a225dfe65dd9f9c0839a720f1142f3ce119336f6ac4f41406bfda37322ead2"
+    "current_source_fingerprint_sha256": "fc66c492a9411a7b5f55579238863dfa4de782e5447cbfb190a08242dfe7d1b1"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "fc66c492a9411a7b5f55579238863dfa4de782e5447cbfb190a08242dfe7d1b1",
   "market_session_state": "runtime_required",
@@ -442,7 +479,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "ff851d8ab059f998e72c",
   "detail_path": "./data/decision_details/ff851d8ab059f998e72c.json"
 }

@@ -146,46 +146,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "已持有且成本低的投资者可继续持有但设跟踪纪律，若毛利率连续低于18%、扣非净利连续下滑、存货继续上升等减仓信号出现，应减仓或重审。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格或经营兑现",
+    "action_kind": "watch",
+    "empty_position_action": "65.91 元不追，放入观察名单；等待 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率和自由现金流同步修复后再研究买入。",
+    "holder_action": "低成本仓可继续持有但须设纪律；成长型只能小仓事件跟踪，不能把 AI PCB 叙事当安全边际。",
+    "trigger_condition": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入；毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避。",
+    "summary": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第280行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 292,
-        "line_end": 292,
-        "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |",
-        "supports": "表明最终结论为观察，空仓者不应追高买入，支持等待判断。"
-      },
-      {
-        "line_start": 298,
-        "line_end": 298,
-        "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |",
-        "supports": "明确空仓者当前动作是等待价格回到30-40元或财报验证，属于明确的等待价格触发条件。"
-      },
-      {
-        "line_start": 374,
-        "line_end": 374,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "看板契约同样给出‘观察’动作，与正文一致，佐证空仓者不行动、等待后续信号。"
+        "line_start": 280,
+        "line_end": 280,
+        "quote": "## 第八步：最终决策与行动清单",
+        "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "entry_ceiling": 40.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:15:56+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -193,15 +181,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "等待价格或经营兑现",
+    "condition_mode": "price_or_event",
+    "event_condition": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入",
+    "guard_condition": "毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "若基本面未恶化，可进入重点买入研究区。",
+        "price_range": "30-40 元",
+        "min": 30.0,
+        "ceiling": 40.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "若基本面未恶化，可进入重点买入研究区。",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -211,9 +212,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -221,7 +222,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -231,7 +232,7 @@
       "ticker": "603228.SH",
       "main_report": {
         "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
-        "sha256": "14f1673edb5ca0498f1c854b72647828ca606fa2097fa8d05739f9c635989fa6"
+        "sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d"
       },
       "checklist": {
         "path": null,
@@ -239,14 +240,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "7a3407c6e1adc10c580789b17bf295ac0826be3303df210a195f094013977c50",
-    "current_source_fingerprint_sha256": "5665f8de57efcbfbf2ed8f110d3203430869152f57397ebd9b965c880acc940c"
+    "current_source_fingerprint_sha256": "7a3407c6e1adc10c580789b17bf295ac0826be3303df210a195f094013977c50"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "7a3407c6e1adc10c580789b17bf295ac0826be3303df210a195f094013977c50",
   "market_session_state": "runtime_required",
@@ -296,7 +297,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "a1591a9be7fb3e815f12",
   "detail_path": "./data/decision_details/a1591a9be7fb3e815f12.json"
 }

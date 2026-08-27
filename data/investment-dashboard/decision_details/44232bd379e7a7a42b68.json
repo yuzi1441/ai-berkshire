@@ -222,39 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "报告未明确持仓者动作，但激进型建议小仓位跟踪，保守型建议观察不追高，均未要求减仓或卖出",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价 414.80 元绝非低估；只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化。",
+    "holder_action": "低成本可持有并设置反证清单；成本接近报告价者应谨慎持有或降低暴露。",
+    "trigger_condition": "显著回落且订单、毛利率和现金流继续验证；FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控。",
+    "summary": "契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第288至325行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 384,
-        "line_end": 384,
-        "quote": "| 激进型动作 | 小仓位跟踪，不把它当低估值投资 |",
-        "supports": "明确给出激进型空仓者可小仓位跟踪，故归为小仓验证"
-      },
-      {
-        "line_start": 388,
-        "line_end": 388,
-        "quote": "| 保守型动作 | 观察，不追高 |",
-        "supports": "保守型建议观察不追高，未要求回避或卖出，支持不归为回避/卖出"
+        "line_start": 288,
+        "line_end": 325,
+        "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+        "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:55:53+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -262,15 +257,22 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "显著回落且订单、毛利率和现金流继续验证；FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控",
     "guard_condition": null,
     "price_rules": [],
-    "current_action": null,
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价 414.80 元绝非低估；只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化。",
+      "currency": "CNY",
+      "reference_price": 414.8,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -280,9 +282,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -290,7 +292,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -300,7 +302,7 @@
       "ticker": "002916.SZ",
       "main_report": {
         "path": "reports/深南电路/深南电路研究报告-20260709.md",
-        "sha256": "8a3b3e3d368851f6548036101de031de92396c27e2b465fbdfdd076c996aed10"
+        "sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05"
       },
       "checklist": {
         "path": null,
@@ -308,14 +310,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab",
-    "current_source_fingerprint_sha256": "7409770bd3b7e39d6c15464f7f17181587060033b2f15132b3d2f12918a27f57"
+    "current_source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b8d1e8b2c9d4e3a978dcfc30510848727f011d1f7b1d81d3c90e0330112837ab",
   "market_session_state": "runtime_required",
@@ -365,7 +367,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "44232bd379e7a7a42b68",
   "detail_path": "./data/decision_details/44232bd379e7a7a42b68.json"
 }

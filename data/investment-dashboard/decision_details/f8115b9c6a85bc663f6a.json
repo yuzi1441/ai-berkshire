@@ -316,40 +316,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "103.55-115.05元区间可持有，等待8月半年报验证储能毛利率、汇兑及美国订单；不因低于员工持股均价加仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 113.42 元不追；103.55 元以下只建立不超过目标仓位三分之一的观察仓，92.04 元以下且基本面未进一步恶化时才分批建立有意义仓位，80.54 元以下为深度价值区。",
+    "holder_action": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
+    "trigger_condition": "美国 FCC 规则范围有限或不溯及既往、储能毛利率回到 33% 以上、TTM 净利润恢复增长、境外毛利率维持 38% 以上，且储能出货增速重新追上行业。",
+    "summary": "正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第529至608行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 593,
-        "line_end": 593,
-        "quote": "**结论：好公司，当前价格观望。不是回避，也不是买入——是等。**",
-        "supports": "最终结论明确为观望等待，既非买入也非回避，支持等待价格/watch标签。"
-      },
-      {
-        "line_start": 599,
-        "line_end": 599,
-        "quote": "| **空仓者** | 当前不追价。103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓；**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位；80.54 元（14x）以下为深度价值区。 |",
-        "supports": "空仓者当前不追价，给出明确价格触发点（92.04元以下分批建仓），支持等待价格而非买入或回避。"
+        "line_start": 529,
+        "line_end": 608,
+        "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+        "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 103.55,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:26:28+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -357,15 +351,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "美国 FCC 规则范围有限或不溯及既往、储能毛利率回到 33% 以上、TTM 净利润恢复增长、境外毛利率维持 38% 以上，且储能出货增速重新追上行业",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "深度价值区，可分批建立有意义仓位",
+        "price_range": "80.54 元",
+        "min": 80.54,
+        "ceiling": 80.54,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "有吸引力，可开始建仓",
+        "price_range": "92.04 元",
+        "min": 92.04,
+        "ceiling": 92.04,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "可建立观察仓（不超过目标仓位 1/3）",
+        "price_range": "103.55 元",
+        "min": 103.55,
+        "ceiling": 103.55,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -375,9 +406,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -385,7 +416,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -395,7 +426,7 @@
       "ticker": "300274.SZ",
       "main_report": {
         "path": "reports/阳光电源/阳光电源-research-20260726.md",
-        "sha256": "50f8058ada0f0c60f31276623da1db7c58fd16f457eada8c5101d2a98f269bdb"
+        "sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056"
       },
       "checklist": {
         "path": null,
@@ -403,14 +434,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "3c48edb17a57c9ac8d4fdee4c246a79cfaa38f57e29ed67544e6b46a434eb8a9",
-    "current_source_fingerprint_sha256": "7a6deb54d3ec53a1ed0b680ede673dcb813cebc6aa7e58c8c428155fb956fb1c"
+    "current_source_fingerprint_sha256": "3c48edb17a57c9ac8d4fdee4c246a79cfaa38f57e29ed67544e6b46a434eb8a9"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "3c48edb17a57c9ac8d4fdee4c246a79cfaa38f57e29ed67544e6b46a434eb8a9",
   "market_session_state": "runtime_required",
@@ -460,7 +491,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "f8115b9c6a85bc663f6a",
   "detail_path": "./data/decision_details/f8115b9c6a85bc663f6a.json"
 }

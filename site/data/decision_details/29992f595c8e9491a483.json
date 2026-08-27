@@ -222,45 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者审慎持有，不加仓，需跟踪减仓信号（如安全事故、应收恶化、商誉减值等）",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错；稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下。",
+    "holder_action": "可审慎持有，但要严格跟踪现金流、商誉、应收/合同资产、安全生产和防务兑现。",
+    "trigger_condition": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际；并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位。",
+    "summary": "正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第210至218行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 272,
-        "line_end": 272,
-        "quote": "5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。",
-        "supports": "空仓者需等待明确价格触发点，属等待价格而非立即买入"
-      },
-      {
-        "line_start": 264,
-        "line_end": 264,
-        "quote": "| 研究动作 | **观察 / 有持仓则审慎持有** |",
-        "supports": "最终结论为空仓者观察等待，持仓者审慎持有"
-      },
-      {
-        "line_start": 331,
-        "line_end": 331,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "契约标注基本面动作为观察，与正文一致，空仓者无买入动作"
+        "line_start": 210,
+        "line_end": 218,
+        "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+        "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:01:45+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -268,15 +257,22 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位",
+    "guard_condition": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际",
     "price_rules": [],
-    "current_action": null,
+    "current_action": {
+      "action_kind": "trial",
+      "action": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错；稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下。",
+      "currency": "CNY",
+      "reference_price": 28.34,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -286,9 +282,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -296,7 +292,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -306,7 +302,7 @@
       "ticker": "002683.SZ",
       "main_report": {
         "path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
-        "sha256": "acccf23d874bbc64ae7da3ddc82e83a9338c273779227f2a308a222bb74ab8fc"
+        "sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d"
       },
       "checklist": {
         "path": null,
@@ -314,14 +310,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "861eaeb8c8f1dfcefb4587316bf181a1ee661f5620b135c7eef28bc10f5e2cde",
-    "current_source_fingerprint_sha256": "d38ccf0d86749b5ef1a71b40a4571efb3e55e81b4f963c0b591b39985ac4ed81"
+    "current_source_fingerprint_sha256": "861eaeb8c8f1dfcefb4587316bf181a1ee661f5620b135c7eef28bc10f5e2cde"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "861eaeb8c8f1dfcefb4587316bf181a1ee661f5620b135c7eef28bc10f5e2cde",
   "market_session_state": "runtime_required",
@@ -371,7 +367,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "29992f595c8e9491a483",
   "detail_path": "./data/decision_details/29992f595c8e9491a483.json"
 }

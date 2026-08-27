@@ -172,39 +172,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "若已持有可部分止盈，不建议在异动高位新开仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价约 48 元处于概念异动高位，不追；26-32 元才开始稳健研究，22-26 元、正常化 PE 约 10-12 倍时才具更强吸引力。",
+    "holder_action": "异动高位可部分止盈，不能把磷化铟、固态电池叙事当作已兑现利润；长期跟踪磷矿与兴福电子的真实价值。",
+    "trigger_condition": "价格回到对应正常化估值区，同时磷矿价格中枢和兴福电子业绩兑现、五硫化二磷取得正式订单、磷石膏治理取得实质进展。",
+    "summary": "正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第122至174行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 162,
-        "line_end": 162,
-        "quote": "**最终建议：这是一家值得放进观察名单长期跟踪的好公司，但当前处于投机情绪推动的高位，价值投资者应严守纪律、回避追高，耐心等待周期回落或概念退潮带来的更好价格（正常化 PE 10–12x，约 22–26 元）再重点研究介入。** 记住段永平那句话的精神——磷矿和兴福电子是好资产，但把它们和一堆随行就市的化工装置捆在一起，这门生意的质量被稀释了；而当市场用概念给它套上\"AI+固态电池\"的高估值时，反而是提醒你远离、而非靠近的信号。",
-        "supports": "明确空仓者应回避追高，等待价格触发点22-26元，归为等待价格"
-      },
-      {
-        "line_start": 190,
-        "line_end": 190,
-        "quote": "| 稳健型动作 | 回避追高，列入观察名单，等磷化工周期与概念热度回落 |",
-        "supports": "契约稳健型动作支持等待价格而非回避/卖出，与正文一致"
+        "line_start": 122,
+        "line_end": 174,
+        "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+        "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:52:02+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -212,15 +207,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "event_only",
+    "event_condition": "价格回到对应正常化估值区，同时磷矿价格中枢和兴福电子业绩兑现、五硫化二磷取得正式订单、磷石膏治理取得实质进展",
     "guard_condition": null,
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -230,9 +225,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -240,7 +235,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -250,7 +245,7 @@
       "ticker": "600141.SH",
       "main_report": {
         "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
-        "sha256": "a3680f7c233c98beb2d0883a7862b416f6e97f9a05cba8d8739efe2ac63b1813"
+        "sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64"
       },
       "checklist": {
         "path": null,
@@ -258,14 +253,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72",
-    "current_source_fingerprint_sha256": "e12ef0d5eb20d1e7ba2717323ccc4438535859da816ca45d1d8580e6bf2d818d"
+    "current_source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72",
   "market_session_state": "runtime_required",
@@ -315,7 +310,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "e8e750f83632bed4b0a1",
   "detail_path": "./data/decision_details/e8e750f83632bed4b0a1.json"
 }

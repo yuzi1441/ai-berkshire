@@ -132,39 +132,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "继续持有，设置跟踪止损；若持仓成本高于25元，考虑部分减仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "当前可小仓分批",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价 19.49 元允许先建 3%-5% 观察仓并分批执行，不在高铜价位置一次性重仓；15-17 元安全边际更充分，13-15 元为更强加仓区。",
+    "holder_action": "可继续持有并设置周期与政策跟踪纪律；低成本仓安全边际较好，高成本仓应控制风险。",
+    "trigger_condition": "铜价回调但长期需求未破坏、KFM 二期进度/产量超预期、刚果金政策更明确或股价进入 15-17/13-15 元区；铜价长期低于 10,000 美元、刚果金重大不利政策、利润增速降至个位数或新团队出现诚信/战略失误即失效。",
+    "summary": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第423行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 427,
-        "line_end": 427,
-        "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |",
-        "supports": "空仓者当前可分批买入，而非单纯等待，故归为可分批买入"
-      },
-      {
-        "line_start": 428,
-        "line_end": 428,
-        "quote": "| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |",
-        "supports": "持仓者继续持有，佐证报告整体偏多态度，与空仓者可分批买入一致"
+        "line_start": 423,
+        "line_end": 423,
+        "quote": "### 最终决策",
+        "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:49:07+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -172,15 +167,35 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "main_action_kind": "trial",
+    "main_label": "当前可小仓分批",
+    "condition_mode": "current_action",
+    "event_condition": "铜价回调但长期需求未破坏、KFM 二期进度/产量超预期、刚果金政策更明确或股价进入 15-17/13-15 元区",
+    "guard_condition": "铜价长期低于 10,000 美元、刚果金重大不利政策、利润增速降至个位数或新团队出现诚信/战略失误即失效",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "铜价回调但长期需求未破坏、KFM 二期进度/产量超预期、刚果金政策更明确或股价进入 15-17/13-15 元区",
+        "price_range": "13-15 元",
+        "min": 13.0,
+        "ceiling": 15.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价 19.49 元允许先建 3%-5% 观察仓并分批执行，不在高铜价位置一次性重仓；15-17 元安全边际更充分，13-15 元为更强加仓区。",
+      "currency": "CNY",
+      "reference_price": 19.49,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -190,9 +205,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -200,7 +215,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -210,7 +225,7 @@
       "ticker": "603993.SH",
       "main_report": {
         "path": "reports/CMOC/CMOC-research-20260623.md",
-        "sha256": "336785bb013e61e7df8ff0fc2dfc0888b7084d928973561099f91d196f4ab9d9"
+        "sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea"
       },
       "checklist": {
         "path": null,
@@ -218,14 +233,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "4b2eeea38802ab8c1a9d66920642c11b7b6f2ef24c61ced6416dad7bf4e0c182",
-    "current_source_fingerprint_sha256": "537f7b77be8300ced50374b23f6de6c2b4cc7effd1b21fc1274cc7d3d4e1183c"
+    "current_source_fingerprint_sha256": "4b2eeea38802ab8c1a9d66920642c11b7b6f2ef24c61ced6416dad7bf4e0c182"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "4b2eeea38802ab8c1a9d66920642c11b7b6f2ef24c61ced6416dad7bf4e0c182",
   "market_session_state": "runtime_required",
@@ -275,7 +290,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "fe3b0b249ce9f0b53a6b",
   "detail_path": "./data/decision_details/fe3b0b249ce9f0b53a6b.json"
 }

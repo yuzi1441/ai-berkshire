@@ -132,39 +132,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者建议减仓至5%以下甚至清仓，获利了结。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "报告基准价约 163.66 元、约 100 倍 PE 时明确回避；只有回落到 70-80 元附近才重新研究。",
+    "holder_action": "强烈建议减仓至 5% 以下或退出，不以光模块叙事承受当前估值风险。",
+    "trigger_condition": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估。",
+    "summary": "正文与契约一致，无字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第215至276行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 297,
-        "line_end": 297,
-        "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |",
-        "supports": "该证据支持空仓者当前应回避，但明确给出等待价格触发点，属于等待价格/watch。"
-      },
-      {
-        "line_start": 328,
-        "line_end": 328,
-        "quote": "- 如果回调至CNY 70-80（PE 30-35x），华工科技会成为一个不错的AI光模块投资标的——但在163元，它不是",
-        "supports": "该证据支持最终结论为等待更低价位，而非彻底回避，符合等待价格分类。"
+        "line_start": 215,
+        "line_end": 276,
+        "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+        "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:03:09+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -172,15 +167,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估",
+        "price_range": "70-80 元",
+        "min": 70.0,
+        "ceiling": 80.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -190,9 +198,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -200,7 +208,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -210,7 +218,7 @@
       "ticker": "000988.SZ",
       "main_report": {
         "path": "reports/hgtech/hgtech-investment-research-20260623.md",
-        "sha256": "64794fc503dcf98a0b84784b09e555f74a2ef8a59d57a0c0d085efbbee895824"
+        "sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07"
       },
       "checklist": {
         "path": null,
@@ -218,14 +226,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d1ebe8f5f4543c8fa055fac560b63bd8710ca2ad429d0016c72a9b3541399042",
-    "current_source_fingerprint_sha256": "b4aea3192f9a1a72e4e5193967fc0519e2cc1f843f0029b9837be200da6bac43"
+    "current_source_fingerprint_sha256": "d1ebe8f5f4543c8fa055fac560b63bd8710ca2ad429d0016c72a9b3541399042"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d1ebe8f5f4543c8fa055fac560b63bd8710ca2ad429d0016c72a9b3541399042",
   "market_session_state": "runtime_required",
@@ -275,7 +283,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "f6f40108e77e75c0beb4",
   "detail_path": "./data/decision_details/f6f40108e77e75c0beb4.json"
 }

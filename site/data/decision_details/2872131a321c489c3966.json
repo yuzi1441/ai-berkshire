@@ -432,44 +432,34 @@
   ],
   "report_history_count": 4,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "低成本持仓者可持有并跟踪经营指标；高成本或重仓者应主动降集中度；任何持仓者在临床/安全/海外质量/关联交易失控时重审论文。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待验证",
+    "action_kind": "watch",
+    "empty_position_action": "55.75 元不追；优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元三项至少满足两项。47-50 元只允许激进小仓，43-46 元稳健分批，37-40 元才接近保守安全区。",
+    "holder_action": "低成本持仓可继续验证创新药销售、OCF、许可收入和 FDA 整改；高成本或重仓持仓若价格上行但盈利预期不升，应降低集中度。",
+    "trigger_condition": "半年报创新药增速接近或超过 30%、经营现金流转化修复、卡瑞利珠单抗整改重报或获批、真实里程碑兑现，且价格进入安全区；重大临床、安全性或连续海外质量问题即重审。",
+    "summary": "契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第300至373行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 355,
-        "line_end": 355,
-        "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。",
-        "supports": "明确空仓者当前动作是等待价格区间和事件验证，而非立即买入。"
-      },
-      {
-        "line_start": 373,
+        "line_start": 300,
         "line_end": 373,
-        "quote": "恒瑞医药的稀缺性来自平台，而不是某个爆款：它已经把国内创新药销售、强现金研发体系和全球 BD 连成闭环。真正需要付折价的，是许可收入的年度波动、热门赛道拥挤、海外 CMC 执行以及创始人依赖。55.75 元对应 45.57x TTM PE，中性三年目标价只有 60.2 元，赔率不足以补偿这些风险。结论是：**公司值得长期跟踪，现价适合持有验证，不适合空仓追高；43-46 元开始具备稳健研究价值，37-40 元才接近保守安全区。**",
-        "supports": "最终结论重申空仓追高不适合，仅当价格进入43-46元等区间才具备稳健价值，支持等待价格判断。"
+        "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+        "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 50.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 47.0,
-      "max": 50.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:14:54+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -477,15 +467,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待验证",
+    "condition_mode": "price_or_event",
+    "event_condition": "半年报创新药增速接近或超过 30%、经营现金流转化修复、卡瑞利珠单抗整改重报或获批、真实里程碑兑现，且价格进入安全区",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "重点建仓研究",
+        "price_range": "37-40 元",
+        "min": 37.0,
+        "ceiling": 40.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批建仓",
+        "price_range": "43-46 元",
+        "min": 43.0,
+        "ceiling": 46.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓试探",
+        "price_range": "47-50 元",
+        "min": 47.0,
+        "ceiling": 50.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -558,9 +585,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -568,7 +595,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -578,22 +605,22 @@
       "ticker": "600276.SH",
       "main_report": {
         "path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
-        "sha256": "7186447fb86f7b7e061feced1a27ed43cb1c6f24d681cbaa2eaa0ed2a7902c7a"
+        "sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34"
       },
       "checklist": {
         "path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
-        "sha256": "21ee0094a0496f25cd48a16d91e7b5547ed2ec547a9f902c26045852d0c81ecb"
+        "sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
-    "current_source_fingerprint_sha256": "0afdace029ff79134ae86294da56fe7f3efa152cc4aa83bcbb59bd89c1bf25b7"
+    "current_source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
   "market_session_state": "runtime_required",
@@ -643,7 +670,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "2872131a321c489c3966",
   "detail_path": "./data/decision_details/2872131a321c489c3966.json"
 }

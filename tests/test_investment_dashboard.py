@@ -100,6 +100,40 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(by_ticker["000400.SZ"]["execution_key"], "no")
         self.assertTrue(by_ticker["002027.SZ"]["checklist_blocked"])
 
+    def test_production_main_report_resolutions_cover_exact_a_share_universe(self):
+        data_directory = ROOT / "data" / "investment-dashboard"
+        resolution_payload = json.loads(
+            (data_directory / "main_report_resolutions.json").read_text(encoding="utf-8")
+        )
+        board = json.loads((data_directory / "decision_board.json").read_text(encoding="utf-8"))
+        a_shares = [item for item in board["decisions"] if item.get("market") == "A股"]
+        resolutions = resolution_payload["resolutions"]
+
+        self.assertEqual(len(a_shares), 93)
+        self.assertEqual(len(resolutions), 93)
+        resolutions_by_ticker = {item["ticker"]: item for item in resolutions}
+        self.assertEqual(
+            set(resolutions_by_ticker),
+            {item["ticker"] for item in a_shares},
+        )
+
+        for ticker, resolution in resolutions_by_ticker.items():
+            report = ROOT / resolution["report_path"]
+            self.assertTrue(report.is_file(), ticker)
+            self.assertEqual(
+                resolution["report_sha256"],
+                hashlib.sha256(report.read_bytes()).hexdigest(),
+                ticker,
+            )
+            self.assertTrue(resolution["reviewed_at"], ticker)
+            self.assertIn("人工", resolution["judgment"]["source_basis"], ticker)
+
+        for decision in a_shares:
+            judgment = decision["primary_judgment"]
+            self.assertTrue(judgment["human_reviewed"], decision["ticker"])
+            self.assertEqual(judgment["artifact_status"], "human_reviewed", decision["ticker"])
+            self.assertTrue(judgment["source_matches"], decision["ticker"])
+
     def test_uses_data_cutoff_not_filesystem_modification_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

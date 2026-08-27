@@ -92,39 +92,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "成本8元以下可持有收息，视为类债资产；成本11元以上反弹至11-12元中性估值区建议减仓换入更优标的",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 9.63 元赔率不足，不追；8.40 元以下且分红率维持 30% 时，才按高股息债券替代而非成长股小仓研究。",
+    "holder_action": "成本 8 元以下可持有收息；成本 11 元以上可在 11-12 元中性估值区减仓并比较招行、兴业等更优替代。",
+    "trigger_condition": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳。",
+    "summary": "报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第184至267行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 249,
-        "line_end": 249,
-        "quote": "| **空仓者** | **观望，不追。** 9.63 元处于中性价值（11.3 元）与悲观价值（7.5 元）之间，赔率不足。若非买不可，把买点设在 **8.4 元以下**（股息率 5% + 0.38 倍 PB 双重支撑），仓位按\"高股息债券替代\"管理而非成长仓位。**同等价位内，招行（质量）与兴业（股息）是更优的银行股选择。** |",
-        "supports": "支持空仓者应观望并等待价格触发点8.4元，属于等待价格/watch"
-      },
-      {
-        "line_start": 264,
-        "line_end": 264,
-        "quote": "**一句话结论：真实的困境反转 + 不便宜的反转定价 + 行业内更优替代随处可得 = 观望（8.4 元以下转为\"高股息债券替代\"级别的买入）。**",
-        "supports": "支持最终结论为观望，且价格触发条件明确，归为等待价格"
+        "line_start": 184,
+        "line_end": 267,
+        "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+        "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:19:07+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -132,15 +127,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳",
+        "price_range": "8.40 元",
+        "min": 8.4,
+        "ceiling": 8.4,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -150,9 +158,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -160,7 +168,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -170,7 +178,7 @@
       "ticker": "600000.SH",
       "main_report": {
         "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
-        "sha256": "e2f8c20bab6a21a672a9beaf15811ca6a18f9bb891fabe5cef1db135bf90b090"
+        "sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39"
       },
       "checklist": {
         "path": null,
@@ -178,14 +186,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f",
-    "current_source_fingerprint_sha256": "02c71581f1c660fea68d82107472770443487abedb9d3740d6f4642a3ae84881"
+    "current_source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "c1f0dfae6755bda2bee9d609e18028a3703bae188d333589618b509ca3c0244f",
   "market_session_state": "runtime_required",
@@ -235,7 +243,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "3c4babf294273ae35657",
   "detail_path": "./data/decision_details/3c4babf294273ae35657.json"
 }

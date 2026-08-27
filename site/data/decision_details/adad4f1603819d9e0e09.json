@@ -477,40 +477,34 @@
   ],
   "report_history_count": 7,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "有条件持有，仓位不过度集中，按信号跟踪而非只看股价",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 139.68 元处于 130-160 元合理观察区；125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏。",
+    "holder_action": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押。",
+    "trigger_condition": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长。",
+    "summary": "正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第327至411行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 360,
-        "line_end": 360,
-        "quote": "| 综合动作 | **空仓等待；持仓有条件持有；不在当前价重仓追买** |",
-        "supports": "明确空仓投资者当前动作是等待，而非买入"
-      },
-      {
-        "line_start": 392,
-        "line_end": 392,
-        "quote": "迈瑞依然是一家值得长期跟踪的优秀公司：客户价值真实、研发和全球服务体系难复制，现金流和资产负债表也足够强。但 2025 年已经证明，医疗刚需并不等于公司收入刚性，国产龙头也不等于定价权。当前 139.68 元不是泡沫价格，却要求利润较快修复；在中性 5% EPS 增长假设下，10% 要求回报现值只有约 119 元。最理性的动作不是否定公司，也不是用长期主义替高价格辩护，而是等待国内收入、毛利率和海外利润质量给出更多证据，同时坚持 115-125 元附近才开始逐步提高兴趣的价格纪律。",
-        "supports": "最终结论强调等待价格区间和验证信号，归为等待价格"
+        "line_start": 327,
+        "line_end": 411,
+        "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+        "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 130.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:25:27+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -518,15 +512,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "只设观察仓，不追涨",
+        "price_range": "125 元",
+        "min": 125.0,
+        "ceiling": 125.0,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -605,9 +612,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -615,7 +622,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -625,22 +632,22 @@
       "ticker": "300760.SZ",
       "main_report": {
         "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
-        "sha256": "7fde5dcc0e321dd2cae9c70b29cbc4761587074cd3d2856a4797874852ef06bb"
+        "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489"
       },
       "checklist": {
         "path": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
-        "sha256": "769529a6bb26e254da951adff07720fe0eee1a3c625439e1611fdde8b86c591e"
+        "sha256": "a33194fb798fba7983d7e99750365640389d9f1e69f922487edd7511f7b2f99a"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
-    "current_source_fingerprint_sha256": "64919fb9250758dbc13b896fdd303fc1d9efd9e58e3c8f4045dd599eb697e404"
+    "current_source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
   "market_session_state": "runtime_required",
@@ -690,7 +697,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "adad4f1603819d9e0e09",
   "detail_path": "./data/decision_details/adad4f1603819d9e0e09.json"
 }

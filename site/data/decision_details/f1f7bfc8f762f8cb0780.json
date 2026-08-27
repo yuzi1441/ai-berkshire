@@ -411,34 +411,34 @@
   ],
   "report_history_count": 3,
   "primary_judgment": {
-    "label": "等待验证",
+    "label": "等待价格与半年报验证",
     "action_kind": "watch",
-    "empty_position_action": "A股当前观察、不追价；26-30元才可考虑小仓分批，H股小仓许可不映射为601899.SH动作",
-    "holder_action": "当前持有观察，不因H1预增追高；等待正式半年报和Kamoa修复证据",
-    "trigger_condition": "正式H1兑现预告、CFO和利润良好、Kamoa稳定、巨龙二期达产，并且A股进入26-30元或更低区间",
-    "summary": "601899.SH对应A股；报告在32.55元明确给出观察、不追价，H股分层不改变A股裁决。",
+    "empty_position_action": "A 股 32.55 元合理但安全边际薄，当前观察、不追价；26-30 元且论文未受损时才可小仓分批，25 元以下安全边际才明显改善。H 股折价机会不适用于 601899.SH 的 A 股判断。",
+    "holder_action": "基本面未破坏可继续持有观察，不因半年报预增追高；优先核对正式半年报、Kamoa 修复和新管理层资本纪律。",
+    "trigger_condition": "正式半年报兑现利润并保持现金流质量，Kamoa 守住 29 万吨且 C1 不高于 3 美元/磅，巨龙二期达产，同时价格进入 26-30 元；矿产品毛利率持续低于 50%、并购减值或商品下跌时杠杆恶化即失效。",
+    "summary": "A 股当前位于报告的 30-36 元观察区；报告明确指出周期上行利润抬高估值分母，当前悲观下行大于偏保守中性上行。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文最终决策与看板契约对A股均为观察；A/H差异是市场分层。",
-    "source_basis": "人工逐行核对行动价格带、最终决策及看板契约",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
     "currency": "CNY",
-    "price_source": "主报告第286至291行、第314至317行",
+    "price_source": "主报告第310行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 314,
-        "line_end": 317,
-        "quote": "A股观察、不追价；持仓者当前可持有观察，优先等待正式半年报和Kamoa修复证据。",
-        "supports": "明确区分空仓与持仓动作。"
+        "line_start": 310,
+        "line_end": 310,
+        "quote": "### 最终决策",
+        "supports": "A 股当前位于报告的 30-36 元观察区；报告明确指出周期上行利润抬高估值分母，当前悲观下行大于偏保守中性上行。"
       }
     ],
     "enabled": true,
     "human_reviewed": true,
-    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
     "screening_consensus": false,
     "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-23T16:15:00+08:00",
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -447,10 +447,10 @@
   "execution_policy": {
     "schema_version": 1,
     "main_action_kind": "watch",
-    "main_label": "等待验证",
-    "condition_mode": "price_and_event",
-    "event_condition": "正式H1兑现预告、CFO和利润良好、Kamoa稳定、巨龙二期达产，并且A股进入26-30元或更低区间",
-    "guard_condition": null,
+    "main_label": "等待价格与半年报验证",
+    "condition_mode": "price_or_event",
+    "event_condition": "正式半年报兑现利润并保持现金流质量，Kamoa 守住 29 万吨且 C1 不高于 3 美元/磅，巨龙二期达产，同时价格进入 26-30 元",
+    "guard_condition": "矿产品毛利率持续低于 50%、并购减值或商品下跌时杠杆恶化即失效",
     "price_rules": [
       {
         "action_kind": "buy",
@@ -461,20 +461,20 @@
         "mode": "ceiling",
         "currency": "CNY",
         "requires_validation": true,
-        "validation_condition": "正式H1兑现预告、CFO和利润良好、Kamoa稳定、巨龙二期达产，并且A股进入26-30元或更低区间",
+        "validation_condition": "安全边际明显改善后再分批",
         "source": "report_price_plan"
       },
       {
         "action_kind": "trial",
-        "action": "正式H1兑现预告、CFO和利润良好、Kamoa稳定、巨龙二期达产，并且A股进入26-30元或更低区间",
-        "price_range": "进入26-30元",
+        "action": "小仓分批，优先等待价格回落",
+        "price_range": "26-30 元",
         "min": 26.0,
         "ceiling": 30.0,
         "mode": "range",
         "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "正式H1兑现预告、CFO和利润良好、Kamoa稳定、巨龙二期达产，并且A股进入26-30元或更低区间",
-        "source": "validated_judgment_trigger"
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
       }
     ],
     "current_action": null,
@@ -489,9 +489,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -499,7 +499,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -517,14 +517,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "9c9a1b244734044e91916d09c1add0eaaad2191effd88c07b1ba395c762e63d1",
-    "current_source_fingerprint_sha256": "ee8bc2872253dcd6b2abe25cc043b773ec96a95d57ef4b7959c5100402e0c2d9"
+    "current_source_fingerprint_sha256": "9c9a1b244734044e91916d09c1add0eaaad2191effd88c07b1ba395c762e63d1"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9c9a1b244734044e91916d09c1add0eaaad2191effd88c07b1ba395c762e63d1",
   "market_session_state": "runtime_required",
@@ -574,7 +574,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "f1f7bfc8f762f8cb0780",
   "detail_path": "./data/decision_details/f1f7bfc8f762f8cb0780.json"
 }

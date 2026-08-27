@@ -228,40 +228,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "继续持有收息，若股价回到5.5元以上可考虑减持部分仓位。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "报告基准价 4.81 元只允许 5%-10% 高股息防御配置；优先等 4.50 元以下，3.6-4.5 元为正式建仓区，3.6 元以下才进入极端悲观重仓研究区。",
+    "holder_action": "继续持有收息；5.5 元以上接近目标价时可减持，不能把 5% 股息当作无风险债券收益。",
+    "trigger_condition": "4.2 元以下、容量电价继续提升、水电投产超预期或具体资产注入方案出现；电价连续两季跌幅超过 10%、煤价持续高于 1000 元或负债率超过 76% 即重审。",
+    "summary": "正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第322至341行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 326,
-        "line_end": 326,
-        "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。 |",
-        "supports": "明确给出空仓者可小仓位配置但优先等待4.5元以下价格触发点，因此归类为等待价格。"
-      },
-      {
-        "line_start": 369,
-        "line_end": 369,
-        "quote": "**一句话总结**：国电电力是一张\"5%票息、面值可能小幅增长但也可能下跌\"的准债券。适合追求稳定收息的低风险投资者，但不适合追求资本增值的成长型投资者。",
-        "supports": "最终结论强调其适合收息、不适合追求增值，支持当前不急于重仓、等待更好价格的判断。"
+        "line_start": 322,
+        "line_end": 341,
+        "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+        "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "entry_ceiling": 4.5,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:01:57+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -269,15 +263,59 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "重仓区——极端悲观情景，股息率7%+",
+        "price_range": "3.6元以下",
+        "min": null,
+        "ceiling": 3.6,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "4.2 元以下、容量电价继续提升、水电投产超预期或具体资产注入方案出现",
+        "price_range": "4.2 元以下",
+        "min": null,
+        "ceiling": 4.2,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "建仓区——安全边际充足",
+        "price_range": "3.6-4.5元",
+        "min": 3.6,
+        "ceiling": 4.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "报告基准价 4.81 元只允许 5%-10% 高股息防御配置；优先等 4.50 元以下，3.6-4.5 元为正式建仓区，3.6 元以下才进入极端悲观重仓研究区。",
+      "currency": "CNY",
+      "reference_price": 4.81,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -287,9 +325,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -297,7 +335,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -307,7 +345,7 @@
       "ticker": "600795.SH",
       "main_report": {
         "path": "reports/guodian-power/guodian-power-research-20260623.md",
-        "sha256": "a1759541716188e22aff0917a63ca6000b01bdef74ba79de9fcf5c8634e73b0f"
+        "sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b"
       },
       "checklist": {
         "path": null,
@@ -315,14 +353,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d41078a94844ad909df04b7b0174aa447b72d6835d0994e37d50c77ca12e3dab",
-    "current_source_fingerprint_sha256": "f9027c70d30222ca972b7b47c625d888df8028c093ddf2edb97e3d7e8caa7e70"
+    "current_source_fingerprint_sha256": "d41078a94844ad909df04b7b0174aa447b72d6835d0994e37d50c77ca12e3dab"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d41078a94844ad909df04b7b0174aa447b72d6835d0994e37d50c77ca12e3dab",
   "market_session_state": "runtime_required",
@@ -372,7 +410,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "72db212b3584b0f657cf",
   "detail_path": "./data/decision_details/72db212b3584b0f657cf.json"
 }

@@ -584,50 +584,34 @@
   ],
   "report_history_count": 8,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "小仓持有者持有观察不加仓；大仓持有者复核集中度与成本，若20—24元以上无业绩上修则考虑降低仓位。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 17.81 元不追；14-16 元才允许分批研究，13.90 元以下且基本面未恶化时吸引力进一步提高。",
+    "holder_action": "16-20 元以持有观察、不加仓为主；若股价进入 20-24 元而利润预期没有同步上修，可考虑降低仓位。",
+    "trigger_condition": "价格进入 14-16 元，或 Q2/Q3 核心业务收入、扣非利润、毛利率和现金流同步恢复；海外毛利、特高压项目、服务业务和 H 股条款也是验证项。",
+    "summary": "正文与契约方向一致，但契约没有完整表达分层价格带。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第315至328行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 385,
-        "line_end": 385,
-        "quote": "| 空仓者 | 17.81 元不追；优先等 14—16 元 | 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |",
-        "supports": "明确给出空仓者等待价格区间及事件触发条件，支持‘等待价格’标签"
-      },
-      {
-        "line_start": 408,
-        "line_end": 408,
-        "quote": "> 华明装备值得长期放在高质量观察池，但 17.81 元仍要求未来三年 EPS 以约 15.8% 增长才能在 18x 退出估值下取得 10% 年化总回报；更理性的选择是等待 14—16 元的安全边际，或等待经营数据先证明海外和高端化真正转化为现金利润。",
-        "supports": "最终结论确认空仓者应等待价格或经营验证，支持‘等待价格’判断"
-      },
-      {
-        "line_start": 343,
-        "line_end": 343,
-        "quote": "**综合评分：3.9/5。评级：好公司，当前价观望/持有，不追价买入。**",
-        "supports": "总体评级为观望/持有，不追价买入，与空仓者等待动作一致"
+        "line_start": 315,
+        "line_end": 328,
+        "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+        "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 16.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 14.67,
-      "max": 16.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:51:46+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -635,15 +619,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "价格进入 14-16 元，或 Q2/Q3 核心业务收入、扣非利润、毛利率和现金流同步恢复；海外毛利、特高压项目、服务业务和 H 股条款也是验证项",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "基本面未损时分批买入",
+        "price_range": "≤13.90 元",
+        "min": null,
+        "ceiling": 13.9,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "较有吸引力，分批建仓",
+        "price_range": "13.90—14.67 元",
+        "min": 13.9,
+        "ceiling": 14.67,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓分批，等待季报验证",
+        "price_range": "14.67—16.00 元",
+        "min": 14.67,
+        "ceiling": 16.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "出现一定安全边际，但悲观情景仍有显著下行",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -722,9 +743,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -732,7 +753,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -742,22 +763,22 @@
       "ticker": "002270.SZ",
       "main_report": {
         "path": "reports/华明装备/华明装备-investment-team-20260713.md",
-        "sha256": "766eb1b0f2014bd44b458c7718ee5ed8256302832e92cae7364cfe66ef7052bf"
+        "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd"
       },
       "checklist": {
         "path": "reports/华明装备/巴菲特Checklist-华明装备-20260706.md",
-        "sha256": "8aabcc9274b5bbc4d09a22e69e3961e1a2d93f881425878765790deb52a64cfa"
+        "sha256": "ed71bf47a73f0db2127aeca6ce27f118056d5bdacae18741832178fa7c94d2fd"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
-    "current_source_fingerprint_sha256": "dfd298fc99ea6e95e96cd988850c4652fb9a9132972928ee3c031a317d128223"
+    "current_source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "f5a22f43d0bd1ea75bca88106e60527f0302aff4287e3084ed1768cbcd8d9930",
   "market_session_state": "runtime_required",
@@ -807,7 +828,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "137ae527471b5c46baa0",
   "detail_path": "./data/decision_details/137ae527471b5c46baa0.json"
 }

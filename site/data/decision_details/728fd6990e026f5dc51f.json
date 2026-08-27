@@ -228,56 +228,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持有但不追涨；关注2026中报、回购执行和清洁能源毛利率",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 5.78 元安全边际不足；5.20 元以下才考虑小仓，4.80-5.20 元为激进试买区，4.20-4.80 元稳健分批，4.20 元以下仍须确认前提未破坏。",
+    "holder_action": "可持有但不追涨，继续核对 2026 中报、回购执行、清洁能源毛利率及现金的真实配置效率；6.50 元以上而盈利未恢复时考虑减仓。",
+    "trigger_condition": "TTM 扣非利润企稳、供暖面积保持增长、回购实际执行并增厚每股价值，且价格进入 4.20-4.80 元；清洁能源毛利率持续低于 28% 或供暖面积连续两年下降即重审。",
+    "summary": "正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第310至347行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 366,
-        "line_end": 366,
-        "quote": "**基本面建议：观察。** 联美不是差公司，也不是明显高估公司；它是“好资产、一般增长、需要资本配置证明”的公司。当前价 5.78 元处于合理区间上半部，赔率不够好，空仓者不必急着买。",
-        "supports": "空仓者当前不应买入，需等待更好价格"
-      },
-      {
-        "line_start": 370,
-        "line_end": 370,
-        "quote": "| 空仓者 | 观察；5.20 元以下才考虑小仓，4.80 元以下再进入稳健分批区 |",
-        "supports": "空仓者明确动作是观察并等待价格触发"
-      },
-      {
-        "line_start": 371,
-        "line_end": 371,
-        "quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |",
-        "supports": "持仓者建议持有不追加"
-      },
-      {
-        "line_start": 435,
-        "line_end": 435,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "契约粗标签为观察，与正文一致"
+        "line_start": 310,
+        "line_end": 347,
+        "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+        "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 5.2,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 4.8,
-      "max": 5.2
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:23:41+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -285,15 +263,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "TTM 扣非利润企稳、供暖面积保持增长、回购实际执行并增厚每股价值，且价格进入 4.20-4.80 元；清洁能源毛利率持续低于 28% 或供暖面积连续两年下降即重审",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "前提未破坏时分批买入",
+        "price_range": "低于4.20元",
+        "min": null,
+        "ceiling": 4.2,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批买入",
+        "price_range": "4.20-4.80元",
+        "min": 4.2,
+        "ceiling": 4.8,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "价格进入区间后小仓试买",
+        "price_range": "4.80-5.20元",
+        "min": 4.8,
+        "ceiling": 5.2,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -303,9 +318,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -313,7 +328,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -323,7 +338,7 @@
       "ticker": "600167.SH",
       "main_report": {
         "path": "reports/联美控股/联美控股-investment-research-20260809.md",
-        "sha256": "0c2633b81fea07e6c2a1369ff36b05f7669855bc0c0d01c2091c49e05adb1e0a"
+        "sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0"
       },
       "checklist": {
         "path": null,
@@ -331,14 +346,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3",
-    "current_source_fingerprint_sha256": "0fc113ca1174c5b528e94f2b53f0ec94d0cd81ba7386254c3537a3f34cbfc0d1"
+    "current_source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b810e0c2dc307c9e5b6387e618e79d15925f1050f7199a7f53982b1615e654e3",
   "market_session_state": "runtime_required",
@@ -388,7 +403,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "728fd6990e026f5dc51f",
   "detail_path": "./data/decision_details/728fd6990e026f5dc51f.json"
 }

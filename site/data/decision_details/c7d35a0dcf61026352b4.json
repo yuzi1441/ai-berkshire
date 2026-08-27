@@ -642,44 +642,34 @@
   ],
   "report_history_count": 6,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "可继续持有，但必须设定纪律：若成本在70元以下，考虑在120元以上分批减持至舒适仓位；单一标的仓位不超过组合的10%；严格执行卖出信号。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 112.22 元无安全边际；87-101 元只进入关注区，70-87 元且基本面未恶化才分批建仓。",
+    "holder_action": "基本面仍在加速时可以持有，但要限制单票风险并执行毛利率、现金流、负债和客户分部的卖出纪律。",
+    "trigger_condition": "70-87 元，或 AI 服务器/HPC 恢复双位数增长、mSAP 量产、FCF/净利润回到 50% 以上且 2027 云厂商资本开支未下修。",
+    "summary": "正文与契约一致；契约未结构化持仓纪律与基本面触发条件。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第776至839行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 836,
-        "line_end": 836,
-        "quote": "| **空仓者** | **观望，不买入。** 把 **87–101元** 设为关注区（对应2026E PE 25–29x，历史中位），**70–87元** 设为分批建仓区。当前 112.22 元位于\"无安全边际\"区间的中部。这是一家值得在自己的能力圈里长期跟踪的公司，但今天不是买点。 |",
-        "supports": "明确给出空仓者动作：观望不买入，并给出价格触发区间，属于等待价格。"
-      },
-      {
-        "line_start": 843,
-        "line_end": 843,
-        "quote": "> **好公司，好行业，坏价格。**",
-        "supports": "最终结论强调价格是核心问题，支持等待价格回落再行动。"
+        "line_start": 776,
+        "line_end": 839,
+        "quote": "### 7.8 ⭐ 价格区间：什么价格值得买 **方法一：按历史估值锚（2026E 净利 66.73 亿）** | 给定PE | 对应股价 | 较现价 | 说明 |",
+        "supports": "L776-L839、L1065-L1086。正文与契约一致；契约未结构化持仓纪律与基本面触发条件。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 101.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 87.0,
-      "max": 101.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:18:15+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -687,15 +677,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "70-87 元，或 AI 服务器/HPC 恢复双位数增长、mSAP 量产、FCF/净利润回到 50% 以上且 2027 云厂商资本开支未下修",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "有安全边际，可分批建仓",
+        "price_range": "70 – 87 元",
+        "min": 70.0,
+        "ceiling": 87.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "历史中位区，可开始小仓位关注",
+        "price_range": "87 – 101 元",
+        "min": 87.0,
+        "ceiling": 101.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -768,9 +783,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -778,7 +793,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -788,22 +803,22 @@
       "ticker": "002463.SZ",
       "main_report": {
         "path": "reports/沪电股份/沪电股份-research-20260726.md",
-        "sha256": "6a3af5e2eb0dcc417ad8f3bc01826e0454e17a8b1a3453e4926d5a50e23242fa"
+        "sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45"
       },
       "checklist": {
         "path": "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md",
-        "sha256": "e10138c70292060bc9892847ef4c184db04ad4a79183fc0260b07d7dfb1b3445"
+        "sha256": "962dcaa07a5735f619977fdcc2ecce5d132177a98ccb2611dabddcb1ce289945"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f",
-    "current_source_fingerprint_sha256": "c7bafbd688af766d78027f625378ddd195dd0ac31ccff72f1550a6fd3ed85f3c"
+    "current_source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "8a65646e0a2044953104592c5cdef6faad2a83f7f940731d1a73ec8c623d808f",
   "market_session_state": "runtime_required",
@@ -853,7 +868,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "c7d35a0dcf61026352b4",
   "detail_path": "./data/decision_details/c7d35a0dcf61026352b4.json"
 }

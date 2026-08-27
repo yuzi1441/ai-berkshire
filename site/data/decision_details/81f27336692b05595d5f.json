@@ -173,39 +173,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "分批止盈，至少减半；剩余仓位定性为周期投机头寸，设置严格卖出纪律；若成本极低至少收回本金",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "报告基准价 618.02 元处于周期顶部定价，明确回避；合理价值约 240-300 元，只有 180 元以下且周期出清后才有安全边际。",
+    "holder_action": "分批止盈、至少减半，剩余只按周期投机头寸管理；低成本持仓至少收回本金，不能把中报预增当作长期利润。",
+    "trigger_condition": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估。",
+    "summary": "契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第184至256行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 240,
-        "line_end": 240,
-        "quote": "| 空仓者 | **回避**。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时 |",
-        "supports": "明确空仓者当前动作是回避，属于‘no’类"
-      },
-      {
-        "line_start": 241,
-        "line_end": 241,
-        "quote": "| 持仓者 | **分批止盈，至少减半**。剩余仓位明确定性为\"周期投机头寸\"而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金 |",
-        "supports": "明确持仓者动作是分批止盈减半，支持‘回避/卖出’标签"
+        "line_start": 184,
+        "line_end": 256,
+        "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+        "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:18:27+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -213,15 +208,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估",
     "guard_condition": null,
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -231,9 +226,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -241,7 +236,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -251,7 +246,7 @@
       "ticker": "301308.SZ",
       "main_report": {
         "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
-        "sha256": "c46555dfd3cc95be6688883a518aedfd56db44bda7377dc2871acffc1c74c0b7"
+        "sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d"
       },
       "checklist": {
         "path": null,
@@ -259,14 +254,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6",
-    "current_source_fingerprint_sha256": "04b26d25cf40b5c9f8c85a97a54324d478652a389cc5a892fc20b48b7b2433e2"
+    "current_source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6",
   "market_session_state": "runtime_required",
@@ -316,7 +311,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "81f27336692b05595d5f",
   "detail_path": "./data/decision_details/81f27336692b05595d5f.json"
 }

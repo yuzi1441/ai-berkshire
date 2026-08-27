@@ -222,39 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "报告未明确给出持仓者动作，但整体不建议追高，持有者宜观望等待",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "不追高；55-60 元且 2026H1 现金流修复才允许研究性小仓，稳健型等 35-45 元，保守型等 25-35 元并验证周期下行后的现金流。",
+    "holder_action": "高估值且现金流未改善时分批降风险，不继续扩大周期暴露。",
+    "trigger_condition": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落。",
+    "summary": "契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第193至239行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 303,
-        "line_end": 306,
-        "quote": "| 基本面建议动作 | 观察 | | 结论摘要 | 投资者类型 当前建议 价格/触发区间 解释 | | 激进型动作 | 只适合小仓位观察，不建议追高 | | 激进型价格区间 | 约 58.5 元 |",
-        "supports": "空仓者中激进型只适合小仓位观察，不建议追高，属于等待价格而非买入"
-      },
-      {
-        "line_start": 307,
-        "line_end": 310,
-        "quote": "| 稳健型动作 | 等待 | | 稳健型价格区间 | 35-45 元 | | 保守型动作 | 暂不买入 | | 保守型价格区间 | 25-35 元 |",
-        "supports": "稳健型和保守型均要求等待更低价格且给出触发区间，整体判断为等待价格"
+        "line_start": 193,
+        "line_end": 239,
+        "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+        "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:51:00+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -262,15 +257,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "只适合小仓位观察，不建议追高",
+        "price_range": "约 58.5 元",
+        "min": 58.5,
+        "ceiling": 58.5,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -280,9 +288,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -290,7 +298,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -300,7 +308,7 @@
       "ticker": "000657.SZ",
       "main_report": {
         "path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
-        "sha256": "0f32aa25cdd8f64fb0bfc610c209732e3dd75f35249c29e0ace50ac16adc38df"
+        "sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6"
       },
       "checklist": {
         "path": null,
@@ -308,14 +316,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "8417a6058cb1d56c13233c4d200e310fd4e3c425fc67d649ba3b983965891e49",
-    "current_source_fingerprint_sha256": "843ad3a5414f1a7ebc770246c9b30283c66e483b879da250cd10174841bdcdf2"
+    "current_source_fingerprint_sha256": "8417a6058cb1d56c13233c4d200e310fd4e3c425fc67d649ba3b983965891e49"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "8417a6058cb1d56c13233c4d200e310fd4e3c425fc67d649ba3b983965891e49",
   "market_session_state": "runtime_required",
@@ -365,7 +373,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "b313858d0ee09d72df4f",
   "detail_path": "./data/decision_details/b313858d0ee09d72df4f.json"
 }

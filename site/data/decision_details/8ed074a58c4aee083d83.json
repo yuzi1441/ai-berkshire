@@ -304,44 +304,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "小仓持有者可继续观察，将锑产销率、OCF和控制权过户设为季度检查点；重仓持有者因风险收益不匹配，应评估降低至可承受周期和治理波动的仓位。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格与事件验证",
+    "action_kind": "watch",
+    "empty_position_action": "19.38 元不追；17-18 元且控制权过户、精矿销售或 OCF 至少一项硬改善时才可小仓，13-15 元稳健等待，10-12 元以下或连续两季产销和 OCF 改善后再重估。",
+    "holder_action": "小仓可观察，但须把锑产销率、OCF 和控制权过户设为季度检查点；重仓风险收益不匹配，应降低到可承受周期和治理波动的仓位。",
+    "trigger_condition": "控制权和董事会改组完成且关联定价清楚、塔铝产销率连续两季改善、OCF 接近利润、泥堡节点兑现；库存和负现金流持续、关联交易异常、建设延后或过户长期不完成即重审。",
+    "summary": "契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第273至367行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 364,
-        "line_end": 364,
-        "quote": "| 空仓 | 19.38 元不追，优先等经营证据；激进者也应等 17-18 元与至少一项硬验证同时出现 |",
-        "supports": "明确给出空仓者动作：不追高，等待价格和验证条件，支持‘等待价格’分类"
-      },
-      {
-        "line_start": 289,
-        "line_end": 289,
-        "quote": "> 华钰值得进入金锑资源观察池，但当前仍是“资源好、兑现难、治理待证明”的高波动期权，而不是可以忽略价格的复利资产；19.38 元较前期回落后仍缺乏稳健安全边际，结论是观察或小仓事件跟踪，不建议重仓买入。",
-        "supports": "最终结论为观察或小仓跟踪，不支持立即买入，支持等待/观察判断"
+        "line_start": 273,
+        "line_end": 367,
+        "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+        "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 18.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 17.0,
-      "max": 18.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:12:02+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -349,15 +339,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "等待价格与事件验证",
+    "condition_mode": "price_or_event",
+    "event_condition": "控制权和董事会改组完成且关联定价清楚、塔铝产销率连续两季改善、OCF 接近利润、泥堡节点兑现",
+    "guard_condition": "库存和负现金流持续、关联交易异常、建设延后或过户长期不完成即重审",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "等信号后小仓试错",
+        "price_range": "17-18 元",
+        "min": 17.0,
+        "ceiling": 18.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -367,9 +370,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -377,7 +380,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -387,7 +390,7 @@
       "ticker": "601020.SH",
       "main_report": {
         "path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
-        "sha256": "c5e3eb12dd1192a35ec3208af9d1a1d167422c8611d172989a1edb6e9f84d309"
+        "sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5"
       },
       "checklist": {
         "path": null,
@@ -395,14 +398,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "44f022a498f035e49b809328ce2190cec3152dcfd4bea1ce1e5a6ec3415ae350",
-    "current_source_fingerprint_sha256": "b4e59d1a2f75977cfdce2d940a49f259422588768bb6de55f65c700d43cc3306"
+    "current_source_fingerprint_sha256": "44f022a498f035e49b809328ce2190cec3152dcfd4bea1ce1e5a6ec3415ae350"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "44f022a498f035e49b809328ce2190cec3152dcfd4bea1ce1e5a6ec3415ae350",
   "market_session_state": "runtime_required",
@@ -452,7 +455,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "8ed074a58c4aee083d83",
   "detail_path": "./data/decision_details/8ed074a58c4aee083d83.json"
 }

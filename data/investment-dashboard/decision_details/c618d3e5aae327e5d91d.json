@@ -124,39 +124,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "小比例观察仓可持有至正式中报及后续验证，不宜机械补仓；若超仓位上限且买入逻辑仅为历史低估值，应降至可承受跟踪仓位；14元以上且盈利未上修可分批减仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "12.42 元不追；8.5-9 元且毛利率不再创新低、应收/收入开始下降时只建三分之一观察仓，7-8 元且现金转化和库存改善时稳健分批，6.3 元以下仍需排除质量与治理问题。",
+    "holder_action": "小比例观察仓可等待中报和后续两个季度，不在应收与库存未修复时机械补仓；14 元以上而盈利没有上修可减仓，17 元附近接近乐观终值。",
+    "trigger_condition": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+    "summary": "契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第306至431行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 389,
-        "line_end": 389,
-        "quote": "当前建议为 **观察，不追买**。不要因为 25.25 倍 TTM PE 低于历史均值就买入，因为 H1 备考和年化 PE 分别约 32.17 倍和 40.23 倍。",
-        "supports": "该证据明确空仓者当前动作是观察不追买，支持等待价格/watch。"
-      },
-      {
-        "line_start": 421,
-        "line_end": 421,
-        "quote": "**12.42 元对应的不是“龙头打折价”，而是对 2027-2028 年明显利润修复的提前下注。** 基准情景合理关注区约 8.5-9.0 元；若严格要求相对 Base 折现现值有约 25%安全边际，保守买入区约为 6.3 元以下。在此之前，最有价值的动作是等待正式中报、应收和库存拐点，以及新品真正贡献收入。",
-        "supports": "该证据说明最终结论要求等待更低价格和基本面验证，支持归为等待价格/watch。"
+        "line_start": 306,
+        "line_end": 431,
+        "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+        "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:13:32+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -164,15 +159,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "可用计划仓位的 1/3 建观察仓",
+        "price_range": "8.5-9.0 元",
+        "min": 8.5,
+        "ceiling": 9.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -182,9 +190,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -192,7 +200,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -202,7 +210,7 @@
       "ticker": "600161.SH",
       "main_report": {
         "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
-        "sha256": "827ce4b5bd41dd10dd9f85cf7a45602e97c7d7882961de9ba6a73c7dd75bceac"
+        "sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844"
       },
       "checklist": {
         "path": null,
@@ -210,14 +218,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6",
-    "current_source_fingerprint_sha256": "0a9df9c2672863f15306ed0a89a5220a1d0be342b4f52190029d5a542dc68cb7"
+    "current_source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6",
   "market_session_state": "runtime_required",
@@ -267,7 +275,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "c618d3e5aae327e5d91d",
   "detail_path": "./data/decision_details/c618d3e5aae327e5d91d.json"
 }

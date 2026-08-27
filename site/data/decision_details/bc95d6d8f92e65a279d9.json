@@ -132,39 +132,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者应减仓至5%以下，因1年涨230%后获利了结是理性选择，分析师目标价已低于现价，保留小仓位享受超预期惊喜",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "估值过高，等待回调",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价 258 元不具备投资价值；等待 120-150 元、约 2026E PE 44-55 倍，或 DDR6 切换期出现类似 2023 年的周期性下跌后再研究。",
+    "holder_action": "建议减至 5% 以下并保留小仓跟踪；一年上涨约 230%、分析师目标价已低于现价时，不应用好公司叙事替代赔率纪律。",
+    "trigger_condition": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审；DDR5 出货环比转负、Retimer 份额受挤压、创始人继续大幅减持或 PE 超过 150 倍为减仓/回避信号。",
+    "summary": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第310行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 314,
-        "line_end": 314,
-        "quote": "| **空仓者** | **等待回调。当前258元不具备投资价值。** 目标买入区间：CNY 120-150（对应2026E PE 44-55x），此时安全边际较充足。如果在DDR6切换期（~2028-2029年）出现类似2023年的周期性暴跌，将是极佳的长期买入机会 |",
-        "supports": "明确给出空仓者等待价格回调至120-150元区间，属于等待价格动作"
-      },
-      {
-        "line_start": 345,
-        "line_end": 345,
-        "quote": "- **最佳策略是等待**：等DDR6切换期的周期性下行（类似2023年），或等估值回到PE 50-60x区间再入场",
-        "supports": "最终结论明确建议‘等待’，有价格触发条件，支持归为等待价格"
+        "line_start": 310,
+        "line_end": 310,
+        "quote": "### 最终决策",
+        "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:03:49+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -172,15 +167,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "估值过高，等待回调",
+    "condition_mode": "price_or_event",
+    "event_condition": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审",
+    "guard_condition": "DDR5 出货环比转负、Retimer 份额受挤压、创始人继续大幅减持或 PE 超过 150 倍为减仓/回避信号",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审",
+        "price_range": "120-150 元",
+        "min": 120.0,
+        "ceiling": 150.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -190,9 +198,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -200,7 +208,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -210,7 +218,7 @@
       "ticker": "688008.SH",
       "main_report": {
         "path": "reports/montage-tech/montage-tech-investment-research-20260623.md",
-        "sha256": "57217fc3cc453d2aa0d041d21336ff91833cedf21e840404814ea42c24679569"
+        "sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9"
       },
       "checklist": {
         "path": null,
@@ -218,14 +226,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "f7d72c8ee828e10008fcf9268cb9c05638f447ffc0bae4b8d85ad9eb51f351f2",
-    "current_source_fingerprint_sha256": "3fb13e606d07852eacd036ad8e9346c2ef129bed679d1ea8f021ebabfc32e913"
+    "current_source_fingerprint_sha256": "f7d72c8ee828e10008fcf9268cb9c05638f447ffc0bae4b8d85ad9eb51f351f2"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "f7d72c8ee828e10008fcf9268cb9c05638f447ffc0bae4b8d85ad9eb51f351f2",
   "market_session_state": "runtime_required",
@@ -275,7 +283,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "bc95d6d8f92e65a279d9",
   "detail_path": "./data/decision_details/bc95d6d8f92e65a279d9.json"
 }

@@ -143,22 +143,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "持有/观察优先，等待回调或继续验证",
+    "action_kind": "watch",
+    "empty_position_action": "A 股基准价 277 元不急追，报告没有给出可直接套用的 A 股买入价；保守口径仅给 ONC 240-260 美元且基本面未恶化时重研，稳健口径要求后续季度收入、GAAP 利润率和 FCF 继续验证，不能跨市场机械换算成 A 股买点。",
+    "holder_action": "可继续持有并设置验证线，重点核对 2026 收入指引、GAAP operating income、BRUKINSA 增速、FCF per share 与股本摊薄。",
+    "trigger_condition": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审；BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审。",
+    "summary": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第341行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 341,
+        "line_end": 341,
+        "quote": "## 第十部分：最终投资建议",
+        "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:55:22+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -166,15 +178,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "watch",
+    "main_label": "持有/观察优先，等待回调或继续验证",
+    "condition_mode": "event_only",
     "event_condition": null,
-    "guard_condition": null,
+    "guard_condition": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审；BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审",
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -253,9 +265,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -263,7 +275,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -273,22 +285,22 @@
       "ticker": "688235.SH",
       "main_report": {
         "path": "reports/百济神州/百济神州研究报告-20260706.md",
-        "sha256": "74e492d472d638c78e7522b7738054bb68f3965c59f403d7a97d88f5e74cbb68"
+        "sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263"
       },
       "checklist": {
         "path": "reports/百济神州/巴菲特Checklist-百济神州-20260706.md",
-        "sha256": "660be4aabf8b9dfa2e76bed872ab20262c764b6570635fa3c51cd758112374fa"
+        "sha256": "ad2a82741e1e63177ef1291d65a8f47aa8a36dd253130a0652ad527aeb07d4ff"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4",
-    "current_source_fingerprint_sha256": "06af4bbbe000dc4f4a89651f545f57c6a73e7bff890df2e322eb1be2a6459b65"
+    "current_source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4",
   "market_session_state": "runtime_required",
@@ -338,7 +350,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "b13563f8a689821ed06a",
   "detail_path": "./data/decision_details/b13563f8a689821ed06a.json"
 }

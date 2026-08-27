@@ -182,39 +182,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者持有但控制仓位在10%以内，密切关注欧盟禁令执行和应收账款趋势，触发卖出信号则减仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格或后续业绩验证",
+    "action_kind": "watch",
+    "empty_position_action": "101.85 元不直接建仓；优先等待 70-80 元。若 2026Q2-Q3 持续高增长且欧盟限制影响有限，85-95 元才允许约 5% 观察仓。",
+    "holder_action": "可持有但控制仓位，并重点跟踪欧盟限制、应收质量和储能逆变器毛利率。",
+    "trigger_condition": "70-80 元，或 85-95 元叠加业绩/政策验证；马来西亚产能有效规避壁垒、工商储收入放量、自有品牌占比提高可增强判断。欧洲收入显著下滑、逆变器毛利率低于 40%、应收增速长期远超收入或实控人大额减持即失效。",
+    "summary": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第354行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 358,
-        "line_end": 358,
-        "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |",
-        "supports": "明确给出空仓者等待价格触发条件，归为‘等待价格/watch’"
-      },
-      {
-        "line_start": 390,
-        "line_end": 390,
-        "quote": "- **当前PE 41倍需要\"大部分乐观假设兑现\"才能获得合理回报**。如果投资者对欧盟禁令影响和业绩持续性没有高于市场共识的信心，建议等待更好的价格",
-        "supports": "最终结论再次强调等待更好价格，支持‘等待价格/watch’判断"
+        "line_start": 354,
+        "line_end": 354,
+        "quote": "### 最终决策",
+        "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:49:44+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -222,15 +217,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "等待价格或后续业绩验证",
+    "condition_mode": "price_or_event",
+    "event_condition": "70-80 元，或 85-95 元叠加业绩/政策验证；马来西亚产能有效规避壁垒、工商储收入放量、自有品牌占比提高可增强判断",
+    "guard_condition": "欧洲收入显著下滑、逆变器毛利率低于 40%、应收增速长期远超收入或实控人大额减持即失效",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "70-80 元，或 85-95 元叠加业绩/政策验证",
+        "price_range": "70-80 元",
+        "min": 70.0,
+        "ceiling": 80.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "trial",
+        "action": "70-80 元，或 85-95 元叠加业绩/政策验证",
+        "price_range": "85-95 元",
+        "min": 85.0,
+        "ceiling": 95.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -240,9 +260,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -250,7 +270,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -260,7 +280,7 @@
       "ticker": "605117.SH",
       "main_report": {
         "path": "reports/deye/deye-investment-research-20260623.md",
-        "sha256": "29685b3ed2579599b2e57d0f2250771a911750a97bc9e19baab74306ca29e23c"
+        "sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267"
       },
       "checklist": {
         "path": null,
@@ -268,14 +288,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "9280b06c65ccff61c9922c871e32d10516b353be6a060f06d0fe5437c2f1c918",
-    "current_source_fingerprint_sha256": "5bf1c4b7357a1a64e471975741af2cf543a43a6f65177300e647d37018f03d62"
+    "current_source_fingerprint_sha256": "9280b06c65ccff61c9922c871e32d10516b353be6a060f06d0fe5437c2f1c918"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9280b06c65ccff61c9922c871e32d10516b353be6a060f06d0fe5437c2f1c918",
   "market_session_state": "runtime_required",
@@ -325,7 +345,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "4315eee2a4d8299537f7",
   "detail_path": "./data/decision_details/4315eee2a4d8299537f7.json"
 }

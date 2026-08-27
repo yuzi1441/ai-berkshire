@@ -216,22 +216,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
+    "holder_action": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
+    "trigger_condition": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
+    "summary": "最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第175至241行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 175,
+        "line_end": 241,
+        "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+        "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:58:30+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -239,15 +251,59 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "A股23-26元重点研究买入",
+        "price_range": "23-26元",
+        "min": 23.0,
+        "ceiling": 26.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "A股27-30元分批买入",
+        "price_range": "27-30元",
+        "min": 27.0,
+        "ceiling": 30.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "A股30-34元小额试探",
+        "price_range": "30-34元",
+        "min": 30.0,
+        "ceiling": 34.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
+      "currency": "CNY",
+      "reference_price": 33.8,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -357,9 +413,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-10）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -367,7 +423,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -377,22 +433,22 @@
       "ticker": "002352.SZ",
       "main_report": {
         "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
-        "sha256": "2251cc9b5eaaa443f90e80eca8e3c42452130ced26d56b4ac61d3264cef42815"
+        "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e"
       },
       "checklist": {
         "path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
-        "sha256": "e60873c225cfc58bc8a770b8c47c108df7ee4c7dc8b19cac377d1be92800967c"
+        "sha256": "b9b10a3095400e3e188eb014026001be708f0c390370e9d98133e3a367d8fe1a"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
-    "current_source_fingerprint_sha256": "ff712ec99da9d0a9467b99dc3caa2054d7249f61cb3a41fe81083b4d2ff06c39"
+    "current_source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-10）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-08-31",
   "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
   "market_session_state": "runtime_required",
@@ -442,7 +498,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "fbd1a360c45053ffca3a",
   "detail_path": "./data/decision_details/fbd1a360c45053ffca3a.json"
 }

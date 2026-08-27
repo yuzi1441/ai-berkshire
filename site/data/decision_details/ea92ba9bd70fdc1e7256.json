@@ -402,46 +402,34 @@
   ],
   "report_history_count": 6,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持有；在900-1100元区间可在2026Q2/Q3利润恢复至+5%以上时条件加仓，否则持有不追高",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "可分批买入",
+    "action_kind": "buy",
+    "empty_position_action": "报告基准价 1168.63 元已进入 1100-1300 元合理偏低区，可分批建仓但不能一次打满；900-1100 元吸引力更强，900 元以下仍须排除基本面恶化。",
+    "holder_action": "轻仓者可低吸并等待 1100 元附近；重仓者以持有为主，不因“便宜”继续加满。1300-1500 元持有不追，1500 元以上等待利润重新加速。",
+    "trigger_condition": "1000-1100 元且 Q2/Q3 利润恢复到 5% 以上时加仓；连续两季利润负增长、飞天批价持续跌破出厂价或治理出现重大问题时重审。",
+    "summary": "正文和补充行动价格带一致；这是分批许可，不是满仓信号。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第205至238行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 269,
-        "line_end": 269,
-        "quote": "**最终建议**：可分批买入 / 持有；不是满仓梭哈型机会。真正舒服的加仓区间是 1000-1100 元。",
-        "supports": "报告最终建议明确为可分批买入，并给出加仓区间，支持空仓者买入动作"
-      },
-      {
-        "line_start": 296,
-        "line_end": 296,
-        "quote": "| 结论摘要 | 空仓者 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |",
-        "supports": "看板契约摘要明确空仓者可分批建仓，与正文一致，支持买入判断"
-      },
-      {
-        "line_start": 314,
-        "line_end": 314,
-        "quote": "| 900-1100 元 | 分批建仓 | 条件加仓：2026Q2/Q3 利润恢复至 +5% 以上 | 有吸引力；报告将 1000-1100 元列为舒服的加仓区间 |",
-        "supports": "行动价格带对空仓者给出分批建仓动作，进一步印证买入建议"
+        "line_start": 205,
+        "line_end": 238,
+        "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+        "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 1300.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:24:32+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -449,15 +437,59 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "buy",
+    "main_label": "可分批买入",
+    "condition_mode": "current_action",
+    "event_condition": "1000-1100 元且 Q2/Q3 利润恢复到 5% 以上时加仓；连续两季利润负增长、飞天批价持续跌破出厂价或治理出现重大问题时重审",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "分批建仓",
+        "price_range": "900 元以下",
+        "min": null,
+        "ceiling": 900.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批建仓",
+        "price_range": "900-1100 元",
+        "min": 900.0,
+        "ceiling": 1100.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "分批建仓",
+        "price_range": "1100-1300 元",
+        "min": 1100.0,
+        "ceiling": 1300.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "buy",
+      "action": "报告基准价 1168.63 元已进入 1100-1300 元合理偏低区，可分批建仓但不能一次打满；900-1100 元吸引力更强，900 元以下仍须排除基本面恶化。",
+      "currency": "CNY",
+      "reference_price": 1168.63,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -467,9 +499,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -477,7 +509,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -487,7 +519,7 @@
       "ticker": "600519.SH",
       "main_report": {
         "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
-        "sha256": "164f51831af85337f4548bcc655665f2153fbb2135ca26bb98f7516ca978d2c9"
+        "sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071"
       },
       "checklist": {
         "path": null,
@@ -495,14 +527,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb",
-    "current_source_fingerprint_sha256": "c870a5d4257bba82a042bae1c97767cd737855f494d2e534d81589673413fbb8"
+    "current_source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "064353f6a8db9aacfb6ef82fc48efd61b480bfdee11fe3ec4df12bb9485218eb",
   "market_session_state": "runtime_required",
@@ -552,7 +584,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "ea92ba9bd70fdc1e7256",
   "detail_path": "./data/decision_details/ea92ba9bd70fdc1e7256.json"
 }

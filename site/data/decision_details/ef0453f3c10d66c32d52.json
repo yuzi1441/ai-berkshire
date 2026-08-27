@@ -164,45 +164,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持有可，但控制仓位，享受7%+股息，若仓位过重可在运价/股价冲高时减到舒适仓位",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待周期出清与关键负债核验",
+    "action_kind": "watch",
+    "empty_position_action": "A 股 13.98 元观望、不追；报告只允许极度看重股息且能承受波动者考虑折价 H 股试探仓，不能把该许可移植为 A 股当前买入机会。",
+    "holder_action": "可继续持有收息但控制仓位；若仓位过重，可在运价或股价冲高时降至舒适水平。",
+    "trigger_condition": "等待运价崩盘、公司微利或亏损、市场极度悲观，且 PB 明显低于 0.8、净现金和分红逻辑经租赁负债核验后仍成立，或行业出现实质拆船/减产；红海复航、SCFI 持续下行、派息率跌破 30% 或租赁负债推翻净现金论即继续回避。",
+    "summary": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第269行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 273,
-        "line_end": 273,
-        "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
-        "supports": "明确空仓者动作：观望为主，仅可小仓位试探，不支持立即重仓。"
-      },
-      {
-        "line_start": 337,
-        "line_end": 337,
-        "quote": "| 结论摘要 | 空仓者 观望为主，不追高。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建试探性底仓（≤3成），把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |",
-        "supports": "看板契约结论与正文一致，确认空仓者应观望并仅可试探性建仓。"
-      },
-      {
-        "line_start": 274,
-        "line_end": 274,
-        "quote": "| **持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。 |",
-        "supports": "持仓者建议为持有但不加仓，可适度减仓，印证报告整体并非买入或回避倾向。"
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "### 8.2 最终决策表",
+        "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:10:00+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -210,15 +199,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待周期出清与关键负债核验",
+    "condition_mode": "event_only",
+    "event_condition": "等待运价崩盘、公司微利或亏损、市场极度悲观，且 PB 明显低于 0.8、净现金和分红逻辑经租赁负债核验后仍成立，或行业出现实质拆船/减产",
     "guard_condition": null,
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -228,9 +217,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -238,7 +227,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -248,7 +237,7 @@
       "ticker": "601919.SH",
       "main_report": {
         "path": "reports/中远海控/中远海控-research-20260707.md",
-        "sha256": "067a8e052de2f22e310baf41357c73e6f306aca206dbcb0ad4df407f10354782"
+        "sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671"
       },
       "checklist": {
         "path": null,
@@ -256,14 +245,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "1abbf9d2cb6bfbb5d80c945bf3818e22fd6ed56455d51739d4b5683316139dd0",
-    "current_source_fingerprint_sha256": "9255888cca5391fe97d5c56ab8232b895b68f57c0390c41a75000c51504c6fbd"
+    "current_source_fingerprint_sha256": "1abbf9d2cb6bfbb5d80c945bf3818e22fd6ed56455d51739d4b5683316139dd0"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "1abbf9d2cb6bfbb5d80c945bf3818e22fd6ed56455d51739d4b5683316139dd0",
   "market_session_state": "runtime_required",
@@ -313,7 +302,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "ef0453f3c10d66c32d52",
   "detail_path": "./data/decision_details/ef0453f3c10d66c32d52.json"
 }

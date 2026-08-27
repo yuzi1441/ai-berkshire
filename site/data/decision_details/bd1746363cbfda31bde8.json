@@ -228,40 +228,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "已持有且成本低者可持有但不盲目加仓，持续跟踪ROE、毛利率、现金流，若估值上行而基本面未同步则分批降仓；成本接近现价者谨慎持有/等待验证",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "12.93 元不追；激进型主题交易也只能小仓，不能视作基本面买点。",
+    "holder_action": "低成本仓可继续观察 ROE 与订单质量；估值上行而基本面未同步时降低仓位。",
+    "trigger_condition": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓；8.0-9.0 元且行业逻辑未破坏才有较好安全边际。",
+    "summary": "行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第347至391行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 339,
-        "line_end": 341,
-        "quote": "| 空仓、保守型 | 等待 | 若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。 | | 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 | | 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |",
-        "supports": "给出了空仓者三类明确动作，核心为等待价格回落至8.0-9.0元，稳健型需满足条件后小仓，激进型仅可小仓交易并设退出，故空仓者当前不可追高，整体为等待价格。"
-      },
-      {
-        "line_start": 367,
-        "line_end": 367,
-        "quote": "中国西电是中国电网设备链条中的重要央企平台，受益于特高压、新型电网、新能源并网和设备更新，行业需求和资质壁垒是真实的。公司 2025 年利润增长较快、现金流绝对额较好，连续国网订单也验证了景气。但从价值投资角度，当前最大问题不是“公司差”，而是“价格已经不便宜”：约 52 倍静态 PE、约 2.88 倍 PB，对一家 2025 加权 ROE 仅 5.64%、客户强势、项目制和重制造属性明显的公司，安全边际不足。更合理的策略是把它放入重点观察池，等待 ROE 上台阶或价格回落，而不是在主题热度中把行业确定性误认为投资确定性。",
-        "supports": "最终结论明确建议观望等待，等待价格回落或ROE改善，不支持立即买入，印证'等待价格'判断。"
+        "line_start": 347,
+        "line_end": 391,
+        "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+        "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 12.93,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:08:42+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -269,15 +263,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "小仓观察",
+        "price_range": "9.0-10.5 元",
+        "min": 9.0,
+        "ceiling": 10.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓",
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "主题交易可小仓，但要设退出",
+        "price_range": "12.93 元",
+        "min": 12.93,
+        "ceiling": 12.93,
+        "mode": "point",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -287,9 +306,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -297,7 +316,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -307,7 +326,7 @@
       "ticker": "601179.SH",
       "main_report": {
         "path": "reports/中国西电/中国西电研究报告-20260709.md",
-        "sha256": "aa0260655f0d2017bf67cc3aa8d29b0d47fbeaac50f12938fccb166828741e89"
+        "sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba"
       },
       "checklist": {
         "path": null,
@@ -315,14 +334,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "1e2524b7ae25b93ea15e4256f99a200e48275d7929b8c0e40ca418d9f6d7f1a2",
-    "current_source_fingerprint_sha256": "f1ddb7ace9694453f00210d1e778b0381f6d6304fa90b19c3de463ed65a1cd82"
+    "current_source_fingerprint_sha256": "1e2524b7ae25b93ea15e4256f99a200e48275d7929b8c0e40ca418d9f6d7f1a2"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "1e2524b7ae25b93ea15e4256f99a200e48275d7929b8c0e40ca418d9f6d7f1a2",
   "market_session_state": "runtime_required",
@@ -372,7 +391,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "bd1746363cbfda31bde8",
   "detail_path": "./data/decision_details/bd1746363cbfda31bde8.json"
 }

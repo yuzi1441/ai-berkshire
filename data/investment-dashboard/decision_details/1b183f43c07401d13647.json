@@ -503,22 +503,34 @@
   ],
   "report_history_count": 7,
   "primary_judgment": {
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "145 元以上不追；125-145 元仅激进型小仓研究，110-125 元且核心毛利与现金流未恶化时风险收益才开始合理，90-110 元才进入保守资金重点研究区。",
+    "holder_action": "可持有验证，但不能只用行业景气解释利润率、回款和低毛利业务扩张；多个指标同向恶化时重审。",
+    "trigger_condition": "价格进入相应区间，且核心开关/变压器毛利、海外回款、CFO/净利、H 股条款与扩产回报未恶化。",
+    "summary": "契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第339至349行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 339,
+        "line_end": 349,
+        "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+        "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:53:26+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -526,15 +538,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
     "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "guard_condition": "价格进入相应区间，且核心开关/变压器毛利、海外回款、CFO/净利、H 股条款与扩产回报未恶化",
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "仅小仓分批，接受估值压缩",
+        "price_range": "125-145 元",
+        "min": 125.0,
+        "ceiling": 145.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -607,9 +632,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -617,7 +642,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -627,22 +652,22 @@
       "ticker": "002028.SZ",
       "main_report": {
         "path": "reports/思源电气/思源电气-investment-team-20260714.md",
-        "sha256": "972ea44812e7c5c78e290584b10c720f65dba9997ae277ec3a44c3984d715d53"
+        "sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef"
       },
       "checklist": {
         "path": "reports/思源电气/巴菲特Checklist-思源电气.md",
-        "sha256": "979f6ccb9af41dc3d933f01759303a33c3247759b69610683f50d33f7255ae57"
+        "sha256": "da8237e3865443a31076822c3648d7f15c977fcff29071814d75f0ec7eec2d85"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "ccea7354ca399350e503648381131766748f9495a3a7fbde6dc05b21918b1d00",
-    "current_source_fingerprint_sha256": "b47bdcd9bae2713bc6c9a11a70716566fbf30bf7c16e28e00d8891b41c09f811"
+    "current_source_fingerprint_sha256": "ccea7354ca399350e503648381131766748f9495a3a7fbde6dc05b21918b1d00"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "ccea7354ca399350e503648381131766748f9495a3a7fbde6dc05b21918b1d00",
   "market_session_state": "runtime_required",
@@ -692,7 +717,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "1b183f43c07401d13647",
   "detail_path": "./data/decision_details/1b183f43c07401d13647.json"
 }

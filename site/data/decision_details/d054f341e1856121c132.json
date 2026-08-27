@@ -410,46 +410,34 @@
   ],
   "report_history_count": 6,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "基本面建议动作为观察，持仓者暂不加仓；稳健型未给出动作，保守型建议回避。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待验证",
+    "action_kind": "watch",
+    "empty_position_action": "当前不满足买入条件；激进型也只在 60 元以下试探且不超过 3%，稳健型必须等三类重估信号，保守型回避。",
+    "holder_action": "不以高股息掩盖治理和报表问题，信号未齐备前不加仓。",
+    "trigger_condition": "无补贴批价站稳、连续两季经营现金流转正且票据回落、监管商品款项下降且合同负债上升，并等待问询和治理闭环。",
+    "summary": "契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第113至165行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 198,
-        "line_end": 198,
-        "quote": "| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |",
-        "supports": "明确给出空仓者（激进型）的买入触发价为60元以下，当前未达到该价格，应等待价格。"
-      },
-      {
-        "line_start": 203,
-        "line_end": 203,
-        "quote": "| 保守型动作 | 回避 |",
-        "supports": "对于保守型空仓者，报告明确要求回避，进一步支持当前不应立即买入。"
-      },
-      {
-        "line_start": 197,
-        "line_end": 197,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "总体建议为观察，表明当前不是买入时机，需等待价格或验证。"
+        "line_start": 113,
+        "line_end": 165,
+        "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+        "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 60.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:51:37+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -457,15 +445,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待验证",
+    "condition_mode": "price_and_event",
+    "event_condition": "无补贴批价站稳、连续两季经营现金流转正且票据回落、监管商品款项下降且合同负债上升，并等待问询和治理闭环",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "60元以下分批试探",
+        "price_range": "60元",
+        "min": null,
+        "ceiling": 60.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "无补贴批价站稳、连续两季经营现金流转正且票据回落、监管商品款项下降且合同负债上升，并等待问询和治理闭环",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -475,9 +476,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -485,7 +486,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -495,7 +496,7 @@
       "ticker": "000858.SZ",
       "main_report": {
         "path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
-        "sha256": "8f51050b3d823b0c55c339b15bd48e2383ff72505cea08e56bc77ac000ea01a2"
+        "sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f"
       },
       "checklist": {
         "path": null,
@@ -503,14 +504,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "56c16614d56cda30fdcc6689d4823db364c30229a3ce053cb4f2807a18598c74",
-    "current_source_fingerprint_sha256": "f3f053c2c20608500eab8ce2d96503b9f446c29f1dadbbbaa595b0a8f4bc73b9"
+    "current_source_fingerprint_sha256": "56c16614d56cda30fdcc6689d4823db364c30229a3ce053cb4f2807a18598c74"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "56c16614d56cda30fdcc6689d4823db364c30229a3ce053cb4f2807a18598c74",
   "market_session_state": "runtime_required",
@@ -560,7 +561,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "d054f341e1856121c132",
   "detail_path": "./data/decision_details/d054f341e1856121c132.json"
 }

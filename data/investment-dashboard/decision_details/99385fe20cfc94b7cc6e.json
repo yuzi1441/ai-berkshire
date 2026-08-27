@@ -211,45 +211,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
+    "label": "等待价格或验证",
     "action_kind": "watch",
-    "empty_position_action": "当前不追高，空仓者等待价格跌至24元以下或业绩确认后再考虑介入，激进型可在21-24元等待确认后逐步增加，稳健型不高于21元分批研究性建仓",
-    "holder_action": "当前观察为主，不追加仓位，等待更明确的价格或基本面信号，同时关注买入失效条件",
-    "trigger_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
-    "summary": "伊利股份27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认，不同风险偏好有各自建仓价格区间。",
+    "empty_position_action": "27.12 元观察不追；优先等 24 元以下或 H1/H2 证明液体乳跌幅收窄、OCF 恢复。21-24 元确认后逐步增加，21 元以下才接近研究性安全边际。",
+    "holder_action": "可持有观察，但不因单季利润增长盲目加仓；持续核对现金流、短债、渠道库存、合同负债和分红兑现。",
+    "trigger_condition": "液体乳跌幅收窄、奶粉冷饮双位数增长且现金转换正常、短借回落或被 OCF 覆盖，并进入 21-24 元；食品安全、现金流持续低于利润或短借继续上升且现金/合同负债恶化即重审。",
+    "summary": "正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "无冲突，正文与看板契约一致。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第198至211行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 271,
-        "line_end": 271,
-        "quote": "| 结论摘要 | 27.12元处于合理价值区间，当前观察不追高，等待24元以下或业绩确认。 |",
-        "supports": "该证据明确给出空仓者当前不追高，需等待价格触发条件或业绩确认，属于等待价格/验证动作。"
-      },
-      {
-        "line_start": 270,
-        "line_end": 270,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "该证据表明报告对当前股票的基本面建议是观察而非买入或回避，支持空仓者等待的结论。"
-      },
-      {
-        "line_start": 272,
-        "line_end": 274,
-        "quote": "| 激进型动作 | 21-24元等待确认后逐步增加 | | 激进型价格区间 | 21-24元 | | 稳健型动作 | 不高于21元分批研究性建仓 |",
-        "supports": "该证据进一步说明只有价格进入更低区间或业绩确认后才可行动，当前空仓者应等待。"
+        "line_start": 198,
+        "line_end": 211,
+        "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+        "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "price_source": "主报告未提取到可执行买入价格档",
-    "artifact_status": "ready",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
+    "model_consensus": false,
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:10:53+00:00",
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -258,9 +247,9 @@
   "execution_policy": {
     "schema_version": 1,
     "main_action_kind": "watch",
-    "main_label": "等待价格",
+    "main_label": "等待价格或验证",
     "condition_mode": "price_or_event",
-    "event_condition": "股价跌至24元以下（激进型21-24元区间）或业绩确认",
+    "event_condition": "食品安全、现金流持续低于利润或短借继续上升且现金/合同负债恶化即重审",
     "guard_condition": null,
     "price_rules": [
       {
@@ -274,6 +263,18 @@
         "requires_validation": false,
         "validation_condition": null,
         "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "液体乳跌幅收窄、奶粉冷饮双位数增长且现金转换正常、短借回落或被 OCF 覆盖，并进入 21-24 元",
+        "price_range": "进入 21-24 元",
+        "min": 21.0,
+        "ceiling": 24.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
       }
     ],
     "current_action": null,
@@ -288,9 +289,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -298,7 +299,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -316,14 +317,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "2bcb84e1f181ac722aee55364109657c5939929772a789bb652258074f262eb6",
-    "current_source_fingerprint_sha256": "3b746580a56e4d23d33f115e1a765cd7fef803e2ffd950129afbca21d5317ffa"
+    "current_source_fingerprint_sha256": "2bcb84e1f181ac722aee55364109657c5939929772a789bb652258074f262eb6"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "2bcb84e1f181ac722aee55364109657c5939929772a789bb652258074f262eb6",
   "market_session_state": "runtime_required",
@@ -373,7 +374,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "99385fe20cfc94b7cc6e",
   "detail_path": "./data/decision_details/99385fe20cfc94b7cc6e.json"
 }

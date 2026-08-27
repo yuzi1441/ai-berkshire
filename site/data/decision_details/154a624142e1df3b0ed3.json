@@ -298,22 +298,34 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "约 20-22 元只允许激进型小仓观察，不追高；稳健型等待 16-18 元及半年报修复，保守型等待 13-15 元。",
+    "holder_action": "可继续观察，但不能把电网景气当作加仓依据；利润率、订单和回款未修复前不升级仓位。",
+    "trigger_condition": "半年报/三季报利润增速和毛利率修复、直流或配网订单增加、应收下降且现金流覆盖利润。",
+    "summary": "正文与契约一致，无字段冲突。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第139至173行；人工审阅日志：logs/main-report-human-review-20260827.md",
+    "evidence": [
+      {
+        "line_start": 139,
+        "line_end": 173,
+        "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+        "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:56:48+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -321,15 +333,35 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "半年报/三季报利润增速和毛利率修复、直流或配网订单增加、应收下降且现金流覆盖利润",
     "guard_condition": null,
-    "price_rules": [],
-    "current_action": null,
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "小仓观察，不追高",
+        "price_range": "约20-22元",
+        "min": 20.0,
+        "ceiling": 22.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
+    "current_action": {
+      "action_kind": "trial",
+      "action": "约 20-22 元只允许激进型小仓观察，不追高；稳健型等待 16-18 元及半年报修复，保守型等待 13-15 元。",
+      "currency": "CNY",
+      "reference_price": 21.11,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -396,9 +428,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -406,7 +438,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -416,22 +448,22 @@
       "ticker": "000400.SZ",
       "main_report": {
         "path": "reports/许继电气/许继电气投资研究报告_20260707.md",
-        "sha256": "f00685e37d7f0efbaec1b34a1a6b24d843f10bfdd82b7fd21b3ebd0464e6a158"
+        "sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6"
       },
       "checklist": {
         "path": "reports/许继电气/巴菲特Checklist-许继电气.md",
-        "sha256": "75d8ced49532768f9810a9082ffffa3310a29d77d8b4fda81a8454eda11f528a"
+        "sha256": "21d89f1f6d88f7e5a9a785bcea8504782b727e4ce5164f3313fe4f6d2ada7b38"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "72b47b0e63c4ae4b555c9e8d4bd4a55b80fde60ccee114cdb3096531ad1a31a5",
-    "current_source_fingerprint_sha256": "3ffe7357b165d2759dcb5bf69094678def20936ac2b545bbbda4efbd0b259d77"
+    "current_source_fingerprint_sha256": "72b47b0e63c4ae4b555c9e8d4bd4a55b80fde60ccee114cdb3096531ad1a31a5"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "72b47b0e63c4ae4b555c9e8d4bd4a55b80fde60ccee114cdb3096531ad1a31a5",
   "market_session_state": "runtime_required",
@@ -481,7 +513,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "154a624142e1df3b0ed3",
   "detail_path": "./data/decision_details/154a624142e1df3b0ed3.json"
 }

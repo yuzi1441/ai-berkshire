@@ -222,44 +222,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "若持仓逻辑是高质量城商行可持有；未知成本和仓位下，不建议因PE低机械加仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "32 元观察；29-31 元且半年报未恶化才是首档小仓区，26.5-29 元为稳健区，23-26.5 元为更充分安全边际区。",
+    "holder_action": "可持有优质城商行逻辑，但不能因低 PE 机械加仓。",
+    "trigger_condition": "价格进入相应区间，且 NIM 稳在 1.70% 以上、个人贷款不良率和重组贷款不再上行、CET1 回升或风险加权资产增速收敛。",
+    "summary": "正文与契约一致，无字段冲突。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第234至266行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 263,
-        "line_end": 263,
-        "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |",
-        "supports": "明确给出空仓者等待价格29-31元或半年报验证，属于等待价格/watch"
-      },
-      {
-        "line_start": 259,
-        "line_end": 259,
-        "quote": "**总体结论：观察。** 这是一家值得进入高质量银行候选池的公司，但不是“看到低 PE 就立刻买”的标的。报告区分“好生意”和“好价格”：前者成立，后者在 32 元尚不充分。",
-        "supports": "最终结论为观察，不支持立即买入，空仓者需等待更好价格或验证"
+        "line_start": 234,
+        "line_end": 266,
+        "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+        "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 31.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 29.0,
-      "max": 31.0
-    },
-    "artifact_status": "ready",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:52:57+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -267,15 +257,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "优先研究和配置",
+        "price_range": "23.0-26.5元",
+        "min": 23.0,
+        "ceiling": 26.5,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "buy",
+        "action": "风险指标稳定时分批买入",
+        "price_range": "26.5-29.0元",
+        "min": 26.5,
+        "ceiling": 29.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      },
+      {
+        "action_kind": "trial",
+        "action": "半年报未恶化时小仓分批",
+        "price_range": "29.0-31.0元",
+        "min": 29.0,
+        "ceiling": 31.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "半年报未恶化时小仓分批",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 3,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -285,9 +312,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -295,7 +322,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -305,7 +332,7 @@
       "ticker": "002142.SZ",
       "main_report": {
         "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
-        "sha256": "5ac71634c764a84aae00f592e0864dad7c2a668bb904b6d97fd058bf0baf88d2"
+        "sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36"
       },
       "checklist": {
         "path": null,
@@ -313,14 +340,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "82c8abc726af5d691e07a05ceb602c293d9add8ab57fde0c52ffca34b48685e1",
-    "current_source_fingerprint_sha256": "cc7bcfbcaad3332aa2d89998b7484e4905b36243257242c2c7671ec0af131b68"
+    "current_source_fingerprint_sha256": "82c8abc726af5d691e07a05ceb602c293d9add8ab57fde0c52ffca34b48685e1"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "82c8abc726af5d691e07a05ceb602c293d9add8ab57fde0c52ffca34b48685e1",
   "market_session_state": "runtime_required",
@@ -370,7 +397,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "2069e3700c70da108895",
   "detail_path": "./data/decision_details/2069e3700c70da108895.json"
 }

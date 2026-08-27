@@ -308,42 +308,32 @@
   "primary_judgment": {
     "label": "等待价格",
     "action_kind": "watch",
-    "empty_position_action": "25.37元不追高，等待价格跌至21元以下进入观察买入区，18元以下才考虑更积极分批",
-    "holder_action": "可持有但不默认加仓，用铝价、氧化铝、短借和经营现金流设监控线",
-    "trigger_condition": "股价跌至21元以下（观察买入区），18元以下更积极分批",
-    "summary": "报告认为25.37元不追高，21元以下进入观察买入区，18元以下更积极分批，已持仓者可持有但不加仓。",
+    "empty_position_action": "报告基准价 25.37 元不追高；21-25 元只进入小仓评估区，18-21 元风险收益更有吸引力，18 元以下且基本面未永久受损才考虑更积极分批。",
+    "holder_action": "可以持有但不默认加仓，继续核对铝价、氧化铝成本、短债和经营现金流。",
+    "trigger_condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化。",
+    "summary": "正文与契约一致，无字段冲突。",
     "confidence": "high",
     "report_field_conflict": true,
-    "conflict_note": "正文空仓者建议为21元以下才进入观察买入区，但契约激进型动作允许21-25元小仓位分批评估，存在冲突；依据规则以正文为准。",
+    "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
+    "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
+    "currency": "CNY",
+    "price_source": "主报告第202至230行；人工审阅日志：logs/main-report-human-review-20260827.md",
     "evidence": [
       {
-        "line_start": 251,
-        "line_end": 251,
-        "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |",
-        "supports": "明确给出空仓者应等待更低价格，属于等待价格/watch"
-      },
-      {
-        "line_start": 312,
-        "line_end": 312,
-        "quote": "| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |",
-        "supports": "最终结论同样要求等待价格触发，支持等待价格判断"
+        "line_start": 202,
+        "line_end": 230,
+        "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+        "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": false,
-    "currency": "CNY",
-    "entry_ceiling": 25.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "trial_range": {
-      "min": 21.0,
-      "max": 25.0
-    },
-    "artifact_status": "ready",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
+    "model_consensus": false,
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
     "source_matches": true,
-    "generated_at": "2026-08-14T10:22:07+00:00",
+    "generated_at": "2026-08-27T00:00:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -353,8 +343,8 @@
     "schema_version": 1,
     "main_action_kind": "watch",
     "main_label": "等待价格",
-    "condition_mode": "price_only",
-    "event_condition": null,
+    "condition_mode": "price_and_event",
+    "event_condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化",
     "guard_condition": null,
     "price_rules": [
       {
@@ -366,7 +356,7 @@
         "mode": "ceiling",
         "currency": "CNY",
         "requires_validation": true,
-        "validation_condition": "18元以下深度安全边际区，确认基本面未永久恶化后再分批",
+        "validation_condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化",
         "source": "report_price_plan"
       },
       {
@@ -377,8 +367,8 @@
         "ceiling": 21.0,
         "mode": "range",
         "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
+        "requires_validation": true,
+        "validation_condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化",
         "source": "report_price_plan"
       },
       {
@@ -389,8 +379,8 @@
         "ceiling": 25.0,
         "mode": "range",
         "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
+        "requires_validation": true,
+        "validation_condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化",
         "source": "report_price_plan"
       }
     ],
@@ -406,9 +396,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -416,7 +406,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -434,14 +424,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0",
-    "current_source_fingerprint_sha256": "0be7b4b456809ce51b970efd1d509c7a4ccb374c5af94669c5158207d7fefba7"
+    "current_source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "5e5896a72b0628c05bb6d554be71bd380984162384b2e3b4134d9491f15a25f0",
   "market_session_state": "runtime_required",
@@ -491,7 +481,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "generation_id": "7811f94d5512021bd8d0",
   "detail_id": "fb8d66684b6838478387",
   "detail_path": "./data/decision_details/fb8d66684b6838478387.json"
 }
