@@ -87,7 +87,15 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(by_ticker["605499.SH"]["execution_key"], "actionable")
         self.assertEqual(by_ticker["600426.SH"]["status"], "stale")
         self.assertEqual(by_ticker["600426.SH"]["execution_key"], "review")
-        self.assertIn("2026-08-21", by_ticker["600426.SH"]["invalidation_reason"])
+        checklist_cutoff = next(
+            item["checklist"]["data_cutoff"]
+            for item in decisions
+            if item["ticker"] == "600426.SH"
+        )
+        self.assertIn(
+            f"当前 Checklist 数据截止：{checklist_cutoff}",
+            by_ticker["600426.SH"]["invalidation_reason"],
+        )
         self.assertEqual(by_ticker["600519.SH"]["execution_key"], "validation")
         self.assertEqual(by_ticker["000400.SZ"]["execution_key"], "no")
         self.assertTrue(by_ticker["002027.SZ"]["checklist_blocked"])
