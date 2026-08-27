@@ -168,6 +168,59 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result["key"], "wait_price")
         self.assertEqual(result["label"], "等待价格，不追高")
 
+    def test_human_review_partition_uses_main_report_tiers_and_live_quote(self):
+        result = self.run_classifier(
+            """[
+              classifier.humanReviewExecutionState({market: "A股", primary_judgment: {
+                enabled: true, human_reviewed: true, source_matches: true,
+                label: "仅限有跟踪优势者小仓验证",
+                empty_position_action: "等待",
+                trigger_condition: "价格条件"
+              }}, {price: 105.28, currency: "CNY", provider_timestamp: "20260827150000",
+                snapshot_generated_at: "2026-08-27T07:00:00Z"}, [
+                {action: "若基本面未恶化可分批买入", price_range: "70-80 元"},
+                {action: "等待更好价格或证据", price_range: "80-95 元"},
+                {action: "小仓位观察，不做重仓", price_range: "95-110 元"}
+              ], new Date("2026-08-27T07:05:00Z")),
+              classifier.humanReviewExecutionState({market: "A股", primary_judgment: {
+                enabled: true, human_reviewed: true, source_matches: true,
+                label: "仅限有跟踪优势者小仓验证",
+                empty_position_action: "等待", trigger_condition: "价格条件"
+              }}, {price: 120, currency: "CNY", provider_timestamp: "20260827150000",
+                snapshot_generated_at: "2026-08-27T07:00:00Z"}, [
+                {action: "小仓位观察，不做重仓", price_range: "95-110 元"}
+              ], new Date("2026-08-27T07:05:00Z")),
+              classifier.humanReviewExecutionState({market: "A股", primary_judgment: {
+                enabled: true, human_reviewed: true, source_matches: true,
+                label: "仅限有跟踪优势者小仓验证",
+                empty_position_action: "等待", trigger_condition: "价格条件"
+              }}, {price: 105, currency: "CNY", provider_timestamp: "20260820150000",
+                snapshot_generated_at: "2026-08-20T07:00:00Z"}, [
+                {action: "小仓位观察，不做重仓", price_range: "95-110 元"}
+              ], new Date("2026-08-27T07:05:00Z"))
+            ]"""
+        )
+        self.assertEqual(result[0]["key"], "human_trial")
+        self.assertIn("95-110 元", result[0]["detail"])
+        self.assertEqual(result[0]["freshness"]["state"], "fresh")
+        self.assertEqual(result[1]["key"], "human_wait_price")
+        self.assertEqual(result[2]["key"], "human_trial")
+        self.assertEqual(result[2]["freshness"]["state"], "stale")
+
+    def test_human_review_partition_does_not_use_checklist_or_old_manual_review(self):
+        result = self.run_classifier(
+            """classifier.humanReviewExecutionState({market: "A股",
+              checklist: {hard_veto_state: "triggered"},
+              manual_execution_review: {status: "ready", source: "human_review", execution_key: "no"},
+              primary_judgment: {enabled: true, human_reviewed: true, source_matches: true,
+                label: "可分批买入", empty_position_action: "可分批买入", trigger_condition: "价格条件"}
+            }, {price: 90, currency: "CNY", provider_timestamp: "20260827150000",
+              snapshot_generated_at: "2026-08-27T07:00:00Z"}, [
+                {action: "可分批买入", price_range: "80-100 元"}
+            ], new Date("2026-08-27T07:05:00Z"))"""
+        )
+        self.assertEqual(result["key"], "human_buy")
+
     def test_current_action_uses_report_tiers_before_reference_price_fallback(self):
         result = self.run_classifier(
             """[
@@ -338,10 +391,23 @@ class DashboardActionClassifierTests(unittest.TestCase):
             self.assertIn(f'data-action="{key}"', html)
         self.assertIn('value="execution"', html)
         self.assertIn('aria-label="最近行情参考分区筛选"', html)
+        self.assertIn('aria-label="人工复核分区筛选"', html)
+        for key in (
+            "human_buy",
+            "human_trial",
+            "human_wait_price",
+            "human_wait_event",
+            "human_hold",
+            "human_no",
+            "human_review",
+        ):
+            self.assertIn(f'data-human-review-action="{key}"', html)
         for key in ("actionable", "trial", "validation", "wait_price", "wait_event", "hold", "no"):
             self.assertIn(f'data-reference-action="{key}"', html)
         self.assertIn('value="reference"', html)
         self.assertIn("referenceExecutionState", app)
+        self.assertIn("humanReviewExecutionState", app)
+        self.assertIn("humanReviewAction", app)
         self.assertIn('"当前状态 / 非实时参考"', app)
         self.assertIn("loadOpportunityScansSnapshot", app)
         self.assertIn("每日收盘后扫描 A 股机会", html)

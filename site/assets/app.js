@@ -2,6 +2,7 @@ import {
   currentExecutionState,
   currentActionKind,
   fallbackActionKind,
+  humanReviewExecutionState,
   parseReportPriceBand,
   primaryJudgmentForItem,
   referenceExecutionState,
@@ -47,6 +48,7 @@ const state = {
   market: "all",
   action: "all",
   referenceAction: "all",
+  humanReviewAction: "all",
   trackingFilter: "all",
   hiddenTrackingKeys: new Set(),
   sort: "execution",
@@ -81,6 +83,7 @@ const els = {
   marketChips: document.querySelector("#market-chips"),
   actionChips: document.querySelector("#action-chips"),
   referenceActionChips: document.querySelector("#reference-action-chips"),
+  humanReviewChips: document.querySelector("#human-review-chips"),
   viewTabs: document.querySelector("#view-tabs"),
   trackingFilterRow: document.querySelector("#tracking-filter-row"),
   trackingCount: document.querySelector("#tracking-count"),
@@ -1410,6 +1413,35 @@ function renderBuyAdviceCell(item, quote) {
   return wrap;
 }
 
+function humanReviewForItem(item, quote) {
+  return humanReviewExecutionState(item, quote, reportPriceRows(item, { historicalFallback: false }));
+}
+
+function renderHumanReviewState(item, quote) {
+  const result = humanReviewForItem(item, quote);
+  const wrap = document.createElement("div");
+  wrap.className = `human-review-state human-review-state-${result.key}`;
+  const label = document.createElement("strong");
+  label.textContent = result.label;
+  const detail = document.createElement("p");
+  detail.textContent = result.detail;
+  wrap.append(label, detail);
+  if (result.judgment?.label) {
+    const judgment = document.createElement("p");
+    judgment.className = "human-review-note";
+    judgment.textContent = `主报告判断：${result.judgment.label}`;
+    wrap.append(judgment);
+  }
+  const freshness = result.freshness;
+  if (freshness?.timestamp) {
+    const snapshot = document.createElement("p");
+    snapshot.className = "human-review-note";
+    snapshot.textContent = `行情快照：${attentionTimestamp(freshness.timestamp)}${freshness.state === "fresh" ? " · 新鲜" : " · 已过期"}`;
+    wrap.append(snapshot);
+  }
+  return wrap;
+}
+
 function parsePriceNumbers(text) {
   if (!text) return [];
   const cleaned = String(text).replace(/,/g, "");
@@ -1446,6 +1478,7 @@ function filteredDecisions() {
   const adviceCache = new Map();
   const executionCache = new Map();
   const referenceCache = new Map();
+  const humanReviewCache = new Map();
   const adviceFor = (item) => {
     const key = itemKey(item);
     if (!adviceCache.has(key)) adviceCache.set(key, buyAdviceForItem(item, state.quotes.get(item.ticker)));
@@ -1465,6 +1498,13 @@ function filteredDecisions() {
     }
     return referenceCache.get(key);
   };
+  const humanReviewFor = (item) => {
+    const key = itemKey(item);
+    if (!humanReviewCache.has(key)) {
+      humanReviewCache.set(key, humanReviewForItem(item, state.quotes.get(item.ticker)));
+    }
+    return humanReviewCache.get(key);
+  };
   let list = state.decisions.filter((item) => {
     const marketMatch = state.market === "all" || item.market === state.market;
     const tracking = trackingForItem(item);
@@ -1472,6 +1512,8 @@ function filteredDecisions() {
     const adviceMatch = state.action === "all"
       || executionFor(item).key === state.action;
     const referenceMatch = state.referenceAction === "all" || referenceFor(item).key === state.referenceAction;
+    const humanReviewMatch = state.humanReviewAction === "all"
+      || humanReviewFor(item).key === state.humanReviewAction;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -1482,6 +1524,7 @@ function filteredDecisions() {
     return marketMatch
       && (state.view === "tracking" ? true : adviceMatch)
       && (state.view === "tracking" ? true : referenceMatch)
+      && (state.view === "tracking" ? true : humanReviewMatch)
       && trackingMatch
       && (!phrase || searchable.includes(phrase));
   });
@@ -3085,6 +3128,7 @@ function renderRows() {
     "市场 / 代码",
     "情绪",
     "主报告判断",
+    "人工复核分区",
     "现价",
     "当前状态 / 非实时参考",
     "技术面（辅助）",
@@ -3136,6 +3180,11 @@ function renderRows() {
       || renderPriceActionTable(item, quote, { compact: true }),
     );
     tr.append(actionTd);
+
+    const humanReviewTd = document.createElement("td");
+    humanReviewTd.className = "human-review-cell";
+    humanReviewTd.append(renderHumanReviewState(item, quote));
+    tr.append(humanReviewTd);
 
     const change = formatChange(quote);
     const quoteTd = document.createElement("td");
@@ -3432,6 +3481,12 @@ function renderDetail() {
       auxiliaryCard.innerHTML = "<h3>当前状态 / 非实时参考</h3>";
       auxiliaryCard.append(renderExecutionState(item, quote, { compact: false }));
       els.detailBody.append(auxiliaryCard);
+
+      const humanReviewCard = document.createElement("div");
+      humanReviewCard.className = "card human-review-card";
+      humanReviewCard.innerHTML = "<h3>人工复核分区</h3>";
+      humanReviewCard.append(renderHumanReviewState(item, quote));
+      els.detailBody.append(humanReviewCard);
     }
 
     const adviceCard = document.createElement("div");
@@ -3666,6 +3721,7 @@ function setView(view) {
   });
   if (els.actionChips) els.actionChips.hidden = state.view === "tracking";
   if (els.referenceActionChips) els.referenceActionChips.hidden = state.view === "tracking";
+  if (els.humanReviewChips) els.humanReviewChips.hidden = state.view === "tracking";
   if (els.trackingFilterRow) els.trackingFilterRow.hidden = state.view !== "tracking";
   renderAll();
 }
@@ -3704,6 +3760,7 @@ function bindEvents() {
     state.market = "all";
     state.action = "all";
     state.referenceAction = "all";
+    state.humanReviewAction = "all";
     state.trackingFilter = "all";
     state.sort = "execution";
     resetRowPage();
@@ -3717,6 +3774,9 @@ function bindEvents() {
     });
     els.referenceActionChips?.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.referenceAction === "all");
+    });
+    els.humanReviewChips?.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.humanReviewAction === "all");
     });
     els.trackingFilterRow?.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.trackingFilter === "all");
@@ -3754,6 +3814,16 @@ function bindEvents() {
     state.referenceAction = chip.dataset.referenceAction;
     resetRowPage();
     els.referenceActionChips.querySelectorAll(".chip").forEach((node) => {
+      node.classList.toggle("active", node === chip);
+    });
+    renderRows();
+  });
+  els.humanReviewChips?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    state.humanReviewAction = chip.dataset.humanReviewAction;
+    resetRowPage();
+    els.humanReviewChips.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
     renderRows();

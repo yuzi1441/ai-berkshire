@@ -559,6 +559,97 @@ export function referenceExecutionState(item, quote, fallbackKind = "unknown") {
   });
 }
 
+function humanReviewResult(key, label, detail, extra = {}) {
+  return { key: `human_${key}`, label, detail, rank: executionRank(key), ...extra };
+}
+
+function humanReviewPriceRows(priceRows, market, quote) {
+  const currency = String(quote?.currency || "");
+  return (Array.isArray(priceRows) ? priceRows : [])
+    .map((row) => {
+      const band = parseReportPriceBand(row, market);
+      if (!band || band.currency !== currency) return null;
+      return { row, band, kind: currentActionKind(row) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => Number(a.band.max ?? Infinity) - Number(b.band.max ?? Infinity));
+}
+
+export function humanReviewExecutionState(item, quote, priceRows = [], now = new Date()) {
+  if (item?.market !== "A股") {
+    return humanReviewResult("research", "仅供研究", "人工复核分区只适用于 A 股", {
+      freshness: "not_applicable",
+      source: "human_main_report",
+    });
+  }
+
+  const judgment = primaryJudgmentForItem(item);
+  if (!judgment || judgment.human_reviewed !== true || judgment.source_matches === false) {
+    return humanReviewResult("review", "人工复核：等待人工判断", "没有有效的人工主报告裁决", {
+      freshness: quoteFreshnessState(quote, now),
+      source: "human_main_report",
+    });
+  }
+
+  const freshness = quoteFreshnessState(quote, now);
+  const price = Number(quote?.price);
+  const rows = humanReviewPriceRows(priceRows, item.market, quote);
+  if (!Number.isFinite(price) || !rows.length) {
+    return humanReviewResult(
+      "review",
+      "人工复核：等待人工判断",
+      !Number.isFinite(price) ? "没有可用于人工价格分区的当前价格" : "主报告没有可可靠比较的价格区间",
+      { judgment, freshness, source: "human_main_report" },
+    );
+  }
+
+  const matched = rows.find(({ band }) => {
+    const aboveMinimum = !Number.isFinite(band.min) || price >= band.min - 1e-9;
+    const belowMaximum = !Number.isFinite(band.max) || price <= band.max + 1e-9;
+    return aboveMinimum && belowMaximum;
+  });
+  let key;
+  let label;
+  let detail;
+  if (matched) {
+    if (["buy", "trial"].includes(matched.kind)) {
+      key = matched.kind;
+      label = matched.kind === "trial" ? "人工复核：小仓价格区" : "人工复核：分批价格区";
+    } else if (matched.kind === "no") {
+      key = "no";
+      label = "人工复核：回避/不买";
+    } else if (matched.kind === "hold") {
+      key = "hold";
+      label = "人工复核：持有不新买";
+    } else {
+      key = /事件|条件|验证|确认|改善|兑现|财报|现金流|利润|基本面/.test(
+        `${matched.row.action || ""} ${matched.row.note || ""}`,
+      ) ? "wait_event" : "wait_price";
+      label = key === "wait_event" ? "人工复核：等待条件" : "人工复核：等待价格";
+    }
+    detail = `现价 ${price.toFixed(2)} 元，命中主报告价格区间 ${matched.row.price_range}；主报告动作：${matched.row.action || "见报告"}`;
+  } else {
+    const lowest = rows[0];
+    const highest = rows[rows.length - 1];
+    if (Number.isFinite(lowest.band.min) && price < lowest.band.min) {
+      key = "wait_event";
+      label = "人工复核：等待条件";
+      detail = `现价 ${price.toFixed(2)} 元低于主报告最低价格区间 ${lowest.row.price_range}，仍需结合报告条件判断`;
+    } else {
+      key = "wait_price";
+      label = "人工复核：等待价格";
+      detail = `现价 ${price.toFixed(2)} 元高于主报告可执行价格区间 ${highest.row.price_range}`;
+    }
+  }
+  return humanReviewResult(key, label, detail, {
+    judgment,
+    freshness,
+    matchedRule: matched?.row || null,
+    source: "human_main_report",
+    quoteStatus: freshness.state,
+  });
+}
+
 export function currentExecutionState(item, quote, fallbackKind = "unknown", context = {}) {
   if (item?.market !== "A股") {
     return executionResult(

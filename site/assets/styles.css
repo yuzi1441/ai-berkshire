@@ -960,6 +960,21 @@ tbody tr.detail-inline-row .detail-panel {
 
 /* 当前可执行状态 */
 .buy-advice-cell { min-width: 190px; max-width: 300px; }
+
+.human-review-state {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px dashed var(--line);
+}
+.human-review-state strong { display: block; font-size: 11px; color: var(--ink); }
+.human-review-state p { margin: 2px 0 0; font-size: 10px; line-height: 1.4; color: var(--ink-faint); }
+.human-review-state-human_trial strong { color: var(--trial); }
+.human-review-state-human_buy strong { color: var(--buy); }
+.human-review-cell { min-width: 220px; max-width: 320px; }
+.human-review-state-human_wait_price strong,
+.human-review-state-human_wait_event strong { color: var(--watch); }
+.human-review-state-human_no strong { color: var(--sell); }
+.human-review-note { color: var(--ink-muted) !important; }
 .buy-advice { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .buy-advice-detail {
   font-size: 11px;
