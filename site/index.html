@@ -4,11 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#05090e" />
+    <meta name="theme-color" content="#150b26" />
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/themes/_engine.css" />
+    <link rel="stylesheet" href="./assets/themes/18-glass.css" />
   </head>
   <body>
     <div class="app-shell">
@@ -216,13 +218,14 @@
       </div>
 
       <footer class="app-footer">
-        仅收录个股研究；A股实时执行须同时通过人工复核、Checklist、交易时段和 10 分钟内同源行情守门，技术面只辅助观察节奏，不构成投资建议。
+        仅收录个股研究；A股实时执行状态由主报告动作、价格档、经营前提、交易时段和 10 分钟内同源行情动态生成，人工复核仅作行动提示，Checklist 由你自行查看，技术面只辅助观察节奏，不构成投资建议。
         盘前、午休和盘后保留“最近行情参考分区”，仅用于研究与准备，不代表当时可以下单。
         港股与美股仅供研究浏览，不计入“当前可执行”。
       </footer>
     </div>
 
     <div class="toast" id="toast" hidden></div>
+    <script type="module" src="./assets/particles.js"></script>
     <script type="module" src="./assets/app.js"></script>
   </body>
 </html>

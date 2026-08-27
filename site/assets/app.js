@@ -633,6 +633,15 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
     consensus.textContent = "双模型细分口径有分歧；本状态只采用两者对“当前不可直接买入”的安全交集。";
     wrap.append(consensus);
   }
+  if (
+    execution.manualReviewCaveat
+    && (execution.manualReviewState !== "ready" || execution.manualReviewKey !== execution.key)
+  ) {
+    const reviewNote = document.createElement("p");
+    reviewNote.className = "primary-judgment-aux-note manual-review-caveat";
+    reviewNote.textContent = execution.manualReviewCaveat;
+    wrap.append(reviewNote);
+  }
   if (!compact) {
     if (execution.policy?.guard_condition) {
       const guard = document.createElement("p");
@@ -642,9 +651,7 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
     }
     const note = document.createElement("p");
     note.className = "primary-judgment-aux-note";
-    note.textContent = execution.manualReview
-      ? "当前状态来自逐股人工复核；Checklist 硬性否决优先，技术面与情绪面仅作辅助。"
-      : "当前可执行状态由主报告动作许可、报告价格档、经营前提和现价共同生成；Checklist、技术面与情绪面不参与该归类。";
+    note.textContent = "当前执行分区由主报告动作许可、价格档/经营前提与最新同源行情生成；人工复核只作提示，Checklist 不参与自动分区，技术面与情绪面仅作辅助。";
     wrap.append(note);
   }
   return wrap;
@@ -2476,7 +2483,7 @@ function renderChecklistDetail(item) {
   if (checklist.hard_veto) {
     const warning = document.createElement("p");
     warning.className = "checklist-warning";
-    warning.textContent = "已识别硬性否决信号：Checklist 只允许把该标的挡在新增买入流程外，不会自动改写主研报动作。";
+    warning.textContent = "已识别硬性否决信号：请你结合完整 Checklist 自行复核；它不会自动改写当前价格分区或主研报动作。";
     summaryCard.append(warning);
   }
   els.detailBody.append(summaryCard);
@@ -2542,7 +2549,7 @@ function renderChecklistDetail(item) {
 
   const footer = document.createElement("p");
   footer.className = "source-note";
-  footer.textContent = "Checklist 是买入前筛选闸门，不覆盖基本面主研报、技术面或情绪面的独立结论。";
+  footer.textContent = "Checklist 保留为独立买入前参考，由你自行复核；不参与当前价格分区，也不覆盖基本面主研报、技术面或情绪面的独立结论。";
   if (checklist.report_path) {
     const link = document.createElement("a");
     link.href = `${repositoryUrl}${checklist.report_path}`;
@@ -3487,7 +3494,7 @@ function renderDetail() {
     const tip = document.createElement("div");
     tip.className = "card";
     tip.innerHTML = primaryJudgment
-      ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；已完成的逐股人工复核优先决定“当前可执行状态”，并覆盖旧的机械价格归类。未完成人工复核时，才按报告价格档与经营前提推导。Checklist 硬性否决不得进入可买列表；技术面和情绪面保持独立辅助展示。</p>`
+      ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；当前执行分区按报告价格档、经营前提和最新同源行情动态计算。人工复核只作为行动提示，不再覆盖价格状态；Checklist 由你自行查看，不参与自动分区，技术面和情绪面保持独立辅助展示。</p>`
       : `<h3>筛选依据</h3><p class="source-note">尚无双模型主报告判断的非 A 股，暂按旧报告结论兼容归类；完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;

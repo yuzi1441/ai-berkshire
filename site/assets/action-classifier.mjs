@@ -281,6 +281,60 @@ function conservativeExecutionResult(manualResult, policyResult) {
   });
 }
 
+function manualReviewMetadata(manual, priceResult) {
+  if (!manual) {
+    return {
+      manualReview: null,
+      manualReviewState: "missing",
+      manualReviewKey: "review",
+      manualReviewCaveat: "尚无逐股人工复核；当前价格状态仅按主报告价格条件与最新行情计算。",
+    };
+  }
+
+  const status = String(manual.status || "review");
+  const source = String(manual.source || "");
+  const valid = status === "ready" && source === "human_review";
+  if (!valid) {
+    const reason = manual.invalidation_reason || manual.detail || "人工复核缺失或已失效";
+    return {
+      manualReview: manual,
+      manualReviewState: manual.validity_state || status || "invalid",
+      manualReviewKey: String(manual.execution_key || "review"),
+      manualReviewCaveat: `${reason}；当前价格状态仍按主报告价格条件与最新行情计算。`,
+    };
+  }
+
+  const reviewKey = String(manual.execution_key || "review");
+  if (reviewKey === String(priceResult?.key || "review")) {
+    return {
+      manualReview: manual,
+      manualReviewState: "ready",
+      manualReviewKey: reviewKey,
+    };
+  }
+
+  const label = String(manual.label || manual.detail || "人工复核结论")
+    .replace(/^人工复核\s*[:：]?\s*/, "");
+  return {
+    manualReview: manual,
+    manualReviewState: "ready",
+    manualReviewKey: reviewKey,
+    manualReviewCaveat: `人工提示：${label}；不改变当前价格状态，是否行动由你判断。`,
+  };
+}
+
+function withManualReviewMetadata(priceResult, manual) {
+  return executionResult(
+    priceResult.key,
+    priceResult.label,
+    priceResult.detail,
+    {
+      ...priceResult,
+      ...manualReviewMetadata(manual, priceResult),
+    },
+  );
+}
+
 function comparableExecutionRules(policy, quote) {
   const currency = String(quote?.currency || "");
   return (Array.isArray(policy?.price_rules) ? policy.price_rules : [])
@@ -289,7 +343,12 @@ function comparableExecutionRules(policy, quote) {
 }
 
 function matchedExecutionRule(rules, price) {
-  return rules.find((rule) => price <= Number(rule.ceiling) + 1e-9) || null;
+  return rules.find((rule) => {
+    const ceiling = Number(rule?.ceiling);
+    const minimum = Number(rule?.min);
+    const aboveMinimum = !Number.isFinite(minimum) || price >= minimum - 1e-9;
+    return aboveMinimum && Number.isFinite(ceiling) && price <= ceiling + 1e-9;
+  }) || null;
 }
 
 function executionRuleDetail(price, rule) {
@@ -468,50 +527,34 @@ export function referenceExecutionState(item, quote, fallbackKind = "unknown") {
   }
 
   const policy = item?.execution_policy;
-  const checklist = item?.checklist || {};
-  if (checklist.hard_veto === true || checklist.hard_veto_state === "triggered") {
-    return executionResult(
-      "no",
-      referenceLabel("no"),
-      "Checklist 的真实硬性否决已触发，任何行情时点都不进入买入参考分区",
-      { policy, referenceMode: "latest_snapshot" },
-    );
-  }
-
   const manual = item?.manual_execution_review;
-  if (manual && (manual.status !== "ready" || manual.source !== "human_review")) {
-    return executionResult(
-      "review",
-      referenceLabel("review"),
-      manual.invalidation_reason || manual.detail || "人工复核缺失、过期或来源指纹已变化",
-      {
-        policy,
-        manualReview: manual,
-        referenceMode: "latest_snapshot",
-        validityState: manual.validity_state || manual.status || "invalid",
-      },
-    );
-  }
-
-  // Compatibility for policy-only fixtures. Production records always include
-  // a per-stock manual review object, including missing/stale placeholders.
-  if (!manual) return asReferenceResult(policyExecutionState(item, quote, fallbackKind));
-
-  const manualResult = manualExecutionResult(manual, policy);
   const policyResult = policyExecutionState(item, quote, fallbackKind);
-  // A missing or incomparable latest quote must block real-time execution, but
-  // it should not erase a still-valid human conclusion from the research view.
-  // Keep the manual partition and surface the price-policy gap as a caveat.
-  if (policyResult.key === "review") {
+
+  // A missing or invalid human review is a visible caveat, not a replacement
+  // for the price-derived research partition. If the price is unavailable,
+  // retain the manual partition as a fallback so the research view remains
+  // useful without pretending that it is price-comparable.
+  if (policyResult.key === "review" && manual) {
+    const manualResult = manualExecutionResult(manual, policy);
     return asReferenceResult(manualResult, {
-      manualReview: manual,
+      ...manualReviewMetadata(manual, policyResult),
       referenceCaveat: policyResult.detail,
       quotePolicyState: "unavailable",
     });
   }
-  const result = conservativeExecutionResult(manualResult, policyResult);
-  return asReferenceResult(result, {
-    manualReview: manual,
+
+  // Production records carry a review object, but policy-only fixtures and
+  // older records remain valid. The price-derived result is authoritative.
+  if (!manual) {
+    return asReferenceResult(policyResult, {
+      ...manualReviewMetadata(null, policyResult),
+      quotePolicyState: policyResult.key === "review" ? "unavailable" : "comparable",
+    });
+  }
+
+  const reviewMeta = manualReviewMetadata(manual, policyResult);
+  return asReferenceResult(policyResult, {
+    ...reviewMeta,
     quotePolicyState: "comparable",
   });
 }
@@ -527,45 +570,15 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
   }
 
   const policy = item?.execution_policy;
-  const checklist = item?.checklist || {};
-  if (checklist.hard_veto === true || checklist.hard_veto_state === "triggered") {
-    return executionResult(
-      "no",
-      "硬性否决已触发",
-      "Checklist 的真实硬性否决优先于人工复核、行情和价格策略",
-      {
-        policy,
-        marketSessionState: aShareMarketSessionState(context.now),
-        quoteFreshness: quoteFreshnessState(quote, context.now).state,
-      },
-    );
-  }
-
   const manual = item?.manual_execution_review;
-  if (manual && (manual.status !== "ready" || manual.source !== "human_review")) {
-    return executionResult(
-      "review",
-      "待人工复核",
-      manual.invalidation_reason || manual.detail || "人工复核缺失、过期或来源指纹已变化",
-      {
-        policy,
-        manualReview: manual,
-        validityState: manual.validity_state || manual.status || "invalid",
-        invalidationReason: manual.invalidation_reason || "manual_review_invalid",
-      },
-    );
-  }
-
-  // Compatibility for raw policy-only callers. Production dashboard records
-  // always carry a per-stock manual review object, including missing/stale ones.
-  if (!manual) return policyExecutionState(item, quote, fallbackKind);
 
   const referenceExecution = referenceExecutionState(item, quote, fallbackKind);
   const now = context.now || new Date();
   const sessionState = aShareMarketSessionState(now);
   const freshness = quoteFreshnessState(quote, now);
+  const policyResult = policyExecutionState(item, quote, fallbackKind);
   if (sessionState !== "open") {
-    const nextCandidate = ["actionable", "trial"].includes(manual.execution_key);
+    const nextCandidate = ["actionable", "trial"].includes(policyResult.key);
     return executionResult(
       "paused",
       nextCandidate ? "下个交易日候选" : "非交易时段",
@@ -579,6 +592,8 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
         quoteFreshness: freshness.state,
         nextTradingDayCandidate: nextCandidate,
         referenceExecution,
+        priceState: policyResult,
+        ...manualReviewMetadata(manual, policyResult),
       },
     );
   }
@@ -596,16 +611,15 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
         quoteFreshness: freshness.state,
         quoteFreshnessDetail: freshness,
         referenceExecution,
+        priceState: policyResult,
+        ...manualReviewMetadata(manual, policyResult),
       },
     );
   }
 
-  const manualResult = manualExecutionResult(manual, policy);
-  const policyResult = policyExecutionState(item, quote, fallbackKind);
-  const result = conservativeExecutionResult(manualResult, policyResult);
+  const result = withManualReviewMetadata(policyResult, manual);
   return executionResult(result.key, result.label, result.detail, {
     ...result,
-    manualReview: manual,
     marketSessionState: sessionState,
     quoteFreshness: freshness.state,
     quoteFreshnessDetail: freshness,
