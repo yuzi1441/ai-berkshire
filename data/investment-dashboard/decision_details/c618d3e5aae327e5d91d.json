@@ -124,15 +124,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "当前观察不追买，等待价格与证据同时满足（如激进型8.5-9.0元且毛利率不再创新低等）后再建仓",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "小比例观察仓可持有至正式中报及后续验证，不宜机械补仓；若超仓位上限且买入逻辑仅为历史低估值，应降至可承受跟踪仓位；14元以上且盈利未上修可分批减仓",
-    "trigger_condition": "激进型8.5-9.0元且毛利率不再创新低、应收/收入开始下降；稳健型7.0-8.0元且OCF/净利连续两期回到70%以上；保守型6.3元以下且无质量事故等",
-    "summary": "天坛生物12.42元不是高确定性买点，建议空仓者观察不追买，等待价格下探至8.5-9.0元以下并出现基本面拐点证据",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约均建议‘观察’，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 389,
@@ -148,14 +148,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:13:32+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -164,28 +164,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "激进型8.5-9.0元且毛利率不再创新低、应收/收入开始下降",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "可用计划仓位的 1/3 建观察仓",
-        "price_range": "8.5-9.0 元",
-        "min": 8.5,
-        "ceiling": 9.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "激进型8.5-9.0元且毛利率不再创新低、应收/收入开始下降",
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -195,9 +182,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -205,7 +192,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -215,7 +202,7 @@
       "ticker": "600161.SH",
       "main_report": {
         "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
-        "sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844"
+        "sha256": "827ce4b5bd41dd10dd9f85cf7a45602e97c7d7882961de9ba6a73c7dd75bceac"
       },
       "checklist": {
         "path": null,
@@ -223,14 +210,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6",
-    "current_source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6"
+    "current_source_fingerprint_sha256": "0a9df9c2672863f15306ed0a89a5220a1d0be342b4f52190029d5a542dc68cb7"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "e6f592bb0eba3346b78d2822d40d73177b1d549ccf33d8ba2327f02062e707f6",
   "market_session_state": "runtime_required",
@@ -280,7 +267,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "c618d3e5aae327e5d91d",
   "detail_path": "./data/decision_details/c618d3e5aae327e5d91d.json"
 }

@@ -156,15 +156,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓不追高，等待估值消化或价格回落至90-110元且业绩未坏再重估；激进型可待2026Q2/Q3高增长且毛利率维持27%+时小仓试错",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "可持有但设置基本面止损，盯毛利率、CFO/净利、库存应收、AI PCB订单与扩产回报；高仓位不建议加仓，若PE仍>80x且增速放缓应考虑降低风险暴露",
-    "trigger_condition": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏；或2026Q2/Q3继续高增长且毛利率维持27%+（激进型小仓条件）",
-    "summary": "生益科技质地好但估值偏贵，空仓不追高，等待价格回落或业绩验证后再行动",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约一致，均指向观察等待，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 22,
@@ -186,14 +186,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:55:53+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -202,28 +202,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "或2026Q2/Q3继续高增长且毛利率维持27%+（激进型小仓条件）",
-    "guard_condition": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏",
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "TTM PE回落至40-50x，或股价回落至90-110元且业绩未坏",
-        "price_range": "回落至90-110元",
-        "min": 90.0,
-        "ceiling": 110.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -233,9 +220,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -243,7 +230,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -253,7 +240,7 @@
       "ticker": "600183.SH",
       "main_report": {
         "path": "reports/生益科技/生益科技研究报告-20260709.md",
-        "sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180"
+        "sha256": "0835ca525a39007c82d0171f23039e6173d92173dd8e91a3aba4d63e0bba9cb2"
       },
       "checklist": {
         "path": null,
@@ -261,14 +248,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "f01847472a4b74a333a5141487e9729b5e2b9890da90427a730b16e16d640220",
-    "current_source_fingerprint_sha256": "f01847472a4b74a333a5141487e9729b5e2b9890da90427a730b16e16d640220"
+    "current_source_fingerprint_sha256": "a738e4fe66622cb0df2b9729c2a260e0c9fe26acc05ea835907ed988a7100aee"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "f01847472a4b74a333a5141487e9729b5e2b9890da90427a730b16e16d640220",
   "market_session_state": "runtime_required",
@@ -318,7 +305,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "efe2e65208a01fdad026",
   "detail_path": "./data/decision_details/efe2e65208a01fdad026.json"
 }

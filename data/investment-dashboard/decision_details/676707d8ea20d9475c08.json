@@ -483,15 +483,15 @@
   ],
   "report_history_count": 10,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "当前不追买，继续观察，优先等待半年报；A股价格进入47-50元且经营信号未恶化时，再谈小额分批",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "默认继续持有观察，不在53.32元机械加仓；H股持有但不过度加仓；触发核心失效条件时重新评估或减仓",
-    "trigger_condition": "2026-08-21半年报确认投资收益、NBV利润率未恶化，且A股价格进入47-50元区间",
-    "summary": "公司质量与赔率可进高优先级名单，但半年报前维持观察，A股不追买，等待47-50元且验证经营信号后再小额分批。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约均指示‘观察’，激进型动作与价格区间一致，无冲突。",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 347,
@@ -513,15 +513,15 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 50.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:07:22+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -530,40 +530,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "2026-08-21半年报确认投资收益、NBV利润率未恶化，且A股价格进入47-50元区间",
-    "guard_condition": "2026-08-21半年报确认投资收益、NBV利润率未恶化，且A股价格进入47-50元区间",
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "进入价格带后分批研究",
-        "price_range": "43-47元",
-        "min": 43.0,
-        "ceiling": 47.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "2026-08-21半年报确认投资收益、NBV利润率未恶化，且A股价格进入47-50元区间",
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "buy",
-        "action": "半年报确认信号后小额分批",
-        "price_range": "47-50元",
-        "min": 47.0,
-        "ceiling": 50.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "2026-08-21半年报确认投资收益、NBV利润率未恶化，且A股价格进入47-50元区间",
-        "source": "report_price_plan"
-      }
-    ],
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -667,9 +642,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -677,7 +652,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -687,22 +662,22 @@
       "ticker": "601318.SH",
       "main_report": {
         "path": "reports/平安集团/中国平安-investment-research-20260810.md",
-        "sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73"
+        "sha256": "64f13cb93da40a2f4b6bc329a3c02047daf48bb4bf55be1a99d5bcce2aedf208"
       },
       "checklist": {
         "path": "reports/平安集团/平安集团-checklist-20260807.md",
-        "sha256": "b5140689f71a9b1d2afa7d3ded7a85602d5b880ad074f4785306bd8d4e4f800c"
+        "sha256": "0323a08191f79e510fcc33aadd8436e43da30d019943e10c80678e5d192602c0"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "ed819b87d5d1ca40b7ee082ea099a4bc8edc9a4862e2939ed5be85f064e285de",
-    "current_source_fingerprint_sha256": "ed819b87d5d1ca40b7ee082ea099a4bc8edc9a4862e2939ed5be85f064e285de"
+    "current_source_fingerprint_sha256": "e92e5fcc4d1bfd4d2d8c8eae9ae49f077e8d2d5f8d239506ef65cdcbd539c391"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
   "valid_until": "2026-09-01",
   "source_fingerprint_sha256": "ed819b87d5d1ca40b7ee082ea099a4bc8edc9a4862e2939ed5be85f064e285de",
   "market_session_state": "runtime_required",
@@ -752,7 +727,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "676707d8ea20d9475c08",
   "detail_path": "./data/decision_details/676707d8ea20d9475c08.json"
 }

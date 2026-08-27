@@ -1264,45 +1264,56 @@
   ],
   "report_history_count": 20,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "报告基准价28.42元时空仓等待，不在当前估值下直接建仓",
-    "holder_action": "持仓者可继续收息并按季度复核",
-    "trigger_condition": "25-26元可小仓试建；23-25元可分批建仓但需基本面未坏；22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-    "summary": "主报告明确写明当前空仓等待，只有进入对应价格带并满足保护条件后才可行动。",
-    "confidence": "high",
-    "report_field_conflict": true,
-    "conflict_note": "粗字段写分批买入，但正文当前价格行和最终总结明确要求空仓等待价格。",
-    "source_basis": "人工逐行核对当前价格行、分层价格表与最终总结",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "holder_action": "持仓者可继续持有，若价格进入对应区间可考虑加仓",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "confidence": "medium",
+    "report_field_conflict": false,
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "evidence": [
+      {
+        "line_start": 365,
+        "line_end": 365,
+        "quote": "| 基本面建议动作 | 分批买入 |",
+        "supports": "明确建议分批买入，但结合价格区间，需等待价格条件"
+      },
+      {
+        "line_start": 366,
+        "line_end": 366,
+        "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
+        "supports": "看好基本面，支持买入逻辑"
+      },
+      {
+        "line_start": 368,
+        "line_end": 368,
+        "quote": "| 激进型价格区间 | 25-26 元 |",
+        "supports": "给出激进型买入价格触发区间，空仓者需等待价格达到"
+      },
+      {
+        "line_start": 370,
+        "line_end": 370,
+        "quote": "| 稳健型价格区间 | 23-25 元 |",
+        "supports": "给出稳健型买入价格触发区间，空仓者需等待价格达到"
+      }
+    ],
+    "enabled": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
+    "label_detail_consensus": false,
+    "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 26.0,
+    "price_source": "本地程序从主报告价格行动表确定性提取",
     "trial_range": {
       "min": 25.0,
       "max": 26.0
     },
-    "price_source": "主报告第273至280行与第302行",
-    "evidence": [
-      {
-        "line_start": 273,
-        "line_end": 280,
-        "quote": "25-26元小仓试建，23-25元分批且要求基本面未坏，22.5元以下须先排除永久性损伤；当前28.42元空仓等待。",
-        "supports": "当前不能买和未来价格触发条件都写得明确。"
-      },
-      {
-        "line_start": 302,
-        "line_end": 302,
-        "quote": "对空仓者，23-25元更接近好公司与合理安全边际的交集。",
-        "supports": "最终总结再次确认等待更低价格。"
-      }
-    ],
-    "enabled": true,
-    "human_reviewed": true,
-    "human_reviewed_at": "2026-08-13T11:14:00+08:00",
-    "model_consensus": false,
-    "screening_consensus": false,
-    "artifact_status": "human_reviewed",
-    "source_matches": true,
-    "generated_at": "2026-08-13T11:14:00+08:00",
+    "artifact_status": "review",
+    "source_matches": false,
+    "generated_at": "2026-08-14T10:58:16+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -1310,52 +1321,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_and_event",
-    "event_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-    "guard_condition": "23-25元可分批建仓但需基本面未坏",
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-        "price_range": "22.5元以下",
-        "min": null,
-        "ceiling": 22.5,
-        "mode": "ceiling",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-        "source": "validated_judgment_trigger"
-      },
-      {
-        "action_kind": "buy",
-        "action": "23-25元可分批建仓但需基本面未坏",
-        "price_range": "23-25元",
-        "min": 23.0,
-        "ceiling": 25.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-        "source": "validated_judgment_trigger"
-      },
-      {
-        "action_kind": "trial",
-        "action": "小仓试建，保留回撤加仓空间",
-        "price_range": "25-26 元",
-        "min": 25.0,
-        "ceiling": 26.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": true,
-        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
-        "source": "report_price_plan"
-      }
-    ],
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
+    "guard_condition": null,
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -1434,9 +1408,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -1444,7 +1418,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -1454,22 +1428,22 @@
       "ticker": "600900.SH",
       "main_report": {
         "path": "reports/长江电力/长江电力-investment-team-20260713.md",
-        "sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99"
+        "sha256": "fb475ebf6846edbd8275536d2075f1763232097a26a435c36684f5e072e7ea9f"
       },
       "checklist": {
         "path": "reports/长江电力/巴菲特Checklist-长江电力.md",
-        "sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe"
+        "sha256": "8e1371b2cfe69e7be3e47d8c8a2d68404b4cd955a8258aea7c822b0fa5245715"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
-    "current_source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d"
+    "current_source_fingerprint_sha256": "aa10102c7a32009df28ac0d233d2dccb0f3787b0adefaeed6a7b22cec6f4594e"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
   "market_session_state": "runtime_required",
@@ -1519,7 +1493,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "9ca5388e95a28a01273f",
   "detail_path": "./data/decision_details/9ca5388e95a28a01273f.json"
 }

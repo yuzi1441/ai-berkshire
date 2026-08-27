@@ -361,15 +361,15 @@
   ],
   "report_history_count": 5,
   "primary_judgment": {
-    "label": "可分批买入",
-    "action_kind": "buy",
-    "empty_position_action": "当前价5.14元位于4.3-5.3元买入区间内，可小仓分批买入，但不宜重仓",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持有者可继续持有，但需关注失效条件并定期复核",
-    "trigger_condition": "买入区间4.3-5.3元，当前价格5.14元处于区间内，无需等待更低价格",
-    "summary": "报告建议分批买入但非高确定性重仓，现价可小仓分批，稳健者可等待4.3-4.8元更厚安全边际。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，均支持分批买入，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 273,
@@ -397,8 +397,8 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
@@ -409,7 +409,7 @@
       "max": 5.3
     },
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:11:20+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -418,47 +418,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "buy",
-    "main_label": "可分批买入",
-    "condition_mode": "current_action",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "仅在深度折价时买入",
-        "price_range": "3.8-4.2 元",
-        "min": 3.8,
-        "ceiling": 4.2,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      },
-      {
-        "action_kind": "trial",
-        "action": "现价附近小仓分批",
-        "price_range": "4.8-5.3 元",
-        "min": 4.8,
-        "ceiling": 5.3,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
-    "current_action": {
-      "action_kind": "buy",
-      "action": "当前价5.14元位于4.3-5.3元买入区间内，可小仓分批买入，但不宜重仓",
-      "currency": "CNY",
-      "reference_price": 5.14,
-      "reference_source": "主报告明确标注的分析基准价",
-      "requires_validation": false
-    },
+    "price_rules": [],
+    "current_action": null,
     "report_rule_count": 2,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -565,9 +533,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -575,7 +543,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "D",
-    "execution_key": "no",
+    "execution_key": "review",
     "label": "人工复核：Checklist 硬性否决",
     "detail": "买入前 Checklist 存在硬性否决；即使价格进入主报告区间，也不得进入当前可买名单。",
     "opportunity_tier": null,
@@ -585,22 +553,22 @@
       "ticker": "002027.SZ",
       "main_report": {
         "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
-        "sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5"
+        "sha256": "b92d58656ddb9a83b880977c67362622641fdbc78e85559b95d7adbe5276de00"
       },
       "checklist": {
         "path": "reports/分众传媒/巴菲特Checklist-分众传媒.md",
-        "sha256": "c9974370d65cd2b25d736d63bcd4077e5f596684dc1558537226c00cedc89e44"
+        "sha256": "5042e8d11173afec405156a9f176d188638d55ded85cd8976ffa6d0c1cb02296"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4",
-    "current_source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4"
+    "current_source_fingerprint_sha256": "2bd69b22b2677092ff385fecccf3a9f877146c4a11e818fbeabe7089349286c9"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-07）",
   "valid_until": "2026-09-05",
   "source_fingerprint_sha256": "cbdde4746bc0a911af572824d700c7db5b460d4ecb9bac489fb0336e7bf244b4",
   "market_session_state": "runtime_required",
@@ -650,7 +618,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "e1493b1e9f6e0d424a3b",
   "detail_path": "./data/decision_details/e1493b1e9f6e0d424a3b.json"
 }

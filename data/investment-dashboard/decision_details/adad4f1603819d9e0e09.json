@@ -477,15 +477,15 @@
   ],
   "report_history_count": 7,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓等待，不在当前价重仓追买，等待115-125元附近或验证信号后再考虑买入",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "有条件持有，仓位不过度集中，按信号跟踪而非只看股价",
-    "trigger_condition": "价格触发：激进型125元观察仓、稳健型115-120元分批、保守型100元；或基本面验证：国内收入连续两季转正、利润恢复增长、海外增长等",
-    "summary": "迈瑞优秀但当前估值合理偏高，空仓等待更低价格或经营验证，不追涨，持仓有条件持有。",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与看板契约一致，均建议观察等待，无冲突",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 360,
@@ -501,15 +501,15 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "entry_ceiling": 130.0,
     "price_source": "本地程序从主报告价格行动表确定性提取",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:25:27+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -518,28 +518,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "或基本面验证：国内收入连续两季转正、利润恢复增长、海外增长等",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "trial",
-        "action": "只设观察仓，不追涨",
-        "price_range": "125 元",
-        "min": 125.0,
-        "ceiling": 125.0,
-        "mode": "point",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "report_price_plan"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -618,9 +605,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -628,7 +615,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -638,22 +625,22 @@
       "ticker": "300760.SZ",
       "main_report": {
         "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
-        "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489"
+        "sha256": "7fde5dcc0e321dd2cae9c70b29cbc4761587074cd3d2856a4797874852ef06bb"
       },
       "checklist": {
         "path": "reports/迈瑞医疗/巴菲特Checklist-迈瑞医疗.md",
-        "sha256": "a33194fb798fba7983d7e99750365640389d9f1e69f922487edd7511f7b2f99a"
+        "sha256": "769529a6bb26e254da951adff07720fe0eee1a3c625439e1611fdde8b86c591e"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
-    "current_source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6"
+    "current_source_fingerprint_sha256": "64919fb9250758dbc13b896fdd303fc1d9efd9e58e3c8f4045dd599eb697e404"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "3514b7c67b562d81ab678ede5cb74a6a3e53b3074a7980a5226134d9f76a6fe6",
   "market_session_state": "runtime_required",
@@ -703,7 +690,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "adad4f1603819d9e0e09",
   "detail_path": "./data/decision_details/adad4f1603819d9e0e09.json"
 }

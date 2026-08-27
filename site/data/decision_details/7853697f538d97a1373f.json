@@ -132,15 +132,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "等待价格",
-    "action_kind": "watch",
-    "empty_position_action": "空仓者观望，等待更好价格，建议PE回落至40-50倍（约23-29元）或等2026年季报验证后再决策",
+    "label": "待人工复核",
+    "action_kind": "unknown",
+    "empty_position_action": "模型结果不可用，暂停自动归类",
     "holder_action": "持仓者考虑减仓锁定利润，建议至少减持一半仓位",
-    "trigger_condition": "PE回落至40-50倍区间（对应股价约23-29元），或2026年后续季报验证增长持续性",
-    "summary": "报告认为87倍PE透支增长，空仓者等待价格回落或业绩验证；持仓者建议减仓锁利",
+    "trigger_condition": "重新解析当前主报告并完成人工复核",
+    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "正文与契约一致，契约摘要亦为观望等待更好价格",
+    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
     "evidence": [
       {
         "line_start": 403,
@@ -156,14 +156,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "双模型核对主报告空仓行动表与最终结论",
-    "model_consensus": true,
+    "source_basis": "报告判断缓存状态检查",
+    "model_consensus": false,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": true,
+    "source_matches": false,
     "generated_at": "2026-08-14T10:02:48+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -172,28 +172,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "watch",
-    "main_label": "等待价格",
-    "condition_mode": "price_or_event",
-    "event_condition": "PE回落至40-50倍区间（对应股价约23-29元），或2026年后续季报验证增长持续性",
+    "main_action_kind": "unknown",
+    "main_label": "待人工复核",
+    "condition_mode": "review",
+    "event_condition": null,
     "guard_condition": null,
-    "price_rules": [
-      {
-        "action_kind": "buy",
-        "action": "PE回落至40-50倍区间（对应股价约23-29元），或2026年后续季报验证增长持续性",
-        "price_range": "约23-29元",
-        "min": 23.0,
-        "ceiling": 29.0,
-        "mode": "range",
-        "currency": "CNY",
-        "requires_validation": false,
-        "validation_condition": null,
-        "source": "validated_judgment_trigger"
-      }
-    ],
+    "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "high",
+    "reliability": "review",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -203,9 +190,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -213,7 +200,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -223,7 +210,7 @@
       "ticker": "603005.SH",
       "main_report": {
         "path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
-        "sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d"
+        "sha256": "a5b91e3d4c37bc4fb26a7f4e3860a36f42da5a1b41d0ead05a560f0041a92d48"
       },
       "checklist": {
         "path": null,
@@ -231,14 +218,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
+        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
       }
     },
     "source_fingerprint_sha256": "181d25e349d0a359c1e046f5bc4f0f47418aeff22671b177ee58cb310d8d07f9",
-    "current_source_fingerprint_sha256": "181d25e349d0a359c1e046f5bc4f0f47418aeff22671b177ee58cb310d8d07f9"
+    "current_source_fingerprint_sha256": "d983d49e8884317e0c46f2eee98985890cdcecf0f58bbda74c03f68726c17869"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "181d25e349d0a359c1e046f5bc4f0f47418aeff22671b177ee58cb310d8d07f9",
   "market_session_state": "runtime_required",
@@ -288,7 +275,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "338fce117509e14ec56c",
+  "generation_id": "db8fb03db80665ae2abd",
   "detail_id": "7853697f538d97a1373f",
   "detail_path": "./data/decision_details/7853697f538d97a1373f.json"
 }
