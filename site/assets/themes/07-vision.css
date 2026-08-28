@@ -1,0 +1,46 @@
+/* Theme 07 · Vision 空间景深 —— 深色环境光斑 + 大圆角半透明面板 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #060608; --bg-1: rgba(255, 255, 255, 0.045); --bg-2: rgba(255, 255, 255, 0.07);
+  --bg-3: rgba(255, 255, 255, 0.11); --bg-inset: rgba(0, 0, 0, 0.32);
+  --line: rgba(255, 255, 255, 0.09); --line-2: rgba(255, 255, 255, 0.16); --line-3: rgba(255, 255, 255, 0.26);
+  --ink: #e8e6ee; --ink-strong: #ffffff; --ink-soft: #a8a4b8; --ink-faint: #77738a;
+  --brand: #8fa8ff; --brand-soft: rgba(143, 168, 255, 0.14);
+  --buy: #4ade80; --trial: #bef264; --installment: #60a5fa;
+  --hold: #fbbf24; --watch: #f59e0b; --sell: #fb7185;
+  --up: #fb7185; --down: #4ade80;
+  --radius: 16px; --radius-lg: 22px;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --panel-bg: rgba(255, 255, 255, 0.05);
+  --card-bg: rgba(255, 255, 255, 0.065);
+  --row-alt: rgba(255, 255, 255, 0.02);
+  --violet: #c4b5fd;
+}
+
+body {
+  background:
+    radial-gradient(900px 600px at 8% -8%, rgba(255, 143, 177, 0.14), transparent 58%),
+    radial-gradient(1000px 640px at 92% -10%, rgba(96, 165, 250, 0.13), transparent 58%),
+    radial-gradient(1100px 700px at 50% 115%, rgba(167, 139, 250, 0.10), transparent 60%),
+    var(--bg-0);
+}
+
+.topbar, .table-panel, .detail-panel, .index-band, .annual-panel,
+.automation-panel, .attention-panel, .control-band, .summary-band .metric {
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+.control-band, .summary-band { background: transparent; }
+
+.brand-mark { border-radius: 14px; }
+.metric { border-radius: 18px; }
+.index-card { border-radius: 14px; }
+.btn { border-radius: 999px; padding-inline: 16px; }
+.search-box input { border-radius: 999px; padding-left: 16px; }
+.table-panel, .detail-panel { border-radius: 24px; }
+thead th:first-child { border-top-left-radius: 22px; }
+
+tbody tr:hover { background: rgba(255, 255, 255, 0.045); }
+tbody tr.active { background: rgba(143, 168, 255, 0.09); }

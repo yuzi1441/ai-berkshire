@@ -1,0 +1,47 @@
+/* Theme 11 · 私人银行藏蓝金 —— 深夜蓝 + 香槟金，衬线大标题，低调奢华 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #0a1626; --bg-1: #0e1e33; --bg-2: #132943; --bg-3: #1a3654;
+  --bg-inset: #081220;
+  --line: #1e3a5c; --line-2: #2c5078; --line-3: #3e6b99;
+  --ink: #c9d6e6; --ink-strong: #f2f7fd; --ink-soft: #8fa5bd; --ink-faint: #657e99;
+  --brand: #d4b876; --brand-soft: rgba(212, 184, 118, 0.11);
+  --buy: #6fc2a0; --trial: #a8c686; --installment: #7ab3e0;
+  --hold: #d4b876; --watch: #e0a86b; --sell: #d97b7b;
+  --up: #e08585; --down: #7fc8a9;
+  --radius: 6px; --radius-lg: 10px;
+  --shadow: 0 18px 48px rgba(2, 8, 20, 0.65);
+  --shadow-soft: 0 8px 22px rgba(2, 8, 20, 0.5);
+  --panel-bg: rgba(14, 30, 51, 0.72);
+  --card-bg: rgba(19, 41, 67, 0.7);
+  --violet: #a08cd8;
+}
+
+body {
+  background:
+    radial-gradient(1200px 520px at 50% -12%, rgba(212, 184, 118, 0.06), transparent 62%),
+    var(--bg-0);
+}
+
+.topbar {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, transparent, #d4b87666, transparent) 1;
+}
+.brand-mark {
+  background: linear-gradient(150deg, #23334d, #101d31);
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  color: #d4b876;
+  border-color: rgba(212, 184, 118, 0.55);
+}
+h1, h2, .detail-head h2 {
+  font-family: Georgia, "Songti SC", "STSongti-SC", "Noto Serif CJK SC", serif;
+  font-weight: 600;
+}
+.eyebrow { color: var(--hold); letter-spacing: 0.24em; }
+
+thead th { color: #9db1c7; }
+tbody tr:hover { background: rgba(212, 184, 118, 0.045); }
+tbody tr.active { background: rgba(212, 184, 118, 0.07); box-shadow: inset 3px 0 0 #d4b876; }
+.btn { border-radius: 4px; }

@@ -1,0 +1,53 @@
+/* Theme 01 · Bloomberg 终端琥珀 —— 全黑底 + 琥珀橙等宽字，CRT 扫描线 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #000000; --bg-1: #0a0a0a; --bg-2: #121212; --bg-3: #1c1c1c;
+  --bg-inset: #050505;
+  --line: #242424; --line-2: #3a3a3a; --line-3: #55503c;
+  --ink: #c8c8c0; --ink-strong: #f4f2e8; --ink-soft: #8f8f85; --ink-faint: #63635a;
+  --brand: #ff9f1a; --brand-soft: rgba(255, 159, 26, 0.14);
+  --buy: #ffb000; --trial: #ffd166; --installment: #6fb7ff;
+  --hold: #e0b15e; --watch: #ffcf40; --sell: #ff4d4d;
+  --up: #ff5252; --down: #37d67a;
+  --radius: 2px; --radius-lg: 3px;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.6);
+  --panel-bg: rgba(255, 255, 255, 0.025);
+  --card-bg: rgba(255, 255, 255, 0.035);
+  --row-alt: rgba(255, 159, 26, 0.025);
+  --font-sans: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+    "PingFang SC", "Microsoft YaHei", monospace;
+}
+
+body {
+  background:
+    radial-gradient(900px 420px at 50% -10%, rgba(255, 159, 26, 0.06), transparent 65%),
+    var(--bg-0);
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background: repeating-linear-gradient(180deg,
+    rgba(255, 255, 255, 0.022) 0px, rgba(255, 255, 255, 0.022) 1px,
+    transparent 1px, transparent 3px);
+}
+
+.topbar { border-bottom: 2px solid var(--line-2); }
+.brand-mark {
+  border-radius: 2px;
+  background: #1a1206;
+  color: var(--brand);
+  border-color: #7a5410;
+}
+.eyebrow { letter-spacing: 0.22em; }
+.metric-value, .quote-price { color: var(--ink-strong); }
+h1, h2 { letter-spacing: 0.02em; }
+
+.chip, .btn { border-radius: 2px; }
+.tab { border-radius: 2px; }
+.live-pill { border-radius: 2px; }
+.toast { border-radius: 2px; }
+
+thead th { letter-spacing: 0.16em; }
+tbody tr:hover { box-shadow: inset 3px 0 0 var(--brand); }

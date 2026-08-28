@@ -1,0 +1,45 @@
+/* Theme 14 · Notion 文档白 —— 白底轻边框、几乎无投影、克制灰阶 + 蓝链接色 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #ffffff; --bg-1: #ffffff; --bg-2: #f7f7f5; --bg-3: #efefed;
+  --bg-inset: #f7f7f5;
+  --line: #e9e9e7; --line-2: #dedede; --line-3: #d3d1cb;
+  --ink: #37352f; --ink-strong: #1d1c19; --ink-soft: #787774; --ink-faint: #9b9a97;
+  --brand: #2383e2; --brand-soft: rgba(35, 131, 226, 0.07);
+  --buy: #448361; --trial: #7d9439; --installment: #337ea9;
+  --hold: #9f6b53; --watch: #d9730d; --sell: #e03e3e;
+  --up: #e03e3e; --down: #448361;
+  --radius: 5px; --radius-lg: 8px;
+  --shadow: 0 1px 2px rgba(15, 15, 15, 0.04), 0 6px 20px rgba(15, 15, 15, 0.05);
+  --shadow-soft: 0 1px 2px rgba(15, 15, 15, 0.05);
+  --panel-bg: #ffffff;
+  --card-bg: #fbfbfa;
+  --row-alt: #fcfcfb;
+}
+
+body { background: var(--bg-0); }
+
+.topbar { border-bottom: 1px solid var(--line); }
+.brand-mark {
+  background: #1d1c19;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  box-shadow: none;
+}
+h1, h2 { letter-spacing: -0.008em; }
+
+.metric { box-shadow: none; }
+.table-panel, .detail-panel { box-shadow: none; }
+
+.btn { border-radius: 6px; box-shadow: none; }
+.btn.primary { background: transparent; border-color: rgba(35, 131, 226, 0.5); }
+.btn.primary:hover { background: rgba(35, 131, 226, 0.06); }
+.chip { border-radius: 4px; }
+.tab { border-radius: 5px; }
+
+thead th { text-transform: none; letter-spacing: 0.02em; }
+tbody tr:hover { background: #f7f7f5; box-shadow: none; }
+tbody tr.active { background: rgba(35, 131, 226, 0.05); box-shadow: inset 2px 0 0 #2383e2; }
+.toast { border-radius: 8px; }

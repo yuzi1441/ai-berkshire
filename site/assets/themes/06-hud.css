@@ -1,0 +1,52 @@
+/* Theme 06 · 军用 HUD 抬头显示 —— 墨绿线框、角标括号、扫描线 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #020a08; --bg-1: #041210; --bg-2: #061a17; --bg-3: #0a2420;
+  --bg-inset: #010806;
+  --line: #10352c; --line-2: #1a4f40; --line-3: #2a7360;
+  --ink: #b8d8cc; --ink-strong: #eafcf2; --ink-soft: #7fa696; --ink-faint: #567468;
+  --brand: #35ffa2; --brand-soft: rgba(53, 255, 162, 0.1);
+  --buy: #35ffa2; --trial: #a8ff60; --installment: #45c8ff;
+  --hold: #ffc857; --watch: #ffb347; --sell: #ff5470;
+  --up: #ff5470; --down: #35ffa2;
+  --radius: 3px; --radius-lg: 4px;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.6);
+  --panel-bg: rgba(53, 255, 162, 0.02);
+  --card-bg: rgba(53, 255, 162, 0.035);
+  --font-sans: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+    "PingFang SC", "Microsoft YaHei", monospace;
+}
+
+body {
+  background:
+    radial-gradient(1000px 500px at 50% -12%, rgba(53, 255, 162, 0.07), transparent 62%),
+    repeating-linear-gradient(180deg,
+      rgba(53, 255, 162, 0.016) 0px, rgba(53, 255, 162, 0.016) 1px,
+      transparent 1px, transparent 4px),
+    var(--bg-0);
+}
+body::after {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+  background:
+    linear-gradient(rgba(53, 255, 162, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(53, 255, 162, 0.04) 1px, transparent 1px);
+  background-size: 120px 120px;
+  mask-image: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,.55), transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,.55), transparent 78%);
+}
+
+.table-panel, .detail-panel, .index-band {
+  outline: 1px solid var(--line-2);
+  outline-offset: 4px;
+}
+.brand-mark {
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+  background: #052015;
+  border-color: var(--brand);
+}
+.eyebrow { letter-spacing: 0.26em; }
+thead th { letter-spacing: 0.2em; }
+.metric-value, .quote-price { text-shadow: 0 0 10px rgba(53, 255, 162, 0.3); }

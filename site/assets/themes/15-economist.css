@@ -1,0 +1,53 @@
+/* Theme 15 · Economist 数据杂志 —— 浅灰蓝底、标志性红色块与图表配色 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #f0f3f4; --bg-1: #ffffff; --bg-2: #f7f9fa; --bg-3: #eaeef0;
+  --bg-inset: #eef2f4;
+  --line: #dbe2e6; --line-2: #c8d2d8; --line-3: #aebcc4;
+  --ink: #24313a; --ink-strong: #0d1418; --ink-soft: #5c6a73; --ink-faint: #8b959c;
+  --brand: #e3120b; --brand-soft: rgba(227, 18, 11, 0.07);
+  --buy: #007a5e; --trial: #56b4e9; --installment: #006ba2;
+  --hold: #b08c1e; --watch: #c76a1c; --sell: #e3120b;
+  --up: #e3120b; --down: #007a5e;
+  --radius: 2px; --radius-lg: 3px;
+  --shadow: 0 8px 28px rgba(13, 20, 24, 0.10);
+  --shadow-soft: 0 3px 12px rgba(13, 20, 24, 0.07);
+  --panel-bg: #ffffff;
+  --card-bg: #f7f9fa;
+  --row-alt: #f6f8f9;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+body { background: var(--bg-0); }
+
+.app-shell::before {
+  content: "";
+  display: block;
+  height: 6px;
+  margin-bottom: 14px;
+  background: #e3120b;
+}
+.brand-mark {
+  background: #e3120b;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.eyebrow { text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; }
+h1, h2 { font-weight: 800; letter-spacing: -0.01em; }
+
+.metric { border-top: 3px solid #0d1418; }
+.index-card { border-radius: 0; }
+table { border-collapse: collapse; }
+
+.chip, .btn, .tab { border-radius: 2px; }
+.btn.primary { background: #0d1418; color: #fff; border-color: #0d1418; }
+.btn.primary:hover { background: #e3120b; border-color: #e3120b; color: #fff; }
+thead th { text-transform: uppercase; letter-spacing: 0.14em; border-bottom: 2px solid #0d1418; }
+
+tbody tr:hover { background: #eceff1; box-shadow: inset 3px 0 0 #e3120b; }
+tbody tr.active { background: rgba(227, 18, 11, 0.05); box-shadow: inset 3px 0 0 #e3120b; }
+.toast { border-radius: 0; }

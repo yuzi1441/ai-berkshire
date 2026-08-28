@@ -1,0 +1,48 @@
+/* Theme 17 · 新粗野主义 —— 奶油底 + 高饱和撞色、硬黑边框、偏移硬阴影 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #fbf6ea; --bg-1: #ffffff; --bg-2: #fff3c9; --bg-3: #ffe8a3;
+  --bg-inset: #fdf8ec;
+  --line: #111111; --line-2: #111111; --line-3: #000000;
+  --ink: #111111; --ink-strong: #000000; --ink-soft: #4a4a4a; --ink-faint: #767676;
+  --brand: #ff5900; --brand-soft: rgba(255, 89, 0, 0.12);
+  --buy: #00b268; --trial: #97d700; --installment: #2d7ff9;
+  --hold: #e0a800; --watch: #ffc700; --sell: #f21d4d;
+  --up: #f21d4d; --down: #00b268;
+  --radius: 6px; --radius-lg: 10px;
+  --shadow: 6px 6px 0 #111111;
+  --shadow-soft: 3px 3px 0 #111111;
+  --panel-bg: #ffffff;
+  --card-bg: #ffffff;
+  --row-alt: #fffbea;
+}
+
+body {
+  background:
+    radial-gradient(rgba(17, 17, 17, 0.055) 1.2px, transparent 1.2px),
+    var(--bg-0);
+  background-size: 22px 22px, auto;
+}
+
+.brand-mark {
+  background: #ff5900;
+  color: #fff;
+  border: 2px solid #111;
+  box-shadow: 3px 3px 0 #111;
+}
+h1, h2 { font-weight: 900; letter-spacing: -0.01em; }
+.eyebrow { font-weight: 800; }
+
+.metric, .index-card { border-width: 2px; }
+.table-panel, .detail-panel { border: 2px solid #111; }
+
+.btn, .chip { border: 2px solid #111 !important; box-shadow: 2px 2px 0 #111; }
+.btn:hover, .chip:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 #111; }
+.btn.primary { background: #ff5900; color: #fff; }
+.btn.primary:hover { background: #e64f00; color: #fff; }
+
+thead th { border-bottom: 2px solid #111; text-transform: uppercase; }
+tbody tr:hover { box-shadow: inset 4px 0 0 #ff5900; }
+tbody tr.active { background: #fff3c9; box-shadow: inset 4px 0 0 #111; }
+.toast { border-radius: 6px; border: 2px solid #111; box-shadow: 4px 4px 0 #111; }

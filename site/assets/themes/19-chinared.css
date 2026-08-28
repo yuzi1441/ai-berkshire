@@ -1,0 +1,52 @@
+/* Theme 19 · 中式雅金宣纸 —— 宣纸米白 + 故宫红 + 鎏金，全衬线，回纹细框 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #f8f2e7; --bg-1: #fdfaf3; --bg-2: #f3ecdd; --bg-3: #eadfc9;
+  --bg-inset: #f4edde;
+  --line: #ddd0b8; --line-2: #c9b896; --line-3: #ab966f;
+  --ink: #3a2f26; --ink-strong: #201812; --ink-soft: #7d6f5f; --ink-faint: #a3937f;
+  --brand: #a63125; --brand-soft: rgba(166, 49, 37, 0.07);
+  --buy: #2f6e4f; --trial: #7d8c3a; --installment: #3a6b8c;
+  --hold: #a8823c; --watch: #c07a2a; --sell: #b03a2e;
+  --up: #c0392b; --down: #2f6e4f;
+  --radius: 4px; --radius-lg: 6px;
+  --shadow: 0 10px 30px rgba(58, 47, 38, 0.12);
+  --shadow-soft: 0 4px 14px rgba(58, 47, 38, 0.08);
+  --panel-bg: rgba(253, 250, 243, 0.85);
+  --card-bg: rgba(243, 236, 221, 0.7);
+  --row-alt: rgba(166, 49, 37, 0.02);
+  --violet: #6d5a8c;
+  --font-sans: "Songti SC", "STSongti-SC", Georgia, "Noto Serif CJK SC",
+    "PingFang SC", serif;
+}
+
+body {
+  background:
+    radial-gradient(1000px 480px at 50% -8%, rgba(166, 49, 37, 0.045), transparent 60%),
+    var(--bg-0);
+}
+
+.topbar { border-bottom: double 4px #ab966f; }
+.brand-mark {
+  background: #a63125;
+  color: #f8f2e7;
+  border: none;
+  outline: 1px solid #c9a227;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+h1, h2 { font-weight: 700; letter-spacing: 0.04em; }
+.eyebrow { letter-spacing: 0.3em; }
+
+.table-panel, .index-band, .annual-panel, .automation-panel {
+  box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.35), var(--shadow);
+}
+thead th { letter-spacing: 0.16em; }
+.metric-value, .quote-price { font-family: Georgia, "Songti SC", serif; }
+
+.chip { border-radius: 3px; }
+.btn.primary { background: #a63125; color: #f8f2e7; border-color: #87281d; }
+.btn.primary:hover { background: #87281d; color: #fff; }
+tbody tr:hover { background: rgba(166, 49, 37, 0.035); }
+tbody tr.active { background: rgba(166, 49, 37, 0.05); box-shadow: inset 3px 0 0 #a63125; }

@@ -1,0 +1,55 @@
+/* Theme 12 · Stripe 产品蓝紫 —— 纯白底 + 靛紫渐变点缀，清爽现代产品感 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #ffffff; --bg-1: #ffffff; --bg-2: #f6f9fc; --bg-3: #e9eff5;
+  --bg-inset: #f6f9fc;
+  --line: #e6ebf1; --line-2: #d8e0e8; --line-3: #c2cedb;
+  --ink: #425466; --ink-strong: #0a2540; --ink-soft: #6b7c93; --ink-faint: #8898aa;
+  --brand: #635bff; --brand-soft: rgba(99, 91, 255, 0.08);
+  --buy: #0e6245; --trial: #7c9a1d; --installment: #0570de;
+  --hold: #9a6a00; --watch: #ad5d00; --sell: #df1b41;
+  --up: #df1b41; --down: #0e6245;
+  --radius: 10px; --radius-lg: 14px;
+  --shadow: 0 6px 18px rgba(60, 66, 87, 0.10), 0 16px 40px rgba(60, 66, 87, 0.08);
+  --shadow-soft: 0 3px 10px rgba(60, 66, 87, 0.08);
+  --panel-bg: #ffffff;
+  --card-bg: #f6f9fc;
+  --row-alt: #fafbfd;
+  --violet: #7a73ff;
+}
+
+body {
+  background:
+    linear-gradient(180deg, #f6f9fc 0%, #ffffff 320px),
+    var(--bg-0);
+}
+
+.topbar { border-bottom: none; }
+.brand-mark {
+  background: linear-gradient(140deg, #635bff, #0570de);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(99, 91, 255, 0.35);
+}
+h1, h2 { color: #0a2540; letter-spacing: -0.01em; }
+.eyebrow { color: #635bff; letter-spacing: 0.14em; }
+
+.table-panel, .detail-panel { border-color: #e6ebf1; }
+thead th { background: #f6f9fc; letter-spacing: 0.06em; }
+
+.btn { border-radius: 999px; padding-inline: 14px; }
+.btn.primary {
+  background: linear-gradient(140deg, #635bff, #8a84ff);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35);
+}
+.btn.primary:hover { filter: brightness(1.06); color: #fff; }
+.chip { border-radius: 999px; }
+.tab { border-radius: 999px; }
+.search-box input { border-radius: 10px; }
+
+tbody tr:hover { background: #f6f9fc; }
+tbody tr.active { background: rgba(99, 91, 255, 0.05); box-shadow: inset 3px 0 0 #635bff; }

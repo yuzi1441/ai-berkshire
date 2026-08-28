@@ -1,0 +1,43 @@
+/* Theme 16 · 墨水屏护眼 —— 纯黑白灰无彩色、仿电子纸，仅涨跌保留暗红/墨绿 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #fdfdfb; --bg-1: #ffffff; --bg-2: #f4f3ef; --bg-3: #eae8e2;
+  --bg-inset: #f6f5f1;
+  --line: #dbd9d1; --line-2: #c7c4ba; --line-3: #a8a49a;
+  --ink: #33322e; --ink-strong: #111110; --ink-soft: #6b6a64; --ink-faint: #98968e;
+  --brand: #111110; --brand-soft: rgba(17, 17, 16, 0.06);
+  --buy: #14532d; --trial: #4a5c23; --installment: #3d5a73;
+  --hold: #5f5326; --watch: #6e4a12; --sell: #7c1d1d;
+  --up: #8b1a1a; --down: #14532d;
+  --radius: 2px; --radius-lg: 3px;
+  --shadow: none;
+  --shadow-soft: none;
+  --panel-bg: #ffffff;
+  --card-bg: #f8f7f3;
+  --row-alt: #f8f7f3;
+}
+
+body { background: var(--bg-0); }
+
+.brand-mark {
+  background: #111110;
+  color: #fdfdfb;
+  border: none;
+  box-shadow: none;
+}
+.eyebrow { text-transform: uppercase; letter-spacing: 0.2em; }
+h1, h2 { font-weight: 700; }
+
+.metric { box-shadow: none; }
+.table-panel, .detail-panel { box-shadow: none; border-color: #b3b0a6; }
+thead th { border-bottom: 2px solid #33322e; text-transform: uppercase; letter-spacing: 0.14em; }
+
+.chip, .btn, .tab { border-radius: 2px; }
+.btn.primary { background: #fff; color: #111; border-color: #111; }
+.btn.primary:hover { background: #111; color: #fff; }
+.live-dot.on { background: #444; box-shadow: none; animation: none; }
+
+tbody tr:hover { background: #f0efe9; box-shadow: inset 3px 0 0 #33322e; }
+tbody tr.active { background: #eceae2; box-shadow: inset 3px 0 0 #111; }
+.toast { border-radius: 2px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }

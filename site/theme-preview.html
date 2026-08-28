@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#05090e" />
+    <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
+    <title>投资决策看板 | AI Berkshire</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="stylesheet" href="./assets/themes/_engine.css" />
+    <link rel="stylesheet" id="theme-css" href="./assets/themes/01-bloomberg.css" />
+    <script type="module" src="./assets/theme-switcher.js"></script>
+    <script type="module" src="./assets/particles.js"></script>
+
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">AB</div>
+          <div>
+            <p class="eyebrow">AI BERKSHIRE</p>
+            <h1>个股投资决策看板</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <div class="live-pill" id="live-status" title="行情状态">
+            <span class="live-dot" id="live-dot"></span>
+            <span id="live-text">行情加载中</span>
+          </div>
+          <button type="button" class="btn ghost" id="refresh-quotes" title="立即读取 VPS 同源行情快照">刷新行情</button>
+          <a class="btn ghost" href="https://github.com/yuzi1441/ai-berkshire" target="_blank" rel="noreferrer">研究库</a>
+        </div>
+      </header>
+
+      <section class="summary-band" aria-label="决策总览">
+        <div class="summary-grid" id="summary"></div>
+      </section>
+      <section class="index-band" aria-label="A股指数行情">
+        <div class="index-band-head">
+          <div>
+            <p class="eyebrow">A-SHARE INDEX MONITOR</p>
+            <h2>A股指数行情</h2>
+          </div>
+          <p class="index-band-meta" id="index-band-meta">等待行情快照</p>
+        </div>
+        <div class="index-grid" id="index-cards"></div>
+      </section>
+      <details class="annual-panel" id="annual-panel">
+        <summary class="annual-panel-toggle">
+          <span>
+            <span class="eyebrow">A-SHARE ANNUAL REPORT CALENDAR</span>
+            <strong>A股年报披露日期</strong>
+          </span>
+          <span class="annual-panel-meta" id="annual-panel-meta">等待更新</span>
+        </summary>
+        <div class="annual-panel-body" id="annual-date-content">
+          <p class="source-note">正在加载A股年报日期。</p>
+        </div>
+      </details>
+      <details class="automation-panel" id="automation-panel">
+        <summary class="annual-panel-toggle">
+          <span>
+            <span class="eyebrow">AUTOMATION CONTROL TOWER</span>
+            <strong>统一自动化状态</strong>
+          </span>
+          <span class="annual-panel-meta" id="automation-panel-meta">等待调度器</span>
+        </summary>
+        <div class="annual-panel-body" id="automation-status-content">
+          <p class="source-note">正在加载自动化状态。</p>
+        </div>
+      </details>
+      <div class="sentiment-alert" id="sentiment-alert" hidden role="status"></div>
+
+      <details class="attention-panel" id="attention-panel" hidden>
+        <summary class="attention-toggle">
+          <span class="attention-toggle-copy">
+            <span class="eyebrow">A-SHARE OPPORTUNITY</span>
+            <span class="attention-toggle-title">每日机会筛选</span>
+            <span class="attention-toggle-note">每日收盘后扫描 A 股机会；只展示仍值得你决策的当前与临近机会</span>
+          </span>
+          <span class="attention-toggle-side">
+            <span class="attention-toggle-meta" id="attention-toggle-meta">尚未加载</span>
+            <span class="attention-toggle-state" id="attention-toggle-state">展开</span>
+            <span class="attention-toggle-chevron" aria-hidden="true">⌄</span>
+          </span>
+        </summary>
+        <div class="attention-panel-body">
+          <div class="attention-panel-head">
+            <p class="attention-panel-note">每日收盘后用最新行情扫描 A 股机会，当前机会进入主列表，仍缺安全边际或决定性条件的临近机会折叠展示；它不等于实时可执行，仍须通过交易时段与行情新鲜度守门。周末可再进行人工复核确认。</p>
+            <p class="attention-panel-meta" id="attention-meta"></p>
+          </div>
+          <div class="attention-list" id="attention-list"></div>
+        </div>
+      </details>
+
+      <section class="control-band" aria-label="筛选与检索">
+        <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
+          <button type="button" class="chip active" data-view="decision">买入前决策</button>
+          <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
+        </div>
+        <div class="search-box">
+          <label class="sr-only" for="company-filter">检索公司或代码</label>
+          <input
+            id="company-filter"
+            type="search"
+            placeholder="搜索公司 / 代码，Enter 打开第一条 · / 聚焦"
+            autocomplete="off"
+          />
+          <kbd class="hint-key">/</kbd>
+        </div>
+        <div class="chip-row" id="market-chips" role="tablist" aria-label="市场">
+          <button type="button" class="chip active" data-market="all">全部</button>
+          <button type="button" class="chip" data-market="A股">A股</button>
+          <button type="button" class="chip" data-market="港股">港股</button>
+          <button type="button" class="chip" data-market="美股">美股</button>
+          <button type="button" class="chip" data-market="未识别">待识别</button>
+        </div>
+        <div class="chip-row advice-filter-row" id="action-chips" role="tablist" aria-label="当前可执行筛选">
+          <span class="filter-label">当前可执行筛选</span>
+          <button type="button" class="chip active" data-action="all">全部</button>
+          <button type="button" class="chip advice-conservative" data-action="actionable">当前可分批</button>
+          <button type="button" class="chip advice-trial" data-action="trial">当前可小仓</button>
+          <button type="button" class="chip advice-aggressive" data-action="validation">价格已到待验证</button>
+          <button type="button" class="chip advice-aggressive" data-action="wait_price">等待价格</button>
+          <button type="button" class="chip advice-aggressive" data-action="wait_event">等待事件/条件</button>
+          <button type="button" class="chip advice-balanced" data-action="hold">持有不新买</button>
+          <button type="button" class="chip advice-no" data-action="no">回避/不买</button>
+          <button type="button" class="chip advice-unknown" data-action="paused">行情/时段暂停</button>
+          <button type="button" class="chip advice-unknown" data-action="review">待人工复核</button>
+        </div>
+        <div class="chip-row advice-filter-row" id="reference-action-chips" role="tablist" aria-label="最近行情参考分区筛选">
+          <span class="filter-label">最近行情参考分区（非实时，不代表可下单）</span>
+          <button type="button" class="chip active" data-reference-action="all">全部</button>
+          <button type="button" class="chip advice-conservative" data-reference-action="actionable">参考可分批</button>
+          <button type="button" class="chip advice-trial" data-reference-action="trial">参考小仓</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="validation">参考待验证</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="wait_price">参考等待价格</button>
+          <button type="button" class="chip advice-aggressive" data-reference-action="wait_event">参考等待条件</button>
+          <button type="button" class="chip advice-balanced" data-reference-action="hold">参考持有不新买</button>
+          <button type="button" class="chip advice-no" data-reference-action="no">参考回避/不买</button>
+        </div>
+        <div class="chip-row tracking-filter-row" id="tracking-filter-row" role="tablist" aria-label="持仓跟踪筛选" hidden>
+          <span class="filter-label">跟踪状态</span>
+          <button type="button" class="chip active" data-tracking-filter="all">全部</button>
+          <button type="button" class="chip" data-tracking-filter="alert">有预警</button>
+          <button type="button" class="chip" data-tracking-filter="review">待复核</button>
+          <button type="button" class="chip" id="restore-tracking" hidden>恢复已隐藏</button>
+        </div>
+        <div class="control-meta">
+          <label class="sort-field">
+            <span>排序</span>
+            <select id="sort-select">
+              <option value="execution">按当前可执行性</option>
+              <option value="reference">按最近行情参考分区</option>
+              <option value="action">按主报告判断</option>
+              <option value="change">按当日涨跌</option>
+              <option value="cutoff">按研报截止日</option>
+              <option value="name">按公司名</option>
+            </select>
+          </label>
+          <button type="button" class="btn text" id="clear-filters">清除筛选</button>
+          <p class="data-status" id="data-status"></p>
+        </div>
+      </section>
+
+      <div class="workspace" id="workspace">
+        <section class="table-panel" aria-label="个股列表">
+          <div class="table-wrap">
+            <table id="decision-table">
+              <thead id="decision-head">
+                <tr>
+                  <th scope="col">公司</th>
+                  <th scope="col">市场/代码</th>
+                  <th scope="col">情绪</th>
+                  <th scope="col">主报告判断</th>
+                  <th scope="col">现价</th>
+                  <th scope="col">当前状态 / 非实时参考</th>
+                  <th scope="col">技术面</th>
+                  <th scope="col">技术价 / 基本面交叉</th>
+                </tr>
+              </thead>
+              <tbody id="decision-rows"></tbody>
+            </table>
+            <button type="button" class="btn ghost load-more-rows" id="load-more-rows" hidden>加载更多</button>
+            <div class="empty-state" id="empty-state" hidden>
+              <div class="empty-icon" aria-hidden="true">∅</div>
+              <p class="empty-title">没有匹配的个股</p>
+              <p class="empty-desc">试试清除筛选，或换个关键词</p>
+            </div>
+          </div>
+          <p class="table-hint">点击行查看技术面 · <kbd>j</kbd>/<kbd>k</kbd> 切换 · <kbd>Enter</kbd> 详情 · <kbd>Esc</kbd> 关闭 · <kbd>/</kbd> 搜索</p>
+        </section>
+
+        <aside class="detail-panel" id="detail-panel" hidden aria-label="个股详情">
+          <div class="detail-head">
+            <div>
+              <p class="detail-kicker" id="detail-kicker">个股详情</p>
+              <h2 id="detail-title">选择一家公司</h2>
+              <p class="detail-sub" id="detail-sub"></p>
+            </div>
+            <button type="button" class="btn icon" id="detail-close" aria-label="关闭详情">×</button>
+          </div>
+          <div class="detail-tabs" role="tablist">
+            <button type="button" class="tab active" data-tab="technical">技术面</button>
+            <button type="button" class="tab" data-tab="overview">摘要</button>
+            <button type="button" class="tab deep-review-tab" data-tab="deep-review" hidden>深度复核</button>
+            <button type="button" class="tab checklist-tab" data-tab="checklist">买入前检查</button>
+            <button type="button" class="tab" data-tab="sentiment">情绪</button>
+            <button type="button" class="tab" data-tab="history">历史研报</button>
+            <button type="button" class="tab tracking-tab" data-tab="tracking" hidden>持仓跟踪</button>
+          </div>
+          <div class="detail-body" id="detail-body"></div>
+          <div class="detail-foot">
+            <a class="btn primary" id="detail-report" href="#" target="_blank" rel="noreferrer">打开研报</a>
+            <button type="button" class="btn ghost" id="detail-copy-link">复制链接</button>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="app-footer">
+        仅收录个股研究；A股实时执行状态由主报告动作、价格档、经营前提、交易时段和 10 分钟内同源行情动态生成，人工复核仅作行动提示，Checklist 由你自行查看，技术面只辅助观察节奏，不构成投资建议。
+        盘前、午休和盘后保留“最近行情参考分区”，仅用于研究与准备，不代表当时可以下单。
+        港股与美股仅供研究浏览，不计入“当前可执行”。
+      </footer>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+    <script type="module" src="./assets/app.js"></script>
+  </body>
+</html>

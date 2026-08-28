@@ -1,0 +1,44 @@
+/* Theme 10 · FT 金融时报 —— 米粉纸张底 + 衬线标题 + 勃艮第红，老牌财经报纸 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #fff1e5; --bg-1: #fff9f1; --bg-2: #fdf0e3; --bg-3: #f7e6d4;
+  --bg-inset: #fbeada;
+  --line: #e6d2bf; --line-2: #d6bcA4; --line-3: #b99f85;
+  --ink: #4a4038; --ink-strong: #1a1410; --ink-soft: #7a6d60; --ink-faint: #a4937f;
+  --brand: #990f3d; --brand-soft: rgba(153, 15, 61, 0.07);
+  --buy: #0d7a5f; --trial: #7a8c33; --installment: #0f5499;
+  --hold: #9c6f1a; --watch: #cc7000; --sell: #c0392b;
+  --up: #c0392b; --down: #0d7680;
+  --radius: 3px; --radius-lg: 4px;
+  --shadow: 0 10px 30px rgba(74, 64, 56, 0.12);
+  --shadow-soft: 0 4px 14px rgba(74, 64, 56, 0.08);
+  --panel-bg: rgba(255, 252, 247, 0.75);
+  --card-bg: rgba(255, 249, 241, 0.9);
+  --row-alt: rgba(153, 15, 61, 0.02);
+  --violet: #6d5a8c;
+  --font-sans: Georgia, "Times New Roman", "Songti SC", "STSongti-SC",
+    "Noto Serif CJK SC", "PingFang SC", serif;
+}
+
+body {
+  background:
+    radial-gradient(1100px 500px at 50% -10%, rgba(204, 112, 0, 0.04), transparent 60%),
+    var(--bg-0);
+}
+
+.topbar { border-bottom: 2px solid #990f3d; }
+.brand-mark {
+  background: #990f3d;
+  color: #fff1e5;
+  border: none;
+  box-shadow: none;
+}
+.eyebrow { letter-spacing: 0.18em; text-transform: uppercase; font-size: 9.5px; }
+h1, h2 { font-weight: 700; letter-spacing: 0.005em; }
+
+thead th { text-transform: uppercase; letter-spacing: 0.12em; font-family: inherit; }
+.metric-value, .quote-price, .index-card-price, .ticker-code { font-family: Georgia, serif; }
+
+tbody tr:hover { background: rgba(153, 15, 61, 0.035); }
+.btn, .chip { border-radius: 2px; }

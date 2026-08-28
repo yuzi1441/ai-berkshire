@@ -1,0 +1,38 @@
+/* Theme 08 · 暮色琥珀交易室 —— 深咖啡底 + 橙金暖光，衬线大标题 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #140d06; --bg-1: #1c130a; --bg-2: #241a0e; --bg-3: #302315;
+  --bg-inset: #0e0904;
+  --line: #3a2c18; --line-2: #52402a; --line-3: #6e5738;
+  --ink: #e2d4c0; --ink-strong: #faf3e6; --ink-soft: #a89478; --ink-faint: #7d6c54;
+  --brand: #ffab4d; --brand-soft: rgba(255, 171, 77, 0.13);
+  --buy: #ffc069; --trial: #cdd96a; --installment: #7fb8e8;
+  --hold: #e0b15e; --watch: #ff9f45; --sell: #ff6b57;
+  --up: #ff6b57; --down: #7fd4a8;
+  --radius: 10px; --radius-lg: 14px;
+  --shadow: 0 16px 44px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 8px 22px rgba(0, 0, 0, 0.45);
+  --panel-bg: rgba(28, 19, 10, 0.75);
+  --card-bg: rgba(48, 35, 21, 0.65);
+  --violet: #c9a0dc;
+}
+
+body {
+  background:
+    radial-gradient(1000px 480px at 50% -10%, rgba(255, 159, 26, 0.10), transparent 60%),
+    radial-gradient(800px 400px at 85% 108%, rgba(255, 107, 87, 0.06), transparent 58%),
+    var(--bg-0);
+}
+
+.brand-mark {
+  background: linear-gradient(150deg, #33200a, #1c130a);
+  border-radius: 10px;
+}
+h1, h2, .detail-head h2, .attention-toggle-title {
+  font-family: Georgia, "Songti SC", "STSongti-SC", "Noto Serif CJK SC", serif;
+  letter-spacing: 0.01em;
+}
+.eyebrow { color: var(--hold); }
+.topbar { border-bottom: 1px solid var(--line-2); }
+tbody tr.active { background: rgba(255, 171, 77, 0.08); }

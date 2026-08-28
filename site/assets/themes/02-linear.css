@@ -1,0 +1,43 @@
+/* Theme 02 · Linear 现代灰阶 —— 近黑中性灰阶、细腻描边、靛蓝微光晕 */
+
+:root {
+  color-scheme: dark;
+  --bg-0: #08090a; --bg-1: #0e0f11; --bg-2: #131417; --bg-3: #1a1b1f;
+  --bg-inset: #0b0c0e;
+  --line: #202125; --line-2: #2c2d33; --line-3: #3d3f47;
+  --ink: #b6bac1; --ink-strong: #f7f8f8; --ink-soft: #8a8f98; --ink-faint: #5f646d;
+  --brand: #7b7ff2; --brand-soft: rgba(123, 127, 242, 0.13);
+  --buy: #4cb782; --trial: #97c05c; --installment: #57abff;
+  --hold: #d29922; --watch: #e0a12f; --sell: #eb5757;
+  --up: #f2555a; --down: #3fb950;
+  --radius: 10px; --radius-lg: 14px;
+  --shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+  --shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --panel-bg: rgba(255, 255, 255, 0.028);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --violet: #9b8cff;
+}
+
+body {
+  background:
+    radial-gradient(1100px 480px at 50% -12%, rgba(123, 127, 242, 0.09), transparent 62%),
+    var(--bg-0);
+}
+
+.brand-mark {
+  background: linear-gradient(150deg, #1b1c2e, #121218);
+  border-radius: 9px;
+}
+.topbar { border-bottom-color: var(--line); }
+
+.metric {
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012));
+}
+.table-panel, .detail-panel { border-radius: 16px; }
+.index-card { border-radius: 10px; }
+
+tbody tr:hover { background: rgba(255, 255, 255, 0.028); }
+tbody tr.active { background: rgba(123, 127, 242, 0.09); }
+
+.btn, .search-box input, .sort-field select { transition: all 0.15s ease; }
