@@ -392,6 +392,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn('value="execution"', html)
         self.assertIn('aria-label="最近行情参考分区筛选"', html)
         self.assertIn('aria-label="人工复核分区筛选"', html)
+        self.assertIn('id="advanced-filters"', html)
         for key in (
             "human_buy",
             "human_trial",
@@ -415,7 +416,11 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("humanReviewTaskCompactDateText", app)
         self.assertIn("humanReviewTaskDateText", app)
         self.assertIn("东财+巨潮核验", app)
-        self.assertIn('"当前状态 / 非实时参考"', app)
+        self.assertIn('"当前状态"', app)
+        self.assertIn("renderExecutionMainCell", app)
+        self.assertIn("renderIdentityCell", app)
+        self.assertIn("renderTechnicalCell(item, { includeCross: true })", app)
+        self.assertNotIn("tr.append(renderSentimentCell(item));", app)
         self.assertIn("loadOpportunityScansSnapshot", app)
         self.assertIn("每日收盘后扫描 A 股机会", html)
         self.assertNotIn("综合操作筛选", html)

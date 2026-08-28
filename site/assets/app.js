@@ -82,6 +82,7 @@ const els = {
   clearFilters: document.querySelector("#clear-filters"),
   marketChips: document.querySelector("#market-chips"),
   actionChips: document.querySelector("#action-chips"),
+  advancedFilters: document.querySelector("#advanced-filters"),
   referenceActionChips: document.querySelector("#reference-action-chips"),
   humanReviewChips: document.querySelector("#human-review-chips"),
   viewTabs: document.querySelector("#view-tabs"),
@@ -537,13 +538,16 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
   const emptyAction = document.createElement("p");
   emptyAction.className = "primary-judgment-action";
   emptyAction.textContent = `空仓者：${judgment.empty_position_action}`;
-  const trigger = document.createElement("p");
-  trigger.className = "primary-judgment-trigger";
-  trigger.textContent = `触发条件：${judgment.trigger_condition}`;
-  const summary = document.createElement("p");
-  summary.className = "primary-judgment-summary";
-  summary.textContent = judgment.summary;
-  wrap.append(eyebrow, label, emptyAction, trigger, summary);
+  wrap.append(eyebrow, label, emptyAction);
+  if (!compact) {
+    const trigger = document.createElement("p");
+    trigger.className = "primary-judgment-trigger";
+    trigger.textContent = `触发条件：${judgment.trigger_condition}`;
+    const summary = document.createElement("p");
+    summary.className = "primary-judgment-summary";
+    summary.textContent = judgment.summary;
+    wrap.append(trigger, summary);
+  }
 
   if (judgment.human_reviewed === true) {
     const reviewed = document.createElement("p");
@@ -566,7 +570,9 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
   if (judgment.report_field_conflict) {
     const conflict = document.createElement("p");
     conflict.className = "primary-judgment-conflict";
-    conflict.textContent = `字段冲突：${judgment.conflict_note || "粗粒度字段与报告正文不一致"}`;
+    conflict.textContent = compact
+      ? "字段冲突：已按主报告正文处理，详情可查看说明。"
+      : `字段冲突：${judgment.conflict_note || "粗粒度字段与报告正文不一致"}`;
     wrap.append(conflict);
   }
   if (!compact) {
@@ -1658,6 +1664,53 @@ function renderHumanReviewMainCell(item, quote) {
   return wrap;
 }
 
+function renderExecutionMainCell(item, quote) {
+  const fallback = buyAdviceForItem(item, quote);
+  const execution = currentExecutionState(item, quote, fallback.key);
+  const wrap = document.createElement("div");
+  wrap.className = `execution-main execution-main-${execution.key}`;
+  const label = document.createElement("strong");
+  label.textContent = `当前：${execution.label}`;
+  wrap.append(label);
+  const detail = document.createElement("p");
+  if (execution.key === "paused" && execution.referenceExecution) {
+    detail.textContent = `最近参考：${execution.referenceExecution.label} · 下个交易日重新核对`;
+  } else {
+    detail.textContent = execution.detail;
+  }
+  wrap.append(detail);
+  if (execution.rule?.price_range) {
+    const rule = document.createElement("span");
+    rule.className = "execution-main-rule";
+    rule.textContent = `报告价格带 ${execution.rule.price_range}`;
+    wrap.append(rule);
+  }
+  return wrap;
+}
+
+function renderIdentityCell(item) {
+  const cell = document.createElement("td");
+  cell.className = "company-cell company-identity-cell";
+  const companyName = document.createElement("div");
+  companyName.className = "company-name";
+  companyName.textContent = item.company;
+  const marketLine = document.createElement("div");
+  marketLine.className = "company-identity-meta";
+  const marketBadge = document.createElement("span");
+  marketBadge.className = `market-badge ${marketBadgeClass(item.market)}`;
+  marketBadge.textContent = item.market || "未识别";
+  const tickerCode = document.createElement("span");
+  tickerCode.className = "ticker-code";
+  tickerCode.textContent = item.ticker || "无代码";
+  marketLine.append(marketBadge, tickerCode);
+  const sentiment = sentimentForItem(item)?.combined_sentiment;
+  const sentimentLine = document.createElement("span");
+  sentimentLine.className = `company-sentiment ${sentimentTone(sentiment?.score_0_100)}`;
+  sentimentLine.textContent = `情绪 ${sentimentScoreText(sentimentDisplayScore(sentiment))} · ${sentimentDisplayState(sentiment)}`;
+  cell.append(companyName, marketLine, sentimentLine);
+  return cell;
+}
+
 function parsePriceNumbers(text) {
   if (!text) return [];
   const cleaned = String(text).replace(/,/g, "");
@@ -2347,7 +2400,7 @@ function intradayLight(technical, dimension) {
   return (technical?.lights || []).find((light) => light?.dimension === dimension) || null;
 }
 
-function renderTechnicalCell(item) {
+function renderTechnicalCell(item, { includeCross = false } = {}) {
   const technical = item?.technical_analysis || { status: "missing", lights: [] };
   const intraday = intradayTechnicalForItem(item);
   const cell = document.createElement("td");
@@ -2384,6 +2437,22 @@ function renderTechnicalCell(item) {
       : intraday.status === "failed" ? "盘中30m：抓取失败"
         : intraday.status === "review" ? "盘中30m：待复核" : "盘中30m：未生成";
     cell.append(intradayFreshness);
+  }
+  if (includeCross) {
+    const hasFundamentalPlan = !/未提取|无法核验/.test(String(technical.fundamental_entry_plan || ""));
+    const combined = compactTechnicalZone(technical.combined_candidate_zone);
+    const cross = document.createElement("span");
+    cross.className = "technical-cross-brief";
+    if (technical.status !== "ready") {
+      cross.textContent = "技术价 / 基本面交叉：待复核";
+    } else if (!technical.combined_candidate_zone || !hasFundamentalPlan || technical.valid_buy_candidate === "暂不能判断") {
+      cross.textContent = `技术价 ${compactTechnicalZone(technical.observation_zone)} · 交叉待复核`;
+    } else if (/无交集/.test(combined)) {
+      cross.textContent = `技术价 ${compactTechnicalZone(technical.observation_zone)} · 无交集`;
+    } else {
+      cross.textContent = `基本面交叉 ${combined}`;
+    }
+    cell.append(cross);
   }
   return cell;
 }
@@ -3191,23 +3260,15 @@ function renderSummary(visible) {
   const manualReviewCount = aShareVisible.filter(
     (item) => item.validity_state !== "ready" || item.manual_execution_review?.status !== "ready",
   ).length;
-  const sentimentReadyCount = aShareVisible.filter(
-    (item) => sentimentForItem(item)?.combined_sentiment?.status === "ok",
-  ).length;
   const metrics = [
     ["当前个股", visible.length],
-    ["A股", aShareVisible.length],
-    ["港股", visible.filter((i) => i.market === "港股").length],
-    ["A股情绪可用", `${sentimentReadyCount}/${aShareVisible.length}`],
+    ["A股研究", aShareVisible.length],
     ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
     ["下个交易日候选", nextCandidateCount],
     ["价格已到待验证", counts.validation || 0],
-    ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
-    ["行情/时段暂停", counts.paused || 0],
     ["待人工复核", manualReviewCount],
-    ["参考可分批/小仓", (referenceCounts.actionable || 0) + (referenceCounts.trial || 0)],
-    ["参考待验证", referenceCounts.validation || 0],
-    ["参考等待价格/条件", (referenceCounts.wait_price || 0) + (referenceCounts.wait_event || 0)],
+    ["行情/时段暂停", counts.paused || 0],
+    ["最近参考可买/小仓", (referenceCounts.actionable || 0) + (referenceCounts.trial || 0)],
   ];
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {
@@ -3340,15 +3401,12 @@ function renderRows() {
     return;
   }
   setTableHeader([
-    "公司",
-    "市场 / 代码",
-    "情绪",
+    "公司 / 代码",
     "主报告判断",
-    "人工复核分区",
+    "人工复核",
     "现价",
-    "当前状态 / 非实时参考",
+    "当前状态",
     "技术面（辅助）",
-    "技术价 / 基本面交叉",
   ]);
 
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
@@ -3360,33 +3418,7 @@ function renderRows() {
     tr.dataset.index = String(index);
     tr.tabIndex = 0;
 
-    const companyTd = document.createElement("td");
-    companyTd.className = "company-cell";
-    const companyName = document.createElement("div");
-    companyName.className = "company-name";
-    companyName.textContent = item.company;
-    const companyMeta = document.createElement("div");
-    companyMeta.className = "company-meta";
-    companyMeta.textContent = item.technical_analysis?.status === "ready" ? "已接入技术面" : "技术面待补";
-    companyTd.append(companyName, companyMeta);
-    const checklist = item.checklist;
-    const checklistBadge = document.createElement("span");
-    checklistBadge.className = `checklist-badge ${checklistStatusClass(checklist?.status)}`;
-    checklistBadge.textContent = checklistBadgeText(checklistForItem(item));
-    companyTd.append(checklistBadge);
-    tr.append(companyTd);
-
-    const marketTd = document.createElement("td");
-    const marketBadge = document.createElement("span");
-    marketBadge.className = `market-badge ${marketBadgeClass(item.market)}`;
-    marketBadge.textContent = item.market || "未识别";
-    const tickerCode = document.createElement("div");
-    tickerCode.className = "ticker-code";
-    tickerCode.textContent = item.ticker || "无代码";
-    marketTd.append(marketBadge, tickerCode);
-    tr.append(marketTd);
-
-    tr.append(renderSentimentCell(item));
+    tr.append(renderIdentityCell(item));
 
     const quote = state.quotes.get(item.ticker);
     const actionTd = document.createElement("td");
@@ -3415,12 +3447,11 @@ function renderRows() {
     tr.append(quoteTd);
 
     const adviceTd = document.createElement("td");
-    adviceTd.className = "buy-advice-cell";
-    adviceTd.append(renderExecutionState(item, quote, { compact: true }));
+    adviceTd.className = "execution-main-cell";
+    adviceTd.append(renderExecutionMainCell(item, quote));
     tr.append(adviceTd);
 
-    tr.append(renderTechnicalCell(item));
-    tr.append(renderTechnicalCrossCell(item));
+    tr.append(renderTechnicalCell(item, { includeCross: true }));
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {
@@ -3941,6 +3972,10 @@ function setView(view) {
     chip.classList.toggle("active", chip.dataset.view === state.view);
   });
   if (els.actionChips) els.actionChips.hidden = state.view === "tracking";
+  if (els.advancedFilters) {
+    els.advancedFilters.hidden = state.view === "tracking";
+    if (state.view === "tracking") els.advancedFilters.open = false;
+  }
   if (els.referenceActionChips) els.referenceActionChips.hidden = state.view === "tracking";
   if (els.humanReviewChips) els.humanReviewChips.hidden = state.view === "tracking";
   if (els.trackingFilterRow) els.trackingFilterRow.hidden = state.view !== "tracking";
@@ -3987,6 +4022,7 @@ function bindEvents() {
     resetRowPage();
     els.companyFilter.value = "";
     els.sortSelect.value = "execution";
+    if (els.advancedFilters) els.advancedFilters.open = false;
     els.marketChips.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.market === "all");
     });

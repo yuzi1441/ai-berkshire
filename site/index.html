@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#150b26" />
+    <meta name="theme-color" content="#0b1118" />
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
@@ -128,28 +128,36 @@
           <button type="button" class="chip advice-unknown" data-action="paused">行情/时段暂停</button>
           <button type="button" class="chip advice-unknown" data-action="review">待人工复核</button>
         </div>
-        <div class="chip-row advice-filter-row" id="reference-action-chips" role="tablist" aria-label="最近行情参考分区筛选">
-          <span class="filter-label">最近行情参考分区（非实时，不代表可下单）</span>
-          <button type="button" class="chip active" data-reference-action="all">全部</button>
-          <button type="button" class="chip advice-conservative" data-reference-action="actionable">参考可分批</button>
-          <button type="button" class="chip advice-trial" data-reference-action="trial">参考小仓</button>
-          <button type="button" class="chip advice-aggressive" data-reference-action="validation">参考待验证</button>
-          <button type="button" class="chip advice-aggressive" data-reference-action="wait_price">参考等待价格</button>
-          <button type="button" class="chip advice-aggressive" data-reference-action="wait_event">参考等待条件</button>
-          <button type="button" class="chip advice-balanced" data-reference-action="hold">参考持有不新买</button>
-          <button type="button" class="chip advice-no" data-reference-action="no">参考回避/不买</button>
-        </div>
-        <div class="chip-row advice-filter-row" id="human-review-chips" role="tablist" aria-label="人工复核分区筛选">
-          <span class="filter-label">人工复核分区（主报告 + 行情）</span>
-          <button type="button" class="chip active" data-human-review-action="all">全部</button>
-          <button type="button" class="chip advice-conservative" data-human-review-action="human_buy">人工复核：分批价格区</button>
-          <button type="button" class="chip advice-trial" data-human-review-action="human_trial">人工复核：小仓价格区</button>
-          <button type="button" class="chip advice-aggressive" data-human-review-action="human_wait_price">人工复核：等待价格</button>
-          <button type="button" class="chip advice-aggressive" data-human-review-action="human_wait_event">人工复核：等待条件</button>
-          <button type="button" class="chip advice-balanced" data-human-review-action="human_hold">人工复核：持有不新买</button>
-          <button type="button" class="chip advice-no" data-human-review-action="human_no">人工复核：回避/不买</button>
-          <button type="button" class="chip advice-unknown" data-human-review-action="human_review">人工复核：等待人工判断</button>
-        </div>
+        <details class="advanced-filters" id="advanced-filters">
+          <summary>
+            <span>高级分区筛选</span>
+            <span>最近行情参考 · 人工复核</span>
+          </summary>
+          <div class="advanced-filter-body">
+            <div class="chip-row advice-filter-row" id="reference-action-chips" role="tablist" aria-label="最近行情参考分区筛选">
+              <span class="filter-label">最近行情参考分区（非实时，不代表可下单）</span>
+              <button type="button" class="chip active" data-reference-action="all">全部</button>
+              <button type="button" class="chip advice-conservative" data-reference-action="actionable">参考可分批</button>
+              <button type="button" class="chip advice-trial" data-reference-action="trial">参考小仓</button>
+              <button type="button" class="chip advice-aggressive" data-reference-action="validation">参考待验证</button>
+              <button type="button" class="chip advice-aggressive" data-reference-action="wait_price">参考等待价格</button>
+              <button type="button" class="chip advice-aggressive" data-reference-action="wait_event">参考等待条件</button>
+              <button type="button" class="chip advice-balanced" data-reference-action="hold">参考持有不新买</button>
+              <button type="button" class="chip advice-no" data-reference-action="no">参考回避/不买</button>
+            </div>
+            <div class="chip-row advice-filter-row" id="human-review-chips" role="tablist" aria-label="人工复核分区筛选">
+              <span class="filter-label">人工复核分区（主报告 + 行情）</span>
+              <button type="button" class="chip active" data-human-review-action="all">全部</button>
+              <button type="button" class="chip advice-conservative" data-human-review-action="human_buy">人工复核：分批价格区</button>
+              <button type="button" class="chip advice-trial" data-human-review-action="human_trial">人工复核：小仓价格区</button>
+              <button type="button" class="chip advice-aggressive" data-human-review-action="human_wait_price">人工复核：等待价格</button>
+              <button type="button" class="chip advice-aggressive" data-human-review-action="human_wait_event">人工复核：等待条件</button>
+              <button type="button" class="chip advice-balanced" data-human-review-action="human_hold">人工复核：持有不新买</button>
+              <button type="button" class="chip advice-no" data-human-review-action="human_no">人工复核：回避/不买</button>
+              <button type="button" class="chip advice-unknown" data-human-review-action="human_review">人工复核：等待人工判断</button>
+            </div>
+          </div>
+        </details>
         <div class="chip-row tracking-filter-row" id="tracking-filter-row" role="tablist" aria-label="持仓跟踪筛选" hidden>
           <span class="filter-label">跟踪状态</span>
           <button type="button" class="chip active" data-tracking-filter="all">全部</button>

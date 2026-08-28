@@ -1,46 +1,39 @@
-/* Theme 18 · 玻璃拟态 —— 彩色模糊背景 + 半透明毛玻璃卡片，通透轻盈 */
+/* Theme 18 · 深色研究终端 —— 低干扰底色，突出结论、价格与复核状态。 */
 
 :root {
   color-scheme: dark;
-  --bg-0: #150b26; --bg-1: rgba(255, 255, 255, 0.06); --bg-2: rgba(255, 255, 255, 0.09);
-  --bg-3: rgba(255, 255, 255, 0.13); --bg-inset: rgba(0, 0, 0, 0.28);
-  --line: rgba(255, 255, 255, 0.12); --line-2: rgba(255, 255, 255, 0.2); --line-3: rgba(255, 255, 255, 0.32);
-  --ink: #e9e4f5; --ink-strong: #ffffff; --ink-soft: #b3aacb; --ink-faint: #857ba3;
-  --brand: #9dd6ff; --brand-soft: rgba(157, 214, 255, 0.12);
-  --buy: #4ade80; --trial: #d9f99d; --installment: #7dd3fc;
-  --hold: #fcd34d; --watch: #fdba74; --sell: #fb7185;
-  --up: #ff8fa3; --down: #4ade80;
-  --radius: 16px; --radius-lg: 22px;
-  --shadow: 0 20px 55px rgba(10, 4, 24, 0.55);
-  --shadow-soft: 0 10px 28px rgba(10, 4, 24, 0.4);
-  --panel-bg: rgba(255, 255, 255, 0.055);
-  --card-bg: rgba(255, 255, 255, 0.08);
-  --row-alt: rgba(255, 255, 255, 0.025);
-  --violet: #d8b4fe;
+  --bg-0: #0b1118; --bg-1: #101923; --bg-2: #14202c;
+  --bg-3: #1a2937; --bg-inset: #0d151e;
+  --line: #243444; --line-2: #314658; --line-3: #496174;
+  --ink: #d7e0e8; --ink-strong: #f4f7fa; --ink-soft: #9cabb9; --ink-faint: #6f8190;
+  --brand: #67d5b5; --brand-soft: rgba(103, 213, 181, 0.12);
+  --buy: #57d69a; --trial: #b9dc74; --installment: #72bde8;
+  --hold: #d8bd71; --watch: #e5aa62; --sell: #ed7885;
+  --up: #ed7885; --down: #57d69a;
+  --radius: 8px; --radius-lg: 12px;
+  --shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  --shadow-soft: 0 5px 16px rgba(0, 0, 0, 0.18);
+  --panel-bg: #101923;
+  --card-bg: #14202c;
+  --row-alt: rgba(255, 255, 255, 0.018);
+  --violet: #a99bea;
 }
 
-body {
-  background:
-    radial-gradient(1000px 700px at 12% 8%, rgba(217, 70, 239, 0.22), transparent 55%),
-    radial-gradient(1100px 750px at 88% 12%, rgba(56, 189, 248, 0.20), transparent 55%),
-    radial-gradient(1200px 800px at 50% 105%, rgba(129, 140, 248, 0.22), transparent 58%),
-    linear-gradient(160deg, #170b2b, #0d0619);
-  background-attachment: fixed;
-}
+body { background: var(--bg-0); }
 
 .topbar, .table-panel, .detail-panel, .index-band, .annual-panel,
 .automation-panel, .attention-panel, .metric {
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-.brand-mark { border-radius: 14px; }
-.metric { border-radius: 18px; }
-.index-card { border-radius: 14px; backdrop-filter: blur(12px); }
-.table-panel, .detail-panel { border-radius: 24px; }
-.btn { border-radius: 999px; padding-inline: 15px; backdrop-filter: blur(8px); }
-.search-box input { border-radius: 999px; backdrop-filter: blur(8px); }
-.chip { backdrop-filter: blur(8px); }
+.brand-mark { border-radius: 7px; }
+.metric { border-radius: 8px; }
+.index-card { border-radius: 7px; backdrop-filter: none; }
+.table-panel, .detail-panel { border-radius: 12px; }
+.btn { border-radius: 6px; padding-inline: 12px; backdrop-filter: none; }
+.search-box input { border-radius: 6px; backdrop-filter: none; }
+.chip { border-radius: 6px; backdrop-filter: none; }
 
-tbody tr:hover { background: rgba(255, 255, 255, 0.05); }
-tbody tr.active { background: rgba(157, 214, 255, 0.08); }
+tbody tr:hover { background: rgba(103, 213, 181, 0.045); }
+tbody tr.active { background: rgba(103, 213, 181, 0.08); }

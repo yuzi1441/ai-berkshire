@@ -214,7 +214,7 @@ h1 {
 .summary-band { margin-bottom: 12px; }
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 .metric {
@@ -618,6 +618,7 @@ h1 {
     "search mode"
     "search market"
     "search action"
+    "advanced advanced"
     "meta meta";
   column-gap: 18px;
   row-gap: 8px;
@@ -627,9 +628,7 @@ h1 {
   backdrop-filter: blur(12px);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  position: sticky;
-  top: 6px;
-  z-index: 20;
+  position: static;
   box-shadow: var(--shadow-soft);
   transition: box-shadow 0.15s ease;
 }
@@ -680,6 +679,51 @@ h1 {
   padding-top: 8px;
   border-top: 1px solid var(--line);
 }
+.advanced-filters {
+  grid-area: advanced;
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.advanced-filters[hidden] { display: none !important; }
+.advanced-filters > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  list-style: none;
+}
+.advanced-filters > summary::-webkit-details-marker { display: none; }
+.advanced-filters > summary::before {
+  content: "›";
+  margin-right: 5px;
+  color: var(--brand);
+  font-size: 17px;
+  line-height: 0;
+  transform: rotate(0deg);
+  transition: transform 0.14s ease;
+}
+.advanced-filters[open] > summary::before { transform: rotate(90deg); }
+.advanced-filters > summary span:first-child { margin-right: auto; }
+.advanced-filters > summary span:last-child {
+  color: var(--ink-faint);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.advanced-filter-body {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(132, 153, 172, 0.16);
+}
+.advanced-filter-body .chip-row { margin-bottom: 0; }
 .tracking-filter-row[hidden] { display: none; }
 .tracking-tab[hidden] { display: none; }
 
@@ -970,7 +1014,7 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-state p { margin: 2px 0 0; font-size: 10px; line-height: 1.4; color: var(--ink-faint); }
 .human-review-state-human_trial strong { color: var(--trial); }
 .human-review-state-human_buy strong { color: var(--buy); }
-.human-review-cell { min-width: 220px; max-width: 320px; }
+.human-review-cell { min-width: 220px; max-width: 290px; }
 .human-review-state-human_wait_price strong,
 .human-review-state-human_wait_event strong { color: var(--watch); }
 .human-review-state-human_no strong { color: var(--sell); }
@@ -1175,6 +1219,20 @@ tbody tr.detail-inline-row .detail-panel {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+.primary-judgment-compact { gap: 4px; padding: 9px 10px; }
+.primary-judgment-compact .primary-judgment-label { font-size: 14px; }
+.primary-judgment-compact .primary-judgment-action {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.primary-judgment-compact .primary-judgment-consensus { padding: 2px 6px; font-size: 9px; }
+.primary-judgment-compact .primary-judgment-conflict { font-size: 9.5px; }
 /* 提高优先级覆盖 .card 的 padding；勿加 overflow:hidden（grid 拉伸下会塌高度） */
 .card.primary-judgment-card { padding: 0; }
 .primary-judgment-card .primary-judgment {
@@ -1414,7 +1472,7 @@ tbody tr.detail-inline-row .detail-panel {
    技术面
    -------------------------------------------------------------------------- */
 
-.technical-col { min-width: 150px; }
+.technical-col { min-width: 175px; }
 .technical-state {
   display: inline-flex;
   align-items: center;
@@ -1452,6 +1510,50 @@ tbody tr.detail-inline-row .detail-panel {
 .technical-light.unknown { color: var(--ink-soft); background: rgba(132, 153, 172, 0.12); border-color: rgba(132, 153, 172, 0.3); }
 .technical-freshness { display: block; margin-top: 6px; color: var(--ink-faint); font-size: 10.5px; line-height: 1.3; }
 .technical-intraday-freshness { display: block; margin-top: 3px; color: var(--brand); font-size: 10.5px; line-height: 1.3; }
+.technical-cross-brief {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+/* 主列表只回答“现在是什么状态”，完整依据留给详情面板。 */
+.company-identity-cell { min-width: 155px; }
+.company-identity-meta { display: flex; align-items: center; gap: 7px; margin-top: 5px; }
+.company-identity-meta .ticker-code { margin: 0; }
+.company-sentiment { display: block; margin-top: 6px; color: var(--ink-faint); font-size: 10px; line-height: 1.3; }
+.company-sentiment.sentiment-positive { color: var(--buy); }
+.company-sentiment.sentiment-negative { color: var(--sell); }
+.company-sentiment.sentiment-neutral { color: var(--watch); }
+.conclusion-cell { min-width: 230px; max-width: 290px; }
+.execution-main-cell { min-width: 190px; max-width: 250px; }
+.execution-main {
+  display: grid;
+  gap: 4px;
+  padding: 8px 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.018);
+}
+.execution-main strong { color: var(--ink-strong); font-size: 11px; line-height: 1.35; }
+.execution-main p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.38;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.execution-main-rule { color: var(--ink-faint); font-size: 9.5px; line-height: 1.3; }
+.execution-main-actionable strong { color: var(--buy); }
+.execution-main-trial strong { color: var(--trial); }
+.execution-main-validation strong,
+.execution-main-wait_price strong,
+.execution-main-wait_event strong { color: var(--watch); }
+.execution-main-no strong { color: var(--sell); }
 
 .technical-cross-col { min-width: 190px; max-width: 270px; }
 .technical-cross-zone, .technical-cross-overlap { display: grid; gap: 2px; min-width: 0; }
@@ -2260,6 +2362,7 @@ tbody tr.active .valuation-chip.ready {
   .view-mode-row,
   #market-chips,
   #action-chips,
+  .advanced-filters,
   #tracking-filter-row,
   .control-meta { width: 100%; }
   .search-box { width: 100%; }
@@ -2368,27 +2471,25 @@ tbody tr.active .valuation-chip.ready {
     border: 0;
     vertical-align: top;
   }
-  .table-wrap tbody td:nth-child(1) { grid-column: 1; }
-  .table-wrap tbody td:nth-child(2) { grid-column: 2; text-align: right; }
-  .table-wrap tbody td:nth-child(3),
-  .table-wrap tbody td:nth-child(4) {
+  .table-wrap tbody td:nth-child(1) { grid-column: 1 / -1; }
+  .table-wrap tbody td:nth-child(2),
+  .table-wrap tbody td:nth-child(3) {
     grid-column: 1 / -1;
     padding-top: 9px;
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
     background: rgba(255, 255, 255, 0.02);
   }
-  .table-wrap tbody td:nth-child(5),
-  .table-wrap tbody td:nth-child(6) { padding-top: 10px; }
-  .table-wrap tbody td:nth-child(7),
-  .table-wrap tbody td:nth-child(8) {
+  .table-wrap tbody td:nth-child(4),
+  .table-wrap tbody td:nth-child(5) { padding-top: 10px; }
+  .table-wrap tbody td:nth-child(6) {
+    grid-column: 1 / -1;
     padding-top: 8px;
     border-top: 1px solid var(--line);
   }
+  .table-wrap tbody td:nth-child(4)::before,
   .table-wrap tbody td:nth-child(5)::before,
-  .table-wrap tbody td:nth-child(6)::before,
-  .table-wrap tbody td:nth-child(7)::before,
-  .table-wrap tbody td:nth-child(8)::before {
+  .table-wrap tbody td:nth-child(6)::before {
     display: block;
     margin-bottom: 4px;
     color: var(--ink-faint);
@@ -2396,10 +2497,9 @@ tbody tr.active .valuation-chip.ready {
     font-weight: 700;
     letter-spacing: 0.06em;
   }
-  .table-wrap tbody td:nth-child(5)::before { content: "实时行情"; }
-  .table-wrap tbody td:nth-child(6)::before { content: "综合操作归类"; }
-  .table-wrap tbody td:nth-child(7)::before { content: "技术面（辅助）"; }
-  .table-wrap tbody td:nth-child(8)::before { content: "技术价 / 基本面交叉"; }
+  .table-wrap tbody td:nth-child(4)::before { content: "行情"; }
+  .table-wrap tbody td:nth-child(5)::before { content: "当前状态"; }
+  .table-wrap tbody td:nth-child(6)::before { content: "技术面（辅助）"; }
   .company-cell { min-width: 0; }
   .company-name { font-size: 15px; }
   .company-meta { font-size: 11px; }
@@ -2409,7 +2509,7 @@ tbody tr.active .valuation-chip.ready {
   .stance-row { grid-template-columns: 42px minmax(0, 1fr); }
   .stance-action { font-size: 12px; }
   .price-action-row { grid-template-columns: minmax(72px, 0.7fr) minmax(0, 1.7fr); }
-  .quote-block, .buy-advice-cell { min-width: 0; max-width: none; }
+  .quote-block, .buy-advice-cell, .execution-main-cell { min-width: 0; max-width: none; }
   .quote-price { font-size: 16px; }
   .buy-advice-detail { font-size: 10.5px; }
   .valuation-col, .technical-col { min-width: 0; }
