@@ -978,21 +978,6 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-plan-detail { margin-top: 12px; }
 .human-review-plan-detail h4 { margin: 0 0 7px; color: var(--ink-soft); font-size: 12px; }
 .human-review-plan { display: flex; flex-direction: column; gap: 8px; }
-.human-review-plan-compact { gap: 4px; }
-.human-review-plan-compact .human-review-task {
-  padding: 6px 7px;
-  background: rgba(255, 255, 255, 0.012);
-}
-.human-review-plan-compact .human-review-task strong { font-size: 10.5px; }
-.human-review-plan-compact .human-review-task p {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
-.human-review-plan-compact .human-review-task p.human-review-note {
-  -webkit-line-clamp: 2;
-}
 .human-review-task {
   padding: 8px 9px;
   border-left: 3px solid var(--line-2);
@@ -1006,6 +991,77 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-task-price_only { border-left-color: var(--ink-muted); }
 .human-review-task-unannounced,
 .human-review-task-source_mismatch { border-left-color: var(--watch); }
+.human-review-main { display: grid; gap: 4px; min-width: 0; }
+.human-review-main-header { display: flex; align-items: center; min-width: 0; }
+.human-review-main-label {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 4px 7px;
+  border: 1px solid rgba(132, 153, 172, 0.28);
+  border-radius: 999px;
+  color: var(--ink-strong);
+  font-size: 10.5px;
+  line-height: 1.25;
+  white-space: normal;
+}
+.human-review-main-human_buy .human-review-main-label { color: var(--buy); border-color: rgba(46, 230, 168, 0.35); background: rgba(46, 230, 168, 0.08); }
+.human-review-main-human_trial .human-review-main-label { color: var(--trial); border-color: rgba(164, 214, 79, 0.35); background: rgba(164, 214, 79, 0.08); }
+.human-review-main-human_wait_price .human-review-main-label,
+.human-review-main-human_wait_event .human-review-main-label { color: var(--watch); border-color: rgba(255, 178, 36, 0.35); background: rgba(255, 178, 36, 0.08); }
+.human-review-main-human_no .human-review-main-label { color: var(--sell); border-color: rgba(255, 95, 95, 0.35); background: rgba(255, 95, 95, 0.08); }
+.human-review-main-detail,
+.human-review-main-muted { margin: 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.35; }
+.human-review-main-detail {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.human-review-main-muted { color: var(--ink-faint); }
+.human-review-main-plan { margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--line); }
+.human-review-main-plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 700;
+}
+.human-review-main-due { color: var(--watch); }
+.human-review-task-list { display: grid; gap: 1px; }
+.human-review-task-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px;
+  align-items: baseline;
+  min-width: 0;
+  padding: 3px 0;
+  border-top: 1px solid rgba(38, 58, 77, 0.6);
+}
+.human-review-task-row:first-child { border-top: 0; }
+.human-review-task-name {
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.human-review-task-meta {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-faint);
+  font-size: 9.5px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.human-review-task-row-due .human-review-task-meta { color: #d6a34e; }
+.human-review-task-row-pending .human-review-task-meta { color: var(--ink-soft); }
+.human-review-task-row-event_trigger .human-review-task-meta,
+.human-review-task-row-price_only .human-review-task-meta { color: var(--ink-faint); }
+.human-review-task-row-source_mismatch .human-review-task-meta,
+.human-review-task-row-unannounced .human-review-task-meta { color: var(--watch); }
 .buy-advice { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .buy-advice-detail {
   font-size: 11px;

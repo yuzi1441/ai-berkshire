@@ -1458,6 +1458,24 @@ function humanReviewTaskDateText(task) {
   return `复核时间：${task?.schedule_label || "财报披露后"} · ${task?.status_label || "待确认"}${dateText}`;
 }
 
+function humanReviewTaskCompactDateText(task) {
+  const dateStatus = task?.date_status;
+  if (dateStatus === "event_trigger" || dateStatus === "price_only") {
+    return task?.status_label || "事件触发后复核";
+  }
+  if (dateStatus === "source_mismatch") return "日期待核对";
+  if (dateStatus === "unannounced") return "日期待公布";
+
+  const details = Array.isArray(task?.calendar_date_details) ? task.calendar_date_details : [];
+  const targetDate = task?.next_review_date || details[0]?.effective_date || details[0]?.scheduled_date;
+  const target = details.find((detail) => detail.effective_date === targetDate)
+    || details.find((detail) => detail.scheduled_date === targetDate)
+    || details[0];
+  const period = target?.period_label || "财报";
+  const date = targetDate || "日期待公布";
+  return `${period} · ${date} · ${task?.status_label || "待确认"}`;
+}
+
 function renderHumanReviewPlan(item, { compact = false } = {}) {
   const plan = humanReviewPlanForItem(item);
   const wrap = document.createElement("div");
@@ -1552,6 +1570,91 @@ function renderHumanReviewState(item, quote) {
     planMeta.textContent = "固定复核：人工主报告计划不可用";
   }
   wrap.append(planMeta);
+  return wrap;
+}
+
+function renderHumanReviewMainCell(item, quote) {
+  const result = humanReviewForItem(item, quote);
+  const wrap = document.createElement("div");
+  wrap.className = `human-review-main human-review-main-${result.key}`;
+
+  const header = document.createElement("div");
+  header.className = "human-review-main-header";
+  const label = document.createElement("strong");
+  label.className = "human-review-main-label";
+  label.textContent = result.label;
+  header.append(label);
+  wrap.append(header);
+
+  const detail = document.createElement("p");
+  detail.className = "human-review-main-detail";
+  detail.textContent = result.detail;
+  wrap.append(detail);
+
+  if (result.judgment?.label) {
+    const judgment = document.createElement("p");
+    judgment.className = "human-review-main-muted";
+    judgment.textContent = `主报告：${result.judgment.label}`;
+    wrap.append(judgment);
+  }
+
+  const freshness = result.freshness;
+  const snapshot = document.createElement("p");
+  snapshot.className = "human-review-main-muted";
+  if (freshness?.timestamp) {
+    snapshot.textContent = `行情 ${attentionTimestamp(freshness.timestamp)} · ${freshness.state === "fresh" ? "新鲜" : "已过期"}`;
+  } else {
+    snapshot.textContent = "行情快照：缺失";
+  }
+  wrap.append(snapshot);
+
+  const plan = humanReviewPlanForItem(item);
+  if (!plan || plan.status !== "ready") {
+    const note = document.createElement("p");
+    note.className = "human-review-main-muted";
+    note.textContent = plan?.message || "固定复核事项不可用";
+    wrap.append(note);
+    return wrap;
+  }
+  if (!plan.tasks?.length) {
+    const note = document.createElement("p");
+    note.className = "human-review-main-muted";
+    note.textContent = "暂无固定时间事项 · 价格条件随行情判断";
+    wrap.append(note);
+    return wrap;
+  }
+
+  const planBlock = document.createElement("div");
+  planBlock.className = "human-review-main-plan";
+  const planHeader = document.createElement("div");
+  planHeader.className = "human-review-main-plan-header";
+  const planTitle = document.createElement("span");
+  planTitle.textContent = `固定复核 ${plan.task_count} 项`;
+  const dueCount = Number(plan.due_count || 0);
+  const planStatus = document.createElement("span");
+  planStatus.className = dueCount ? "human-review-main-due" : "human-review-main-muted";
+  planStatus.textContent = dueCount ? `${dueCount} 项待确认` : "均未到期";
+  planHeader.append(planTitle, planStatus);
+  planBlock.append(planHeader);
+
+  const taskList = document.createElement("div");
+  taskList.className = "human-review-task-list";
+  for (const task of plan.tasks) {
+    const taskRow = document.createElement("div");
+    taskRow.className = `human-review-task-row human-review-task-row-${task.date_status || "unknown"}`;
+    taskRow.title = task.content || "主报告未提供具体复核内容";
+    const taskName = document.createElement("span");
+    taskName.className = "human-review-task-name";
+    taskName.textContent = task.scope_label || task.title || "复核事项";
+    const taskMeta = document.createElement("span");
+    taskMeta.className = "human-review-task-meta";
+    const metrics = task.metrics?.length ? task.metrics.join("、") : "主报告条件";
+    taskMeta.textContent = `${metrics} · ${humanReviewTaskCompactDateText(task)}`;
+    taskRow.append(taskName, taskMeta);
+    taskList.append(taskRow);
+  }
+  planBlock.append(taskList);
+  wrap.append(planBlock);
   return wrap;
 }
 
@@ -3296,8 +3399,7 @@ function renderRows() {
 
     const humanReviewTd = document.createElement("td");
     humanReviewTd.className = "human-review-cell";
-    humanReviewTd.append(renderHumanReviewState(item, quote));
-    humanReviewTd.append(renderHumanReviewPlan(item, { compact: true }));
+    humanReviewTd.append(renderHumanReviewMainCell(item, quote));
     tr.append(humanReviewTd);
 
     const change = formatChange(quote);
