@@ -248,6 +248,74 @@
         "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 29.07 元不买；理想区间 22-25 元，但只有价格低于 25 元且 Q2/Q3 业绩持续向好时，才允许建立小仓位，价格条件单独满足不够。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有，但必须跟踪宁德采购、负极出货恢复和涂覆市占率是否守住 40%以上。",
+        "metrics": [
+          "产能/销量"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "22-25 元且季度经营验证向好，或负极产能利用率回升、硅碳大客户订单落地；宁德自建负极、涂覆市占率连续两季低于 35%、质押强平或硅碳渗透提高而产品缺乏竞争力即失效。",
+        "metrics": [
+          "订单",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -260,6 +328,152 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 29.07 元不买；理想区间 22-25 元，但只有价格低于 25 元且 Q2/Q3 业绩持续向好时，才允许建立小仓位，价格条件单独满足不够。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "22-25 元且季度经营验证向好，或负极产能利用率回升、硅碳大客户订单落地；宁德自建负极、涂覆市占率连续两季低于 35%、质押强平或硅碳渗透提高而产品缺乏竞争力即失效。",
+        "metrics": [
+          "订单",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-23",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-23",
+            "scheduled_date": "2026-04-23",
+            "effective_date": "2026-04-23",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-23",
+            "actual_cninfo": "2026-04-23",
+            "scheduled_eastmoney": "2026-04-23",
+            "scheduled_cninfo": "2026-04-23"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有，但必须跟踪宁德采购、负极出货恢复和涂覆市占率是否守住 40%以上。",
+        "metrics": [
+          "产能/销量"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 423,
+            "line_end": 423,
+            "quote": "### 最终决策",
+            "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -490,7 +704,7 @@
     "latest_event": null,
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "4ad310e5c1e4d2579400",
   "detail_path": "./data/decision_details/4ad310e5c1e4d2579400.json"
 }

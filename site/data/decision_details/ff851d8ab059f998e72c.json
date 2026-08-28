@@ -336,6 +336,81 @@
         "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "48.39 元回避，不因较高点腰斩就抄底；33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价。",
+        "metrics": [
+          "库存",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓并降低到可承受仓位；报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上；重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审。",
+        "metrics": [
+          "利润",
+          "库存",
+          "债务"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -348,6 +423,176 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "48.39 元回避，不因较高点腰斩就抄底；33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价。",
+        "metrics": [
+          "库存",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓并降低到可承受仓位；报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上；重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审。",
+        "metrics": [
+          "利润",
+          "库存",
+          "债务"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 690,
+            "line_end": 727,
+            "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+            "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-21"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -479,7 +724,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "ff851d8ab059f998e72c",
   "detail_path": "./data/decision_details/ff851d8ab059f998e72c.json"
 }

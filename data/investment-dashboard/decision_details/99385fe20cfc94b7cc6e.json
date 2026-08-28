@@ -231,6 +231,74 @@
         "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "27.12 元观察不追；优先等 24 元以下或 H1/H2 证明液体乳跌幅收窄、OCF 恢复。21-24 元确认后逐步增加，21 元以下才接近研究性安全边际。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有观察，但不因单季利润增长盲目加仓；持续核对现金流、短债、渠道库存、合同负债和分红兑现。",
+        "metrics": [
+          "利润",
+          "库存",
+          "债务",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "液体乳跌幅收窄、奶粉冷饮双位数增长且现金转换正常、短借回落或被 OCF 覆盖，并进入 21-24 元；食品安全、现金流持续低于利润或短借继续上升且现金/合同负债恶化即重审。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -243,6 +311,152 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "27.12 元观察不追；优先等 24 元以下或 H1/H2 证明液体乳跌幅收窄、OCF 恢复。21-24 元确认后逐步增加，21 元以下才接近研究性安全边际。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有观察，但不因单季利润增长盲目加仓；持续核对现金流、短债、渠道库存、合同负债和分红兑现。",
+        "metrics": [
+          "利润",
+          "库存",
+          "债务",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "液体乳跌幅收窄、奶粉冷饮双位数增长且现金转换正常、短借回落或被 OCF 覆盖，并进入 21-24 元；食品安全、现金流持续低于利润或短借继续上升且现金/合同负债恶化即重审。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 198,
+            "line_end": 211,
+            "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+            "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -374,7 +588,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "99385fe20cfc94b7cc6e",
   "detail_path": "./data/decision_details/99385fe20cfc94b7cc6e.json"
 }

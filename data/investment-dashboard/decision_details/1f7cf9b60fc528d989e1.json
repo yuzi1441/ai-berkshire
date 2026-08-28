@@ -204,6 +204,75 @@
         "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "36.78 元观察、不追；32-35 元才允许激进型小额分批，28-32 元可稳健分批，不高于 28 元才进入保守型重点关注区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本仓可继续持有但不因高分红追价；成本接近现价者应在半年报增长弱于 Base 且估值仍高时评估降低集中度。",
+        "metrics": [
+          "分红",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入相应区间且品牌、渠道、份额和现金流未恶化；食品安全损害品牌、酱油连续落后行业、毛利率低于 37%、现金流/利润长期低于 80%、分红承诺失守或资本配置损害每股价值即暂停买入。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -216,6 +285,121 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本仓可继续持有但不因高分红追价；成本接近现价者应在半年报增长弱于 Base 且估值仍高时评估降低集中度。",
+        "metrics": [
+          "分红",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "36.78 元观察、不追；32-35 元才允许激进型小额分批，28-32 元可稳健分批，不高于 28 元才进入保守型重点关注区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入相应区间且品牌、渠道、份额和现金流未恶化；食品安全损害品牌、酱油连续落后行业、毛利率低于 37%、现金流/利润长期低于 80%、分红承诺失守或资本配置损害每股价值即暂停买入。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 13,
+            "line_end": 13,
+            "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+            "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -347,7 +531,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "1f7cf9b60fc528d989e1",
   "detail_path": "./data/decision_details/1f7cf9b60fc528d989e1.json"
 }

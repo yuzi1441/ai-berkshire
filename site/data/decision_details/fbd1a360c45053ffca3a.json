@@ -236,6 +236,73 @@
         "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -248,6 +315,134 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-29",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": "2026-08-29",
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 175,
+            "line_end": 241,
+            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-04-29"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -498,7 +693,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "fbd1a360c45053ffca3a",
   "detail_path": "./data/decision_details/fbd1a360c45053ffca3a.json"
 }

@@ -146,6 +146,73 @@
         "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 18.50 元明确回避；只有估值回归 7-11 元、重点约 8-10 元，并出现业务兑现后才重新研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "报告给出的动作是减仓直至清仓，不应因液冷或风电叙事继续承担当前估值风险。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "8-10 元，且液冷订单达到可验证规模、连续两个季度盈利，管理层停止减持并出现增持后再评估。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -158,6 +225,134 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "8-10 元，且液冷订单达到可验证规模、连续两个季度盈利，管理层停止减持并出现增持后再评估。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-04-15",
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-15",
+            "scheduled_date": "2026-04-15",
+            "effective_date": "2026-04-15",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-15",
+            "actual_cninfo": "2026-04-15",
+            "scheduled_eastmoney": "2026-04-15",
+            "scheduled_cninfo": "2026-04-15"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 18.50 元明确回避；只有估值回归 7-11 元、重点约 8-10 元，并出现业务兑现后才重新研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "报告给出的动作是减仓直至清仓，不应因液冷或风电叙事继续承担当前估值风险。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 235,
+            "line_end": 319,
+            "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+            "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-26"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -277,7 +472,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "bdd27c65c6c098ddd3fc",
   "detail_path": "./data/decision_details/bdd27c65c6c098ddd3fc.json"
 }

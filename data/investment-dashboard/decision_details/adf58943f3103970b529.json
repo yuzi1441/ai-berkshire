@@ -225,6 +225,72 @@
         "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 75.72 元没有足够安全边际；70-75 元只允许小仓试错，63-69 元稳健分批，55-60 元才适合扩大研究仓位。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "合理仓位可持有但不追半年预告；重仓者应控制强周期重资产集中度，必须能承受悲观情景约 34% 的回撤。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间；聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "债务"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -237,6 +303,118 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间；聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "债务"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 75.72 元没有足够安全边际；70-75 元只允许小仓试错，63-69 元稳健分批，55-60 元才适合扩大研究仓位。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "合理仓位可持有但不追半年预告；重仓者应控制强周期重资产集中度，必须能承受悲观情景约 34% 的回撤。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 196,
+            "line_end": 212,
+            "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+            "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-25"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -380,7 +558,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "adf58943f3103970b529",
   "detail_path": "./data/decision_details/adf58943f3103970b529.json"
 }

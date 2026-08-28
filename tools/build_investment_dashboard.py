@@ -1561,6 +1561,363 @@ def load_report_judgments(directory: Path) -> list[dict[str, Any]]:
     return artifacts
 
 
+HUMAN_REVIEW_METRIC_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("毛利率", r"毛利率|毛利"),
+    ("经营现金流", r"经营现金流|经营活动现金流|CFO"),
+    ("自由现金流", r"自由现金流|FCF"),
+    ("利润", r"归母净利|归母利润|净利润|扣非利润|扣非净利|利润"),
+    ("收入", r"收入|营收|销售额"),
+    ("ROE", r"ROE"),
+    ("ROIC", r"ROIC"),
+    ("订单", r"订单|在手订单|新签订单"),
+    ("回款", r"回款|应收账款|应收"),
+    ("库存", r"库存|存货"),
+    ("债务", r"短债|短期借款|净债务|负债率|杠杆"),
+    ("分红", r"分红|股息"),
+    ("政策", r"政策|关税|监管"),
+    ("产能/销量", r"产能|销量|产量|出货"),
+    ("产品/客户", r"产品|客户|服务收入|海外收入|市场份额|认证"),
+    ("估值", r"估值|PE|PB|PS|市值"),
+)
+
+
+def human_review_metric_names(text: str) -> list[str]:
+    """Extract only named review metrics from an already human-reviewed sentence."""
+    return [
+        label for label, pattern in HUMAN_REVIEW_METRIC_PATTERNS if re.search(pattern, text, re.I)
+    ]
+
+
+def human_review_periods(text: str) -> list[str]:
+    """Map explicit report-period words to calendar keys without inventing thresholds."""
+    periods: list[str] = []
+    if re.search(r"中报|半年报|半年度|上半年|H1|Q2|第二季度", text, re.I):
+        periods.append("H1")
+    if re.search(r"三季报|第三季度|Q3", text, re.I):
+        periods.append("Q3")
+    if re.search(r"年报|年度报告|年度财报|FY", text, re.I):
+        periods.append("FY")
+    if re.search(r"连续\s*[两二三2-9]?\s*(?:个|期|次)?季度|后续季度|多个季度|每期财报|每季度", text):
+        periods.append("quarterly")
+    return list(dict.fromkeys(periods))
+
+
+def build_human_review_tasks(judgment: dict[str, Any]) -> list[dict[str, Any]]:
+    """Create auditable task groups from the three human judgment fields.
+
+    This is deliberately deterministic: it does not read Checklist, technical,
+    sentiment, model-consensus, or old manual-execution data, and it never
+    creates a metric or threshold absent from the reviewed judgment.
+    """
+    tasks: list[dict[str, Any]] = []
+    fields = (
+        ("entry", "买入前提", "empty_position_action"),
+        ("holder", "持仓验证", "holder_action"),
+        ("risk", "风险/失效条件", "trigger_condition"),
+    )
+    evidence = judgment.get("evidence") if isinstance(judgment.get("evidence"), list) else []
+    for task_id, scope_label, source_field in fields:
+        content = clean_markdown(str(judgment.get(source_field) or ""))
+        if not content or content in {"-", "未给出", "待复核"}:
+            continue
+        metrics = human_review_metric_names(content)
+        periods = human_review_periods(content)
+        financial = bool(
+            re.search(
+                r"毛利|现金流|FCF|利润|收入|ROE|ROIC|财报|中报|半年报|季报|年报|季度",
+                content,
+                re.I,
+            )
+        )
+        price_signal = bool(
+            re.search(r"价格|股价|价位|估值|PE|PB|PS|市值|\d+\s*元", content, re.I)
+        )
+        event_signal = bool(
+            re.search(
+                r"验证|确认|改善|兑现|落地|政策|订单|产能|销量|认证|客户|回款|基本面|经营|财报|中报|半年报|季报|年报|季度",
+                content,
+                re.I,
+            )
+        )
+        schedule_type = "filing" if periods and periods != ["quarterly"] else (
+            "recurring_filing" if financial else "event"
+        )
+        if schedule_type == "filing" and "quarterly" in periods:
+            schedule_type = "recurring_filing"
+        if price_signal and not event_signal and not periods:
+            schedule_type = "price"
+        tasks.append(
+            {
+                "task_id": task_id,
+                "scope": task_id,
+                "scope_label": scope_label,
+                "title": f"复核{scope_label}",
+                "content": content,
+                "metrics": metrics,
+                "periods": periods,
+                "schedule_type": schedule_type,
+                "source_field": source_field,
+                "evidence": evidence,
+            }
+        )
+    return tasks
+
+
+def validate_human_review_tasks(tasks: Any, ticker: str) -> None:
+    """Validate optional structured task groups without changing legacy fixtures."""
+    if tasks is None:
+        return
+    if not isinstance(tasks, list):
+        raise ValueError(f"primary_judgment review_tasks must be a list: {ticker}")
+    seen: set[str] = set()
+    valid_scopes = {"entry", "holder", "risk"}
+    valid_schedules = {"filing", "recurring_filing", "event", "price"}
+    for task in tasks:
+        if not isinstance(task, dict):
+            raise ValueError(f"primary_judgment review task must be an object: {ticker}")
+        task_id = str(task.get("task_id") or "")
+        if (
+            not task_id
+            or task_id in seen
+            or task.get("scope") not in valid_scopes
+            or not str(task.get("scope_label") or "").strip()
+            or not str(task.get("title") or "").strip()
+            or not str(task.get("content") or "").strip()
+            or not isinstance(task.get("metrics"), list)
+            or not isinstance(task.get("periods"), list)
+            or task.get("schedule_type") not in valid_schedules
+            or not str(task.get("source_field") or "").strip()
+        ):
+            raise ValueError(f"Incomplete primary_judgment review task: {ticker}")
+        seen.add(task_id)
+
+
+def load_human_review_calendar(path: Path) -> dict[str, Any]:
+    """Load the official filing-date extension, tolerating older snapshots."""
+    payload = load_json(path, {})
+    periods = payload.get("report_periods")
+    return payload if isinstance(periods, list) else {**payload, "report_periods": []}
+
+
+def human_review_calendar_entries(
+    calendar: dict[str, Any], ticker: str, periods: list[str], schedule_type: str
+) -> list[dict[str, Any]]:
+    """Resolve task period labels to the matching official calendar rows."""
+    wanted = set(periods)
+    entries: list[dict[str, Any]] = []
+    for period in calendar.get("report_periods") or []:
+        if not isinstance(period, dict):
+            continue
+        period_key = str(period.get("period_key") or "")
+        suffix = re.search(r"(?:Q1|H1|Q3|FY)$", period_key)
+        period_suffix = suffix.group(0) if suffix else ""
+        if schedule_type == "recurring_filing" or "quarterly" in wanted or period_suffix in wanted:
+            record = next(
+                (
+                    item
+                    for item in period.get("records") or []
+                    if isinstance(item, dict) and str(item.get("ticker") or "").upper() == ticker
+                ),
+                None,
+            )
+            if record:
+                entries.append({**period, "record": record})
+    return entries
+
+
+def resolve_human_review_task(
+    task: dict[str, Any], ticker: str, calendar: dict[str, Any], as_of: date
+) -> dict[str, Any]:
+    """Attach date/status metadata while preserving the reviewed condition verbatim."""
+    resolved = dict(task)
+    schedule_type = str(task.get("schedule_type") or "event")
+    if schedule_type == "price":
+        resolved.update(
+            {
+                "schedule_label": "随行情判断",
+                "date_status": "price_only",
+                "status_label": "随行情判断",
+                "next_review_date": None,
+                "calendar_dates": [],
+                "calendar_date_details": [],
+            }
+        )
+        return resolved
+    if schedule_type == "event":
+        resolved.update(
+            {
+                "schedule_label": "事件触发后",
+                "date_status": "event_trigger",
+                "status_label": "事件触发后复核",
+                "next_review_date": None,
+                "calendar_dates": [],
+                "calendar_date_details": [],
+            }
+        )
+        return resolved
+
+    entries = human_review_calendar_entries(
+        calendar,
+        ticker,
+        [str(item) for item in task.get("periods") or []],
+        schedule_type,
+    )
+    dates: list[str] = []
+    mismatched = False
+    labels: list[str] = []
+    date_details: list[dict[str, Any]] = []
+    for entry in entries:
+        record = entry.get("record") or {}
+        if record.get("date_status") == "source_mismatch":
+            mismatched = True
+        effective_date = record.get("effective_date")
+        if effective_date:
+            dates.append(str(effective_date))
+        if entry.get("label"):
+            labels.append(str(entry["label"]))
+        if any(
+            record.get(key)
+            for key in (
+                "actual_disclosure_date",
+                "scheduled_disclosure_date",
+                "effective_date",
+                "actual_eastmoney",
+                "actual_cninfo",
+                "scheduled_eastmoney",
+                "scheduled_cninfo",
+            )
+        ):
+            date_details.append(
+                {
+                    "period_key": entry.get("period_key"),
+                    "period_label": entry.get("label"),
+                    "actual_date": record.get("actual_disclosure_date"),
+                    "scheduled_date": record.get("scheduled_disclosure_date"),
+                    "effective_date": record.get("effective_date"),
+                    "effective_type": record.get("effective_type"),
+                    "actual_verification": record.get("actual_verification"),
+                    "scheduled_verification": record.get("scheduled_verification"),
+                    "actual_eastmoney": record.get("actual_eastmoney"),
+                    "actual_cninfo": record.get("actual_cninfo"),
+                    "scheduled_eastmoney": record.get("scheduled_eastmoney"),
+                    "scheduled_cninfo": record.get("scheduled_cninfo"),
+                }
+            )
+    dates = sorted(set(dates))
+    if mismatched:
+        resolved.update(
+            {
+                "schedule_label": "、".join(labels) or "财报披露后",
+                "date_status": "source_mismatch",
+                "status_label": "日期待核对",
+                "next_review_date": None,
+                "calendar_dates": [],
+                "calendar_date_details": date_details,
+            }
+        )
+        return resolved
+    if not dates:
+        resolved.update(
+            {
+                "schedule_label": "、".join(labels) or "财报披露后",
+                "date_status": "unannounced",
+                "status_label": "日期待公布",
+                "next_review_date": None,
+                "calendar_dates": [],
+                "calendar_date_details": date_details,
+            }
+        )
+        return resolved
+
+    today = as_of.isoformat()
+    due_dates = [value for value in dates if value <= today]
+    if due_dates:
+        next_date = due_dates[-1]
+        status = "due"
+        status_label = "已到期待确认"
+    else:
+        next_date = dates[0]
+        status = "pending"
+        status_label = "待披露"
+    resolved.update(
+        {
+            "schedule_label": "、".join(labels) or "财报披露后",
+            "date_status": status,
+            "status_label": status_label,
+            "next_review_date": next_date,
+            "calendar_dates": dates,
+            "calendar_date_details": date_details,
+        }
+    )
+    return resolved
+
+
+def attach_human_review_plans(
+    decisions: list[dict[str, Any]],
+    calendar: dict[str, Any],
+    as_of: date | None = None,
+) -> None:
+    """Attach the independent human-report review schedule to each decision."""
+    current_date = as_of or datetime.now().astimezone().date()
+    calendar_generated_at = calendar.get("generated_at")
+    for decision in decisions:
+        judgment = decision.get("primary_judgment")
+        if decision.get("market") != "A股" or not isinstance(judgment, dict):
+            decision["human_review_plan"] = {
+                "schema_version": 1,
+                "status": "research_only",
+                "tasks": [],
+                "task_count": 0,
+            }
+            continue
+        if judgment.get("human_reviewed") is not True or judgment.get("source_matches") is False:
+            decision["human_review_plan"] = {
+                "schema_version": 1,
+                "status": "review",
+                "source": "human_main_report",
+                "tasks": [],
+                "task_count": 0,
+                "message": "人工主报告裁决当前不可用，暂不生成复核计划",
+                "calendar_generated_at": calendar_generated_at,
+            }
+            continue
+        tasks = judgment.get("review_tasks")
+        if not isinstance(tasks, list):
+            tasks = build_human_review_tasks(judgment)
+        resolved_tasks = [
+            resolve_human_review_task(
+                task,
+                str(decision.get("ticker") or "").upper(),
+                calendar,
+                current_date,
+            )
+            for task in tasks
+            if isinstance(task, dict)
+        ]
+        due = [task for task in resolved_tasks if task.get("date_status") == "due"]
+        dated = [task for task in resolved_tasks if task.get("next_review_date")]
+        ordered = sorted(
+            resolved_tasks,
+            key=lambda task: (
+                0 if task.get("date_status") == "due" else 1,
+                task.get("next_review_date") or "9999-12-31",
+                str(task.get("task_id") or ""),
+            ),
+        )
+        decision["human_review_plan"] = {
+            "schema_version": 1,
+            "status": "ready",
+            "source": "human_main_report + official_filing_calendar",
+            "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "calendar_generated_at": calendar_generated_at,
+            "reviewed_at": judgment.get("human_reviewed_at"),
+            "tasks": ordered,
+            "task_count": len(ordered),
+            "due_count": len(due),
+            "next_review_date": min((task["next_review_date"] for task in dated), default=None),
+        }
+
+
 def load_main_report_resolutions(path: Path) -> list[dict[str, Any]]:
     """Load durable human resolutions for model disagreements on one exact report.
 
@@ -1610,6 +1967,7 @@ def load_main_report_resolutions(path: Path) -> list[dict[str, Any]]:
         evidence = judgment.get("evidence")
         if not isinstance(evidence, list) or not evidence:
             raise ValueError(f"Human-reviewed judgment needs report evidence for {ticker}: {path}")
+        validate_human_review_tasks(judgment.get("review_tasks"), ticker)
         seen.add(ticker)
         normalized.append(item)
     return normalized
@@ -5038,6 +5396,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         data_directory / "main_report_resolutions.json"
     )
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
+    human_review_calendar = load_human_review_calendar(
+        data_directory / "annual_report_dates.json"
+    )
+    attach_human_review_plans(decisions, human_review_calendar)
     attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
     attach_manual_execution_reviews(decisions, manual_execution_reviews, repo_root)

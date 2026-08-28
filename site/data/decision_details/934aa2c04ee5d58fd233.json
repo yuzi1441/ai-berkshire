@@ -293,6 +293,71 @@
         "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "7.12 元处在 6.5-7.5 元的观望或小仓配置区，可作为高股息金融公用事业的小仓研究标的，不宜当作高弹性核心进攻仓。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可作为低波动、收息底仓继续持有；若超过 8.0-8.5 元而 ROE、息差未改善则不追并审视仓位。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "6.0-6.5 元可稳健分批，6.0 元以下安全边际更强；同时要求净息差止跌、ROE 稳定、资产质量和资本充足率不恶化。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -305,6 +370,132 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可作为低波动、收息底仓继续持有；若超过 8.0-8.5 元而 ROE、息差未改善则不追并审视仓位。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "7.12 元处在 6.5-7.5 元的观望或小仓配置区，可作为高股息金融公用事业的小仓研究标的，不宜当作高弹性核心进攻仓。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "6.0-6.5 元可稳健分批，6.0 元以下安全边际更强；同时要求净息差止跌、ROE 稳定、资产质量和资本充足率不恶化。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 30,
+            "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+            "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-04-30"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -500,7 +691,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "934aa2c04ee5d58fd233",
   "detail_path": "./data/decision_details/934aa2c04ee5d58fd233.json"
 }

@@ -230,6 +230,76 @@
         "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "44.38 元不追；30-34 元且高端认证或批量订单有可核验证据时只可小仓，24-28 元且景气正常化后 ROE 与 FCF 仍改善时稳健分批，24 元以下才研究较大仓位。",
+        "metrics": [
+          "自由现金流",
+          "ROE",
+          "订单",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "正常仓位可继续持有核心观察仓但不加仓；仓位过重应在景气与情绪高位降低集中度，55 元以上而盈利或高端订单未上修时减仓。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际；普通电子布价格和库存反转或特种认证持续失败即重审。",
+        "metrics": [
+          "收入",
+          "库存",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -242,6 +312,169 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "44.38 元不追；30-34 元且高端认证或批量订单有可核验证据时只可小仓，24-28 元且景气正常化后 ROE 与 FCF 仍改善时稳健分批，24 元以下才研究较大仓位。",
+        "metrics": [
+          "自由现金流",
+          "ROE",
+          "订单",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-25",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-25",
+            "scheduled_date": "2026-04-25",
+            "effective_date": "2026-04-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-25",
+            "actual_cninfo": "2026-04-25",
+            "scheduled_eastmoney": "2026-04-25",
+            "scheduled_cninfo": "2026-04-25"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际；普通电子布价格和库存反转或特种认证持续失败即重审。",
+        "metrics": [
+          "收入",
+          "库存",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-25",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-25",
+            "scheduled_date": "2026-04-25",
+            "effective_date": "2026-04-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-25",
+            "actual_cninfo": "2026-04-25",
+            "scheduled_eastmoney": "2026-04-25",
+            "scheduled_cninfo": "2026-04-25"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "正常仓位可继续持有核心观察仓但不加仓；仓位过重应在景气与情绪高位降低集中度，55 元以上而盈利或高端订单未上修时减仓。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 338,
+            "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+            "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-21"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -373,7 +606,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "66233961d14ee4d6e3ff",
   "detail_path": "./data/decision_details/66233961d14ee4d6e3ff.json"
 }

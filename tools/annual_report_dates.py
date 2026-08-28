@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Refresh A-share annual-report disclosure dates for the decision dashboard.
+"""Refresh A-share report disclosure dates for the decision dashboard.
 
 The snapshot keeps two different facts separate:
 
 * the latest completed annual report's actual disclosure date;
 * the next annual report's effective scheduled date, when an exchange or data
-  provider has published one.
+  provider has published one;
+* current-year Q1, H1, Q3, and FY period dates used by human review tasks.
 
 Eastmoney provides a compact full-market appointment table. CNINFO's bulk
 appointment table is used as an independent cross-check for the latest actual
@@ -209,59 +210,128 @@ def cninfo_actual(row: dict[str, Any] | None) -> str | None:
     return normalized_date(row.get("f006d_0102")) if row else None
 
 
+REPORT_PERIOD_SPECS = (
+    ("Q1", "03-31", "一季报"),
+    ("H1", "06-30", "中报"),
+    ("Q3", "09-30", "三季报"),
+    ("FY", "12-31", "年报"),
+)
+
+
+def _resolved_source_date(first: str | None, second: str | None) -> tuple[str | None, str]:
+    if first and second:
+        return (first, "cross_checked") if first == second else (None, "source_mismatch")
+    if first or second:
+        return first or second, "single_source"
+    return None, "missing"
+
+
+def report_period_record(
+    item: dict[str, str], report_period: str,
+    eastmoney_rows: dict[str, dict[str, Any]],
+    cninfo_rows: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    code = code_from_ticker(item["ticker"])
+    eastmoney = eastmoney_rows.get(code) or {}
+    cninfo = cninfo_rows.get(code) or {}
+    eastmoney_actual = normalized_date(eastmoney.get("ACTUAL_PUBLISH_DATE"))
+    cninfo_actual_date = cninfo_actual(cninfo)
+    actual_date, actual_status = _resolved_source_date(eastmoney_actual, cninfo_actual_date)
+    eastmoney_scheduled = effective_appointment(eastmoney)
+    cninfo_scheduled = cninfo_effective_appointment(cninfo)
+    scheduled_date, scheduled_status = _resolved_source_date(eastmoney_scheduled, cninfo_scheduled)
+    effective_date = actual_date or scheduled_date
+    effective_type = "actual" if actual_date else "scheduled" if scheduled_date else None
+    return {
+        "company": item["company"],
+        "ticker": item["ticker"],
+        "market": "A股",
+        "report_period": report_period,
+        "actual_disclosure_date": actual_date,
+        "actual_eastmoney": eastmoney_actual,
+        "actual_cninfo": cninfo_actual_date,
+        "actual_verification": actual_status,
+        "scheduled_disclosure_date": scheduled_date,
+        "scheduled_eastmoney": eastmoney_scheduled,
+        "scheduled_cninfo": cninfo_scheduled,
+        "scheduled_verification": scheduled_status,
+        "effective_date": effective_date,
+        "effective_type": effective_type,
+        "date_status": "source_mismatch" if "source_mismatch" in {actual_status, scheduled_status}
+        else "已披露" if actual_date else "已预约" if scheduled_date else "未公布",
+        "sources": {
+            "eastmoney": "https://datacenter.eastmoney.com/securities/api/data/v1/get",
+            "cninfo": "https://www.cninfo.com.cn/new/commonUrl?url=data/yuyuepilu",
+        },
+    }
+
+
+def fetch_period_records(
+    universe: list[dict[str, str]], report_period: str
+) -> list[dict[str, Any]]:
+    eastmoney = fetch_eastmoney_period(report_period)
+    cninfo = fetch_cninfo_market("szsh", report_period)
+    cninfo.update(fetch_cninfo_market("bj", report_period))
+    return [report_period_record(item, report_period, eastmoney, cninfo) for item in universe]
+
+
+def period_key_for(year: int, suffix: str) -> str:
+    return f"{year}{suffix}"
+
+
+def period_label_for(year: int, suffix: str, label: str) -> str:
+    return f"{year}年{label}"
+
+
 def build_snapshot(repo_root: Path, as_of: date) -> dict[str, Any]:
     universe = board_universe(repo_root / "data" / "investment-dashboard" / "decision_board.json")
     latest_period = date(as_of.year - 1, 12, 31).isoformat()
     next_period = date(as_of.year, 12, 31).isoformat()
-    eastmoney_latest = fetch_eastmoney_period(latest_period)
-    eastmoney_next = fetch_eastmoney_period(next_period)
-    cninfo_latest = fetch_cninfo_market("szsh", latest_period)
-    cninfo_latest.update(fetch_cninfo_market("bj", latest_period))
-    cninfo_next = fetch_cninfo_market("szsh", next_period)
-    cninfo_next.update(fetch_cninfo_market("bj", next_period))
+    latest_records = fetch_period_records(universe, latest_period)
+    next_records = fetch_period_records(universe, next_period)
+    next_by_ticker = {item["ticker"]: item for item in next_records}
 
     records: list[dict[str, Any]] = []
-    for item in universe:
-        ticker = item["ticker"]
-        code = code_from_ticker(ticker)
-        em_latest = eastmoney_latest.get(code)
-        em_next = eastmoney_next.get(code)
-        ci_latest = cninfo_latest.get(code)
-        ci_next = cninfo_next.get(code)
-        eastmoney_actual = normalized_date((em_latest or {}).get("ACTUAL_PUBLISH_DATE"))
-        cninfo_actual_date = cninfo_actual(ci_latest)
-        next_eastmoney = effective_appointment(em_next)
-        next_cninfo = cninfo_effective_appointment(ci_next)
-        next_actual = normalized_date((em_next or {}).get("ACTUAL_PUBLISH_DATE")) or cninfo_actual(ci_next)
-        if eastmoney_actual and cninfo_actual_date:
-            verification = "cross_checked" if eastmoney_actual == cninfo_actual_date else "source_mismatch"
-        elif eastmoney_actual or cninfo_actual_date:
-            verification = "single_source"
-        else:
-            verification = "missing"
-        scheduled = next_eastmoney or next_cninfo
+    for latest in latest_records:
+        upcoming = next_by_ticker[latest["ticker"]]
         records.append(
             {
-                "company": item["company"],
-                "ticker": ticker,
+                "company": latest["company"],
+                "ticker": latest["ticker"],
                 "market": "A股",
                 "latest_report_period": latest_period,
-                "latest_actual_disclosure_date": eastmoney_actual or cninfo_actual_date,
-                "latest_actual_eastmoney": eastmoney_actual,
-                "latest_actual_cninfo": cninfo_actual_date,
-                "latest_actual_verification": verification,
+                "latest_actual_disclosure_date": latest["actual_disclosure_date"],
+                "latest_actual_eastmoney": latest["actual_eastmoney"],
+                "latest_actual_cninfo": latest["actual_cninfo"],
+                "latest_actual_verification": latest["actual_verification"],
                 "next_report_period": next_period,
-                "next_scheduled_disclosure_date": scheduled if not next_actual else None,
-                "next_scheduled_eastmoney": next_eastmoney,
-                "next_scheduled_cninfo": next_cninfo,
-                "next_actual_disclosure_date": next_actual,
-                "next_status": "已披露" if next_actual else "已预约" if scheduled else "未公布",
-                "sources": {
-                    "eastmoney": "https://datacenter.eastmoney.com/securities/api/data/v1/get",
-                    "cninfo": "https://www.cninfo.com.cn/new/commonUrl?url=data/yuyuepilu",
-                },
+                "next_scheduled_disclosure_date": (
+                    upcoming["scheduled_disclosure_date"]
+                    if not upcoming["actual_disclosure_date"]
+                    else None
+                ),
+                "next_scheduled_eastmoney": upcoming["scheduled_eastmoney"],
+                "next_scheduled_cninfo": upcoming["scheduled_cninfo"],
+                "next_actual_disclosure_date": upcoming["actual_disclosure_date"],
+                "next_status": upcoming["date_status"],
+                "sources": latest["sources"],
             }
         )
+
+    report_periods: list[dict[str, Any]] = []
+    for suffix, month_day, label in REPORT_PERIOD_SPECS:
+        report_period = f"{as_of.year}-{month_day}"
+        period_records = fetch_period_records(universe, report_period)
+        report_periods.append(
+            {
+                "period_key": period_key_for(as_of.year, suffix),
+                "report_period": report_period,
+                "label": period_label_for(as_of.year, suffix, label),
+                "records": period_records,
+                "record_count": len(period_records),
+            }
+        )
+
     missing_latest = sum(not item.get("latest_actual_disclosure_date") for item in records)
     next_scheduled_count = sum(bool(item.get("next_scheduled_disclosure_date")) for item in records)
     return {
@@ -277,6 +347,7 @@ def build_snapshot(repo_root: Path, as_of: date) -> dict[str, Any]:
         "next_scheduled_count": next_scheduled_count,
         "source_policy": "Eastmoney primary appointment table + CNINFO independent cross-check; no estimated dates",
         "records": records,
+        "report_periods": report_periods,
     }
 
 

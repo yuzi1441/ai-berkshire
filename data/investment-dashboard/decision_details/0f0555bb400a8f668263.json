@@ -242,6 +242,71 @@
         "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 64.34 元高于激进型价格带；56-62 元且基本面未恶化时仅可小仓分批，48-55 元为稳健分批区，45 元以下才提供更厚安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "工业自动化增长和新能源汽车业务毛利率未恶化时可以持有，但不因机器人或 AI 叙事追价。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +319,164 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "工业自动化增长和新能源汽车业务毛利率未恶化时可以持有，但不因机器人或 AI 叙事追价。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-28",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": "2026-08-29",
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-28",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": "2026-08-29",
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 64.34 元高于激进型价格带；56-62 元且基本面未恶化时仅可小仓分批，48-55 元为稳健分批区，45 元以下才提供更厚安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 183,
+            "line_end": 237,
+            "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+            "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-04-28"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -385,7 +608,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "0f0555bb400a8f668263",
   "detail_path": "./data/decision_details/0f0555bb400a8f668263.json"
 }

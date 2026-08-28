@@ -381,6 +381,69 @@
         "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "5.3-7.4 元以持有、不追为主；基本面未同步改善而股价达到 7.5 元以上时可考虑减仓。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流。",
+        "metrics": [
+          "自由现金流",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -393,6 +456,130 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流。",
+        "metrics": [
+          "自由现金流",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-19",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-19"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-19",
+            "scheduled_date": "2026-08-19",
+            "effective_date": "2026-08-19",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-19",
+            "actual_cninfo": "2026-08-19",
+            "scheduled_eastmoney": "2026-08-19",
+            "scheduled_cninfo": "2026-08-19"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "5.3-7.4 元以持有、不追为主；基本面未同步改善而股价达到 7.5 元以上时可考虑减仓。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 247,
+            "line_end": 257,
+            "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+            "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-19"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -628,7 +815,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "e1493b1e9f6e0d424a3b",
   "detail_path": "./data/decision_details/e1493b1e9f6e0d424a3b.json"
 }

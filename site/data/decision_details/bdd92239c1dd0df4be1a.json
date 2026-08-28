@@ -302,6 +302,72 @@
         "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "不追“AI+电网”情绪；12 元附近可以观察仓，10-11 元且基本面未坏时性价比更好。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有，以扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "10-11 元，或连续 2-3 季扣非增速超过 15%、现金流改善且毛利率稳定在 32% 以上。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -314,6 +380,165 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有，以扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "10-11 元，或连续 2-3 季扣非增速超过 15%、现金流改善且毛利率稳定在 32% 以上。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "不追“AI+电网”情绪；12 元附近可以观察仓，10-11 元且基本面未坏时性价比更好。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+            "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -551,7 +776,7 @@
     "latest_event": null,
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "bdd92239c1dd0df4be1a",
   "detail_path": "./data/decision_details/bdd92239c1dd0df4be1a.json"
 }

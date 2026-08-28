@@ -204,6 +204,77 @@
         "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股不追；28-32 元才进入激进型小额分批区，23-28 元为稳健区，16-23 元为保守型重点研究区；也可等待半年报证明核心业务重新提速和新业务形成可核验收入。",
+        "metrics": [
+          "收入"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "基本面未坏可持有，但当前不加仓；若显著高于 50 元且利润未上修，可降低估值风险。",
+        "metrics": [
+          "利润",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股进入对应价格带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润，液冷/机器人出现可核验收入。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -216,6 +287,187 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股不追；28-32 元才进入激进型小额分批区，23-28 元为稳健区，16-23 元为保守型重点研究区；也可等待半年报证明核心业务重新提速和新业务形成可核验收入。",
+        "metrics": [
+          "收入"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "基本面未坏可持有，但当前不加仓；若显著高于 50 元且利润未上修，可降低估值风险。",
+        "metrics": [
+          "利润",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股进入对应价格带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润，液冷/机器人出现可核验收入。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 302,
+            "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+            "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -359,7 +611,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "739f2547d4c9799a7f54",
   "detail_path": "./data/decision_details/739f2547d4c9799a7f54.json"
 }

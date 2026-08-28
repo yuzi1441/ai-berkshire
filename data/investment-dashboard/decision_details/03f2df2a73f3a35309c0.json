@@ -158,6 +158,69 @@
         "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "当前回避或观望；等待 35-40 元附近且基本面未恶化后重新评估。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "逢高分批减仓并可保留底仓，不在高 PB 区追加。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "35-40 元且巨龙分红、麻米措投产与商品周期未恶化；巨龙扩产兑现属于加仓验证。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -170,6 +233,98 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "当前回避或观望；等待 35-40 元附近且基本面未恶化后重新评估。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "逢高分批减仓并可保留底仓，不在高 PB 区追加。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "35-40 元且巨龙分红、麻米措投产与商品周期未恶化；巨龙扩产兑现属于加仓验证。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 228,
+            "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+            "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 0,
+    "next_review_date": null
   },
   "execution_policy": {
     "schema_version": 1,
@@ -276,7 +431,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "03f2df2a73f3a35309c0",
   "detail_path": "./data/decision_details/03f2df2a73f3a35309c0.json"
 }

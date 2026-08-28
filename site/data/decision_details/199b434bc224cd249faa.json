@@ -246,6 +246,83 @@
         "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "8.70 元不急买；价格跌至 7 元以下且基本面未继续破坏时才可小仓，5.5-6 元且资产负债表稳定时才有更明显赔率；也可等待 Q2/Q3 证明 API 毛利率、现金流和利润降幅收敛。",
+        "metrics": [
+          "毛利率",
+          "利润"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有观察，但不能因 PB 小于 1 机械加仓；重点核对半年报原料药毛利率、经营现金流和制剂收入是否止跌。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "收入",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格、周期、经营改善三者至少满足两项；API 毛利率回升、OCF 转正且周转未恶化、新品形成可见收入毛利。若利润继续双位数下滑、API 毛利长期低位或治理合规折价扩大则重审。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -258,6 +335,178 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "8.70 元不急买；价格跌至 7 元以下且基本面未继续破坏时才可小仓，5.5-6 元且资产负债表稳定时才有更明显赔率；也可等待 Q2/Q3 证明 API 毛利率、现金流和利润降幅收敛。",
+        "metrics": [
+          "毛利率",
+          "利润"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有观察，但不能因 PB 小于 1 机械加仓；重点核对半年报原料药毛利率、经营现金流和制剂收入是否止跌。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "收入",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格、周期、经营改善三者至少满足两项；API 毛利率回升、OCF 转正且周转未恶化、新品形成可见收入毛利。若利润继续双位数下滑、API 毛利长期低位或治理合规折价扩大则重审。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "收入"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 275,
+            "line_end": 332,
+            "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+            "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -364,7 +613,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "199b434bc224cd249faa",
   "detail_path": "./data/decision_details/199b434bc224cd249faa.json"
 }

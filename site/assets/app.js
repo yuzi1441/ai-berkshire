@@ -1417,6 +1417,103 @@ function humanReviewForItem(item, quote) {
   return humanReviewExecutionState(item, quote, reportPriceRows(item, { historicalFallback: false }));
 }
 
+function humanReviewPlanForItem(item) {
+  const plan = item?.human_review_plan;
+  return plan && Array.isArray(plan.tasks) ? plan : null;
+}
+
+function humanReviewTaskSourceLabel(task) {
+  const source = task?.source_field;
+  return {
+    empty_position_action: "空仓行动",
+    holder_action: "持仓行动",
+    trigger_condition: "触发条件",
+  }[source] || "主报告判断";
+}
+
+function humanReviewTaskDateText(task) {
+  if (task?.date_status === "event_trigger") return "复核时间：事件触发后复核";
+  if (task?.date_status === "price_only") return "复核时间：随行情判断";
+  if (task?.date_status === "source_mismatch") return "复核时间：日期待核对（官方来源不一致）";
+  const details = Array.isArray(task?.calendar_date_details) ? task.calendar_date_details : [];
+  const dates = details.map((detail) => {
+    const period = detail.period_label || detail.period_key || "财报";
+    const actual = detail.actual_date ? `实际披露 ${detail.actual_date}` : "";
+    const scheduled = detail.scheduled_date && detail.scheduled_date !== detail.actual_date
+      ? `预约 ${detail.scheduled_date}`
+      : detail.scheduled_date
+        ? `实际/预约 ${detail.scheduled_date}`
+        : "";
+    const fallback = detail.effective_date ? `披露 ${detail.effective_date}` : "日期待公布";
+    const verification = detail.actual_verification || detail.scheduled_verification;
+    const verificationText = verification === "cross_checked"
+      ? "东财+巨潮核验"
+      : verification === "single_source"
+        ? "单一官方来源"
+        : "";
+    const dateBody = [actual, scheduled].filter(Boolean).join("；") || fallback;
+    return `${period}：${dateBody}${verificationText ? `（${verificationText}）` : ""}`;
+  });
+  const dateText = dates.length ? ` · ${dates.join("；")}` : "";
+  return `复核时间：${task?.schedule_label || "财报披露后"} · ${task?.status_label || "待确认"}${dateText}`;
+}
+
+function renderHumanReviewPlan(item, { compact = false } = {}) {
+  const plan = humanReviewPlanForItem(item);
+  const wrap = document.createElement("div");
+  wrap.className = `human-review-plan ${compact ? "human-review-plan-compact" : ""}`;
+  if (!plan || plan.status !== "ready") {
+    const note = document.createElement("p");
+    note.className = "human-review-note";
+    note.textContent = plan?.message || "暂无可用的人工复核事项";
+    wrap.append(note);
+    return wrap;
+  }
+  const tasks = plan.tasks || [];
+  if (!tasks.length) {
+    const note = document.createElement("p");
+    note.className = "human-review-note";
+    note.textContent = "暂无固定时间事项；价格条件仍随行情判断，事件条件见主报告";
+    wrap.append(note);
+    return wrap;
+  }
+  const visibleTasks = compact ? tasks.slice(0, 1) : tasks;
+  for (const task of visibleTasks) {
+    const taskWrap = document.createElement("div");
+    taskWrap.className = `human-review-task human-review-task-${task.date_status || "unknown"}`;
+    const heading = document.createElement("strong");
+    heading.textContent = `${task.scope_label || "复核事项"} · ${task.title || "主报告条件"}`;
+    taskWrap.append(heading);
+    const content = document.createElement("p");
+    content.textContent = task.content || "主报告未提供具体复核内容";
+    taskWrap.append(content);
+    if (task.metrics?.length) {
+      const metrics = document.createElement("p");
+      metrics.className = "human-review-note";
+      metrics.textContent = `关注指标：${task.metrics.join("、")}`;
+      taskWrap.append(metrics);
+    }
+    const schedule = document.createElement("p");
+    schedule.className = "human-review-note";
+    schedule.textContent = humanReviewTaskDateText(task);
+    taskWrap.append(schedule);
+    if (!compact) {
+      const source = document.createElement("p");
+      source.className = "human-review-note";
+      source.textContent = `来源：${humanReviewTaskSourceLabel(task)}${task.evidence?.[0]?.line_start ? ` · 主报告第 ${task.evidence[0].line_start} 行起` : ""}`;
+      taskWrap.append(source);
+    }
+    wrap.append(taskWrap);
+  }
+  if (compact && tasks.length > visibleTasks.length) {
+    const more = document.createElement("p");
+    more.className = "human-review-note";
+    more.textContent = `另有 ${tasks.length - visibleTasks.length} 项，打开详情查看全部`;
+    wrap.append(more);
+  }
+  return wrap;
+}
+
 function renderHumanReviewState(item, quote) {
   const result = humanReviewForItem(item, quote);
   const wrap = document.createElement("div");
@@ -1439,6 +1536,18 @@ function renderHumanReviewState(item, quote) {
     snapshot.textContent = `行情快照：${attentionTimestamp(freshness.timestamp)}${freshness.state === "fresh" ? " · 新鲜" : " · 已过期"}`;
     wrap.append(snapshot);
   }
+  const plan = humanReviewPlanForItem(item);
+  const planMeta = document.createElement("p");
+  planMeta.className = "human-review-note";
+  if (plan?.status === "ready" && plan.task_count) {
+    const next = plan.tasks?.[0];
+    planMeta.textContent = `固定复核 ${plan.task_count} 项${plan.due_count ? ` · ${plan.due_count} 项已到期待确认` : ""}${next ? ` · 最近：${next.title} · ${next.status_label || "待确认"}${next.next_review_date ? ` · ${next.next_review_date}` : ""}` : ""}`;
+  } else if (plan?.status === "ready") {
+    planMeta.textContent = "固定复核：暂无事项，价格条件随行情判断";
+  } else {
+    planMeta.textContent = "固定复核：人工主报告计划不可用";
+  }
+  wrap.append(planMeta);
   return wrap;
 }
 
@@ -3486,6 +3595,11 @@ function renderDetail() {
       humanReviewCard.className = "card human-review-card";
       humanReviewCard.innerHTML = "<h3>人工复核分区</h3>";
       humanReviewCard.append(renderHumanReviewState(item, quote));
+      const humanReviewPlan = document.createElement("div");
+      humanReviewPlan.className = "human-review-plan-detail";
+      humanReviewPlan.innerHTML = "<h4>固定复核事项</h4>";
+      humanReviewPlan.append(renderHumanReviewPlan(item));
+      humanReviewCard.append(humanReviewPlan);
       els.detailBody.append(humanReviewCard);
     }
 

@@ -336,6 +336,72 @@
         "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "17.35 元观察，不追价；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "已有仓位可持有，当前不加仓，把半年报作为第一复核点。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格不高于 14.5 元，同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元；航速毛利率连续两期低于 12% 或 FCF 转负即失效。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -348,6 +414,118 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "已有仓位可持有，当前不加仓，把半年报作为第一复核点。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "pending",
+        "status_label": "待披露",
+        "next_review_date": "2026-08-31",
+        "calendar_dates": [
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "17.35 元观察，不追价；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格不高于 14.5 元，同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元；航速毛利率连续两期低于 12% 或 FCF 转负即失效。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 338,
+            "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+            "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 0,
+    "next_review_date": "2026-08-31"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -491,7 +669,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "777c39697b20ad269909",
   "detail_path": "./data/decision_details/777c39697b20ad269909.json"
 }

@@ -194,6 +194,68 @@
         "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 116.24 元可先建四分之一观察仓但不追反弹；110 元以下分批，100 元以下加快，90-100 元才属于重注研究区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有收息；成本高于 150 元者等待中性目标区但不补仓，重点核对青花20 批价和季度合同负债。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "100 元以下或连续两季合同负债同比正增长且批价企稳；青花20 批价持续跌破 320 元、分红率下降/跨界并购、品质安全事件或估值透支时重审。",
+        "metrics": [
+          "分红",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -206,6 +268,129 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有收息；成本高于 150 元者等待中性目标区但不补仓，重点核对青花20 批价和季度合同负债。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 116.24 元可先建四分之一观察仓但不追反弹；110 元以下分批，100 元以下加快，90-100 元才属于重注研究区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "100 元以下或连续两季合同负债同比正增长且批价企稳；青花20 批价持续跌破 320 元、分红率下降/跨界并购、品质安全事件或估值透支时重审。",
+        "metrics": [
+          "分红",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 206,
+            "line_end": 260,
+            "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+            "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-04-30"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -319,7 +504,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "8284c19c2d22afb2b253",
   "detail_path": "./data/decision_details/8284c19c2d22afb2b253.json"
 }

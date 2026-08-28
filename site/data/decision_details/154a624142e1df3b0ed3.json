@@ -318,6 +318,81 @@
         "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "约 20-22 元只允许激进型小仓观察，不追高；稳健型等待 16-18 元及半年报修复，保守型等待 13-15 元。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续观察，但不能把电网景气当作加仓依据；利润率、订单和回款未修复前不升级仓位。",
+        "metrics": [
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "半年报/三季报利润增速和毛利率修复、直流或配网订单增加、应收下降且现金流覆盖利润。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -330,6 +405,176 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "约 20-22 元只允许激进型小仓观察，不追高；稳健型等待 16-18 元及半年报修复，保守型等待 13-15 元。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续观察，但不能把电网景气当作加仓依据；利润率、订单和回款未修复前不升级仓位。",
+        "metrics": [
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-11",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-11",
+            "scheduled_date": "2026-04-11",
+            "effective_date": "2026-04-11",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-11",
+            "actual_cninfo": "2026-04-11",
+            "scheduled_eastmoney": "2026-04-11",
+            "scheduled_cninfo": "2026-04-11"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "半年报/三季报利润增速和毛利率修复、直流或配网订单增加、应收下降且现金流覆盖利润。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 139,
+            "line_end": 173,
+            "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+            "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -513,7 +758,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "154a624142e1df3b0ed3",
   "detail_path": "./data/decision_details/154a624142e1df3b0ed3.json"
 }

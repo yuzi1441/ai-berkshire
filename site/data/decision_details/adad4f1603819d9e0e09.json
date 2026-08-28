@@ -497,6 +497,81 @@
         "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 139.68 元处于 130-160 元合理观察区；125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -509,6 +584,206 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 139.68 元处于 130-160 元合理观察区；125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-29",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-29",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 327,
+            "line_end": 411,
+            "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+            "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-29",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-04-29"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -697,7 +972,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "adad4f1603819d9e0e09",
   "detail_path": "./data/decision_details/adad4f1603819d9e0e09.json"
 }

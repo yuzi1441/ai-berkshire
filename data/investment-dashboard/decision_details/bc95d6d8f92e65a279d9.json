@@ -152,6 +152,72 @@
         "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 258 元不具备投资价值；等待 120-150 元、约 2026E PE 44-55 倍，或 DDR6 切换期出现类似 2023 年的周期性下跌后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "建议减至 5% 以下并保留小仓跟踪；一年上涨约 230%、分析师目标价已低于现价时，不应用好公司叙事替代赔率纪律。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审；DDR5 出货环比转负、Retimer 份额受挤压、创始人继续大幅减持或 PE 超过 150 倍为减仓/回避信号。",
+        "metrics": [
+          "收入",
+          "产能/销量",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -164,6 +230,133 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审；DDR5 出货环比转负、Retimer 份额受挤压、创始人继续大幅减持或 PE 超过 150 倍为减仓/回避信号。",
+        "metrics": [
+          "收入",
+          "产能/销量",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-28",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 258 元不具备投资价值；等待 120-150 元、约 2026E PE 44-55 倍，或 DDR6 切换期出现类似 2023 年的周期性下跌后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "建议减至 5% 以下并保留小仓跟踪；一年上涨约 230%、分析师目标价已低于现价时，不应用好公司叙事替代赔率纪律。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 310,
+            "line_end": 310,
+            "quote": "### 最终决策",
+            "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-04-28"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -283,7 +476,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "bc95d6d8f92e65a279d9",
   "detail_path": "./data/decision_details/bc95d6d8f92e65a279d9.json"
 }

@@ -204,6 +204,82 @@
         "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "35.46 元不追；29-32 元且毛利率止跌、出现终端利润拐点时仅激进小仓，24-28 元且 EPS、现金流、库存和应收改善后稳健分批，19-22 元才有更厚安全边际。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有观察，不因反弹加仓；等待中报验证毛利和现金流。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率回到 31% 以上、防务订单或关联销售企稳、CFO/净利润持续改善、库存与应收增速回落。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "订单",
+          "回款",
+          "库存"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -216,6 +292,192 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "35.46 元不追；29-32 元且毛利率止跌、出现终端利润拐点时仅激进小仓，24-28 元且 EPS、现金流、库存和应收改善后稳健分批，19-22 元才有更厚安全边际。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-25",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-25",
+            "scheduled_date": "2026-04-25",
+            "effective_date": "2026-04-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-25",
+            "actual_cninfo": "2026-04-25",
+            "scheduled_eastmoney": "2026-04-25",
+            "scheduled_cninfo": "2026-04-25"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有观察，不因反弹加仓；等待中报验证毛利和现金流。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率回到 31% 以上、防务订单或关联销售企稳、CFO/净利润持续改善、库存与应收增速回落。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "订单",
+          "回款",
+          "库存"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 327,
+            "quote": "## 第七步：估值与安全边际——对的价格 ### 7.1 当前定价 以 2026-08-07 收盘价 ¥35.46、最新总股本 21.0025 亿股计算，总市值 ¥744.75 亿元。TTM 归母净利润约 19.20 亿元，EPS 约 ¥0.9142；TTM 收入约 214.20 亿元。",
+            "supports": "L241-L327、L389-L410。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-25",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-25",
+            "scheduled_date": "2026-04-25",
+            "effective_date": "2026-04-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-25",
+            "actual_cninfo": "2026-04-25",
+            "scheduled_eastmoney": "2026-04-25",
+            "scheduled_cninfo": "2026-04-25"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -347,7 +609,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "49f2074bf4dd5bd8a121",
   "detail_path": "./data/decision_details/49f2074bf4dd5bd8a121.json"
 }

@@ -152,6 +152,75 @@
         "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 275.90 元严重透支未来 5-7 年增长，当前回避；等待 57-86 元、对应 PS 10-15 倍后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "强烈建议减仓或清仓；国产替代趋势确定不等于公司在 966 亿元市值上仍有合理赔率。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "57-86 元、单季度经营现金流转正、产品进入 14nm 及以下先进制程，或连续两个季度净利率超过 10%后重审；全年经营现金流仍为负、合同负债环比下降、PS 超过 50 倍或 KLA 制裁松绑即维持回避/卖出。",
+        "metrics": [
+          "经营现金流",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -164,6 +233,136 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "57-86 元、单季度经营现金流转正、产品进入 14nm 及以下先进制程，或连续两个季度净利率超过 10%后重审；全年经营现金流仍为负、合同负债环比下降、PS 超过 50 倍或 KLA 制裁松绑即维持回避/卖出。",
+        "metrics": [
+          "经营现金流",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 275.90 元严重透支未来 5-7 年增长，当前回避；等待 57-86 元、对应 PS 10-15 倍后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "强烈建议减仓或清仓；国产替代趋势确定不等于公司在 966 亿元市值上仍有合理赔率。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 282,
+            "line_end": 282,
+            "quote": "### 最终决策",
+            "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-26"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -283,7 +482,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "5f8fa1608e3820b3bad7",
   "detail_path": "./data/decision_details/5f8fa1608e3820b3bad7.json"
 }

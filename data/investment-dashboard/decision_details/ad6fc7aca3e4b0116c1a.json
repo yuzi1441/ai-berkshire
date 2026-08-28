@@ -152,6 +152,73 @@
         "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "15.05 元可用小仓位介入“高股息现金牛 + 转型期权”，但 2026Q1 盈利拐点未确认，不允许重仓。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有收息并控制权重，把它定位为退潮期现金牛而非确定成长股。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "中报验证煤机订单与盈利重回增长、现金流和应收改善后再加仓；12-13 元是更好的击球点；煤机持续负增长、分红下降或接班失误即重审。",
+        "metrics": [
+          "订单",
+          "回款",
+          "分红"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -164,6 +231,119 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "中报验证煤机订单与盈利重回增长、现金流和应收改善后再加仓；12-13 元是更好的击球点；煤机持续负增长、分红下降或接班失误即重审。",
+        "metrics": [
+          "订单",
+          "回款",
+          "分红"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "pending",
+        "status_label": "待披露",
+        "next_review_date": "2026-08-31",
+        "calendar_dates": [
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "15.05 元可用小仓位介入“高股息现金牛 + 转型期权”，但 2026Q1 盈利拐点未确认，不允许重仓。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有收息并控制权重，把它定位为退潮期现金牛而非确定成长股。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 323,
+            "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+            "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 0,
+    "next_review_date": "2026-08-31"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -277,7 +457,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "ad6fc7aca3e4b0116c1a",
   "detail_path": "./data/decision_details/ad6fc7aca3e4b0116c1a.json"
 }

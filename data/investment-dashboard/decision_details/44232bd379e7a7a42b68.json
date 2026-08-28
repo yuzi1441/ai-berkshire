@@ -242,6 +242,71 @@
         "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 414.80 元绝非低估；只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有并设置反证清单；成本接近报告价者应谨慎持有或降低暴露。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "显著回落且订单、毛利率和现金流继续验证；FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +319,132 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "显著回落且订单、毛利率和现金流继续验证；FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 414.80 元绝非低估；只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有并设置反证清单；成本接近报告价者应谨慎持有或降低暴露。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 288,
+            "line_end": 325,
+            "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+            "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -367,7 +558,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "44232bd379e7a7a42b68",
   "detail_path": "./data/decision_details/44232bd379e7a7a42b68.json"
 }

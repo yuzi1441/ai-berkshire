@@ -975,6 +975,23 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-state-human_wait_event strong { color: var(--watch); }
 .human-review-state-human_no strong { color: var(--sell); }
 .human-review-note { color: var(--ink-muted) !important; }
+.human-review-plan-detail { margin-top: 12px; }
+.human-review-plan-detail h4 { margin: 0 0 7px; color: var(--ink-soft); font-size: 12px; }
+.human-review-plan { display: flex; flex-direction: column; gap: 8px; }
+.human-review-plan-compact { gap: 4px; }
+.human-review-task {
+  padding: 8px 9px;
+  border-left: 3px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.018);
+}
+.human-review-task strong { display: block; color: var(--ink); font-size: 11px; line-height: 1.35; }
+.human-review-task p { margin: 3px 0 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.45; }
+.human-review-task-pending { border-left-color: var(--watch); }
+.human-review-task-due { border-left-color: var(--sell); }
+.human-review-task-event_trigger,
+.human-review-task-price_only { border-left-color: var(--ink-muted); }
+.human-review-task-unannounced,
+.human-review-task-source_mismatch { border-left-color: var(--watch); }
 .buy-advice { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .buy-advice-detail {
   font-size: 11px;

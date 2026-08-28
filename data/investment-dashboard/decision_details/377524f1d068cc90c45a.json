@@ -134,6 +134,67 @@
         "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "705 元、约 3,074 亿元市值没有安全边际，坚决回避；等待 2027 年解禁潮和更多盈利季度后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "立即卖出或大幅减仓，不能用单季度扭亏、低流通盘和 AI 存储叙事替代可持续盈利验证。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "股价进入 80-120 元区间，且连续四个季度证明盈利可持续、自研主控实现规模商业化后再评估。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -146,6 +207,192 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "705 元、约 3,074 亿元市值没有安全边际，坚决回避；等待 2027 年解禁潮和更多盈利季度后再研究。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "立即卖出或大幅减仓，不能用单季度扭亏、低流通盘和 AI 存储叙事替代可持续盈利验证。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "股价进入 80-120 元区间，且连续四个季度证明盈利可持续、自研主控实现规模商业化后再评估。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 278,
+            "line_end": 329,
+            "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+            "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-25"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -252,7 +499,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "377524f1d068cc90c45a",
   "detail_path": "./data/decision_details/377524f1d068cc90c45a.json"
 }

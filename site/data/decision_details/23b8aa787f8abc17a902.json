@@ -242,6 +242,71 @@
         "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "11.69 元不追价，优先等待 9.5 元附近，或正式财报证明利润中枢显著上修。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续观察，但不把单季改善当成加仓理由。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "9.5-10.5 元只适合小仓试错，9.0-9.5 元进入稳健买入区，不高于 9.0 元才有更强安全边际；同时验证回款、海外毛利和高端产品商业化。",
+        "metrics": [
+          "毛利率",
+          "回款",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +319,164 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "11.69 元不追价，优先等待 9.5 元附近，或正式财报证明利润中枢显著上修。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "9.5-10.5 元只适合小仓试错，9.0-9.5 元进入稳健买入区，不高于 9.0 元才有更强安全边际；同时验证回款、海外毛利和高端产品商业化。",
+        "metrics": [
+          "毛利率",
+          "回款",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续观察，但不把单季改善当成加仓理由。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 274,
+            "line_end": 285,
+            "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+            "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-26"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -397,7 +620,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "23b8aa787f8abc17a902",
   "detail_path": "./data/decision_details/23b8aa787f8abc17a902.json"
 }

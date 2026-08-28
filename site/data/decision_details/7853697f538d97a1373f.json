@@ -152,6 +152,76 @@
         "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "49.60 元、87 倍 PE 明显透支增长，不买；等待约 25-35 元的研究区，其中 23-29 元对应报告所述 40-50 倍历史利润口径，或先等后续季报证明增长可持续。",
+        "metrics": [
+          "利润",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "报告建议考虑至少减持一半锁定利润；不能因先进封装、车载 CIS、CPO 等叙事忽略 2026Q1 净利润零增长与负 FCF。",
+        "metrics": [
+          "自由现金流",
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "PE 回落至 40 倍以下或价格进入更有安全边际区，同时车载 CIS 季度收入维持高增长、CPO 出现可验证收入、管理层增持或推出有效激励；连续两季收入增速低于 20%、毛利率低于 40%、大客户变化或管理层大额减持即失效。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -164,6 +234,201 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "49.60 元、87 倍 PE 明显透支增长，不买；等待约 25-35 元的研究区，其中 23-29 元对应报告所述 40-50 倍历史利润口径，或先等后续季报证明增长可持续。",
+        "metrics": [
+          "利润",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "报告建议考虑至少减持一半锁定利润；不能因先进封装、车载 CIS、CPO 等叙事忽略 2026Q1 净利润零增长与负 FCF。",
+        "metrics": [
+          "自由现金流",
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "PE 回落至 40 倍以下或价格进入更有安全边际区，同时车载 CIS 季度收入维持高增长、CPO 出现可验证收入、管理层增持或推出有效激励；连续两季收入增速低于 20%、毛利率低于 40%、大客户变化或管理层大额减持即失效。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "产品/客户",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 399,
+            "line_end": 399,
+            "quote": "### 最终决策",
+            "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-25"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -270,7 +535,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "7853697f538d97a1373f",
   "detail_path": "./data/decision_details/7853697f538d97a1373f.json"
 }

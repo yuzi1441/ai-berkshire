@@ -242,6 +242,74 @@
         "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错；稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下。",
+        "metrics": [
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可审慎持有，但要严格跟踪现金流、商誉、应收/合同资产、安全生产和防务兑现。",
+        "metrics": [
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际；并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位。",
+        "metrics": [
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +322,199 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错；稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下。",
+        "metrics": [
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可审慎持有，但要严格跟踪现金流、商誉、应收/合同资产、安全生产和防务兑现。",
+        "metrics": [
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际；并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位。",
+        "metrics": [
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 210,
+            "line_end": 218,
+            "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+            "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-25",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-25"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-25",
+            "scheduled_date": "2026-08-25",
+            "effective_date": "2026-08-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-25",
+            "actual_cninfo": "2026-08-25",
+            "scheduled_eastmoney": "2026-08-25",
+            "scheduled_cninfo": "2026-08-25"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-25"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -367,7 +628,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "29992f595c8e9491a483",
   "detail_path": "./data/decision_details/29992f595c8e9491a483.json"
 }

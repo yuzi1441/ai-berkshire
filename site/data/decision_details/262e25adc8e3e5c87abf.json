@@ -174,6 +174,77 @@
         "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股 6.97 元没有安全边际，当前不买；即使进入 3.0-3.5 元也只观察，2.5-3.0 元也只能在证据改善后重新研究，不因题材和订单叙事建仓。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "不因订单主题继续加仓；已有较大仓位应利用主题强势重新评估或降低仓位，只有经常性盈利、归母占比和营运资本同步改善后才重建论文。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股不高于 2.1 元，且扣非 ROE 连续两年高于 8%、扣非利润占净利润高于 70%、归母利润占合并利润高于 50%、经营现金流足以覆盖资本开支和分红后，才可考虑分批；治理处罚、扣非转负、存货应收快于收入、海外亏损或净负债恶化均为继续回避信号。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入",
+          "ROE",
+          "回款",
+          "库存",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -186,6 +257,138 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "A 股不高于 2.1 元，且扣非 ROE 连续两年高于 8%、扣非利润占净利润高于 70%、归母利润占合并利润高于 50%、经营现金流足以覆盖资本开支和分红后，才可考虑分批；治理处罚、扣非转负、存货应收快于收入、海外亏损或净负债恶化均为继续回避信号。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入",
+          "ROE",
+          "回款",
+          "库存",
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股 6.97 元没有安全边际，当前不买；即使进入 3.0-3.5 元也只观察，2.5-3.0 元也只能在证据改善后重新研究，不因题材和订单叙事建仓。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "不因订单主题继续加仓；已有较大仓位应利用主题强势重新评估或降低仓位，只有经常性盈利、归母占比和营运资本同步改善后才重建论文。",
+        "metrics": [
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 408,
+            "line_end": 408,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-04-30"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -305,7 +508,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "262e25adc8e3e5c87abf",
   "detail_path": "./data/decision_details/262e25adc8e3e5c87abf.json"
 }

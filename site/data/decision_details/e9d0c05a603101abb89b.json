@@ -242,6 +242,74 @@
         "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "21.11 元赔率不足；18-21 元只适合激进小仓，15-17 元稳健分批，11-14 元才给保守资金更厚缓冲。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有核心仓但 21 元以上不追；半年报继续确认价差、现金流、荆州装置爬坡和净债务后再决定是否维持。",
+        "metrics": [
+          "债务"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "15-17 元且基本面未恶化，或连续两季毛利率高于 20%、OCF 改善且荆州新装置确认正 ROIC；连续四季毛利率低于 15%、FCF/净利持续低于 50% 或主要新项目 ROIC 低于 8% 即失效。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "ROIC"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +322,152 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有核心仓但 21 元以上不追；半年报继续确认价差、现金流、荆州装置爬坡和净债务后再决定是否维持。",
+        "metrics": [
+          "债务"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "15-17 元且基本面未恶化，或连续两季毛利率高于 20%、OCF 改善且荆州新装置确认正 ROIC；连续四季毛利率低于 15%、FCF/净利持续低于 50% 或主要新项目 ROIC 低于 8% 即失效。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "ROIC"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "21.11 元赔率不足；18-21 元只适合激进小仓，15-17 元稳健分批，11-14 元才给保守资金更厚缓冲。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 335,
+            "line_end": 368,
+            "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+            "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -524,7 +738,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "e9d0c05a603101abb89b",
   "detail_path": "./data/decision_details/e9d0c05a603101abb89b.json"
 }

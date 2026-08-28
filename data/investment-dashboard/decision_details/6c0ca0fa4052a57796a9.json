@@ -204,6 +204,74 @@
         "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "3.71 元不追；3.2-3.5 元只允许激进型小额试仓，2.7-3.2 元可稳健分批，2.1-2.7 元且经营未恶化才进入更强安全边际区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "已有仓位可观察持有并等待半年报，不因 Q1 表观净利增长追涨；报告并不知道用户成本和仓位。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入相应区间，同时亚太 MR TCE 连续两季不低于约 20,000 美元/天、扣非利润与经营现金流改善、新船交付后收入/载重吨和 ROIC 不下降；TCE 跌破该线、利用率与 ROIC 下滑、净债务和减值上升或关联交易缺乏公允性即失效。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入",
+          "ROIC",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -216,6 +284,152 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "已有仓位可观察持有并等待半年报，不因 Q1 表观净利增长追涨；报告并不知道用户成本和仓位。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-28",
+        "calendar_dates": [
+          "2026-08-28"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-28",
+            "scheduled_date": "2026-08-28",
+            "effective_date": "2026-08-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-28",
+            "actual_cninfo": "2026-08-28",
+            "scheduled_eastmoney": "2026-08-28",
+            "scheduled_cninfo": "2026-08-28"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入相应区间，同时亚太 MR TCE 连续两季不低于约 20,000 美元/天、扣非利润与经营现金流改善、新船交付后收入/载重吨和 ROIC 不下降；TCE 跌破该线、利用率与 ROIC 下滑、净债务和减值上升或关联交易缺乏公允性即失效。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "收入",
+          "ROIC",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-28",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-28"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-28",
+            "scheduled_date": "2026-08-28",
+            "effective_date": "2026-08-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-28",
+            "actual_cninfo": "2026-08-28",
+            "scheduled_eastmoney": "2026-08-28",
+            "scheduled_cninfo": "2026-08-28"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "3.71 元不追；3.2-3.5 元只允许激进型小额试仓，2.7-3.2 元可稳健分批，2.1-2.7 元且经营未恶化才进入更强安全边际区。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 276,
+            "line_end": 276,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-28"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -359,7 +573,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "6c0ca0fa4052a57796a9",
   "detail_path": "./data/decision_details/6c0ca0fa4052a57796a9.json"
 }

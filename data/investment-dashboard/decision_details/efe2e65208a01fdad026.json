@@ -176,6 +176,83 @@
         "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "157.40 元不追；激进型也只有在 2026Q2/Q3 继续高增长且毛利率维持 27% 以上时小仓试错，稳健型等待 TTM PE 回落到 40-50 倍或股价 90-110 元且业绩未坏。",
+        "metrics": [
+          "毛利率",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有但设置基本面止损，不继续扩大高估值暴露；PE 仍高于 80 倍且增速放缓时应降低风险。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "收入和利润继续高增长、CFO/净利回到约 1 倍、毛利率维持 27% 以上、新产能顺利爬坡且高端材料出现明确批量认证或订单；毛利率连续两季低于 24% 或现金流、库存应收恶化即重审。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "订单",
+          "回款",
+          "库存",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -188,6 +265,161 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "157.40 元不追；激进型也只有在 2026Q2/Q3 继续高增长且毛利率维持 27% 以上时小仓试错，稳健型等待 TTM PE 回落到 40-50 倍或股价 90-110 元且业绩未坏。",
+        "metrics": [
+          "毛利率",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-15",
+        "calendar_dates": [
+          "2026-08-15"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-15",
+            "scheduled_date": "2026-08-15",
+            "effective_date": "2026-08-15",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-15",
+            "actual_cninfo": "2026-08-15",
+            "scheduled_eastmoney": "2026-08-15",
+            "scheduled_cninfo": "2026-08-15"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "收入和利润继续高增长、CFO/净利回到约 1 倍、毛利率维持 27% 以上、新产能顺利爬坡且高端材料出现明确批量认证或订单；毛利率连续两季低于 24% 或现金流、库存应收恶化即重审。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "订单",
+          "回款",
+          "库存",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-15",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-15"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-15",
+            "scheduled_date": "2026-08-15",
+            "effective_date": "2026-08-15",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-15",
+            "actual_cninfo": "2026-08-15",
+            "scheduled_eastmoney": "2026-08-15",
+            "scheduled_cninfo": "2026-08-15"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有但设置基本面止损，不继续扩大高估值暴露；PE 仍高于 80 倍且增速放缓时应降低风险。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 270,
+            "line_end": 297,
+            "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+            "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-15"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -294,7 +526,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "efe2e65208a01fdad026",
   "detail_path": "./data/decision_details/efe2e65208a01fdad026.json"
 }

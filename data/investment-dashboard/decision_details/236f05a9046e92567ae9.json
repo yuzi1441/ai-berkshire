@@ -152,6 +152,79 @@
         "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "21.75 元、34 倍 PE 缺乏安全边际，等待 15-17 元分批；若 Q2/Q3 持续超预期且海外毛利率保持 24% 以上，可重新提高可接受价格。",
+        "metrics": [
+          "毛利率",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓，重点核对海外高毛利增长、价格战和应收坏账风险。",
+        "metrics": [
+          "毛利率",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "15-17 元且基本面未恶化，或海外收入占比超过 30%、风机毛利率恢复至 15% 以上、分红显著提高。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "分红",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -164,6 +237,157 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "21.75 元、34 倍 PE 缺乏安全边际，等待 15-17 元分批；若 Q2/Q3 持续超预期且海外毛利率保持 24% 以上，可重新提高可接受价格。",
+        "metrics": [
+          "毛利率",
+          "估值"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "15-17 元且基本面未恶化，或海外收入占比超过 30%、风机毛利率恢复至 15% 以上、分红显著提高。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "分红",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-26",
+        "calendar_dates": [
+          "2026-04-25",
+          "2026-08-26"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-25",
+            "scheduled_date": "2026-04-25",
+            "effective_date": "2026-04-25",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-25",
+            "actual_cninfo": "2026-04-25",
+            "scheduled_eastmoney": "2026-04-25",
+            "scheduled_cninfo": "2026-04-25"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-26",
+            "scheduled_date": "2026-08-26",
+            "effective_date": "2026-08-26",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-26",
+            "actual_cninfo": "2026-08-26",
+            "scheduled_eastmoney": "2026-08-26",
+            "scheduled_cninfo": "2026-08-26"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓，重点核对海外高毛利增长、价格战和应收坏账风险。",
+        "metrics": [
+          "毛利率",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 250,
+            "line_end": 325,
+            "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+            "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-26"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -283,7 +507,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "236f05a9046e92567ae9",
   "detail_path": "./data/decision_details/236f05a9046e92567ae9.json"
 }

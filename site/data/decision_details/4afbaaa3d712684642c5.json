@@ -337,6 +337,82 @@
         "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 82.04 元不适合按价值投资标准主动买入；保守型等待 45-55 元或约 30 倍可持续 EPS，稳健型也需连续 2-3 个季度证明订单转化为利润和经营现金流后，再结合估值回落分批研究；激进型只能事件驱动极小仓。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有并设预警线，成本接近现价者谨慎持有、逢高降风险；重点看现金流、AIDC/海外订单毛利和储能毛利率。",
+        "metrics": [
+          "毛利率",
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "经营现金流连续两个半年度覆盖净利润、AIDC 高增且毛利提升、海外交付和回款不恶化、储能毛利率回到 10%以上并叠加估值回落可上调；应收加合同资产占收入超过 50%且账龄恶化、主业毛利率下降超过 3 个百分点、低毛利储能扩张、募投低利用率或治理风险即回避。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "回款",
+          "估值"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -349,6 +425,192 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 82.04 元不适合按价值投资标准主动买入；保守型等待 45-55 元或约 30 倍可持续 EPS，稳健型也需连续 2-3 个季度证明订单转化为利润和经营现金流后，再结合估值回落分批研究；激进型只能事件驱动极小仓。",
+        "metrics": [
+          "经营现金流",
+          "利润",
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本可持有并设预警线，成本接近现价者谨慎持有、逢高降风险；重点看现金流、AIDC/海外订单毛利和储能毛利率。",
+        "metrics": [
+          "毛利率",
+          "订单"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-24",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-24",
+            "scheduled_date": "2026-04-24",
+            "effective_date": "2026-04-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-24",
+            "actual_cninfo": "2026-04-24",
+            "scheduled_eastmoney": "2026-04-24",
+            "scheduled_cninfo": "2026-04-24"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "经营现金流连续两个半年度覆盖净利润、AIDC 高增且毛利提升、海外交付和回款不恶化、储能毛利率回到 10%以上并叠加估值回落可上调；应收加合同资产占收入超过 50%且账龄恶化、主业毛利率下降超过 3 个百分点、低毛利储能扩张、募投低利用率或治理风险即回避。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "回款",
+          "估值"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 316,
+            "line_end": 316,
+            "quote": "## 第十二部分：最终决策与行动清单",
+            "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-21"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -455,7 +717,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "4afbaaa3d712684642c5",
   "detail_path": "./data/decision_details/4afbaaa3d712684642c5.json"
 }

@@ -134,6 +134,142 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(judgment["artifact_status"], "human_reviewed", decision["ticker"])
             self.assertTrue(judgment["source_matches"], decision["ticker"])
 
+    def test_production_human_review_tasks_cover_exact_a_share_universe(self):
+        data_directory = ROOT / "data" / "investment-dashboard"
+        resolution_payload = json.loads(
+            (data_directory / "main_report_resolutions.json").read_text(encoding="utf-8")
+        )
+        tasks_by_ticker = {
+            item["ticker"]: item["judgment"].get("review_tasks")
+            for item in resolution_payload["resolutions"]
+        }
+        self.assertEqual(len(tasks_by_ticker), 93)
+        self.assertTrue(all(isinstance(tasks, list) and tasks for tasks in tasks_by_ticker.values()))
+        for ticker, tasks in tasks_by_ticker.items():
+            dashboard.validate_human_review_tasks(tasks, ticker)
+            self.assertTrue(
+                all(
+                    task["source_field"]
+                    in {"empty_position_action", "holder_action", "trigger_condition"}
+                    for task in tasks
+                ),
+                ticker,
+            )
+
+    def test_human_review_plan_resolves_filing_date_and_keeps_due_until_replaced(self):
+        decisions = [
+            {
+                "ticker": "688271.SH",
+                "market": "A股",
+                "primary_judgment": {
+                    "enabled": True,
+                    "human_reviewed": True,
+                    "source_matches": True,
+                    "human_reviewed_at": "2026-08-27T00:00:00+08:00",
+                    "review_tasks": [
+                        {
+                            "task_id": "risk",
+                            "scope": "risk",
+                            "scope_label": "风险/失效条件",
+                            "title": "复核风险/失效条件",
+                            "content": "中报确认毛利率不低于45%",
+                            "metrics": ["毛利率"],
+                            "periods": ["H1"],
+                            "schedule_type": "filing",
+                            "source_field": "trigger_condition",
+                            "evidence": [{"line_start": 10}],
+                        }
+                    ],
+                },
+            }
+        ]
+        calendar = {
+            "generated_at": "2026-08-28T08:00:00+08:00",
+            "report_periods": [
+                {
+                    "period_key": "2026H1",
+                    "label": "2026年中报",
+                    "records": [
+                        {
+                            "ticker": "688271.SH",
+                            "date_status": "single_source",
+                            "effective_date": "2026-08-30",
+                            "actual_disclosure_date": None,
+                            "scheduled_disclosure_date": "2026-08-30",
+                            "scheduled_verification": "single_source",
+                        }
+                    ],
+                }
+            ],
+        }
+        dashboard.attach_human_review_plans(decisions, calendar, as_of=date(2026, 8, 29))
+        task = decisions[0]["human_review_plan"]["tasks"][0]
+        self.assertEqual(task["status_label"], "待披露")
+        self.assertEqual(task["next_review_date"], "2026-08-30")
+        self.assertEqual(task["calendar_date_details"][0]["scheduled_date"], "2026-08-30")
+
+        dashboard.attach_human_review_plans(decisions, calendar, as_of=date(2026, 8, 30))
+        task = decisions[0]["human_review_plan"]["tasks"][0]
+        self.assertEqual(task["status_label"], "已到期待确认")
+        self.assertEqual(decisions[0]["human_review_plan"]["due_count"], 1)
+
+    def test_human_review_plan_keeps_past_filing_due_when_next_period_is_future(self):
+        decisions = [
+            {
+                "ticker": "688271.SH",
+                "market": "A股",
+                "primary_judgment": {
+                    "enabled": True,
+                    "human_reviewed": True,
+                    "source_matches": True,
+                    "review_tasks": [
+                        {
+                            "task_id": "holder",
+                            "scope": "holder",
+                            "scope_label": "持仓验证",
+                            "title": "复核持仓验证",
+                            "content": "复核中报和三季报现金流",
+                            "metrics": ["经营现金流"],
+                            "periods": [],
+                            "schedule_type": "recurring_filing",
+                            "source_field": "holder_action",
+                            "evidence": [],
+                        }
+                    ],
+                },
+            }
+        ]
+        calendar = {
+            "report_periods": [
+                {
+                    "period_key": "2026H1",
+                    "label": "2026年中报",
+                    "records": [
+                        {
+                            "ticker": "688271.SH",
+                            "effective_date": "2026-08-20",
+                            "actual_disclosure_date": "2026-08-20",
+                        }
+                    ],
+                },
+                {
+                    "period_key": "2026Q3",
+                    "label": "2026年三季报",
+                    "records": [
+                        {
+                            "ticker": "688271.SH",
+                            "effective_date": "2026-10-30",
+                            "scheduled_disclosure_date": "2026-10-30",
+                        }
+                    ],
+                },
+            ]
+        }
+        dashboard.attach_human_review_plans(decisions, calendar, as_of=date(2026, 9, 1))
+        task = decisions[0]["human_review_plan"]["tasks"][0]
+        self.assertEqual(task["status_label"], "已到期待确认")
+        self.assertEqual(task["next_review_date"], "2026-08-20")
+
     def test_uses_data_cutoff_not_filesystem_modification_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

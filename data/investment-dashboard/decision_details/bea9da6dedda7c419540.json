@@ -336,6 +336,69 @@
         "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "60 元以上不因新型电力系统、AIDC 或 SST 叙事追高。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有跟踪，但需前置仓位上限和卖出纪律。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "45-55 元只进入研究区，35-45 元且基本面未恶化才接近分批研究买点；同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -348,6 +411,130 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "45-55 元只进入研究区，35-45 元且基本面未恶化才接近分批研究买点；同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "60 元以上不因新型电力系统、AIDC 或 SST 叙事追高。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可持有跟踪，但需前置仓位上限和卖出纪律。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 12,
+            "line_end": 21,
+            "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+            "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -536,7 +723,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "bea9da6dedda7c419540",
   "detail_path": "./data/decision_details/bea9da6dedda7c419540.json"
 }

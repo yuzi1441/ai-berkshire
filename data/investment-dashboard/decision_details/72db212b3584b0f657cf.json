@@ -248,6 +248,71 @@
         "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 4.81 元只允许 5%-10% 高股息防御配置；优先等 4.50 元以下，3.6-4.5 元为正式建仓区，3.6 元以下才进入极端悲观重仓研究区。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "继续持有收息；5.5 元以上接近目标价时可减持，不能把 5% 股息当作无风险债券收益。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "4.2 元以下、容量电价继续提升、水电投产超预期或具体资产注入方案出现；电价连续两季跌幅超过 10%、煤价持续高于 1000 元或负债率超过 76% 即重审。",
+        "metrics": [
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -260,6 +325,100 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 4.81 元只允许 5%-10% 高股息防御配置；优先等 4.50 元以下，3.6-4.5 元为正式建仓区，3.6 元以下才进入极端悲观重仓研究区。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "继续持有收息；5.5 元以上接近目标价时可减持，不能把 5% 股息当作无风险债券收益。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "4.2 元以下、容量电价继续提升、水电投产超预期或具体资产注入方案出现；电价连续两季跌幅超过 10%、煤价持续高于 1000 元或负债率超过 76% 即重审。",
+        "metrics": [
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 322,
+            "line_end": 341,
+            "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+            "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 0,
+    "next_review_date": null
   },
   "execution_policy": {
     "schema_version": 1,
@@ -410,7 +569,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "72db212b3584b0f657cf",
   "detail_path": "./data/decision_details/72db212b3584b0f657cf.json"
 }

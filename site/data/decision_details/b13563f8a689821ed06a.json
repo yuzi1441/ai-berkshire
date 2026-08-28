@@ -163,6 +163,82 @@
         "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股基准价 277 元不急追，报告没有给出可直接套用的 A 股买入价；保守口径仅给 ONC 240-260 美元且基本面未恶化时重研，稳健口径要求后续季度收入、GAAP 利润率和 FCF 继续验证，不能跨市场机械换算成 A 股买点。",
+        "metrics": [
+          "自由现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有并设置验证线，重点核对 2026 收入指引、GAAP operating income、BRUKINSA 增速、FCF per share 与股本摊薄。",
+        "metrics": [
+          "自由现金流",
+          "收入",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审；BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -175,6 +251,207 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "A 股基准价 277 元不急追，报告没有给出可直接套用的 A 股买入价；保守口径仅给 ONC 240-260 美元且基本面未恶化时重研，稳健口径要求后续季度收入、GAAP 利润率和 FCF 继续验证，不能跨市场机械换算成 A 股买点。",
+        "metrics": [
+          "自由现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-05-12",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-05-12",
+            "scheduled_date": "2026-05-12",
+            "effective_date": "2026-05-12",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-05-12",
+            "actual_cninfo": "2026-05-12",
+            "scheduled_eastmoney": "2026-05-12",
+            "scheduled_cninfo": "2026-05-12"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有并设置验证线，重点核对 2026 收入指引、GAAP operating income、BRUKINSA 增速、FCF per share 与股本摊薄。",
+        "metrics": [
+          "自由现金流",
+          "收入",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-05-12",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-05-12",
+            "scheduled_date": "2026-05-12",
+            "effective_date": "2026-05-12",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-05-12",
+            "actual_cninfo": "2026-05-12",
+            "scheduled_eastmoney": "2026-05-12",
+            "scheduled_cninfo": "2026-05-12"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审；BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "收入"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 341,
+            "line_end": 341,
+            "quote": "## 第十部分：最终投资建议",
+            "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-05-12",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-05-12",
+            "scheduled_date": "2026-05-12",
+            "effective_date": "2026-05-12",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-05-12",
+            "actual_cninfo": "2026-05-12",
+            "scheduled_eastmoney": "2026-05-12",
+            "scheduled_cninfo": "2026-05-12"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -350,7 +627,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "b13563f8a689821ed06a",
   "detail_path": "./data/decision_details/b13563f8a689821ed06a.json"
 }

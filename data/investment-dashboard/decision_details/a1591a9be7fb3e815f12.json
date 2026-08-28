@@ -166,6 +166,76 @@
         "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "65.91 元不追，放入观察名单；等待 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率和自由现金流同步修复后再研究买入。",
+        "metrics": [
+          "毛利率",
+          "自由现金流"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本仓可继续持有但须设纪律；成长型只能小仓事件跟踪，不能把 AI PCB 叙事当安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入；毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "库存",
+          "债务",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -178,6 +248,169 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "65.91 元不追，放入观察名单；等待 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率和自由现金流同步修复后再研究买入。",
+        "metrics": [
+          "毛利率",
+          "自由现金流"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-22",
+        "calendar_dates": [
+          "2026-04-23",
+          "2026-08-22"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-23",
+            "scheduled_date": "2026-04-23",
+            "effective_date": "2026-04-23",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-23",
+            "actual_cninfo": "2026-04-23",
+            "scheduled_eastmoney": "2026-04-23",
+            "scheduled_cninfo": "2026-04-23"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-22",
+            "scheduled_date": "2026-08-22",
+            "effective_date": "2026-08-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-22",
+            "actual_cninfo": "2026-08-22",
+            "scheduled_eastmoney": "2026-08-22",
+            "scheduled_cninfo": "2026-08-22"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入；毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避。",
+        "metrics": [
+          "毛利率",
+          "自由现金流",
+          "利润",
+          "库存",
+          "债务",
+          "产能/销量",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-22",
+        "calendar_dates": [
+          "2026-04-23",
+          "2026-08-22"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-23",
+            "scheduled_date": "2026-04-23",
+            "effective_date": "2026-04-23",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-23",
+            "actual_cninfo": "2026-04-23",
+            "scheduled_eastmoney": "2026-04-23",
+            "scheduled_cninfo": "2026-04-23"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-22",
+            "scheduled_date": "2026-08-22",
+            "effective_date": "2026-08-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-22",
+            "actual_cninfo": "2026-08-22",
+            "scheduled_eastmoney": "2026-08-22",
+            "scheduled_cninfo": "2026-08-22"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本仓可继续持有但须设纪律；成长型只能小仓事件跟踪，不能把 AI PCB 叙事当安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 280,
+            "line_end": 280,
+            "quote": "## 第八步：最终决策与行动清单",
+            "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-22"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -297,7 +530,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "a1591a9be7fb3e815f12",
   "detail_path": "./data/decision_details/a1591a9be7fb3e815f12.json"
 }

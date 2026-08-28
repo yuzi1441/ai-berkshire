@@ -242,6 +242,73 @@
         "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "不追高；55-60 元且 2026H1 现金流修复才允许研究性小仓，稳健型等 35-45 元，保守型等 25-35 元并验证周期下行后的现金流。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "高估值且现金流未改善时分批降风险，不继续扩大周期暴露。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落。",
+        "metrics": [
+          "利润",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -254,6 +321,183 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "不追高；55-60 元且 2026H1 现金流修复才允许研究性小仓，稳健型等 35-45 元，保守型等 25-35 元并验证周期下行后的现金流。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-24",
+        "calendar_dates": [
+          "2026-08-24"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-24",
+            "scheduled_date": "2026-08-24",
+            "effective_date": "2026-08-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-24",
+            "actual_cninfo": "2026-08-24",
+            "scheduled_eastmoney": "2026-08-24",
+            "scheduled_cninfo": "2026-08-24"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "高估值且现金流未改善时分批降风险，不继续扩大周期暴露。",
+        "metrics": [
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-24",
+        "calendar_dates": [
+          "2026-04-27",
+          "2026-08-24"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-27",
+            "scheduled_date": "2026-04-27",
+            "effective_date": "2026-04-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-27",
+            "actual_cninfo": "2026-04-27",
+            "scheduled_eastmoney": "2026-04-27",
+            "scheduled_cninfo": "2026-04-27"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-24",
+            "scheduled_date": "2026-08-24",
+            "effective_date": "2026-08-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-24",
+            "actual_cninfo": "2026-08-24",
+            "scheduled_eastmoney": "2026-08-24",
+            "scheduled_cninfo": "2026-08-24"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落。",
+        "metrics": [
+          "利润",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 193,
+            "line_end": 239,
+            "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+            "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-24",
+        "calendar_dates": [
+          "2026-04-27",
+          "2026-08-24"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-27",
+            "scheduled_date": "2026-04-27",
+            "effective_date": "2026-04-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-27",
+            "actual_cninfo": "2026-04-27",
+            "scheduled_eastmoney": "2026-04-27",
+            "scheduled_cninfo": "2026-04-27"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-24",
+            "scheduled_date": "2026-08-24",
+            "effective_date": "2026-08-24",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-24",
+            "actual_cninfo": "2026-08-24",
+            "scheduled_eastmoney": "2026-08-24",
+            "scheduled_cninfo": "2026-08-24"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-24"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -373,7 +617,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "b313858d0ee09d72df4f",
   "detail_path": "./data/decision_details/b313858d0ee09d72df4f.json"
 }

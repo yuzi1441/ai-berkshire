@@ -273,6 +273,77 @@
         "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -285,6 +356,155 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "订单",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-22",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-22",
+            "scheduled_date": "2026-04-22",
+            "effective_date": "2026-04-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-22",
+            "actual_cninfo": "2026-04-22",
+            "scheduled_eastmoney": "2026-04-22",
+            "scheduled_cninfo": "2026-04-22"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 258,
+            "line_end": 298,
+            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -500,7 +720,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "f95a45f9adc96e17cb04",
   "detail_path": "./data/decision_details/f95a45f9adc96e17cb04.json"
 }

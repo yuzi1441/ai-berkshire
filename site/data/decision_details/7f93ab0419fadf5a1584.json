@@ -397,6 +397,72 @@
         "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "38.80 元、5.20% 税前静态股息率仅属合理偏低；36.65 元以下才开始小仓研究，34-36 元为稳健研究区，33.60 元以下提供更厚收益率缓冲。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "分红覆盖与资本缓冲仍强时可长期持有，但不能把银行当成债券；持仓和加仓仍需受银行股总暴露约束。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复。",
+        "metrics": [
+          "回款",
+          "政策"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -409,6 +475,101 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "38.80 元、5.20% 税前静态股息率仅属合理偏低；36.65 元以下才开始小仓研究，34-36 元为稳健研究区，33.60 元以下提供更厚收益率缓冲。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "分红覆盖与资本缓冲仍强时可长期持有，但不能把银行当成债券；持仓和加仓仍需受银行股总暴露约束。",
+        "metrics": [
+          "分红"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复。",
+        "metrics": [
+          "回款",
+          "政策"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 137,
+            "line_end": 217,
+            "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+            "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 0,
+    "next_review_date": null
   },
   "execution_policy": {
     "schema_version": 1,
@@ -540,7 +701,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "7f93ab0419fadf5a1584",
   "detail_path": "./data/decision_details/7f93ab0419fadf5a1584.json"
 }

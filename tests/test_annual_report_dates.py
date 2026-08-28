@@ -31,6 +31,26 @@ class AnnualReportDateTests(unittest.TestCase):
         self.assertIsNone(annual.effective_appointment(None))
         self.assertIsNone(annual.cninfo_effective_appointment({}))
 
+    def test_report_period_record_with_matching_sources_is_usable(self):
+        record = annual.report_period_record(
+            {"company": "示例公司", "ticker": "600000.SH"},
+            "2026-06-30",
+            {"600000": {"ACTUAL_PUBLISH_DATE": "2026-08-30"}},
+            {"600000": {"f006d_0102": "2026-08-30"}},
+        )
+        self.assertEqual(record["effective_date"], "2026-08-30")
+        self.assertEqual(record["date_status"], "已披露")
+
+    def test_report_period_record_does_not_choose_between_conflicting_sources(self):
+        record = annual.report_period_record(
+            {"company": "示例公司", "ticker": "600000.SH"},
+            "2026-06-30",
+            {"600000": {"ACTUAL_PUBLISH_DATE": "2026-08-30"}},
+            {"600000": {"f006d_0102": "2026-08-31"}},
+        )
+        self.assertIsNone(record["effective_date"])
+        self.assertEqual(record["date_status"], "source_mismatch")
+
 
 if __name__ == "__main__":
     unittest.main()

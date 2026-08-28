@@ -176,6 +176,69 @@
         "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "价值投资者不在 24 元附近追高，等待 17-20 元或资产注入细节证明每股价值显著增厚；趋势投资者的小仓跟踪不能当作低估买入。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本持仓可分批管理，高成本持仓要降低预期收益率；金锑价格、注入条款或中报转弱时减仓复盘。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "17-20 元且金锑钨价格未系统性反转，或资产注入评估、矿权成本和业绩承诺明确增厚每股价值，同时自产资源利润和安全生产得到验证。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -188,6 +251,147 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "低成本持仓可分批管理，高成本持仓要降低预期收益率；金锑价格、注入条款或中报转弱时减仓复盘。",
+        "metrics": [],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "17-20 元且金锑钨价格未系统性反转，或资产注入评估、矿权成本和业绩承诺明确增厚每股价值，同时自产资源利润和安全生产得到验证。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-21",
+        "calendar_dates": [
+          "2026-04-27",
+          "2026-08-21"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-27",
+            "scheduled_date": "2026-04-27",
+            "effective_date": "2026-04-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-27",
+            "actual_cninfo": "2026-04-27",
+            "scheduled_eastmoney": "2026-04-27",
+            "scheduled_cninfo": "2026-04-27"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-21",
+            "scheduled_date": "2026-08-21",
+            "effective_date": "2026-08-21",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-21",
+            "actual_cninfo": "2026-08-21",
+            "scheduled_eastmoney": "2026-08-21",
+            "scheduled_cninfo": "2026-08-21"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "价值投资者不在 24 元附近追高，等待 17-20 元或资产注入细节证明每股价值显著增厚；趋势投资者的小仓跟踪不能当作低估买入。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 281,
+            "line_end": 291,
+            "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+            "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-21"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -294,7 +498,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "a25dcab6d9249f4cf64d",
   "detail_path": "./data/decision_details/a25dcab6d9249f4cf64d.json"
 }

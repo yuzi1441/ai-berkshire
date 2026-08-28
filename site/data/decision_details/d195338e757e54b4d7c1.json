@@ -202,6 +202,74 @@
         "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "现价不大举买入，等待更厚安全边际或明确经营改善。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有但不加仓；连续两个季度扣非净利低于 5 亿元时降低风险暴露。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "股价回调至 45-50 元；或中报扣非净利改善且经营现金流转正；或赛豆首款车型得到有效市场验证。",
+        "metrics": [
+          "经营现金流",
+          "利润"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -214,6 +282,152 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可继续持有但不加仓；连续两个季度扣非净利低于 5 亿元时降低风险暴露。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "股价回调至 45-50 元；或中报扣非净利改善且经营现金流转正；或赛豆首款车型得到有效市场验证。",
+        "metrics": [
+          "经营现金流",
+          "利润"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-20",
+        "calendar_dates": [
+          "2026-08-20"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-20",
+            "scheduled_date": "2026-08-20",
+            "effective_date": "2026-08-20",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-20",
+            "actual_cninfo": "2026-08-20",
+            "scheduled_eastmoney": "2026-08-20",
+            "scheduled_cninfo": "2026-08-20"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "现价不大举买入，等待更厚安全边际或明确经营改善。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 425,
+            "quote": "**如果股市明天关闭5年，你愿意以这个价格持有吗？** > 以61元买入并持有5年，核心赌注是：（1）华为合作关系5年内不会实质性恶化；（2）问界品牌在高端市场站稳脚跟；（3）净利润从60亿增长至100亿+。如果这三个条件满足，5年后PE 15-18x对应每股100-130元，年化回报10-16%。但如果华为策略转向或赛力斯去华为化失败，5年后可能仅值40元。**这不是一个让人\"非常安心\"的5年持有标的——不确定性太大。段永平可能会说：\"看不懂的就不要碰。\"** ---",
+            "supports": "L391-L425。估值虽较高点明显回落，但核心护城河受华为战略约束，盈利质量和自主品牌仍未验证。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-20"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -320,7 +534,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "d195338e757e54b4d7c1",
   "detail_path": "./data/decision_details/d195338e757e54b4d7c1.json"
 }

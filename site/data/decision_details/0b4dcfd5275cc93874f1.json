@@ -146,6 +146,69 @@
         "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价约 330 元处于概念泡沫区，当前回避；真心看好赛道也应等待 100-120 元再考虑，100 元以下且经营信号改善时吸引力才明显提高。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "至少减至半仓，保留底仓也不宜超过组合 3%-5%；不能把人形机器人长期方向正确等同于当前价格合理。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入 100-120 元、特斯拉确认大规模量产订单并指定公司供应，或季度毛利率重新稳定在 40%以上后重审；量产继续推迟、毛利率跌破 30%、实控人继续减持或杠杆资金异常攀升即维持回避/减仓。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -158,6 +221,130 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "价格进入 100-120 元、特斯拉确认大规模量产订单并指定公司供应，或季度毛利率重新稳定在 40%以上后重审；量产继续推迟、毛利率跌破 30%、实控人继续减持或杠杆资金异常攀升即维持回避/减仓。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "债务"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-23",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-23",
+            "scheduled_date": "2026-04-23",
+            "effective_date": "2026-04-23",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-23",
+            "actual_cninfo": "2026-04-23",
+            "scheduled_eastmoney": "2026-04-23",
+            "scheduled_cninfo": "2026-04-23"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价约 330 元处于概念泡沫区，当前回避；真心看好赛道也应等待 100-120 元再考虑，100 元以下且经营信号改善时吸引力才明显提高。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "至少减至半仓，保留底仓也不宜超过组合 3%-5%；不能把人形机器人长期方向正确等同于当前价格合理。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 317,
+            "line_end": 317,
+            "quote": "### 最终决策表",
+            "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -277,7 +464,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "0b4dcfd5275cc93874f1",
   "detail_path": "./data/decision_details/0b4dcfd5275cc93874f1.json"
 }

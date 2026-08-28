@@ -212,6 +212,86 @@
         "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "11.19 元附近不急买；10-11.5 元只适合交易型押注修复，8-10 元才可观察或小仓，长期价值投资者优先等 8 元附近或连续两个季度 ROE、现金流改善。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可以持有观察但不盲目加仓，重点核对半年报和三季报的经营现金流、应收、存货及毛利率；13 元以上而利润未上修应谨慎。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "回款",
+          "库存"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "连续两季 OCF 改善且全年 OCF/净利润接近 1，应收和存货周转改善、ROE 向 5%-7% 修复，民机 MRO/PMA/国际业务出现可量化订单；ROE 仍低于 3% 且 PE 高于 45 倍、现金流持续为负或题材涨价无利润兑现即重审。",
+        "metrics": [
+          "利润",
+          "ROE",
+          "订单",
+          "回款",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -224,6 +304,196 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "11.19 元附近不急买；10-11.5 元只适合交易型押注修复，8-10 元才可观察或小仓，长期价值投资者优先等 8 元附近或连续两个季度 ROE、现金流改善。",
+        "metrics": [
+          "ROE"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "可以持有观察但不盲目加仓，重点核对半年报和三季报的经营现金流、应收、存货及毛利率；13 元以上而利润未上修应谨慎。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "回款",
+          "库存"
+        ],
+        "periods": [
+          "H1",
+          "Q3",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "连续两季 OCF 改善且全年 OCF/净利润接近 1，应收和存货周转改善、ROE 向 5%-7% 修复，民机 MRO/PMA/国际业务出现可量化订单；ROE 仍低于 3% 且 PE 高于 45 倍、现金流持续为负或题材涨价无利润兑现即重审。",
+        "metrics": [
+          "利润",
+          "ROE",
+          "订单",
+          "回款",
+          "库存",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 292,
+            "line_end": 379,
+            "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+            "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-27",
+        "calendar_dates": [
+          "2026-04-28",
+          "2026-08-27"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-28",
+            "scheduled_date": "2026-04-28",
+            "effective_date": "2026-04-28",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-28",
+            "actual_cninfo": "2026-04-28",
+            "scheduled_eastmoney": "2026-04-28",
+            "scheduled_cninfo": "2026-04-28"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-27",
+            "scheduled_date": "2026-08-27",
+            "effective_date": "2026-08-27",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-27",
+            "actual_cninfo": "2026-08-27",
+            "scheduled_eastmoney": "2026-08-27",
+            "scheduled_cninfo": "2026-08-27"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-27"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -343,7 +613,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "39666279f9aaa9b4e2bb",
   "detail_path": "./data/decision_details/39666279f9aaa9b4e2bb.json"
 }

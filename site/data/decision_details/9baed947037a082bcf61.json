@@ -355,6 +355,78 @@
         "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告明确要求先等半年报六项指标判决，验证前不建仓；四项及以上转正面后可在 36-45 元分批，30-36 元仍要求半年报未转负面。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓；低估值不支持恐慌卖出，但订单结构、海缆增速和现金流恶化不允许在验证前加码。",
+        "metrics": [
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "H1 现金流转正、海缆毛利率不低于 30%、海缆收入增速高于整体、海缆订单守住 100 亿元、应收增速低于收入、扣套期后毛利率不低于 22%，六项中至少四项转正；三项以上转负或出现订单缩量、治理/海外减值即继续回避或减仓。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "订单",
+          "回款"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -367,6 +439,173 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告明确要求先等半年报六项指标判决，验证前不建仓；四项及以上转正面后可在 36-45 元分批，30-36 元仍要求半年报未转负面。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-05",
+        "calendar_dates": [
+          "2026-08-05"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-05",
+            "scheduled_date": "2026-08-05",
+            "effective_date": "2026-08-05",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-05",
+            "actual_cninfo": "2026-08-05",
+            "scheduled_eastmoney": "2026-08-05",
+            "scheduled_cninfo": "2026-08-05"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "持有但不加仓；低估值不支持恐慌卖出，但订单结构、海缆增速和现金流恶化不允许在验证前加码。",
+        "metrics": [
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-05",
+        "calendar_dates": [
+          "2026-04-22",
+          "2026-08-05"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-22",
+            "scheduled_date": "2026-04-22",
+            "effective_date": "2026-04-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-22",
+            "actual_cninfo": "2026-04-22",
+            "scheduled_eastmoney": "2026-04-22",
+            "scheduled_cninfo": "2026-04-22"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-05",
+            "scheduled_date": "2026-08-05",
+            "effective_date": "2026-08-05",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-05",
+            "actual_cninfo": "2026-08-05",
+            "scheduled_eastmoney": "2026-08-05",
+            "scheduled_cninfo": "2026-08-05"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "H1 现金流转正、海缆毛利率不低于 30%、海缆收入增速高于整体、海缆订单守住 100 亿元、应收增速低于收入、扣套期后毛利率不低于 22%，六项中至少四项转正；三项以上转负或出现订单缩量、治理/海外减值即继续回避或减仓。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "订单",
+          "回款"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 762,
+            "line_end": 762,
+            "quote": "### 8.2 最终结论",
+            "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-05",
+        "calendar_dates": [
+          "2026-08-05"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-05",
+            "scheduled_date": "2026-08-05",
+            "effective_date": "2026-08-05",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-05",
+            "actual_cninfo": "2026-08-05",
+            "scheduled_eastmoney": "2026-08-05",
+            "scheduled_cninfo": "2026-08-05"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-05"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -572,7 +811,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "9baed947037a082bcf61",
   "detail_path": "./data/decision_details/9baed947037a082bcf61.json"
 }

@@ -486,6 +486,79 @@
         "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "19.14 元不新建仓；13.3-15 元且半年报确认设备毛利、扣非和现金流未恶化时仅建研究仓，11.8-13.3 元稳健分批，10.7 元以下仍需确认论文未破坏。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "成本低、现金流和设备毛利未破坏时可持有观察，不因低 PB 或订单新闻加仓；仓位重且价格接近 19-21.5 元时应降低集中度。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "电气设备毛利率约 20%、海外增长同时改善毛利和回款、滚动 OCF/归母净利大于 1、Capex/OCF 向 1 倍收敛、硅料毛利转正且无新增大额减值。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -498,6 +571,189 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "19.14 元不新建仓；13.3-15 元且半年报确认设备毛利、扣非和现金流未恶化时仅建研究仓，11.8-13.3 元稳健分批，10.7 元以下仍需确认论文未破坏。",
+        "metrics": [
+          "毛利率"
+        ],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-22",
+        "calendar_dates": [
+          "2026-08-22"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-22",
+            "scheduled_date": "2026-08-22",
+            "effective_date": "2026-08-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-22",
+            "actual_cninfo": "2026-08-22",
+            "scheduled_eastmoney": "2026-08-22",
+            "scheduled_cninfo": "2026-08-22"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "成本低、现金流和设备毛利未破坏时可持有观察，不因低 PB 或订单新闻加仓；仓位重且价格接近 19-21.5 元时应降低集中度。",
+        "metrics": [
+          "毛利率",
+          "订单",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-22",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-22"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-22",
+            "scheduled_date": "2026-08-22",
+            "effective_date": "2026-08-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-22",
+            "actual_cninfo": "2026-08-22",
+            "scheduled_eastmoney": "2026-08-22",
+            "scheduled_cninfo": "2026-08-22"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "电气设备毛利率约 20%、海外增长同时改善毛利和回款、滚动 OCF/归母净利大于 1、Capex/OCF 向 1 倍收敛、硅料毛利转正且无新增大额减值。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 241,
+            "line_end": 357,
+            "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+            "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-22",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-22"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-22",
+            "scheduled_date": "2026-08-22",
+            "effective_date": "2026-08-22",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-22",
+            "actual_cninfo": "2026-08-22",
+            "scheduled_eastmoney": "2026-08-22",
+            "scheduled_cninfo": "2026-08-22"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 3,
+    "next_review_date": "2026-08-22"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -617,7 +873,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "2ac73a79a72dd09ad2b6",
   "detail_path": "./data/decision_details/2ac73a79a72dd09ad2b6.json"
 }

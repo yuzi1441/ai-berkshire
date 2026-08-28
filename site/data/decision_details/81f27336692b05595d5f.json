@@ -193,6 +193,72 @@
         "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 618.02 元处于周期顶部定价，明确回避；合理价值约 240-300 元，只有 180 元以下且周期出清后才有安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "分批止盈、至少减半，剩余只按周期投机头寸管理；低成本持仓至少收回本金，不能把中报预增当作长期利润。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估。",
+        "metrics": [
+          "收入",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -205,6 +271,118 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "分批止盈、至少减半，剩余只按周期投机头寸管理；低成本持仓至少收回本金，不能把中报预增当作长期利润。",
+        "metrics": [
+          "利润"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-11",
+        "calendar_dates": [
+          "2026-08-11"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-11",
+            "scheduled_date": "2026-08-11",
+            "effective_date": "2026-08-11",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-11",
+            "actual_cninfo": "2026-08-11",
+            "scheduled_eastmoney": "2026-08-11",
+            "scheduled_cninfo": "2026-08-11"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 618.02 元处于周期顶部定价，明确回避；合理价值约 240-300 元，只有 180 元以下且周期出清后才有安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估。",
+        "metrics": [
+          "收入",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 184,
+            "line_end": 256,
+            "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+            "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 1,
+    "next_review_date": "2026-08-11"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -311,7 +489,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "81f27336692b05595d5f",
   "detail_path": "./data/decision_details/81f27336692b05595d5f.json"
 }

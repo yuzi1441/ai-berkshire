@@ -190,6 +190,79 @@
         "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 241.11 元处于 200-260 元合理低估区，允许分批建仓并称当前可配置半仓；但关税、KTM 变局和极核盈利尚未验证，应分段执行而非一次打满。",
+        "metrics": [
+          "政策"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "继续持有但不急于加仓，先确认 2026Q2-Q3 利润增速、极核毛利率、美国关税和欧洲渠道重建。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "政策"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "200-220 元是理想加仓区，200 元以下安全边际更强；极核季度毛利率转正、关税缓和或 ATV 全球份额突破 8% 可增强判断。Forward PE 超过 30 倍、关税超过 50%且无法规避、全年利润个位数增长或管理层再大额减持即失效。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "政策",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -202,6 +275,157 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "继续持有但不急于加仓，先确认 2026Q2-Q3 利润增速、极核毛利率、美国关税和欧洲渠道重建。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "政策"
+        ],
+        "periods": [
+          "H1",
+          "Q3"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年三季报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-18",
+        "calendar_dates": [
+          "2026-08-18"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-18",
+            "scheduled_date": "2026-08-18",
+            "effective_date": "2026-08-18",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-18",
+            "actual_cninfo": "2026-08-18",
+            "scheduled_eastmoney": "2026-08-18",
+            "scheduled_cninfo": "2026-08-18"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "200-220 元是理想加仓区，200 元以下安全边际更强；极核季度毛利率转正、关税缓和或 ATV 全球份额突破 8% 可增强判断。Forward PE 超过 30 倍、关税超过 50%且无法规避、全年利润个位数增长或管理层再大额减持即失效。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "政策",
+          "估值"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-18",
+        "calendar_dates": [
+          "2026-04-16",
+          "2026-08-18"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-16",
+            "scheduled_date": "2026-04-16",
+            "effective_date": "2026-04-16",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-16",
+            "actual_cninfo": "2026-04-16",
+            "scheduled_eastmoney": "2026-04-16",
+            "scheduled_cninfo": "2026-04-16"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-18",
+            "scheduled_date": "2026-08-18",
+            "effective_date": "2026-08-18",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-18",
+            "actual_cninfo": "2026-08-18",
+            "scheduled_eastmoney": "2026-08-18",
+            "scheduled_cninfo": "2026-08-18"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 241.11 元处于 200-260 元合理低估区，允许分批建仓并称当前可配置半仓；但关税、KTM 变局和极核盈利尚未验证，应分段执行而非一次打满。",
+        "metrics": [
+          "政策"
+        ],
+        "periods": [],
+        "schedule_type": "event",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 433,
+            "line_end": 433,
+            "quote": "### 最终决策",
+            "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+          }
+        ],
+        "schedule_label": "事件触发后",
+        "date_status": "event_trigger",
+        "status_label": "事件触发后复核",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-08-18"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -340,7 +564,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "ecb2e8e2cd42f5d37661",
   "detail_path": "./data/decision_details/ecb2e8e2cd42f5d37661.json"
 }

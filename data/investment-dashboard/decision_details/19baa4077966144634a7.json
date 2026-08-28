@@ -204,6 +204,75 @@
         "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 19.58 元高于计划买入区间，不追；17-18 元为激进小仓，14.5-16 元稳健分批，12-13.5 元才有较厚安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "仓位合理时可以持有，继续核对海外毛利、扣非利润、应收和逾期垫款、财务费用及 H 股募集资金回报。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "进入对应价格带，且海外收入保持增长、国际毛利率不低于 28%、经营现金流不持续弱于净利润、信用资产未恶化。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -216,6 +285,168 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "仓位合理时可以持有，继续核对海外毛利、扣非利润、应收和逾期垫款、财务费用及 H 股募集资金回报。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "回款"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "进入对应价格带，且海外收入保持增长、国际毛利率不低于 28%、经营现金流不持续弱于净利润、信用资产未恶化。",
+        "metrics": [
+          "毛利率",
+          "经营现金流",
+          "利润",
+          "收入",
+          "产品/客户"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-31"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": null,
+            "scheduled_date": "2026-08-31",
+            "effective_date": "2026-08-31",
+            "effective_type": "scheduled",
+            "actual_verification": "missing",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": null,
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-31",
+            "scheduled_cninfo": "2026-08-31"
+          }
+        ]
+      },
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "报告基准价 19.58 元高于计划买入区间，不追；17-18 元为激进小仓，14.5-16 元稳健分批，12-13.5 元才有较厚安全边际。",
+        "metrics": [],
+        "periods": [],
+        "schedule_type": "price",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 186,
+            "line_end": 226,
+            "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+            "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+          }
+        ],
+        "schedule_label": "随行情判断",
+        "date_status": "price_only",
+        "status_label": "随行情判断",
+        "next_review_date": null,
+        "calendar_dates": [],
+        "calendar_date_details": []
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-04-30"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -359,7 +590,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "19baa4077966144634a7",
   "detail_path": "./data/decision_details/19baa4077966144634a7.json"
 }

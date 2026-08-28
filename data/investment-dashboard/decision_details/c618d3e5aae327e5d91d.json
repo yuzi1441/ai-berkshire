@@ -144,6 +144,83 @@
         "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
       }
     ],
+    "review_tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "12.42 元不追；8.5-9 元且毛利率不再创新低、应收/收入开始下降时只建三分之一观察仓，7-8 元且现金转化和库存改善时稳健分批，6.3 元以下仍需排除质量与治理问题。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "回款",
+          "库存"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "小比例观察仓可等待中报和后续两个季度，不在应收与库存未修复时机械补仓；14 元以上而盈利没有上修可减仓，17 元附近接近乐观终值。",
+        "metrics": [
+          "回款",
+          "库存"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "收入",
+          "库存",
+          "产能/销量"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ]
+      }
+    ],
     "enabled": true,
     "human_reviewed": true,
     "human_reviewed_at": "2026-08-27T00:00:00+08:00",
@@ -156,6 +233,193 @@
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
     }
+  },
+  "human_review_plan": {
+    "schema_version": 1,
+    "status": "ready",
+    "source": "human_main_report + official_filing_calendar",
+    "generated_at": "2026-08-28T22:21:47+08:00",
+    "calendar_generated_at": "2026-08-28T22:16:13+08:00",
+    "reviewed_at": "2026-08-27T00:00:00+08:00",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope": "entry",
+        "scope_label": "买入前提",
+        "title": "复核买入前提",
+        "content": "12.42 元不追；8.5-9 元且毛利率不再创新低、应收/收入开始下降时只建三分之一观察仓，7-8 元且现金转化和库存改善时稳健分批，6.3 元以下仍需排除质量与治理问题。",
+        "metrics": [
+          "毛利率",
+          "收入",
+          "回款",
+          "库存"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "empty_position_action",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "收入",
+          "库存",
+          "产能/销量"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-04-30",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "小比例观察仓可等待中报和后续两个季度，不在应收与库存未修复时机械补仓；14 元以上而盈利没有上修可减仓，17 元附近接近乐观终值。",
+        "metrics": [
+          "回款",
+          "库存"
+        ],
+        "periods": [
+          "H1"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年中报",
+        "date_status": "pending",
+        "status_label": "待披露",
+        "next_review_date": "2026-08-29",
+        "calendar_dates": [
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      }
+    ],
+    "task_count": 3,
+    "due_count": 2,
+    "next_review_date": "2026-04-30"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -275,7 +539,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "7811f94d5512021bd8d0",
+  "generation_id": "5cf6105a432bb168df88",
   "detail_id": "c618d3e5aae327e5d91d",
   "detail_path": "./data/decision_details/c618d3e5aae327e5d91d.json"
 }
