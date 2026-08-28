@@ -1477,7 +1477,11 @@ function renderHumanReviewPlan(item, { compact = false } = {}) {
     wrap.append(note);
     return wrap;
   }
-  const visibleTasks = compact ? tasks.slice(0, 1) : tasks;
+  // The main table also needs to expose every human-review task directly.
+  // Keep the compact mode visually lighter, but do not reduce it to a single
+  // summary task; the user should be able to see all report conditions and
+  // their review dates without opening the detail drawer.
+  const visibleTasks = tasks;
   for (const task of visibleTasks) {
     const taskWrap = document.createElement("div");
     taskWrap.className = `human-review-task human-review-task-${task.date_status || "unknown"}`;
@@ -3293,6 +3297,7 @@ function renderRows() {
     const humanReviewTd = document.createElement("td");
     humanReviewTd.className = "human-review-cell";
     humanReviewTd.append(renderHumanReviewState(item, quote));
+    humanReviewTd.append(renderHumanReviewPlan(item, { compact: true }));
     tr.append(humanReviewTd);
 
     const change = formatChange(quote);

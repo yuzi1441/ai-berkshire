@@ -979,6 +979,20 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-plan-detail h4 { margin: 0 0 7px; color: var(--ink-soft); font-size: 12px; }
 .human-review-plan { display: flex; flex-direction: column; gap: 8px; }
 .human-review-plan-compact { gap: 4px; }
+.human-review-plan-compact .human-review-task {
+  padding: 6px 7px;
+  background: rgba(255, 255, 255, 0.012);
+}
+.human-review-plan-compact .human-review-task strong { font-size: 10.5px; }
+.human-review-plan-compact .human-review-task p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.human-review-plan-compact .human-review-task p.human-review-note {
+  -webkit-line-clamp: 2;
+}
 .human-review-task {
   padding: 8px 9px;
   border-left: 3px solid var(--line-2);

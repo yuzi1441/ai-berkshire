@@ -410,6 +410,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("humanReviewAction", app)
         self.assertIn("human_review_plan", app)
         self.assertIn("renderHumanReviewPlan", app)
+        self.assertIn('humanReviewTd.append(renderHumanReviewPlan(item, { compact: true }))', app)
         self.assertIn("humanReviewTaskDateText", app)
         self.assertIn("东财+巨潮核验", app)
         self.assertIn('"当前状态 / 非实时参考"', app)
