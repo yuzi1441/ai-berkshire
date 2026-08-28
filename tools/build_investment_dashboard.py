@@ -1692,11 +1692,21 @@ def validate_human_review_tasks(tasks: Any, ticker: str) -> None:
         seen.add(task_id)
 
 
-def load_human_review_calendar(path: Path) -> dict[str, Any]:
-    """Load the official filing-date extension, tolerating older snapshots."""
+def load_human_review_calendar(path: Path, fallback_path: Path | None = None) -> dict[str, Any]:
+    """Load official filing dates, with a source seed for pre-extension snapshots."""
     payload = load_json(path, {})
     periods = payload.get("report_periods")
-    return payload if isinstance(periods, list) else {**payload, "report_periods": []}
+    if isinstance(periods, list):
+        return payload
+    if fallback_path and fallback_path.is_file():
+        fallback = load_json(fallback_path, {})
+        if isinstance(fallback.get("report_periods"), list):
+            return {
+                **fallback,
+                "runtime_snapshot_generated_at": payload.get("generated_at"),
+                "runtime_snapshot_legacy": True,
+            }
+    return {**payload, "report_periods": []}
 
 
 def human_review_calendar_entries(
@@ -5397,7 +5407,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     )
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
     human_review_calendar = load_human_review_calendar(
-        data_directory / "annual_report_dates.json"
+        data_directory / "annual_report_dates.json",
+        data_directory / "human_review_calendar_seed.json",
     )
     attach_human_review_plans(decisions, human_review_calendar)
     attach_execution_policies(decisions)

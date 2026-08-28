@@ -270,6 +270,33 @@ class InvestmentDashboardTests(unittest.TestCase):
         self.assertEqual(task["status_label"], "已到期待确认")
         self.assertEqual(task["next_review_date"], "2026-08-20")
 
+    def test_legacy_calendar_uses_source_seed_until_runtime_snapshot_is_extended(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            legacy = root / "annual_report_dates.json"
+            seed = root / "human_review_calendar_seed.json"
+            legacy.write_text(json.dumps({"generated_at": "2026-08-27T08:32:14+08:00"}), encoding="utf-8")
+            seed.write_text(
+                json.dumps(
+                    {
+                        "generated_at": "2026-08-28T22:16:13+08:00",
+                        "report_periods": [{"period_key": "2026H1", "records": []}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            loaded = dashboard.load_human_review_calendar(legacy, seed)
+            self.assertEqual(len(loaded["report_periods"]), 1)
+            self.assertTrue(loaded["runtime_snapshot_legacy"])
+
+            current = root / "current.json"
+            current.write_text(
+                json.dumps({"report_periods": [{"period_key": "2026H1", "records": []}]}),
+                encoding="utf-8",
+            )
+            loaded_current = dashboard.load_human_review_calendar(current, seed)
+            self.assertNotIn("runtime_snapshot_legacy", loaded_current)
+
     def test_uses_data_cutoff_not_filesystem_modification_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
