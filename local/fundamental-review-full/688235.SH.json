@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-29T15:16:20+08:00",
+  "generated_at": "2026-08-29T15:48:18+08:00",
   "company": "百济神州",
   "ticker": "688235.SH",
   "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
@@ -102,7 +102,7 @@
     "tasks": [
       {
         "task_id": "entry",
-        "status": "verified",
+        "status": "data_insufficient",
         "evidence_document_ids": [
           "local_1"
         ],
@@ -110,24 +110,27 @@
           {
             "document_id": "local_1",
             "line_ref": "L5",
-            "exact_quote": "**价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。"
+            "exact_quote": "> **价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。"
           },
           {
             "document_id": "local_1",
             "line_ref": "L358",
-            "exact_quote": "若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。"
+            "exact_quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
           },
           {
             "document_id": "local_1",
             "line_ref": "L359",
-            "exact_quote": "只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。"
+            "exact_quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
           }
         ],
-        "missing_codes": []
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
       },
       {
         "task_id": "holder",
-        "status": "verified",
+        "status": "data_insufficient",
         "evidence_document_ids": [
           "local_1"
         ],
@@ -135,45 +138,53 @@
           {
             "document_id": "local_1",
             "line_ref": "L360",
-            "exact_quote": "已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。"
+            "exact_quote": "| 已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L395",
+            "exact_quote": "**最终一句话**：百济神州值得长期跟踪，也可能成为中国创新药全球化最重要样本之一；但在当前估值下，投资者买的不是“便宜资产”，而是“高质量成长继续兑现”。如果没有持仓，耐心比冲动更值钱；如果已经持有，真正要做的是盯住 BRUKINSA 增速、经营杠杆、FCF per share 与第二曲线，而不是被“创新药龙头”四个字催眠。"
           },
           {
             "document_id": "local_1",
             "line_ref": "L271",
-            "exact_quote": "SBC/收入维持高位；年度稀释率超过 3-5%。用每股 FCF 重估，而非公司 FCF。"
-          },
-          {
-            "document_id": "local_1",
-            "line_ref": "L378",
-            "exact_quote": "年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+            "exact_quote": "| SBC 与股本稀释 | 中 | 中 | SBC/收入维持高位；年度稀释率超过 3-5%。 | 用每股 FCF 重估，而非公司 FCF。 |"
           }
         ],
-        "missing_codes": []
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
       },
       {
         "task_id": "risk",
-        "status": "verified",
+        "status": "data_insufficient",
         "evidence_document_ids": [
           "local_1"
         ],
         "evidence_lines": [
           {
             "document_id": "local_1",
-            "line_ref": "L359",
-            "exact_quote": "只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。"
+            "line_ref": "L373",
+            "exact_quote": "1. BRUKINSA 同比连续两季低于 20%。"
           },
           {
             "document_id": "local_1",
-            "line_ref": "L358",
-            "exact_quote": "若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。"
+            "line_ref": "L375",
+            "exact_quote": "3. 毛利率跌破 85% 且不是短期产品组合扰动。"
           },
           {
             "document_id": "local_1",
-            "line_ref": "L373-L378",
-            "exact_quote": "BRUKINSA 同比连续两季低于 20%。公司下调 2026 或 2027 收入/经营利润指引。毛利率跌破 85% 且不是短期产品组合扰动。FCF margin 低于 10%，同时费用继续扩张。关键管线验证性试验失败或安全性标签恶化。年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+            "line_ref": "L378",
+            "exact_quote": "6. 年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
           }
         ],
-        "missing_codes": []
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
       }
     ],
     "model": "deepseek-v4-flash",
