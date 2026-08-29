@@ -1760,6 +1760,7 @@ const fundamentalReviewStatusMeta = {
   data_gap: { label: "存在数据缺口", tone: "gap", rank: 50 },
   waiting_evidence: { label: "等待新证据", tone: "waiting", rank: 40 },
   error: { label: "复核失败", tone: "stale", rank: 35 },
+  historical_review: { label: "上一轮日常复核", tone: "historical", rank: 32 },
   improving: { label: "改善条件命中", tone: "improving", rank: 30 },
   no_rules: { label: "暂无经营规则", tone: "waiting", rank: 20 },
   clear: { label: "暂无确认红线", tone: "clear", rank: 10 },
@@ -3379,6 +3380,7 @@ function renderSummary(visible) {
       ["日常红线", counts.redline || 0],
       ["日常关注", counts.attention || 0],
       ["日常改善", counts.improving || 0],
+      ["上一轮日常复核", counts.historical_review || 0],
       ["日常数据不足", (counts.data_gap || 0) + (counts.evidence_ready || 0)],
       ["日常等待证据", counts.waiting_evidence || 0],
       ["日常复核失败", counts.error || 0],
@@ -3628,13 +3630,24 @@ function renderRoutineReviewCell(review) {
   reviewer.textContent = routine.reviewer || "DeepSeek 日常核验";
   const evidence = document.createElement("p");
   evidence.className = "fundamental-review-meta muted";
-  evidence.textContent = `新证据 ${routine.current_evidence_count ?? review.current_evidence_count ?? 0} 份 · 最近 ${routine.latest_evidence_date || review.latest_evidence_date || "未记录"}`;
+  const isHistorical = routineReviewMeta(review).status === "historical_review";
+  evidence.textContent = isHistorical
+    ? `保存的本地证据 ${routine.current_evidence_count ?? 0} 份 · 非实时结果`
+    : `新证据 ${routine.current_evidence_count ?? review.current_evidence_count ?? 0} 份 · 最近 ${routine.latest_evidence_date || review.latest_evidence_date || "未记录"}`;
   const next = document.createElement("p");
   next.className = "fundamental-review-meta muted";
   next.textContent = `上次 ${shortReviewDate(routine.generated_at || review.generated_at)} · 下次 ${shortReviewDate(review.next_check_at || state.fundamentalReviewSnapshot?.next_check_at)}`;
   const zcodeCount = (review.evidence_documents || [])
     .filter((document) => document.source_role === "zcode_current_evidence_extract").length;
-  if (routineReviewMeta(review).status === "error") {
+  const legacyTasks = routine.legacy_daily?.tasks || [];
+  if (legacyTasks.length) {
+    const historical = document.createElement("p");
+    historical.className = "fundamental-review-meta routine-review-history";
+    const taskLabels = { entry: "买入前提", holder: "持仓验证", risk: "原始风险任务" };
+    const statusLabels = { verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足" };
+    historical.textContent = `历史任务：${legacyTasks.map((task) => `${taskLabels[task.task_id] || task.task_id} ${statusLabels[task.status] || task.status}`).join(" · ")}`;
+    cell.append(reviewer, evidence, next, historical);
+  } else if (routineReviewMeta(review).status === "error") {
     const failed = document.createElement("p");
     failed.className = "fundamental-review-meta routine-review-warning";
     failed.textContent = zcodeCount
@@ -3643,6 +3656,13 @@ function renderRoutineReviewCell(review) {
     cell.append(reviewer, evidence, next, failed);
   } else {
     cell.append(reviewer, evidence, next);
+  }
+  const strict = routine.strict_incremental;
+  if (isHistorical && strict?.status && strict.status !== "waiting_evidence") {
+    const strictNote = document.createElement("p");
+    strictNote.className = "fundamental-review-meta routine-review-warning";
+    strictNote.textContent = `严格增量核验：${strict.label || strict.status}；不覆盖历史任务。`;
+    cell.append(strictNote);
   }
   return cell;
 }
@@ -4143,6 +4163,45 @@ function renderFundamentalReviewDetail(item) {
   policy.textContent = "人工层决定“核对什么”；日常层回答“最新证据是否满足”。两层结论不会互相覆盖。";
   overview.append(copy, layers, policy);
   els.detailBody.append(overview);
+
+  const historicalTasks = review.routine?.legacy_daily?.tasks || [];
+  if (historicalTasks.length) {
+    const historicalCard = document.createElement("section");
+    historicalCard.className = "card fundamental-review-history-card";
+    const historicalTitle = document.createElement("h3");
+    historicalTitle.textContent = "上一轮 DeepSeek 日常复核（历史数据）";
+    const historicalNote = document.createElement("p");
+    historicalNote.className = "source-note";
+    historicalNote.textContent = review.routine.legacy_daily.caveat || "这是已保存的日常复核原始任务，不会改写人工锁定规则。";
+    historicalCard.append(historicalTitle, historicalNote);
+    const taskLabels = { entry: "买入前提", holder: "持仓验证", risk: "原始风险 / 条件任务" };
+    const statusLabels = { verified: "原模型：已验证", not_triggered: "原模型：未触发", triggered: "原模型：有触发", data_insufficient: "原模型：数据不足" };
+    const taskList = document.createElement("div");
+    taskList.className = "fundamental-review-history-list";
+    for (const task of historicalTasks) {
+      const taskCard = document.createElement("article");
+      const heading = document.createElement("strong");
+      heading.textContent = `${taskLabels[task.task_id] || task.task_id} · ${statusLabels[task.status] || task.status}`;
+      const meta = document.createElement("small");
+      meta.textContent = `${task.evidence_count || 0} 份引用证据${task.missing_codes?.length ? ` · 缺口：${task.missing_codes.join("、")}` : ""}`;
+      taskCard.append(heading, meta);
+      for (const line of task.evidence_lines || []) {
+        const quote = document.createElement("p");
+        quote.textContent = `${line.line_ref || "原文"} · ${line.exact_quote || "未保留引文"}`;
+        taskCard.append(quote);
+      }
+      taskList.append(taskCard);
+    }
+    historicalCard.append(taskList);
+    const strict = review.routine?.strict_incremental;
+    if (strict?.status && strict.status !== "waiting_evidence") {
+      const strictNote = document.createElement("p");
+      strictNote.className = "source-note";
+      strictNote.textContent = `严格增量核验状态：${strict.label || strict.status}。${strict.message || ""}`;
+      historicalCard.append(strictNote);
+    }
+    els.detailBody.append(historicalCard);
+  }
 
   const reusedZcode = (review.evidence_documents || [])
     .filter((document) => document.source_role === "zcode_current_evidence_extract");

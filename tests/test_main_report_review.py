@@ -364,11 +364,13 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["stock_count"], 93)
         self.assertEqual(len(snapshot["reviews"]), 93)
         dongfang = next(row for row in snapshot["reviews"] if row["ticker"] == "000682.SZ")
-        self.assertEqual(snapshot["schema_version"], 3)
+        self.assertEqual(snapshot["schema_version"], 4)
         self.assertEqual(dongfang["manual"]["authority"], "human_locked")
         self.assertEqual(dongfang["manual"]["status"], "active")
-        self.assertEqual(dongfang["routine"]["status"], dongfang["summary"]["status"])
-        self.assertEqual(dongfang["routine"]["reviewer"], "DeepSeek 日常核验")
+        self.assertEqual(dongfang["routine"]["status"], "historical_review")
+        self.assertEqual(dongfang["routine"]["reviewer"], "deepseek-v4-flash")
+        self.assertEqual(len(dongfang["routine"]["legacy_daily"]["tasks"]), 3)
+        self.assertEqual(dongfang["routine"]["strict_incremental"]["status"], dongfang["summary"]["status"])
         self.assertEqual(dongfang["current_evidence_count"], 2)
         self.assertEqual(
             sum(

@@ -1313,7 +1313,52 @@ def render_comparison_markdown(snapshot: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def public_review_snapshot(rules_dir: Path, output_dir: Path, comparison: dict[str, Any] | None = None) -> dict[str, Any]:
+def compact_legacy_daily_review(payload: dict[str, Any]) -> dict[str, Any] | None:
+    """Expose the saved DeepSeek daily run without promoting it to a rule verdict."""
+    model_review = payload.get("model_review") if isinstance(payload, dict) else None
+    if not isinstance(model_review, dict) or model_review.get("status") != "completed":
+        return None
+    tasks = []
+    for task in model_review.get("tasks") or []:
+        if not isinstance(task, dict):
+            continue
+        evidence_lines = []
+        for line in task.get("evidence_lines") or []:
+            if not isinstance(line, dict):
+                continue
+            evidence_lines.append(
+                {
+                    "document_id": line.get("document_id"),
+                    "line_ref": line.get("line_ref"),
+                    "exact_quote": line.get("exact_quote"),
+                }
+            )
+        tasks.append(
+            {
+                "task_id": task.get("task_id"),
+                "status": task.get("status") or "unknown",
+                "evidence_count": len(task.get("evidence_document_ids") or []),
+                "missing_codes": task.get("missing_codes") or [],
+                "evidence_lines": evidence_lines[:3],
+            }
+        )
+    return {
+        "model": model_review.get("model") or "deepseek-v4-flash",
+        "generated_at": payload.get("generated_at"),
+        "scope": payload.get("scope") or "历史全量日常复核",
+        "tasks": tasks,
+        "local_evidence_count": len(payload.get("local_evidence_documents") or []),
+        "source": "local/fundamental-review-full 中保存的 DeepSeek 历史日常复核",
+        "caveat": "任务口径为 entry / holder / risk 三项粗任务；risk 不等于纯负向红线，不能直接改变人工规则或投资动作。",
+    }
+
+
+def public_review_snapshot(
+    rules_dir: Path,
+    output_dir: Path,
+    comparison: dict[str, Any] | None = None,
+    legacy_dir: Path | None = None,
+) -> dict[str, Any]:
     generated_at = now_iso()
     next_check_at = (datetime.now().astimezone() + timedelta(days=3)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
@@ -1321,6 +1366,8 @@ def public_review_snapshot(rules_dir: Path, output_dir: Path, comparison: dict[s
     status_counts: dict[str, int] = {}
     for ticker, package in sorted(rules_by_ticker.items()):
         result = load_json(output_dir / f"{ticker}.json", {})
+        legacy_payload = load_json(legacy_dir / f"{ticker}.json", {}) if legacy_dir else {}
+        legacy_daily = compact_legacy_daily_review(legacy_payload)
         result_is_current = (
             result.get("protocol_version") == PROTOCOL_VERSION
             and result.get("rules_fingerprint") == package.get("rules_fingerprint")
@@ -1357,7 +1404,6 @@ def public_review_snapshot(rules_dir: Path, output_dir: Path, comparison: dict[s
             ),
         }
         status = str(summary.get("status") or "waiting_evidence")
-        status_counts[status] = status_counts.get(status, 0) + 1
         results_by_id = {
             row.get("rule_id"): row
             for row in ((result.get("model_review") or {}).get("rules") or [])
@@ -1385,7 +1431,32 @@ def public_review_snapshot(rules_dir: Path, output_dir: Path, comparison: dict[s
         # result is a point-in-time evidence check, never an authority to alter
         # a threshold, a red line, or the main-report judgment.
         model_review = result.get("model_review") if isinstance(result, dict) else None
-        routine_model = (model_review or {}).get("model") or "DeepSeek 日常核验"
+        has_current_model_result = isinstance(model_review, dict) and model_review.get("status") == "completed"
+        if has_current_model_result:
+            routine_status = status
+            routine_label = summary.get("label") or default_label
+            routine_model = model_review.get("model") or "DeepSeek 日常核验"
+            routine_generated_at = result.get("generated_at")
+            routine_evidence_count = result.get("current_evidence_count", 0)
+            routine_evidence_date = result.get("latest_evidence_date")
+        elif legacy_daily:
+            # We have a real saved daily model run, but it predates the strict
+            # atomic-rule protocol.  Show it rather than hiding it, while
+            # retaining the newer run's error/waiting state as context.
+            routine_status = "historical_review"
+            routine_label = "上一轮日常复核（历史）"
+            routine_model = legacy_daily["model"]
+            routine_generated_at = legacy_daily.get("generated_at")
+            routine_evidence_count = legacy_daily.get("local_evidence_count", 0)
+            routine_evidence_date = None
+        else:
+            routine_status = status
+            routine_label = summary.get("label") or default_label
+            routine_model = "DeepSeek 日常核验"
+            routine_generated_at = result.get("generated_at")
+            routine_evidence_count = result.get("current_evidence_count", 0)
+            routine_evidence_date = result.get("latest_evidence_date")
+        status_counts[routine_status] = status_counts.get(routine_status, 0) + 1
         rows.append(
             {
                 "company": package.get("company"),
@@ -1413,23 +1484,32 @@ def public_review_snapshot(rules_dir: Path, output_dir: Path, comparison: dict[s
                     "source": "人工主报告裁决与锁定规则",
                 },
                 "routine": {
-                    "status": status,
-                    "label": summary.get("label") or default_label,
+                    "status": routine_status,
+                    "label": routine_label,
                     "reviewer": routine_model,
-                    "run_state": (model_review or {}).get("status") or ("not_run" if not result else "no_result"),
-                    "generated_at": result.get("generated_at"),
-                    "latest_evidence_date": result.get("latest_evidence_date"),
-                    "current_evidence_count": result.get("current_evidence_count", 0),
-                    "source": "主报告之后的新证据；本地资料优先，官方披露补充",
+                    "run_state": (model_review or {}).get("status") or ("historical_saved" if legacy_daily else ("not_run" if not result else "no_result")),
+                    "generated_at": routine_generated_at,
+                    "latest_evidence_date": routine_evidence_date,
+                    "current_evidence_count": routine_evidence_count,
+                    "source": legacy_daily.get("source") if legacy_daily else "主报告之后的新证据；本地资料优先，官方披露补充",
                     "message": result.get("message"),
+                    "legacy_daily": legacy_daily,
+                    "strict_incremental": {
+                        "status": status,
+                        "label": summary.get("label") or default_label,
+                        "generated_at": result.get("generated_at"),
+                        "current_evidence_count": result.get("current_evidence_count", 0),
+                        "latest_evidence_date": result.get("latest_evidence_date"),
+                        "message": result.get("message"),
+                    },
                 },
             }
         )
     return {
-        "schema_version": 3,
+        "schema_version": 4,
         "generated_at": generated_at,
         "next_check_at": next_check_at,
-        "source": "human_locked_rules + routine_deepseek_current_evidence",
+        "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
         "status_counts": status_counts,
         "stock_count": len(rows),
         "comparison": comparison.get("summary") if isinstance(comparison, dict) else None,
@@ -1442,6 +1522,7 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--rules-dir", type=Path, default=Path("data/investment-dashboard/main-report-review-rules"))
     parser.add_argument("--output-dir", type=Path, default=Path("local/fundamental-review-current"))
+    parser.add_argument("--legacy-dir", type=Path, default=Path("local/fundamental-review-full"))
     parser.add_argument("--migrate-rules", action="store_true")
     parser.add_argument("--migrate-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -1455,6 +1536,7 @@ def main() -> int:
     repo_root = args.repo_root.resolve()
     rules_dir = args.rules_dir if args.rules_dir.is_absolute() else repo_root / args.rules_dir
     output_dir = args.output_dir if args.output_dir.is_absolute() else repo_root / args.output_dir
+    legacy_dir = args.legacy_dir if args.legacy_dir.is_absolute() else repo_root / args.legacy_dir
     if args.migrate_rules:
         print(json.dumps(migrate_rule_packages(repo_root, rules_dir), ensure_ascii=False, indent=2))
         if args.migrate_only:
@@ -1465,7 +1547,7 @@ def main() -> int:
             atomic_write_json(output_dir / "comparison-current.json", comparison)
             atomic_write_text(output_dir / "对照报告-current.md", render_comparison_markdown(comparison))
         if args.write_public_snapshot:
-            snapshot = public_review_snapshot(rules_dir, output_dir, comparison)
+            snapshot = public_review_snapshot(rules_dir, output_dir, comparison, legacy_dir)
             atomic_write_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", snapshot)
             atomic_write_json(repo_root / "site" / "data" / "main_report_review.json", snapshot)
         print(json.dumps({"generated_at": now_iso(), "snapshot_only": True}, ensure_ascii=False, indent=2))
@@ -1484,7 +1566,7 @@ def main() -> int:
         atomic_write_json(output_dir / "comparison-current.json", comparison)
         atomic_write_text(output_dir / "对照报告-current.md", render_comparison_markdown(comparison))
     if args.write_public_snapshot and not args.dry_run:
-        snapshot = public_review_snapshot(rules_dir, output_dir, comparison)
+        snapshot = public_review_snapshot(rules_dir, output_dir, comparison, legacy_dir)
         atomic_write_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", snapshot)
         atomic_write_json(repo_root / "site" / "data" / "main_report_review.json", snapshot)
     print(json.dumps(run_status, ensure_ascii=False, indent=2))

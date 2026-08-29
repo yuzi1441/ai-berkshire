@@ -1170,6 +1170,11 @@ tbody tr.detail-inline-row .detail-panel {
   border-color: rgba(46, 230, 168, 0.36);
   background: rgba(46, 230, 168, 0.08);
 }
+.fundamental-review-badge-historical {
+  color: #c5afe8;
+  border-color: rgba(197, 175, 232, 0.34);
+  background: rgba(197, 175, 232, 0.08);
+}
 .fundamental-review-badge-manual-active {
   color: #71c7ff;
   border-color: rgba(113, 199, 255, 0.38);
@@ -1191,6 +1196,7 @@ tbody tr.detail-inline-row .detail-panel {
 }
 .fundamental-review-meta.muted { margin-top: 3px; color: var(--ink-faint); }
 .routine-review-warning { color: var(--watch); }
+.routine-review-history { color: #c5afe8; }
 .fundamental-review-rule-list { display: grid; gap: 7px; min-width: 210px; }
 .fundamental-review-rule-brief {
   min-width: 0;
@@ -1299,6 +1305,33 @@ tbody tr.detail-inline-row .detail-panel {
 .fundamental-review-reused-card {
   border-color: rgba(65, 208, 154, 0.22);
   background: rgba(65, 208, 154, 0.035);
+}
+.fundamental-review-history-card {
+  border-color: rgba(197, 175, 232, 0.24);
+  background: rgba(197, 175, 232, 0.035);
+}
+.fundamental-review-history-card > h3 { margin-bottom: 4px; }
+.fundamental-review-history-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+.fundamental-review-history-list article {
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid #c5afe8;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.11);
+}
+.fundamental-review-history-list strong,
+.fundamental-review-history-list small { display: block; }
+.fundamental-review-history-list strong { color: var(--ink); font-size: 11px; }
+.fundamental-review-history-list small { margin-top: 3px; color: var(--ink-faint); font-size: 9.5px; }
+.fundamental-review-history-list p {
+  margin: 5px 0 0;
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  line-height: 1.45;
 }
 .fundamental-review-reused-card > h3 { margin-bottom: 4px; }
 .fundamental-review-reused-list {
