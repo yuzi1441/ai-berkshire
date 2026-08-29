@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中国巨石股份有限公司",
+  "ticker": "600176.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+    "sha256": "b7fb51bfc4625552bb9e61de47911176f55079e4282c00e0fcb3b100f44567ac",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格分层买入前提：激进型 30—34 元小仓试投，前提是 2026 盈利兑现且出现高端认证/批量订单的可核验证据；稳健型 24—28 元分批买入，前提是电子布景气正常化后 ROE 与 FCF 仍改善；保守型 24 元以下再考虑较大仓位，前提是周期下行压力已计入、净债务和扩产回报未恶化。基本面价值约 28.4—35.5 元；报告日（数据截止 2026-08-07）收盘 44.38 元高于全部买入带，报告基准建议为观察。",
+      "derivation_quote": "激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据",
+      "derivation_line_ref": 332,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "2026盈利",
+        "高端认证/批量订单"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持有且仓位正常者可继续持有核心观察仓，但不在 44.38 元附近加仓，用 H1 正式报告和产品认证检验论文；仓位过重者若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓。加仓信号：低介电/低膨胀产品获头部客户认证并形成批量收入；新线良率与回报达标；价格进入对应安全边际。下次复核日期 2026-08-28。",
+      "derivation_quote": "可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文",
+      "derivation_line_ref": 362,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "A股收盘价",
+        "H1业绩",
+        "产品认证",
+        "盈利上修"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/论文失效信号：普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东。需跟踪 2400tex 直接纱、G75 电子纱和 7628 电子布月均价及库存，以及季度资本开支、自由现金流、净债务。",
+      "derivation_quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负",
+      "derivation_line_ref": 365,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "普通电子布价格",
+        "库存",
+        "ROE",
+        "FCF",
+        "净债务"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+      "source_role": "main_report_reference",
+      "sha256": "b7fb51bfc4625552bb9e61de47911176f55079e4282c00e0fcb3b100f44567ac"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "清单内仅 local_1 主报告一份文档，只能作报告基线。基线显示 2026-08-07 收盘 44.38 元，高于激进型 30—34 元、稳健型 24—28 元及保守型 24 元以下全部买入带；截至复核日 2026-08-29 本地无独立来源提供当前股价与 2026 盈利、高端认证证据现状，无法确认是否进入买入区，诚实判定为证据不足。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 8,
+            "exact_quote": "| 收盘价 | 44.38 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 332,
+            "exact_quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 328,
+            "exact_quote": "用 2026E EPS 1.42 元乘以 20—25x 的复苏期合理区间，得到当前基本面价值约 **28.4—35.5 元**。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "note": "持仓验证的关键节点是 H1 正式报告与产品认证，且报告设定的下次复核日期 2026-08-28 已过。本地证据目录中没有 2026H1 正式报告或其摘录，无认证进展、无当前股价（减仓阈值 55 元需对比），无法完成验证或确认事件已发生。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 362,
+            "exact_quote": "| 已持有、仓位正常 | 可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 363,
+            "exact_quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 442,
+            "exact_quote": "| 下次复核日期 | 2026-08-28 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "note": "失效条件需当期普通电子布价格与库存、特种认证进展、ROE（阈值 10%）、FCF 连续性及净债务与报告基线对比。本地仅有数据截止 2026-08-07 的报告基线，无此后月度价格、库存或财报证据提供对比期数值，无法判定任一失效信号是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 365,
+            "exact_quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 369,
+            "exact_quote": "1. 2400tex 直接纱、G75 电子纱和 7628 电子布月均价及库存。"
+          }
+        ]
+      }
+    ]
+  }
+}

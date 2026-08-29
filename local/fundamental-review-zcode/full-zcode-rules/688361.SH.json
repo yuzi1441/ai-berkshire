@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "skyverse-tech",
+  "ticker": "688361.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+    "sha256": "bdd375bcec7fd94445d19d9cbe7013f13c30b004582dbe8a505dab8726ec99ba",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：基线现价 275.9 元严重透支未来 5-7 年增长（分析师目标价约 211 元低于现价），仅当股价回调至 CNY 57-86（PS 10-15x）再入场，那时赔率才对称。",
+      "derivation_quote": "等待回调至CNY 57-86（PS 10-15x）再入场",
+      "derivation_line_ref": 286,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "PS"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者基线动作：强烈建议减仓或清仓（乐观情景 3 年仅 +3.7%）；持仓期间按季验证加仓/持有条件：单季度经营现金流转正、连续 2 个季度净利率超过 10%、产品成功进入 14nm 及以下先进制程产线。",
+      "derivation_quote": "**强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元",
+      "derivation_line_ref": 287,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "单季度经营现金流",
+        "净利率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "失效/卖出信号（任一触发即执行卖出）：（1）2026 年全年经营现金流仍为负；（2）合同负债环比下降（订单放缓信号）；（3）PS 超过 50x 且无新催化剂；（4）美国对 KLA 制裁出现松绑迹象。看板『买入失效条件』字段为未给出，失效条件以最终决策卖出信号为准。",
+      "derivation_quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象",
+      "derivation_line_ref": 288,
+      "schedule_type": "event",
+      "metrics": [
+        "经营现金流(2026全年)",
+        "合同负债环比",
+        "PS",
+        "KLA制裁"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+      "source_role": "main_report_reference",
+      "sha256": "bdd375bcec7fd94445d19d9cbe7013f13c30b004582dbe8a505dab8726ec99ba"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 286,
+            "exact_quote": "等待回调至CNY 57-86（PS 10-15x）再入场"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 344,
+            "exact_quote": "| 数据截止日 | 2026-06-24 |"
+          }
+        ],
+        "note": "证据集仅含主报告基线（数据截止 2026-06-24，基线现价 275.9 元），无更新的独立行情或官方数据可判断股价当前是否已回调至 CNY 57-86（PS 10-15x）区间，故按诚实原则记 data_insufficient。local_1 仅作报告基线引用，不作为新的独立验证。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 287,
+            "exact_quote": "**强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 289,
+            "exact_quote": "（2）单季度经营现金流转正；（3）产品成功进入14nm及以下先进制程产线；（4）连续2个季度净利率超过10%"
+          }
+        ],
+        "note": "报告基线（20 亿收入、0.59 亿利润、-8.62 亿现金流）之后无新财报证据：无当前单季经营现金流、净利率及对比期，14nm 先进制程验证亦无官方确认，无法判断持仓验证/加仓条件是否成立。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 288,
+            "exact_quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 353,
+            "exact_quote": "| 买入失效条件 | 未给出 |"
+          }
+        ],
+        "note": "无 2026 年经营现金流、合同负债环比、最新 PS 及 KLA 制裁动态等官方证据，四条卖出信号均无法确认是否触发；看板『买入失效条件』字段为未给出，规则仅能锚定报告基线卖出信号原文。"
+      }
+    ]
+  }
+}

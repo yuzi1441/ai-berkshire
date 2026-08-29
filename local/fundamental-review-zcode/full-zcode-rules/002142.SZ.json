@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "宁波银行",
+  "ticker": "002142.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+    "sha256": "5ac71634c764a84aae00f592e0864dad7c2a668bb904b6d97fd058bf0baf88d2",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：报告基线 32 元（2026-08-10）观察、安全边际不充分；空仓者等待 29-31 元首档安全边际，或半年报证明 NIM、个人资产质量和 CET1 没有恶化；激进型 29.0-31.0 元（约 0.82-0.88 倍 PB）半年报未恶化时小仓分批、不追高；稳健型 26.5-29.0 元（约 0.75-0.82 倍 PB）风险指标稳定时分批；保守型 23.0-26.5 元（约 0.65-0.75 倍 PB）优先研究和配置。",
+      "derivation_quote": "在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。",
+      "derivation_line_ref": 263,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PB"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓逻辑为高质量城商行者可持有，不建议因 PE 低机械加仓；2026 年半年度报告披露后重点核对 NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 和手续费及佣金收入可持续性；看板下次复核日期 2026-08-31。",
+      "derivation_quote": "重点核对 NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 和手续费及佣金收入可持续性",
+      "derivation_line_ref": 284,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "拨备覆盖率",
+        "CET1"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：NIM 低于 1.60% 且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表，任一触发即减仓/卖出重审；买入失效条件为净息差低于 1.60% 且个人资产质量、资本充足率同时恶化。",
+      "derivation_quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%",
+      "derivation_line_ref": 266,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "5ac71634c764a84aae00f592e0864dad7c2a668bb904b6d97fd058bf0baf88d2"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 263,
+            "exact_quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 240,
+            "exact_quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
+          }
+        ],
+        "note": "证据包仅有主报告 local_1，32 元为 2026-08-10 报告基线价，无当前股价，无法判断是否进入 29-31/26.5-29/23-26.5 元买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 264,
+            "exact_quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 284,
+            "exact_quote": "**下次复核：** 2026 年半年度报告披露后，重点核对 NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 和手续费及佣金收入可持续性。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 320,
+            "exact_quote": "| 下次复核日期 | 2026-08-31 |"
+          }
+        ],
+        "note": "证据包中无 2026 半年度报告数据（NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 均无当前值与对比期），持仓验证清单无法执行。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 266,
+            "exact_quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 319,
+            "exact_quote": "| 买入失效条件 | 净息差低于1.60%且个人资产质量资本充足率同时恶化 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 144,
+            "exact_quote": "| 净息差持续下台阶 | 中高 | 高 | NIM 连续两个季度低于 1.65%，或低于 1.60% 且非息收入未补偿 |"
+          }
+        ],
+        "note": "证据包中无最新季度 NIM、个人贷款不良率、重组贷款占比与 CET1 数据及对比期，减仓/失效条件触发状态未知。"
+      }
+    ]
+  }
+}

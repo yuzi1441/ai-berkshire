@@ -1,0 +1,278 @@
+{
+  "schema_version": 2,
+  "pilot": true,
+  "generated_at": "2026-08-29T15:59:14+08:00",
+  "company": "东方电子",
+  "ticker": "000682.SZ",
+  "scope": "主报告明确条件的单股本地验证；不读取 Checklist、技术面、情绪面或旧人工执行复核。模型可读取更新的本地基本面资料作为证据，但无权变更规则。",
+  "main_report": {
+    "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+    "sha256": "ae5b3066490b2a59d926ed7fbe78b116b0eeb8fc3789864f63d0d1db9e631b29",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false
+  },
+  "sources": {
+    "eastmoney_financials": {
+      "report_date": "2026-06-30",
+      "source": "https://datacenter.eastmoney.com/securities/api/data/get"
+    },
+    "cninfo_official_filing": {
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-20/1225481429.PDF",
+      "sha256": "bdb07e3a984335d0ec4f0fc81a4005be633e39f0a7ff4afcc3894116060f16a2",
+      "page_count": 144,
+      "segments": [
+        {
+          "name": "智能配用电业务",
+          "revenue": 2390289440.62,
+          "gross_margin": 27.84,
+          "revenue_yoy": 36.74,
+          "gross_margin_yoy_change_pct_point": 41.82,
+          "revenue_share": 65.18,
+          "previous_revenue_share": 55.28
+        },
+        {
+          "name": "新能源及储能业务",
+          "revenue": 96035215.55,
+          "gross_margin": 28.34,
+          "revenue_yoy": -35.13,
+          "gross_margin_yoy_change_pct_point": -44.32,
+          "revenue_share": 2.62,
+          "previous_revenue_share": 4.68
+        },
+        {
+          "name": "综合能源及虚拟电厂",
+          "revenue": 128812134.33,
+          "gross_margin": 34.92,
+          "revenue_yoy": 9.19,
+          "gross_margin_yoy_change_pct_point": 19.64,
+          "revenue_share": 3.51,
+          "previous_revenue_share": 3.73
+        }
+      ]
+    },
+    "quote": {
+      "name": "东方电子",
+      "price": 11.53,
+      "timestamp": "20260828161433",
+      "source": "tencent_quote"
+    },
+    "cross_check": {
+      "revenue": {
+        "eastmoney": 3667345480.29,
+        "cninfo": 3667345480.29,
+        "error_pct": 0.0,
+        "verified": true
+      },
+      "net_profit": {
+        "eastmoney": 402856329.62,
+        "cninfo": 402856329.62,
+        "error_pct": 0.0,
+        "verified": true
+      },
+      "deducted_profit": {
+        "eastmoney": 318243864.16,
+        "cninfo": 318243864.16,
+        "error_pct": 0.0,
+        "verified": true
+      },
+      "operating_cash_flow": {
+        "eastmoney": -770238839.0020376,
+        "cninfo": -770300281.21,
+        "error_pct": 0.007977033207258354,
+        "verified": true
+      }
+    }
+  },
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports\\东方电子\\东方电子-thesis-tracker-20260819.md",
+      "sha256": "6022e7b6eb004525d9d5e10cf14ba53f9dbba3d45474709a0496bf6b6d33e748",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports\\东方电子\\东方电子-thesis.md",
+      "sha256": "012fe1af719d31c2b5efbdfc9cabc108e617b8a56372ecc183a8f24ce33fa2f9",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports\\东方电子\\sources\\2026_investor_qa_clean.txt",
+      "sha256": "2c8cd930af4629ed4a68f715c2e2897d2bfdee50621b72c99da4a0b9ea1218df",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "official_evidence_documents": [],
+  "comparisons": [
+    {
+      "metric": "扣非归母净利润同比",
+      "current": [
+        {
+          "period": "2026Q1",
+          "value": 9.661415914689
+        },
+        {
+          "period": "2026Q2",
+          "value": 6.551384271001148
+        }
+      ],
+      "comparison": "连续两季均未达到报告所列的正向验证线。",
+      "threshold": "连续至少两季 >15%",
+      "status": "not_met"
+    },
+    {
+      "metric": "综合毛利率",
+      "current": {
+        "period": "2026中报",
+        "value": 30.681485067
+      },
+      "comparison": {
+        "Q1": 30.449946609,
+        "上年同期": 33.0806119527,
+        "同比百分点": -2.399126885700003
+      },
+      "threshold": "目标 ≥32%；红线 <30%",
+      "status": "warning"
+    },
+    {
+      "metric": "经营现金流净额",
+      "current": {
+        "period": "2026中报",
+        "value": -770238839.0020376
+      },
+      "comparison": {
+        "上年同期": -551142192.3991078,
+        "同比变化": -219096646.60292983
+      },
+      "threshold": "报告要求改善；年度红线见现金转化率",
+      "status": "warning"
+    },
+    {
+      "metric": "经营现金流/归母净利润",
+      "current": {
+        "period": "2025年报",
+        "value": 0.8862722345868862
+      },
+      "comparison": {
+        "2024年报": 1.5208012654714762
+      },
+      "threshold": "连续两年 <0.70 才触发红线",
+      "status": "not_breached"
+    },
+    {
+      "metric": "价格质量红线前提",
+      "current": 11.53,
+      "comparison": "当前价格未进入高估值价格前提。",
+      "threshold": "价格 ≥18 元后才复核扣非增速是否改善",
+      "status": "not_applicable"
+    }
+  ],
+  "rules": [
+    {
+      "rule_id": "positive_quality_upgrade",
+      "category": "positive_condition",
+      "status": "not_met",
+      "rule": "连续至少两季扣非归母净利润同比 >15%，经营现金流改善，且毛利率稳定在 32% 以上。",
+      "source": "主报告 L366-L369；其中“连续 2-3 季”按最小两季测试，三季仅增强置信度。",
+      "evidence": {
+        "deducted_profit_yoy": [
+          {
+            "period": "2026Q1",
+            "value": 9.661415914689
+          },
+          {
+            "period": "2026Q2",
+            "value": 6.551384271001148
+          }
+        ],
+        "operating_cash_flow_h1": -770238839.0020376,
+        "gross_margin": [
+          {
+            "period": "2026一季报",
+            "value": 30.449946609
+          },
+          {
+            "period": "2026中报",
+            "value": 30.681485067
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "margin_redline",
+      "category": "redline",
+      "status": "not_breached",
+      "rule": "综合毛利率跌破 30%。",
+      "source": "主报告 L186、L368。",
+      "evidence": {
+        "period": "2026中报",
+        "gross_margin": 30.681485067
+      }
+    },
+    {
+      "rule_id": "cash_conversion_redline",
+      "category": "redline",
+      "status": "not_breached",
+      "rule": "经营现金流连续两年低于归母净利润的 70%。",
+      "source": "主报告 L368。仅以完整年报判定。",
+      "evidence": {
+        "annual_operating_cash_flow_over_net_profit": [
+          {
+            "period": "2024年报",
+            "value": 1.5208012654714762
+          },
+          {
+            "period": "2025年报",
+            "value": 0.8862722345868862
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "high_price_without_quality",
+      "category": "redline",
+      "status": "not_applicable",
+      "rule": "股价 18 元以上但扣非增速没有提升。",
+      "source": "主报告 L368。当前价格未达到价格前提时不评价利润条件。",
+      "evidence": {
+        "current_price": 11.53,
+        "price_threshold": 18
+      }
+    },
+    {
+      "rule_id": "low_margin_mix",
+      "category": "semantic_redline",
+      "status": "inconclusive",
+      "rule": "储能/工程低毛利业务占比快速上升。",
+      "source": "主报告 L368。只允许根据最新中报分产品表判断，不创造“快速上升”的阈值。",
+      "evidence": {
+        "note": "本次未调用模型；只完成数值规则验证。"
+      }
+    },
+    {
+      "rule_id": "overseas_and_vpp_orders",
+      "category": "event_condition",
+      "status": "inconclusive",
+      "rule": "以海外/虚拟电厂订单和国外收入回款验证第二曲线质量。",
+      "source": "主报告 L366、L369。主报告未给出可自动判定的阈值，不能将新闻或普通营收替代为订单与回款。",
+      "evidence": {
+        "note": "本次未调用模型；未读取本地更新资料或官方补证。"
+      }
+    }
+  ],
+  "summary": {
+    "overall_status": "needs_fundamental_attention",
+    "breached_rule_ids": [],
+    "warning_rule_ids": [],
+    "unmet_positive_rule_ids": [
+      "positive_quality_upgrade"
+    ],
+    "unresolved_rule_ids": [
+      "low_margin_mix",
+      "overseas_and_vpp_orders"
+    ],
+    "next_evidence": "2026年三季报后重新检查扣非增速、毛利率、经营现金流与分产品结构。",
+    "decision_boundary": "本结果仅升级独立复核状态，不修改主报告判断、人工价格分区或现有可执行分区。"
+  }
+}

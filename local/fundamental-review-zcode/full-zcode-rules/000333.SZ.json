@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "美的集团",
+  "ticker": "000333.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+    "sha256": "bbf98f144f75244da87c9e3c8893be15ebb1a47454318acc22be46a717bc9c9c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：A股进入 71-75 元区间可小仓分批（要求年化回报 12% 对应最高买入价 71.31 元）；不高于 66 元（15% 回报对应 65.87 元）为强安全边际区；当前 80.40 元位于 75-88 元观察/持有区，不构成买入前提。",
+      "derivation_quote": "普通买入线约 71-75 元，强安全边际线不高于 66 元。",
+      "derivation_line_ref": 491,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：低成本持有者继续持有收息并跟踪五项季度指标；加仓前提为扣非归母净利润恢复正增长且经营现金流同步改善（2026Q1 扣非 109.62 亿元、同比 -14.02% 为当前核心黄灯），不因短期波动交易。",
+      "derivation_quote": "扣非归母净利润恢复正增长，经营现金流同步改善。",
+      "derivation_line_ref": 473,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非归母净利同比增速",
+        "经营现金流",
+        "智能家居毛利率"
+      ],
+      "periods": [
+        "2026H1",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓或论文重审触发条件：海外利润率连续两年下降超过 3 个百分点；大额跨界并购或商誉减值明显超预期（KUKA 相关商誉约 234.35 亿元）；连续两年依靠增债维持分红回购；股价高于 100 元重审或部分降低仓位。",
+      "derivation_quote": "海外利润率连续两年下降超过 3 个百分点。",
+      "derivation_line_ref": 483,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "海外利润率",
+        "商誉减值",
+        "股息加净回购对FCF覆盖"
+      ],
+      "periods": [
+        "FY2026"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+      "source_role": "main_report_reference",
+      "sha256": "bbf98f144f75244da87c9e3c8893be15ebb1a47454318acc22be46a717bc9c9c"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/美的集团/美的集团-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "125bea39c54c4957ecc9434b32b0f632a8281dcebd7012848f086d9fdc6df12b"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "证据档案仅提供 2026-07-13 报告基线快照价 80.40 元（与主报告同源，明确标注'不得解释成实际成交'），无复核日新价格，无法判断股价是否进入 71-75 元或 66 元以下买入带。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 12,
+            "exact_quote": "| 实际买入价 | 用户未提供；80.40 元只是研究快照，不得解释成实际成交 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 38,
+            "exact_quote": "| A 股收盘价 / A 股口径市值 | 80.40 元 / 6,121.20 亿元 | 当前位于观察/持有区，不是高赔率买点 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "证据档案数据截止 2026-07-13，仅含 2026Q1 扣非 -14.02% 的黄灯基线（与主报告同源），无 2026H1/2026Q3 新财报数据可验证'扣非恢复正增长、经营现金流同步改善'是否发生；建档结论为持有/观察。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 46,
+            "exact_quote": "| 2026Q1 扣非归母净利 | 109.62 亿元，同比 -14.02% | 当前最重要的核心经营黄灯 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 15,
+            "exact_quote": "| 当前动作 | **若已持有：持有/观察；若空仓：不追价。两种情况都不因单日涨跌改变经营论文** |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "证据档案仅在 2026-07-13 首次建档时确认 7 条红线'0 条触发'，属报告基线而非新独立验证；无其后财报或公告数据，无法确认海外利润率、商誉减值、增债分红等失效条件在复核日是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 104,
+            "exact_quote": "**首次建档红线检查：0 条触发。** 当前三项黄灯应提高跟踪频率，但尚不等于卖出条件已经成立。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 99,
+            "exact_quote": "| 4 | 海外利润率连续两年下降超过 3pct 且本地化资本投入仍加码；或监管、贸易、质量事件永久影响集团收入 10%以上 | 严重 | 未触发 | 海外按低增长/低利润重估，暂停加仓并降低仓位 |"
+          }
+        ]
+      }
+    ]
+  }
+}

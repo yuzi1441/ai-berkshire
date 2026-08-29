@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中国移动有限公司",
+  "ticker": "600941.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+    "sha256": "b36b2c01a19815d6c866b62d153aa6bee37fe3530d9982ca4308efad984eff73",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：A 股 96.70 元不追；88-92 元（约 13.9-14.5 倍 2025 PE）才考虑小额试仓，78-84 元（约 12.3-13.2 倍 PE、股息率约 5.6%-6.0%）进入稳健分批区，70-75 元为保守型重点关注并分批买入区。",
+      "derivation_quote": "96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区",
+      "derivation_line_ref": 328,
+      "schedule_type": "price",
+      "metrics": [
+        "A股股价",
+        "PE",
+        "股息率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：若以股息为主且仓位合理，可持有；当前不加仓；股价 114 元以上且基本面无上修可考虑降低仓位；加仓需半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带。",
+      "derivation_quote": "114 元以上且基本面无上修可考虑降低仓位",
+      "derivation_line_ref": 329,
+      "schedule_type": "price",
+      "metrics": [
+        "A股股价",
+        "EBITDA率",
+        "主营收入增速"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（卖出/失效信号，任一触发即失效）：移动 ARPU 跌破 45 元并伴随客户下降；FCF/股利连续两年低于 1 倍；算力重投入却持续不披露回报。若半年报证明 EBITDA 率持续低于 30%、算力服务增长失速或股息现金覆盖恶化，应下调全部价格带。",
+      "derivation_quote": "移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍",
+      "derivation_line_ref": 332,
+      "schedule_type": "event",
+      "metrics": [
+        "移动ARPU",
+        "客户数",
+        "FCF/股利覆盖"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "b36b2c01a19815d6c866b62d153aa6bee37fe3530d9982ca4308efad984eff73"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 328,
+            "exact_quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 300,
+            "exact_quote": "| 稳健型 | 78-84 元 | 分批买入 | 约 12.3-13.2 倍 PE，股息率约 5.6%-6.0%，对中性价值有一定安全边际 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "note": "仅有主报告基线价 96.70 元（报告日 2026-08-10），清单内无独立证据文档提供当前 A 股市价，无法判断是否已进入 88-92/78-84 元价格带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 329,
+            "exact_quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 331,
+            "exact_quote": "| 加仓信号 | 半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "note": "本地证据中无 2026 半年报主营增速、EBITDA 率与算力/现金回报数据，也无当前股价，持仓验证与加仓确认条件均无法验证。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 332,
+            "exact_quote": "| 卖出 / 失效信号 | 移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍，或算力重投入却持续不披露回报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 406,
+            "exact_quote": "| 买入失效条件 | 移动ARPU跌破45元且客户下降，或自由现金流连续两年不足覆盖现金股利 |"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "note": "证据中无报告基线（2026-08-10）之后的 ARPU、客户数与自由现金流数据，失效信号无法确认触发或未触发。"
+      }
+    ]
+  }
+}

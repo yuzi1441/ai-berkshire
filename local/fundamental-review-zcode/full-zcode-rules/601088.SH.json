@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中国神华",
+  "ticker": "601088.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+    "sha256": "f24421adc6abf0f81c292620f61ca4a2a2efbf7dbd22d16c2b928ae0eca5f614",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：激进型空仓者需 A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价；稳健型需等正式半年报验证 OCF、ROIC 和分部利润，A 股 33 元以下、H 股 36 港元以下更合适；行动价格带：A 股 24-30 元强安全边际可积极分批、30-36 元合理建仓区、40-46 元充分定价空仓者不追；H 股 30-35 港元安全边际较好。",
+      "derivation_quote": "A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价",
+      "derivation_line_ref": 358,
+      "schedule_type": "price",
+      "metrics": [
+        "A股股价",
+        "H股股价",
+        "OCF",
+        "ROIC"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：A 股现有持有人当前以持有收息为主，不新增；股价 46 元以上且盈利未上修时控制机会成本（进入减仓观察估值复核，非机械清仓）；H 股现有持有人可持有，需核算股息税、汇率和流动性。",
+      "derivation_quote": "当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本",
+      "derivation_line_ref": 361,
+      "schedule_type": "price",
+      "metrics": [
+        "A股股价",
+        "H股股价",
+        "盈利上修"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓或论文失效信号，任一触发即重审）：① 并购后每股经营现金流连续两个报告期下降；② 资本开支持续接近或超过 OCF、需举债维持股息；③ 分红率低于公司回报规划或股息依赖一次性资产处置；④ 重大安全环保事故、关联交易定价异常或财务公司资金安全事件；⑤ 自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨。",
+      "derivation_quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨",
+      "derivation_line_ref": 379,
+      "schedule_type": "event",
+      "metrics": [
+        "每股经营现金流",
+        "资本开支/OCF",
+        "分红率",
+        "自产煤毛利率",
+        "单位生产成本"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+      "source_role": "main_report_reference",
+      "sha256": "f24421adc6abf0f81c292620f61ca4a2a2efbf7dbd22d16c2b928ae0eca5f614"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/中国神华/中国神华-thesis-tracker-20260720.md",
+      "source_role": "local_current_evidence",
+      "sha256": "bebe5760d3f5e8bc4b8fb85eb2405bedfca80ca07de4bd8e05e56c981bbb2ab4"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports/中国神华/中国神华-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "0a154a104e9550e26d953b7eba0149f8695a9f6aeaf1f3a256daf09712c77d61"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 130,
+            "exact_quote": "- **无仓位者：不追。** A 股 46.14 元已越过既定观察线；H 股 43.60 港元也接近 44 港元上沿，等待正式中报或价格回到建仓区。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 82,
+            "exact_quote": "4. **价格跑在证据前面。** A 股由 43.42 元升至 46.14 元，+6.26%；H 股由 42.30 港元升至 43.60 港元，+3.07%。A 股已略高于既定 46 元机会成本复核线。"
+          }
+        ],
+        "missing_codes": [],
+        "note": "tracker（2026-07-20）记录 A 股 46.14 元、H 股 43.60 港元，均远高于买入前提要求的 A 股 36 元以下/H 股 39 港元以下，A 股甚至越过 46 元观察线，买入条件未触发；正式半年报验证项尚未发生。"
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_2",
+          "local_3"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 131,
+            "exact_quote": "- **A 股已有持仓：进入“减仓观察”估值复核，不加仓。** 46.14 元已触发“高于 46 元且盈利与现金流未上修”的冻结动作条件；这不是机械清仓信号。因买入成本、仓位和要求回报率未知，本报告不虚构减仓比例。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 132,
+            "exact_quote": "- **H 股已有持仓：持有但不加仓。** 18.10% 的 A/H 折价保留了相对缓冲，但 43.60 港元已接近 44 港元观察线上沿，仍需核算股息税、汇率和流动性。"
+          },
+          {
+            "document_id": "local_3",
+            "line_ref": 106,
+            "exact_quote": "| 减仓观察 | 高于 46 元且盈利与现金流未上修 | 高于 44 港元且折价明显收窄或预期回报下降 | 先看机会成本，再看基本面 |"
+          }
+        ],
+        "missing_codes": [],
+        "note": "A 股 46.14 元已触发主报告“46 元以上且盈利未上修控制机会成本”条件（盈利与现金流未上修由 tracker 确认），进入减仓观察估值复核——条件已触发但属估值层面，非清仓信号；H 股仍在 39-44 港元持有区内但接近上沿。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2",
+          "local_3"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 17,
+            "exact_quote": "**状态：论文完整但有两个黄灯；没有减仓或清仓型基本面信号。**"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 63,
+            "exact_quote": "| 4 | FCF 覆盖不足并伴随债务压力连续不修复 | 否，首期预警延续 | 公司重申分红规划，但没有新增现金流或短借证据，不能解除也不能升级黄灯 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 64,
+            "exact_quote": "| 5 | 政府认定的重大及以上安全环保事故、长期停产或经监管明确认定的瞒报 | 否 | 本期未检出中国神华新的重大及以上安全事故、重大环境事故、长期停产或环保处罚 |"
+          }
+        ],
+        "missing_codes": [],
+        "note": "tracker 红线检查：安全事故/瞒报、自产煤成本越线、OCF 下降等减仓失效条件均未触发；FCF 覆盖黄灯（2025 简化 FCF/分红 0.638x）延续但未连续两期触发，未构成主报告所列减仓或论文失效条件。"
+      }
+    ]
+  }
+}

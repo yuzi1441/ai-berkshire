@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "Jereh",
+  "ticker": "002353.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/Jereh/Jereh-research-20260624.md",
+    "sha256": "9dc454047c82a3ce76414a209377e39e0266fb62605846df5d4e5dd49ce8976b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：报告基线 159 元/57.7x PE 对制造业公司风险收益比极差，空仓者回避当前价位；设置观察价位 80-100 元（对应 25-35x PE），到达后重新评估。",
+      "derivation_quote": "建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估",
+      "derivation_line_ref": 401,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：持仓者考虑部分止盈——一年涨 362%、大量乐观预期已反映在股价中，建议至少减仓 30-50% 锁定利润、保留底仓享受长期成长；重新加仓需股价回落至 80-100 元区间（PE 25-35x），或自研燃气轮机取得突破性进展，或连续多季度毛利率企稳回升并超过 35%。",
+      "derivation_quote": "建议至少减仓30-50%锁定利润，保留底仓享受长期成长",
+      "derivation_line_ref": 402,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PE",
+        "毛利率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/失效触发：(1) 北美燃机订单增速放缓或交付出现问题；(2) 连续 2 个季度毛利率继续下滑至 30% 以下；(3) 西方对燃气轮机出口实施限制；(4) AI 资本开支周期见顶。",
+      "derivation_quote": "连续2个季度毛利率继续下滑至30%以下",
+      "derivation_line_ref": 403,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "北美燃机订单增速",
+        "毛利率",
+        "燃气轮机出口限制事件",
+        "AI资本开支"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/Jereh/Jereh-research-20260624.md",
+      "source_role": "main_report_reference",
+      "sha256": "9dc454047c82a3ce76414a209377e39e0266fb62605846df5d4e5dd49ce8976b"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-06-24 主报告基线（159 元/57.7x PE，回避并等 80-100 元观察价）；报告免责声明自述'数据截至 2026 年 6 月 24 日，可能已发生变化'，看板价格区间与复核日期均为'未给出'。无复核日现价与 PE，无法判断是否到达观察价位。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 401,
+            "exact_quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 494,
+            "exact_quote": "| 下次复核日期 | 未给出 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "'至少减仓 30-50%'止盈建议基于报告时点一年 +362% 的涨幅与 57.7x PE；本地无复核日价格、涨幅对比数据及最新毛利率，自研燃气轮机进展亦无公告证据，无法验证持仓验证条件是否变化。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 402,
+            "exact_quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 404,
+            "exact_quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "四条卖出触发依赖 2026Q2/Q3 毛利率、北美燃机订单交付、西方出口限制政策与 AI 资本开支周期；本地无主报告基线之后的财报、公告或政策事件确认，无对比期，无法判断是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 403,
+            "exact_quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
+          }
+        ]
+      }
+    ]
+  }
+}

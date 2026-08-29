@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "长鑫存储",
+  "ticker": "688825.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+    "sha256": "f61d138263824656d6eedc4ff696e2ef05de27fa4490ea91872d7ae100137779",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提（分价位决策表，基线现价区 45 元+、市值 3 万亿以上为回避区）：1.6-3 万亿（24-45 元）观望；1.1-1.6 万亿（16-24 元）若无实体清单落地且 HBM 未证伪可建观察仓（组合 2% 内）；1 万亿以下（15 元下方）若公司基本面未坏（仅周期杀估值）进入价值区可系统性建仓；中性情景 23.3 元之下赔率才转为中性。",
+      "derivation_quote": "1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓",
+      "derivation_line_ref": 340,
+      "schedule_type": "price",
+      "metrics": [
+        "市值(万亿元)",
+        "股价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证（未来 18 个月最重要跟踪变量）：若 2027 年前 HBM3/3E 良率爬到 60% 以上并对华为规模出货，估值逻辑从周期股切换为战略资源股，若爬坡失败则为 HBM 预付的数千亿元市值将被抹去。加仓信号（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除；G5 按期量产且 TechInsights 拆解确认；周期下行段仍保持正毛利。",
+      "derivation_quote": "若 2027 年前 HBM3/3E 良率爬到 60% 以上并对华为规模出货",
+      "derivation_line_ref": 193,
+      "schedule_type": "event",
+      "metrics": [
+        "HBM3/3E良率",
+        "华为昇腾出货",
+        "G5量产进度"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "回避/清仓信号（任一触发即执行）：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。看板『买入失效条件』字段为未给出，失效条件以决策表回避/清仓信号为准。",
+      "derivation_quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振",
+      "derivation_line_ref": 344,
+      "schedule_type": "event",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+      "source_role": "main_report_reference",
+      "sha256": "f61d138263824656d6eedc4ff696e2ef05de27fa4490ea91872d7ae100137779"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 340,
+            "exact_quote": "1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 308,
+            "exact_quote": "中性情景 23.3 元之下、即市值 1.6 万亿元以下，赔率才转为中性"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 391,
+            "exact_quote": "| 数据截止日 | 2026-07-30 |"
+          }
+        ],
+        "note": "证据集仅含主报告基线（数据截止 2026-07-30，基线首日收盘市值 3.28 万亿元/约 49 元），无更新的独立行情或官方数据可判断当前市值/股价落在哪一档决策区间，故按诚实原则记 data_insufficient。local_1 仅作报告基线引用，不作为新的独立验证。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 193,
+            "exact_quote": "若 2027 年前 HBM3/3E 良率爬到 60% 以上并对华为规模出货"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 342,
+            "exact_quote": "HBM3/3E 综合良率突破 60% 的第三方证据"
+          }
+        ],
+        "note": "无 HBM3/3E 良率第三方证据、无华为昇腾出货确认、无 G5 量产/TechInsights 拆解进展：报告待验证清单（第 2-4 条）本身即要求 2026 半年报与 HBM 真实状态的一手验证，证据集中无任何官方来源，无法判断加仓/持有信号是否出现。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 344,
+            "exact_quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 400,
+            "exact_quote": "| 买入失效条件 | 未给出 |"
+          }
+        ],
+        "note": "无实体清单名单变动、DRAM 合约价环比、G5 进度、兆易关联交易执行价及当前市值等官方证据，回避/清仓信号均无法确认是否触发；看板『买入失效条件』字段为未给出，规则仅能锚定报告基线回避/清仓信号原文。"
+      }
+    ]
+  }
+}

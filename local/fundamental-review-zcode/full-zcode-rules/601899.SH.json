@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "紫金矿业",
+  "ticker": "601899.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+    "sha256": "29884f410c4989e6a878aa3ac0913e17f69a2a4e06bc00b26bcb3edbb133e7b0",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者：A股观察、不追价；H股可在30.2-34.9港元小仓分批，前提是能承受汇率和长期折价。分档行动价格带：A股26-30元可小仓分批（激进）；不高于26元观察正式半年报（稳健）；不高于25元安全边际明显改善（保守）。报告基线A股32.55元位于30-36元观察区，H股32.92港元位于折价小仓分批区。",
+      "derivation_quote": "A 股观察、不追价；H 股可在 30.2-34.9 港元小仓分批，前提是能承受汇率和长期折价",
+      "derivation_line_ref": 314,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "H股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者当前可持有观察，A股不宜因H1预增继续追高，优先等待正式半年报和Kamoa修复证据。加仓信号需同时满足：正式H1兑现预告且CFO/利润保持良好；Kamoa产量与成本稳定；巨龙二期达产；价格进入安全边际区（A股不高于25元/保守档）。",
+      "derivation_quote": "正式 H1 兑现预告且 CFO/利润保持良好；Kamoa 产量与成本稳定；巨龙二期达产；价格进入上述安全边际区",
+      "derivation_line_ref": 316,
+      "schedule_type": "event",
+      "metrics": [
+        "CFO/经营现金流",
+        "净利润",
+        "Kamoa产量",
+        "Kamoa成本"
+      ],
+      "periods": [
+        "2026半年度"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/卖出信号（任一出现即触发）：2026年Kamoa产量低于29万吨或C1成本超过3美元/磅；矿产品毛利率持续低于50%；重大收购减值；商品下跌时杠杆重新恶化。",
+      "derivation_quote": "2026 Kamoa 低于 29 万吨或 C1 超 3 美元/磅；矿产品毛利率持续低于 50%；重大收购减值；商品下跌时杠杆重新恶化",
+      "derivation_line_ref": 317,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "Kamoa年产量(万吨)",
+        "Kamoa C1成本(美元/磅)",
+        "矿产品毛利率(%)",
+        "杠杆水平"
+      ],
+      "periods": [
+        "2026年度"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+      "source_role": "main_report_reference",
+      "sha256": "29884f410c4989e6a878aa3ac0913e17f69a2a4e06bc00b26bcb3edbb133e7b0"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 289,
+            "exact_quote": "| 30-36 元 | 约 34.9-41.8 港元 | 观察，不建大仓 | 持有观察；A 股当前 32.55 元在此区间 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 389,
+            "exact_quote": "| 保守型价格区间 | 不高于 25 元 |"
+          }
+        ],
+        "note": "证据文档仅含主报告（基线32.55元/32.92港元为报告日数据），无独立行情来源给出当前价格，无法验证现价是否落入26-30元或不高于25元的买入区间。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 315,
+            "exact_quote": "| 持仓者 | 未提供成本。当前可持有观察，A 股不宜因 H1 预增继续追高；优先等待正式半年报和 Kamoa 修复证据 |"
+          }
+        ],
+        "note": "证据文档中无报告基线之后的正式半年报或Kamoa产量/CFO新数据，也无事件确认（正式H1业绩预告兑现），无法验证加仓信号是否成立。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 317,
+            "exact_quote": "| 减仓/卖出信号 | 2026 Kamoa 低于 29 万吨或 C1 超 3 美元/磅；矿产品毛利率持续低于 50%；重大收购减值；商品下跌时杠杆重新恶化 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 390,
+            "exact_quote": "| 买入失效条件 | Kamoa 产量低于指引或 C1 超过 3 美元/磅；矿产品毛利率持续低于 50%；重大收购减值；商品下跌时杠杆重新恶化。 |"
+          }
+        ],
+        "note": "失效阈值取自报告原文，但无报告基线之后的Kamoa产量/C1成本/毛利率/杠杆官方数据可对照，无法确认失效条件是否触发。"
+      }
+    ]
+  }
+}

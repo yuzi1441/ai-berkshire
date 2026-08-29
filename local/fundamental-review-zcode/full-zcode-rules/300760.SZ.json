@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "迈瑞医疗",
+  "ticker": "300760.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+    "sha256": "7fde5dcc0e321dd2cae9c70b29cbc4761587074cd3d2856a4797874852ef06bb",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者不在当前价（报告基线 139.68 元）重仓追买；激进型 125 元附近或 2026H1 利润明确转正后重新估值（仅观察仓）；稳健型 115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定；保守型 100 元附近并确认论文未破坏。",
+      "derivation_quote": "115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定",
+      "derivation_line_ref": 367,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已有持仓有条件持有、仓位不过度集中，按信号跟踪；加仓/重新评级信号包括：国内收入连续两个季度转正（非低价大单一次性波动）、归母净利润恢复正增长且经营现金流同步改善、IVD 毛利率不再下降且份额继续提升、国际收入保持 15% 左右增长。",
+      "derivation_quote": "国内收入连续两个季度转正，且不是低价大单造成的一次性波动。",
+      "derivation_line_ref": 373,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "国内收入同比",
+        "归母净利润同比",
+        "经营现金流",
+        "IVD毛利率",
+        "国际收入同比"
+      ],
+      "periods": [
+        "2026Q1",
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：出现任一情形触发减仓或论文重审——2026H2 国内收入仍连续双位数下降；国际收入降至个位数增长且海外费用率上升；综合或 IVD 毛利率继续显著下降且份额无法带来利润；商誉减值、惠泰协同不及预期或继续高价并购；重大 FDA/CE、招采、反商业贿赂或数据合规事件；控股股东质押比例继续上升或继任不确定。",
+      "derivation_quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。",
+      "derivation_line_ref": 385,
+      "schedule_type": "event",
+      "metrics": [
+        "国内收入同比",
+        "国际收入同比",
+        "商誉减值",
+        "质押比例"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+      "source_role": "main_report_reference",
+      "sha256": "7fde5dcc0e321dd2cae9c70b29cbc4761587074cd3d2856a4797874852ef06bb"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/迈瑞医疗/迈瑞医疗-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "f5f9f773d8fffe1f3ce0e80aabc7a9a6577a6d9c617d614a1ddb771dbe1739a9"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 36,
+            "exact_quote": "收盘价 / 总市值 | 139.68 元 / 1,693.54 亿元 | 当前不在计划买入区"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 51,
+            "exact_quote": "**我不以139.68元激活买入论文；计划在115元以下分批研究迈瑞"
+          }
+        ],
+        "note": "最新可得价格证据为 2026-07-13 基线 139.68 元（高于 115-120 元买入带，买入论文未激活）；复核日 2026-08-29 无当前市价证据，无法确认价格是否已进入买入带，维持证据不足。"
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 62,
+            "exact_quote": "2025 国内 -22.97%，2026Q1 仍 -11.13%；降幅收窄但离转正较远"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 63,
+            "exact_quote": "2026Q1 收入 +1.39%，但归母净利 -11.37%，毛利率较上年同期仍低 0.66pct"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 61,
+            "exact_quote": "2026Q1 国际收入 44.49 亿元、+15.70%、占比 53%"
+          }
+        ],
+        "note": "以 2026Q1 一季报（最新可得官方报告期，含同比对比）核验：国内收入 -11.13% 未转正、归母净利 -11.37% 仍负增长、IVD 毛利率同比下降 3.88pct（2025 年 58.33%），加仓信号均未满足；国际收入 +15.70% 达到 15% 左右增长标准。结论：维持有条件持有、不加仓；2026H1 半年报发布后需再复核。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 91,
+            "exact_quote": "**首次建档红线检查：0 条正式触发。** 当前有三项黄色预警：国内收入、合规细节、并购回报透明度；质押是解除后的持续观察项，不是利好催化。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 85,
+            "exact_quote": "未触发但已逼近；2026Q1 为 -11.13%"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 89,
+            "exact_quote": "未触发；当前占其持股 22.56%、总股本 5.53%"
+          }
+        ],
+        "note": "证据文档红线清单（2026-07-13 建档，含控股股东部分股份解除质押公告）确认 7 条红线 0 条正式触发；但国内收入红线已逼近（2026Q1 -11.13%），属黄色预警，需持续观察。"
+      }
+    ]
+  }
+}

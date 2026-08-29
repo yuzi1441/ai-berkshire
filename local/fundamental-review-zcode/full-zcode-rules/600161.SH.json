@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "天坛生物",
+  "ticker": "600161.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+    "sha256": "827ce4b5bd41dd10dd9f85cf7a45602e97c7d7882961de9ba6a73c7dd75bceac",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提为价格与证据双条件同时满足：激进型需价格进入 8.5-9.0 元区间且毛利率不再创新低、应收/收入开始下降（可用计划仓位 1/3 建观察仓）；稳健型需 7.0-8.0 元且连续两个报告期滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长；保守型需 6.3 元以下且无质量事故、浆站制度恶化或控股股东利益侵占（对应相对 Base 折现现值约 25%安全边际）。报告日基准价 12.42 元高于全部买入价格带，报告基准建议为观察、不追买。",
+      "derivation_quote": "激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降",
+      "derivation_line_ref": 393,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "毛利率",
+        "应收/收入"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证条件：14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。若公司低价环境下 OCF/净利恢复到 80%以上、应收/收入回落、其他高价值产品占比持续提升，可重新上调合理 PE 和仓位。观察仓可持有到正式中报和随后两个季度验证。",
+      "derivation_quote": "14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓",
+      "derivation_line_ref": 403,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "2026E盈利",
+        "2027E盈利",
+        "OCF/净利"
+      ],
+      "periods": [
+        "2026E",
+        "2027E"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/论文失效信号：产品价格继续下降且毛利率跌破 30%；应收/收入继续上升、坏账准备明显增加；生产继续快于销售、库存减值出现；两大传统品种占比两三年后仍接近 90%；采浆连续两年低于行业增速且单站产出不升；以高价或不透明方式向上市公司注入竞争资产。",
+      "derivation_quote": "产品价格继续下降且毛利率跌破 30%",
+      "derivation_line_ref": 410,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "应收/收入",
+        "坏账准备",
+        "库存",
+        "单站采浆"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+      "source_role": "main_report_reference",
+      "sha256": "827ce4b5bd41dd10dd9f85cf7a45602e97c7d7882961de9ba6a73c7dd75bceac"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "清单内仅 local_1 主报告一份文档，只能作报告基线。基线显示 2026-07-23 股价 12.42 元，高于激进型 8.5-9.0 元、稳健型 7.0-8.0 元、保守型 6.3 元全部买入价格带；截至复核日 2026-08-29 本地无独立来源提供当前股价及毛利率、应收/收入现状，无法确认价格与证据双条件是否到位，诚实判定为证据不足。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 6,
+            "exact_quote": "| 股价 / 总股本 / 市值 | 12.42 元 / 19.7737 亿股 / 245.59 亿元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 393,
+            "exact_quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 421,
+            "exact_quote": "基准情景合理关注区约 8.5-9.0 元；若严格要求相对 Base 折现现值有约 25%安全边际，保守买入区约为 6.3 元以下。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "note": "减仓阈值 14 元与 Bull 终值 17 元均需与当前股价对比，盈利上修与否需 2026E/2027E 盈利预测的更新值。本地仅有报告日 12.42 元基线与报告自身的盈利预测，无当前股价、无更新后的盈利预测，无法判定是否触及减仓条件。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 403,
+            "exact_quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "note": "失效条件需当期毛利率（阈值 30%）、应收/收入、坏账准备、库存及单站采浆等与报告基线的连续对比。本地仅有 2026-07-23 数据截止日的报告基线，无此后新财报或任何独立证据文档提供对比期数值，无法判定任一失效信号是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 410,
+            "exact_quote": "| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 411,
+            "exact_quote": "| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 412,
+            "exact_quote": "| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |"
+          }
+        ]
+      }
+    ]
+  }
+}

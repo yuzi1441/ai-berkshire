@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "一拖股份",
+  "ticker": "601038.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+    "sha256": "877eb0ba762dadd1cc2edad9ec83a076f28081ffa3fcf47b17337412a2a02af5",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓在 11.69 元不追价；触发买入需价格进入 9.5 元附近（9.0-9.5 元为稳健型重点买入区，不高于 9.0 元为保守型强安全边际区），或正式财报证明利润中枢显著上修；9.5-10.5 元仅激进型小仓试错且需 2026H1/Q3 继续验证内需、回款和毛利。",
+      "derivation_quote": "价格进入 9.5 元附近，或正式财报证明利润中枢显著上修",
+      "derivation_line_ref": 322,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "利润中枢"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：小仓持有继续观察，核对 2026H1 回款、海外毛利、高端产品销量和渠道库存四项；较重持仓审视机会成本——成本显著低于 9.5 元可持有，成本接近现价需与更高 ROIC 公司比较。",
+      "derivation_quote": "看 2026H1 回款、海外毛利、高端产品销量和渠道库存",
+      "derivation_line_ref": 323,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "回款",
+        "海外毛利率",
+        "高端产品销量",
+        "渠道库存"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓或论文重审信号，任一触发即重审）：① 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱；② 雷沃份额和高端商业化持续领先、一拖只能靠降价守份额；③ 海外收入增长但毛利率、回款或保修成本持续恶化；④ 在建工程与折旧明显上升而产能利用率未改善；⑤ 再次发生重大会计差错、监管警示或关联资金风险；⑥ 股价升至 16.5 元以上且基本面未上修。",
+      "derivation_quote": "若升至 16.5 元且基本面未上修，考虑减仓",
+      "derivation_line_ref": 325,
+      "schedule_type": "event",
+      "metrics": [
+        "股价",
+        "应收/贴息/销售费用",
+        "海外毛利率",
+        "产能利用率"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+      "source_role": "main_report_reference",
+      "sha256": "877eb0ba762dadd1cc2edad9ec83a076f28081ffa3fcf47b17337412a2a02af5"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 322,
+            "exact_quote": "| 空仓 | **等待，不在 11.69 元追价** | 价格进入 9.5 元附近，或正式财报证明利润中枢显著上修 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 279,
+            "exact_quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 281,
+            "exact_quote": "| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "note": "仅有主报告基线价 11.69 元（报告日 2026-07-14，位于 10.5-13.8 元等待区），清单内无独立证据文档提供当前市价与正式财报利润数据，买入触发条件无法评估。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 323,
+            "exact_quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 324,
+            "exact_quote": "| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "note": "本地证据中无 2026H1 回款、海外毛利、高端产品销量与渠道库存数据，四项持仓验证指标无法核对。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 325,
+            "exact_quote": "| 价格升至 13.8 元以上 | **不追价并审视估值** | 若升至 16.5 元且基本面未上修，考虑减仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 339,
+            "exact_quote": "1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 343,
+            "exact_quote": "5. 再次发生重大会计差错、监管警示或关联资金风险。"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "note": "证据中无报告基线（2026-07-14）之后的应收/费用、海外毛利、产能利用率与监管事件数据，减仓/重审信号无法确认触发或未触发。"
+      }
+    ]
+  }
+}

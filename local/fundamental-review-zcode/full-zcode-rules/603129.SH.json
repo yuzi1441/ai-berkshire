@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "chunfeng-dongli",
+  "ticker": "603129.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+    "sha256": "1d6188a8c293e051168b42500da0c8db9524ec2c87b79598d375bd7ceae8f9fb",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者建议分批建仓（当前价位可配置半仓）：前提是Forward PE 15x、PEG 0.66、净现金占25%的估值具备安全边际；同时需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位为200-220元（对应Forward PE 12-14x），股价跌至200元以下（Forward PE<13x，接近悲观情景）为明确加仓信号。",
+      "derivation_quote": "Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际",
+      "derivation_line_ref": 437,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "Forward PE",
+        "PEG",
+        "净现金占比"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者继续持有、但不急于加仓：2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。持仓验证关注三个拐点：(1)极核毛利率转正；(2)美国关税政策明确化；(3)欧洲渠道重建完成。加仓信号：极核电动季度毛利率转正、中美贸易缓和关税下调、ATV全球市占率突破8%。",
+      "derivation_quote": "2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。",
+      "derivation_line_ref": 438,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "季度净利润增速",
+        "极核电动季度毛利率",
+        "ATV全球市占率",
+        "Forward PE"
+      ],
+      "periods": [
+        "季度"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出信号（任一出现即触发）：(1)Forward PE升至30x以上（股价约470元）；(2)美国关税综合税率突破50%且无有效规避路径；(3)2026全年净利润增速降至个位数；(4)管理层再次大规模减持。",
+      "derivation_quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径",
+      "derivation_line_ref": 439,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "Forward PE",
+        "美国关税综合税率",
+        "年度净利润增速",
+        "管理层持股变动"
+      ],
+      "periods": [
+        "年度",
+        "季度"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+      "source_role": "main_report_reference",
+      "sha256": "1d6188a8c293e051168b42500da0c8db9524ec2c87b79598d375bd7ceae8f9fb"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 437,
+            "exact_quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
+          }
+        ],
+        "note": "证据文档仅含主报告（Forward PE 15x为报告日基线），无独立行情来源给出当前股价与Forward PE，无法验证估值前提和200-220元理想加仓价位是否已满足。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 438,
+            "exact_quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
+          }
+        ],
+        "note": "证据文档无2026Q2/Q3季报数据（利润增速、极核毛利率），也无关税政策事件确认，缺少对比期、官方来源与事件确认，无法验证持仓拐点是否出现。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 439,
+            "exact_quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+          }
+        ],
+        "note": "卖出信号阈值取自报告原文，但证据文档无最新Forward PE、关税税率、全年利润增速、管理层持股数据可对照，无法确认任一卖出信号是否触发。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "格力电器",
+  "ticker": "000651.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+    "sha256": "b02729c13934c3035c819cb279265a5c9e2f7f12e3d713332584cc391f3faac0",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：激进型38元以下分批建仓（不因低PE一次性满仓，总仓位上限受控）；稳健型32-35元优先买入区（对应约6.1-6.7x正常化EPS）；保守型30元以下且分红政策未恶化才考虑重仓；38-52元为持有/小额定投观察区，高于55元降低新增买入。报告基线37.80元（2026-07-06）。",
+      "derivation_quote": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。",
+      "derivation_line_ref": 200,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有/加仓验证条件：2026-2027年扣非利润恢复正增长且不靠一次性收益（基线：2026Q1扣非57.02亿元、同比-0.27%）；空调与中央空调份额稳定、毛利率不被价格战明显击穿；分红率和回购纪律继续保持，跨界投资收缩到能力圈内。",
+      "derivation_quote": "2026-2027 年扣非利润恢复正增长，且不是靠一次性收益。",
+      "derivation_line_ref": 206,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非归母净利同比",
+        "空调份额与毛利率",
+        "分红率与回购纪律"
+      ],
+      "periods": [
+        "2026H1",
+        "FY2026"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓触发条件：扣非利润连续两年下滑且经营现金流同步恶化；空调主业份额明显流失、线上均价与毛利率下滑不可逆；新能源/智能装备/格力钛继续消耗现金但无ROIC证明；大股东持续减持或质押风险扩大引发治理不稳定；分红政策显著弱化且无高回报再投资；股价高于55元降低新增买入。",
+      "derivation_quote": "扣非利润连续两年下滑，且经营现金流同步恶化。",
+      "derivation_line_ref": 214,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非归母净利",
+        "经营现金流",
+        "大股东减持与质押",
+        "分红政策"
+      ],
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "source_role": "main_report_reference",
+      "sha256": "b02729c13934c3035c819cb279265a5c9e2f7f12e3d713332584cc391f3faac0"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "该股仅有主报告一个本地文档，37.80元（2026-07-06）为报告基线快照；无独立证据提供复核日现价，无法判断是否落入38元以下/32-35元/30元以下等买入带或55元以上谨慎区。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 226,
+            "exact_quote": "1. `verify-market-cap`：37.80 元 × 5,586,631,551 股 = 2111.7 亿元，与 2111 亿元报告市值偏差 0.04%。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 121,
+            "exact_quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "验证所需的2026H1/2026年报扣非增速、份额与毛利率数据在本地证据中缺失，仅有2026Q1扣非-0.27%的报告基线（'核心盈利恢复仍需观察'），无新财报当前值与对比期。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 77,
+            "exact_quote": "2026Q1 营收和归母净利润分别同比增长 3.52% 和 3.01%，表观企稳；扣非归母净利润 57.02 亿元，同比 -0.27%，提示核心盈利恢复仍需观察。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "减仓信号需连续两年利润与现金流数据、大股东减持/质押后续安排及分红政策变化，本地证据仅有2026年出现的减持与较高质押信息的基线描述，无后续公告或财报确认，无法判定是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 217,
+            "exact_quote": "4. 大股东持续减持或质押风险扩大，引发治理不稳定。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 169,
+            "exact_quote": "治理层面，公司无控股股东、无实际控制人，市场化程度较高；但珠海明骏及一致行动人仍有重要影响力，且 2026 年出现减持与较高质押信息，需跟踪后续减持安排、表决权安排和员工持股计划执行。"
+          }
+        ]
+      }
+    ]
+  }
+}

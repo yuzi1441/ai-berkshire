@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "厦门钨业",
+  "ticker": "600549.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+    "sha256": "5feae5084ea2ed2050ce241ceb4b05a58bb51df1da2775fe917d242ce218f975",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：回避，不因股价从 96.85 元跌到 48.39 元（-50%）就认为便宜；需等两个条件之一：(a) 价格跌至 33.5 元以下（28-33.5 元为主要建仓区，对应 20% 安全边际及 PB 2.5-3.0x）；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上；两者都不满足前不建仓。",
+      "derivation_quote": "等两个条件之一：**(a) 价格跌至 33.5 元以下**",
+      "derivation_line_ref": 714,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "经营现金流",
+        "存货",
+        "短期借款",
+        "钨价"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有但不加仓，并主动降低仓位至可承受水平；悲观情景下行至 15.8 元（-67%），需确认自己能承受；若仓位超过组合 10%，建议在半年报前减至 5% 以内。",
+      "derivation_quote": "持有但不加仓，并主动降低仓位至可承受水平。** 悲观情景下行至 15.8 元（−67%），需确认自己能承受。",
+      "derivation_line_ref": 715,
+      "schedule_type": "filing",
+      "metrics": [
+        "仓位占比",
+        "经营现金流",
+        "存货",
+        "短期借款"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出信号：① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；③ 滚动 OCF/归母净利连续两期 < 0.7 且存货、短债同时上升；④ 钨价跌破 35 万/标吨；⑤ 洛阳豫鹭停产超 180 天且影响年度归母净利 > 5%；⑥ 关联交易或资产注入明显损害少数股东；⑦ 券商 2026E 一致预期下修至 35 亿元以下且股价未同步调整。",
+      "derivation_quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；",
+      "derivation_line_ref": 716,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "资产减值损失",
+        "单季归母净利润",
+        "OCF/归母净利",
+        "钨价",
+        "券商一致预期"
+      ],
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "5feae5084ea2ed2050ce241ceb4b05a58bb51df1da2775fe917d242ce218f975"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/厦门钨业/厦门钨业-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "cf3660746f40012ffcac004b0a84bc068f4087eac32a88e0825ab327e8e2818e"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 8,
+            "exact_quote": "> **研究参考价**：48.39 元（腾讯、东方财富，2026-07-24 15:36 左右双源一致）"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 47,
+            "exact_quote": "3. 7 月 24 日收盘价 48.39 元，较 7 月 9 日 64.71 元下跌 25.22%。价格下跌改善了赔率，但不能替代半年报对经营现金流、存货和短期借款的验证。"
+          }
+        ],
+        "notes": "最新证据（2026-07-24 双源）现价 48.39 元，远高于 33.5 元买入条件 (a)；条件 (b) 所需正式半年报未披露（H1 仅为预告，证据明确其不能替代验证），截至证据日两个建仓条件均未满足，空仓者维持回避。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 124,
+            "exact_quote": "| 44.08-50 元 | 观察和重估区；48.39 元位于此区，正式半年报前不新买 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 58,
+            "exact_quote": "| 2 | 账面利润最终能转化为现金，存货和短债不会持续吞噬股东回报 | 滚动 12 个月 OCF/归母净利润、存货、短借；连续两个报告期 OCF/净利润低于 0.7 且存货、短借同时上升则受损 | 季度 / 半年 | 🟡 | 2026Q1 OCF -25.70 亿元、存货 197.31 亿元、短借 106.12 亿元；H1 预告未披露三项数据 |"
+          }
+        ],
+        "notes": "证据与'不加仓'纪律一致（48.39 元位于半年报前不新买区），但持仓验证的核心数据缺失：无任何实际持仓/仓位占比数据，且 2026Q1 后 OCF、存货、短债的当前值未披露（H1 仅有利润预告），正式半年报未出，无法完成'减至 5% 以内'与现金流改善的核验。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 45,
+            "exact_quote": "1. 公司 2026H1 预告归母净利润 22.160318 亿元、同比增长 128.62%，扣非归母净利润 21.760263 亿元、同比增长 135.87%；但由 H1 减去 Q1 推算的 Q2 归母净利润约 11.0922 亿元，仅较 Q1 增长约 0.22%，说明利润在高位而非继续加速。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 46,
+            "exact_quote": "2. 洛阳豫鹭因洛阳钼业暂停供应尾矿而基本停产。其 2025 年对集团归母净利润贡献仅 2.66%，但 2026H1 停产前贡献已达 1.6790 亿元，约占 H1 预告归母净利润 7.58%；停产时长和后续影响尚无法量化。"
+          }
+        ],
+        "notes": "卖出信号多数无法判定：半年报减值（信号①）与 Q3 利润（②）需后续财报；OCF/归母净利仅 Q1 为 -25.70 亿元、缺连续两期对比；钨价现值无证据；洛阳豫鹭已基本停产但时长未知（信号⑤两个要件均未确认）；券商一致预期无当前值。无任一信号被完整证据触发或排除。"
+      }
+    ]
+  }
+}

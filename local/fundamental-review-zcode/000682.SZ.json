@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T16:03:27+08:00",
+  "company": "东方电子",
+  "ticker": "000682.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+    "sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "不追“AI+电网”情绪；12 元附近可以观察仓，10-11 元且基本面未坏时性价比更好。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有，以扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "10-11 元，或连续 2-3 季扣非增速超过 15%、现金流改善且毛利率稳定在 32% 以上。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports\\东方电子\\东方电子投资研究报告-20260707.md",
+      "sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports\\东方电子\\东方电子-thesis-tracker-20260819.md",
+      "sha256": "6022e7b6eb004525d9d5e10cf14ba53f9dbba3d45474709a0496bf6b6d33e748",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports\\东方电子\\东方电子-thesis.md",
+      "sha256": "012fe1af719d31c2b5efbdfc9cabc108e617b8a56372ecc183a8f24ce33fa2f9",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM（本机 ZCode 代理担任复核模型，非 OpenCode）",
+    "reasoning": "按封闭协议逐条核验 main_report_resolutions.json 中人工锁定的 3 个任务；证据仅限 document_catalog 内本地文档（主报告基线 + 2026-08-19 半年报跟踪 + thesis），未使用外部知识，未新增/删除/放宽任何阈值。本地证据价格与财务截至 2026-08-19/08-20 披露周期，执行层面需以最新行情复核价格分支。",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L365",
+            "exact_quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L68",
+            "exact_quote": "2026-08-19 收盘价为 11.58 元，腾讯与新浪两源一致。按总股本 13.40727 亿股复算，总市值 155.26 亿元"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L78",
+            "exact_quote": "成本仍位于原报告 10–13 元的小仓观察区间，价格没有失去安全边际；但“价格不贵”不能抵消毛利率、现金流和资本配置的不确定性。10% 继续作为仓位上限。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L25",
+            "exact_quote": "| 扣非归母净利润 | 3.18 亿元，+7.76% | 低于论文长期两位数增长阈值 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L26",
+            "exact_quote": "| 综合毛利率 | 30.68%，同比下降约 2.40 个百分点 | 低于 31% 跟踪阈值，但仍高于 30% 红线 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L27",
+            "exact_quote": "| 经营现金流净额 | -7.70 亿元，上年同期 -5.51 亿元 | 季节性仍在，但同比恶化 39.79% |"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L39",
+            "exact_quote": "| 1 | 营收与扣非利润长期同比增长不低于 10% | 收入 +15.98%，扣非利润 +7.76%；Q2 单季收入 +22.32%、扣非利润 +6.55% | 🟡 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L26",
+            "exact_quote": "| 综合毛利率 | 30.68%，同比下降约 2.40 个百分点 | 低于 31% 跟踪阈值，但仍高于 30% 红线 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L68",
+            "exact_quote": "2026-08-19 收盘价为 11.58 元，腾讯与新浪两源一致。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      }
+    ]
+  }
+}

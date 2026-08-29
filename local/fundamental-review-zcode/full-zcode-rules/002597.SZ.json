@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "金禾实业",
+  "ticker": "002597.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+    "sha256": "f364f4676298fd444c551bb6253eecddc68a5184ade793e08474a6515d254770",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：当前 20.24 元（TTM PE 57x、FCF 为负、Q1 利润下滑 60%）仅观察不买入；稳健型需股价跌入 13.5-16.5 元且毛利率、库存和现金流同步改善后分批买入；激进型 16.5-18.0 元仅小仓位观察不追涨；保守型在 10.5-13.5 元区间仍暂不参与。",
+      "derivation_quote": "当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究",
+      "derivation_line_ref": 203,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "毛利率",
+        "库存",
+        "经营现金流"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：不因股价接近一年低点而补仓，保留小仓位观察，按失效条件控制仓位；下次复核日 2026-09-10，重点核对 2026 半年报与 Q2 经营数据（核心食品添加剂毛利率是否回升、库存是否同比下降、年度 FCF 是否转正）。",
+      "derivation_quote": "不因“接近一年低点”补仓；保留小仓位观察，按失效条件控制仓位",
+      "derivation_line_ref": 204,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "核心食品添加剂毛利率",
+        "库存",
+        "FCF"
+      ],
+      "periods": [
+        "2026H1",
+        "2026Q2"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "失效/减仓卖出信号：核心食品添加剂毛利率继续低于 20%；存货和跌价损失继续上升；或连续年度 FCF 为负且有息负债上升。触发任一即按失效条件控制仓位。",
+      "derivation_quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升",
+      "derivation_line_ref": 206,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "核心毛利率",
+        "存货",
+        "跌价损失",
+        "FCF",
+        "有息负债"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "f364f4676298fd444c551bb6253eecddc68a5184ade793e08474a6515d254770"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope_label": "买入前提",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 203,
+            "exact_quote": "当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 181,
+            "exact_quote": "等待确认后分批买入 | 13.5-16.5 元 | 需要毛利率、库存和现金流同步改善"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 184,
+            "exact_quote": "在 TTM PE 57x、FCF 为负且 Q1 利润下滑 60% 的组合下，答案是否定的；等待价格或证据改善更划算。"
+          }
+        ],
+        "note": "本地证据仅主报告基线（价格 20.24 元，数据截止 2026-08-10），无 2026-08-29 当前股价，也没有判定毛利率/库存/现金流是否同步改善的最新数据，无法确认是否跌入 13.5-16.5 元稳健区间。"
+      },
+      {
+        "task_id": "holder",
+        "scope_label": "持仓验证",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 204,
+            "exact_quote": "不因“接近一年低点”补仓；保留小仓位观察，按失效条件控制仓位"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 208,
+            "exact_quote": "下一次复核安排在 2026-09-10，重点等待半年报和 Q2 经营数据。"
+          }
+        ],
+        "note": "下次复核日 2026-09-10 未到，2026 半年报/Q2 经营数据尚未出现在证据包中，无当前值与对比期，无法验证毛利率回升、库存下降或 FCF 转正。"
+      },
+      {
+        "task_id": "risk",
+        "scope_label": "风险/失效条件",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 206,
+            "exact_quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 252,
+            "exact_quote": "核心毛利率继续低于20%，库存和跌价损失继续上升，或连续年度FCF为负且有息负债上升。"
+          }
+        ],
+        "note": "判定“继续低于 20% / 继续上升 / 连续年度 FCF 为负”均需要报告基线之后的新披露期数据（2026 半年报等），证据包中缺失，无法宣告触发或未触发。"
+      }
+    ]
+  }
+}

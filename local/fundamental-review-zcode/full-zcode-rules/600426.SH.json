@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "山东华鲁恒升化工股份有限公司",
+  "ticker": "600426.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+    "sha256": "a00386e1ae573fb83442d0d288b732fc3f184e850abcf204d2d414556d869477",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：稳健型在股价 15-17 元区间分批买入（接近中性情景折现价值、开始具安全边际）；保守型在 11-14 元区间分批买入（接近悲观目标区）；当前 21.11 元（15.58 倍 TTM PE）安全边际不足，不追。",
+      "derivation_quote": "稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |",
+      "derivation_line_ref": 331,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "PE TTM"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓者可持有核心仓、21 元以上不追；若 Q2 价差、现金流和项目爬坡继续改善可维持仓位；以 2026 年半年报为最重要复核点：核对 Q1 量价齐升能否延续、经营现金流能否跟上利润、荆州新装置负荷与毛利、净债务是否继续上升。",
+      "derivation_quote": "持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |",
+      "derivation_line_ref": 361,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "产品价差",
+        "经营现金流",
+        "荆州基地装置负荷与毛利",
+        "净债务"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/失效条件：连续四季毛利率低于 15%、FCF/净利润持续低于 50%，或主要新项目稳产后 ROIC 低于 8%；减仓信号：股价进入 30 元以上而盈利未同步上修，或估值超过 18 倍且行业供给仍加速。",
+      "derivation_quote": "卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |",
+      "derivation_line_ref": 364,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "FCF/净利润",
+        "新项目ROIC",
+        "股价",
+        "估值倍数"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+      "source_role": "main_report_reference",
+      "sha256": "a00386e1ae573fb83442d0d288b732fc3f184e850abcf204d2d414556d869477"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 206,
+            "exact_quote": "因为当前15.58倍PE看似不贵，却建立在37亿元TTM会计利润上；若维护性资本开支高、下一轮项目回报低，真正所有者收益可能远低于EPS，21.11元并没有足够安全边际。"
+          }
+        ],
+        "notes": "仅主报告作基线：21.11 元为报告撰写时点价格，清单内无报告发布后的当前股价，无法判定 15-17 元或 11-14 元买入区间是否触发。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 368,
+            "exact_quote": "2026年半年报是当前最重要的复核点：需要看Q1的量价齐升能否延续、经营现金流能否跟上利润、荆州新装置的负荷与毛利、净债务是否继续上升，以及管理层对剩余NMP/PBAT和TDI规划的正式表述。"
+          }
+        ],
+        "notes": "看板下次复核日期为 2026-08-21（已过），但 2026 年半年报及相关量价、现金流数据未出现在证据清单中，无法完成持仓验证。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 437,
+            "exact_quote": "| 买入失效条件 | 连续四季毛利率低于15%或主要新项目稳产后ROIC低于8% |"
+          }
+        ],
+        "notes": "缺报告期后连续四个季度毛利率、FCF/净利润与新项目 ROIC 的当前值及对比期，无法判断任一卖出/失效条件是否触发。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "江波龙",
+  "ticker": "301308.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+    "sha256": "c46555dfd3cc95be6688883a518aedfd56db44bda7377dc2871acffc1c74c0b7",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者回避（报告基线 618.02 元为显著高估区域，超主流机构目标价约一倍）；具备安全边际的买入区间为 180 元以下（中性情景再打 6 折，约对应 PB 6~7 倍）；合理价值区间 240~300 元。加仓/买入信号：周期下行出清后 PB 回到 8 倍（历史均值）以下、且企业级存储收入占比升至 20% 以上验证第二曲线，两者同时满足再评估。",
+      "derivation_quote": "具备安全边际的买入区间：180元以下",
+      "derivation_line_ref": 215,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PB"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓者分批止盈，至少减半；剩余仓位明确定性为周期投机头寸而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金。持仓者重新评估加仓需同时满足：PB 回到 8 倍以下且企业级存储收入占比升至 20% 以上。",
+      "derivation_quote": "周期下行出清后：PB回到8倍（历史均值）以下、且企业级存储收入占比升至20%以上验证第二曲线",
+      "derivation_line_ref": 243,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "PB",
+        "企业级存储收入占比"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：卖出信号①NAND/DRAM 合约价环比转负（报告期 Q3 涨幅已收窄至 10~18%，逼近临界）；②季报出现存货跌价准备大额计提；③2026-08-06 实控人不减持承诺到期后蔡华波本人开始减持；④37 亿定增落地价显著低于市价。",
+      "derivation_quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）",
+      "derivation_line_ref": 242,
+      "schedule_type": "event",
+      "metrics": [
+        "NAND/DRAM合约价环比",
+        "存货跌价准备"
+      ],
+      "periods": [
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+      "source_role": "main_report_reference",
+      "sha256": "c46555dfd3cc95be6688883a518aedfd56db44bda7377dc2871acffc1c74c0b7"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 215,
+            "exact_quote": "**具备安全边际的买入区间：180元以下**（中性情景再打6折，约对应PB 6~7倍、接近历史均值下方）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 240,
+            "exact_quote": "**回避**。这是好周期股，不是好投资标的——好周期股的买点在血流成河时（2024年9月PB 3.9倍、59元），不在中报预增743倍上新闻时"
+          }
+        ],
+        "note": "清单内仅有主报告 local_1，无独立行情证据。618.02 元为 2026-07-06 报告基线价，无当前股价与 PB 判断是否接近 180 元买入区间或 PB 8 倍加仓条件。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 241,
+            "exact_quote": "剩余仓位明确定性为\"周期投机头寸\"而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 243,
+            "exact_quote": "周期下行出清后：PB回到8倍（历史均值）以下、且企业级存储收入占比升至20%以上验证第二曲线，两者同时满足再评估"
+          }
+        ],
+        "note": "证据文档中无最新 PB、企业级存储收入占比的当前值与对比期，无法验证持仓者重新评估条件是否满足。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 242,
+            "exact_quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）；②季报出现存货跌价准备大额计提；③2026-08-06实控人不减持承诺到期后蔡华波本人开始减持；④37亿定增落地价显著低于市价"
+          }
+        ],
+        "note": "证据文档中没有 2026-08-06 承诺到期后减持、定增落地、季报存货计提的事件确认，也无最新 NAND/DRAM 合约价环比数据，四条卖出信号触发状态未知。"
+      }
+    ]
+  }
+}

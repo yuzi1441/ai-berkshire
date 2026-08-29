@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "特变电工",
+  "ticker": "600089.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/特变电工/特变电工研究报告-20260713.md",
+    "sha256": "d8626446170445adbbc6decb89a3866ec75d80905335ac42d63d5d7d27a4338b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓买入前提（价格分层）：18 元以上不买；13.3-15.0 元仅在半年报确认设备毛利、扣非和现金流未恶化时建立不超过目标仓位 1/4 的研究仓；稳健型 11.8-13.3 元为分批买入区（接近中性情景 8% 年化回报阈值）；保守型 10.7 元以下接近 10% 中性回报阈值。价格与基本面必须同时满足。",
+      "derivation_quote": "| 稳健型 | **11.8-13.3元** | 分批买入区，接近中性情景8%年化回报阈值 |",
+      "derivation_line_ref": 327,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者以现金流和资本纪律而非订单新闻作为去留标准，逐季/年度验证：滚动 OCF/归母净利保持大于 1，Capex/OCF 先降至 1.5x 以下并继续向 1x 收敛；电气设备毛利率稳定在 20% 左右或继续提升；海外收入增长同时境外毛利回升且应收和合同资产不快于收入。半年报若显著改变扣非利润、资本开支、设备毛利或净资产应重新计算。",
+      "derivation_quote": "滚动OCF/归母净利保持大于1，Capex/OCF先降至1.5x以下并继续向1x收敛",
+      "derivation_line_ref": 340,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "OCF/归母净利",
+        "Capex/OCF",
+        "电气设备毛利率"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/论文失效信号：电气设备毛利率跌破 18% 且订单增速放缓；订单增长但经营现金流、应收和合同资产继续恶化；多晶硅新增大额减值或低利用率长期化；煤制气超预算、延期、追加大额融资或 IRR 低于资本成本；核心债务和财务费用持续快于经营利润增长；关联交易扩大但缺少第三方定价与增量 ROIC 证据。",
+      "derivation_quote": "电气设备毛利率跌破18%且订单增速放缓",
+      "derivation_line_ref": 347,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "电气设备毛利率",
+        "订单增速",
+        "多晶硅减值",
+        "煤制气总投资"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/特变电工/特变电工研究报告-20260713.md",
+      "source_role": "main_report_reference",
+      "sha256": "d8626446170445adbbc6decb89a3866ec75d80905335ac42d63d5d7d27a4338b"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/特变电工/特变电工-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "0c80baaf52e142085fcd51a0a7080c6d1a479ae1fbccf0d5a4d6cd5ed9c2f5d6"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "本地证据 local_2（论文追踪）数据截止 2026-07-13 收盘：观察基准 19.14 元，高于 13.3-15.0/11.8-13.3 元全部买入带，且当前动作为不买入；但该价格与主报告同日，非复核日（2026-08-29）当前值，价格条件现状无法确认，判证据不足。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 4,
+            "exact_quote": "2026-07-13收盘；财务数据截至2026Q1"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 6,
+            "exact_quote": "19.14元，市值967.10亿元"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 8,
+            "exact_quote": "不买入，等待价格与基本面双重确认"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "note": "以最新可得季度证据（local_2，财务数据截至 2026Q1）验证：假设3（滚动 OCF/归母净利≥1、Capex/OCF 向 1.5x 以下收敛）仍为🔴受损，2025 Capex/OCF 2.37x、粗略 FCF -127.48 亿元，未出现明确下降趋势，现金流改善/加仓信号未触发，按纪律继续观察；2026H1 尚未进入本地证据。",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 39,
+            "exact_quote": "2025 Capex/OCF 2.37x，粗略FCF -127.48亿元；2026Q1粗略FCF -76.89亿元"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 51,
+            "exact_quote": "假设3至少由🔴改善为🟡，即现金流不再继续恶化，Capex/OCF出现明确下降趋势"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "note": "以 local_2 最新证据（截至 2026Q1）对照失效信号：2025 电气设备毛利率 19.81%（高于 18% 红线，假设1 🟢）、2026Q1 订单增长，论文健康度 4/10、无红线触发，减仓/失效信号均未触发。",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 13,
+            "exact_quote": "两项假设受损、两项边际弱化、两项成立、一项待验证；没有红线触发"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 37,
+            "exact_quote": "2025电气设备收入+19.66%，毛利率19.81%；2026Q1订单增长"
+          }
+        ]
+      }
+    ]
+  }
+}
