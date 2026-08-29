@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "DapuStor",
+  "ticker": "301666.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/DapuStor/DapuStor-research-20260623.md",
+    "sha256": "935083488cbfff14abe92846598be03c712e6c861fa80ff2fe272891400cc7d8",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者坚决回避，报告基线 705 元不包含任何安全边际（383x PB / 207x forward PE，高估 4-8 倍）；加仓信号为股价跌至 80-120 元区间（市值 350-520 亿，对应 2027 年合理 PE 20-30x，假设年利润 15-20 亿），且连续 4 个季度证明盈利可持续，两者同时满足才再评估。",
+      "derivation_quote": "股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续",
+      "derivation_line_ref": 316,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "总市值"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓者立即卖出或大幅减仓，锁定利润；报告基线 3,074 亿市值无法被任何合理估值模型支撑；即使最乐观预期（5 年后收入 100 亿/利润 20 亿/30x PE）合理价仅约 138 元。验证点：是否已按此纪律执行减仓。",
+      "derivation_quote": "如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑",
+      "derivation_line_ref": 314,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "总市值"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：最大风险组合为估值泡沫（383x PB / 207x forward PE）+ 2027 年解禁减持潮 + NAND 价格周期；2026Q1 扭亏仅一个季度数据，毛利率 37.6% 是否可持续高度依赖 NAND 价格走势；在当前估值下任何时点均为卖出信号。",
+      "derivation_quote": "估值泡沫（383x PB / 207x forward PE）+2027年解禁减持潮+NAND价格周期",
+      "derivation_line_ref": 305,
+      "schedule_type": "event",
+      "metrics": [
+        "解禁减持进展",
+        "NAND合约价",
+        "毛利率"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/DapuStor/DapuStor-research-20260623.md",
+      "source_role": "main_report_reference",
+      "sha256": "935083488cbfff14abe92846598be03c712e6c861fa80ff2fe272891400cc7d8"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 313,
+            "exact_quote": "**坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 316,
+            "exact_quote": "股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续"
+          }
+        ],
+        "note": "清单内仅有主报告 local_1，无独立行情证据。705 元为 2026-06-23 报告基线价，无当前股价/市值判断是否接近 80-120 元加仓区间。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 314,
+            "exact_quote": "**立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑"
+          }
+        ],
+        "note": "证据文档不含当前市值/股价，也无持仓执行情况记录，无法核验减仓纪律的执行与当前估值状态。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 305,
+            "exact_quote": "估值泡沫（383x PB / 207x forward PE）+2027年解禁减持潮+NAND价格周期"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 349,
+            "exact_quote": "**2026Q1扭亏的可持续性**——仅一个季度数据，毛利率37.6%是否可持续高度依赖NAND价格走势"
+          }
+        ],
+        "note": "证据文档中无 2027 解禁减持进展、NAND 价格最新走势、最新季度毛利率等事件确认与当前值，风险条件触发状态未知。"
+      }
+    ]
+  }
+}

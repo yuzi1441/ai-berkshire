@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "汾酒",
+  "ticker": "600809.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+    "sha256": "302eec7f3ac09def86d83ce1b6ae1b4afe6acd991033162e853a5b735958373a",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：具备安全边际的买入区为 110 元以下（静态 PE <11 倍、股息率 >6%），分批买入（如 3 批：110 / 100 / 92）；90-100 元为重注区；当前约 116 元只可先建 1/4 观察仓，不追反弹。",
+      "derivation_quote": "**具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%",
+      "derivation_line_ref": 209,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "静态PE",
+        "股息率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有收息；核心跟踪指标为青花20 批价能否守住 355-365 元区间，以及季度合同负债是否同比正增长（连续两季正增长+批价企稳构成加仓右侧确认）；成本高于 150 元者等中性目标区（150-170 元）不补仓。",
+      "derivation_quote": "核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债",
+      "derivation_line_ref": 236,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "青花20批价",
+        "合同负债",
+        "股息"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（卖出信号，任一触发即失效）：① 青花20 批价跌破 320 元且持续一季（价盘失守）；② 分红率掉头下降或出现跨界并购（资本配置变质）；③ 股价升至 190-210 元（约 18-20 倍 2027E）而收入增速未回到双位数（估值透支）；④ 品质安全事件。",
+      "derivation_quote": "① 青花20 批价跌破 320 元且持续一季（价盘失守）",
+      "derivation_line_ref": 237,
+      "schedule_type": "event",
+      "metrics": [
+        "青花20批价",
+        "分红率",
+        "股价",
+        "收入增速"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+      "source_role": "main_report_reference",
+      "sha256": "302eec7f3ac09def86d83ce1b6ae1b4afe6acd991033162e853a5b735958373a"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 209,
+            "exact_quote": "- **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 235,
+            "exact_quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 211,
+            "exact_quote": "- 当前 116.24 元：处于\"有吸引力但非极端便宜\"位置，距 7 月 10 日低点 103.64 元已反弹 12%。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "note": "仅有主报告基线价 116.24 元（报告日 2026-07-19 附近），清单内无独立证据文档提供当前市价，无法判断股价是否已进入 110 元以下买入区。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 236,
+            "exact_quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "note": "本地证据中无报告日之后的青花20 批价与季度合同负债数据，无法验证 355-365 元批价区间是否守住及合同负债同比方向。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 237,
+            "exact_quote": "| 卖出信号 | ① 青花20 批价跌破 320 元且持续一季（价盘失守）；② 分红率掉头下降或出现跨界并购（资本配置变质）；③ 股价升至 190-210 元（约 18-20 倍 2027E）而收入增速未回到双位数（估值透支）；④ 品质安全事件 |"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "note": "证据中无报告基线之后的批价、分红率、股价与收入增速数据，四项卖出信号均无法确认触发或未触发。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "杭叉集团",
+  "ticker": "603298.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+    "sha256": "9aae535c6e142c4640a4c3861f1ec144e9a92b7b6f17ef0f64d4b21d903e95a5",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "报告基线股价26.45元（PE 15.5x）仅列入观察名单，不建仓；等待PE跌至12-13倍（约20-23元）再考虑建仓。分层：激进型24-26元轻仓观察仓位上限≤5%；稳健型20-23元等待仓位上限≤10%；保守型18元以下回避。",
+      "derivation_quote": "当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。",
+      "derivation_line_ref": 10,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "市盈率PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证（加仓信号）：应收账款周转天数连续2个季度改善；2026Q2-Q3毛利率回升至24%以上；泰国工厂如期投产且海外增速维持25%以上。",
+      "derivation_quote": "2026Q2-Q3毛利率回升至24%+",
+      "derivation_line_ref": 168,
+      "schedule_type": "filing",
+      "metrics": [
+        "毛利率",
+        "应收账款周转天数",
+        "海外收入增速"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/清仓信号：应收账款持续恶化+坏账计提大增；实际控制人利用控股地位进行不利的关联交易；欧美对中国叉车加征高额关税；行业价格战爆发导致毛利率骤降。基线：应收账款周转天数已由23天升至55天（2026Q1达57.92天）。",
+      "derivation_quote": "应收账款持续恶化+坏账计提大增",
+      "derivation_line_ref": 166,
+      "schedule_type": "filing",
+      "metrics": [
+        "应收账款周转天数",
+        "坏账计提",
+        "毛利率"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+      "source_role": "main_report_reference",
+      "sha256": "9aae535c6e142c4640a4c3861f1ec144e9a92b7b6f17ef0f64d4b21d903e95a5"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "仅有主报告local_1，无独立行情证据。报告基线为2026-04-25股价26.45元、PE 15.5x，无当前股价与PE，无法判断是否已跌入20-23元建仓区。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 3,
+            "exact_quote": "**报告日期**：2026-04-25 | **当前股价**：26.45元 | **币种**：人民币  "
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 159,
+            "exact_quote": "| **稳健型** | **等待** | 20-23元（PE 12-13x） | ≤10% |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "报告数据截止2026-04-25，仅含2026Q1数据（毛利率22.50%、应收周转天数57.92天），无2026Q2/Q3财报确认，无法验证毛利率回升至24%+及应收周转连续2个季度改善。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 34,
+            "exact_quote": "| 毛利率 | 17.78% | 20.78% | 23.55% | 24.78% | 22.50% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 40,
+            "exact_quote": "| 应收账款周转天数 | 30.96 | 33.29 | 44.52 | 54.66 | 57.92 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "减仓/清仓信号均需报告期后财报或公告确认；本地证据仅有截至2026Q1的基线（应收周转天数57.92天、毛利率22.50%），无最新坏账计提、关联交易或关税事件信息。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 166,
+            "exact_quote": "| 应收账款持续恶化+坏账计提大增 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 71,
+            "exact_quote": "- **⚠️ 最大危险信号——应收账款4年翻倍**：周转天数从23天→55天（2026Q1继续恶化至58天）。估算应收余额从9.3亿→26.6亿，增幅186%远超营收增幅22%"
+          }
+        ]
+      }
+    ]
+  }
+}

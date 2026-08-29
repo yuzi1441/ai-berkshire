@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "东方电缆",
+  "ticker": "603606.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/东方电缆/东方电缆-research-20260726.md",
+    "sha256": "1349109f76ad62f5833291c1dbdb29b90a07b478c8aabe80b539ae5295d5d0cf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者在8月5日中报披露前不建仓；中报判决表四项及以上转正面后，方可在36-45元区间分批建仓；或股价跌入30-36元且中报未转负面为加仓信号；低于30元（PE<18x、PB<3.0x）安全边际充分。",
+      "derivation_quote": "在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓",
+      "derivation_line_ref": 818,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PE",
+        "PB"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者持有、不加仓，以2026年8月5日中报判决表作二元判定：H1经营现金流≥0；海缆分部毛利率≥30%；海缆收入增速回升至整体增速之上；在手订单总额守住180亿且海缆守住100亿；应收账款DSO<136天；扣除套期影响后毛利率≥22%。四项及以上转正面按错杀处理，三项及以上转负面按基本面拐点向下处理。",
+      "derivation_quote": "四项及以上转正面 → 可按\"错杀\"处理；三项及以上转负面 → 按\"基本面拐点向下\"处理。",
+      "derivation_line_ref": 812,
+      "schedule_type": "filing",
+      "metrics": [
+        "H1经营现金流",
+        "海缆分部毛利率",
+        "海缆收入增速",
+        "在手订单",
+        "应收账款DSO",
+        "扣除套期影响后毛利率"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/减仓信号：①H1经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于20%；④在手订单海缆分部跌破90亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值。",
+      "derivation_quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%",
+      "derivation_line_ref": 821,
+      "schedule_type": "filing",
+      "metrics": [
+        "经营现金流",
+        "海缆毛利率",
+        "中标海缆占比",
+        "在手订单海缆分部"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东方电缆/东方电缆-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "1349109f76ad62f5833291c1dbdb29b90a07b478c8aabe80b539ae5295d5d0cf"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "仅有主报告local_1，无独立行情证据。报告基线（2026-07-26）为现价处于36-45元区间、PE 23.77x（5年6%分位），无当前股价，也无8月5日中报判决结果，无法确认买入前提是否满足。",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 737,
+            "exact_quote": "| **36 – 45 元** | **当前所在区间**。PE 5 年 6% 分位、2026E PE 17.4x，估值合理偏低，但需中报验证现金流与毛利率 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 818,
+            "exact_quote": "| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "中报判决表六项指标需2026H1财报确认；报告日期为2026-07-26、明示等待8月5日中报，本地证据无2026H1披露数据，六项判决全部无法执行。",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 801,
+            "exact_quote": "### 8.3 中报判决表（8 月 5 日，二元判定）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 805,
+            "exact_quote": "| **H1 经营现金流** | ≥ 0（季节性成立，参照 2025H1 +7.14 亿） | < 0（**季节性解释被证伪**，按回款恶化重定价） |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "六条卖出/减仓信号均需报告期后定期报告或公告确认；本地仅有报告基线（2026Q1 OCF −9.73亿、套期储备剩3.45亿、在手订单184亿）可作对照，无最新数据。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 821,
+            "exact_quote": "| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 789,
+            "exact_quote": "| 5 | **现金流创纪录流出** | 2026Q1 OCF **−9.73 亿**，13 年最差 |"
+          }
+        ]
+      }
+    ]
+  }
+}

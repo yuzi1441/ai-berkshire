@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "长江电力",
+  "ticker": "600900.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+    "sha256": "fb475ebf6846edbd8275536d2075f1763232097a26a435c36684f5e072e7ea9f",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：股价进入稳健型 23-25 元区间（PE 15.60-16.95x、股息率 4.00%-4.35%）且六站来水、电量、综合结算价没有结构性恶化，方可分批建仓；25-26 元为激进型小仓试建带；当前 28.42 元（PE 19.27x、股息率 3.52%）空仓不追价。",
+      "derivation_quote": "23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓",
+      "derivation_line_ref": 278,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "PE",
+        "股息率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓者可继续收息并按季度复核；跟踪末期 0.79 元股息（2026-07-16 登记、07-17 发放）是否按期到账，六站发电量与来水是否结构性恶化，TTM EPS 1.4747 元、简化 FCF/股 1.77035 元观察锚与 70% 分红纪律是否保持。",
+      "derivation_quote": "空仓等待；持仓可继续收息并复核",
+      "derivation_line_ref": 280,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "每股分红",
+        "六站发电量",
+        "来水"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓或论文重审信号，任一触发即重审）：① 估值升至 21 倍以上而盈利、现金流和分红没有同步改善；② 连续 2-3 年综合结算价或单位电量现金贡献下降超过 5%；③ 长期资产现金支出连续两年超过 OCF 50% 且净债务上升；④ 抽蓄、海外或关联资产重大减值、延期、超支或低回报注入；⑤ 重大大坝、机组、生态事故或市场化规则永久削弱收益权。",
+      "derivation_quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善",
+      "derivation_line_ref": 294,
+      "schedule_type": "event",
+      "metrics": [
+        "PE",
+        "综合结算价",
+        "长期资产现金支出/OCF",
+        "净债务"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "source_role": "main_report_reference",
+      "sha256": "fb475ebf6846edbd8275536d2075f1763232097a26a435c36684f5e072e7ea9f"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/长江电力/长江电力-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "df74450e275029d0497eee60780eb9ee5e0a437bae9d0bdaf4e32a7d36598c7f"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 162,
+            "exact_quote": "| 买入论文成立吗？ | **未成立**：28.42 元接近乐观折现价值 29.65 元，中性安全边际不足 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 127,
+            "exact_quote": "| 22-25 元 | 观察仓或小仓跟踪 | 接近中性价值，但没有 20%安全边际 |"
+          }
+        ],
+        "missing_codes": [],
+        "note": "thesis 建档价 28.42 元（2026-07-13 行情锚）高于主报告 23-25 元稳健买入带，thesis 明确判定买入论文未成立、22-25 元仅允许观察仓，买入前提未触发；该价格非实时报价，最新市价待刷新。"
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 31,
+            "exact_quote": "| 2025 全年分红 | 1.00 元/股 | 已含中期 0.21 元；末期 0.79 元于 7 月 17 日发放 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 36,
+            "exact_quote": "| 2026H1 六站发电量 | 1,327.44 亿千瓦时，+4.81% | 乌东德来水 -16.94%，三峡来水 +28.74% |"
+          }
+        ],
+        "missing_codes": [],
+        "note": "thesis 证实末期 0.79 元已于 2026-07-17 按期发放（收息兑现），2026H1 六站发电量 1,327.44 亿千瓦时同比 +4.81% 无结构性恶化；2026 中期分红与全年 70% 分红率尚未披露，属后续复核项。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 103,
+            "exact_quote": "| 10 | PE 超过 21x，而连续两年归母净利增速低于 5%、无新现金回报证据 | 估值警告 | 未触发 | 停止加仓，仓位过高者考虑再平衡 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 96,
+            "exact_quote": "| 3 | 境内水电毛利率连续两个报告期低于 55%，或综合结算价连续两年累计下降超过 5%且无水文解释 | 严重 | 未触发 | 暂停加仓，重估电价与成本护城河 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 98,
+            "exact_quote": "| 5 | 年度 OCF/归母净利连续两年低于 1.0，同时长期资产现金支出/OCF 超过 70%、净债务上升 | 严重 | 未触发 | 将现金牛论文降为受损，考虑减仓 |"
+          }
+        ],
+        "missing_codes": [],
+        "note": "thesis 红线表（建档 2026-07-13）十项红线全部标注未触发；当前 PE 19.27x 低于 21 倍阈值，电价与现金牛类红线亦未触发，减仓/重审信号未触发。"
+      }
+    ]
+  }
+}

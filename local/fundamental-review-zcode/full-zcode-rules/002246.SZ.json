@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "北化股份",
+  "ticker": "002246.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/北化股份/北化股份研究报告-20260709.md",
+    "sha256": "abda107ca51347f9fa60ec23fb8179e66df5aa1921ba0989cd07daf22e34baca",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：估值基准价 18.60 元下安全边际不充分，空仓者观察优先不追高；保守型 ≤13 元且无治理恶化才进入深度研究/小仓试错（对应 TTM PE 约 23x）；稳健型 13-16.5 元且 2026H1/H2 继续验证利润后分批观察；激进型 16.5-20 元只能小仓位主题/景气跟踪。",
+      "derivation_quote": "13-16.5元，且 2026H1/H2 继续验证利润",
+      "derivation_line_ref": 247,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "TTM PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：已持有者 18-22 元区间持有但不盲目加仓，等 2026 中报验证并关注实控人变更方案；验证线为若硝化棉毛利率和现金流维持可继续持有，若业绩靠重组预期支撑应降低仓位；加仓信号含 2026H1/H2 硝化棉毛利率维持高位、防护器材订单/合同负债/现金流有连续性、南充产线披露清晰回报与消化路径。",
+      "derivation_quote": "若硝化棉毛利率和现金流维持，可继续；若业绩靠重组预期支撑，应降低仓位",
+      "derivation_line_ref": 309,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "硝化棉毛利率",
+        "经营现金流",
+        "合同负债与订单连续性"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/回避触发：硝化棉毛利率快速回落且库存和应收账款上升；关联交易占比继续提高且披露透明度下降；实控人变更伴随复杂资产置换或弱资产注入；安全环保处罚、停产整改或重大质量问题；股价 >25 元且无 EPS 上修时减仓/降低预期。",
+      "derivation_quote": "硝化棉毛利率快速回落，库存和应收账款上升。",
+      "derivation_line_ref": 325,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "硝化棉毛利率",
+        "库存/应收账款",
+        "关联交易占比",
+        "安全环保处罚事件",
+        "EPS 上修"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/北化股份/北化股份研究报告-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "abda107ca51347f9fa60ec23fb8179e66df5aa1921ba0989cd07daf22e34baca"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "主报告明确 18.60 元仅为敏感性估值基准价、行情需交易终端复核（报告自身声明实时行情无法在本环境二次交叉验证），看板'买入失效条件''下次复核日期'均为未给出。本地无复核日现价，无法判断是否进入 ≤13 元/13-16.5 元/16.5-20 元任一价格带。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 246,
+            "exact_quote": "| 保守型空仓 | ≤13元且无治理恶化 | 才进入深度研究/小仓试错 | 对应 TTM PE 约 23x，给周期和不透明度留出折价 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 366,
+            "exact_quote": "由于实时行情源无法在本环境完成二次交叉验证，18.60 元仅作为敏感性估值基准价，正式投资决策前必须用交易终端复核。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "持有验证线取决于 2026 中报硝化棉毛利率与现金流是否维持；本地证据只有主报告基线（数据截止 2026-07-09 前后），无 2026H1 官方披露数据，也无实控人变更方案公告，无法验证'维持/靠重组预期支撑'哪个分支成立。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 309,
+            "exact_quote": "| 已持有者 | **持有但设验证线** | 若硝化棉毛利率和现金流维持，可继续；若业绩靠重组预期支撑，应降低仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 249,
+            "exact_quote": "| 已持有者 | 18-22元 | 持有但不盲目加仓 | 等 2026 中报验证；关注实控人变更方案 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "失效条件需逐季毛利率/库存应收/关联交易数据及安全环保处罚事件确认；本地仅有报告基线判断'市场已提前计入硝化棉高毛利与重组预期'，无其后财报或公告，>25 元减仓线亦无现价可比对。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 325,
+            "exact_quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 250,
+            "exact_quote": "| 所有类型 | >25元且无 EPS 上修 | 减仓/降低预期 | 若估值靠题材扩张而非利润验证，风险收益不佳 |"
+          }
+        ]
+      }
+    ]
+  }
+}

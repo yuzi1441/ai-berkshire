@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "万华化学",
+  "ticker": "600309.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+    "sha256": "7f7184559522b848cfcbe8af91edb8f7492054ac153c35c021a381a1783a67c7",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：优先等待股价进入稳健型分批买入区间 63—69 元（对应预告中值 EPS 12.0—13.1 倍 PE），或等待正式 2026H1 半年报验证利润、现金流和债务后再评估；70—75 元区间仅适合小仓试错；55—60 元保守区间（10.4—11.4 倍 PE）才具备较充分周期安全边际。",
+      "derivation_quote": "优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+      "derivation_line_ref": 200,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "PE"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已有合理仓位者持有期间不因短期预告追高，重点跟踪聚氨酯毛利率和自由现金流；等待正式 2026H1 报告确认利润、现金流与债务兑现，若基本面兑现而估值未显著扩张可继续持有；下次重点复核日为 2026-09-05。",
+      "derivation_quote": "不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。",
+      "derivation_line_ref": 201,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "聚氨酯毛利率",
+        "自由现金流"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "论文失效条件：聚氨酯板块毛利率连续两个报告期低于 20%（且并非短期检修或原料错配）；广义净债务/EBITDA 持续高于 4.5 倍；建设高峰过后自由现金流连续两个完整年度为负。",
+      "derivation_quote": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；",
+      "derivation_line_ref": 206,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "聚氨酯板块毛利率",
+        "净债务/EBITDA",
+        "自由现金流"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+      "source_role": "main_report_reference",
+      "sha256": "7f7184559522b848cfcbe8af91edb8f7492054ac153c35c021a381a1783a67c7"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 200,
+            "exact_quote": "优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 268,
+            "exact_quote": "稳健型价格区间 | 63—69 元 |"
+          }
+        ],
+        "notes": "清单内仅有主报告作为基线：报告基准价 75.72 元为 2026-08-07 收盘，不构成新的独立验证；缺少报告发布后的当前股价，无法判定 63—69 元区间是否触发。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 212,
+            "exact_quote": "下一次重点复核：正式 2026H1 报告、福建 MDI 项目公开投产进度、聚氨酯毛利率、广义净债务、经营现金流与新增项目资本回报。建议复核日：2026-09-05。"
+          }
+        ],
+        "notes": "报告中仅有 2026H1 业绩预告（未经审计）及基线聚氨酯/FCF 数据，正式 2026H1 半年报（复核日 2026-09-05 前后）未在证据清单中出现，无法完成持仓验证。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 206,
+            "exact_quote": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 271,
+            "exact_quote": "买入失效条件 | 聚氨酯毛利率连续两期低于 20%；净债务/EBITDA 持续高于 4.5 倍；建设高峰后连续两年自由现金流为负 |"
+          }
+        ],
+        "notes": "缺少报告期后各报告期的聚氨酯毛利率序列与净债务/EBITDA 对比期数据，无法判断任一失效条件是否触发。"
+      }
+    ]
+  }
+}

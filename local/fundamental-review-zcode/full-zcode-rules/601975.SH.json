@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "招商局南京油运股份有限公司",
+  "ticker": "601975.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/招商南油/招商南油-investment-research-20260810.md",
+    "sha256": "a1549c700acc4f777cd75760e2d1d6dd8f67f434f171e33e1b9316a68a990f35",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "分档买入价格带：激进型3.2-3.5元小额分批；稳健型2.7-3.2元分批；保守型2.1-2.7元重点买入（接近Bear与净现金保护区间，仍需经营未恶化）。现价3.71元不在买入带，动作为观察，需等待半年报、运价和新船回报证据后再评估买入。",
+      "derivation_quote": "现价 3.71 元 | 不在买入带 | **观察** | 等待半年报、运价和新船回报证据",
+      "derivation_line_ref": 270,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者可持有并等待2026H1，不要因Q1归母净利+51.73%追涨。加仓触发需同时满足：价格进入相应价格带；亚太MR TCE连续两个季度不低于约20000美元/天；扣非利润和经营现金流改善；新船交付后单船收入/载重吨与ROIC不下滑。下次复核日2026-09-01，使用预计2026-08-28披露的2026半年报核验。",
+      "derivation_quote": "亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善",
+      "derivation_line_ref": 295,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "亚太MR TCE(美元/天)",
+        "扣非净利润",
+        "经营现金流",
+        "新船单船收入/载重吨",
+        "ROIC"
+      ],
+      "periods": [
+        "2026半年度",
+        "季度"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓或卖出触发（任一出现即触发）：亚太MR TCE连续两个季度低于约20000美元/天；新船交付后利用率、收入/载重吨和ROIC明显下降；净债务持续上升并伴随新增船舶减值；关联船价、利率或托管费缺乏公允对照；出现重大安全、监管和资金占用问题。",
+      "derivation_quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降",
+      "derivation_line_ref": 297,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "亚太MR TCE(美元/天)",
+        "新船利用率",
+        "单船收入/载重吨",
+        "ROIC",
+        "净债务",
+        "船舶减值",
+        "关联交易公允性"
+      ],
+      "periods": [
+        "季度"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/招商南油/招商南油-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "a1549c700acc4f777cd75760e2d1d6dd8f67f434f171e33e1b9316a68a990f35"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 270,
+            "exact_quote": "| 现价 3.71 元 | 不在买入带 | **观察** | 等待半年报、运价和新船回报证据 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 267,
+            "exact_quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
+          }
+        ],
+        "note": "证据文档仅含主报告（3.71元为报告日基线），无独立行情来源给出当前股价，无法验证现价是否已进入3.2-3.5元/2.7-3.2元/2.1-2.7元任一买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 295,
+            "exact_quote": "**加仓触发：** 价格进入相应价格带，同时亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善，新船交付后单船收入/载重吨与 ROIC 不下滑。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 299,
+            "exact_quote": "**下一复核日：** 2026-09-01，重点使用预计 2026-08-28 披露的 2026 半年报，核验成品油运价、扣非利润、经营现金流、新船交付与关联交易。"
+          }
+        ],
+        "note": "报告基线后应有2026半年报（预计2026-08-28披露），但证据文档中无该半年报或运价数据，缺少当前值、对比期与官方来源，无法验证加仓触发条件。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 297,
+            "exact_quote": "**减仓或卖出触发：** 亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降；净债务持续上升并伴随新增船舶减值；关联船价、利率或托管费缺乏公允对照；或出现重大安全、监管和资金占用问题。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 358,
+            "exact_quote": "| 买入失效条件 | 亚太 MR TCE 连续两个季度低于约 20000 美元/天，或新船交付后 ROIC 下滑并伴随净债务上升、减值 |"
+          }
+        ],
+        "note": "失效阈值取自报告原文，但无报告基线之后的TCE、ROIC、净债务、减值等官方数据可对照，无法确认失效条件是否触发。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "神火股份",
+  "ticker": "000933.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/神火股份/神火股份研究报告-20260803.md",
+    "sha256": "1b7132753052a73f9ea104c8158eb5e71340823c478c7d12fc34096cb099f22e",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：报告基线价 25.37 元（2026-08-03）不追高；激进型 21-25 元小仓位分批评估（前提：H2 利润不塌、流动性缺口收窄）；稳健型 18-21 元较有吸引力的积累区（前提：资产负债表稳定、分红仍由现金流覆盖）；保守型 18 元以下深度安全边际区（需确认不是煤矿事故、监管或行业永久恶化导致的下跌）。",
+      "derivation_quote": "25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批",
+      "derivation_line_ref": 251,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持仓者可持有但不默认加仓；25-30 元为持有观察区，不新增追涨仓位（前提：铝价、氧化铝和短债没有恶化）；用铝价、氧化铝、短期借款和经营现金流设监控线。",
+      "derivation_quote": "可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线",
+      "derivation_line_ref": 252,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "沪铝价格",
+        "氧化铝价格",
+        "短期借款",
+        "经营现金流"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级，任一出现即触发减仓/卖出与买入失效重审。",
+      "derivation_quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。",
+      "derivation_line_ref": 319,
+      "schedule_type": "price",
+      "metrics": [
+        "沪铝价格",
+        "氧化铝价格"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/神火股份/神火股份研究报告-20260803.md",
+      "source_role": "main_report_reference",
+      "sha256": "1b7132753052a73f9ea104c8158eb5e71340823c478c7d12fc34096cb099f22e"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 251,
+            "exact_quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 312,
+            "exact_quote": "| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |"
+          }
+        ],
+        "note": "证据包仅有主报告 local_1，25.37 元为 2026-08-03 报告基线价，无当前股价数据，无法判断是否落入 21-25/18-21/18 元以下任一买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 252,
+            "exact_quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 225,
+            "exact_quote": "| 25-30 元 | 持有观察，不新增追涨仓位 | 需要铝价、氧化铝和短债没有恶化 |"
+          }
+        ],
+        "note": "无当前股价、沪铝/氧化铝最新价格及最新短期借款、经营现金流数据，监控线状态与持有观察区判断均无法执行。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 319,
+            "exact_quote": "| 买入失效条件 | 铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 146,
+            "exact_quote": "| 铝价回落而氧化铝反弹 | 中高 | 高 | 沪铝跌破 21,500 元/吨、氧化铝持续回升、吨铝利润下滑 |"
+          }
+        ],
+        "note": "证据包中无最新沪铝/氧化铝价格，也无云南限电、煤矿减值、监管公告等事件确认，失效条件触发状态未知。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "江南化工",
+  "ticker": "002226.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+    "sha256": "d75fee445ed5b79efe72e9b720bd71df78ace872572e738461ffd971331f65b7",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：报告基线股价约 4.47 元，激进型 4.0 元以下更合理、4.47 元附近不追（小仓位观察/事件驱动）；稳健型 3.3-3.7 元等待安全边际并要求 2026 利润/现金流改善确认；保守型 3.0-3.3 元或更低才考虑深度折价买入；加仓价格信号为股价回落至 3.0-3.5 元区间且基本面未恶化。",
+      "derivation_quote": "股价回落至3.0-3.5元区间，同时基本面未恶化。",
+      "derivation_line_ref": 197,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：当前建议为观察/等待安全边际；加仓需同时验证——实控人变更方案清晰且有利于资产边界与同业竞争解决；连续 2-3 个季度扣非净利恢复增长、经营现金流同步改善；爆破工程服务毛利率提升且应收/合同资产未明显恶化；并购标的完成业绩承诺、ROIC 与现金流验证良好。",
+      "derivation_quote": "连续2-3个季度扣非净利恢复增长，经营现金流同步改善。",
+      "derivation_line_ref": 194,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非净利同比增速",
+        "经营现金流",
+        "爆破工程服务毛利率",
+        "应收/合同资产"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/重审触发：发生重大安全事故、环保处罚、许可证/爆破资质异常；实控人变更导致不利资产注入、同业竞争加剧或关联交易扩大；连续两个季度扣非净利下滑超过 30% 且经营现金流持续为负；有息债务继续快速上升、财务费用明显侵蚀利润；大股东可交换债换股/减持带来股权与供给冲击。",
+      "derivation_quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。",
+      "derivation_line_ref": 202,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非净利同比增速",
+        "经营现金流",
+        "有息债务",
+        "安全事故/环保处罚/资质事件"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "d75fee445ed5b79efe72e9b720bd71df78ace872572e738461ffd971331f65b7"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-07-09 主报告基线（约 4.47 元，高于激进型 4.0 元门槛，未达稳健 3.3-3.7 元与保守 3.0-3.3 元买入带）；看板契约激进/保守价格区间与复核日期均为'未给出'。无复核日现价，无法判断是否进入任一买入带。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 186,
+            "exact_quote": "| 激进型 | 小仓位观察/事件驱动 | 4.0元以下更合理；4.47元附近不追 | 博弈实控人变更、整合改善、利润修复，但承受治理与安全折价 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 271,
+            "exact_quote": "| 下次复核日期 | 未给出 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "持仓验证依赖实控人变更进展与 2026 年逐季扣非净利、经营现金流、爆破服务毛利率数据；本地证据只有主报告基线（2025 年与 2026Q1 增收不增利），无 2026H1 及之后官方财报或公告，无法验证加仓信号是否成立。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 194,
+            "exact_quote": "连续2-3个季度扣非净利恢复增长，经营现金流同步改善。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 193,
+            "exact_quote": "实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "失效触发含安全事故/环保处罚等事件项和连续两季扣非下滑超 30% 的财务项；本地无主报告基线之后的安全事件、公告或季度财报数据，无事件确认与对比期，无法判断是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 202,
+            "exact_quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 200,
+            "exact_quote": "发生重大安全事故、环保处罚、许可证/爆破资质异常。"
+          }
+        ]
+      }
+    ]
+  }
+}

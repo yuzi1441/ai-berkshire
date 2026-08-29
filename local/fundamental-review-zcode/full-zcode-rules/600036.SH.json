@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "招商银行",
+  "ticker": "600036.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+    "sha256": "346c9b5772f2c74f84fdeffb6a35f22583f7ee57eca234671f801296b2e265f6",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "A股价格条件：DPS 2.016 元不变时，36.65 元对应 5.50% 税前收益率（激进型上限）、34-36 元为优先研究区（对应约 5.60%-5.93%）、33.60 元对应 6.00%（保守型）；同时需满足盈利条件（半年报确认净息差止跌）、信用条件（信用卡不良率不超 2.20%、关注率不超 6%）、资本条件（高级法 CET1 缓冲高于监管要求至少 4pct）才进入下一步研究。报告日基准价 38.80 元高于全部买入价格带。",
+      "derivation_quote": "优先研究 34-36 元，而不是只因除息日临近买入",
+      "derivation_line_ref": 202,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "税前股息率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "下次关键复核点是 2026 年半年报及其业绩交流会：重点验证净息差、信用卡风险迁徙、信用成本和高级法 CET1 能否同时稳定。警戒线：净息差 <1.70% 连续两季；信用卡不良率 >2.20%、关注率 >6.00%；拨备覆盖率快速下降；高级法 CET1 较 8.25% 要求缓冲 <4pct 复核、<2pct 高危；DPS 持平需解释。",
+      "derivation_quote": "下次关键复核点是 2026 年半年报及其业绩交流会",
+      "derivation_line_ref": 237,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "净息差",
+        "信用卡不良率",
+        "信用卡关注率",
+        "高级法CET1",
+        "拨备覆盖率"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "买入失效/减仓条件：净息差跌破 1.60% 且无企稳，信用卡风险向其他零售贷款扩散，CET1 缓冲低于 2 个百分点，或出现重大治理事件；另有普通股派息率因利润下滑被动升至 60% 以上且无一次性原因、信用卡不良率超 2.20% 且关注率超 6% 并向消费贷/按揭/小微扩散、基本面未改善时股价高于约 50 元（静态股息率低于约 4%）收益赔率明显下降。",
+      "derivation_quote": "净息差跌破1.60%且无企稳，信用卡风险向其他零售贷款扩散，CET1缓冲低于2个百分点，或出现重大治理事件",
+      "derivation_line_ref": 280,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "净息差",
+        "信用卡不良率",
+        "高级法CET1",
+        "普通股派息率"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+      "source_role": "main_report_reference",
+      "sha256": "346c9b5772f2c74f84fdeffb6a35f22583f7ee57eca234671f801296b2e265f6"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "规则含价格与基本面双重门槛。本地仅有主报告基线：2026-08-07 行情 A 股 38.80 元（高于 34-36 元研究区，当时不满足价格条件）；截至复核日 2026-08-29 无任何本地文档提供当前股价，无法确认价格条件现状，诚实判定为证据不足。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 7,
+            "exact_quote": "A 股 38.80 元，普通股 TTM PE 6.80 倍"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 277,
+            "exact_quote": "稳健型价格区间 | 34-36元"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "note": "持有验证以 2026 年半年报为关键复核点。主报告明确 2026H1 尚未披露是主要时间缺口，本地证据目录中无半年报或其摘录，无法对净息差、信用卡迁徙、CET1 等当期值做验证，亦无半年报已披露的事件确认。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 245,
+            "exact_quote": "2026H1 尚未披露是主要时间缺口，已通过降低前瞻结论置信度处理"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 225,
+            "exact_quote": "净息差 | 1.83%（2026Q1） | <1.70%连续两季；<1.60%严重"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "note": "失效条件需当期净息差（阈值 1.60%）、信用卡不良/关注率、高级法 CET1 缓冲等与警戒线对比。本地仅有 2026Q1 基线值（净息差 1.83%、信用卡不良率 1.90%、CET1 14.13%），无复核日当期值与对比期，无法判定任一失效条件是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 226,
+            "exact_quote": "信用卡不良率 | 1.90% | >2.20%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 231,
+            "exact_quote": "高级法 CET1 | 14.13% | 较 8.25%要求的缓冲 <4pct 复核，<2pct 高危"
+          }
+        ]
+      }
+    ]
+  }
+}

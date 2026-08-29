@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "国电南瑞",
+  "ticker": "600406.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+    "sha256": "7db62af524142ef7e78ca80f0772d18e744837cdf5d8698e1f7314a7b047c608",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：观察、不买入；等待股价 ≤21.84 元（中性现值）开始分批建仓，≤17.48 元（20% 安全边际候选价）积极建仓，≤15.29 元（30% 安全边际）重仓候选；现价 23.58 元比 17.48 元高 34.9%，现价买入期望年化约 7.8% 低于 10% 要求回报，没有需要现在就买的理由。",
+      "derivation_quote": "等待 ≤ 21.84 元（中性现值）开始分批、**≤ 17.48 元（20% 安全边际）积极建仓**。",
+      "derivation_line_ref": 1056,
+      "schedule_type": "price",
+      "metrics": [
+        "股价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持仓者持有、不加仓，前提为全部红线未触发（标准无保留审计、无处罚、无重大诉讼、无大股东减持、商誉 144.47 万元、有息负债率 0.60%、FCF/净利 1.29、分红率 60% 连续三年）；已无安全边际，不应在此价位增加仓位；若仓位 >15% 不再投入新资金，等 2026-08-27 中报验证 Q2 单季毛利率同比、现金流与 750 亿收入目标。",
+      "derivation_quote": "但已无安全边际，**不应在此价位增加仓位。若仓位 >15%，建议不再投入新资金，等 2026-08-27 中报。**",
+      "derivation_line_ref": 1057,
+      "schedule_type": "filing",
+      "metrics": [
+        "红线清单",
+        "仓位占比",
+        "Q2单季毛利率同比",
+        "经营现金流"
+      ],
+      "periods": [
+        "2026中报"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出信号（任一触发即重审）：① 股价 ≥30 元而归母增速仍 <10%；② 年度经营现金流连续 2 年低于净利润；③ 综合毛利率跌破 24% 或核心电网智能业务毛利率跌破 28%；④ 网内收入连续 2 年零增长或负增长；⑤ 非国网应收账款占比超 55% 且计提率升破 20%；⑥ 非标审计意见或内控非标；⑦ 控股股东/董监高重大诚信或监管处罚；⑧ 2026 年收入低于 700 亿元。",
+      "derivation_quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%",
+      "derivation_line_ref": 1058,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "综合毛利率",
+        "核心电网智能业务毛利率",
+        "网内收入增速",
+        "非国网应收账款占比及计提率",
+        "年度收入"
+      ],
+      "periods": [
+        "2026"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "7db62af524142ef7e78ca80f0772d18e744837cdf5d8698e1f7314a7b047c608"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/国电南瑞/国电南瑞-thesis-drift-20260706.md",
+      "source_role": "local_current_evidence",
+      "sha256": "b88ca0db2ca1ff84127f2a69a63ae9f43eba1ce06f85c77e1f938324af3cd49e"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports/国电南瑞/国电南瑞-thesis-drift-20260720.md",
+      "source_role": "local_current_evidence",
+      "sha256": "3ee379f9295bd6e3d4bcf218c41348ac45790510d474d24b1702285564a2262e"
+    },
+    {
+      "document_id": "local_4",
+      "path": "reports/国电南瑞/国电南瑞-thesis-drift-20260723.md",
+      "source_role": "local_current_evidence",
+      "sha256": "4fbcfccc40c3e4e663f5921bcc03d1aba893b16166df3a2843871976bff860f3"
+    },
+    {
+      "document_id": "local_5",
+      "path": "reports/国电南瑞/国电南瑞-thesis-tracker-20260706.md",
+      "source_role": "local_current_evidence",
+      "sha256": "6e6f336c696933d70b92c1d7746cfccac74cde38c9d67583ced2eda1170ee1d6"
+    },
+    {
+      "document_id": "local_6",
+      "path": "reports/国电南瑞/国电南瑞-thesis-tracker-20260713.md",
+      "source_role": "local_current_evidence",
+      "sha256": "de70b63efaf188aa5c80f710cb06943f5d57e89e29e7dcb5a9a100fc79391f4a"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_4"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_4",
+            "line_ref": 8,
+            "exact_quote": "> **行情截止**：2026-07-23上海收盘，腾讯与新浪均为24.37元"
+          },
+          {
+            "document_id": "local_4",
+            "line_ref": 121,
+            "exact_quote": "严格20%安全边际候选价仍约为17.48元；24.37元比该候选价高39.42%。价格尚未触及27元的机会成本复核线，也没有基本面证据支持把动作迁移为Reduce或Exit。"
+          }
+        ],
+        "notes": "最新证据（2026-07-23 收盘，腾讯/新浪双源）24.37 元高于中性现值约 21.85 元（溢价 11.53%），更高于 17.48 元积极建仓线，买入前提未触发。证据截止 2026-07-23，其后至复核日 2026-08-29 的行情未在证据清单内。"
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_4",
+          "local_6"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_4",
+            "line_ref": 116,
+            "exact_quote": "| 已持有者  | 持有、不加仓  | **继续持有、不加仓** |  否   |"
+          },
+          {
+            "document_id": "local_4",
+            "line_ref": 132,
+            "exact_quote": "4. 2026H1现金流、存货转化、毛利率和750亿元收入目标仍未获得新验证。"
+          },
+          {
+            "document_id": "local_6",
+            "line_ref": 66,
+            "exact_quote": "**红线结论：0条触发。** 没有卖出型事实变化。"
+          }
+        ],
+        "notes": "截至最新证据日 2026-07-23：红线 0 条触发（local_6 于 2026-07-13 逐项核对、local_4 复核 Unchanged），动作维持'继续持有、不加仓'，持仓纪律未被破坏，复核结论成立。主报告指定的 2026-08-27 中报复核点数据未出现在证据清单中（local_4 亦明确 2026H1 未获新验证），本次复核不构成对中报兑现的验证，属下一复核点待办。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_4",
+          "local_6"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_4",
+            "line_ref": 46,
+            "exact_quote": "| 红线清单 | 0条触发 | 0条触发 | **Unchanged** | — | 高 |"
+          },
+          {
+            "document_id": "local_6",
+            "line_ref": 64,
+            "exact_quote": "| 8 | 2026年750亿元收入目标大幅落空且无合理解释 | 尚不能判断 | Q1完成95.64亿元，项目确认季节性强，必须等中报或三季报 |"
+          }
+        ],
+        "notes": "价格/治理类卖出信号截至 2026-07-23 未触发（红线 0 条）；财务阈值类信号（综合毛利率 24%、核心业务 28%、网内收入、2026 收入 700 亿）需中报数据方可判定，local_6 红线表第 8 项明确标'尚不能判断'，故本结论仅基于最新可得证据。"
+      }
+    ]
+  }
+}

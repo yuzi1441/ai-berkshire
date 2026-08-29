@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "兴发集团",
+  "ticker": "600141.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+    "sha256": "a3680f7c233c98beb2d0883a7862b416f6e97f9a05cba8d8739efe2ac63b1813",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提（价格分层）：现价约 48 元（2026-06-29 参考）不建议在异动高位新开仓；稳健型等正常化 PE 12-14x（26-32 元）起研究；保守型等正常化 PE 10-12x（22-26 元）才具吸引力，即股价回落至正常化 PE 10-12x（22-26 元）区间为加仓/关注信号 1，届时再重点研究介入。",
+      "derivation_quote": "股价回落至正常化 PE 10–12x（22–26 元）区间",
+      "derivation_line_ref": 141,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "正常化PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓/观察验证事件：已持有者可部分止盈（现价约 48 元投机高位）；持续跟踪加仓/关注信号是否兑现——磷矿价格中枢因能源化需求确认性上台阶、兴福电子业绩超预期或估值显性化（分拆价值重估）、固态电池五硫化二磷放量并拿到头部电池厂正式订单、磷石膏零排放取得实质突破；同时验证概念热度是否退潮、股价是否从异动高位快速回落。",
+      "derivation_quote": "概念热度退潮、股价从异动高位快速回落",
+      "derivation_line_ref": 152,
+      "schedule_type": "event",
+      "metrics": [],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/回避信号：磷化铟/AI 算力概念被证伪（公司暂无产能、纯研发阶段）；磷矿 2025-2026 新产能集中投放压垮价格；有机硅反内卷失败、需求端无硬支撑；新能源材料持续亏损、资本开支失控侵蚀主业现金流；概念热度退潮、股价从异动高位快速回落。",
+      "derivation_quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）",
+      "derivation_line_ref": 148,
+      "schedule_type": "event",
+      "metrics": [],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+      "source_role": "main_report_reference",
+      "sha256": "a3680f7c233c98beb2d0883a7862b416f6e97f9a05cba8d8739efe2ac63b1813"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "买入前提以价格带（22-26/26-32 元）为主。本地仅有主报告基线：约 48 元系 2026-06-29 收盘参考，报告自身提示交易前必须以实时行情二次复核；截至复核日 2026-08-29 本地无当前股价，且该股处于异常波动期，无法确认是否回落至买入带。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 168,
+            "exact_quote": "但 48 元系近期约 6/29 收盘参考，且该股正处异常波动期"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 135,
+            "exact_quote": "不建议在异动高位新开仓"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "note": "持有验证依赖事件确认（磷矿价格中枢上台阶、兴福电子业绩、固态电池订单、概念热度退潮）。本地证据目录仅有主报告，无任何上述事件的当期确认或对比期数据，无法判定任一信号是否兑现。",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 143,
+            "exact_quote": "兴福电子业绩超预期或估值显性化（分拆价值重估）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 168,
+            "exact_quote": "交易前必须以实时行情二次复核"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "note": "失效信号为事件型（磷化铟概念证伪、磷矿新产能压垮价格、反内卷失败等）。报告基线（2026-07-08）记录磷化铟暂无产能、纯研发阶段，此后无本地证据确认概念是否被证伪或磷矿价格走势，无法判定触发状态。",
+        "missing_codes": [
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 148,
+            "exact_quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+          }
+        ]
+      }
+    ]
+  }
+}

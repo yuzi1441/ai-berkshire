@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "工商银行",
+  "ticker": "601398.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+    "sha256": "ecd4516ad1b5cda4ec469446ec86687d1f09d4a0b72f10dae9dd3fe4e461d446",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：基于 2025 EPS 1.00 元、BVPS 10.83 元的价格带——≤6.0 元（≤6x PE、≤0.55x PB）较有安全边际可重点研究/分批配置；6.0-6.5 元稳健型小仓；6.5-7.5 元当前附近观望或小仓；≥8.5 元不追高；加仓还需净息差连续两个季度稳定或回升且非一次性因素。",
+      "derivation_quote": "| ≤ 6.0 元 | ≤6x PE；≤0.55x PB | 较有安全边际，可重点研究/分批配置 |",
+      "derivation_line_ref": 356,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "净息差",
+        "加权ROE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有者重在股息而非弹性，跟踪 ROE 与净息差走势及分红/资本充足率；加仓信号要求 ROE 止跌、年化维持在 9% 以上并有改善迹象，手续费净收入恢复可持续增长，房地产与地方债相关不良不再恶化。",
+      "derivation_quote": "ROE止跌，年化维持在9%以上并有改善迹象；",
+      "derivation_line_ref": 365,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "加权ROE",
+        "净息差",
+        "DPS",
+        "资本充足率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓/回避信号，出现即重审）：净息差继续显著下行且负债成本难以下降；房地产、个人贷款、地方平台风险显著暴露；资本充足率下降导致分红政策受压；贷款减值损失持续快于收入增长；股价上涨仅由高股息抱团推动而基本面未改善。",
+      "derivation_quote": "净息差继续显著下行，且负债成本难以下降；",
+      "derivation_line_ref": 372,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "净息差",
+        "不良贷款率",
+        "资本充足率",
+        "贷款减值损失"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+      "source_role": "main_report_reference",
+      "sha256": "ecd4516ad1b5cda4ec469446ec86687d1f09d4a0b72f10dae9dd3fe4e461d446"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/工商银行/工商银行-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "391835e2dfd8e2cb7d2dab6de79bc45d55377adad2be719b5a6b0a666e4f6c23"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 37,
+            "exact_quote": "| A 股收盘价 | 7.53 元 | 腾讯与新浪 2026-07-13 收盘一致；仅为观察价 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 14,
+            "exact_quote": "| 当前动作基调 | 无仓位：7.53 元不追，等待 6.10-6.60 元或经营改善；已有仓位：持有复核，是否加减仓必须结合真实成本与仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 348,
+            "exact_quote": "| 时机 | 2026-07-06 A股7.12元处于可研究区，不是明显便宜到闭眼买 |"
+          }
+        ],
+        "note": "论文证据（2026-07-13 收盘 7.53 元）晚于主报告基线（2026-07-06 的 7.12 元）且为双源一致行情：7.53 元落在主报告 6.5-7.5 元\"观望或小仓配置\"带，高于 ≤6.0/6.0-6.5 元建仓带，价格维度的买入前提未触发；论文亦明确\"7.53 元不追\"。"
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 51,
+            "exact_quote": "| 2025 / 2026Q1 加权 ROE | 9.45% / 8.83% | 一季度为年化口径，盈利能力仍在下行 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 50,
+            "exact_quote": "| 2025 NIM | 1.28% | 净利差为 1.15%，两者不能混称 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 83,
+            "exact_quote": "2025 NIM 1.28%、ROE 9.45%；一季度年化 ROE 8.83%"
+          }
+        ],
+        "note": "加仓前提\"ROE 年化维持 9% 以上\"未满足：2025 加权 ROE 9.45%，但 2026Q1 年化已降至 8.83% 且盈利能力仍在下行；NIM 侵蚀被论文标注为边际弱化（黄灯），股息维度追踪税前股息率 4.12%（2025 DPS 0.3103 元）仍在，持有可续、加仓条件未触发。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 15,
+            "exact_quote": "| 初始论文健康度 | 7/10：3 项成立、3 项边际弱化、0 项受损、0 项破裂、0 条红线触发 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 53,
+            "exact_quote": "| 2026Q1 拨备覆盖率 | 214.38% | 当前缓冲充足 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 54,
+            "exact_quote": "| 2026Q1 核心一级资本充足率 | 13.26% | 较 2025 年末继续下降 |"
+          }
+        ],
+        "note": "截至论文建档（2026-07-13）0 条红线触发：2026Q1 不良率 1.31% 稳定、拨备覆盖率 214.38%、资本充足率 18.21%，主报告减仓/回避信号均未触发；但核心一级资本充足率较 2025 年末继续下降、TLAC 缓冲仅 0.91 个百分点，资本约束为警戒项，需半年报确认。"
+      }
+    ]
+  }
+}

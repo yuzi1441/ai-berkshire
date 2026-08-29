@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "Goldwind",
+  "ticker": "002202.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/Goldwind/Goldwind-research-20260623.md",
+    "sha256": "b4be125955702f11b55b256e0f0c1785eca1c8af94d75054e4fd691d93ad3a64",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：当前 21.75 元/PE 34x 缺乏足够安全边际，空仓者观望为主；在 15-17 元区间（PE 23-27x 基于 2025 年 EPS，或 PE 13-15x 基于 2026E EPS）分批建仓；若 Q2-Q3 业绩持续超预期（尤其海外毛利率维持 24%+）可提高买入价格区间。",
+      "derivation_quote": "建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓",
+      "derivation_line_ref": 322,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "海外毛利率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：持有但不加仓，盈利拐点已确认、在手订单 50.49GW 充裕、海外放量是核心看点；应收账款 337 亿与价格战反复风险限制上行空间，设 15 元止损线；加仓信号为股价跌至 15-17 元区间且基本面未恶化、海外收入占比突破 30%、风机毛利率恢复至 15%+、宣布大幅提高分红比例。",
+      "derivation_quote": "盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。",
+      "derivation_line_ref": 323,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "在手订单",
+        "海外收入占比",
+        "风机毛利率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/失效触发：风机含塔筒均价重新跌破 1,500 元/kW；单季度应收坏账计提超 5 亿元；欧盟正式限制金风在欧洲投标；海外毛利率跌破 15%。",
+      "derivation_quote": "风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元",
+      "derivation_line_ref": 324,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "风机含塔筒均价",
+        "单季应收坏账计提",
+        "海外毛利率"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/Goldwind/Goldwind-research-20260623.md",
+      "source_role": "main_report_reference",
+      "sha256": "b4be125955702f11b55b256e0f0c1785eca1c8af94d75054e4fd691d93ad3a64"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-06-23 主报告基线（当时 21.75 元/PE 34x，建议观望、15-17 元分批建仓）；看板契约价格区间与复核日期均为'未给出'。无复核日现价与最新 PE，无法判断是否进入 15-17 元买入带或触发上调条件。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 322,
+            "exact_quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 396,
+            "exact_quote": "| 保守型价格区间 | 未给出 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "止损线 15 元与加仓信号（15-17 元、海外收入占比 30%、风机毛利率 15%+）均需现价和最新季度经营数据判断；本地证据只有主报告基线（在手订单 50.49GW、应收 337 亿为报告时点数），无其后行情与财报，无法验证。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 323,
+            "exact_quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 325,
+            "exact_quote": "| **加仓信号** | 股价跌至15-17元区间且基本面未恶化；海外收入占比突破30%；风机毛利率恢复至15%+；宣布大幅提高分红比例 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "四条卖出触发分别依赖风机均价、季度坏账计提、欧盟调查进展与海外毛利率，主报告基线（2026-06-23）之后无任何本地证据；无 2026Q2/Q3 财报与欧盟事件确认，无法判断是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 324,
+            "exact_quote": "| **卖出信号** | 风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元；欧盟正式限制金风在欧洲投标；海外毛利率跌破15% |"
+          }
+        ]
+      }
+    ]
+  }
+}

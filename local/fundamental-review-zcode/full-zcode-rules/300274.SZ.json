@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "阳光电源",
+  "ticker": "300274.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/阳光电源/阳光电源-research-20260726.md",
+    "sha256": "50f8058ada0f0c60f31276623da1db7c58fd16f457eada8c5101d2a98f269bdb",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者当前不追价（报告基线价 113.42 元，20x 区间上沿观望）；103.55 元（18x TTM PE）以下可建立不超过目标仓位 1/3 的观察仓；92.04 元（16x TTM PE）以下且基本面未进一步恶化时分批建立有意义仓位；80.54 元（14x TTM PE）以下为深度价值区。等价格跌破 92 元或美国 FCC 规则文本明朗二者之一。",
+      "derivation_quote": "103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓",
+      "derivation_line_ref": 599,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：103.55-115.05 元区间可持有，重点等 8 月半年报验证三件事：储能毛利率是否守住 30%、汇兑是否回摆、美国订单有无实质变化；不因股价低于员工持股计划均价 138.61 元就加仓。加仓信号：①美国 FCC 规则明确不溯及既往或范围有限；②单季储能毛利率回到 33% 以上；③TTM 归母净利恢复正增长；④境外毛利率维持 38% 以上；⑤储能出货增速重新追上行业。",
+      "derivation_quote": "重点等 8 月半年报验证三件事：储能毛利率是否守住 30%、汇兑是否回摆、美国订单有无实质变化",
+      "derivation_line_ref": 600,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "单季储能毛利率",
+        "汇兑损益",
+        "美国订单",
+        "境外毛利率",
+        "TTM归母净利润"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：卖出/否决信号为①美国禁令落地且覆盖存量项目；②重大储能安全事故导致 BNEF 评级下调或客户流失；③欧盟限制从融资扩展到市场准入；④连续两个报告期利润与经营现金流同步恶化；⑤治理底线被突破。减仓信号：138.06 元（24x）以上而盈利未上修、单季储能毛利率跌破 25%、境外收入毛利率跌破 33%。",
+      "derivation_quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失",
+      "derivation_line_ref": 603,
+      "schedule_type": "event",
+      "metrics": [
+        "单季储能毛利率",
+        "境外收入毛利率"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/阳光电源/阳光电源-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "50f8058ada0f0c60f31276623da1db7c58fd16f457eada8c5101d2a98f269bdb"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 599,
+            "exact_quote": "当前不追价。103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓；**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位；80.54 元（14x）以下为深度价值区。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 595,
+            "exact_quote": "等两件事中的任意一件：**价格跌到 92 元以下（16x TTM PE）**，或者**美国 FCC 规则的实际文本出台并证明影响可控**。"
+          }
+        ],
+        "note": "清单内仅有主报告 local_1，无独立行情证据。113.42 元为 2026-07-26 报告基线价，无当前市价可比较 92.04/103.55/80.54 元各档买入带，也无法确认美国 FCC 规则文本是否出台。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 600,
+            "exact_quote": "重点等 8 月半年报验证三件事：储能毛利率是否守住 30%、汇兑是否回摆、美国订单有无实质变化。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 601,
+            "exact_quote": "①美国 FCC 规则明确不溯及既往或范围有限；②单季储能毛利率回到 33% 以上；③TTM 归母净利恢复正增长；④境外毛利率维持 38% 以上；⑤储能出货增速重新追上行业。"
+          }
+        ],
+        "note": "证据文档中没有 2026 半年报数据，储能毛利率、汇兑、美国订单、境外毛利率均无当前值与对比期，持仓验证三件事全部无法核验。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 603,
+            "exact_quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失；③欧盟限制从\"融资\"扩展到\"市场准入\"；④连续两个报告期利润与经营现金流同步恶化；⑤治理底线被突破（大股东减持、关联交易异常）。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 602,
+            "exact_quote": "①138.06 元（24x）以上而盈利未上修；②单季储能毛利率跌破 25%；③境外收入毛利率跌破 33%；④应收+存货增速连续两期显著快于收入；⑤保证类质保负债增速持续快于储能收入增速。"
+          }
+        ],
+        "note": "无独立证据确认美国禁令、储能安全事故、欧盟限制等事件是否发生，也无最新单季储能毛利率/境外毛利率数据，卖出与减仓信号触发状态均未知。"
+      }
+    ]
+  }
+}

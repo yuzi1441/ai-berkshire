@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "湖南黄金",
+  "ticker": "002155.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+    "sha256": "b81140ea4ad68c6c819d455ffb33c802cfa3fc8d3f89fcfa9d8eb0c26963540f",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：报告基线 24.26 元（2026-07-09）不是明显低估，空仓价值投资者不追高、列入观察清单；等待 17-20 元价格带（TTM PE 约 15-18x，基本面未恶化时进入重点观察/分批区），17 元以下 TTM PE 接近 15x 以下风险收益改善（仍需确认金锑钨价格和安全生产未系统恶化）；或等待资产注入草案、问询回复、业绩承诺与 2026 中报验证后再决策；20-24 元仅适合对锑和资产注入有强判断者小仓验证。",
+      "derivation_quote": "等待 17-20 元价格带，或资产注入细节证明每股价值显著增厚",
+      "derivation_line_ref": 326,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持有且成本较低者可继续持有但分批管理仓位，若金/锑价格继续上行、资产注入获批且条款优于预期可保留核心仓；已持有且成本接近当前价者降低预期收益率，若跌破关键趋势或中报利润弱于预期应减仓复盘；28 元以上已有仓位应设风险线。",
+      "derivation_quote": "若跌破关键趋势或中报利润弱于预期，应减仓复盘",
+      "derivation_line_ref": 329,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "中报利润",
+        "金/锑价格",
+        "资产注入获批条款",
+        "A股收盘价"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓/卖出信号）：金价回撤 15% 以上、锑价回撤 25%-30% 且公司毛利率同步下行；资产注入估值偏高、发行摊薄明显、业绩承诺弱；安全事故连续发生或核心矿山长期停产；经营现金流显著低于净利润、库存和应收账款异常上升；股价涨至 28 元以上但基本面未同步超预期。",
+      "derivation_quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行",
+      "derivation_line_ref": 342,
+      "schedule_type": "price",
+      "metrics": [
+        "金价",
+        "锑价",
+        "A股收盘价"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "b81140ea4ad68c6c819d455ffb33c802cfa3fc8d3f89fcfa9d8eb0c26963540f"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 326,
+            "exact_quote": "| 空仓、价值投资者 | **不追高，列入观察清单** | 等待 17-20 元价格带，或资产注入细节证明每股价值显著增厚 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 288,
+            "exact_quote": "| 17-20 元 | TTM PE 约 15-18x，开始有研究价值 | 若基本面未恶化，可进入重点观察/分批区 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 291,
+            "exact_quote": "**估值结论**：湖南黄金在 24.26 元不是“明显低估”。"
+          }
+        ],
+        "note": "证据包仅有主报告 local_1，24.26 元为 2026-07-09 报告基线价，无当前股价，无法判断是否回落至 17-20 元或 17 元以下买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 328,
+            "exact_quote": "| 已持有、成本较低 | 可继续持有但分批管理仓位 | 若金/锑价格继续上行、资产注入获批且条款优于预期，可保留核心仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 329,
+            "exact_quote": "| 已持有、成本接近当前价 | 降低预期收益率 | 若跌破关键趋势或中报利润弱于预期，应减仓复盘 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 285,
+            "exact_quote": "| 28 元以上 | 需要非常强的锑价/金价和资产注入兑现 | 价值投资视角不追，已有仓位应设风险线 |"
+          }
+        ],
+        "note": "证据包中无当前金/锑价格、2026 中报利润数据及对比期，也无资产注入获批进展事件确认，持仓验证条件均无法评估。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 342,
+            "exact_quote": "1. 金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 160,
+            "exact_quote": "| 金/锑/钨价格回落 | 中高 | 高 | 金价回撤 15%；锑价回撤 25%-30%；钨价回撤 20% | 做周期压力测试；提高买入安全边际 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 346,
+            "exact_quote": "5. 股价继续上涨至 28 元以上但基本面未同步超预期。"
+          }
+        ],
+        "note": "证据包中无当前金价/锑价/股价及公司毛利率、经营现金流数据，也无安全事故与资产注入条款事件确认，减仓信号触发状态未知。"
+      }
+    ]
+  }
+}

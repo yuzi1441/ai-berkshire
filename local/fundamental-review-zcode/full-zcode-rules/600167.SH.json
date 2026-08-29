@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "联美量子股份有限公司",
+  "ticker": "600167.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+    "sha256": "0c2633b81fea07e6c2a1369ff36b05f7669855bc0c0d01c2091c49e05adb1e0a",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格分层买入前提：4.80-5.20 元开始计入部分安全边际，激进型可小仓试买；4.20-4.80 元对盈利停滞已有较充分折价，稳健型分批买入；低于 4.20 元且前提未破坏，保守型分批买入。基本面合理价值约 4.8-6.2 元，要求足够安全边际时买入区应明显低于 5.2 元。报告日现价 5.78 元处于合理区间上半部，报告基准建议为观察，5.20 元以下才考虑小仓。",
+      "derivation_quote": "4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买",
+      "derivation_line_ref": 343,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有但不追涨，关注 2026 中报、回购执行和清洁能源毛利率。加仓信号需同时跟踪：TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元。下次复核日期 2026-10-31。",
+      "derivation_quote": "持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率",
+      "derivation_line_ref": 371,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "TTM扣非利润",
+        "供暖面积",
+        "回购执行",
+        "清洁能源毛利率"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/失效信号：清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复（高于 6.50 元区间无恢复证据则减仓/不追价）。",
+      "derivation_quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降",
+      "derivation_line_ref": 373,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "清洁能源毛利率",
+        "平均供暖面积",
+        "净现金",
+        "A股收盘价"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+      "source_role": "main_report_reference",
+      "sha256": "0c2633b81fea07e6c2a1369ff36b05f7669855bc0c0d01c2091c49e05adb1e0a"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "note": "清单内仅 local_1 主报告一份文档，只能作报告基线。基线显示报告日（数据截止 2026-08-07）现价 5.78 元，高于激进型 4.80-5.20 元、稳健型 4.20-4.80 元及保守型低于 4.20 元全部买入带；截至复核日 2026-08-29 本地无独立来源提供当前股价，无法确认是否进入买入区，诚实判定为证据不足。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 343,
+            "exact_quote": "| 4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 366,
+            "exact_quote": "当前价 5.78 元处于合理区间上半部，赔率不够好，空仓者不必急着买。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "note": "持仓验证的关键节点是 2026 年中报及回购执行、清洁能源毛利率。本地证据目录中没有 2026 中报或其摘录，也无回购执行进度与当期清洁能源毛利率数据，无法完成中报验证或确认事件已发生。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 371,
+            "exact_quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 372,
+            "exact_quote": "| 加仓信号 | TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "note": "失效条件需当期清洁能源毛利率（阈值 28%）、平均供暖面积连续两年趋势及净现金变化与报告基线对比。本地仅有报告基线，无此后财报或独立证据提供对比期数值，无法判定任一失效信号是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 373,
+            "exact_quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 443,
+            "exact_quote": "| 买入失效条件 | 清洁能源毛利率持续低于28%或平均供暖面积连续两年下降或旧煤资产改造显著侵蚀净现金 |"
+          }
+        ]
+      }
+    ]
+  }
+}

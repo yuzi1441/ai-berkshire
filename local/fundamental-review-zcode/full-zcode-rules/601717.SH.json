@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中创智领",
+  "ticker": "601717.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+    "sha256": "02de943591babaa7d5ce926c36ee64dfbf94a022f602969bf2666739a4dfd984",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者观望偏积极、只可小仓位介入；因 2026Q1 净利 -18% 拐点未确认，不建议重仓 all-in，宜等 2026 中报验证煤机订单与盈利趋势后再决定加仓；股价跌向 12-13 元（股息率 >9.5%、深熊已计入）时是更好的击球点。",
+      "derivation_quote": "股价跌向 12–13 元（股息率 >9.5%、深熊已计入）时是更好的击球点",
+      "derivation_line_ref": 279,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "股息率",
+        "煤机订单额",
+        "归母净利润同比"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有者持有收息，把公司定位为\"退潮期现金牛\"而非成长股并控制仓位权重；只要基本面未破位、股息率约 8.3% 的保护仍在，就无需在低位区恐慌卖出；持续跟踪分红率与经营现金流/自由现金流。",
+      "derivation_quote": "基本面未破位、股息率 8.3% 提供强持有理由，无需在低位区恐慌卖出",
+      "derivation_line_ref": 277,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "股息率",
+        "分红率",
+        "经营现金流"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（卖出信号，任一触发即卖/减）：①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）；②分红率因现金流恶化被迫下调；③焦承尧换届后战略摇摆或核心团队流失；④\"机器人/新能源\"题材把股价拉到 PE >12（透支）时可减。",
+      "derivation_quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）",
+      "derivation_line_ref": 278,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "煤机订单额",
+        "归母净利润同比",
+        "分红率",
+        "PE"
+      ],
+      "periods": [
+        "2026H1",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+      "source_role": "main_report_reference",
+      "sha256": "02de943591babaa7d5ce926c36ee64dfbf94a022f602969bf2666739a4dfd984"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 218,
+            "exact_quote": "| 股价 | 15.05 元 | 52 周区间 14.90–27.69，处**低位区** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 223,
+            "exact_quote": "| 股息率 | **8.31%** | A 股高股息前列 |"
+          }
+        ],
+        "note": "仅有主报告作基线：基线日（2026-07-06 收盘）股价 15.05 元、股息率 8.31%，高于 12-13 元更优击球区；清单内无独立证据文档提供当前股价与 2026 中报煤机订单/盈利趋势，小仓介入后的加仓前提是否达成无法核验。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 223,
+            "exact_quote": "| 股息率 | **8.31%** | A 股高股息前列 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 224,
+            "exact_quote": "| FCF Yield | 3.19% | ⚠️ 现金流质量弱于账面利润 |"
+          }
+        ],
+        "note": "\"基本面未破位、股息率约 8.3%\"的持有前提需以当前股价与最新分红/现金流数据核验；基线仅有 2026-07-06 快照（股息率 8.31%、FCF Yield 3.19% 且现金流质量弱于账面利润），无最新报告期对比数据，持有条件当前状态无法确认。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 241,
+            "exact_quote": "深熊压力测试（假设盈利进入下行周期，回应 2026Q1 -18% 的拐点信号）："
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 224,
+            "exact_quote": "| FCF Yield | 3.19% | ⚠️ 现金流质量弱于账面利润 |"
+          }
+        ],
+        "note": "基线已知 2026Q1 净利 -18% 的拐点警报与 FCF Yield 3.19% 偏弱，但\"煤机订单与利润同比持续负增长（拐点坐实）\"需 2026 中报/三季报官方数据对比，证据集中没有；分红率是否因现金流恶化下调同样无法核验，卖出信号是否触发无法判定。"
+      }
+    ]
+  }
+}
