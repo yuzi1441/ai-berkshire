@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:23:17+08:00",
+  "company": "国药现代",
+  "ticker": "600420.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+    "sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "8.70 元不急买；价格跌至 7 元以下且基本面未继续破坏时才可小仓，5.5-6 元且资产负债表稳定时才有更明显赔率；也可等待 Q2/Q3 证明 API 毛利率、现金流和利润降幅收敛。",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有观察，但不能因 PB 小于 1 机械加仓；重点核对半年报原料药毛利率、经营现金流和制剂收入是否止跌。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "收入",
+        "估值"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格、周期、经营改善三者至少满足两项；API 毛利率回升、OCF 转正且周转未恶化、新品形成可见收入毛利。若利润继续双位数下滑、API 毛利长期低位或治理合规折价扩大则重审。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "收入"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+      "sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L255",
+            "exact_quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L256",
+            "exact_quote": "| 逆向型 | ≤ 5.5-6.0 元，且资产负债表未恶化 | 才可能出现较明显赔率；仍需确认利润不是永久下台阶。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L302",
+            "exact_quote": "**对空仓投资者**：不必急。更好的买点来自两个条件之一：价格跌到足够便宜，或 2026Q2/Q3 证明 API 毛利率、现金流和利润下滑开始收敛。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L303",
+            "exact_quote": "**对已有持仓者**：可以持有观察，但不要因为 PB < 1 就机械加仓。重点看 2026 半年报：原料药毛利率、经营现金流、制剂收入是否止跌。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L257",
+            "exact_quote": "| 已持有者 | 8-9 元区间 | 可持有观察，不建议因低 PB 机械加仓。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L332",
+            "exact_quote": "**最终总结**：国药现代的研究价值在于，它把成熟化药行业的矛盾展示得很清楚：需求是真的，平台是真的，现金也是真的；但价格权弱、利润池被重分配、2026Q1 压力也是真的。对价值投资者来说，这不是“看到低 PB 就买”的公司，而是要等价格、周期和经营改善三者至少满足两个，再认真考虑提高仓位。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L310",
+            "exact_quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L311",
+            "exact_quote": "| 加仓信号 2 | 经营现金流恢复为正，且应收/存货周转没有恶化。 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

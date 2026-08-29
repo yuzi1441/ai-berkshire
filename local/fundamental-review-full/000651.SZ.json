@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:48:57+08:00",
+  "company": "格力电器",
+  "ticker": "000651.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+    "sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "高于 38 元观察；低于 38 元才进入激进型分批区，32-35 元为稳健优先区，30 元以下且分红未恶化才是保守型高仓位候选。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型   |      区间 | 动作建议    | 逻辑                             | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "38-52 元持有观察或小额定投；高于 55 元降低新增买入。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型   |      区间 | 动作建议    | 逻辑                             | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "进入相应价格带，并确认扣非利润、份额、毛利率、分红纪律与管理层传承未恶化。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型   |      区间 | 动作建议    | 逻辑                             | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L121",
+            "exact_quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L124",
+            "exact_quote": "| 持有观察 | 38-52 元 | 持有/小额定投 | 估值仍不贵，但回报更依赖利润稳定和分红。           |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L202",
+            "exact_quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L124",
+            "exact_quote": "| 持有观察 | 38-52 元 | 持有/小额定投 | 估值仍不贵，但回报更依赖利润稳定和分红。           |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L125",
+            "exact_quote": "| 谨慎区  | 高于 55 元 | 降低新增买入  | 若无增长恢复，估值补偿下降。                 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L77",
+            "exact_quote": "2026Q1 营收和归母净利润分别同比增长 3.52% 和 3.01%，表观企稳；扣非归母净利润 57.02 亿元，同比 -0.27%，提示核心盈利恢复仍需观察。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L79",
+            "exact_quote": "2025 年消费电器收入 1330.55 亿元，占总收入 78.06%，毛利率 35.28%；工业制品及绿色能源收入 173.81 亿元，占 10.20%，毛利率 15.53%；智能装备收入 6.81 亿元，占 0.40%。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L167",
+            "exact_quote": "格力仍带有强人治理特征，张伟接任总裁是传承进展，但市场尚无法独立判断新班子的品牌、渠道和资本配置能力。"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

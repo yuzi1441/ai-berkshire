@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:47:27+08:00",
+  "company": "金盘科技",
+  "ticker": "688676.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+    "sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 82.04 元不适合按价值投资标准主动买入；保守型等待 45-55 元或约 30 倍可持续 EPS，稳健型也需连续 2-3 个季度证明订单转化为利润和经营现金流后，再结合估值回落分批研究；激进型只能事件驱动极小仓。",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "订单",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本可持有并设预警线，成本接近现价者谨慎持有、逢高降风险；重点看现金流、AIDC/海外订单毛利和储能毛利率。",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "经营现金流连续两个半年度覆盖净利润、AIDC 高增且毛利提升、海外交付和回款不恶化、储能毛利率回到 10%以上并叠加估值回落可上调；应收加合同资产占收入超过 50%且账龄恶化、主业毛利率下降超过 3 个百分点、低毛利储能扩张、募投低利用率或治理风险即回避。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "回款",
+        "估值"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+      "sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L31",
+            "exact_quote": "以 82.04 元、约 56.7x TTM PE 计，当前更适合“重点跟踪/持有观察”，不适合按价值投资标准主动重仓买入。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L334",
+            "exact_quote": "空仓稳健型 | 小仓观察即可 | 若公司连续2-3个季度证明订单转化为利润和经营现金流，可在估值回落时分批研究"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L336",
+            "exact_quote": "已持有且成本低 | 可继续持有但设预警线 | 盯现金流、AIDC毛利、海外订单、储能毛利率"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L337",
+            "exact_quote": "已持有且成本接近现价 | 谨慎持有/逢高降风险 | 若PE维持50x+但业绩低于预期，应降低仓位"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L341",
+            "exact_quote": "1. 经营现金流连续两个半年度覆盖净利润；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L344",
+            "exact_quote": "4. 储能毛利率回到10%以上，且没有明显回款恶化；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L349",
+            "exact_quote": "1. 应收账款+合同资产/收入超过50%且账龄恶化；"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

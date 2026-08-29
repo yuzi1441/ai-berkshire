@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:54:33+08:00",
+  "company": "宁波银行",
+  "ticker": "002142.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+    "sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "32 元观察；29-31 元且半年报未恶化才是首档小仓区，26.5-29 元为稳健区，23-26.5 元为更充分安全边际区。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有优质城商行逻辑，但不能因低 PE 机械加仓。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入相应区间，且 NIM 稳在 1.70% 以上、个人贷款不良率和重组贷款不再上行、CET1 回升或风险加权资产增速收敛。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+      "sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "截至数据截止日，本次从公司和深交所可检索资料中未取得 2026 年半年度报告，不能以一季报年化替代半年报。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "**行情：** 32.00 元，腾讯与新浪在 2026-08-10 收盘后快照一致。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L263",
+            "exact_quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "**估值：** 普通股 TTM EPS 4.41 元，TTM PE 7.26 倍；2026Q1 普通股 BVPS 35.21 元，PB 0.91 倍；2025 年全年普通股 DPS 1.20 元，静态税前股息率 3.75%。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L264",
+            "exact_quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L72",
+            "exact_quote": "| 净息差 | 1.73% | -1bp 较 2025 年 | 尚未证明企稳 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L138",
+            "exact_quote": "2025 年个人贷款仅占总贷款 30.84%，但不良率 1.94%，其中个人消费贷款 1.85%、个体经营贷款 3.45%；公司贷款不良率仅 0.23%。个人贷款同比下降 4.17%，而对公与票据扩张更快，会让全行不良率短期看起来更稳定。与此同时，重组贷款从 22.78 亿元升至 57.36 亿元，占比从 0.15% 升至 0.33%。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L74",
+            "exact_quote": "| CET1 / 总资本充足率 | 9.25% / 14.02% | 分别 -9bp / -28bp | 高速扩表有资本代价 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

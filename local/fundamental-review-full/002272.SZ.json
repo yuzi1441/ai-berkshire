@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:58:15+08:00",
+  "company": "chuanrun",
+  "ticker": "002272.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/chuanrun/chuanrun-research-20260623.md",
+    "sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 18.50 元明确回避；只有估值回归 7-11 元、重点约 8-10 元，并出现业务兑现后才重新研究。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "报告给出的动作是减仓直至清仓，不应因液冷或风电叙事继续承担当前估值风险。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "8-10 元，且液冷订单达到可验证规模、连续两个季度盈利，管理层停止减持并出现增持后再评估。",
+      "metrics": [
+        "订单"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/chuanrun/chuanrun-research-20260623.md",
+      "sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**股价**：18.50元 | **市值**：89.7亿元 | **总股本**：4.85亿股"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L316",
+            "exact_quote": "**空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L319",
+            "exact_quote": "**加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L317",
+            "exact_quote": "**持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L316",
+            "exact_quote": "**空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L244",
+            "exact_quote": "PB | **6.15倍** | ✅ 验算通过（18.5/3.01）"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L319",
+            "exact_quote": "**加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**股价**：18.50元 | **市值**：89.7亿元 | **总股本**：4.85亿股"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L140",
+            "exact_quote": "**连续三年亏损**，2026Q1仍亏3088万——基本面不支撑当前估值"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

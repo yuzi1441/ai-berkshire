@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:34:18+08:00",
+  "company": "伊利股份",
+  "ticker": "600887.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+    "sha256": "259a2cfd325dd08b522483ac629e01840860f404728f08c4bd598b8e3220bcc9",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "27.12 元观察不追；优先等 24 元以下或 H1/H2 证明液体乳跌幅收窄、OCF 恢复。21-24 元确认后逐步增加，21 元以下才接近研究性安全边际。",
+      "metrics": [],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 198,
+          "line_end": 211,
+          "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+          "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有观察，但不因单季利润增长盲目加仓；持续核对现金流、短债、渠道库存、合同负债和分红兑现。",
+      "metrics": [
+        "利润",
+        "库存",
+        "债务",
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 198,
+          "line_end": 211,
+          "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+          "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "液体乳跌幅收窄、奶粉冷饮双位数增长且现金转换正常、短借回落或被 OCF 覆盖，并进入 21-24 元；食品安全、现金流持续低于利润或短借继续上升且现金/合同负债恶化即重审。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 198,
+          "line_end": 211,
+          "quote": "## 八、行动备忘录 | 策略 | 建议 | |---|---|",
+          "supports": "L198-L211、L259-L280。正文与契约一致，24 元以上仍只是研究清单，不是可执行买点。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
+      "sha256": "259a2cfd325dd08b522483ac629e01840860f404728f08c4bd598b8e3220bcc9",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L202",
+            "exact_quote": "27.12 元可放入研究清单，但优先等待 24 元以下或 2026H1/H2 证明液体乳跌幅收窄、经营现金流恢复。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L191",
+            "exact_quote": "≤21 元：接近悲观情景下的安全边际，若现金流没有恶化，可分批研究性建仓；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L192",
+            "exact_quote": "21-24 元：有吸引力区间，适合等待业绩和渠道数据确认后逐步增加；"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L203",
+            "exact_quote": "若已有仓位，重点看现金流、短债、渠道库存和分红兑现，不因单季利润增长盲目加仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L26",
+            "exact_quote": "持仓者可持有观察但不以旧价格带机械加仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L254",
+            "exact_quote": "经营现金流是否恢复到归母净利以上，合同负债和短期借款是否回到更健康水平；"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L205",
+            "exact_quote": "2026H1/H2 液体乳跌幅明显收窄；奶粉/冷饮保持双位数且现金转换正常；短期借款回落或被经营现金流覆盖；价格进入 21-24 元区间。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L204",
+            "exact_quote": "液体乳收入连续两期加速下滑；销售费用率和返利上升而毛利率回落；经营现金流持续低于归母净利；食品安全事件；短期借款继续升而现金/合同负债恶化。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=high"
+    }
+  }
+}

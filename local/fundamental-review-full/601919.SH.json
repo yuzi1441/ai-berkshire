@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:39:52+08:00",
+  "company": "中远海控",
+  "ticker": "601919.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中远海控/中远海控-research-20260707.md",
+    "sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 13.98 元观望、不追；报告只允许极度看重股息且能承受波动者考虑折价 H 股试探仓，不能把该许可移植为 A 股当前买入机会。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有收息但控制仓位；若仓位过重，可在运价或股价冲高时降至舒适水平。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "等待运价崩盘、公司微利或亏损、市场极度悲观，且 PB 明显低于 0.8、净现金和分红逻辑经租赁负债核验后仍成立，或行业出现实质拆船/减产；红海复航、SCFI 持续下行、派息率跌破 30% 或租赁负债推翻净现金论即继续回避。",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中远海控/中远海控-research-20260707.md",
+      "sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L29",
+            "exact_quote": "A股股价(601919) | **13.98 元** | 东方财富实时API"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L273",
+            "exact_quote": "**空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L273",
+            "exact_quote": "不建议在运价被红海托高的当下重仓。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L274",
+            "exact_quote": "**持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L65",
+            "exact_quote": "本次未取到租赁负债精确金额。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L140",
+            "exact_quote": "**红海复航** | 中（时点不定） | 极高 | 当前运价靠绕行支撑，复航释放约 6% 运力（250万TEU）回主航道→运价可能断崖"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L208",
+            "exact_quote": "2026 地缘再度托高（SCFI 6 月均值约 3,018 点）"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:36:55+08:00",
+  "company": "中国平安",
+  "ticker": "601318.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/平安集团/中国平安-investment-research-20260810.md",
+    "sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 53.32 元继续观察；47-50 元且半年报确认投资收益、NBV 质量和资本缓冲后才考虑小额分批。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "基本面未破坏可观察持有，不在现价机械加仓；H 股还需核算税费与汇率。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "47-50 元激进小仓、43-47 元稳健研究、40 元以下保守评估；偿付能力、NBV、COR、银行资产质量或投资回报触发失效条件时重审。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/平安集团/中国平安-investment-research-20260810.md",
+      "sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L328",
+            "exact_quote": "H 股 56.75 港元折合约 48.77 元，已进入激进型等值区间；但 H 股税费、汇率、流动性和投资者身份不同，等值价格不能直接替代个人税后回报计算。A 股 53.32 元高于激进型区间，距离半年报又很近，没有必要抢跑。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L324",
+            "exact_quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L357",
+            "exact_quote": "| 加仓信号 | 价格进入对应安全带，同时半年报确认 NBV 质量、投资收益和资本缓冲没有恶化 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L354",
+            "exact_quote": "| 已持有 A 股 | 若成本与仓位未知，默认继续持有观察，不在 53.32 元机械加仓；半年报后复核投资收益、NBV 利润率和偿付能力 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L355",
+            "exact_quote": "| 已持有 H 股 | 关注税后股息、汇率和 A/H 折价；基本面未破坏可持有，但不能仅因折价扩大无限加仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L347",
+            "exact_quote": "**明确结论：观察。** 公司质量和赔率都足以进入高优先级研究名单，但 2026Q1 投资收益率和 NBV 利润率是必须等待半年报验证的反向信号。当前 A 股不追买；H 股虽已进入激进型等值区间，也应先核对个人税费与汇率影响，并把 2026-08-21 半年报作为动作前检查点。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L324",
+            "exact_quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L326",
+            "exact_quote": "| 保守型 | 40 元以下 | 约 46.54 港元以下 | 提供更高资产与假设折价，再评估集中风险 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L361",
+            "exact_quote": "1. 集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

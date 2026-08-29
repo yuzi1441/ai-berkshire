@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:07:54+08:00",
+  "company": "浦发银行",
+  "ticker": "600000.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+    "sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 9.63 元赔率不足，不追；8.40 元以下且分红率维持 30% 时，才按高股息债券替代而非成长股小仓研究。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "成本 8 元以下可持有收息；成本 11 元以上可在 11-12 元中性估值区减仓并比较招行、兴业等更优替代。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳。",
+      "metrics": [
+        "收入",
+        "ROE",
+        "分红"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+      "sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L63",
+            "exact_quote": "2025 年度分红 | 每股 0.42 元，分红率 30.22%，股息率 4.36% | 工具验算 0.42/9.63=4.36%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L221",
+            "exact_quote": "- **8.4 元**：股息率达 5%（0.42/0.05），与兴业/民生的股息率看齐，\"债券替代\"逻辑变硬（工具验算）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L249",
+            "exact_quote": "若非买不可，把买点设在 **8.4 元以下**（股息率 5% + 0.38 倍 PB 双重支撑），仓位按\"高股息债券替代\"管理而非成长仓位。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L250",
+            "exact_quote": "成本在 8 元以下的，股息逻辑仍成立，可持有收息，但应明确自己持有的是\"类债资产\"而非反转成长股；成本在 11 元以上的，反弹至 11-12 元（中性估值区）建议减仓换入更优标的。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L193",
+            "exact_quote": "| 股息率 | 4.36% | 5.0% | 5.58% | 4.82% | 5.18% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L252",
+            "exact_quote": "| **加仓信号** | ① 股价跌破 8.4 元且分红方案维持 30%；② 营收增速回升至 5% 以上（证明反转进入经营科目而非拨备科目）；③ ROE 站上 8% 且息差企稳两个季度以上 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L251",
+            "exact_quote": "| **卖出信号** | ① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）；③ 再现亿元级罚单或分支机构造假案；④ 董事长张为忠调离且业绩尚未证明可脱离个人（2026-2027 年为关键观察窗口）；⑤ 股价升破 12.2 元（0.55 倍 PB）且 ROE 未同步回升至 8% 以上 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L83",
+            "exact_quote": "但净利润 +10.52% 中相当部分来自拨备反哺（信用减值少提），营收端只有 +1.88%，2026Q1 净利增速已回落至 +1.49%。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:19:04+08:00",
+  "company": "中国巨石股份有限公司",
+  "ticker": "600176.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+    "sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "44.38 元不追；30-34 元且高端认证或批量订单有可核验证据时只可小仓，24-28 元且景气正常化后 ROE 与 FCF 仍改善时稳健分批，24 元以下才研究较大仓位。",
+      "metrics": [
+        "自由现金流",
+        "ROE",
+        "订单",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "正常仓位可继续持有核心观察仓但不加仓；仓位过重应在景气与情绪高位降低集中度，55 元以上而盈利或高端订单未上修时减仓。",
+      "metrics": [
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际；普通电子布价格和库存反转或特种认证持续失败即重审。",
+      "metrics": [
+        "收入",
+        "库存",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+      "sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L355",
+            "exact_quote": "但 44.38 元不是一个能容忍普通布价格回落、特种布认证延迟或扩产超支的价格。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L332",
+            "exact_quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L362",
+            "exact_quote": "| 已持有、仓位正常 | 可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L363",
+            "exact_quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L364",
+            "exact_quote": "| 加仓信号 | 低介电/低膨胀产品获头部客户认证并形成批量收入；新线良率与回报达标；价格进入对应安全边际 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L365",
+            "exact_quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L141",
+            "exact_quote": "低介电、低膨胀等特种电子布仍在研发、送样、认证阶段，尚未形成相关订单或收入。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

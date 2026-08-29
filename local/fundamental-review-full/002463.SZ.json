@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:58:51+08:00",
+  "company": "沪电股份",
+  "ticker": "002463.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/沪电股份/沪电股份-research-20260726.md",
+    "sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 112.22 元无安全边际；87-101 元只进入关注区，70-87 元且基本面未恶化才分批建仓。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 776,
+          "line_end": 839,
+          "quote": "### 7.8 ⭐ 价格区间：什么价格值得买 **方法一：按历史估值锚（2026E 净利 66.73 亿）** | 给定PE | 对应股价 | 较现价 | 说明 |",
+          "supports": "L776-L839、L1065-L1086。正文与契约一致；契约未结构化持仓纪律与基本面触发条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "基本面仍在加速时可以持有，但要限制单票风险并执行毛利率、现金流、负债和客户分部的卖出纪律。",
+      "metrics": [
+        "毛利率",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 776,
+          "line_end": 839,
+          "quote": "### 7.8 ⭐ 价格区间：什么价格值得买 **方法一：按历史估值锚（2026E 净利 66.73 亿）** | 给定PE | 对应股价 | 较现价 | 说明 |",
+          "supports": "L776-L839、L1065-L1086。正文与契约一致；契约未结构化持仓纪律与基本面触发条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "70-87 元，或 AI 服务器/HPC 恢复双位数增长、mSAP 量产、FCF/净利润回到 50% 以上且 2027 云厂商资本开支未下修。",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 776,
+          "line_end": 839,
+          "quote": "### 7.8 ⭐ 价格区间：什么价格值得买 **方法一：按历史估值锚（2026E 净利 66.73 亿）** | 给定PE | 对应股价 | 较现价 | 说明 |",
+          "supports": "L776-L839、L1065-L1086。正文与契约一致；契约未结构化持仓纪律与基本面触发条件。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/沪电股份/沪电股份-research-20260726.md",
+      "sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/沪电股份/沪电股份-thesis.md",
+      "sha256": "61cfb3ddd5538544775b52c6d447b14a2506a4e1aac57934bcb6127057fa2796",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "| 行情基准 | **2026-07-24 收盘 112.22 元**（周五收盘，7/25-26 休市） |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L99",
+            "exact_quote": "| 84-95 元 | 可开始分批研究性建仓 | 中性情景未下修，毛利率和平台份额稳定 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L101",
+            "exact_quote": "| 低于 77 元 | 高赔率观察区 | 红线未触发，现金流与资本回报出现改善证据 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L63",
+            "exact_quote": "**评级：观望（不买入，持仓者可继续持有但需设定纪律）**"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L61",
+            "exact_quote": "| 4 | 数据通讯毛利率连续两个披露期低于 32%，或单期下降超过 5 个百分点且非一次性 | 严重 | 下调内在价值，考虑退出 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L64",
+            "exact_quote": "| 7 | 资产负债率超过 60%，同时经营现金流恶化且再融资受阻 | 严重 | 优先控制仓位，重估偿债与摊薄风险 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L321",
+            "exact_quote": "| 5 | **AI服务器分部持续零增长，交换机独木难支** | 中 | 中高 | AI+HPC 2025 仅 +1.04%（2024年为+139.9%），2026Q1 +8.3%。若机柜价值持续向 GPU/OAM 板集中，沪电吃不到 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L43",
+            "exact_quote": "| 4 | 利润最终能恢复为股东自由现金流 | OCF/归母净利、Capex、TTM 简化 FCF | 每季度 | 2026Q1 OCF/净利仅 0.41；TTM 简化 FCF 约 -10.46 亿元 | 🟡 边际弱化 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

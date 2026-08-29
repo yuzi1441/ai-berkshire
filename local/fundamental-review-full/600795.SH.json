@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:26:19+08:00",
+  "company": "guodian-power",
+  "ticker": "600795.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/guodian-power/guodian-power-research-20260623.md",
+    "sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 4.81 元只允许 5%-10% 高股息防御配置；优先等 4.50 元以下，3.6-4.5 元为正式建仓区，3.6 元以下才进入极端悲观重仓研究区。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 322,
+          "line_end": 341,
+          "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+          "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "继续持有收息；5.5 元以上接近目标价时可减持，不能把 5% 股息当作无风险债券收益。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 322,
+          "line_end": 341,
+          "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+          "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "4.2 元以下、容量电价继续提升、水电投产超预期或具体资产注入方案出现；电价连续两季跌幅超过 10%、煤价持续高于 1000 元或负债率超过 76% 即重审。",
+      "metrics": [
+        "债务"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 322,
+          "line_end": 341,
+          "quote": "### 最终决策 | 策略 | 建议 | |------|------|",
+          "supports": "L322-L341、L383-L404。正文明确允许小仓，契约粗字段却写“观察”，采用正文分层许可并保留高负债限制。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/guodian-power/guodian-power-research-20260623.md",
+      "sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L326",
+            "exact_quote": "可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L335",
+            "exact_quote": "**3.6元以下** | <9x | 重仓区——极端悲观情景，股息率7%+"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L336",
+            "exact_quote": "**3.6-4.5元** | 9-11x | 建仓区——安全边际充足"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L327",
+            "exact_quote": "继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L345",
+            "exact_quote": "所以你以为的'高股息安全垫'其实没那么安全。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L329",
+            "exact_quote": "① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L328",
+            "exact_quote": "① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76%"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

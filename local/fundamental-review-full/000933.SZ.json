@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:50:13+08:00",
+  "company": "神火股份",
+  "ticker": "000933.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/神火股份/神火股份研究报告-20260803.md",
+    "sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 25.37 元不追高；21-25 元只进入小仓评估区，18-21 元风险收益更有吸引力，18 元以下且基本面未永久受损才考虑更积极分批。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可以持有但不默认加仓，继续核对铝价、氧化铝成本、短债和经营现金流。",
+      "metrics": [
+        "经营现金流",
+        "债务"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化。",
+      "metrics": [
+        "利润",
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/神火股份/神火股份研究报告-20260803.md",
+      "sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L251",
+            "exact_quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L226",
+            "exact_quote": "| 21-25 元 | 小仓位分批评估 | H2 利润不塌、流动性缺口收窄 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L228",
+            "exact_quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L252",
+            "exact_quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L21",
+            "exact_quote": "- 经营现金流 72.00 亿元很强，但短期借款从年初 45.62 亿元升至 86.76 亿元，现金转换与流动性不能只看利润表。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L63",
+            "exact_quote": "| 短期借款 | 45.62 | 86.76 | +90.18%，公司解释为融资结构调整 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L253",
+            "exact_quote": "| 加仓信号 | 股价跌入 18-21 元；H2 铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L227",
+            "exact_quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:03:23+08:00",
+  "company": "英维克",
+  "ticker": "002837.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/英维克/英维克投资研究报告-20260706.md",
+    "sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "74.06 元显著高估，明确回避；30-50 元只观察，30 元以下且海外订单、海外收入、净现比或毛利率验证后才重新研究。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "减仓到能够完全承受 60% 回撤的比例；低成本小仓可保留观察，但不能把未经公告确认的订单当作价值依据。",
+      "metrics": [
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "30 元以下，且公司公告海外大客户批量订单、海外收入占比升至 25% 以上、净现比回到 0.7 以上或毛利率连续两季回升。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L243",
+            "exact_quote": "- **当前74.06元：显著高估区**，价格已透支乐观情景。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L266",
+            "exact_quote": "| **空仓者** | **回避。** 好行业+好卡位+错误的价格=坏投资。若坚持想参与，等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L269",
+            "exact_quote": "| **加仓信号（需先跌入安全区）** | ①股价跌至30元下方且②以下任一兑现：公司公告形式披露海外大客户批量订单、海外收入占比升至25%+、净现比回到0.7以上、毛利率连续两季回升 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L267",
+            "exact_quote": "| **持仓者** | **建议减仓至可完全承受-60%回撤的比例。** 当前价格的持有逻辑只剩“海外订单公告落地”这一个催化剂，本质是事件博弈而非价值投资；若成本很低且仓位小，可留观察仓等半年报验证海外收入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L137",
+            "exact_quote": "**不是否认液冷行业，而是拒绝为\"未经公司确认的订单传闻\"支付200倍市盈率**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L158",
+            "exact_quote": "- **信披模糊（事实）**：对\"是否英伟达直接供应商\"的市场传闻既不确认也不否认，任由券商30余篇研报放大叙事，直到暴雷。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**当前股价**：74.06元（2026-07-06收盘，2025年度10转3已于2026-06-01除权）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L34",
+            "exact_quote": "| 2025 | 60.68 | +32.2% | 5.22 | +15.3% | 27.86% | 16.58% | 1.57 | **-1.46** | **0.30** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L116",
+            "exact_quote": "\"英伟达供应商\"公司信披从未确认；第一财经查证英伟达官网无供货信息；传闻的\"GB300机柜1200台订单\"仅见于自媒体。谷歌CDU尚在\"样品供货\"阶段"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

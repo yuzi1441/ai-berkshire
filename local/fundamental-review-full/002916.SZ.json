@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:05:05+08:00",
+  "company": "深南电路",
+  "ticker": "002916.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/深南电路/深南电路研究报告-20260709.md",
+    "sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 414.80 元绝非低估；只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本可持有并设置反证清单；成本接近报告价者应谨慎持有或降低暴露。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "显著回落且订单、毛利率和现金流继续验证；FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控。",
+      "metrics": [
+        "毛利率",
+        "订单",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/深南电路/深南电路研究报告-20260709.md",
+      "sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L19",
+            "exact_quote": "本报告的核心判断是：**深南电路是中国高端电子互连平台型资产，但按 2026-07-09 收盘价 414.80 元测算，市场已经给了很高的 AI/先进封装预期；好公司与好价格需要分开。**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L305",
+            "exact_quote": "若回落到 250-300 元区间，或 PE 回到约 45-55x 且基本面未恶化，再重新评估。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L306",
+            "exact_quote": "只有在能承受 -30% 到 -45% 回撤时，才考虑以研究仓参与。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L307",
+            "exact_quote": "可继续持有，但设置反证清单"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L308",
+            "exact_quote": "谨慎持有/分批降低暴露"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L312",
+            "exact_quote": "股价显著回落，但 2026-2027 订单、毛利率和现金流仍验证高端化。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L313",
+            "exact_quote": "FC-BGA 24 层以上产品进入稳定量产，且封装基板毛利率继续提升。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L314",
+            "exact_quote": "泰国工厂客户认证、良率和境外毛利率改善。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:53:49+08:00",
+  "company": "湖南黄金",
+  "ticker": "002155.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+    "sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "价值投资者不在 24 元附近追高，等待 17-20 元或资产注入细节证明每股价值显著增厚；趋势投资者的小仓跟踪不能当作低估买入。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本持仓可分批管理，高成本持仓要降低预期收益率；金锑价格、注入条款或中报转弱时减仓复盘。",
+      "metrics": [],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "17-20 元且金锑钨价格未系统性反转，或资产注入评估、矿权成本和业绩承诺明确增厚每股价值，同时自产资源利润和安全生产得到验证。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+      "sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L9",
+            "exact_quote": "空仓投资者不宜在 24 元附近按价值投资逻辑追高。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L326",
+            "exact_quote": "等待 17-20 元价格带，或资产注入细节证明每股价值显著增厚"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L327",
+            "exact_quote": "可小仓跟踪，但不应误认为低估"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L328",
+            "exact_quote": "可继续持有但分批管理仓位"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L329",
+            "exact_quote": "降低预期收益率"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L342",
+            "exact_quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行；"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L334",
+            "exact_quote": "股价回到 17-20 元，同时金锑钨价格未系统性反转；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L335",
+            "exact_quote": "资产注入问询回复显示评估假设保守、矿权成本清晰、业绩承诺覆盖充分；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L337",
+            "exact_quote": "安全生产稳定，停产矿山顺利复产且未反复事故；"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

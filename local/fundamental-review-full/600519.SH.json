@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:24:10+08:00",
+  "company": "茅台",
+  "ticker": "600519.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
+    "sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 1168.63 元已进入 1100-1300 元合理偏低区，可分批建仓但不能一次打满；900-1100 元吸引力更强，900 元以下仍须排除基本面恶化。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "轻仓者可低吸并等待 1100 元附近；重仓者以持有为主，不因“便宜”继续加满。1300-1500 元持有不追，1500 元以上等待利润重新加速。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "1000-1100 元且 Q2/Q3 利润恢复到 5% 以上时加仓；连续两季利润负增长、飞天批价持续跌破出厂价或治理出现重大问题时重审。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
+      "sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**当前股价**：1168.63 元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L210",
+            "exact_quote": "| 1100-1300 元 | 合理偏低，可分批 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L234",
+            "exact_quote": "| 空仓者 | 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L235",
+            "exact_quote": "| 轻仓者 | 可继续低吸，重点看 1100 元附近是否出现 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L316",
+            "exact_quote": "| 1300-1500 元 | 观察，不追价 | 持有，不加仓 | 合理，安全边际一般；重仓者不必因为“便宜”继续加满 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L317",
+            "exact_quote": "| 1500 元以上 | 观察，等待利润重新加速 | 持有，等待利润重新加速确认 | 需要利润重新加速支撑 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L238",
+            "exact_quote": "| 加仓信号 | 股价跌入 1000-1100 元，同时 2026Q2/Q3 利润恢复到 5%+ |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L237",
+            "exact_quote": "| 卖出信号 | 连续两季度利润负增长、飞天批价持续跌破出厂价、治理再出重大问题 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

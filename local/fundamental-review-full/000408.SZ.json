@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:47:34+08:00",
+  "company": "藏格矿业",
+  "ticker": "000408.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+    "sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "当前回避或观望；等待 35-40 元附近且基本面未恶化后重新评估。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "逢高分批减仓并可保留底仓，不在高 PB 区追加。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "35-40 元且巨龙分红、麻米措投产与商品周期未恶化；巨龙扩产兑现属于加仓验证。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+      "sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L249",
+            "exact_quote": "| **空仓者** | **回避/观望**。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。**不建议在此价位新建仓。** 等回调至**35–40元附近（对应PB约3x、中性情景合理值）** 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L252",
+            "exact_quote": "| **加仓信号** | ① 股价回落至35–40元且基本面未恶化（PB回到3x）；② 麻米措首期顺利投产、成本验证≤3.5万/吨；③ 巨龙二期产量兑现、三期获批；④ 商品价格周期确认新一轮上行起点。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L250",
+            "exact_quote": "| **持仓者** | **逢高分批减仓/落袋为主**。核心逻辑（低成本资源+巨龙扩产+高分红+治理改善）未破坏，但估值已透支未来3年成长，PB 6.2x处历史极值区。建议兑现部分涨幅、降低仓位，保留底仓享受巨龙放量与高分红，不宜在此价位持满仓或追加。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L251",
+            "exact_quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L252",
+            "exact_quote": "| **加仓信号** | ① 股价回落至35–40元且基本面未恶化（PB回到3x）；② 麻米措首期顺利投产、成本验证≤3.5万/吨；③ 巨龙二期产量兑现、三期获批；④ 商品价格周期确认新一轮上行起点。 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

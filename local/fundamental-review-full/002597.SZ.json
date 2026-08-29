@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:04:56+08:00",
+  "company": "金禾实业",
+  "ticker": "002597.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+    "sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "20.24 元不买；16.5-18 元仅激进型小仓观察，13.5-16.5 元且毛利率、库存和现金流同步改善后稳健分批，10.5-13.5 元保守型仍暂不参与。",
+      "metrics": [
+        "毛利率",
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "不因接近一年低点补仓，只保留小仓观察并按利润质量和现金流失效条件控制仓位。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "进入对应价格带，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度 FCF 转正；电子化学品收入占比超过 3% 且毛利率高于集团平均可提高确定性。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "收入",
+        "库存"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+      "sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> 收盘价：20.24 元（腾讯、 新浪、 搜狐三源一致）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L181",
+            "exact_quote": "| 稳健型 | 等待确认后分批买入 | 13.5-16.5 元 | 需要毛利率、库存和现金流同步改善 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L203",
+            "exact_quote": "| 空仓者 | 当前价格观察，不买入；若跌入稳健区间且毛利/库存改善，再分批研究 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_comparison"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L20",
+            "exact_quote": "- 价格接近过去一年低位区间不等于便宜。前复权区间约 18.42 至 29.032 元，估值要与盈利能力一起看。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L204",
+            "exact_quote": "| 持仓者 | 不因“接近一年低点”补仓；保留小仓位观察，按失效条件控制仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L206",
+            "exact_quote": "| 减仓/卖出信号 | 核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_comparison"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L205",
+            "exact_quote": "| 加仓信号 | 核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度 FCF 转正；电子化学品收入占比超过 3% 且毛利率高于集团平均 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L32",
+            "exact_quote": "| 食品添加剂及配料 | 22.8057 | 46.44% | -17.16% | 30.37% | 当前利润锚，销量同比 -22.44% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L36",
+            "exact_quote": "| 电子化学品 | 0.8337 | 1.70% | +185.50% | 9.30% | 高增但小基数，尚未改变公司利润结构 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

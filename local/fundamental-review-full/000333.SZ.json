@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:48:15+08:00",
+  "company": "美的集团",
+  "ticker": "000333.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+    "sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "当前不追；激进型不高于 75.27 元才小仓，稳健型 68-71 元，保守型不高于 65.87 元。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本持有者继续持有收息；接近报告基准价的持仓者等待扣非利润、现金流与 ToB 回报验证。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入对应区间且扣非利润、经营现金流不继续恶化；楼宇科技利润与资产周转改善可提高仓位。",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+      "sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/美的集团/美的集团-thesis.md",
+      "sha256": "1b82d753a045d7df5cee2ffa7bce5a7b9d0bea4cd91d1cdbd9b2e31f1c158329",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L123",
+            "exact_quote": "中性情景三年总价值为 100.1849 元。由该终值倒推：要求年化回报 10%、12%、15%时，最高买入价分别为 **75.27 元、71.31 元、65.87 元**。这些是模型纪律，不是对未来股价的保证。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L131",
+            "exact_quote": "| 75.27-88 元 | 观察/持有区 | 当前 80.40 元位于此区间；不因静态股息率单独买入 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L133",
+            "exact_quote": "| 65.87-71.31 元 | 普通分批买入区 | 健康度不低于 7/10 且无红线时，按普通买入纪律分批 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L75",
+            "exact_quote": "| 1 | 核心智能家居维持盈利与现金创造，不靠牺牲利润换增长 | 半年度/年度智能家居收入不转为持续负增长、毛利率不低于 28%；年度简化 FCF/归母净利不低于 0.9；扣非归母净利恢复非负增长 | 每季度 / 半年度 | **🟡 边际弱化** | 2025 智能家居收入 +11.28%、毛利率 29.90%，但 FCF -19.88%；2026Q1 扣非净利 -14.02%，应收账款升至 525.37 亿元 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L161",
+            "exact_quote": "**判定：经营论文完整但边际弱化，买入论文尚未由当前价格激活。** 核心家电和效率护城河仍在，ToB 回报、扣非利润和接班安排需要半年报及后续公告验证。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L176",
+            "exact_quote": "| 该怎么做？ | **无仓位：80.40 元等待、不追价；若已持有：持有/观察，不因价格单独加仓。75.27 元以下可研究小仓，71.31 元附近进入普通买入线，65.87 元以下才有强安全边际** |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L43",
+            "exact_quote": "| 2025 经营现金流 / 简化 FCF | 533.46 亿元 / 422.04 亿元 | FCF 同比 -19.88%，现金缓冲边际收窄 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L75",
+            "exact_quote": "| 1 | 核心智能家居维持盈利与现金创造，不靠牺牲利润换增长 | 半年度/年度智能家居收入不转为持续负增长、毛利率不低于 28%；年度简化 FCF/归母净利不低于 0.9；扣非归母净利恢复非负增长 | 每季度 / 半年度 | **🟡 边际弱化** | 2025 智能家居收入 +11.28%、毛利率 29.90%，但 FCF -19.88%；2026Q1 扣非净利 -14.02%，应收账款升至 525.37 亿元 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L77",
+            "exact_quote": "| 3 | ToB 与海外扩张不会持续拉低集团资本回报 | 集团 ROE 不低于 18%；楼宇分部利润/期末资产代理恢复至 10%以上且利润转正增长；KUKA EBIT 率提高至 3%以上；海外利润率和现金回流不持续恶化 | 每半年 / 年度 | **🟡 边际弱化** | 2025 楼宇资产 +31.91%、分部利润 -10.82%，利润/资产代理降至 8.74%；KUKA EBIT 率约 1.5%，海外毛利率仅比国内高 0.36pct |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

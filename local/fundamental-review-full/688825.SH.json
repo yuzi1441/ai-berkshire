@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:19:55+08:00",
+  "company": "长鑫存储",
+  "ticker": "688825.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+    "sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 49 元、3 万亿元以上市值区间任何理由都不追；24-45 元仍只观望，16-24 元且无实体清单落地、HBM 未证伪时最多建 2% 观察仓，15 元以下且仅周期杀估值、基本面未坏时才进入系统性价值建仓区。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "当前高估值区应控制或退出风险暴露；发行申购的巨大赔率已经过去，不能把发行价机会迁移到二级市场。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "HBM3/3E 综合良率突破 60%的第三方证据、华为昇腾规模采用、实体清单风险实质解除、G5 按期量产且拆解确认，或周期下行仍保持正毛利可上调；列入实体清单、DRAM 合约价转负叠加三巨头扩产、G5 延期超过两个季度、关联交易异常或解禁前估值仍超 2 万亿元即回避/清仓。",
+      "metrics": [
+        "毛利率",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+      "sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L13",
+            "exact_quote": "首日收盘 3.28 万亿元市值把 DRAM 超级周期顶部的利润和 HBM 尚未兑现的成功一起定价了，49 元没有安全边际，中性情景三年测算下跌约五成。发行价 8.66 元的申购是十年一遇的送钱机会，但已经过去；二级市场的机会要等周期回落或恐慌错杀。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L28",
+            "exact_quote": "约 3.28 万亿元（约 4600-4900 亿美元，汇率口径不同），超越工商银行成为 A 股市值第一"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L308",
+            "exact_quote": "反推安全边际：中性情景 23.3 元之下、即市值 1.6 万亿元以下，赔率才转为中性；若要求悲观情景也仅小亏，需等到 15 元下方（市值约 1 万亿元）"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L11",
+            "exact_quote": "投资评级：观望（跟踪池一级标的，当前价位不买入）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L13",
+            "exact_quote": "首日收盘 3.28 万亿元市值把 DRAM 超级周期顶部的利润和 HBM 尚未兑现的成功一起定价了，49 元没有安全边际，中性情景三年测算下跌约五成。发行价 8.66 元的申购是十年一遇的送钱机会，但已经过去；二级市场的机会要等周期回落或恐慌错杀。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "2026-07-27 已登陆科创板，本报告写作时上市仅 3 个交易日"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L28",
+            "exact_quote": "约 3.28 万亿元（约 4600-4900 亿美元，汇率口径不同），超越工商银行成为 A 股市值第一"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L221",
+            "exact_quote": "首日 465% 涨幅 + 周期顶部利润 + 解禁周期（网下限售 6 个月起、战配 12-18 个月、大股东 36 个月）"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

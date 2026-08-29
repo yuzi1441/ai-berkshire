@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:16:20+08:00",
+  "company": "百济神州",
+  "ticker": "688235.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/百济神州/百济神州研究报告-20260706.md",
+    "sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股基准价 277 元不急追，报告没有给出可直接套用的 A 股买入价；保守口径仅给 ONC 240-260 美元且基本面未恶化时重研，稳健口径要求后续季度收入、GAAP 利润率和 FCF 继续验证，不能跨市场机械换算成 A 股买点。",
+      "metrics": [
+        "自由现金流",
+        "利润",
+        "收入"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有并设置验证线，重点核对 2026 收入指引、GAAP operating income、BRUKINSA 增速、FCF per share 与股本摊薄。",
+      "metrics": [
+        "自由现金流",
+        "收入",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审；BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "利润",
+        "收入"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/百济神州/百济神州研究报告-20260706.md",
+      "sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L358",
+            "exact_quote": "若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L359",
+            "exact_quote": "只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L360",
+            "exact_quote": "已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L271",
+            "exact_quote": "SBC/收入维持高位；年度稀释率超过 3-5%。用每股 FCF 重估，而非公司 FCF。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L378",
+            "exact_quote": "年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L359",
+            "exact_quote": "只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L358",
+            "exact_quote": "若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L373-L378",
+            "exact_quote": "BRUKINSA 同比连续两季低于 20%。公司下调 2026 或 2027 收入/经营利润指引。毛利率跌破 85% 且不是短期产品组合扰动。FCF margin 低于 10%，同时费用继续扩张。关键管线验证性试验失败或安全性标签恶化。年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:15:20+08:00",
+  "company": "三一重工",
+  "ticker": "600031.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/三一重工/三一重工研究报告-20260808.md",
+    "sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 19.58 元高于计划买入区间，不追；17-18 元为激进小仓，14.5-16 元稳健分批，12-13.5 元才有较厚安全边际。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "仓位合理时可以持有，继续核对海外毛利、扣非利润、应收和逾期垫款、财务费用及 H 股募集资金回报。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "进入对应价格带，且海外收入保持增长、国际毛利率不低于 28%、经营现金流不持续弱于净利润、信用资产未恶化。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/三一重工/三一重工研究报告-20260808.md",
+      "sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> **A / H 股价格：** 19.58 元 / 20.34 港元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L222",
+            "exact_quote": "| 保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L243",
+            "exact_quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L243",
+            "exact_quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L10",
+            "exact_quote": "2026 年中报截至研究日尚未披露，最新未经审计定期报告为 2026 年一季报。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L90",
+            "exact_quote": "地区上，国内主营收入 314.14 亿元、毛利率 20.69%；国际主营收入 558.56 亿元、毛利率 31.64%。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L247",
+            "exact_quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L90",
+            "exact_quote": "国际主营收入 558.56 亿元、毛利率 31.64%。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L10",
+            "exact_quote": "2026 年中报截至研究日尚未披露，最新未经审计定期报告为 2026 年一季报。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:41:14+08:00",
+  "company": "景旺电子",
+  "ticker": "603228.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+    "sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "65.91 元不追，放入观察名单；等待 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率和自由现金流同步修复后再研究买入。",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本仓可继续持有但须设纪律；成长型只能小仓事件跟踪，不能把 AI PCB 叙事当安全边际。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入；毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "利润",
+        "库存",
+        "债务",
+        "产能/销量",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+      "sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> 当前价格口径：65.91 元/股（2026-07-09 收盘价口径，行情源交叉参考 Investing / HSTong；不同盘后页面可能有轻微时点差异）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L225",
+            "exact_quote": "**关键判断：** 当前价格几乎贴近乐观情景。除非未来 2-3 年净利润达到 18-20 亿元以上、毛利率和 FCF 同步修复，否则 57x TTM PE 很难给价值投资者安全边际。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L298",
+            "exact_quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L299",
+            "exact_quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L300",
+            "exact_quote": "| 成长型投资者 | 可小仓位事件跟踪 | 核心赌的是 AI/高速通信产能放量和估值继续扩张，不是传统安全边际。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L57",
+            "exact_quote": "| 2026Q1 毛利率 | 18.76%，同比 -2.02pct | 原材料、汇率、产品价格压力明显。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L51",
+            "exact_quote": "| 2025 扣非归母净利润 | 10.21 亿元，同比 -3.15% | 扣非质量是核心短板。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L146",
+            "exact_quote": "| 存货和负债压力 | 港股递表媒体披露存货、借款、资产负债率上升。 | 中高 | 存货周转天数、有息负债、资产负债率。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

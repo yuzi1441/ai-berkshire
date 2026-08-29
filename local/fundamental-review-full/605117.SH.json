@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:45:29+08:00",
+  "company": "deye",
+  "ticker": "605117.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/deye/deye-investment-research-20260623.md",
+    "sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "101.85 元不直接建仓；优先等待 70-80 元。若 2026Q2-Q3 持续高增长且欧盟限制影响有限，85-95 元才允许约 5% 观察仓。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有但控制仓位，并重点跟踪欧盟限制、应收质量和储能逆变器毛利率。",
+      "metrics": [
+        "毛利率",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "70-80 元，或 85-95 元叠加业绩/政策验证；马来西亚产能有效规避壁垒、工商储收入放量、自有品牌占比提高可增强判断。欧洲收入显著下滑、逆变器毛利率低于 40%、应收增速长期远超收入或实控人大额减持即失效。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "回款",
+        "政策",
+        "产能/销量"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/deye/deye-investment-research-20260623.md",
+      "sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "> **股价**：CNY 101.85 | **市值**：CNY 1,297亿"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L358",
+            "exact_quote": "**空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L359",
+            "exact_quote": "**持仓者** | **持有但控制仓位在10%以内**。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L49",
+            "exact_quote": "| 储能逆变器 | 52.17 | 42.7% | +18.9% | **51.10%** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L154",
+            "exact_quote": "| 应收账款恶化/坏账 | 20-30% | 中高 | 2024年末应收账款17亿（+203%），增速远超营收。新兴市场客户信用风险高（巴基斯坦、乌克兰等） |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L360",
+            "exact_quote": "**卖出信号** | （1）欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上；（4）张和君大幅减持（>1%持股）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L49",
+            "exact_quote": "| 储能逆变器 | 52.17 | 42.7% | +18.9% | **51.10%** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L211",
+            "exact_quote": "| 2024年 | 马来西亚建厂1.5亿美元 | 规避贸易壁垒，但产能投产需时间 | B+（待验证） |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

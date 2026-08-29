@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:10:14+08:00",
+  "company": "DapuStor",
+  "ticker": "301666.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/DapuStor/DapuStor-research-20260623.md",
+    "sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "705 元、约 3,074 亿元市值没有安全边际，坚决回避；等待 2027 年解禁潮和更多盈利季度后再研究。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "立即卖出或大幅减仓，不能用单季度扭亏、低流通盘和 AI 存储叙事替代可持续盈利验证。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "股价进入 80-120 元区间，且连续四个季度证明盈利可持续、自研主控实现规模商业化后再评估。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/DapuStor/DapuStor-research-20260623.md",
+      "sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**当前股价**：705.00元（6/23收盘，-7.66%）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "**市值**：约3,074亿元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L313",
+            "exact_quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L314",
+            "exact_quote": "| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L16",
+            "exact_quote": "- 仅有一个完整季度的盈利数据（2026Q1），盈利可持续性完全未验证"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L331",
+            "exact_quote": "答案是：流通盘仅6.2%创造的人为稀缺性+AI叙事的狂热。这是投机，不是投资。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**当前股价**：705.00元（6/23收盘，-7.66%）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L316",
+            "exact_quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L119",
+            "exact_quote": "- ⚠️ 自研主控的规模化量产仍在早期，\"全栈自研\"的商业化验证尚不充分"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

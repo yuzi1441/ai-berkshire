@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:15:30+08:00",
+  "company": "东鹏饮料（集团）股份有限公司",
+  "ticker": "605499.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+    "sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 130.83 元位于 127-140 元激进型区间，可小额首批而非一次买满；114-127 元进入稳健分批区，100-114 元在基本面未恶化时重点关注，高于 140 元不追。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "以持有为主；低于 127 元且 H2 扣非利润仍保持双位数增长时，再评估增加。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "东鹏特饮恢复 10%以上增长、茶饮料高增同时销售费用率不升、海外或新基地披露明确回报可增强判断；销售费用连续两个报告期比收入多增 10 个百分点、扣非增速持续低于收入、核心能量饮料连续两个半年度零增长或份额下降超过 3 个百分点、低回报并购、治理或食品安全事件即暂停或退出。",
+      "metrics": [
+        "收入"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+      "sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L305",
+            "exact_quote": "当前130.83元处于激进型区间。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L300",
+            "exact_quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L303",
+            "exact_quote": "| 不追价区 | 高于140元 | 高于21倍 | 等待H2或下一份季报验证再评估 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L334",
+            "exact_quote": "| 加仓信号 | 东鹏特饮恢复10%以上增长；茶饮料高增同时销售费用率不升；海外或新基地披露明确回报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L335",
+            "exact_quote": "| 暂停买入信号 | 销售费用连续两个报告期比收入多增10个百分点；扣非利润增速持续低于收入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L336",
+            "exact_quote": "| 减仓/卖出信号 | 核心能量饮料连续两个半年度零增长或份额下降超过3个百分点；重大低回报并购；治理或食品安全事件破坏品牌 |"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

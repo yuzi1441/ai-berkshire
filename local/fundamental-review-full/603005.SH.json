@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:40:35+08:00",
+  "company": "jingfang-keji",
+  "ticker": "603005.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+    "sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "49.60 元、87 倍 PE 明显透支增长，不买；等待约 25-35 元的研究区，其中 23-29 元对应报告所述 40-50 倍历史利润口径，或先等后续季报证明增长可持续。",
+      "metrics": [
+        "利润",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "报告建议考虑至少减持一半锁定利润；不能因先进封装、车载 CIS、CPO 等叙事忽略 2026Q1 净利润零增长与负 FCF。",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "PE 回落至 40 倍以下或价格进入更有安全边际区，同时车载 CIS 季度收入维持高增长、CPO 出现可验证收入、管理层增持或推出有效激励；连续两季收入增速低于 20%、毛利率低于 40%、大客户变化或管理层大额减持即失效。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "产品/客户",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+      "sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L35",
+            "exact_quote": "| 最新股价 | 49.60元（2026年6月25日） |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L403",
+            "exact_quote": "当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L416",
+            "exact_quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L404",
+            "exact_quote": "股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L70",
+            "exact_quote": "| 归母净利 | 0.65亿元 | +0.1% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L98",
+            "exact_quote": "| FCF Yield | **-0.46%**（负自由现金流） |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L405",
+            "exact_quote": "| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L406",
+            "exact_quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L93",
+            "exact_quote": "| PE（TTM） | **87.0x** |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

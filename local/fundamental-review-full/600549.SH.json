@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:48:01+08:00",
+  "company": "厦门钨业",
+  "ticker": "600549.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+    "sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "48.39 元回避，不因较高点腰斩就抄底；33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价。",
+      "metrics": [
+        "库存",
+        "债务"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "持有但不加仓并降低到可承受仓位；报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上；重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审。",
+      "metrics": [
+        "利润",
+        "库存",
+        "债务"
+      ],
+      "periods": [
+        "H1",
+        "Q3",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+      "sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/厦门钨业/厦门钨业-thesis.md",
+      "sha256": "cf3660746f40012ffcac004b0a84bc068f4087eac32a88e0825ab327e8e2818e",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> **研究参考价**：48.39 元（腾讯行情 + 东方财富双源一致，偏差 0.00%）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "> **一句话结论**：**回避 / 继续观察。** 钨价已自 2026 年 3 月峰值回落约 60% 并跌破年初水平，公司创纪录的半年报利润建立在已经消失的价格之上；197 亿元高价存货 + 106 亿元短期借款构成的资产负债表尚未经历这轮价格下跌的检验。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L39",
+            "exact_quote": "| 空仓该怎么做 | 观察；等正式半年报，不因从 64.71 元跌到 48.39 元就自动买入 |"
+          }
+        ],
+        "missing_codes": [
+          "no_threshold"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L40",
+            "exact_quote": "| 已持有该怎么做 | 持有但不加仓；半年报若显示现金流、存货和短债同步恶化，立即重审 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L173",
+            "exact_quote": "| 2026-07-24 | 7/10 | 首次建档；H1 利润高增，但 Q2 环比近乎持平；洛阳豫鹭停产；现价较 7 月 9 日下降 25.22%，现金流仍待正式半年报验证 | 空仓观察；已有持仓持有但不加仓 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_threshold"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L109",
+            "exact_quote": "| **2026-07-23** | **41.5 万** | **中国钨业协会 CTIA（最权威）** |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L83",
+            "exact_quote": "| 2 | 滚动 12 个月 OCF/归母净利润低于 0.7，且存货、短借连续两个报告期同时上升 | 严重 | 冻结加仓；减仓 50%并重估资产负债表 | Q1 为首期警报，尚未连续触发 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:40:31+08:00",
+  "company": "chunfeng-dongli",
+  "ticker": "603129.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+    "sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 241.11 元处于 200-260 元合理低估区，允许分批建仓并称当前可配置半仓；但关税、KTM 变局和极核盈利尚未验证，应分段执行而非一次打满。",
+      "metrics": [
+        "政策"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "继续持有但不急于加仓，先确认 2026Q2-Q3 利润增速、极核毛利率、美国关税和欧洲渠道重建。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "200-220 元是理想加仓区，200 元以下安全边际更强；极核季度毛利率转正、关税缓和或 ATV 全球份额突破 8% 可增强判断。Forward PE 超过 30 倍、关税超过 50%且无法规避、全年利润个位数增长或管理层再大额减持即失效。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+      "sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "**股价**：241.11 元 | **市值**：370亿元 | **总股本**：1.5348亿股"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L447",
+            "exact_quote": "| 合理低估区 | 200-260元 | Forward PE 13-17x，当前所处位置 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L437",
+            "exact_quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L438",
+            "exact_quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L437",
+            "exact_quote": "理想加仓价位：200-220元（对应Forward PE 12-14x）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L440",
+            "exact_quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L439",
+            "exact_quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

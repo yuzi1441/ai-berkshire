@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:33:01+08:00",
+  "company": "中国神华",
+  "ticker": "601088.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+    "sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 43.42 元不追；现有持仓者可持有收息，但这是持仓口径，不能转写成空仓买入机会。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "A 股 36 元以下才适合激进分批，33 元以下更适合稳健型；正式半年报还需验证每股经营现金流、ROIC、分部利润和短借去化。",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "ROIC"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+      "sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/中国神华/中国神华-thesis-tracker-20260720.md",
+      "sha256": "6e0f4bb550e0e57da71d422a0e141e337d50f22ee7c928114113fb1e50e982ee",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports/中国神华/中国神华-thesis.md",
+      "sha256": "0a154a104e9550e26d953b7eba0149f8695a9f6aeaf1f3a256daf09712c77d61",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_2",
+          "local_3"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L130",
+            "exact_quote": "- **无仓位者：不追。** A 股 46.14 元已越过既定观察线；H 股 43.60 港元也接近 44 港元上沿，等待正式中报或价格回到建仓区。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L131",
+            "exact_quote": "- **A 股已有持仓：进入“减仓观察”估值复核，不加仓。** 46.14 元已触发“高于 46 元且盈利与现金流未上修”的冻结动作条件；这不是机械清仓信号。"
+          },
+          {
+            "document_id": "local_3",
+            "line_ref": "L21",
+            "exact_quote": "4. A 股 43.42 元没有明显安全边际；H 股 42.30 港元较合理，安全边际来自折价与股息。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_2",
+          "local_3"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L93",
+            "exact_quote": "| A 股收盘价 | 43.42 元 | **46.14 元** | +6.26% |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L131",
+            "exact_quote": "- **A 股已有持仓：进入“减仓观察”估值复核，不加仓。** 46.14 元已触发“高于 46 元且盈利与现金流未上修”的冻结动作条件；这不是机械清仓信号。"
+          },
+          {
+            "document_id": "local_3",
+            "line_ref": "L106",
+            "exact_quote": "| 减仓观察 | 高于 46 元且盈利与现金流未上修 | 高于 44 港元且折价明显收窄或预期回报下降 | 先看机会成本，再看基本面 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L81",
+            "exact_quote": "- **现金流黄灯没有新答案。** 公司重申 65% 分红规划和继续中期分红，但未披露 H1 OCF、资本开支、短借去化或重组 ROIC；口头和制度承诺不能替代现金覆盖。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L21",
+            "exact_quote": "四项假设成立，两项黄灯仍是：分红现金覆盖尚未被中报现金流验证；重组后每股现金创造能力和 ROIC 尚未披露。新运营数据增强了一体化韧性的证据，但没有提供单位成本、分部利润、经营现金流或资本回报，不能把黄灯提前转绿。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L40",
+            "exact_quote": "公司称有利因素主要是煤化工业务量、自有铁路、港口及航运业务量增加；不利因素是税金及附加和营业外支出增加。预告未经审计或审阅，且没有披露分部利润率、经营现金流和新增资产 ROIC。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

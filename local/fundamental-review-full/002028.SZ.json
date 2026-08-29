@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:54:15+08:00",
+  "company": "思源电气",
+  "ticker": "002028.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+    "sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "145 元以上不追；125-145 元仅激进型小仓研究，110-125 元且核心毛利与现金流未恶化时风险收益才开始合理，90-110 元才进入保守资金重点研究区。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有验证，但不能只用行业景气解释利润率、回款和低毛利业务扩张；多个指标同向恶化时重审。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入相应区间，且核心开关/变压器毛利、海外回款、CFO/净利、H 股条款与扩产回报未恶化。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+      "sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/思源电气/思源电气-thesis.md",
+      "sha256": "35b423e1c072cf66cadd0ab7b4dadbb03e6476ab41f670f3dfcf56162fa0ba33",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "> **股价**：154.27 元；腾讯与新浪同秒附近报价一致"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L343",
+            "exact_quote": "| **145 元以上** | 33.9x 以上 | 空仓者以跟踪为主；已有仓位持有验证 | 不追高，等正式中报和 H2 兑现 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L87",
+            "exact_quote": "| 综合毛利率 | 29.50% | 31.25% | **30.77%** | 快报未披露 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L205",
+            "exact_quote": "H 股申请稿显示，贸易应收款项及应收票据由 2023 年末 53.21 亿元增至 2025 年 9 月末 80.85 亿元，周转天数由 126 天延长至 138 天；截至 2026-01-31，2025 年 9 月末相关应收约 47.9% 已收回。公司 2025 年作为原告的收款相关诉讼 325 件、涉约 4.07 亿元，高于 2024 年的 266 件、约 3.51 亿元。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L435",
+            "exact_quote": "| 2026H1 分部盈利 | 低 | 快报未披露分产品和分地区毛利，须等正式中报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L205",
+            "exact_quote": "H 股申请稿显示，贸易应收款项及应收票据由 2023 年末 53.21 亿元增至 2025 年 9 月末 80.85 亿元，周转天数由 126 天延长至 138 天；截至 2026-01-31，2025 年 9 月末相关应收约 47.9% 已收回。公司 2025 年作为原告的收款相关诉讼 325 件、涉约 4.07 亿元，高于 2024 年的 266 件、约 3.51 亿元。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L439",
+            "exact_quote": "| 扩产回报 | 中低 | 方向合理，但设计产能、建设期、IRR 和订单覆盖未披露 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:59:54+08:00",
+  "company": "Jereh",
+  "ticker": "002353.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/Jereh/Jereh-research-20260624.md",
+    "sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价约 159 元、约 57.7 倍 PE 时明确回避；等待 80-100 元并重新核对增长质量。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 314,
+          "line_end": 405,
+          "quote": "## 第七步：估值与安全边际——巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标 | 指标 | 数值 | 说明 |",
+          "supports": "L314-L405、L474-L495。契约粗字段写“观察”，正文对当前价格明确要求空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "分批止盈并降低 30%-50% 仓位，可保留少量底仓观察，不应继续扩大估值暴露。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 314,
+          "line_end": 405,
+          "quote": "## 第七步：估值与安全边际——巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标 | 指标 | 数值 | 说明 |",
+          "supports": "L314-L405、L474-L495。契约粗字段写“观察”，正文对当前价格明确要求空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "80-100 元，或自研燃机取得实质突破、连续多个季度毛利率稳定在 35% 以上后再评估；北美订单放缓、毛利连续低于 30% 等为减仓信号。",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 314,
+          "line_end": 405,
+          "quote": "## 第七步：估值与安全边际——巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标 | 指标 | 数值 | 说明 |",
+          "supports": "L314-L405、L474-L495。契约粗字段写“观察”，正文对当前价格明确要求空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/Jereh/Jereh-research-20260624.md",
+      "sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L320",
+            "exact_quote": "| 股价 | 159.30元 | 2026年6月24日 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L323",
+            "exact_quote": "| PE(TTM) | 57.7x | 工具验算：159.3/2.76=57.7 ✅ |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L401",
+            "exact_quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L402",
+            "exact_quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L36",
+            "exact_quote": "| 2025 | 162.23 | +21.5% | 26.80 | +2.0% | 31.7% | 17.0% | 12.2% | 53.78 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L98",
+            "exact_quote": "| 2026年以来北美燃机订单 | >11亿美元（~80亿元） | 新业务 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L404",
+            "exact_quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

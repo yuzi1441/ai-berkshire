@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:46:32+08:00",
+  "company": "联影医疗",
+  "ticker": "688271.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+    "sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 106.75 元位于 95-110 元激进型小仓观察区，但许可只适用于能持续跟踪现金流、毛利率与海外质量者，不得当作普通低估买点；一般空仓者等待 80-95 元，保守型等待 70-80 元或更强经营证据。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有但不因国产替代叙事盲目加仓；高于 120 元且现金流未同步改善时，应降低估值风险暴露。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "80-95 元并伴随经营现金流连续改善，或服务占比提升、海外高增且回款不恶化、ROE 回到 12%-15%后可上调；毛利率跌破 45%、应收存货持续快于收入、经营现金流连续两个半年度为负、海外失速、研发资本化/关联交易扩大或质量合规事件即暂停。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "收入",
+        "ROE",
+        "回款",
+        "库存"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+      "sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "2026-07-06 收盘价 106.75 元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L210",
+            "exact_quote": "95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L211",
+            "exact_quote": "80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L25",
+            "exact_quote": "持仓者可持有但不宜因国产替代叙事无脑加仓"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L213",
+            "exact_quote": "若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L227",
+            "exact_quote": "毛利率跌破 45%且非一次性因素。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L228",
+            "exact_quote": "应收 + 存货增速连续高于收入增速，经营现金流连续两个半年度为负。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L222",
+            "exact_quote": "ROE 回升至 12%-15%并非由杠杆驱动。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

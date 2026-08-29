@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:23:12+08:00",
+  "company": "中航机载",
+  "ticker": "600372.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中航机载/中航机载研究报告-20260709.md",
+    "sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "11.19 元附近不急买；10-11.5 元只适合交易型押注修复，8-10 元才可观察或小仓，长期价值投资者优先等 8 元附近或连续两个季度 ROE、现金流改善。",
+      "metrics": [
+        "ROE"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可以持有观察但不盲目加仓，重点核对半年报和三季报的经营现金流、应收、存货及毛利率；13 元以上而利润未上修应谨慎。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "periods": [
+        "H1",
+        "Q3",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "连续两季 OCF 改善且全年 OCF/净利润接近 1，应收和存货周转改善、ROE 向 5%-7% 修复，民机 MRO/PMA/国际业务出现可量化订单；ROE 仍低于 3% 且 PE 高于 45 倍、现金流持续为负或题材涨价无利润兑现即重审。",
+      "metrics": [
+        "利润",
+        "ROE",
+        "订单",
+        "回款",
+        "库存",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中航机载/中航机载研究报告-20260709.md",
+      "sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L285",
+            "exact_quote": "| 当前价附近 | 11.19 元 | 观察 / 持有者跟踪，不建议空仓者按安全边际逻辑追买 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L284",
+            "exact_quote": "| 进取型 | 10.0-11.5 元 | 只能押注利润修复和军工估值弹性，不适合重仓价值买入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L343",
+            "exact_quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L344",
+            "exact_quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L286",
+            "exact_quote": "| 高估警戒 | > 13 元且利润无同步上修 | 风险收益比转差 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L19",
+            "exact_quote": "| 2025 加权 ROE | 2.82% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L13",
+            "exact_quote": "| PE TTM | 47.23x |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L360",
+            "exact_quote": "- 收入继续低增长，ROE 仍低于 3%，但 PE TTM 维持 45x 以上。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:10:12+08:00",
+  "company": "江波龙",
+  "ticker": "301308.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+    "sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 618.02 元处于周期顶部定价，明确回避；合理价值约 240-300 元，只有 180 元以下且周期出清后才有安全边际。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "分批止盈、至少减半，剩余只按周期投机头寸管理；低成本持仓至少收回本金，不能把中报预增当作长期利润。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估。",
+      "metrics": [
+        "收入",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+      "sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L216",
+            "exact_quote": "**当前618.02元：显著高估区域**，对应本轮周期利润的顶部定价"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L214",
+            "exact_quote": "**合理价值区间：240~300元**（对应中性情景，约2029年中周期利润80~85亿×15倍PE折现口径）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L215",
+            "exact_quote": "**具备安全边际的买入区间：180元以下**（中性情景再打6折，约对应PB 6~7倍、接近历史均值下方）"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L241",
+            "exact_quote": "**分批止盈，至少减半**。剩余仓位明确定性为\"周期投机头寸\"而非长期持有，设置严格卖出纪律；若成本极低，至少收回本金"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L134",
+            "exact_quote": "**叙事偏差**：H1预增743倍的新闻热度会让人把周期利润当成长利润。剔除涨价重估，2025年\"正常年景\"净利仅14.23亿"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L71",
+            "exact_quote": "2026年中报预告（2026-07-03）：归母净利润 **92亿~110亿元**（同比+62,204%~+74,394%）。半年利润预计达2025全年的6.5~7.7倍。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L243",
+            "exact_quote": "周期下行出清后：PB回到8倍（历史均值）以下、且企业级存储收入占比升至20%以上验证第二曲线，两者同时满足再评估"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L193",
+            "exact_quote": "PB | 21.26（MRQ口径21.26 / LF口径21.96）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L82",
+            "exact_quote": "企业级存储（业务口径）17.83亿（+93.30%），占收入约7.8%"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

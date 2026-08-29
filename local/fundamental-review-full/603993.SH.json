@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:44:03+08:00",
+  "company": "CMOC",
+  "ticker": "603993.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/CMOC/CMOC-research-20260623.md",
+    "sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 19.49 元允许先建 3%-5% 观察仓并分批执行，不在高铜价位置一次性重仓；15-17 元安全边际更充分，13-15 元为更强加仓区。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有并设置周期与政策跟踪纪律；低成本仓安全边际较好，高成本仓应控制风险。",
+      "metrics": [
+        "政策"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "铜价回调但长期需求未破坏、KFM 二期进度/产量超预期、刚果金政策更明确或股价进入 15-17/13-15 元区；铜价长期低于 10,000 美元、刚果金重大不利政策、利润增速降至个位数或新团队出现诚信/战略失误即失效。",
+      "metrics": [
+        "利润",
+        "政策",
+        "产能/销量"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/CMOC/CMOC-research-20260623.md",
+      "sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**当前股价**：A股 19.49元（6/22收盘）/ H股 17.47港元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L427",
+            "exact_quote": "**空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L430",
+            "exact_quote": "**加仓信号** | 铜价回调至$10,000-11,000但长期需求逻辑未变（提供更好的安全边际）；KFM二期提前投产或产量超预期；刚果金政治环境改善（如税收政策明确化）；股价跌至13-15元区间（PE <16x）"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L428",
+            "exact_quote": "**持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L406",
+            "exact_quote": "这不是一笔\"闭眼持有\"的投资——它需要持续跟踪铜价和刚果金政策。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L429",
+            "exact_quote": "**卖出信号** | 铜价跌破$10,000/吨并持续3个月以上；刚果金出台重大不利政策（如将矿业税提高至50%以上或强制国有化）；Q2-Q3利润增速放缓至个位数；管理层出现诚信问题或重大战略失误"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L430",
+            "exact_quote": "**加仓信号** | 铜价回调至$10,000-11,000但长期需求逻辑未变（提供更好的安全边际）；KFM二期提前投产或产量超预期；刚果金政治环境改善（如税收政策明确化）；股价跌至13-15元区间（PE <16x）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L427",
+            "exact_quote": "股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

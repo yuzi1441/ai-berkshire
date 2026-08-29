@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:56:42+08:00",
+  "company": "华明装备",
+  "ticker": "002270.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+    "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 17.81 元不追；14-16 元才允许分批研究，13.90 元以下且基本面未恶化时吸引力进一步提高。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "16-20 元以持有观察、不加仓为主；若股价进入 20-24 元而利润预期没有同步上修，可考虑降低仓位。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入 14-16 元，或 Q2/Q3 核心业务收入、扣非利润、毛利率和现金流同步恢复；海外毛利、特高压项目、服务业务和 H 股条款也是验证项。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "收入"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+      "sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/华明装备/华明装备-thesis.md",
+      "sha256": "982f22e29adc6fd52bfaa289a30fedd168f3af9079c36f61bd7216d93451ca24",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L13",
+            "exact_quote": "> **短结论**：华明装备是分接开关这一“小部件、大责任”赛道中的优质细分冠军，国内护城河真实，海外与特高压提供增长期权；但 17.81 元仍隐含接近乐观情景的盈利要求。空仓者不追，优先等待 14—16 元或等待业绩先证明；持有者可观察持有。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L321",
+            "exact_quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L227",
+            "exact_quote": "当前精确估值由 `tools/financial_rigor.py` 验算：PE 22.76x、PB 5.11x、P/FCF 32.45x、FCF Yield 3.08%、股息率 3.43%。若要求中性情景达到 10% 年化总回报，最高买入价约 **14.67 元**；要求 12% 年化约 **13.90 元**。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L324",
+            "exact_quote": "| **16.00—20.00 元** | 观察或持有，不主动加仓 | 中性回报偏低，依赖乐观兑现 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L325",
+            "exact_quote": "| **20.00—24.00 元** | 不新增；大仓位复核 | 需要更高 EPS 增长或更高退出估值 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L14",
+            "exact_quote": "| 当前动作基调 | 若已有仓位：持有观察、暂不加仓；若无仓位：17.81 元不追，等待 14—16 元安全边际或等待 2026Q2/中报验证 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L385",
+            "exact_quote": "| 空仓者 | 17.81 元不追；优先等 14—16 元 | 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L386",
+            "exact_quote": "| 小仓持有者 | 持有观察，不加仓 | 海外毛利企稳、复购增加、特高压后续项目验证 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L213",
+            "exact_quote": "| 推进 H 股发行 | 可支持全球化并利用资本窗口 | 发行价、摊薄、用途和回报均未确定 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}
