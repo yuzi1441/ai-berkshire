@@ -1,0 +1,319 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中创智领",
+  "ticker": "601717.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+    "canonical_sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044",
+    "locked_sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "15.05 元可用小仓位介入“高股息现金牛 + 转型期权”，但 2026Q1 盈利拐点未确认，不允许重仓",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "15.05 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有收息并控制权重，把它定位为退潮期现金牛而非确定成长股",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "中报验证煤机订单与盈利重回增长、现金流和应收改善后再加仓",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "12-13 元是更好的击球点",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "回款",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "12-13 元",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "煤机持续负增长、分红下降或接班失误即重审",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（卖出信号，任一触发即卖/减）：①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 278,
+          "quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②分红率因现金流恶化被迫下调",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 278,
+          "quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③焦承尧换届后战略摇摆或核心团队流失",
+      "relation": "any_of",
+      "metrics": [
+        "煤机订单额",
+        "归母净利润同比",
+        "分红率",
+        "PE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 278,
+          "quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④\"机器人/新能源\"题材把股价拉到 PE >12（透支）时可减",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "12",
+      "periods": [
+        "2026H1",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 278,
+          "quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "52445911c4ab4013789ab9624f81d6ad796f10094686423018e1554729c976d5",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 4
+  }
+}

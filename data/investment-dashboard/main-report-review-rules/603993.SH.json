@@ -1,0 +1,337 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "CMOC",
+  "ticker": "603993.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/CMOC/CMOC-research-20260623.md",
+    "canonical_sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea",
+    "locked_sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 19.49 元允许先建 3%-5% 观察仓并分批执行，不在高铜价位置一次性重仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "15-17 元安全边际更充分，13-15 元为更强加仓区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续持有并设置周期与政策跟踪纪律",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本仓安全边际较好，高成本仓应控制风险",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "铜价回调但长期需求未破坏、KFM 二期进度/产量超预期、刚果金政策更明确或股价进入 15-17/13-15 元区",
+      "relation": "any_of",
+      "metrics": [
+        "政策",
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": "13-15 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "铜价长期低于 10,000 美元、刚果金重大不利政策、利润增速降至个位数或新团队出现诚信/战略失误即失效",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "政策"
+      ],
+      "operator": "lt",
+      "threshold": "000 美元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "正文同时允许当前小仓与回调后加仓，两者是仓位层级而非互斥判断；世界级资源与周期/国别风险决定只能小仓起步。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号：铜价跌破$10,000/吨并持续3个月以上",
+      "relation": "all_of",
+      "metrics": [
+        "铜价",
+        "归母净利润增速",
+        "刚果金矿业政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "铜价跌破$10,000/吨并持续3个月以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "刚果金出台重大不利政策（如矿业税提高至50%以上或强制国有化）",
+      "relation": "any_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "50%",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "铜价跌破$10,000/吨并持续3个月以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "Q2-Q3利润增速放缓至个位数",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "铜价跌破$10,000/吨并持续3个月以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "管理层出现诚信问题或重大战略失误",
+      "relation": "any_of",
+      "metrics": [
+        "铜价",
+        "归母净利润增速",
+        "刚果金矿业政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "铜价跌破$10,000/吨并持续3个月以上"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "32f9756497d2cb64944faa3c7e0a23c9d383d6636133e6b3625620d573352adc",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

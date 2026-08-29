@@ -1,0 +1,458 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "厦门钨业",
+  "ticker": "600549.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+    "canonical_sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
+    "locked_sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "48.39 元回避，不因较高点腰斩就抄底",
+      "relation": "all_of",
+      "metrics": [
+        "库存",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": "48.39 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价",
+      "relation": "all_of",
+      "metrics": [
+        "库存",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持有但不加仓并降低到可承受仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上",
+      "relation": "any_of",
+      "metrics": [
+        "库存",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 690,
+          "line_end": 727,
+          "quote": "3. **五年自由现金流转换率只有 14%**——股市关闭 5 年期间，公司创造的**能分给我的现金**很少；我拿到的是 1.21% 的股息率 段永平的核心问题是**\"这个价格买，我睡得着吗？\"** 在存货 197 亿（超过归母净资产）、短债 106 亿、经营现金流 −25.7 亿、且钨价还在下跌的组合下，**48.39 元睡不着；33 元以下才开始能睡。** ---",
+          "supports": "L690-L727、L741-L785、L895-L913。契约粗字段写“持有”混入持仓口径，但正文对空仓者明确回避，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号：① 半年报资产减值损失 > 10 亿元",
+      "relation": "all_of",
+      "metrics": [
+        "资产减值损失",
+        "单季归母净利润",
+        "OCF/归母净利",
+        "钨价",
+        "券商一致预期"
+      ],
+      "operator": "gt",
+      "threshold": "10 亿元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "6 亿元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 滚动 OCF/归母净利连续两期 < 0.7 且存货、短债同时上升",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "库存",
+        "债务"
+      ],
+      "operator": "lt",
+      "threshold": "0.7",
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 钨价跌破 35 万/标吨",
+      "relation": "all_of",
+      "metrics": [
+        "资产减值损失",
+        "单季归母净利润",
+        "OCF/归母净利",
+        "钨价",
+        "券商一致预期"
+      ],
+      "operator": "lt",
+      "threshold": "35 万",
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 洛阳豫鹭停产超 180 天且影响年度归母净利 > 5%",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": "gt",
+      "threshold": "5%",
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑥ 关联交易或资产注入明显损害少数股东",
+      "relation": "any_of",
+      "metrics": [
+        "资产减值损失",
+        "单季归母净利润",
+        "OCF/归母净利",
+        "钨价",
+        "券商一致预期"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑦ 券商 2026E 一致预期下修至 35 亿元以下且股价未同步调整",
+      "relation": "all_of",
+      "metrics": [
+        "资产减值损失",
+        "单季归母净利润",
+        "OCF/归母净利",
+        "钨价",
+        "券商一致预期"
+      ],
+      "operator": null,
+      "threshold": "35 亿元",
+      "periods": [
+        "2026半年报",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "c01e2917125c2e8e89baf90a0fb9f8f4c50c461aa1b50eb18ecb439b76509549",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 7
+  }
+}

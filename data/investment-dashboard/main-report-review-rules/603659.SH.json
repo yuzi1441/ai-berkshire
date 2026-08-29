@@ -1,0 +1,334 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "璞泰来",
+  "ticker": "603659.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/Putailai/Putailai-investment-research-20260624.md",
+    "canonical_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+    "locked_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 29.07 元不买",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "29.07 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "理想区间 22-25 元，但只有价格低于 25 元且 Q2/Q3 业绩持续向好时，才允许建立小仓位，价格条件单独满足不够",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续持有，但必须跟踪宁德采购、负极出货恢复和涂覆市占率是否守住 40%以上",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": "40%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "22-25 元且季度经营验证向好，或负极产能利用率回升、硅碳大客户订单落地",
+      "relation": "any_of",
+      "metrics": [
+        "订单",
+        "产能/销量",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "22-25 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "宁德自建负极、涂覆市占率连续两季低于 35%、质押强平或硅碳渗透提高而产品缺乏竞争力即失效",
+      "relation": "any_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "35%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号：",
+      "relation": "all_of",
+      "metrics": [
+        "涂覆隔膜市占率",
+        "质押股份数",
+        "硅碳负极渗透率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "涂覆隔膜市占率连续两季度下降至35%以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "宁德时代明确启动负极材料自建项目",
+      "relation": "all_of",
+      "metrics": [
+        "涂覆隔膜市占率",
+        "质押股份数",
+        "硅碳负极渗透率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "涂覆隔膜市占率连续两季度下降至35%以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "涂覆隔膜市占率连续两季度下降至35%以下",
+      "relation": "all_of",
+      "metrics": [
+        "涂覆隔膜市占率",
+        "质押股份数",
+        "硅碳负极渗透率"
+      ],
+      "operator": null,
+      "threshold": "35%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "涂覆隔膜市占率连续两季度下降至35%以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "梁丰被迫平仓质押股份（基线：累计质押4.088亿股，占合计持股42.51%）",
+      "relation": "all_of",
+      "metrics": [
+        "涂覆隔膜市占率",
+        "质押股份数",
+        "硅碳负极渗透率"
+      ],
+      "operator": null,
+      "threshold": "42.51%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "涂覆隔膜市占率连续两季度下降至35%以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "硅碳负极渗透率超过40%且璞泰来产品缺乏竞争力",
+      "relation": "all_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": "gt",
+      "threshold": "40%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "涂覆隔膜市占率连续两季度下降至35%以下"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "125bf855974d85654c7d1dbf135bebdce8c58d83667442784159346a6f288d29",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

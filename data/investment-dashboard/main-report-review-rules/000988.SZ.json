@@ -1,0 +1,313 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "hgtech",
+  "ticker": "000988.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/hgtech/hgtech-investment-research-20260623.md",
+    "canonical_sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
+    "locked_sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价约 163.66 元、约 100 倍 PE 时明确回避",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "只有回落到 70-80 元附近才重新研究",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "70-80 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "强烈建议减仓至 5% 以下或退出，不以光模块叙事承受当前估值风险",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "5%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（卖出信号）：",
+      "relation": "all_of",
+      "metrics": [
+        "光模块出货量环比增速",
+        "北美云厂商资本开支指引",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2026Q2-Q3 光模块出货量环比增速放缓",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "北美云厂商资本开支指引下调",
+      "relation": "all_of",
+      "metrics": [
+        "光模块出货量环比增速",
+        "北美云厂商资本开支指引",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "中际旭创/新易盛大幅降价挤压份额",
+      "relation": "all_of",
+      "metrics": [
+        "光模块出货量环比增速",
+        "北美云厂商资本开支指引",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PE 回到 60x 以上时如无新催化剂支撑",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "60x",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "（1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "8ac258a3c1e17cb4905ae6f7b3b04714d7a0af985e5eba56397757106ae64639",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

@@ -1,0 +1,450 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "思源电气",
+  "ticker": "002028.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+    "canonical_sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
+    "locked_sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "145 元以上不追",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "145 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "125-145 元仅激进型小仓研究，110-125 元且核心毛利与现金流未恶化时风险收益才开始合理，90-110 元才进入保守资金重点研究区",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有验证，但不能只用行业景气解释利润率、回款和低毛利业务扩张",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "多个指标同向恶化时重审",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入相应区间，且核心开关/变压器毛利、海外回款、CFO/净利、H 股条款与扩产回报未恶化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 339,
+          "line_end": 349,
+          "quote": "### 价格行动带 | 价格区间 | 对应 TTM PE 约值 | 适合对象 | 行动纪律 | |---|---:|---|---|",
+          "supports": "L339-L349、L353-L420。契约漏掉稳健型和保守型价格层级，且结论摘要错误抽成 Checklist 标题，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或论文重审信号）：CFO/净利连续两期低于 60% 且应收账龄、收款诉讼继续上升",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "回款"
+      ],
+      "operator": "lt",
+      "threshold": "60%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "开关、变压器毛利率连续显著下滑",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "海外重大延期、坏账、索赔、制裁或供应资格问题",
+      "relation": "any_of",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "订单放缓时产能仍快速扩张",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "H 股大比例折价发行或资金进入低回报并购",
+      "relation": "any_of",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "创始团队异常减持、关键高管流失",
+      "relation": "all_of",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "重大质量事故、召回、停标",
+      "relation": "all_of",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.8",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "SST/无 SF6 技术迁移加速而公司明显落后",
+      "relation": "all_of",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "operator": null,
+      "threshold": "6",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "50d98630421712384545ef4aa797861e417963d3923e1294614606d0d13e1196",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 8
+  }
+}

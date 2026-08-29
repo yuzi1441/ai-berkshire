@@ -1,0 +1,331 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "工商银行",
+  "ticker": "601398.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+    "canonical_sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671",
+    "locked_sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "7.12 元处在 6.5-7.5 元的观望或小仓配置区，可作为高股息金融公用事业的小仓研究标的，不宜当作高弹性核心进攻仓",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 30,
+          "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+          "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可作为低波动、收息底仓继续持有",
+      "relation": "all_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 30,
+          "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+          "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若超过 8.0-8.5 元而 ROE、息差未改善则不追并审视仓位",
+      "relation": "all_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": "gt",
+      "threshold": "8.0-8.5 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 30,
+          "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+          "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "6.0-6.5 元可稳健分批，6.0 元以下安全边际更强",
+      "relation": "all_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 30,
+          "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+          "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "同时要求净息差止跌、ROE 稳定、资产质量和资本充足率不恶化",
+      "relation": "all_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 30,
+          "quote": "## 0. 执行摘要 ### 一句话结论 工商银行是中国最核心的金融基础设施之一，低成本负债、账户关系、对公结算和系统重要性构成很深护城河；但它不是高定价权、高成长、高ROE的顶级好生意。以 2026-07-06 A股 7.12 元计，估值约 7.12x PE、0.66x PB，股息与安全边际有吸引力，但长期回报上限受净息差、资本监管、地产/地方债和公共政策目标约束。更适合把它当作“高股息金融公用事业”，而不是高复利成长股。",
+          "supports": "L12-L30、L341-L384。正文允许当前小仓配置，不能因契约粗字段“观察”把所有行动许可抹掉。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓/回避信号，出现即重审）：净息差继续显著下行且负债成本难以下降",
+      "relation": "all_of",
+      "metrics": [
+        "净息差",
+        "不良贷款率",
+        "资本充足率",
+        "贷款减值损失"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 372,
+          "line_end": 372,
+          "quote": "净息差继续显著下行，且负债成本难以下降；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "房地产、个人贷款、地方平台风险显著暴露",
+      "relation": "all_of",
+      "metrics": [
+        "净息差",
+        "不良贷款率",
+        "资本充足率",
+        "贷款减值损失"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 372,
+          "line_end": 372,
+          "quote": "净息差继续显著下行，且负债成本难以下降；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "资本充足率下降导致分红政策受压",
+      "relation": "all_of",
+      "metrics": [
+        "分红",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 372,
+          "line_end": 372,
+          "quote": "净息差继续显著下行，且负债成本难以下降；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "贷款减值损失持续快于收入增长",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 372,
+          "line_end": 372,
+          "quote": "净息差继续显著下行，且负债成本难以下降；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价上涨仅由高股息抱团推动而基本面未改善",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 372,
+          "line_end": 372,
+          "quote": "净息差继续显著下行，且负债成本难以下降；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "a5e1284c01054176c2d4b57c35e9d927e9dd6e1ec731e2b8fe6bb08ce3886894",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

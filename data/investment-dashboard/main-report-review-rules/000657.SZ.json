@@ -1,0 +1,303 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中钨高新",
+  "ticker": "000657.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+    "canonical_sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
+    "locked_sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不追高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "55-60 元且 2026H1 现金流修复才允许研究性小仓，稳健型等 35-45 元，保守型等 25-35 元并验证周期下行后的现金流",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "高估值且现金流未改善时分批降风险，不继续扩大周期暴露",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "库存",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避触发条件：价格继续高于75元但现金流未改善，应降低仓位暴露",
+      "relation": "all_of",
+      "metrics": [
+        "A股收盘价",
+        "经营现金流/净利润",
+        "关联交易规模",
+        "钨价与存货"
+      ],
+      "operator": "gt",
+      "threshold": "75元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "若价格继续高于 75 元但现金流未改善，应降低仓位暴露"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "钨价高位回落同时存货和预付款仍大幅增加",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "若价格继续高于 75 元但现金流未改善，应降低仓位暴露"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流持续显著低于净利润",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "若价格继续高于 75 元但现金流未改善，应降低仓位暴露"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易继续大幅调增且价格公允性缺乏透明解释",
+      "relation": "all_of",
+      "metrics": [
+        "A股收盘价",
+        "经营现金流/净利润",
+        "关联交易规模",
+        "钨价与存货"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "若价格继续高于 75 元但现金流未改善，应降低仓位暴露"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "资产注入发生在高景气高估值位置且交易条件对少数股东不友好",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "若价格继续高于 75 元但现金流未改善，应降低仓位暴露"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "244bdc5e20f44084cdb9e88ee010fa93c858d02868a714d071eb5004d700e56d",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 0,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

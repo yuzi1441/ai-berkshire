@@ -1,0 +1,394 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "skyverse-tech",
+  "ticker": "688361.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+    "canonical_sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
+    "locked_sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 275.90 元严重透支未来 5-7 年增长，当前回避",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "275.90 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 57-86 元、对应 PS 10-15 倍后再研究",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "强烈建议减仓或清仓",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "国产替代趋势确定不等于公司在 966 亿元市值上仍有合理赔率",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "966 亿元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "57-86 元、单季度经营现金流转正、产品进入 14nm 及以下先进制程，或连续两个季度净利率超过 10%后重审",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "全年经营现金流仍为负、合同负债环比下降、PS 超过 50 倍或 KLA 制裁松绑即维持回避/卖出",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "50 倍",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/卖出信号（任一触发即执行卖出）：",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流(2026全年)",
+        "合同负债环比",
+        "PS",
+        "KLA制裁"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2026 年全年经营现金流仍为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "合同负债环比下降（订单放缓信号）",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PS 超过 50x 且无新催化剂",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "50x",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "美国对 KLA 制裁出现松绑迹象",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流(2026全年)",
+        "合同负债环比",
+        "PS",
+        "KLA制裁"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出，失效条件以最终决策卖出信号为准",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流(2026全年)",
+        "合同负债环比",
+        "PS",
+        "KLA制裁"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "39d300fb4030021638cf01b8e01696fe64e7d9da284b54c11063cac3a7b75727",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

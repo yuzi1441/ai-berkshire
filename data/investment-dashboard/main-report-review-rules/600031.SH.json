@@ -1,0 +1,220 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "三一重工",
+  "ticker": "600031.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/三一重工/三一重工研究报告-20260808.md",
+    "canonical_sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
+    "locked_sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 19.58 元高于计划买入区间，不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "gt",
+      "threshold": "19.58 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "17-18 元为激进小仓，14.5-16 元稳健分批，12-13.5 元才有较厚安全边际",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "仓位合理时可以持有，继续核对海外毛利、扣非利润、应收和逾期垫款、财务费用及 H 股募集资金回报",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "扣非利润",
+        "利润",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进入对应价格带，且海外收入保持增长、国际毛利率不低于 28%、经营现金流不持续弱于净利润、信用资产未恶化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": "gte",
+      "threshold": "28%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 186,
+          "line_end": 226,
+          "quote": "## 七、估值与安全边际 ### 1. 同行与历史位置 | 公司 | 股价（元） | 总市值（亿元） | PE TTM | PB | 业务定位 |",
+          "supports": "L186-L226、L239-L269、L281-L302。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：主要失效条件为海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润，应重审全球化与盈利质量假设",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 247,
+          "quote": "海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "此外国内收入连续两个半年度负增长、综合毛利率跌破 25% 且份额未改善、信用减值超过收入 2% 或 CFO/净利持续低于 1 均触发论文重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 247,
+          "quote": "海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "0de9e87cd9505009c3a9b5ccfe25fe6fb913310fcce87d6e1e43ef26e76b3ce3",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 2
+  }
+}

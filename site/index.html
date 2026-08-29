@@ -8,9 +8,9 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=15d89a7f" />
-    <link rel="stylesheet" href="./assets/themes/_engine.css?v=15d89a7f" />
-    <link rel="stylesheet" href="./assets/themes/18-glass.css?v=15d89a7f" />
+    <link rel="stylesheet" href="./assets/styles.css?v=main-review-v8" />
+    <link rel="stylesheet" href="./assets/themes/_engine.css?v=main-review-v8" />
+    <link rel="stylesheet" href="./assets/themes/18-glass.css?v=main-review-v8" />
   </head>
   <body>
     <div class="app-shell">
@@ -96,6 +96,7 @@
       <section class="control-band" aria-label="筛选与检索">
         <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
           <button type="button" class="chip active" data-view="decision">买入前决策</button>
+          <button type="button" class="chip" data-view="review">报告复核 <span class="chip-count" id="fundamental-review-count">0</span></button>
           <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
         </div>
         <div class="search-box">
@@ -165,8 +166,20 @@
           <button type="button" class="chip" data-tracking-filter="review">待复核</button>
           <button type="button" class="chip" id="restore-tracking" hidden>恢复已隐藏</button>
         </div>
+        <div class="chip-row fundamental-review-filter-row" id="fundamental-review-filter-row" role="tablist" aria-label="日常证据复核状态筛选" hidden>
+          <span class="filter-label">日常证据复核（DeepSeek · 只核验新证据）</span>
+          <button type="button" class="chip active" data-fundamental-review-filter="all">全部</button>
+          <button type="button" class="chip review-filter-redline" data-fundamental-review-filter="redline">红线已触发</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="attention">需要关注</button>
+          <button type="button" class="chip review-filter-improving" data-fundamental-review-filter="improving">条件改善</button>
+          <button type="button" class="chip review-filter-gap" data-fundamental-review-filter="evidence_ready">已有数据待判定</button>
+          <button type="button" class="chip review-filter-gap" data-fundamental-review-filter="data_gap">数据不足</button>
+          <button type="button" class="chip review-filter-waiting" data-fundamental-review-filter="waiting_evidence">等待新证据</button>
+          <button type="button" class="chip review-filter-stale" data-fundamental-review-filter="stale_rules">规则已失效</button>
+          <button type="button" class="chip review-filter-stale" data-fundamental-review-filter="error">日常复核失败</button>
+        </div>
         <div class="control-meta">
-          <label class="sort-field">
+          <label class="sort-field" id="sort-field">
             <span>排序</span>
             <select id="sort-select">
               <option value="execution">按当前可执行性</option>
@@ -244,6 +257,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=15d89a7f"></script>
+    <script type="module" src="./assets/app.js?v=main-review-v8"></script>
   </body>
 </html>

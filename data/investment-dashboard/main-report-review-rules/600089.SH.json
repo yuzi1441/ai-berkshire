@@ -1,0 +1,391 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "特变电工",
+  "ticker": "600089.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/特变电工/特变电工研究报告-20260713.md",
+    "canonical_sha256": "93282d9268561c7bdfabc8471605530bcce155730f7182bbd36307a48215c294",
+    "locked_sha256": "93282d9268561c7bdfabc8471605530bcce155730f7182bbd36307a48215c294",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "19.14 元不新建仓",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "19.14 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 241,
+          "line_end": 357,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+          "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "13.3-15 元且半年报确认设备毛利、扣非和现金流未恶化时仅建研究仓，11.8-13.3 元稳健分批，10.7 元以下仍需确认论文未破坏",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 241,
+          "line_end": 357,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+          "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本低、现金流和设备毛利未破坏时可持有观察，不因低 PB 或订单新闻加仓",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 241,
+          "line_end": 357,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+          "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "仓位重且价格接近 19-21.5 元时应降低集中度",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "19-21.5 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 241,
+          "line_end": 357,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+          "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "电气设备毛利率约 20%、海外增长同时改善毛利和回款、滚动 OCF/归母净利大于 1、Capex/OCF 向 1 倍收敛、硅料毛利转正且无新增大额减值",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "回款",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 241,
+          "line_end": 357,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 两套盈利口径 19.14元对应TTM归母PE约15.7-15.9x；滚动扣非利润代理EPS只有0.8900元，对应PE 21.51x。归母利润包含公允价值和其他非经常性贡献，扣非又可能压低周期恢复弹性，因此两者都不是唯一正确口径。但两套口径共同说明：**当前估值对复杂重资产集团不便宜，1.26x PB也不是充分保护。**",
+          "supports": "L241-L357、L406-L424。契约粗字段写“分批买入”且摘要误抓 Checklist，但正文明确当前不买，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/论文失效信号：电气设备毛利率跌破 18% 且订单增速放缓",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": "lt",
+      "threshold": "18%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "订单增长但经营现金流、应收和合同资产继续恶化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "多晶硅新增大额减值或低利用率长期化",
+      "relation": "any_of",
+      "metrics": [
+        "电气设备毛利率",
+        "订单增速",
+        "多晶硅减值",
+        "煤制气总投资"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "煤制气超预算、延期、追加大额融资或 IRR 低于资本成本",
+      "relation": "any_of",
+      "metrics": [
+        "电气设备毛利率",
+        "订单增速",
+        "多晶硅减值",
+        "煤制气总投资"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "核心债务和财务费用持续快于经营利润增长",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易扩大但缺少第三方定价与增量 ROIC 证据",
+      "relation": "all_of",
+      "metrics": [
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "电气设备毛利率跌破18%且订单增速放缓"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "515fe151ca03ca37cdf912a3c404c7401d9851763edb2b1ce4859629c2185e03",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

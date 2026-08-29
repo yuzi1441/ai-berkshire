@@ -1,0 +1,295 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "万华化学",
+  "ticker": "600309.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+    "canonical_sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
+    "locked_sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 75.72 元没有足够安全边际",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "75.72 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "70-75 元只允许小仓试错，63-69 元稳健分批，55-60 元才适合扩大研究仓位",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "合理仓位可持有但不追半年预告",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重仓者应控制强周期重资产集中度，必须能承受悲观情景约 34% 的回撤",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "34%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "论文失效条件：聚氨酯板块毛利率连续两个报告期低于 20%（且并非短期检修或原料错配）",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "广义净债务/EBITDA 持续高于 4.5 倍",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": "gt",
+      "threshold": "4.5 倍",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "建设高峰过后自由现金流连续两个完整年度为负",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "65190649a472c41dfef0994b120dcfa53a260cf4a3cac6df53e7618a09db7853",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

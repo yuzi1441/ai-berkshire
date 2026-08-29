@@ -1,0 +1,229 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "DapuStor",
+  "ticker": "301666.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/DapuStor/DapuStor-research-20260623.md",
+    "canonical_sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
+    "locked_sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "705 元、约 3,074 亿元市值没有安全边际，坚决回避",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 2027 年解禁潮和更多盈利季度后再研究",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "2027",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "立即卖出或大幅减仓，不能用单季度扭亏、低流通盘和 AI 存储叙事替代可持续盈利验证",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "股价进入 80-120 元区间，且连续四个季度证明盈利可持续、自研主控实现规模商业化后再评估",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "80-120 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 278,
+          "line_end": 329,
+          "quote": "**即使在最乐观的5年预期下，当前705元的股价仍高估了4倍以上。** 更激进的假设（10年后全球市占率5%）： - 收入50亿美元 ≈ 350亿元",
+          "supports": "L278-L329、L356-L398。契约粗字段写“观察”，正文明确空仓坚决回避、持仓卖出，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：最大风险组合为估值泡沫（383x PB / 207x forward PE）+ 2027 年解禁减持潮 + NAND 价格周期",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 305,
+          "line_end": 305,
+          "quote": "估值泡沫（383x PB / 207x forward PE）+2027年解禁减持潮+NAND价格周期"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2026Q1 扭亏仅一个季度数据，毛利率 37.6% 是否可持续高度依赖 NAND 价格走势",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "37.6%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 305,
+          "line_end": 305,
+          "quote": "估值泡沫（383x PB / 207x forward PE）+2027年解禁减持潮+NAND价格周期"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "在当前估值下任何时点均为卖出信号",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 305,
+          "line_end": 305,
+          "quote": "估值泡沫（383x PB / 207x forward PE）+2027年解禁减持潮+NAND价格周期"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "dde8bd3dd849b5c56cf01fec6fd831e846228841900a8c66a5b0603e09df3699",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

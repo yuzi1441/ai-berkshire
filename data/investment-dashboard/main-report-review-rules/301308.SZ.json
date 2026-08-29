@@ -1,0 +1,303 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "江波龙",
+  "ticker": "301308.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+    "canonical_sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
+    "locked_sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 618.02 元处于周期顶部定价，明确回避",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "618.02 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "合理价值约 240-300 元，只有 180 元以下且周期出清后才有安全边际",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "分批止盈、至少减半，剩余只按周期投机头寸管理",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本持仓至少收回本金，不能把中报预增当作长期利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "周期下行出清后 PB 回到 8 倍以下，且企业级存储收入占比升至 20% 以上，两者同时满足才重新评估",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 256,
+          "quote": "## 七、估值与安全边际 ### 7.1 当前市场定价（2026-07-03，工具验算） | 指标 | 数值 | 历史/同行参照 |",
+          "supports": "L184-L256、L257-L281。契约粗字段写“待复核”，正文明确空仓回避、持仓止盈，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：卖出信号①NAND/DRAM 合约价环比转负（报告期 Q3 涨幅已收窄至 10~18%，逼近临界）",
+      "relation": "all_of",
+      "metrics": [
+        "NAND/DRAM合约价环比",
+        "存货跌价准备"
+      ],
+      "operator": null,
+      "threshold": "18%",
+      "periods": [
+        "Q3"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②季报出现存货跌价准备大额计提",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q3"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③2026-08-06 实控人不减持承诺到期后蔡华波本人开始减持",
+      "relation": "all_of",
+      "metrics": [
+        "NAND/DRAM合约价环比",
+        "存货跌价准备"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q3"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④37 亿定增落地价显著低于市价",
+      "relation": "all_of",
+      "metrics": [
+        "NAND/DRAM合约价环比",
+        "存货跌价准备"
+      ],
+      "operator": "lt",
+      "threshold": "37",
+      "periods": [
+        "2026Q3"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "①NAND/DRAM合约价环比转负（当前Q3涨幅已收窄至10~18%，逼近临界）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "2642df064cfddcc98a5ffa7f917780f14bbdf3220835d6516d9f77b1fc4be3e0",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

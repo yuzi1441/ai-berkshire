@@ -1,0 +1,345 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "宁波银行",
+  "ticker": "002142.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+    "canonical_sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
+    "locked_sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "32 元观察",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "32 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "29-31 元且半年报未恶化才是首档小仓区，26.5-29 元为稳健区，23-26.5 元为更充分安全边际区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有优质城商行逻辑，但不能因低 PE 机械加仓",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入相应区间，且 NIM 稳在 1.70% 以上、个人贷款不良率和重组贷款不再上行、CET1 回升或风险加权资产增速收敛",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "1.70%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 234,
+          "line_end": 266,
+          "quote": "### 7.4 价格带 以 2026Q1 BVPS 35.21 元的 0.85、0.75、0.65 倍 PB 分别对应 29.93、26.41、22.89 元。价格带是基本面估值和安全边际，不是技术面信号。 | 类型 | 基本面价格区间 | 对应 PB | 动作 |",
+          "supports": "L234-L266、L300-L321。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：NIM 低于 1.60% 且非息收入无法补偿",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": "lt",
+      "threshold": "1.60%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "个人贷款不良率超过 2.50%",
+      "relation": "all_of",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "operator": "gt",
+      "threshold": "2.50%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "重组贷款占比超过 0.60%",
+      "relation": "all_of",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "operator": "gt",
+      "threshold": "0.60%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "CET1 跌破 8.80%",
+      "relation": "all_of",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "operator": "lt",
+      "threshold": "8.80%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "出现明显放松风险偏好的扩表，任一触发即减仓/卖出重审",
+      "relation": "any_of",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "买入失效条件为净息差低于 1.60% 且个人资产质量、资本充足率同时恶化",
+      "relation": "all_of",
+      "metrics": [
+        "NIM",
+        "个人贷款不良率",
+        "重组贷款占比",
+        "CET1"
+      ],
+      "operator": "lt",
+      "threshold": "1.60%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "1a1b97830a20a6bc974e833c6b6d8d8a99327ec7e7c8269436fc6b9c78f4c1e8",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

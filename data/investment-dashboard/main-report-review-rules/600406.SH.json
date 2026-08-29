@@ -1,0 +1,437 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "国电南瑞",
+  "ticker": "600406.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+    "canonical_sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db",
+    "locked_sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "23.58 元观察、不买",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "23.58 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 1011,
+          "line_end": 1035,
+          "quote": "### 7.11 行动价格带 | 价格区间 | 2026E PE | 动作 | 逻辑 | |---|---|---|---|",
+          "supports": "L1011-L1035、L1052-L1069、L1378-L1399。契约遗漏分层动作和完整红线；正文明确“愿意持有但不愿意现价买入”，采用正文完整条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "21.84 元以下开始分批，17.48 元以下进入 20% 安全边际积极区，15.29 元以下才是 30% 安全边际候选",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 1011,
+          "line_end": 1035,
+          "quote": "### 7.11 行动价格带 | 价格区间 | 2026E PE | 动作 | 逻辑 | |---|---|---|---|",
+          "supports": "L1011-L1035、L1052-L1069、L1378-L1399。契约遗漏分层动作和完整红线；正文明确“愿意持有但不愿意现价买入”，采用正文完整条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "生意未坏可持有但不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 1011,
+          "line_end": 1035,
+          "quote": "### 7.11 行动价格带 | 价格区间 | 2026E PE | 动作 | 逻辑 | |---|---|---|---|",
+          "supports": "L1011-L1035、L1052-L1069、L1378-L1399。契约遗漏分层动作和完整红线；正文明确“愿意持有但不愿意现价买入”，采用正文完整条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "仓位超过 15% 时不再投入新资金，等待中报核对毛利率、现金流、订单和回购用途",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": "gt",
+      "threshold": "15%",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 1011,
+          "line_end": 1035,
+          "quote": "### 7.11 行动价格带 | 价格区间 | 2026E PE | 动作 | 逻辑 | |---|---|---|---|",
+          "supports": "L1011-L1035、L1052-L1069、L1378-L1399。契约遗漏分层动作和完整红线；正文明确“愿意持有但不愿意现价买入”，采用正文完整条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格不高于 21.84/17.48 元、所有卖出红线未触发，并至少满足 Q2 毛利率同比转正、利润增速不低于 12%、海外毛利率不低于 22%、注销式回购或网内业务增速不低于 10% 之一",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 1011,
+          "line_end": 1035,
+          "quote": "### 7.11 行动价格带 | 价格区间 | 2026E PE | 动作 | 逻辑 | |---|---|---|---|",
+          "supports": "L1011-L1035、L1052-L1069、L1378-L1399。契约遗漏分层动作和完整红线；正文明确“愿意持有但不愿意现价买入”，采用正文完整条件。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号（任一触发即重审）：① 股价 ≥30 元而归母增速仍 <10%",
+      "relation": "any_of",
+      "metrics": [
+        "综合毛利率",
+        "核心电网智能业务毛利率",
+        "网内收入增速",
+        "非国网应收账款占比及计提率",
+        "年度收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 年度经营现金流连续 2 年低于净利润",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "2",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 综合毛利率跌破 24% 或核心电网智能业务毛利率跌破 28%",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 网内收入连续 2 年零增长或负增长",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "2",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 非国网应收账款占比超 55% 且计提率升破 20%",
+      "relation": "all_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑥ 非标审计意见或内控非标",
+      "relation": "any_of",
+      "metrics": [
+        "综合毛利率",
+        "核心电网智能业务毛利率",
+        "网内收入增速",
+        "非国网应收账款占比及计提率",
+        "年度收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑦ 控股股东/董监高重大诚信或监管处罚",
+      "relation": "any_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.8",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑧ 2026 年收入低于 700 亿元",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": "lt",
+      "threshold": "700 亿元",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "e041eb37e037fd3320775527937e89f4cea8a0e38c3b2d8ee313cbcc87ea297f",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 8
+  }
+}

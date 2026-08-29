@@ -1,0 +1,250 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "招商银行",
+  "ticker": "600036.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+    "canonical_sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
+    "locked_sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "38.80 元、5.20% 税前静态股息率仅属合理偏低",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "36.65 元以下才开始小仓研究，34-36 元为稳健研究区，33.60 元以下提供更厚收益率缓冲",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "分红覆盖与资本缓冲仍强时可长期持有，但不能把银行当成债券",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持仓和加仓仍需受银行股总暴露约束",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复",
+      "relation": "all_of",
+      "metrics": [
+        "回款",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "买入失效/减仓条件：净息差跌破 1.60% 且无企稳，信用卡风险向其他零售贷款扩散，CET1 缓冲低于 2 个百分点，或出现重大治理事件",
+      "relation": "any_of",
+      "metrics": [
+        "净息差",
+        "信用卡不良率",
+        "高级法CET1",
+        "普通股派息率"
+      ],
+      "operator": "lt",
+      "threshold": "1.60%",
+      "periods": [
+        "2026Q2",
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "净息差跌破1.60%且无企稳，信用卡风险向其他零售贷款扩散，CET1缓冲低于2个百分点，或出现重大治理事件"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "另有普通股派息率因利润下滑被动升至 60% 以上且无一次性原因、信用卡不良率超 2.20% 且关注率超 6% 并向消费贷/按揭/小微扩散、基本面未改善时股价高于约 50 元（静态股息率低于约 4%）收益赔率明显下降",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "净息差跌破1.60%且无企稳，信用卡风险向其他零售贷款扩散，CET1缓冲低于2个百分点，或出现重大治理事件"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "09de93c4d3ca10e96d908662ad93aa9e0821700dc5bc01a58be1117575995784",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 2
+  }
+}

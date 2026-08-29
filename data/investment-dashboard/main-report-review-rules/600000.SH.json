@@ -1,0 +1,329 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "浦发银行",
+  "ticker": "600000.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+    "canonical_sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39",
+    "locked_sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 9.63 元赔率不足，不追",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "9.63 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "8.40 元以下且分红率维持 30% 时，才按高股息债券替代而非成长股小仓研究",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本 8 元以下可持有收息",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "8 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本 11 元以上可在 11-12 元中性估值区减仓并比较招行、兴业等更优替代",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "跌破 8.40 元且分红维持 30%，或营收增速回到 5% 以上、ROE 站上 8% 且息差连续两个季度企稳",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "ROE",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 184,
+          "line_end": 267,
+          "quote": "## 七、估值与安全边际 ### 当前定价（全部经工具验算） | 指标 | 浦发 | 招行 | 兴业 | 中信 | 民生 |",
+          "supports": "L184-L267。报告没有看板契约，但最终决策和价格标尺清晰；不把低 PB 机械等同买点。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：卖出信号①连续两个季度净利润负增长（拨备反哺耗尽的确认）",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②分红率再度跌破 30%（重演 2022 年）",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③再现亿元级罚单或分支机构造假案",
+      "relation": "any_of",
+      "metrics": [
+        "净利润同比",
+        "分红率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④董事长张为忠调离且业绩尚未证明可脱离个人（2026-2027 年为关键观察窗口）",
+      "relation": "all_of",
+      "metrics": [
+        "净利润同比",
+        "分红率"
+      ],
+      "operator": null,
+      "threshold": "2026-2027",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤股价升破 12.2 元（0.55 倍 PB）且 ROE 未同步回升至 8% 以上",
+      "relation": "all_of",
+      "metrics": [
+        "ROE",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 连续两个季度净利润负增长（拨备反哺耗尽的确认）；② 分红率再度跌破 30%（重演 2022 年）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "6a3fd95a31d400e1abef66ea7c6f8bf4e857c9dac8fa0f1c4aa1a58cb51bad54",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

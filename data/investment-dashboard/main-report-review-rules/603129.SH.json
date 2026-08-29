@@ -1,0 +1,379 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "chunfeng-dongli",
+  "ticker": "603129.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+    "canonical_sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12",
+    "locked_sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 241.11 元处于 200-260 元合理低估区，允许分批建仓并称当前可配置半仓",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "但关税、KTM 变局和极核盈利尚未验证，应分段执行而非一次打满",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "继续持有但不急于加仓，先确认 2026Q2-Q3 利润增速、极核毛利率、美国关税和欧洲渠道重建",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "200-220 元是理想加仓区，200 元以下安全边际更强",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "极核季度毛利率转正、关税缓和或 ATV 全球份额突破 8% 可增强判断",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "8%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "Forward PE 超过 30 倍、关税超过 50%且无法规避、全年利润个位数增长或管理层再大额减持即失效",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "政策",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 433,
+          "line_end": 433,
+          "quote": "### 最终决策",
+          "supports": "报告正文明确给出“当前价位可配置半仓”，并用净现金、Forward PE 与增长覆盖当前估值；同时把关税和盈利验证作为硬约束。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号（任一出现即触发）：",
+      "relation": "any_of",
+      "metrics": [
+        "Forward PE",
+        "美国关税综合税率",
+        "年度净利润增速",
+        "管理层持股变动"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度",
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "Forward PE升至30x以上（股价约470元）",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度",
+        "季度"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "美国关税综合税率突破50%且无有效规避路径",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "50%",
+      "periods": [
+        "年度",
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2026全年净利润增速降至个位数",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "年度",
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "管理层再次大规模减持",
+      "relation": "all_of",
+      "metrics": [
+        "Forward PE",
+        "美国关税综合税率",
+        "年度净利润增速",
+        "管理层持股变动"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度",
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "(1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "f1489bc50a62865cb386f01a4a39461e4db21b676f069c1ff609b780eb762577",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "汾酒",
+  "ticker": "600809.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+    "canonical_sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
+    "locked_sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 116.24 元可先建四分之一观察仓但不追反弹",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "116.24 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "110 元以下分批，100 元以下加快，90-100 元才属于重注研究区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持有收息",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本高于 150 元者等待中性目标区但不补仓，重点核对青花20 批价和季度合同负债",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "gt",
+      "threshold": "150 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "100 元以下或连续两季合同负债同比正增长且批价企稳",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "100 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "青花20 批价持续跌破 320 元、分红率下降/跨界并购、品质安全事件或估值透支时重审",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": "lt",
+      "threshold": "320 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（卖出信号，任一触发即失效）：① 青花20 批价跌破 320 元且持续一季（价盘失守）",
+      "relation": "any_of",
+      "metrics": [
+        "青花20批价",
+        "分红率",
+        "股价",
+        "收入增速"
+      ],
+      "operator": "lt",
+      "threshold": "320 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "① 青花20 批价跌破 320 元且持续一季（价盘失守）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 分红率掉头下降或出现跨界并购（资本配置变质）",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "① 青花20 批价跌破 320 元且持续一季（价盘失守）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 股价升至 190-210 元（约 18-20 倍 2027E）而收入增速未回到双位数（估值透支）",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "① 青花20 批价跌破 320 元且持续一季（价盘失守）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 品质安全事件",
+      "relation": "all_of",
+      "metrics": [
+        "青花20批价",
+        "分红率",
+        "股价",
+        "收入增速"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "① 青花20 批价跌破 320 元且持续一季（价盘失守）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "ac244e38030307955c020d5564076283ef9ca74453b0d2a85dbd50064a634463",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 5,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

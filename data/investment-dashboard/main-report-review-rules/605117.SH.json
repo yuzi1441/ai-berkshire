@@ -1,0 +1,392 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "deye",
+  "ticker": "605117.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/deye/deye-investment-research-20260623.md",
+    "canonical_sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
+    "locked_sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "101.85 元不直接建仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "101.85 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "优先等待 70-80 元",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "70-80 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若 2026Q2-Q3 持续高增长且欧盟限制影响有限，85-95 元才允许约 5% 观察仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有但控制仓位，并重点跟踪欧盟限制、应收质量和储能逆变器毛利率",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "70-80 元，或 85-95 元叠加业绩/政策验证",
+      "relation": "any_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "马来西亚产能有效规避壁垒、工商储收入放量、自有品牌占比提高可增强判断",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "欧洲收入显著下滑、逆变器毛利率低于 40%、应收增速长期远超收入或实控人大额减持即失效",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "回款"
+      ],
+      "operator": "lt",
+      "threshold": "40%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "### 最终决策",
+          "supports": "生意质量和 ROE 很强，但当前估值要求大部分乐观假设兑现；报告明确把价格与 Q2-Q3/欧盟验证设为二选一或组合条件。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号：",
+      "relation": "all_of",
+      "metrics": [
+        "德国/欧洲收入环比",
+        "储能逆变器毛利率",
+        "应收账款增速",
+        "张和君持股变动"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": "gt",
+      "threshold": "20%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "储能逆变器毛利率跌破40%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "40%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款增速持续超过营收增速2倍以上",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "回款"
+      ],
+      "operator": "gt",
+      "threshold": "2倍",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "张和君大幅减持（>1%持股）",
+      "relation": "all_of",
+      "metrics": [
+        "德国/欧洲收入环比",
+        "储能逆变器毛利率",
+        "应收账款增速",
+        "张和君持股变动"
+      ],
+      "operator": "gt",
+      "threshold": "1%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "13815060823be339994227ab18a584563223eae583736d4e322f326f34b725b3",
+  "summary": {
+    "active_rule_count": 7,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

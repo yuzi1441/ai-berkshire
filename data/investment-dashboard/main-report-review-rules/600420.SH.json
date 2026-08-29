@@ -1,0 +1,419 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "国药现代",
+  "ticker": "600420.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+    "canonical_sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
+    "locked_sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "8.70 元不急买",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "8.70 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格跌至 7 元以下且基本面未继续破坏时才可小仓，5.5-6 元且资产负债表稳定时才有更明显赔率",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "也可等待 Q2/Q3 证明 API 毛利率、现金流和利润降幅收敛",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有观察，但不能因 PB 小于 1 机械加仓",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "lt",
+      "threshold": "1",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重点核对半年报原料药毛利率、经营现金流和制剂收入是否止跌",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格、周期、经营改善三者至少满足两项",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "API 毛利率回升、OCF 转正且周转未恶化、新品形成可见收入毛利",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若利润继续双位数下滑、API 毛利长期低位或治理合规折价扩大则重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 332,
+          "quote": "| 8 | 行业顺风吗 | 否 | 医保控费、集采和 API 过剩压制。 | | 9 | 当前价格有安全边际吗 | 否 | 中性估值约 8.2 元，当前 8.70 元安全边际不足。 | | 10 | 适合长期重仓吗 | 否 | 更适合观察仓/周期修复仓，不适合作为核心复利仓。 |",
+          "supports": "L275-L332、L395-L416。契约只留下 8.70 元“观望”粗字段，遗漏正文 7 元和 5.5-6 元价格层级及经营前提。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓信号：2026 半年报继续出现收入和利润双位数下滑且管理层无清晰改善路径",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "API 毛利率长期低位（价格战非短周期）",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026半年报"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价上涨到 10.5-11 元以上但盈利修复没有同步发生",
+      "relation": "all_of",
+      "metrics": [
+        "收入增速",
+        "利润增速",
+        "API 毛利率",
+        "股价"
+      ],
+      "operator": null,
+      "threshold": "10.5-11 元",
+      "periods": [
+        "2026半年报"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易、财务公司、合规处罚或质量事故带来治理折扣扩大",
+      "relation": "any_of",
+      "metrics": [
+        "收入增速",
+        "利润增速",
+        "API 毛利率",
+        "股价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026半年报"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "1f30a469925c24e0109a8d9ac984ceb2cc8af6f1f2a272d244b30b01994abe61",
+  "summary": {
+    "active_rule_count": 8,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 4,
+    "redline_count": 2,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "山东华鲁恒升化工股份有限公司",
+  "ticker": "600426.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+    "canonical_sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
+    "locked_sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "21.11 元赔率不足",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "21.11 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "18-21 元只适合激进小仓，15-17 元稳健分批，11-14 元才给保守资金更厚缓冲",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有核心仓但 21 元以上不追",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": "21 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "半年报继续确认价差、现金流、荆州装置爬坡和净债务后再决定是否维持",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "15-17 元且基本面未恶化，或连续两季毛利率高于 20%、OCF 改善且荆州新装置确认正 ROIC",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "连续四季毛利率低于 15%、FCF/净利持续低于 50% 或主要新项目 ROIC 低于 8% 即失效",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/失效条件：连续四季毛利率低于 15%、FCF/净利润持续低于 50%，或主要新项目稳产后 ROIC 低于 8%",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "利润",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓信号：股价进入 30 元以上而盈利未同步上修，或估值超过 18 倍且行业供给仍加速",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "310e1fc05b1d03a6fdcba2df7aa58e068cf4f71a1e4e0a4fb029e1eadc961e21",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 2
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "海康威视",
+  "ticker": "002415.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/海康威视/海康威视研究报告-20260803.md",
+    "canonical_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+    "locked_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 37.95 元处于合理偏贵区，不追",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": "37.95 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "30-34 元建立观察仓，30 元以下且现金流、库存未恶化时才分批研究或买入",
+      "relation": "any_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持有并跟踪，不因单季利润增长加仓",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重点核对经营现金流、存货、应收、国内主业和创新业务利润",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "30-34 元，或连续两个季度经营现金流/净利润不低于 1、存货增速低于收入增速且主业毛利率稳定",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "库存"
+      ],
+      "operator": "gte",
+      "threshold": "30-34 元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效条件：经营现金流连续两个季度显著弱于净利润",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "经营现金流连续两个季度显著弱于净利润；库存与应收同步上升；股价高于50元但盈利预测未上修；出现重大合规或质量事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "库存与应收同步上升",
+      "relation": "all_of",
+      "metrics": [
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "经营现金流连续两个季度显著弱于净利润；库存与应收同步上升；股价高于50元但盈利预测未上修；出现重大合规或质量事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价 ≥50 元但盈利预测未上修（≥50 元属估值透支区，考虑减仓或转向更便宜标的）",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "经营现金流连续两个季度显著弱于净利润；库存与应收同步上升；股价高于50元但盈利预测未上修；出现重大合规或质量事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "出现重大合规或质量事件",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "净利润",
+        "库存",
+        "应收账款",
+        "股价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "经营现金流连续两个季度显著弱于净利润；库存与应收同步上升；股价高于50元但盈利预测未上修；出现重大合规或质量事件。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "036b6b65e700e1eb2367b74bb769720bca9db6da4eaa9eb119bee9659648b818",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 4
+  }
+}

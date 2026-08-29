@@ -1,0 +1,294 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "神火股份",
+  "ticker": "000933.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/神火股份/神火股份研究报告-20260803.md",
+    "canonical_sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10",
+    "locked_sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 25.37 元不追高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "25.37 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "21-25 元只进入小仓评估区，18-21 元风险收益更有吸引力，18 元以下且基本面未永久受损才考虑更积极分批",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可以持有但不默认加仓，继续核对铝价、氧化铝成本、短债和经营现金流",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入 18-21 元，且下半年利润、流动性缺口和分红现金覆盖没有恶化",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "18-21 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 230,
+          "quote": "## 第七步：估值与安全边际 ### 7.1 反向估值直觉 当前 25.37 元对应动态 PE 8.29x，表面不贵；但动态 PE 把高景气 H1 利润放进分母，容易产生周期幻觉。用 2022-2025 EPS 的正常化平均值约 2.45 元作为起点，更接近“非峰值”思考。",
+          "supports": "L202-L230、L234-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：铝价跌破 21,500 元/吨并持续",
+      "relation": "all_of",
+      "metrics": [
+        "沪铝价格",
+        "氧化铝价格"
+      ],
+      "operator": "lt",
+      "threshold": "500 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "氧化铝反弹",
+      "relation": "all_of",
+      "metrics": [
+        "沪铝价格",
+        "氧化铝价格"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "云南限电或电价上升",
+      "relation": "any_of",
+      "metrics": [
+        "沪铝价格",
+        "氧化铝价格"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "煤矿再大额减值",
+      "relation": "all_of",
+      "metrics": [
+        "沪铝价格",
+        "氧化铝价格"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易或监管问题升级，任一出现即触发减仓/卖出与买入失效重审",
+      "relation": "any_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "f87cb02789e7336f16592db39dd1db2fd7143f48976de65682a2212c6dc64e40",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

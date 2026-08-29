@@ -1,0 +1,362 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中国移动有限公司",
+  "ticker": "600941.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+    "canonical_sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b",
+    "locked_sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 96.70 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "96.70 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "88-92 元只考虑小额试仓，78-84 元稳健分批，70-75 元才进入重点关注区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "能买 H 股者还需比较税费、汇率和约 36% 名义价差",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "36%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "以股息为主且仓位合理可持有，当前不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "114 元以上而基本面未上修时可降低仓位",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "114 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "半年报主营恢复增长、EBITDA 率回到 30% 以上、算力增速与现金回报同时改善且价格进入对应区间",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "30%",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "ARPU 跌破 45 元并伴客户下降、FCF/股利连续两年低于 1 或算力重投入无回报披露即重审",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流",
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "45 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（卖出/失效信号，任一触发即失效）：移动 ARPU 跌破 45 元并伴随客户下降",
+      "relation": "any_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "45 元",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "FCF/股利连续两年低于 1 倍",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": "lt",
+      "threshold": "1 倍",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "算力重投入却持续不披露回报",
+      "relation": "all_of",
+      "metrics": [
+        "移动ARPU",
+        "客户数",
+        "FCF/股利覆盖"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "若半年报证明 EBITDA 率持续低于 30%、算力服务增长失速或股息现金覆盖恶化，应下调全部价格带",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "47d13552c662bf2bb0bfe26cb7699e551b01a84359c31d173c412f6b552ed498",
+  "summary": {
+    "active_rule_count": 7,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

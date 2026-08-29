@@ -1,0 +1,375 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "jingfang-keji",
+  "ticker": "603005.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+    "canonical_sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d",
+    "locked_sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "49.60 元、87 倍 PE 明显透支增长，不买",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待约 25-35 元的研究区，其中 23-29 元对应报告所述 40-50 倍历史利润口径，或先等后续季报证明增长可持续",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告建议考虑至少减持一半锁定利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不能因先进封装、车载 CIS、CPO 等叙事忽略 2026Q1 净利润零增长与负 FCF",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "PE 回落至 40 倍以下或价格进入更有安全边际区，同时车载 CIS 季度收入维持高增长、CPO 出现可验证收入、管理层增持或推出有效激励",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "40 倍",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "连续两季收入增速低于 20%、毛利率低于 40%、大客户变化或管理层大额减持即失效",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 399,
+          "line_end": 399,
+          "quote": "### 最终决策",
+          "supports": "好生意与好价格明显分离；47% 毛利率和客户认证构成真实壁垒，但 8% ROE、87 倍 PE、治理瑕疵和周期性不支持当前买入。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号（任一出现即触发）：",
+      "relation": "any_of",
+      "metrics": [
+        "季度营收增速",
+        "毛利率",
+        "第一大客户集中度/变动",
+        "管理层持股变动"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "（1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续2个季度营收增速低于20%",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "（1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "毛利率跌破40%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "40%",
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "（1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "第一大客户发生重大变动",
+      "relation": "all_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "（1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "管理层大规模减持",
+      "relation": "all_of",
+      "metrics": [
+        "季度营收增速",
+        "毛利率",
+        "第一大客户集中度/变动",
+        "管理层持股变动"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "（1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "fe9d93c944f7ccad217a2c2ba1b0cbc3d575718ec1838535e35a3ef904533a75",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

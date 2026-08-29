@@ -1,0 +1,421 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "百济神州",
+  "ticker": "688235.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/百济神州/百济神州研究报告-20260706.md",
+    "canonical_sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
+    "locked_sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股基准价 277 元不急追，报告没有给出可直接套用的 A 股买入价",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "277 元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "保守口径仅给 ONC 240-260 美元且基本面未恶化时重研，稳健口径要求后续季度收入、GAAP 利润率和 FCF 继续验证，不能跨市场机械换算成 A 股买点",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "240-260 美元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续持有并设置验证线，重点核对 2026 收入指引、GAAP operating income、BRUKINSA 增速、FCF per share 与股本摊薄",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "收入",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "后续季度收入约增长 30%、GAAP 利润率继续提升、FCF 保持为正，或 ONC 回到 240-260 美元且基本面未坏后重审",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "BRUKINSA 连续两季低于 20%、下调指引、毛利率跌破 85%、FCF margin 低于 10%、关键管线失败或年度稀释超过 3%-5%即减仓/重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "## 第十部分：最终投资建议",
+          "supports": "2025 已实现 GAAP 盈利和 FCF 转正，BRUKINSA 是真实全球大单品；但收入集中度约 74%、SBC 高于 GAAP 净利，当前价格仍在押注持续高增长和利润率爬坡，安全边际不厚。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/重审信号（任一触发即重审）：BRUKINSA 同比连续两季低于 20%",
+      "relation": "any_of",
+      "metrics": [
+        "BRUKINSA收入增速",
+        "毛利率",
+        "FCF margin",
+        "股本稀释比例"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "公司下调 2026 或 2027 收入/经营利润指引",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "毛利率跌破 85% 且不是短期产品组合扰动",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "85%",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "FCF margin 低于 10% 且费用继续扩张",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": "lt",
+      "threshold": "10%",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关键管线验证性试验失败或安全性标签恶化",
+      "relation": "any_of",
+      "metrics": [
+        "BRUKINSA收入增速",
+        "毛利率",
+        "FCF margin",
+        "股本稀释比例"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "年度股本稀释超过 3-5%",
+      "relation": "all_of",
+      "metrics": [
+        "BRUKINSA收入增速",
+        "毛利率",
+        "FCF margin",
+        "股本稀释比例"
+      ],
+      "operator": "gt",
+      "threshold": "3-5%",
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出",
+      "relation": "all_of",
+      "metrics": [
+        "BRUKINSA收入增速",
+        "毛利率",
+        "FCF margin",
+        "股本稀释比例"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "BRUKINSA 同比连续两季低于 20%"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "6e4eb35a77ca29ef08aff4c3b64dfa41c5483ce28d47145a6c8a9c9a54fdc429",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 7
+  }
+}

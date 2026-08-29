@@ -1,0 +1,383 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "montage-tech",
+  "ticker": "688008.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/montage-tech/montage-tech-investment-research-20260623.md",
+    "canonical_sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9",
+    "locked_sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 258 元不具备投资价值",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "258 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 120-150 元、约 2026E PE 44-55 倍，或 DDR6 切换期出现类似 2023 年的周期性下跌后再研究",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "建议减至 5% 以下并保留小仓跟踪",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "5%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "一年上涨约 230%、分析师目标价已低于现价时，不应用好公司叙事替代赔率纪律",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "lt",
+      "threshold": "230%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "120-150 元、DDR6 率先通过 JEDEC 认证、CXL 贡献 10%以上收入或 PCIe Retimer 进入 NVIDIA 供应链可重审",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "DDR5 出货环比转负、Retimer 份额受挤压、创始人继续大幅减持或 PE 超过 150 倍为减仓/回避信号",
+      "relation": "any_of",
+      "metrics": [
+        "产能/销量",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "150 倍",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "三寡头、轻资产和 AI 顺风使生意质量极高，但 131 倍 PE 已提前定价远期终局；中性三年估值约 146 元，乐观情景也只有约 9% 年化，风险收益不对称。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/卖出信号（任一触发即执行卖出）：",
+      "relation": "any_of",
+      "metrics": [
+        "DDR5出货量环比增速",
+        "创始人减持",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "DDR5 出货量环比增速转负",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": "5",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PCIe Retimer 市场被 Broadcom/Marvell 挤压",
+      "relation": "all_of",
+      "metrics": [
+        "DDR5出货量环比增速",
+        "创始人减持",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "创始人进一步大幅减持",
+      "relation": "all_of",
+      "metrics": [
+        "DDR5出货量环比增速",
+        "创始人减持",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PE 超过 150x",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "150x",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出，失效条件以最终决策的卖出信号为准",
+      "relation": "all_of",
+      "metrics": [
+        "DDR5出货量环比增速",
+        "创始人减持",
+        "PE(TTM)"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "（3）创始人进一步大幅减持；（4）PE超过150x"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "55bfa69fb0450c03a01d9f51293496e1e3b58392013784a7d7b61505220cd626",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

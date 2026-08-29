@@ -1106,6 +1106,268 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-task-row-price_only .human-review-task-meta { color: var(--ink-faint); }
 .human-review-task-row-source_mismatch .human-review-task-meta,
 .human-review-task-row-unannounced .human-review-task-meta { color: var(--watch); }
+
+/* 主报告经营复核：与价格分区、技术面和情绪面保持独立 */
+.fundamental-review-filter-row {
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+#market-chips[hidden],
+#action-chips[hidden],
+#reference-action-chips[hidden],
+#human-review-chips[hidden],
+#tracking-filter-row[hidden],
+#fundamental-review-filter-row[hidden],
+.sort-field[hidden] { display: none !important; }
+.review-view .index-band,
+.review-view .annual-panel,
+.review-view .automation-panel,
+.review-view .attention-panel { display: none !important; }
+.review-view .summary-band { margin-top: 2px; }
+.review-filter-redline { color: #ff8585; }
+.review-filter-attention,
+.review-filter-stale { color: var(--watch); }
+.review-filter-improving { color: var(--buy); }
+.review-filter-gap,
+.review-filter-waiting { color: var(--ink-soft); }
+.fundamental-review-table { min-width: 1280px; }
+.fundamental-review-table tbody td { vertical-align: top; }
+.fundamental-review-table .company-sentiment { display: none; }
+.fundamental-review-status-cell { min-width: 170px; }
+.fundamental-review-layer-cell { min-width: 190px; }
+.manual-review-cell { background: rgba(76, 195, 255, 0.025); }
+.routine-review-cell { background: rgba(255, 255, 255, 0.012); }
+.fundamental-review-badge,
+.fundamental-review-mini-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.fundamental-review-badge { padding: 5px 8px; }
+.fundamental-review-mini-badge { padding: 3px 6px; }
+.fundamental-review-badge-redline,
+.fundamental-review-mini-badge-redline {
+  color: #ff8585;
+  border-color: rgba(255, 95, 95, 0.4);
+  background: rgba(255, 95, 95, 0.1);
+}
+.fundamental-review-badge-attention,
+.fundamental-review-mini-badge-attention,
+.fundamental-review-badge-stale {
+  color: var(--watch);
+  border-color: rgba(255, 178, 36, 0.38);
+  background: rgba(255, 178, 36, 0.09);
+}
+.fundamental-review-badge-improving,
+.fundamental-review-mini-badge-improving {
+  color: var(--buy);
+  border-color: rgba(46, 230, 168, 0.36);
+  background: rgba(46, 230, 168, 0.08);
+}
+.fundamental-review-badge-manual-active {
+  color: #71c7ff;
+  border-color: rgba(113, 199, 255, 0.38);
+  background: rgba(113, 199, 255, 0.09);
+}
+.fundamental-review-badge-gap,
+.fundamental-review-badge-waiting,
+.fundamental-review-mini-badge-waiting,
+.fundamental-review-badge-clear {
+  color: var(--ink-soft);
+  border-color: rgba(132, 153, 172, 0.3);
+  background: rgba(132, 153, 172, 0.07);
+}
+.fundamental-review-meta {
+  margin: 7px 0 0;
+  color: var(--ink);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+.fundamental-review-meta.muted { margin-top: 3px; color: var(--ink-faint); }
+.routine-review-warning { color: var(--watch); }
+.fundamental-review-rule-list { display: grid; gap: 7px; min-width: 210px; }
+.fundamental-review-rule-brief {
+  min-width: 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--line-2);
+}
+.fundamental-review-rule-brief strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 10.5px;
+  font-weight: 650;
+  line-height: 1.42;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.fundamental-review-rule-brief span,
+.fundamental-review-more {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-faint);
+  font-size: 9.5px;
+  line-height: 1.35;
+}
+.fundamental-review-rule-redline { border-left-color: var(--sell); }
+.fundamental-review-rule-improvement { border-left-color: var(--buy); }
+.fundamental-review-rule-holder { border-left-color: var(--watch); }
+.fundamental-review-empty {
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+.fundamental-review-evidence-cell { min-width: 170px; }
+.fundamental-review-evidence-cell strong { color: var(--ink); font-size: 11px; }
+.fundamental-review-evidence-cell p {
+  margin: 4px 0 0;
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.35;
+}
+.fundamental-review-evidence-cell .fundamental-review-next { color: var(--ink-soft); }
+.fundamental-review-evidence-cell .fundamental-review-reused-line { color: var(--buy); }
+.fundamental-review-overview-card {
+  border-color: rgba(76, 195, 255, 0.22);
+  background: linear-gradient(145deg, rgba(76, 195, 255, 0.06), rgba(255, 255, 255, 0.012));
+}
+.fundamental-review-overview-top,
+.fundamental-review-rule-head,
+.fundamental-review-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fundamental-review-overview-top h3,
+.fundamental-review-section-head h3 { margin: 2px 0 0; }
+.fundamental-review-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 13px;
+}
+.fundamental-review-layer-card {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.fundamental-review-layer-card h4 { margin: 1px 0 0; color: var(--ink); font-size: 12px; }
+.manual-review-card { border-color: rgba(113, 199, 255, 0.28); }
+.routine-review-card { border-color: rgba(255, 178, 36, 0.2); }
+.fundamental-review-layer-card .fundamental-review-overview-facts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 10px;
+}
+.fundamental-review-layer-card .fundamental-review-policy {
+  margin-top: 9px;
+  padding-top: 8px;
+}
+.fundamental-review-overview-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 13px;
+}
+.fundamental-review-overview-facts > div {
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.12);
+}
+.fundamental-review-overview-facts span,
+.fundamental-review-overview-facts strong { display: block; }
+.fundamental-review-overview-facts span { color: var(--ink-faint); font-size: 9.5px; }
+.fundamental-review-overview-facts strong { margin-top: 3px; color: var(--ink); font-size: 11px; line-height: 1.35; }
+.fundamental-review-policy {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.fundamental-review-reused-card {
+  border-color: rgba(65, 208, 154, 0.22);
+  background: rgba(65, 208, 154, 0.035);
+}
+.fundamental-review-reused-card > h3 { margin-bottom: 4px; }
+.fundamental-review-reused-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+.fundamental-review-reused-list article {
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--buy);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.11);
+}
+.fundamental-review-reused-list strong,
+.fundamental-review-reused-list small { display: block; }
+.fundamental-review-reused-list strong { color: var(--ink); font-size: 11px; }
+.fundamental-review-reused-list p {
+  margin: 4px 0;
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+.fundamental-review-reused-list small { color: var(--ink-faint); font-size: 9.5px; }
+.fundamental-review-section-head { margin-bottom: 10px; }
+.fundamental-review-section-head p {
+  max-width: 62%;
+  margin: 0;
+  color: var(--ink-faint);
+  font-size: 10.5px;
+  line-height: 1.4;
+  text-align: right;
+}
+.fundamental-review-detail-grid { display: grid; gap: 9px; }
+.fundamental-review-rule-card {
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.018);
+}
+.fundamental-review-rule-card-redline { border-left-color: var(--sell); }
+.fundamental-review-rule-card-attention { border-left-color: var(--watch); }
+.fundamental-review-rule-card-improving { border-left-color: var(--buy); }
+.fundamental-review-rule-truth { color: var(--ink-soft); font-size: 10px; }
+.fundamental-review-rule-condition { margin: 8px 0; color: var(--ink); font-size: 12px; line-height: 1.52; }
+.fundamental-review-rule-meta {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 4px 8px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 10.5px;
+}
+.fundamental-review-rule-meta dt { color: var(--ink-faint); }
+.fundamental-review-rule-meta dd { margin: 0; }
+.fundamental-review-result {
+  margin-top: 9px;
+  padding: 8px;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.14);
+}
+.fundamental-review-result strong { color: var(--ink); font-size: 11px; }
+.fundamental-review-result p { margin: 3px 0 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.42; }
+.fundamental-review-result .fundamental-review-missing { color: var(--watch); }
+.fundamental-review-source { margin-top: 9px; color: var(--ink-faint); font-size: 10px; }
+.fundamental-review-source summary { cursor: pointer; color: var(--ink-soft); }
+.fundamental-review-source p { margin: 6px 0 0; line-height: 1.45; }
+.fundamental-review-gap-card > p { color: var(--ink-soft); font-size: 11px; line-height: 1.5; }
 .buy-advice { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .buy-advice-detail {
   font-size: 11px;
@@ -2364,6 +2626,7 @@ tbody tr.active .valuation-chip.ready {
   #action-chips,
   .advanced-filters,
   #tracking-filter-row,
+  #fundamental-review-filter-row,
   .control-meta { width: 100%; }
   .search-box { width: 100%; }
   .metric { min-height: 62px; }
@@ -2593,6 +2856,14 @@ tbody tr.active .valuation-chip.ready {
     font-weight: 700;
     letter-spacing: 0.06em;
   }
+  .fundamental-review-table tbody td:nth-child(n+2)::before {
+    content: attr(data-label);
+  }
+  .fundamental-review-table .fundamental-review-rule-list { min-width: 0; }
+  .fundamental-review-overview-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fundamental-review-layer-grid { grid-template-columns: 1fr; }
+  .fundamental-review-section-head { display: block; }
+  .fundamental-review-section-head p { max-width: none; margin-top: 4px; text-align: left; }
 }
 
 @media (max-width: 560px) {

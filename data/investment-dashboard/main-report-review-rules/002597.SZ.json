@@ -1,0 +1,305 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "金禾实业",
+  "ticker": "002597.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
+    "canonical_sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990",
+    "locked_sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "20.24 元不买",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": "20.24 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "16.5-18 元仅激进型小仓观察，13.5-16.5 元且毛利率、库存和现金流同步改善后稳健分批，10.5-13.5 元保守型仍暂不参与",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不因接近一年低点补仓，只保留小仓观察并按利润质量和现金流失效条件控制仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进入对应价格带，且核心食品添加剂毛利率连续两个季度回升、库存同比下降、年度 FCF 转正",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "电子化学品收入占比超过 3% 且毛利率高于集团平均可提高确定性",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入"
+      ],
+      "operator": "gt",
+      "threshold": "3%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 176,
+          "line_end": 208,
+          "quote": "### 8.4 基本面价格区间 | 投资者类型 | 基本面动作 | 价格区间 | 触发逻辑 | |---|---|---:|---|",
+          "supports": "L176-L208、L233-L254。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/减仓卖出信号：核心食品添加剂毛利率继续低于 20%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "存货和跌价损失继续上升",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "或连续年度 FCF 为负且有息负债上升",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "触发任一即按失效条件控制仓位",
+      "relation": "any_of",
+      "metrics": [
+        "核心毛利率",
+        "存货",
+        "跌价损失",
+        "FCF",
+        "有息负债"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "核心毛利率继续低于 20%、存货和跌价损失继续上升，或连续年度 FCF 为负且有息负债上升"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "b04ef8f85738df96838fd23f862aac781adb3dce5ebd86fdcc521a2f1574492c",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

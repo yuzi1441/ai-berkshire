@@ -1,0 +1,363 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "联美量子股份有限公司",
+  "ticker": "600167.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+    "canonical_sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0",
+    "locked_sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 5.78 元安全边际不足",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "5.78 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "5.20 元以下才考虑小仓，4.80-5.20 元为激进试买区，4.20-4.80 元稳健分批，4.20 元以下仍须确认前提未破坏",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有但不追涨，继续核对 2026 中报、回购执行、清洁能源毛利率及现金的真实配置效率",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "6.50 元以上而盈利未恢复时考虑减仓",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "6.50 元",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "TTM 扣非利润企稳、供暖面积保持增长、回购实际执行并增厚每股价值，且价格进入 4.20-4.80 元",
+      "relation": "all_of",
+      "metrics": [
+        "扣非利润",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "4.20-4.80 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "清洁能源毛利率持续低于 28% 或供暖面积连续两年下降即重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "28%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/失效信号：清洁能源毛利率持续低于 28%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "28%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "平均供暖面积连续两年下降",
+      "relation": "all_of",
+      "metrics": [
+        "清洁能源毛利率",
+        "平均供暖面积",
+        "净现金",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "旧煤资产改造无补偿且侵蚀现金",
+      "relation": "all_of",
+      "metrics": [
+        "清洁能源毛利率",
+        "平均供暖面积",
+        "净现金",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "大量现金继续流向低回报金融投资",
+      "relation": "all_of",
+      "metrics": [
+        "清洁能源毛利率",
+        "平均供暖面积",
+        "净现金",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "价格高于 6.50 元而盈利没有恢复（高于 6.50 元区间无恢复证据则减仓/不追价）",
+      "relation": "all_of",
+      "metrics": [
+        "清洁能源毛利率",
+        "平均供暖面积",
+        "净现金",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "5ddec6c00cff423b12c08e422a2f6ae6c0b99b2b663631128bca3b87198fca09",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 5,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

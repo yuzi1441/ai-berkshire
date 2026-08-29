@@ -1,0 +1,437 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "上海电气",
+  "ticker": "601727.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/上海电气/上海电气研究报告-20260730.md",
+    "canonical_sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
+    "locked_sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 6.97 元没有安全边际，当前不买",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "6.97 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "即使进入 3.0-3.5 元也只观察，2.5-3.0 元也只能在证据改善后重新研究，不因题材和订单叙事建仓",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不因订单主题继续加仓",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "已有较大仓位应利用主题强势重新评估或降低仓位，只有经常性盈利、归母占比和营运资本同步改善后才重建论文",
+      "relation": "any_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股不高于 2.1 元，且扣非 ROE 连续两年高于 8%、扣非利润占净利润高于 70%、归母利润占合并利润高于 50%、经营现金流足以覆盖资本开支和分红后，才可考虑分批",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "ROE",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "治理处罚、扣非转负、存货应收快于收入、海外亏损或净负债恶化均为继续回避信号",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "论文失效条件（任一出现即触发失效观察）：连续两个完整年度扣非归母利润为负",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "归母净利润占合并净利润连续两年低于35%",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "35%",
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款与流动合同资产合计超过收入的55%",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "回款"
+      ],
+      "operator": "gt",
+      "threshold": "55%",
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "存货超过收入的45%",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "库存"
+      ],
+      "operator": "gt",
+      "threshold": "45%",
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "信用与资产减值合计再次超过当年归母净利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "严格口径净现金持续为负且短期有息负债增长快于经营现金流",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "再次出现重大财务造假、资金占用或同类信息披露处罚",
+      "relation": "any_of",
+      "metrics": [
+        "扣非归母净利润",
+        "归母净利润占合并净利润比例",
+        "应收账款与流动合同资产合计/收入",
+        "存货/收入",
+        "信用与资产减值合计/归母净利润",
+        "严格口径净现金"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "归母净利润占合并净利润连续两年低于 **35%**"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "ce03e0e2bef5dad965e22c37d4e3066be1371b1464b77b7b9a1ddecede43a615",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 7
+  }
+}

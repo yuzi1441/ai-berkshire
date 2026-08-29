@@ -1,0 +1,355 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "阳光电源",
+  "ticker": "300274.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/阳光电源/阳光电源-research-20260726.md",
+    "canonical_sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
+    "locked_sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 113.42 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "113.42 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "103.55 元以下只建立不超过目标仓位三分之一的观察仓，92.04 元以下且基本面未进一步恶化时才分批建立有意义仓位，80.54 元以下为深度价值区",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "lt",
+      "threshold": "103.55-115.05 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "盈利未上修而价格超过 138.06 元时考虑减仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "gt",
+      "threshold": "138.06 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "美国 FCC 规则范围有限或不溯及既往、储能毛利率回到 33% 以上、TTM 净利润恢复增长、境外毛利率维持 38% 以上，且储能出货增速重新追上行业",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：卖出/否决信号为①美国禁令落地且覆盖存量项目",
+      "relation": "all_of",
+      "metrics": [
+        "单季储能毛利率",
+        "境外收入毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②重大储能安全事故导致 BNEF 评级下调或客户流失",
+      "relation": "any_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③欧盟限制从融资扩展到市场准入",
+      "relation": "all_of",
+      "metrics": [
+        "单季储能毛利率",
+        "境外收入毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④连续两个报告期利润与经营现金流同步恶化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤治理底线被突破",
+      "relation": "all_of",
+      "metrics": [
+        "单季储能毛利率",
+        "境外收入毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓信号：138.06 元（24x）以上而盈利未上修、单季储能毛利率跌破 25%、境外收入毛利率跌破 33%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "①美国禁令落地且覆盖存量项目；②发生重大储能安全事故导致 BNEF 评级下调或客户流失"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "3a686b13928c88e556552c22f4aaed2015aa77920550940b6bd77036b9a9663f",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

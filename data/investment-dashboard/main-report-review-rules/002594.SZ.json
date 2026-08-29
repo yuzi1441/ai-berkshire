@@ -1,0 +1,406 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "BYD",
+  "ticker": "002594.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/BYD/BYD-research-20260624.md",
+    "canonical_sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136",
+    "locked_sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 85 元观望偏积极，但不直接建仓",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "85 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 Q2/Q3 利润拐点、75 元以下的更厚安全边际，或欧盟关税政策明朗化",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "75 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "长期逻辑未被破坏时继续持有",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股低于 75 元，70 元以下更具安全边际",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "或 Q2/Q3 净利润转正、海外毛利率维持 19% 以上、储能放量、欧盟关税缓和",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": "19%",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/卖出信号：",
+      "relation": "all_of",
+      "metrics": [
+        "海外销量同比",
+        "毛利率",
+        "A股股价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两个季度海外销量同比负增长",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "毛利率跌破 15% 且无改善迹象",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "15%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "王传福因健康或其他原因卸任且无合格接班人",
+      "relation": "any_of",
+      "metrics": [
+        "海外销量同比",
+        "毛利率",
+        "A股股价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "固态电池大规模量产且比亚迪在该路线上明显落后",
+      "relation": "all_of",
+      "metrics": [
+        "海外销量同比",
+        "毛利率",
+        "A股股价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "另 A股 >130 元（PE >36 倍）偏高区考虑减仓",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "34e8d13d4aa27fe9c997f084497a6663ea1c26608f798c1b1ae4fd529f280421",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

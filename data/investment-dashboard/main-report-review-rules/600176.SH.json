@@ -1,0 +1,399 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中国巨石股份有限公司",
+  "ticker": "600176.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+    "canonical_sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3",
+    "locked_sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "44.38 元不追",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "ROE",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "44.38 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "30-34 元且高端认证或批量订单有可核验证据时只可小仓，24-28 元且景气正常化后 ROE 与 FCF 仍改善时稳健分批，24 元以下才研究较大仓位",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流",
+        "ROE",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "正常仓位可继续持有核心观察仓但不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "仓位过重应在景气与情绪高位降低集中度，55 元以上而盈利或高端订单未上修时减仓",
+      "relation": "any_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "55 元",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低介电、低膨胀产品获头部客户认证并形成批量收入，新线良率与回报达标，且价格进入对应安全边际",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "普通电子布价格和库存反转或特种认证持续失败即重审",
+      "relation": "any_of",
+      "metrics": [
+        "库存",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 310,
+          "line_end": 338,
+          "quote": "本报告采用 2026E EPS 1.42 元作为中性起点，约对应全年归母净利 56.84 亿元。该数值是情景假设，不是公司指引；它略低于 H1 预告中点简单年化，以留出季节性和价格回落余地。 若投资者要求 10% 年化回报、五年后终值 PE 为 20x，44.38 元要求 EPS 五年复合增长约 **20.27%**；即使终值 PE 保持 25x，也要求约 **15.02%**。这意味着市场不仅定价 2026 年盈利跃升，还定价了之后多年增长和较高终值估值。 ### 7.4 三情景估值",
+          "supports": "L310-L338、L342-L375、L422-L443。正文与契约一致；当前估值已透支高端电子布尚未验证的成功。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/论文失效信号：普通电子布价格和库存反转",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "特种认证持续失败",
+      "relation": "all_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "ROE 低于 10% 或 FCF 连续两年为负",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流",
+        "ROE"
+      ],
+      "operator": "lt",
+      "threshold": "10%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "净债务失控",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "同业竞争处理损害中小股东",
+      "relation": "all_of",
+      "metrics": [
+        "普通电子布价格",
+        "库存",
+        "ROE",
+        "FCF",
+        "净债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "需跟踪 2400tex 直接纱、G75 电子纱和 7628 电子布月均价及库存，以及季度资本开支、自由现金流、净债务",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "库存",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "ab3bf75218247ba5e8a8f4030e2a42d3d38ea39a869ddb4a16a4a1a14e0dc53f",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 6
+  }
+}

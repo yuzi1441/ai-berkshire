@@ -1,0 +1,423 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "深南电路",
+  "ticker": "002916.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/深南电路/深南电路研究报告-20260709.md",
+    "canonical_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+    "locked_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 414.80 元绝非低估",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "414.80 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "只有能承受 30%-45% 回撤的进取型投资者可用研究仓小仓跟踪，保守型等待 250-300 元或 PE 回到约 45-55 倍且基本面未恶化",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本可持有并设置反证清单",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本接近报告价者应谨慎持有或降低暴露",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "显著回落且订单、毛利率和现金流继续验证",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "FC-BGA 高阶产品稳定量产盈利、泰国工厂良率与境外毛利改善、再融资稀释可控",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 288,
+          "line_end": 325,
+          "quote": "## 第十二部分：最终投资建议与行动清单 ### 1. 定性判断表 | 维度 | 判断 |",
+          "supports": "L288-L325、L371-L392。契约结论摘要缺失，但正文明确分层允许进取型当前小仓研究仓，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/减仓重审信号：",
+      "relation": "all_of",
+      "metrics": [
+        "PCB毛利率",
+        "经营现金流/净利润",
+        "存货增速",
+        "应收增速",
+        "AI服务器/交换机订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "35%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流连续 2-3 个季度显著低于净利润",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "2-3",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "存货和应收增速持续高于收入增速",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "FC-BGA 高阶产品长期停留在打样/导入，未形成利润贡献",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "再融资大比例稀释、募投项目回报不清晰",
+      "relation": "all_of",
+      "metrics": [
+        "PCB毛利率",
+        "经营现金流/净利润",
+        "存货增速",
+        "应收增速",
+        "AI服务器/交换机订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "AI 服务器/交换机订单出现库存或砍单信号",
+      "relation": "any_of",
+      "metrics": [
+        "订单",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "PCB 毛利率从 35%+ 明显回落且无法解释为短期因素。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "98c61436560136318e77e1015d904ad023747783b7b31d0bb7458f2bc3cf12e1",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 7
+  }
+}

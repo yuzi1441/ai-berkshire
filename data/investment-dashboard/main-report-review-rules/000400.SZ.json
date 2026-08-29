@@ -1,0 +1,316 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "许继电气",
+  "ticker": "000400.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+    "canonical_sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6",
+    "locked_sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "约 20-22 元只允许激进型小仓观察，不追高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "20-22 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 139,
+          "line_end": 173,
+          "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+          "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "稳健型等待 16-18 元及半年报修复，保守型等待 13-15 元",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 139,
+          "line_end": 173,
+          "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+          "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续观察，但不能把电网景气当作加仓依据",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 139,
+          "line_end": 173,
+          "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+          "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "利润率、订单和回款未修复前不升级仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 139,
+          "line_end": 173,
+          "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+          "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "半年报/三季报利润增速和毛利率修复、直流或配网订单增加、应收下降且现金流覆盖利润",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 139,
+          "line_end": 173,
+          "quote": "## 7. 最终投资建议 ### 7.1 定性判断表 | 项目 | 判断 | 解释 |",
+          "supports": "L139-L173、L232-L234。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避触发条件：2026全年利润继续大幅下滑（说明价格压力不是季度扰动）",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 173,
+          "line_end": 173,
+          "quote": "股价上行至30元附近但没有相应EPS提升，仅由行业情绪推动。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款重新大幅上升或3年以上应收/坏账准备恶化",
+      "relation": "any_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": "3",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 173,
+          "line_end": 173,
+          "quote": "股价上行至30元附近但没有相应EPS提升，仅由行业情绪推动。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易规模扩大且利润率、公允性披露不足",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 173,
+          "line_end": 173,
+          "quote": "股价上行至30元附近但没有相应EPS提升，仅由行业情绪推动。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价上行至30元附近但没有相应EPS提升、仅由行业情绪推动",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "30元",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 173,
+          "line_end": 173,
+          "quote": "股价上行至30元附近但没有相应EPS提升，仅由行业情绪推动。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "4f6610063afc913cca851b1575b6e5323548586dc15fa7fec74679237a353770",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 4
+  }
+}

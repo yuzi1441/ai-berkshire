@@ -1,0 +1,322 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中航机载",
+  "ticker": "600372.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中航机载/中航机载研究报告-20260709.md",
+    "canonical_sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193",
+    "locked_sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "11.19 元附近不急买",
+      "relation": "all_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": null,
+      "threshold": "11.19 元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "10-11.5 元只适合交易型押注修复，8-10 元才可观察或小仓，长期价值投资者优先等 8 元附近或连续两个季度 ROE、现金流改善",
+      "relation": "any_of",
+      "metrics": [
+        "ROE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可以持有观察但不盲目加仓，重点核对半年报和三季报的经营现金流、应收、存货及毛利率",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "13 元以上而利润未上修应谨慎",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "13 元",
+      "periods": [
+        "H1",
+        "Q3",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "连续两季 OCF 改善且全年 OCF/净利润接近 1，应收和存货周转改善、ROE 向 5%-7% 修复，民机 MRO/PMA/国际业务出现可量化订单",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "ROE",
+        "订单",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "ROE 仍低于 3% 且 PE 高于 45 倍、现金流持续为负或题材涨价无利润兑现即重审",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "ROE",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 379,
+          "quote": "### 8.1 四维评分总表 | 维度 | 框架 | 评分 | 核心判断 | |---|---|---:|---|",
+          "supports": "L292-L379、L419-L440。契约遗漏保守价格档和失效条件，且当前小仓许可只适用于交易型，不应扩大为普通价值买入。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避信号：收入继续低增长且 ROE 仍低于 3%、但 PE TTM 维持 45x 以上",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "ROE",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "收入继续低增长，ROE 仍低于 3%，但 PE TTM 维持 45x 以上。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流再次连续为负、分红回购依赖融资或存量现金",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "收入继续低增长，ROE 仍低于 3%，但 PE TTM 维持 45x 以上。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款和存货继续高于收入增速",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "收入继续低增长，ROE 仍低于 3%，但 PE TTM 维持 45x 以上。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "65567a0b83e543b8677194651047c7b5e0447beb3d6475eea41f3281eb1f1ee5",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

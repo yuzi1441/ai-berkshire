@@ -1,0 +1,351 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "英维克",
+  "ticker": "002837.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/英维克/英维克投资研究报告-20260706.md",
+    "canonical_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+    "locked_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "74.06 元显著高估，明确回避",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "74.06 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "30-50 元只观察，30 元以下且海外订单、海外收入、净现比或毛利率验证后才重新研究",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "减仓到能够完全承受 60% 回撤的比例",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "60%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本小仓可保留观察，但不能把未经公告确认的订单当作价值依据",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "30 元以下，且公司公告海外大客户批量订单、海外收入占比升至 25% 以上、净现比回到 0.7 以上或毛利率连续两季回升",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 213,
+          "line_end": 269,
+          "quote": "### 反向DCF：当前股价隐含了什么？ 以944亿市值倒推：若要求年化10%回报、5年后以30倍PE退出，2030年需归母净利润约50.7亿元——**即从2025年的5.22亿起、连续5年净利润复合增速约58%**。作为参照：公司过去5年净利润复合增速约21%，2026年一季度增速为-82%。当前价格隐含的不是\"液冷成功\"，而是\"液冷史诗级成功且无人分走利润\"。 ### 三情景估值（工具精确计算，3年期，基准EPS 0.4095元）",
+          "supports": "L213-L269、L322-L343。契约粗字段写“观察”，正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/卖出信号：① 2026 半年报海外收入占比未显著提升或液冷收入不及预期",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "2026",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 毛利率跌破 24% 且无企稳迹象",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "24%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 再现董监高减持公告",
+      "relation": "all_of",
+      "metrics": [
+        "海外收入占比",
+        "液冷收入",
+        "毛利率",
+        "董监高减持",
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 经营现金流连续第三年恶化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 谷歌/英伟达订单传闻被公告证伪",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "28adbb239159e111fb2d8fdf43f0b05926ceebb308a219c07996d2f4cc1c2011",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

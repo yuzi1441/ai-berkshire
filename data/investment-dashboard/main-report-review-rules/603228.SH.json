@@ -1,0 +1,436 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "景旺电子",
+  "ticker": "603228.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+    "canonical_sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d",
+    "locked_sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "65.91 元不追，放入观察名单",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": "65.91 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率和自由现金流同步修复后再研究买入",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本仓可继续持有但须设纪律",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成长型只能小仓事件跟踪，不能把 AI PCB 叙事当安全边际",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "毛利率连续两季回到 21%-22%、扣非净利恢复 20% 以上增长、现金流/净利持续大于 1、FCF 转正且高端产能顺利导入",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "扣非利润",
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "毛利率连续低于 18%、扣非连续大降、库存与杠杆上升或高端客户导入不及预期即减仓/回避",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "库存",
+        "债务",
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "18%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "当前 57 倍 TTM PE 几乎贴近报告乐观情景，而 2025-2026Q1 增收不增利、ROE 下滑且 FCF 为负，价格和证据均未满足。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避信号（任一出现即触发）：综合毛利率连续两个季度低于18%",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "18%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "扣非归母净利连续两个季度同比下降超过20%",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": "gt",
+      "threshold": "20%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "存货周转天数超过85天并继续上升",
+      "relation": "all_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": "gt",
+      "threshold": "85",
+      "periods": [
+        "季度",
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "Capex/CFO连续两年超过1.5",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "1.5",
+      "periods": [
+        "季度",
+        "年度"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "资产负债率超过55%或有息负债继续快速上升",
+      "relation": "any_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": "gt",
+      "threshold": "55%",
+      "periods": [
+        "季度",
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "高端客户导入不及预期或AI/通信收入缺乏披露",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度",
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "大额关联交易、产能减值或环保处罚出现",
+      "relation": "any_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度",
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "综合毛利率连续两个季度低于 18%；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "5ce5f0e0a152bfaaefcfd2f1a03fe9881952956a5868b2bc29590feaae35edf3",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 7
+  }
+}
