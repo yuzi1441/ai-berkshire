@@ -422,27 +422,37 @@ def review_locked_tasks_with_local_model(
         "你是股票主报告复核证据核验员。输入的 review_tasks 是已经人工锁定的规则，"
         "你无权新增、删除、修改、放宽或重解释任何任务、阈值、价格带或条件。"
         "只能依据 document_catalog 中的本地文档进行核验，不得使用外部知识。"
-        "主报告 reference 只能作为报告中已写出的基线，不能伪装成新的独立验证。"
-        "没有当前数值、对比期、事件确认或一手证据时，必须使用 data_insufficient。"
+        "主报告 reference（source_role=main_report_reference）只能作为报告中已写出的基线："
+        "其中记载的历史财务、基线价格与报告日行情一律不是当前状态证据，"
+        "不得据其判 verified/not_triggered/triggered，也不得把报告自己写的结论当作新验证。"
+        "凡条件需要当前数值、对比期或事件确认（现价、报告期后财务、公告事件），"
+        "只有 source_role=local_current_evidence 的文档中存在主报告基线之后的记录才可判定；"
+        "否则必须使用 data_insufficient，并用 missing_codes 标注缺口"
+        "（no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation）。"
         "不得给投资、交易或仓位建议。必须严格输出 JSON。"
     )
     user = json.dumps(
         {
-            "schema": {
-                "task_results": [
-                    {
-                        "task_id": "必须与 task_catalog 的键一一对应",
-                        "status": "only: verified/not_triggered/triggered/data_insufficient",
-                        "evidence_document_ids": "only document_catalog keys, at most 3",
-                        "evidence_lines": "at most 3 objects: document_id, line_ref, exact_quote",
-                        "missing_codes": "only no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation",
-                    }
-                ],
-                "rule_update": "must be manual_only",
-            },
-            "task_catalog": task_catalog,
-            "document_catalog": document_catalog,
-            "rule_update_policy": "manual_only; local documents are evidence only",
+                "schema": {
+                    "task_results": [
+                        {
+                            "task_id": "必须与 task_catalog 的键一一对应",
+                            "status": "only: verified/not_triggered/triggered/data_insufficient；前三者均要求 local_current_evidence 中存在基线之后的当前数值/事件确认，仅凭主报告基线必须 data_insufficient",
+                            "evidence_document_ids": "only document_catalog keys, at most 3",
+                            "evidence_lines": "at most 3 objects: document_id, line_ref, exact_quote",
+                            "missing_codes": "only no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation",
+                        }
+                    ],
+                    "rule_update": "must be manual_only",
+                },
+                "task_catalog": task_catalog,
+                "document_catalog": document_catalog,
+                "rule_update_policy": "manual_only; local documents are evidence only",
+                "verification_policy": (
+                    "main_report_reference is baseline only; current-state verdicts "
+                    "(verified/not_triggered/triggered) require newer records in "
+                    "local_current_evidence, otherwise data_insufficient with missing_codes"
+                ),
         },
         ensure_ascii=False,
     )
