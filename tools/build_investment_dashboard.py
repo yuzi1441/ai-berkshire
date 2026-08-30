@@ -5380,7 +5380,7 @@ def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
     legacy_directory = repo_root / "local" / "fundamental-review-full"
     if not rules_directory.is_dir() or not any(rules_directory.glob("*.json")):
         return {
-            "schema_version": 4,
+            "schema_version": main_report_review.PUBLIC_SNAPSHOT_VERSION,
             "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
             "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
             "status_counts": {},
@@ -5392,12 +5392,14 @@ def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
     comparison = load_json(comparison_path, {})
     if not main_report_review.comparison_snapshot_is_current(repo_root, comparison):
         comparison = main_report_review.comparison_snapshot(repo_root)
-    return main_report_review.public_review_snapshot(
+    snapshot = main_report_review.public_review_snapshot(
         rules_directory,
         results_directory,
         comparison,
         legacy_directory,
     )
+    saved = load_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", {})
+    return main_report_review.merge_saved_layer_snapshot(snapshot, saved)
 
 
 def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:

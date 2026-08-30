@@ -72,6 +72,9 @@ install -m 0644 "${REPO_ROOT}/deploy/opencode/opencode.json" "${CONFIG_ROOT}/ope
 install -m 0644 \
     "${REPO_ROOT}/deploy/opencode/agent/fundamental-review-daily.md" \
     "${CONFIG_ROOT}/agent/fundamental-review-daily.md"
+install -m 0644 \
+    "${REPO_ROOT}/deploy/opencode/agent/fundamental-review-deep.md" \
+    "${CONFIG_ROOT}/agent/fundamental-review-deep.md"
 # Older experiments placed an external plugin package here. The production
 # runner uses --pure and the explicit provider config, so keep this directory
 # free of unreviewed external plugins.

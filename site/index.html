@@ -96,7 +96,7 @@
       <section class="control-band" aria-label="筛选与检索">
         <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
           <button type="button" class="chip active" data-view="decision">买入前决策</button>
-          <button type="button" class="chip" data-view="review">双模型复核 <span class="chip-count" id="fundamental-review-count">0</span></button>
+          <button type="button" class="chip" data-view="review">报告复核 <span class="chip-count" id="fundamental-review-count">0</span></button>
           <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
         </div>
         <div class="search-box">
@@ -166,14 +166,15 @@
           <button type="button" class="chip" data-tracking-filter="review">待复核</button>
           <button type="button" class="chip" id="restore-tracking" hidden>恢复已隐藏</button>
         </div>
-        <div class="chip-row fundamental-review-filter-row" id="fundamental-review-filter-row" role="tablist" aria-label="ZCode 与 DeepSeek 复核对照筛选" hidden>
-          <span class="filter-label">双模型复核（只把主报告后的材料视为当前证据）</span>
+        <div class="chip-row fundamental-review-filter-row" id="fundamental-review-filter-row" role="tablist" aria-label="报告复核筛选" hidden>
+          <span class="filter-label">报告复核（规则锁定，日常与深度分层）</span>
           <button type="button" class="chip active" data-fundamental-review-filter="all">全部</button>
-          <button type="button" class="chip review-filter-redline" data-fundamental-review-filter="conflict">结果分歧</button>
-          <button type="button" class="chip review-filter-improving" data-fundamental-review-filter="consensus">双方当前证据一致</button>
-          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="zcode_current">仅 ZCode 当前证据</button>
-          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="deepseek_current">仅 DeepSeek 当前证据</button>
-          <button type="button" class="chip review-filter-historical" data-fundamental-review-filter="both_insufficient">双方证据不足 / 历史</button>
+          <button type="button" class="chip review-filter-redline" data-fundamental-review-filter="redline">红线已触发</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="attention">需要关注</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="daily_due">日常待复核</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="deep_due">深度待复核</button>
+          <button type="button" class="chip review-filter-historical" data-fundamental-review-filter="data_gap">数据不足</button>
+          <button type="button" class="chip review-filter-historical" data-fundamental-review-filter="stale_rules">规则失效</button>
         </div>
         <div class="control-meta">
           <label class="sort-field" id="sort-field">
@@ -256,6 +257,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=main-review-v10"></script>
+    <script type="module" src="./assets/app.js?v=review-layers-v1"></script>
   </body>
 </html>

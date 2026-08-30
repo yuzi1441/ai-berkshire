@@ -457,7 +457,9 @@ class MainReportRuleTests(unittest.TestCase):
                     root, package, output, include_official=False, dry_run=False
                 )
             self.assertEqual((ticker, status), ("600001.SH", "error"))
-            self.assertEqual(payload["current_evidence_count"], 0)
+            # A valid ZCode extract is usable current evidence even when this
+            # attempted model run fails; the failure must not erase the fact.
+            self.assertEqual(payload["current_evidence_count"], 1)
             saved = json.loads((output / "600001.SH.json").read_text(encoding="utf-8"))
             self.assertEqual(saved["summary"]["status"], "error")
             self.assertEqual(saved["evidence_documents"][0]["source_role"], "zcode_current_evidence_extract")
@@ -528,6 +530,33 @@ class MainReportRuleTests(unittest.TestCase):
 class ProductionReviewSnapshotTests(unittest.TestCase):
     ROOT = Path(__file__).resolve().parents[1]
 
+    def test_migrated_daily_layer_keeps_its_real_reviewer_and_evidence_state(self):
+        packet = {
+            "model": "zcode-inline-review/GLM",
+            "generated_at": "2026-08-30T09:00:00+08:00",
+            "run_status": "completed",
+            "tasks": [{"task_id": "holder", "evidence_quality": "current"}],
+        }
+        layer = review.packet_layer_run(
+            packet,
+            layer="daily",
+            default_reviewer="ZCode",
+            rules_fingerprint="locked-rule-v1",
+            migrated_seed=True,
+        )
+        self.assertEqual(layer["model"], "zcode-inline-review/GLM")
+        self.assertEqual(layer["status"], "evidence_ready")
+        self.assertEqual(layer["current_evidence_count"], 1)
+        self.assertTrue(layer["migrated_seed"])
+        self.assertEqual(layer["rules_fingerprint"], "locked-rule-v1")
+
+    def test_layer_comparison_requires_the_same_locked_rule_version(self):
+        daily = {"status": "attention", "rules_fingerprint": "rule-v1"}
+        deep = {"status": "attention", "rules_fingerprint": "rule-v1"}
+        self.assertEqual(review.layer_comparison(daily, deep)["state"], "aligned")
+        deep["rules_fingerprint"] = "rule-v2"
+        self.assertEqual(review.layer_comparison(daily, deep)["state"], "not_comparable")
+
     def test_current_comparison_matches_inputs(self):
         snapshot = review.comparison_snapshot(self.ROOT)
         self.assertEqual(snapshot["summary"]["same_tasks"], 104)
@@ -554,14 +583,11 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("renderFundamentalReviewDetail", app)
         self.assertIn("renderFundamentalReviewPartitions", app)
         self.assertIn("fundamentalReviewPartitionKey", app)
-        self.assertIn("reportReviewAlert", app)
-        self.assertIn("model_review_comparison.json", app)
-        self.assertIn("Codex 直接复核", app)
-        self.assertIn("Codex 直接复核（当前证据）", app)
-        self.assertIn("ZCode 独立复核", app)
-        self.assertIn("DeepSeek 复核", app)
-        self.assertIn("复核行情上下文", app)
-        self.assertIn("双方证据不足 / 历史", app)
+        self.assertIn("main_report_review.json", app)
+        self.assertIn("日常复核", app)
+        self.assertIn("深度复核", app)
+        self.assertIn("renderReviewLayerCell", app)
+        self.assertNotIn('"报告复核提示"', app)
         self.assertIn(".fundamental-review-table", css)
 
     def test_model_comparison_marks_main_report_only_tasks_as_historical(self):
@@ -630,9 +656,13 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["stock_count"], 93)
         self.assertEqual(len(snapshot["reviews"]), 93)
         dongfang = next(row for row in snapshot["reviews"] if row["ticker"] == "000682.SZ")
-        self.assertEqual(snapshot["schema_version"], 4)
+        self.assertEqual(snapshot["schema_version"], 5)
         self.assertEqual(dongfang["manual"]["authority"], "human_locked")
         self.assertEqual(dongfang["manual"]["status"], "active")
+        self.assertIn("zcode", dongfang["daily"]["current"]["model"].lower())
+        self.assertTrue(dongfang["daily"]["current"]["migrated_seed"])
+        self.assertEqual(dongfang["deep"]["current"]["model"], "Codex 直接复核（未调用模型）")
+        self.assertIn(dongfang["layer_comparison"]["state"], {"not_comparable", "aligned", "different", "not_available"})
         self.assertEqual(dongfang["routine"]["status"], "historical_review")
         self.assertEqual(dongfang["routine"]["reviewer"], "deepseek-v4-flash")
         self.assertEqual(len(dongfang["routine"]["legacy_daily"]["tasks"]), 3)

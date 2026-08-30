@@ -65,6 +65,7 @@ for relative in \
     data/investment-dashboard/annual_report_dates.json \
     data/investment-dashboard/automation_status.json \
     data/investment-dashboard/intraday_technical.json \
+    data/investment-dashboard/main_report_review.json \
     data/investment-dashboard/opportunity_scans.json \
     data/investment-dashboard/opportunity_scan_status.json \
     data/investment-dashboard/post_buy_alerts.json \
@@ -74,6 +75,7 @@ for relative in \
     site/data/annual_report_dates.json \
     site/data/automation_status.json \
     site/data/intraday_technical.json \
+    site/data/main_report_review.json \
     site/data/opportunity_scans.json \
     site/data/opportunity_scan_status.json \
     site/data/post_buy_alerts.json \

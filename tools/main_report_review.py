@@ -37,6 +37,9 @@ from source_hash import canonical_file_sha256, canonical_sha256_text
 
 SCHEMA_VERSION = 2
 PROTOCOL_VERSION = "main-report-review-v2.3"
+PUBLIC_SNAPSHOT_VERSION = 5
+DAILY_REVIEW_DUE_DAYS = 3
+DEEP_REVIEW_DUE_DAYS = 30
 RULE_GROUPS = {"entry", "holder", "improvement", "redline"}
 RULE_POLARITIES = {"positive", "negative", "monitoring"}
 RULE_STATES = {"active", "stale", "pending_manual_confirmation", "archived"}
@@ -1045,6 +1048,9 @@ def review_rules_with_model(
     package: dict[str, Any],
     documents: list[dict[str, Any]],
     price_context: dict[str, Any] | None = None,
+    *,
+    responder: Any | None = None,
+    reviewer_model: str | None = None,
 ) -> dict[str, Any]:
     active_rules = [
         rule
@@ -1081,7 +1087,7 @@ def review_rules_with_model(
         }
         for document in documents
     }
-    config = opportunity_review.model_config("scan_flash")
+    config = opportunity_review.model_config("scan_flash") if responder is None else None
     system = (
         "你是主报告锁定规则的证据核验员。规则由人工锁定，你无权新增、删除、修改、放宽、"
         "重解释任何条件或阈值。main_report_reference 只能证明规则来源，不能证明当前状态。"
@@ -1134,7 +1140,14 @@ def review_rules_with_model(
         },
         ensure_ascii=False,
     )
-    response, reasoning = opportunity_review.request_json(config, system=system, user=user)
+    if responder is None:
+        response, reasoning = opportunity_review.request_json(config, system=system, user=user)
+        selected_model = config.model
+    else:
+        response, reasoning = responder(system, user)
+        selected_model = reviewer_model or "external-reviewer"
+    if not isinstance(response, dict):
+        raise RuntimeError("review responder did not return a JSON object")
     raw_results = (
         response.get("rule_results")
         or response.get("task_results")
@@ -1306,7 +1319,7 @@ def review_rules_with_model(
     return {
         "status": "completed",
         "rule_update": "manual_only",
-        "model": config.model,
+        "model": selected_model,
         "reasoning": reasoning,
         "rules": results,
         "protocol_findings": protocol_findings,
@@ -1365,7 +1378,11 @@ def result_payload(
     current_documents = [
         document
         for document in documents
-        if document.get("source_role") in {"local_current_evidence", "official_current_evidence"}
+        if document.get("source_role") in {
+            "local_current_evidence",
+            "official_current_evidence",
+            "zcode_current_evidence_extract",
+        }
     ]
     results = (model_review or {}).get("rules") or []
     if status is None:
@@ -1997,15 +2014,188 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
     }
 
 
+def review_due_at(value: Any, days: int) -> str:
+    """Return a displayable due timestamp without inventing a historical run."""
+    try:
+        base = datetime.fromisoformat(str(value))
+    except (TypeError, ValueError):
+        base = datetime.now().astimezone()
+    if base.tzinfo is None:
+        base = base.replace(tzinfo=datetime.now().astimezone().tzinfo)
+    return (base + timedelta(days=days)).isoformat(timespec="seconds")
+
+
+def packet_layer_run(
+    packet: dict[str, Any] | None,
+    *,
+    layer: str,
+    default_reviewer: str,
+    rules_fingerprint: str | None,
+    migrated_seed: bool = False,
+) -> dict[str, Any] | None:
+    """Make a saved legacy packet explicit about layer and evidence currency.
+
+    A migrated ZCode packet may occupy the current *daily slot* at the user's
+    request, but it must retain its real reviewer and evidence-quality labels.
+    It is never rewritten as a DeepSeek result or a current fact.
+    """
+    if not isinstance(packet, dict) or not packet:
+        return None
+    tasks = [task for task in packet.get("tasks") or [] if isinstance(task, dict)]
+    current_tasks = [task for task in tasks if task.get("evidence_quality") == "current"]
+    run_status = str(packet.get("run_status") or "missing")
+    evidence_state = "current" if current_tasks else "historical_or_insufficient"
+    if run_status not in {"completed", "complete", "success"}:
+        status = "error" if run_status not in {"missing", ""} else "data_gap"
+    elif current_tasks:
+        status = "evidence_ready"
+    else:
+        status = "data_gap"
+    reviewer = str(packet.get("model") or default_reviewer)
+    generated_at = packet.get("generated_at")
+    return {
+        "layer": layer,
+        "run_id": f"migrated-{layer}-{str(generated_at or 'undated')}",
+        "reviewer": reviewer,
+        "model": reviewer,
+        "variant": None,
+        "generated_at": generated_at,
+        # A migration still records which locked-rule version it was attached
+        # to, so it expires with a real report change.  It remains explicitly
+        # non-comparable with a fresh model run below.
+        "rules_fingerprint": rules_fingerprint,
+        "evidence_fingerprint": None,
+        "run_status": run_status,
+        "status": status,
+        "label": "已保存日常复核" if current_tasks else "已保存复核：证据不足 / 历史",
+        "evidence_state": evidence_state,
+        "current_evidence_count": len(current_tasks),
+        "tasks": tasks,
+        "migrated_seed": migrated_seed,
+        "comparison_eligible": not migrated_seed,
+        "source": "迁移的已保存复核结果；保留原始复核者与证据状态。",
+        "due_at": review_due_at(generated_at, DAILY_REVIEW_DUE_DAYS if layer == "daily" else DEEP_REVIEW_DUE_DAYS),
+    }
+
+
+def normalized_layer_status(value: Any) -> str:
+    """Map archived review vocabulary into the public layer state contract."""
+    raw_status = str(value or "data_gap")
+    return {
+        "warning": "attention",
+        "data_insufficient": "data_gap",
+        "waiting_official_disclosure": "waiting_evidence",
+        "rule_stale": "stale_rules",
+    }.get(raw_status, raw_status)
+
+
+def codex_layer_run(
+    direct: dict[str, Any] | None,
+    *,
+    rules_fingerprint: str | None,
+) -> dict[str, Any] | None:
+    if not isinstance(direct, dict) or not direct:
+        return None
+    generated_at = direct.get("reviewed_at")
+    raw_status = str(direct.get("status") or "data_gap")
+    # The older direct-review archive used a slightly different vocabulary.
+    # Normalize only the dashboard state; retain its human-readable label and
+    # source intact so a legacy warning is not misreported as a fresh redline.
+    status = normalized_layer_status(raw_status)
+    return {
+        "layer": "deep",
+        "run_id": f"codex-direct-{str(generated_at or 'undated')}",
+        "reviewer": str(direct.get("reviewer") or "Codex 直接复核（未调用模型）"),
+        "model": "Codex 直接复核（未调用模型）",
+        "variant": None,
+        "generated_at": generated_at,
+        "rules_fingerprint": rules_fingerprint,
+        "evidence_fingerprint": None,
+        "run_status": "completed",
+        "status": status,
+        "label": direct.get("label") or status,
+        "evidence_state": "current" if direct.get("evidence_count") else "historical_or_insufficient",
+        "current_evidence_count": direct.get("evidence_count") or 0,
+        "tasks": [],
+        "migrated_seed": True,
+        "source": direct.get("source_statement") or "Codex 直接复核归档。",
+        "due_at": review_due_at(generated_at, DEEP_REVIEW_DUE_DAYS),
+        "redline_count": direct.get("redline_count") or 0,
+        "warning_count": direct.get("warning_count") or 0,
+        "data_gaps": direct.get("data_gaps") or [],
+    }
+
+
+def stored_layer_run(path: Path, *, layer: str, rules_fingerprint: str) -> dict[str, Any] | None:
+    """Load a completed atomic layer result only when it matches active rules."""
+    payload = load_json(path, {})
+    if not isinstance(payload, dict) or payload.get("layer") != layer:
+        return None
+    if payload.get("rules_fingerprint") != rules_fingerprint:
+        return None
+    payload["status"] = normalized_layer_status(payload.get("status"))
+    return payload
+
+
+def layer_comparison(daily: dict[str, Any] | None, deep: dict[str, Any] | None) -> dict[str, str]:
+    """A comparison is an alert only; it never changes a locked rule or action."""
+    if not daily or not deep:
+        return {"state": "not_available", "label": "缺少其中一层结果"}
+    if daily.get("migrated_seed") or deep.get("migrated_seed"):
+        return {"state": "not_comparable", "label": "含迁移记录，等待同版新复核后再比较"}
+    daily_fingerprint = daily.get("rules_fingerprint")
+    deep_fingerprint = deep.get("rules_fingerprint")
+    if not daily_fingerprint or not deep_fingerprint or daily_fingerprint != deep_fingerprint:
+        return {"state": "not_comparable", "label": "规则版本不同或历史迁移结果，不能直接比较"}
+    if daily.get("status") == "error" or deep.get("status") == "error":
+        return {"state": "not_comparable", "label": "存在失败复核，等待有效结果"}
+    if daily.get("status") != deep.get("status"):
+        return {"state": "different", "label": "两层结果不同，需查看证据"}
+    return {"state": "aligned", "label": "两层状态一致"}
+
+
+def merge_saved_layer_snapshot(snapshot: dict[str, Any], saved: dict[str, Any]) -> dict[str, Any]:
+    """Carry runtime review layers across a release without carrying stale rules.
+
+    The static release builder does not own the VPS runtime directory.  It may
+    reuse a saved layer only when the exact locked main-report hash still
+    matches; a changed report always falls back to the newly built stale state.
+    """
+    if not isinstance(saved, dict) or int(saved.get("schema_version") or 0) < PUBLIC_SNAPSHOT_VERSION:
+        return snapshot
+    saved_by_ticker = {
+        str(row.get("ticker")): row
+        for row in (saved.get("reviews") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+    for row in snapshot.get("reviews") or []:
+        previous = saved_by_ticker.get(str(row.get("ticker")))
+        if not previous or row.get("rule_state") != "active":
+            continue
+        current_hash = (row.get("main_report") or {}).get("canonical_sha256")
+        previous_hash = (previous.get("main_report") or {}).get("canonical_sha256")
+        if not current_hash or current_hash != previous_hash:
+            continue
+        for layer in ("daily", "deep"):
+            if isinstance(previous.get(layer), dict):
+                row[layer] = previous[layer]
+        row["layer_comparison"] = layer_comparison(
+            (row.get("daily") or {}).get("current"),
+            (row.get("deep") or {}).get("current"),
+        )
+    return snapshot
+
+
 def public_review_snapshot(
     rules_dir: Path,
     output_dir: Path,
     comparison: dict[str, Any] | None = None,
     legacy_dir: Path | None = None,
+    layers_dir: Path | None = None,
 ) -> dict[str, Any]:
     generated_at = now_iso()
     repo_root = rules_dir.resolve().parents[2]
-    next_check_at = (datetime.now().astimezone() + timedelta(days=3)).isoformat(timespec="seconds")
+    next_check_at = (datetime.now().astimezone() + timedelta(days=DAILY_REVIEW_DUE_DAYS)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
     codex_archive = load_json(rules_dir.parent / "codex_direct_manual_review.json", {})
     codex_by_ticker = {
@@ -2013,6 +2203,13 @@ def public_review_snapshot(
         for row in (codex_archive.get("reviews") or [])
         if isinstance(row, dict) and row.get("ticker")
     }
+    legacy_model_snapshot = model_review_comparison_snapshot(repo_root)
+    legacy_model_by_ticker = {
+        str(row.get("ticker")): row
+        for row in (legacy_model_snapshot.get("reviews") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
+    layers_dir = layers_dir or output_dir.parent / "fundamental-review-layers"
     rows = []
     status_counts: dict[str, int] = {}
     for ticker, package in sorted(rules_by_ticker.items()):
@@ -2101,6 +2298,59 @@ def public_review_snapshot(
             "stale": "主报告已变化，待人工更新规则",
             "no_rules": "暂无人工锁定经营规则",
         }[manual_status]
+        legacy_models = legacy_model_by_ticker.get(ticker) or {}
+        saved_daily = stored_layer_run(
+            layers_dir / "daily" / f"{ticker}.json",
+            layer="daily",
+            rules_fingerprint=package.get("rules_fingerprint"),
+        )
+        # The user selected ZCode as the current seed of the daily layer.  It
+        # remains explicitly labelled as ZCode until a newer DeepSeek run for
+        # this exact stock atomically replaces it.
+        daily_current = saved_daily or packet_layer_run(
+            legacy_models.get("zcode"),
+            layer="daily",
+            default_reviewer="ZCode",
+            rules_fingerprint=package.get("rules_fingerprint"),
+            migrated_seed=True,
+        )
+        saved_deep = stored_layer_run(
+            layers_dir / "deep" / f"{ticker}.json",
+            layer="deep",
+            rules_fingerprint=package.get("rules_fingerprint"),
+        )
+        deep_current = saved_deep or codex_layer_run(
+            codex_by_ticker.get(ticker),
+            rules_fingerprint=package.get("rules_fingerprint"),
+        )
+        daily_history = []
+        deepseek_history = packet_layer_run(
+            legacy_models.get("deepseek"),
+            layer="daily",
+            default_reviewer="DeepSeek",
+            rules_fingerprint=package.get("rules_fingerprint"),
+            migrated_seed=True,
+        )
+        if deepseek_history:
+            daily_history.append(deepseek_history)
+        if saved_daily and legacy_models.get("zcode"):
+            previous_zcode = packet_layer_run(
+                legacy_models.get("zcode"),
+                layer="daily",
+                default_reviewer="ZCode",
+                rules_fingerprint=package.get("rules_fingerprint"),
+                migrated_seed=True,
+            )
+            if previous_zcode:
+                daily_history.append(previous_zcode)
+        deep_history = []
+        if saved_deep and codex_by_ticker.get(ticker):
+            previous_codex = codex_layer_run(
+                codex_by_ticker.get(ticker),
+                rules_fingerprint=package.get("rules_fingerprint"),
+            )
+            if previous_codex:
+                deep_history.append(previous_codex)
         # This deliberately remains separate from the manual layer.  A model
         # result is a point-in-time evidence check, never an authority to alter
         # a threshold, a red line, or the main-report judgment.
@@ -2180,13 +2430,26 @@ def public_review_snapshot(
                         "message": result.get("message"),
                     },
                 },
+                "daily": {
+                    "current": daily_current,
+                    "history": daily_history,
+                    "due_at": (daily_current or {}).get("due_at") or next_check_at,
+                    "policy": "日常层由 DeepSeek 手动复核；当前 ZCode 仅为迁移的日常记录，直到该股新的 DeepSeek 结果覆盖。",
+                },
+                "deep": {
+                    "current": deep_current,
+                    "history": deep_history,
+                    "due_at": (deep_current or {}).get("due_at") or review_due_at(generated_at, DEEP_REVIEW_DUE_DAYS),
+                    "policy": "深度层由用户每次指定模型与推理档位手动复核；不固定为某一模型。",
+                },
+                "layer_comparison": layer_comparison(daily_current, deep_current),
             }
         )
     return {
-        "schema_version": 4,
+        "schema_version": PUBLIC_SNAPSHOT_VERSION,
         "generated_at": generated_at,
         "next_check_at": next_check_at,
-        "source": "human_locked_rules + Codex_direct_manual_review + saved_deepseek_daily_review + strict_incremental_evidence",
+        "source": "human_locked_rules + migrated_zcode_daily + saved_deepseek_daily_history + codex_deep + atomic_layer_runs",
         "status_counts": status_counts,
         "stock_count": len(rows),
         "comparison": comparison.get("summary") if isinstance(comparison, dict) else None,

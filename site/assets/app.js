@@ -44,8 +44,6 @@ const state = {
   automationStatus: null,
   fundamentalReviewSnapshot: null,
   fundamentalReviews: new Map(),
-  modelReviewComparisonSnapshot: null,
-  modelReviewComparisons: new Map(),
   selectedKey: null,
   generationId: null,
   view: "decision",
@@ -155,7 +153,7 @@ function updateTrackingControls() {
 
 function updateFundamentalReviewControls() {
   if (els.fundamentalReviewCount) {
-    els.fundamentalReviewCount.textContent = String(state.modelReviewComparisons.size);
+    els.fundamentalReviewCount.textContent = String(state.fundamentalReviews.size);
   }
 }
 
@@ -1621,30 +1619,6 @@ function renderHumanReviewMainCell(item, quote) {
   }
   wrap.append(snapshot);
 
-  const plan = humanReviewPlanForItem(item);
-  if (!plan || plan.status !== "ready") {
-    const note = document.createElement("p");
-    note.className = "human-review-main-muted";
-    note.textContent = plan?.message || "固定复核事项不可用";
-    wrap.append(note);
-    return wrap;
-  }
-  if (!plan.tasks?.length) {
-    const note = document.createElement("p");
-    note.className = "human-review-main-muted";
-    note.textContent = "暂无固定时间事项 · 价格条件随行情判断";
-    wrap.append(note);
-    return wrap;
-  }
-
-  const planSummary = document.createElement("p");
-  planSummary.className = "human-review-main-muted";
-  const dueCount = Number(plan.due_count || 0);
-  const next = plan.tasks[0];
-  planSummary.textContent = dueCount
-    ? `固定复核 ${plan.task_count} 项 · ${dueCount} 项待确认${next ? ` · 最近：${next.title || next.scope_label}` : ""}`
-    : `固定复核 ${plan.task_count} 项 · 当前均未到期`;
-  wrap.append(planSummary);
   return wrap;
 }
 
@@ -1749,7 +1723,7 @@ function fundamentalReviewForItem(item) {
 }
 
 function modelReviewForItem(item) {
-  return state.modelReviewComparisons.get(item?.ticker) || null;
+  return fundamentalReviewForItem(item);
 }
 
 function manualReviewMeta(review) {
@@ -1774,19 +1748,34 @@ function fundamentalReviewMeta(review) {
 // takes priority over any saved daily result, so historical data is never
 // mistaken for a still-valid rule outcome.
 function fundamentalReviewPartitionKey(review) {
-  return review?.partition || "both_insufficient";
+  if (!review || review.rule_state === "stale") return "stale_rules";
+  const layerStatuses = [review.daily?.current?.status, review.deep?.current?.status, review.summary?.status];
+  if (layerStatuses.includes("redline")) return "redline";
+  if (layerStatuses.includes("attention")) return "attention";
+  const now = Date.now();
+  const dailyDue = new Date(review.daily?.due_at || 0).getTime();
+  const deepDue = new Date(review.deep?.due_at || 0).getTime();
+  if (Number.isFinite(dailyDue) && dailyDue <= now) return "daily_due";
+  if (Number.isFinite(deepDue) && deepDue <= now) return "deep_due";
+  if (layerStatuses.some((status) => ["data_gap", "waiting_evidence", "error"].includes(status))) return "data_gap";
+  return "clear";
 }
 
 const fundamentalReviewPartitions = [
-  ["conflict", "双方结果分歧", "两边都有当前证据，但同类任务状态不同；需要打开原文核对。", "redline"],
-  ["consensus", "双方当前证据一致", "两边都有主报告之后的证据，且同类任务状态一致。", "improving"],
-  ["zcode_current", "仅 ZCode 有当前证据", "ZCode 已引用新材料；DeepSeek 结果仍是历史或数据不足。", "attention"],
-  ["deepseek_current", "仅 DeepSeek 有当前证据", "DeepSeek 已引用新材料；ZCode 结果仍是历史或数据不足。", "attention"],
-  ["both_insufficient", "双方证据不足 / 历史", "没有可当作当前判断的证据；旧结果只保留作对照。", "historical"],
+  ["redline", "红线已触发", "锁定负向条件已有当前证据支持；需要打开详情核对原文。", "redline"],
+  ["attention", "需要关注", "持仓验证或条件未满足，尚不改变主报告判断。", "attention"],
+  ["daily_due", "日常待复核", "日常层每三天到期；由你手动启动 DeepSeek。", "attention"],
+  ["deep_due", "深度待复核", "深度层每三十天到期；由你选择模型和推理档位。", "attention"],
+  ["data_gap", "数据不足", "当前证据不完整，不能用主报告历史基线补写结论。", "historical"],
+  ["stale_rules", "规则失效", "主报告已更新，等待人工重新锁定规则。", "stale"],
+  ["clear", "暂无预警", "暂无确认红线或到期任务。", "improving"],
 ];
 
 function modelReviewTaskStatus(task) {
-  return ({ verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足" })[task?.status] || "未完成";
+  return ({
+    verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足",
+    met: "条件满足", not_met: "条件未满足", unknown: "数据不足", not_due: "尚未到期",
+  })[task?.status || task?.truth_state] || "未完成";
 }
 
 function modelReviewEvidenceLabel(task) {
@@ -1794,7 +1783,7 @@ function modelReviewEvidenceLabel(task) {
 }
 
 function modelReviewPartitionRank(review) {
-  return ({ conflict: 5, zcode_current: 4, deepseek_current: 3, consensus: 2, both_insufficient: 1 })[fundamentalReviewPartitionKey(review)] || 0;
+  return ({ redline: 7, stale_rules: 6, attention: 5, daily_due: 4, deep_due: 3, data_gap: 2, clear: 1 })[fundamentalReviewPartitionKey(review)] || 0;
 }
 
 function setFundamentalReviewFilter(filter) {
@@ -1815,7 +1804,7 @@ function renderFundamentalReviewPartitions() {
 
   const reviews = state.decisions
     .filter((item) => item.market === "A股")
-    .map((item) => modelReviewForItem(item));
+    .map((item) => fundamentalReviewForItem(item));
   const counts = reviews.reduce((total, review) => {
     const key = fundamentalReviewPartitionKey(review);
     total[key] = (total[key] || 0) + 1;
@@ -1829,9 +1818,9 @@ function renderFundamentalReviewPartitions() {
   eyebrow.className = "eyebrow";
   eyebrow.textContent = "REPORT REVIEW QUEUE";
   const title = document.createElement("h2");
-  title.textContent = "ZCode × DeepSeek 复核分区";
+  title.textContent = "主报告复核队列";
   const note = document.createElement("p");
-  note.textContent = "只比较已保存的两份模型复核。仅引用主报告的旧结果会标为历史，不作为当前结论。";
+  note.textContent = "日常层由 DeepSeek 手动复核；深度层由你每次指定模型和推理档位。两层均只核对锁定规则，不改变买入前决策。";
   copy.append(eyebrow, title, note);
   const total = document.createElement("span");
   total.className = "fundamental-review-partitions-total";
@@ -3788,8 +3777,56 @@ function renderReviewQueueStatusCell(review) {
   const meta = fundamentalReviewPartitions.find(([partition]) => partition === key);
   const badge = document.createElement("strong");
   badge.className = `fundamental-review-badge fundamental-review-badge-${meta?.[3] || "waiting"}`;
-  badge.textContent = meta?.[1] || "双方证据不足 / 历史";
+  badge.textContent = meta?.[1] || "等待复核";
   cell.append(badge);
+  return cell;
+}
+
+function layerReviewLabel(run) {
+  return fundamentalReviewStatusMeta[run?.status]?.label || run?.label || "尚未复核";
+}
+
+function renderReviewLayerCell(review, layer, label) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell review-layer-queue-cell";
+  cell.dataset.label = label;
+  const run = review?.[layer]?.current;
+  if (!run) {
+    cell.textContent = "尚未保存复核结果";
+    return cell;
+  }
+  const heading = document.createElement("strong");
+  heading.textContent = layerReviewLabel(run);
+  const model = document.createElement("p");
+  model.className = "fundamental-review-meta";
+  model.textContent = run.model || run.reviewer || "复核者未记录";
+  const facts = document.createElement("p");
+  facts.className = "fundamental-review-meta muted";
+  facts.textContent = `${shortReviewDate(run.generated_at)} · 当前证据 ${run.current_evidence_count ?? 0} 份`;
+  const note = document.createElement("p");
+  note.className = "fundamental-review-meta muted";
+  note.textContent = run.migrated_seed ? "迁移记录，保留原始证据状态" : (run.variant ? `推理档位：${run.variant}` : "当前层结果");
+  cell.append(heading, model, facts, note);
+  return cell;
+}
+
+function renderReviewScheduleCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell review-schedule-cell";
+  cell.dataset.label = "下次到期";
+  for (const [layer, label] of [["daily", "日常"], ["deep", "深度"]]) {
+    const row = document.createElement("p");
+    row.className = "fundamental-review-meta";
+    row.textContent = `${label}：${shortReviewDate(review?.[layer]?.due_at)}`;
+    cell.append(row);
+  }
+  const comparison = review?.layer_comparison;
+  if (comparison?.label) {
+    const note = document.createElement("p");
+    note.className = "fundamental-review-meta muted";
+    note.textContent = comparison.label;
+    cell.append(note);
+  }
   return cell;
 }
 
@@ -3831,7 +3868,7 @@ function renderCodexDirectReviewCell(review) {
 }
 
 function renderFundamentalReviewRows(visible) {
-  setTableHeader(["公司 / 代码", "Codex 直接复核", "对照分区", "ZCode 独立复核", "DeepSeek 复核", "对照说明"]);
+  setTableHeader(["公司 / 代码", "当前状态", "日常复核", "深度复核", "下次到期"]);
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
   rendered.forEach((item, index) => {
     const review = modelReviewForItem(item);
@@ -3844,11 +3881,10 @@ function renderFundamentalReviewRows(visible) {
     tr.append(renderIdentityCell(item));
 
     tr.append(
-      renderCodexDirectReviewCell(fundamentalReviewForItem(item)),
       renderReviewQueueStatusCell(review),
-      renderModelReviewCell(review?.zcode, "ZCode 独立复核"),
-      renderModelReviewCell(review?.deepseek, "DeepSeek 复核"),
-      renderReportReviewAlertCell(review),
+      renderReviewLayerCell(review, "daily", "日常复核"),
+      renderReviewLayerCell(review, "deep", "深度复核"),
+      renderReviewScheduleCell(review),
     );
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
@@ -3864,7 +3900,7 @@ function renderFundamentalReviewRows(visible) {
     els.loadMoreRows.hidden = remaining === 0;
     els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
   }
-  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · Codex 当前结论与 ZCode / DeepSeek 交叉对照`;
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 日常与深度复核分层展示`;
   if (els.emptyState) els.emptyState.hidden = visible.length > 0;
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
@@ -3890,7 +3926,6 @@ function renderRows() {
     "公司 / 代码",
     "主报告判断",
     "人工价格分区",
-    "报告复核提示",
     "现价",
     "当前状态",
     "技术面（辅助）",
@@ -3920,12 +3955,6 @@ function renderRows() {
     humanReviewTd.className = "human-review-cell";
     humanReviewTd.append(renderHumanReviewMainCell(item, quote));
     tr.append(humanReviewTd);
-
-    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), {
-      compact: true,
-      fundamentalReview: fundamentalReviewForItem(item),
-    });
-    tr.append(reportReviewTd);
 
     const change = formatChange(quote);
     const quoteTd = document.createElement("td");
@@ -4238,14 +4267,123 @@ function appendReviewFacts(parent, rows) {
 }
 
 function renderFundamentalReviewDetail(item) {
-  const comparison = modelReviewForItem(item);
-  if (!comparison) {
+  const reviewLayer = fundamentalReviewForItem(item);
+  if (!reviewLayer) {
     const empty = document.createElement("div");
     empty.className = "card";
-    empty.innerHTML = "<h3>双模型对照快照未生成</h3><p class=\"source-note\">当前没有找到这只股票保存的 ZCode 与 DeepSeek 复核结果。</p>";
+    empty.innerHTML = "<h3>报告复核快照未生成</h3><p class=\"source-note\">当前没有找到该股票的人工锁定规则与复核记录。</p>";
     els.detailBody.append(empty);
     return;
   }
+  const overview = document.createElement("section");
+  overview.className = "card fundamental-review-overview-card";
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "LOCKED RULES · TWO REVIEW LAYERS";
+  const title = document.createElement("h3");
+  title.textContent = "主报告规则与复核结果";
+  const policy = document.createElement("p");
+  policy.className = "fundamental-review-policy";
+  policy.textContent = "人工锁定规则决定核对什么；日常层与深度层只核验新证据，不改写主报告判断、红线或人工价格分区。";
+  overview.append(eyebrow, title, policy);
+  appendReviewFacts(overview, [
+    ["规则版本", `主报告哈希 ${(reviewLayer.main_report?.canonical_sha256 || "").slice(0, 12) || "未记录"}`],
+    ["人工确认", shortReviewDate(reviewLayer.manual?.reviewed_at || reviewLayer.main_report?.reviewed_at)],
+    ["锁定规则", `${reviewLayer.manual?.rule_count ?? reviewLayer.rules?.length ?? 0} 条`],
+    ["当前分区", fundamentalReviewStatusMeta[fundamentalReviewPartitionKey(reviewLayer)]?.label || "等待复核"],
+  ]);
+  els.detailBody.append(overview);
+
+  const renderLayerCard = (layer, titleText, policyText) => {
+    const layerInfo = reviewLayer[layer] || {};
+    const run = layerInfo.current;
+    const card = document.createElement("section");
+    card.className = "card model-review-detail-card";
+    const title = document.createElement("h3");
+    title.textContent = titleText;
+    const note = document.createElement("p");
+    note.className = "fundamental-review-policy";
+    note.textContent = policyText;
+    card.append(title, note);
+    if (!run) {
+      const empty = document.createElement("p");
+      empty.className = "source-note";
+      empty.textContent = "尚未保存该层的复核结果。";
+      card.append(empty);
+      return card;
+    }
+    appendReviewFacts(card, [
+      ["复核者", run.model || run.reviewer || "未记录"],
+      ["复核时间", shortReviewDate(run.generated_at)],
+      ["结果", layerReviewLabel(run)],
+      ["当前证据", `${run.current_evidence_count ?? 0} 份 · ${run.evidence_state === "current" ? "当前" : "历史/不足"}`],
+      ["下次到期", shortReviewDate(layerInfo.due_at || run.due_at)],
+    ]);
+    if (run.variant) {
+      const variant = document.createElement("p");
+      variant.className = "source-note";
+      variant.textContent = `推理档位：${run.variant}`;
+      card.append(variant);
+    }
+    if (run.migrated_seed) {
+      const seed = document.createElement("p");
+      seed.className = "source-note";
+      seed.textContent = "这是迁移的既有结果，保留其原始复核者和证据状态；新的本层运行会原子替换它。";
+      card.append(seed);
+    }
+    const tasks = run.tasks || [];
+    if (tasks.length) {
+      const list = document.createElement("div");
+      list.className = "model-review-task-list";
+      for (const task of tasks) {
+        const taskCard = document.createElement("article");
+        taskCard.className = "model-review-task";
+        const heading = document.createElement("strong");
+        heading.textContent = `${task.scope_label || task.group || "复核事项"} · ${modelReviewTaskStatus(task)}`;
+        const conclusion = document.createElement("p");
+        conclusion.textContent = task.conclusion || task.rule_content || "未保存文字结论。";
+        taskCard.append(heading, conclusion);
+        if (task.missing_codes?.length) {
+          const gap = document.createElement("small");
+          gap.textContent = `数据缺口：${task.missing_codes.join("、")}`;
+          taskCard.append(gap);
+        }
+        list.append(taskCard);
+      }
+      card.append(list);
+    }
+    const history = layerInfo.history || [];
+    if (history.length) {
+      const historyNote = document.createElement("p");
+      historyNote.className = "source-note";
+      historyNote.textContent = `历史记录 ${history.length} 条：${history.map((row) => `${row.model || row.reviewer || "未记录"}（${shortReviewDate(row.generated_at)}）`).join("；")}`;
+      card.append(historyNote);
+    }
+    return card;
+  };
+  els.detailBody.append(
+    renderLayerCard("daily", "日常复核", "由你手动运行固定 DeepSeek；默认每三天到期。当前迁移记录不会伪装成新的 DeepSeek 结果。"),
+    renderLayerCard("deep", "深度复核", "由你手动指定较强模型与推理档位；默认每三十天到期，不固定某一模型。"),
+  );
+  const comparisonCard = document.createElement("section");
+  comparisonCard.className = "card fundamental-review-overview-card";
+  const comparisonTitle = document.createElement("h3");
+  comparisonTitle.textContent = "两层一致性";
+  const comparisonNote = document.createElement("p");
+  comparisonNote.className = "fundamental-review-policy";
+  comparisonNote.textContent = reviewLayer.layer_comparison?.label || "尚无可比较的两层结果。";
+  comparisonCard.append(comparisonTitle, comparisonNote);
+  els.detailBody.append(comparisonCard);
+
+  const redlines = fundamentalReviewRules(reviewLayer, "redline").filter((rule) => rule.schedule_type !== "price");
+  const due = fundamentalReviewRules(reviewLayer).filter((rule) => rule.reviewable && rule.schedule_type !== "price");
+  const improvements = fundamentalReviewRules(reviewLayer, "improvement").filter((rule) => rule.schedule_type !== "price");
+  appendFundamentalReviewSection("锁定风险红线", "只有当前证据支持负向条件时，才会进入红线分区。", redlines);
+  appendFundamentalReviewSection("待核验事项", "财报、经营和事件条件按原报告核验；价格条件仍由人工价格分区处理。", due);
+  appendFundamentalReviewSection("改善与升级条件", "正向条件单独显示，不能和红线混为同一个“触发”。", improvements);
+  return;
+
+  const comparison = modelReviewForItem(item);
   const strictReview = fundamentalReviewForItem(item);
   const codexDirect = strictReview?.manual?.codex_direct;
   if (codexDirect) {
@@ -4551,9 +4689,9 @@ function renderDetail() {
   const detailTabs = document.querySelector(".detail-tabs");
   if (detailTabs) detailTabs.hidden = state.view === "review";
   if (state.view === "review") {
-    const review = modelReviewForItem(item);
-    const alert = reportReviewAlert(review);
-    els.detailSub.textContent = `${alert.label} · ZCode ${shortReviewDate(review?.zcode?.generated_at)} · DeepSeek ${shortReviewDate(review?.deepseek?.generated_at)}`;
+    const review = fundamentalReviewForItem(item);
+    const partition = fundamentalReviewStatusMeta[fundamentalReviewPartitionKey(review)]?.label || "等待复核";
+    els.detailSub.textContent = `${partition} · 日常 ${shortReviewDate(review?.daily?.current?.generated_at)} · 深度 ${shortReviewDate(review?.deep?.current?.generated_at)}`;
     renderFundamentalReviewDetail(item);
     return;
   }
@@ -5161,11 +5299,11 @@ async function loadAutomationStatus() {
 }
 
 async function loadFundamentalReviewSnapshot() {
-  const response = await fetch("./data/model_review_comparison.json", { cache: "no-store" });
-  if (!response.ok) throw new Error("model review comparison snapshot missing");
+  const response = await fetch("./data/main_report_review.json", { cache: "no-store" });
+  if (!response.ok) throw new Error("main report review snapshot missing");
   const snapshot = await response.json();
-  state.modelReviewComparisonSnapshot = snapshot;
-  state.modelReviewComparisons = new Map(
+  state.fundamentalReviewSnapshot = snapshot;
+  state.fundamentalReviews = new Map(
     (snapshot.reviews || [])
       .filter((item) => item?.ticker)
       .map((item) => [item.ticker, item]),
@@ -5238,9 +5376,9 @@ async function loadDashboard() {
     state.automationStatus = null;
   }
   if (fundamentalReviewResult.status === "rejected") {
-    console.warn("model review comparison snapshot failed", fundamentalReviewResult.reason);
-    state.modelReviewComparisonSnapshot = null;
-    state.modelReviewComparisons = new Map();
+    console.warn("main report review snapshot failed", fundamentalReviewResult.reason);
+    state.fundamentalReviewSnapshot = null;
+    state.fundamentalReviews = new Map();
     updateFundamentalReviewControls();
   }
 
