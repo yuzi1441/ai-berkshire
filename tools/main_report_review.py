@@ -50,6 +50,13 @@ MISSING_CODES = {
     "no_official_source",
     "no_event_confirmation",
 }
+PROTOCOL_FINDING_CATEGORIES = {
+    "evidence_gap_pattern",
+    "source_access_issue",
+    "measurement_mapping_issue",
+    "rule_semantic_ambiguity",
+    "output_schema_issue",
+}
 TEXT_EVIDENCE_SUFFIXES = {".md", ".txt"}
 OFFICIAL_TITLE_TOKENS = (
     "年度报告",
@@ -65,6 +72,7 @@ OFFICIAL_TITLE_TOKENS = (
     "回购",
     "监管",
 )
+FORMAL_FINANCIAL_REPORT_TOKENS = ("年度报告", "半年度报告", "季度报告")
 METRIC_PATTERNS: tuple[tuple[str, str], ...] = (
     ("毛利率", r"毛利率|毛利"),
     ("经营现金流", r"经营现金流|经营活动现金流|CFO"),
@@ -87,6 +95,24 @@ METRIC_PATTERNS: tuple[tuple[str, str], ...] = (
 NEGATIVE_MARKERS = re.compile(
     r"红线|风险|失效|卖出|减仓|清仓|回避|跌破|低于|小于|恶化|下滑|下降|"
     r"不改善|未改善|无法|违约|减值|事故|处罚|造假|爆雷|暂停|推迟|低迷|亏损",
+    re.I,
+)
+# A rule can mention a negative word while still being a *positive* gate, for
+# example "经营现金流不继续恶化后才可买入".  Treating every occurrence of
+# "恶化" or "下降" as a sell-side red line was the source of false alerts in
+# the original coarse `risk` task.  A red line needs an explicit adverse
+# outcome; everything else remains a confirmation/monitoring condition.
+ADVERSE_OUTCOME_MARKERS = re.compile(
+    r"(?:红线|失效|清仓|减仓|卖出|回避|暂停(?:买入|加仓)?|退出|重审|"
+    r"维持(?:回避|减仓|卖出)|(?:为|是).*?(?:减仓|回避|卖出)信号)",
+    re.I,
+)
+RISK_MONITORING_MARKERS = re.compile(
+    r"(?:核对|跟踪|监测|关注).{0,24}(?:风险|治理|商誉|问询|合规|处罚)",
+    re.I,
+)
+NEGATED_REDLINE_MARKERS = re.compile(
+    r"(?:所有|既有|相关)?(?:卖出|风险)?红线(?:均)?未触发",
     re.I,
 )
 EVENT_MARKERS = re.compile(
@@ -201,7 +227,14 @@ def split_rule_clauses(text: str) -> list[str]:
 
 
 def relation_for(text: str) -> str:
-    if re.search(r"任一|任意|之一|或者|或", text):
+    has_disjunction = bool(re.search(r"任一|任意|之一|或者|或", text))
+    has_conjunction = bool(re.search(r"且|同时|并且|并需|并至少|必须|以及", text))
+    # A flat all_of/any_of field cannot faithfully encode a nested expression
+    # such as "价格满足且基本面确认，或另一项条件".  `any_of` would let one
+    # fragment pass the entire rule.  Use all_of for the mixed case until the
+    # locked rule is manually split into truly atomic clauses: it fails closed
+    # and never fabricates a positive review result.
+    if has_disjunction and not has_conjunction:
         return "any_of"
     return "all_of"
 
@@ -274,6 +307,29 @@ def locked_group(task: dict[str, Any], clause: str) -> tuple[str, str]:
     if NEGATIVE_MARKERS.search(clause):
         return "redline", "negative"
     return "improvement", "positive"
+
+
+def semantic_group_for_rule(rule: dict[str, Any]) -> str:
+    """Return the display/evaluation group without rewriting the locked rule.
+
+    ``group`` is retained verbatim for auditability and stable rule IDs.  Some
+    legacy ``risk`` tasks, however, mixed an adverse red line with the positive
+    conditions needed before buying or upgrading.  Only a condition with an
+    explicit adverse outcome is a red line.  A risk item that merely asks for
+    continued monitoring is shown as a holding verification; all other such
+    clauses are operating confirmation conditions.
+    """
+    group = str(rule.get("group") or "")
+    if group != "redline":
+        return group if group in RULE_GROUPS else "holder"
+    condition = compact_text(rule.get("condition"))
+    if NEGATED_REDLINE_MARKERS.search(condition):
+        return "improvement"
+    if ADVERSE_OUTCOME_MARKERS.search(condition):
+        return "redline"
+    if RISK_MONITORING_MARKERS.search(condition):
+        return "holder"
+    return "improvement"
 
 
 def rule_from_clause(
@@ -425,8 +481,8 @@ def build_rule_package(
             "active_rule_count": len(active_rules),
             "reviewable_rule_count": sum(rule.get("reviewable") is True for rule in active_rules),
             "price_rule_count": sum(rule.get("schedule_type") == "price" for rule in active_rules),
-            "redline_count": sum(rule.get("group") == "redline" for rule in active_rules),
-            "improvement_count": sum(rule.get("group") == "improvement" for rule in active_rules),
+            "redline_count": sum(semantic_group_for_rule(rule) == "redline" for rule in active_rules),
+            "improvement_count": sum(semantic_group_for_rule(rule) == "improvement" for rule in active_rules),
             "pending_redline_candidate_count": len(audit_candidates),
         },
     }
@@ -498,6 +554,11 @@ def report_baseline_date(package: dict[str, Any]) -> str | None:
     return extract_document_date(path, "") or str((package.get("main_report") or {}).get("reviewed_at") or "")[:10] or None
 
 
+def is_post_baseline_evidence(document_date: str | None, baseline: str | None) -> bool:
+    """Only evidence strictly newer than the locked main report is current."""
+    return bool(document_date and baseline and document_date > baseline)
+
+
 def evidence_candidate_paths(repo_root: Path, package: dict[str, Any]) -> list[Path]:
     report = repo_root / str((package.get("main_report") or {}).get("path") or "")
     if not report.is_file():
@@ -551,6 +612,7 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
     can be passed to the new verifier without being extracted a second time.
     """
     ticker = str(package.get("ticker") or "")
+    baseline = report_baseline_date(package)
     zcode = load_zcode_package(repo_root, ticker)
     if not isinstance(zcode, dict) or (zcode.get("model_review") or {}).get("status") != "completed":
         return []
@@ -567,9 +629,12 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
         raw_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
         canonical_hash = canonical_file_sha256(source_path)
         raw = source_path.read_text(encoding="utf-8", errors="replace")
+        document_date = extract_document_date(source_path, raw)
+        if not is_post_baseline_evidence(document_date, baseline):
+            continue
         source_catalog[str(row.get("document_id") or "")] = {
             "path": relative,
-            "document_date": extract_document_date(source_path, raw),
+            "document_date": document_date,
             "canonical_sha256": canonical_hash,
             "recorded_hash_match": not recorded_hash or recorded_hash in {raw_hash, canonical_hash},
             "content": raw,
@@ -665,13 +730,25 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
         is_main = relative == str((package.get("main_report") or {}).get("path") or "")
         document_date = extract_document_date(path, raw)
         if relative in manifest_roles:
-            role = manifest_roles[relative]
+            # The historical ZCode manifest predates the versioned-rule
+            # protocol, so its `local_current_evidence` label is only a hint.
+            # A file from before the locked report must never time-travel into
+            # a current verdict.
+            manifest_role = manifest_roles[relative]
+            if manifest_role == "local_current_evidence":
+                role = (
+                    "local_current_evidence"
+                    if is_post_baseline_evidence(document_date, baseline)
+                    else "local_supporting_evidence"
+                )
+            else:
+                role = manifest_role
         elif is_main:
             role = "main_report_reference"
         else:
             role = (
                 "local_current_evidence"
-                if document_date and baseline and document_date > baseline
+                if is_post_baseline_evidence(document_date, baseline)
                 else "local_supporting_evidence"
             )
         if role == "main_report_reference":
@@ -718,6 +795,7 @@ def _download_official_pdf(url: str) -> tuple[str, str, int]:
 def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 120) -> list[dict[str, Any]]:
     ticker = str(package.get("ticker") or "")
     company = str(package.get("company") or "")
+    baseline = report_baseline_date(package)
     rows = sentiment_snapshot.fetch_cninfo_company_news(
         {"company": company, "ticker": ticker, "market": "A股"},
         display_name=company,
@@ -726,18 +804,30 @@ def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 1
         news_limit=100,
         retrieval_window_type="main_report_incremental_review",
     )
-    selected = [
+    candidates = [
         row
         for row in rows
         if any(token in str(row.get("title") or "") for token in OFFICIAL_TITLE_TOKENS)
-    ][:3]
+    ]
+    # A formal filing is the primary source for current operating facts.  Do
+    # not let a same-day project, buyback, or property-disposal notice crowd it
+    # out merely because it was returned first by the announcements endpoint.
+    formal_reports = [
+        row
+        for row in candidates
+        if any(token in str(row.get("title") or "") for token in FORMAL_FINANCIAL_REPORT_TOKENS)
+        and "摘要" not in str(row.get("title") or "")
+    ]
+    selected = (formal_reports + [row for row in candidates if row not in formal_reports])[:3]
     documents: list[dict[str, Any]] = []
     for row in selected:
+        published = str(row.get("published_at") or "")
+        if not is_post_baseline_evidence(published[:10] or None, baseline):
+            continue
         try:
             content, sha256, page_count = _download_official_pdf(str(row.get("url") or ""))
         except Exception:
             continue
-        published = str(row.get("published_at") or "")
         documents.append(
             {
                 "document_id": f"official_{len(documents) + 1}",
@@ -778,7 +868,7 @@ def input_fingerprint(package: dict[str, Any], documents: list[dict[str, Any]]) 
 
 
 def effect_for_rule(rule: dict[str, Any], truth_state: str) -> str:
-    group = rule.get("group")
+    group = semantic_group_for_rule(rule)
     if truth_state in {"unknown", "not_due"}:
         return "neutral"
     if group == "redline":
@@ -788,6 +878,11 @@ def effect_for_rule(rule: dict[str, Any], truth_state: str) -> str:
     if group == "holder":
         return "warning" if truth_state == "not_met" else "neutral"
     return "positive" if truth_state == "met" else "neutral"
+
+
+def semantic_relation_for_rule(rule: dict[str, Any]) -> str:
+    """Re-evaluate legacy relation metadata from the locked condition text."""
+    return relation_for(compact_text(rule.get("condition")))
 
 
 def review_rules_with_model(
@@ -806,7 +901,6 @@ def review_rules_with_model(
                 "group",
                 "polarity",
                 "condition",
-                "relation",
                 "metrics",
                 "operator",
                 "threshold",
@@ -816,6 +910,10 @@ def review_rules_with_model(
         }
         for rule in active_rules
     }
+    for rule_id, task in task_catalog.items():
+        task["relation"] = semantic_relation_for_rule(
+            next(rule for rule in active_rules if rule["rule_id"] == rule_id)
+        )
     document_catalog = {
         document["document_id"]: {
             "path": document.get("path"),
@@ -849,6 +947,15 @@ def review_rules_with_model(
                     }
                 ],
                 "rule_update": "must be manual_only",
+                "protocol_findings": [
+                    {
+                        "category": "only evidence_gap_pattern/source_access_issue/measurement_mapping_issue/rule_semantic_ambiguity/output_schema_issue",
+                        "observation": "仅记录本次已观察到的流程问题，不提出规则、阈值或投资动作修改",
+                        "rule_ids": "仅 task_catalog 内的 id，最多3个",
+                        "evidence_document_ids": "仅 document_catalog 内的 id，最多3个",
+                        "review_question": "交给后续规范汇总人工审阅的问题，最多180字",
+                    }
+                ],
             },
             "task_catalog": task_catalog,
             "document_catalog": document_catalog,
@@ -979,12 +1086,39 @@ def review_rules_with_model(
                 },
             )
         )
+    protocol_findings = []
+    for raw in (response.get("protocol_findings") or [])[:3]:
+        if not isinstance(raw, dict):
+            continue
+        category = str(raw.get("category") or "")
+        observation = compact_text(raw.get("observation"))[:280]
+        question = compact_text(raw.get("review_question"))[:180]
+        rule_ids = [str(value) for value in (raw.get("rule_ids") or [])[:3]]
+        evidence_ids = [str(value) for value in (raw.get("evidence_document_ids") or [])[:3]]
+        if (
+            category not in PROTOCOL_FINDING_CATEGORIES
+            or not observation
+            or not question
+            or any(value not in task_catalog for value in rule_ids)
+            or any(value not in document_catalog for value in evidence_ids)
+        ):
+            continue
+        protocol_findings.append(
+            {
+                "category": category,
+                "observation": observation,
+                "rule_ids": rule_ids,
+                "evidence_document_ids": evidence_ids,
+                "review_question": question,
+            }
+        )
     return {
         "status": "completed",
         "rule_update": "manual_only",
         "model": config.model,
         "reasoning": reasoning,
         "rules": results,
+        "protocol_findings": protocol_findings,
     }
 
 
@@ -1089,6 +1223,7 @@ def result_payload(
             default=None,
         ) or None,
         "model_review": model_review,
+        "protocol_findings": (model_review or {}).get("protocol_findings") or [],
         "summary": summary,
     }
 
@@ -1203,6 +1338,110 @@ def run_incremental(
                     atomic_write_json(output_dir / f"{ticker}.json", error_payload)
                 print(f"{ticker}: error: {exc}", flush=True)
     return {"generated_at": now_iso(), "counts": counts, "errors": errors}
+
+
+def protocol_findings_snapshot(output_dir: Path) -> dict[str, Any]:
+    """Aggregate observed process issues without changing the active protocol."""
+    findings: list[dict[str, Any]] = []
+    inputs: list[dict[str, str]] = []
+    for path in sorted(output_dir.glob("*.json")):
+        payload = load_json(path, {})
+        if not isinstance(payload, dict) or not payload.get("ticker"):
+            continue
+        inputs.append({"path": path.name, "sha256": canonical_file_sha256(path)})
+        ticker = str(payload.get("ticker"))
+        summary = payload.get("summary") or {}
+        rule_state = str(payload.get("rule_state") or (payload.get("main_report") or {}).get("rule_state") or "")
+        if rule_state == "stale" or summary.get("status") in {"stale_rules", "rule_stale"}:
+            findings.append({"category": "rule_version_stale", "ticker": ticker, "observation": "主报告版本已变化，旧规则已停止参与当前复核。", "review_question": "新版主报告锁定流程是否完整保留了哈希、行号和旧规则只读历史？"})
+        if summary.get("status") in {"waiting_evidence", "data_insufficient", "waiting_official_disclosure"}:
+            findings.append({"category": "evidence_gap_pattern", "ticker": ticker, "observation": "本轮没有主报告基线之后的当前证据，模型未运行。", "review_question": "该类公司应补充哪一种正式披露或本地跟踪资料，才能在下次复核？"})
+        for finding in payload.get("protocol_findings") or []:
+            if not isinstance(finding, dict):
+                continue
+            category = str(finding.get("category") or "")
+            if category not in PROTOCOL_FINDING_CATEGORIES:
+                continue
+            findings.append({"category": category, "ticker": ticker, **finding})
+    by_category: dict[str, dict[str, Any]] = {}
+    for finding in findings:
+        category = str(finding["category"])
+        row = by_category.setdefault(category, {"category": category, "count": 0, "tickers": [], "examples": []})
+        row["count"] += 1
+        if finding["ticker"] not in row["tickers"]:
+            row["tickers"].append(finding["ticker"])
+        if len(row["examples"]) < 5:
+            row["examples"].append({key: finding.get(key) for key in ("ticker", "observation", "review_question", "rule_ids", "evidence_document_ids") if finding.get(key) not in (None, [], "")})
+    return {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "status": "candidate_review_only",
+        "policy": "本文件只汇总规范改进候选；不会自动修改主报告规则、红线、阈值、价格分区或执行中的规范。",
+        "input_fingerprint": canonical_json_sha256(inputs),
+        "input_files": inputs,
+        "finding_count": len(findings),
+        "categories": sorted(by_category.values(), key=lambda row: (-row["count"], row["category"])),
+    }
+
+
+def codex_direct_manual_snapshot(source_dir: Path) -> dict[str, Any]:
+    """Publish a compact, explicitly labelled archive of Codex direct reviews.
+
+    This is a human/Codex evidence layer.  It is deliberately not converted to
+    a DeepSeek result and never replaces the manually locked report rules.
+    """
+    reviews = []
+    inputs = []
+    status_counts: dict[str, int] = {}
+    for path in sorted(source_dir.glob("*.json")):
+        if path.name == "protocol-findings-current.json":
+            continue
+        payload = load_json(path, {})
+        reviewer = payload.get("reviewer") if isinstance(payload, dict) else {}
+        if not isinstance(reviewer, dict) or reviewer.get("type") != "codex_direct_manual":
+            continue
+        ticker = str(payload.get("ticker") or "")
+        summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        if not ticker or not summary:
+            continue
+        evidence = [row for row in (payload.get("evidence") or []) if isinstance(row, dict)]
+        dated_evidence = sorted(
+            (str(row.get("published_at") or row.get("document_date") or "") for row in evidence if row.get("published_at") or row.get("document_date")),
+            reverse=True,
+        )
+        status = str(summary.get("status") or "data_insufficient")
+        status_counts[status] = status_counts.get(status, 0) + 1
+        inputs.append({"path": path.name, "sha256": canonical_file_sha256(path)})
+        reviews.append(
+            {
+                "ticker": ticker,
+                "company": payload.get("company"),
+                "reviewed_at": payload.get("reviewed_at"),
+                "reviewer": "Codex 直接复核（未调用模型）",
+                "rule_state": (payload.get("main_report") or {}).get("rule_state"),
+                "status": status,
+                "label": summary.get("label") or status,
+                "redline_count": len(summary.get("redline_rule_ids") or []),
+                "warning_count": len(summary.get("warning_rule_ids") or []),
+                "positive_count": len(summary.get("positive_rule_ids") or []),
+                "data_gaps": summary.get("data_gaps") or [],
+                "next_evidence": summary.get("next_evidence"),
+                "evidence_count": len(evidence),
+                "latest_evidence_date": dated_evidence[0] if dated_evidence else None,
+                "source_statement": reviewer.get("statement"),
+                "decision_boundary": summary.get("decision_boundary"),
+            }
+        )
+    return {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "source": "Codex direct manual reviews; not a DeepSeek model result and not a replacement for human-locked rules.",
+        "input_fingerprint": canonical_json_sha256(inputs),
+        "input_files": inputs,
+        "stock_count": len(reviews),
+        "status_counts": status_counts,
+        "reviews": reviews,
+    }
 
 
 def comparison_snapshot(repo_root: Path) -> dict[str, Any]:
@@ -1369,6 +1608,8 @@ def compact_model_review_task(
     task: dict[str, Any],
     rule: dict[str, Any] | None,
     documents: dict[str, dict[str, Any]],
+    *,
+    baseline_date: str | None = None,
 ) -> dict[str, Any]:
     """Expose one saved model task while proving whether its evidence is current.
 
@@ -1376,12 +1617,19 @@ def compact_model_review_task(
     verification.  This deliberately does not reinterpret either model's rule.
     """
     evidence_ids = [str(value) for value in task.get("evidence_document_ids") or [] if value]
-    roles = sorted(
-        {
-            str((documents.get(document_id) or {}).get("source_role") or "unknown")
-            for document_id in evidence_ids
-        }
-    )
+    def effective_source_role(document: dict[str, Any]) -> str:
+        role = str(document.get("source_role") or "unknown")
+        if role != "local_current_evidence" or not baseline_date:
+            return role
+        document_date = str(document.get("document_date") or "")[:10] or None
+        if not document_date:
+            document_date = extract_document_date(Path(str(document.get("path") or "")), "")
+        # The legacy review files can label an older local note as current.
+        # Keep it as historical context in the comparison until it is proven
+        # newer than the locked main report.
+        return role if is_post_baseline_evidence(document_date, baseline_date) else "local_supporting_evidence"
+
+    roles = sorted({effective_source_role(documents.get(document_id) or {}) for document_id in evidence_ids})
     evidence_quality = "current" if any(role in CURRENT_EVIDENCE_ROLES for role in roles) else (
         "historical" if evidence_ids else "missing"
     )
@@ -1405,6 +1653,15 @@ def compact_model_review_task(
         "evidence_quality": evidence_quality,
         "evidence_document_ids": evidence_ids,
         "evidence_roles": roles,
+        "evidence_dates": sorted(
+            {
+                str((documents.get(document_id) or {}).get("document_date") or "")[:10]
+                or extract_document_date(Path(str((documents.get(document_id) or {}).get("path") or "")), "")
+                or ""
+                for document_id in evidence_ids
+            }
+            - {""}
+        ),
         "evidence_lines": evidence_lines[:4],
         "missing_codes": task.get("missing_codes") or [],
     }
@@ -1430,7 +1687,13 @@ def model_review_comparison_partition(zcode_tasks: list[dict[str, Any]], deepsee
     return "both_insufficient"
 
 
-def _model_review_packet(payload: dict[str, Any], *, model_name: str, rule_key: str) -> dict[str, Any]:
+def _model_review_packet(
+    payload: dict[str, Any],
+    *,
+    model_name: str,
+    rule_key: str,
+    baseline_date: str | None = None,
+) -> dict[str, Any]:
     review = payload.get("model_review") if isinstance(payload, dict) else {}
     review = review if isinstance(review, dict) else {}
     documents = {
@@ -1449,7 +1712,12 @@ def _model_review_packet(payload: dict[str, Any], *, model_name: str, rule_key: 
         "scope": payload.get("scope") or "",
         "run_status": review.get("status") or "missing",
         "tasks": [
-            compact_model_review_task(task, rules.get(str(task.get("task_id"))), documents)
+            compact_model_review_task(
+                task,
+                rules.get(str(task.get("task_id"))),
+                documents,
+                baseline_date=baseline_date,
+            )
             for task in review.get("tasks") or []
             if isinstance(task, dict)
         ],
@@ -1485,6 +1753,11 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
     reviews = []
     inputs = []
     counts: dict[str, int] = {}
+    rules_dir = repo_root / "data" / "investment-dashboard" / "main-report-review-rules"
+    baselines = {
+        package.get("ticker"): report_baseline_date(package)
+        for package in load_rule_packages(rules_dir)
+    } if rules_dir.is_dir() else {}
     for ticker in tickers:
         deepseek_path = deepseek_paths.get(ticker)
         zcode_path = zcode_paths.get(ticker)
@@ -1493,8 +1766,19 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
         for path in (deepseek_path, zcode_path):
             if path:
                 inputs.append({"path": str(path.relative_to(repo_root)), "sha256": canonical_file_sha256(path)})
-        zcode = _model_review_packet(zcode_payload, model_name="ZCode", rule_key="zcode_tasks")
-        deepseek = _model_review_packet(deepseek_payload, model_name="DeepSeek", rule_key="fixed_tasks")
+        baseline_date = baselines.get(ticker)
+        zcode = _model_review_packet(
+            zcode_payload,
+            model_name="ZCode",
+            rule_key="zcode_tasks",
+            baseline_date=baseline_date,
+        )
+        deepseek = _model_review_packet(
+            deepseek_payload,
+            model_name="DeepSeek",
+            rule_key="fixed_tasks",
+            baseline_date=baseline_date,
+        )
         partition = model_review_comparison_partition(zcode["tasks"], deepseek["tasks"])
         counts[partition] = counts.get(partition, 0) + 1
         reviews.append(
@@ -1528,6 +1812,12 @@ def public_review_snapshot(
     generated_at = now_iso()
     next_check_at = (datetime.now().astimezone() + timedelta(days=3)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
+    codex_archive = load_json(rules_dir.parent / "codex_direct_manual_review.json", {})
+    codex_by_ticker = {
+        str(row.get("ticker")): row
+        for row in (codex_archive.get("reviews") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
     rows = []
     status_counts: dict[str, int] = {}
     for ticker, package in sorted(rules_by_ticker.items()):
@@ -1553,23 +1843,6 @@ def public_review_snapshot(
             "no_rules": "暂无可复核经营规则",
             "waiting_evidence": "等待新证据",
         }[default_status]
-        summary = result.get("summary") or {
-            "status": default_status,
-            "label": default_label,
-            "redline_count": 0,
-            "warning_count": 0,
-            "positive_count": 0,
-            "unknown_count": reviewable_rule_count,
-            "missing_requirements": sorted(
-                {
-                    requirement
-                    for rule in package.get("active_rules") or []
-                    if rule.get("reviewable") is True
-                    for requirement in rule.get("evidence_requirement") or []
-                }
-            ),
-        }
-        status = str(summary.get("status") or "waiting_evidence")
         results_by_id = {
             row.get("rule_id"): row
             for row in ((result.get("model_review") or {}).get("rules") or [])
@@ -1577,12 +1850,49 @@ def public_review_snapshot(
         }
         public_rules = []
         for rule in package.get("active_rules") or []:
+            saved_result = results_by_id.get(rule.get("rule_id"))
+            # Older saved results used the coarse raw group.  Recalculate only
+            # their display effect so a positive confirmation cannot remain a
+            # false "redline hit" after this semantic fix.
+            if isinstance(saved_result, dict):
+                saved_result = {
+                    **saved_result,
+                    "review_effect": effect_for_rule(
+                        rule,
+                        str(saved_result.get("truth_state") or "unknown"),
+                    ),
+                }
             public_rules.append(
                 {
                     **rule,
-                    "result": results_by_id.get(rule.get("rule_id")),
+                    "semantic_group": semantic_group_for_rule(rule),
+                    "semantic_relation": semantic_relation_for_rule(rule),
+                    "result": saved_result,
                 }
             )
+        current_results = [rule["result"] for rule in public_rules if isinstance(rule.get("result"), dict)]
+        if current_results and isinstance((result.get("model_review") or {}), dict) and (
+            result.get("model_review") or {}
+        ).get("status") == "completed":
+            summary = aggregate_review_status(package, current_results)
+        else:
+            summary = result.get("summary") or {
+                "status": default_status,
+                "label": default_label,
+                "redline_count": 0,
+                "warning_count": 0,
+                "positive_count": 0,
+                "unknown_count": reviewable_rule_count,
+                "missing_requirements": sorted(
+                    {
+                        requirement
+                        for rule in package.get("active_rules") or []
+                        if rule.get("reviewable") is True
+                        for requirement in rule.get("evidence_requirement") or []
+                    }
+                ),
+            }
+        status = str(summary.get("status") or "waiting_evidence")
         manual_status = (
             "stale"
             if package.get("rule_state") == "stale"
@@ -1648,6 +1958,7 @@ def public_review_snapshot(
                     "reviewable_rule_count": reviewable_rule_count,
                     "audit_candidate_count": len(package.get("audit_candidates") or []),
                     "source": "人工主报告裁决与锁定规则",
+                    "codex_direct": codex_by_ticker.get(ticker),
                 },
                 "routine": {
                     "status": routine_status,
@@ -1675,7 +1986,7 @@ def public_review_snapshot(
         "schema_version": 4,
         "generated_at": generated_at,
         "next_check_at": next_check_at,
-        "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
+        "source": "human_locked_rules + Codex_direct_manual_review + saved_deepseek_daily_review + strict_incremental_evidence",
         "status_counts": status_counts,
         "stock_count": len(rows),
         "comparison": comparison.get("summary") if isinstance(comparison, dict) else None,
@@ -1697,6 +2008,7 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--write-comparison", action="store_true")
     parser.add_argument("--write-model-comparison-snapshot", action="store_true")
+    parser.add_argument("--write-protocol-findings", action="store_true")
     parser.add_argument("--write-public-snapshot", action="store_true")
     parser.add_argument("--snapshot-only", action="store_true")
     args = parser.parse_args()
@@ -1744,6 +2056,8 @@ def main() -> int:
         model_snapshot = model_review_comparison_snapshot(repo_root)
         atomic_write_json(repo_root / "data" / "investment-dashboard" / "model_review_comparison.json", model_snapshot)
         atomic_write_json(repo_root / "site" / "data" / "model_review_comparison.json", model_snapshot)
+    if args.write_protocol_findings and not args.dry_run:
+        atomic_write_json(output_dir / "protocol-findings-current.json", protocol_findings_snapshot(output_dir))
     print(json.dumps(run_status, ensure_ascii=False, indent=2))
     return 1 if run_status["counts"]["error"] else 0
 

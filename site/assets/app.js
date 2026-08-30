@@ -1860,7 +1860,7 @@ function renderFundamentalReviewPartitions() {
 }
 
 function fundamentalReviewRules(review, group = null) {
-  return (review?.rules || []).filter((rule) => !group || rule.group === group);
+  return (review?.rules || []).filter((rule) => !group || (rule.semantic_group || rule.group) === group);
 }
 
 function activeReviewResultRules(review, effect) {
@@ -3672,6 +3672,13 @@ function renderManualReviewCell(review) {
   audit.className = "fundamental-review-meta muted";
   audit.textContent = `${manual.audit_candidate_count ?? review.audit_candidates?.length ?? 0} 条 ZCode 审计候选未启用`;
   cell.append(source, count, reviewed, audit);
+  const direct = manual.codex_direct;
+  if (direct) {
+    const current = document.createElement("p");
+    current.className = "fundamental-review-meta routine-review-warning";
+    current.textContent = `今日 Codex 直接复核：${direct.label || direct.status} · ${direct.evidence_count ?? 0} 份证据`;
+    cell.append(current);
+  }
   return cell;
 }
 
@@ -4089,7 +4096,7 @@ const fundamentalReviewGroupMeta = {
 
 function renderFundamentalReviewRule(rule) {
   const article = document.createElement("article");
-  const groupMeta = fundamentalReviewGroupMeta[rule.group] || fundamentalReviewGroupMeta.holder;
+  const groupMeta = fundamentalReviewGroupMeta[rule.semantic_group || rule.group] || fundamentalReviewGroupMeta.holder;
   article.className = `fundamental-review-rule-card fundamental-review-rule-card-${groupMeta.tone}`;
   const head = document.createElement("div");
   head.className = "fundamental-review-rule-head";
@@ -4107,7 +4114,7 @@ function renderFundamentalReviewRule(rule) {
   meta.className = "fundamental-review-rule-meta";
   const rows = [
     ["指标", (rule.metrics || []).join("、") || "事件 / 定性条件"],
-    ["关系", rule.relation === "any_of" ? "任一满足" : "全部满足"],
+    ["关系", (rule.semantic_relation || rule.relation) === "any_of" ? "任一满足" : "全部满足（保守核验）"],
     ["阈值", [rule.operator, rule.threshold].filter(Boolean).join(" ") || "按主报告原文"],
     ["复核时间", reviewScheduleLabel(rule)],
   ];
@@ -4288,6 +4295,7 @@ function renderFundamentalReviewDetail(item) {
   layers.className = "fundamental-review-layer-grid";
 
   const manual = review.manual || {};
+  const direct = manual.codex_direct || null;
   const manualCard = document.createElement("article");
   manualCard.className = "fundamental-review-layer-card manual-review-card";
   const manualTop = document.createElement("div");
@@ -4301,10 +4309,13 @@ function renderFundamentalReviewDetail(item) {
     ["人工确认", shortReviewDate(manual.reviewed_at || review.main_report?.reviewed_at)],
     ["锁定规则", `${manual.rule_count ?? review.rules?.length ?? 0} 条`],
     ["审计候选", `${manual.audit_candidate_count ?? review.audit_candidates?.length ?? 0} 条未启用`],
+    ["今日 Codex 直接复核", direct ? `${direct.label || direct.status} · ${direct.evidence_count ?? 0} 份证据` : "尚未归档"],
   ]);
   const manualNote = document.createElement("p");
   manualNote.className = "fundamental-review-policy";
-  manualNote.textContent = "只有人工确认的主报告规则在这里生效；价格条件仍由买入前页面的人工价格分区处理。";
+  manualNote.textContent = direct
+    ? `Codex 只核对主报告之后的证据：${direct.source_statement || "未调用模型"}。它不改写人工锁定规则，价格条件仍由买入前页面的人工价格分区处理。`
+    : "只有人工确认的主报告规则在这里生效；价格条件仍由买入前页面的人工价格分区处理。";
   manualCard.prepend(manualTop);
   manualCard.append(manualNote);
 
@@ -4406,7 +4417,9 @@ function renderFundamentalReviewDetail(item) {
   }
 
   const redlines = fundamentalReviewRules(review, "redline").filter((rule) => rule.schedule_type !== "price");
-  const due = fundamentalReviewRules(review).filter((rule) => rule.reviewable && ["holder", "entry"].includes(rule.group));
+  const due = fundamentalReviewRules(review).filter(
+    (rule) => rule.reviewable && ["holder", "entry"].includes(rule.semantic_group || rule.group),
+  );
   const improvements = fundamentalReviewRules(review, "improvement").filter((rule) => rule.schedule_type !== "price");
   appendFundamentalReviewSection("日常红线 / 风险预警", "人工规则给出条件；只有日常层的当前证据满足负向条件时才显示为红线触发。", redlines);
   appendFundamentalReviewSection("日常待核验事项", "按人工锁定的财报、经营或事件条件核验；价格条件仍由人工价格分区处理。", due);

@@ -19,7 +19,7 @@ import re
 import subprocess
 import sys
 import tempfile
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
@@ -33,6 +33,7 @@ if TOOLS_DIR not in sys.path:
 
 import opportunity_review
 import sentiment_snapshot
+from source_hash import canonical_file_sha256, canonical_sha256_text
 
 
 EASTMONEY_URL = "https://datacenter.eastmoney.com/securities/api/data/get"
@@ -41,6 +42,7 @@ ALLOWED_SEMANTIC_STATES = {"not_breached", "warning", "breached", "inconclusive"
 ALLOWED_LOCAL_EVIDENCE_AVAILABILITY = {"verified", "partial", "not_disclosed"}
 OFFICIAL_EVIDENCE_TITLE_TOKENS = ("半年度报告", "年度报告", "季度报告", "投资者关系", "调研", "订单", "中标", "项目", "产业园")
 ALLOWED_TASK_REVIEW_STATUSES = {"verified", "not_triggered", "triggered", "data_insufficient"}
+CURRENT_EVIDENCE_ROLES = {"local_current_evidence", "official_current_evidence"}
 ALLOWED_TASK_MISSING_CODES = {
     "no_current_value",
     "no_comparison",
@@ -52,6 +54,25 @@ ALLOWED_TASK_MISSING_CODES = {
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def extract_document_date(path: Path, content: str = "") -> date | None:
+    """Return an explicit document date without trusting filesystem mtime."""
+    samples = (path.name, content[:2000])
+    for sample in samples:
+        match = re.search(r"(?<!\d)(20\d{2})[-_/年.]?(\d{2})[-_/月.]?(\d{2})(?:日)?(?!\d)", sample)
+        if not match:
+            continue
+        try:
+            return date(*(int(value) for value in match.groups()))
+        except ValueError:
+            continue
+    return None
+
+
+def report_baseline_date(resolution: dict[str, Any]) -> date | None:
+    """Use the dated main report as the evidence baseline, not review mtime."""
+    return extract_document_date(Path(str(resolution.get("report_path") or "")))
 
 
 def curl_bytes(url: str, *, params: dict[str, str] | None = None) -> bytes:
@@ -112,6 +133,13 @@ def normalise_financial_record(row: dict[str, Any]) -> dict[str, Any]:
     eps = number(row.get("EPSJB"))
     per_share_ocf = number(row.get("MGJYXJJE"))
     shares = net_profit / eps if net_profit is not None and eps not in (None, 0) else None
+    # Eastmoney exposes the exact cash-flow statement value.  Multiplying a
+    # rounded per-share amount by an EPS-implied share count can create a fake
+    # source discrepancy, so use the original statement field whenever it is
+    # available and retain the arithmetic estimate only as a fallback.
+    operating_cash_flow = number(row.get("NETCASH_OPERATE_PK"))
+    if operating_cash_flow is None and per_share_ocf is not None and shares is not None:
+        operating_cash_flow = per_share_ocf * shares
     return {
         "period": str(row.get("REPORT_DATE_NAME") or row.get("REPORT_DATE") or ""),
         "report_date": str(row.get("REPORT_DATE") or "")[:10],
@@ -121,7 +149,7 @@ def normalise_financial_record(row: dict[str, Any]) -> dict[str, Any]:
         "deducted_profit": number(row.get("KCFJCXSYJLR")),
         "deducted_profit_yoy": number(row.get("KCFJCXSYJLRTZ")),
         "gross_margin": number(row.get("XSMLL")),
-        "operating_cash_flow": per_share_ocf * shares if per_share_ocf is not None and shares is not None else None,
+        "operating_cash_flow": operating_cash_flow,
         "implied_shares": shares,
         "source": "eastmoney",
     }
@@ -249,7 +277,7 @@ def collect_latest_local_evidence(repo_root: Path) -> list[dict[str, Any]]:
             {
                 "document_id": f"local_{len(documents) + 1}",
                 "path": str(path.relative_to(repo_root)),
-                "sha256": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
+                "sha256": canonical_sha256_text(raw),
                 "content": text,
                 "purpose": "只作为复核证据；不得修改主报告规则。",
             }
@@ -259,7 +287,7 @@ def collect_latest_local_evidence(repo_root: Path) -> list[dict[str, Any]]:
     return documents
 
 
-def extract_pdf_evidence(url: str, *, max_chars: int = 18000) -> tuple[str, str, int]:
+def extract_pdf_evidence(url: str, *, max_chars: int = 120000) -> tuple[str, str, int]:
     """Read an official PDF into a bounded, auditable evidence payload."""
     with tempfile.TemporaryDirectory(prefix="fundamental-review-evidence-") as directory:
         pdf_path = Path(directory) / "official.pdf"
@@ -270,9 +298,45 @@ def extract_pdf_evidence(url: str, *, max_chars: int = 18000) -> tuple[str, str,
     return text[:max_chars], hashlib.sha256(payload).hexdigest(), len(reader.pages)
 
 
+def select_relevant_evidence(
+    content: str,
+    review_tasks: list[dict[str, Any]] | None,
+    *,
+    max_chars: int = 18000,
+) -> str:
+    """Keep task-relevant official passages instead of blindly truncating a PDF."""
+    if not review_tasks:
+        return content[:max_chars]
+    task_text = " ".join(
+        str(value)
+        for task in review_tasks
+        for field in ("content", "metrics", "periods")
+        for value in ([task.get(field)] if not isinstance(task.get(field), list) else task.get(field) or [])
+        if value
+    )
+    keywords = {
+        token
+        for token in re.findall(r"[\u4e00-\u9fffA-Za-z0-9%]{2,12}", task_text)
+        if len(token) <= 12
+    }
+    keywords.update({
+        "营业收入", "扣非", "毛利率", "经营现金流", "经营活动产生的现金流量",
+        "订单", "回款", "利润率",
+    })
+    lines = content.splitlines()
+    selected_indexes: set[int] = set(range(min(30, len(lines))))
+    for index, line in enumerate(lines):
+        if any(keyword in line for keyword in keywords):
+            selected_indexes.update(range(max(0, index - 2), min(len(lines), index + 3)))
+    selected = [f"L{index + 1}: {lines[index]}" for index in sorted(selected_indexes)]
+    return "\n".join(selected)[:max_chars]
+
+
 def collect_recent_official_evidence(
     ticker: str,
     *,
+    company: str | None = None,
+    review_tasks: list[dict[str, Any]] | None = None,
     cutoff: datetime | None = None,
     lookback_days: int = 60,
 ) -> list[dict[str, Any]]:
@@ -282,9 +346,10 @@ def collect_recent_official_evidence(
     remains locked unless the user manually updates it through a separate action.
     """
     cutoff = cutoff or datetime.now().astimezone()
+    company = company or "东方电子"
     rows = sentiment_snapshot.fetch_cninfo_company_news(
-        {"company": "东方电子", "ticker": ticker, "market": "A股"},
-        display_name="东方电子",
+        {"company": company, "ticker": ticker, "market": "A股"},
+        display_name=company,
         cutoff=cutoff,
         lookback_days=lookback_days,
         news_limit=100,
@@ -298,6 +363,7 @@ def collect_recent_official_evidence(
     for row in selected:
         try:
             content, sha256, page_count = extract_pdf_evidence(str(row["url"]))
+            content = select_relevant_evidence(content, review_tasks)
         except Exception as exc:
             # A download failure is a source gap, not evidence against the rule.
             documents.append(
@@ -307,6 +373,7 @@ def collect_recent_official_evidence(
                     "url": row["url"],
                     "published_at": row.get("published_at"),
                     "source": "巨潮资讯官方披露",
+                    "source_role": "official_current_evidence",
                     "content": "",
                     "read_error": str(exc),
                     "purpose": "只作为复核证据；不得修改主报告规则。",
@@ -320,6 +387,7 @@ def collect_recent_official_evidence(
                 "url": row["url"],
                 "published_at": row.get("published_at"),
                 "source": "巨潮资讯官方披露",
+                "source_role": "official_current_evidence",
                 "sha256": sha256,
                 "page_count": page_count,
                 "content": content,
@@ -338,6 +406,7 @@ def collect_local_stock_evidence(
     if not report_path.is_file():
         raise RuntimeError(f"主报告不存在：{resolution.get('report_path')}")
     company_dir = report_path.parent
+    baseline_date = report_baseline_date(resolution)
     task_text = " ".join(
         str(task.get(field) or "")
         for task in (resolution.get("judgment") or {}).get("review_tasks", [])
@@ -373,7 +442,12 @@ def collect_local_stock_evidence(
                 if any(keyword in line for keyword in keywords)
             ]
             selected = matched[:240] or [f"L{index + 1}: {line}" for index, line in enumerate(lines[:240])]
-            source_role = "local_current_evidence"
+            document_date = extract_document_date(path, raw)
+            source_role = (
+                "local_current_evidence"
+                if document_date is not None and (baseline_date is None or document_date > baseline_date)
+                else "local_supporting_context"
+            )
         content = "\n".join(
             line if line.startswith("L") else f"L{index + 1}: {line}"
             for index, line in enumerate(selected)
@@ -382,8 +456,10 @@ def collect_local_stock_evidence(
             {
                 "document_id": f"local_{len(documents) + 1}",
                 "path": str(path.relative_to(repo_root)),
-                "sha256": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
+                "sha256": canonical_sha256_text(raw),
                 "source_role": source_role,
+                "document_date": extract_document_date(path, raw).isoformat()
+                if extract_document_date(path, raw) is not None else None,
                 "content": content,
                 "purpose": "只作为复核证据；不得修改主报告规则。",
             }
@@ -412,21 +488,23 @@ def review_locked_tasks_with_local_model(
     }
     document_catalog = {
         document["document_id"]: {
-            "path": document["path"],
-            "source_role": document["source_role"],
-            "content": document["content"],
+            key: document.get(key)
+            for key in ("path", "title", "url", "published_at", "document_date", "source_role", "content")
         }
         for document in documents
     }
     system = (
         "你是股票主报告复核证据核验员。输入的 review_tasks 是已经人工锁定的规则，"
         "你无权新增、删除、修改、放宽或重解释任何任务、阈值、价格带或条件。"
-        "只能依据 document_catalog 中的本地文档进行核验，不得使用外部知识。"
+        "只能依据 document_catalog 中已经提供的本地或官方文档进行核验，不得使用外部知识，"
+        "也不得声称自己另行联网查询。"
         "主报告 reference（source_role=main_report_reference）只能作为报告中已写出的基线："
         "其中记载的历史财务、基线价格与报告日行情一律不是当前状态证据，"
         "不得据其判 verified/not_triggered/triggered，也不得把报告自己写的结论当作新验证。"
         "凡条件需要当前数值、对比期或事件确认（现价、报告期后财务、公告事件），"
-        "只有 source_role=local_current_evidence 的文档中存在主报告基线之后的记录才可判定；"
+        "只有 source_role=local_current_evidence 或 official_current_evidence 的文档中"
+        "存在主报告基线之后的记录才可判定；local_supporting_context 也不能作为当前结论证据。"
+        "每个非 data_insufficient 结论必须逐字引用至少一条当前证据；"
         "否则必须使用 data_insufficient，并用 missing_codes 标注缺口"
         "（no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation）。"
         "不得给投资、交易或仓位建议。必须严格输出 JSON。"
@@ -437,7 +515,7 @@ def review_locked_tasks_with_local_model(
                     "task_results": [
                         {
                             "task_id": "必须与 task_catalog 的键一一对应",
-                            "status": "only: verified/not_triggered/triggered/data_insufficient；前三者均要求 local_current_evidence 中存在基线之后的当前数值/事件确认，仅凭主报告基线必须 data_insufficient",
+                            "status": "only: verified/not_triggered/triggered/data_insufficient；前三者均要求 current evidence role 中存在基线之后的当前数值/事件确认，仅凭主报告或 supporting context 必须 data_insufficient",
                             "evidence_document_ids": "only document_catalog keys, at most 3",
                             "evidence_lines": "at most 3 objects: document_id, line_ref, exact_quote",
                             "missing_codes": "only no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation",
@@ -451,7 +529,8 @@ def review_locked_tasks_with_local_model(
                 "verification_policy": (
                     "main_report_reference is baseline only; current-state verdicts "
                     "(verified/not_triggered/triggered) require newer records in "
-                    "local_current_evidence, otherwise data_insufficient with missing_codes"
+                    "local_current_evidence or official_current_evidence, otherwise "
+                    "data_insufficient with missing_codes"
                 ),
         },
         ensure_ascii=False,
@@ -477,22 +556,46 @@ def review_locked_tasks_with_local_model(
         if any(value not in ALLOWED_TASK_MISSING_CODES for value in missing_codes):
             raise RuntimeError(f"模型返回了未定义的数据缺口：{task_id}")
         evidence_lines = []
+        evidence_validation_errors: list[str] = []
         for line in (item.get("evidence_lines") or [])[:3]:
             if not isinstance(line, dict) or str(line.get("document_id") or "") not in evidence_ids:
                 raise RuntimeError(f"模型返回了无效证据行：{task_id}")
+            document_id = str(line["document_id"])
+            exact_quote = str(line.get("exact_quote") or "").strip()
+            document_content = str(document_catalog[document_id].get("content") or "")
+            if not exact_quote or exact_quote not in document_content:
+                evidence_validation_errors.append(f"quote_not_found:{document_id}")
             evidence_lines.append(
                 {
-                    "document_id": str(line["document_id"]),
+                    "document_id": document_id,
                     "line_ref": str(line.get("line_ref") or ""),
-                    "exact_quote": str(line.get("exact_quote") or ""),
+                    "exact_quote": exact_quote,
                 }
             )
+        current_evidence_ids = {
+            document_id
+            for document_id in evidence_ids
+            if document_catalog[document_id].get("source_role") in CURRENT_EVIDENCE_ROLES
+            and str(document_catalog[document_id].get("content") or "").strip()
+        }
+        current_exact_quotes = [
+            line for line in evidence_lines
+            if line["document_id"] in current_evidence_ids
+            and line["exact_quote"]
+            and line["exact_quote"] in str(document_catalog[line["document_id"]].get("content") or "")
+        ]
+        if status != "data_insufficient" and (not current_evidence_ids or not current_exact_quotes):
+            evidence_validation_errors.append("non_gap_without_current_exact_evidence")
+            status = "data_insufficient"
+            if "no_current_value" not in missing_codes:
+                missing_codes.append("no_current_value")
         by_id[task_id] = {
             "task_id": task_id,
             "status": status,
             "evidence_document_ids": evidence_ids,
             "evidence_lines": evidence_lines,
             "missing_codes": missing_codes,
+            "evidence_validation_errors": evidence_validation_errors,
         }
     # A malformed or incomplete model response must not erase a stock's task.
     # Missing task results are explicit data gaps and remain independently saved.
@@ -555,7 +658,19 @@ def full_local_result(
         "generated_at": now_iso(),
         "company": resolution.get("company"),
         "ticker": resolution.get("ticker"),
-        "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+        "review_layer": "routine_deepseek",
+        "scope": "A股主报告固定任务的日常证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+        "workflow": {
+            "rule_authority": "fixed_tasks_from_human_locked_main_report_resolution",
+            "evidence_order": [
+                "local_current_evidence",
+                "official_current_evidence",
+                "data_insufficient",
+            ],
+            "model_browsing": "disabled; host application gathers auditable evidence",
+            "manual_review": "user_triggered_other_model_using_the_same_fixed_tasks_and_evidence_contract",
+            "automatic_rule_replacement": False,
+        },
         "main_report": {
             "path": resolution.get("report_path"),
             "sha256": resolution.get("report_sha256"),
@@ -590,8 +705,13 @@ def run_full_local(
     *,
     resume: bool = False,
     workers: int = 4,
+    include_official: bool = True,
 ) -> dict[str, int]:
-    """Run all A-share stocks independently and atomically save each result."""
+    """Run routine reviews with locked rules and atomic per-stock results.
+
+    The host gathers evidence before invoking DeepSeek.  This does not rely on
+    model-native browsing, which may be unavailable or unverifiable.
+    """
     resolutions = load_a_share_resolutions(repo_root)
     counts = {"total": len(resolutions), "completed": 0, "error": 0, "skipped": 0}
     pending: list[tuple[int, dict[str, Any], Path]] = []
@@ -617,6 +737,18 @@ def run_full_local(
         ticker = str(resolution["ticker"])
         try:
             documents = collect_local_stock_evidence(repo_root, resolution)
+            if include_official:
+                official_documents = collect_recent_official_evidence(
+                    ticker,
+                    company=str(resolution.get("company") or ticker),
+                    review_tasks=(resolution.get("judgment") or {}).get("review_tasks") or [],
+                )
+                baseline_date = report_baseline_date(resolution)
+                for document in official_documents:
+                    published = sentiment_snapshot.parse_datetime(document.get("published_at"))
+                    if baseline_date is not None and (published is None or published.date() <= baseline_date):
+                        document["source_role"] = "official_supporting_context"
+                documents.extend(official_documents)
             model_result = review_locked_tasks_with_local_model(resolution, documents)
             payload = full_local_result(repo_root, resolution, documents, model_result)
             atomic_write_json(output_path, payload)
@@ -1052,7 +1184,7 @@ def build_result(ticker: str, *, with_model: bool, repo_root: Path | None = None
         "scope": "主报告明确条件的单股本地验证；不读取 Checklist、技术面、情绪面或旧人工执行复核。模型可读取更新的本地基本面资料作为证据，但无权变更规则。",
         "main_report": {
             "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
-            "sha256": hashlib.sha256((repo_root / "reports/东方电子/东方电子投资研究报告-20260707.md").read_bytes()).hexdigest(),
+            "sha256": canonical_file_sha256(repo_root / "reports/东方电子/东方电子投资研究报告-20260707.md"),
             "rule_update_mode": "manual_only",
             "automatic_rule_replacement": False,
         },
@@ -1099,12 +1231,23 @@ def main() -> None:
     )
     parser.add_argument("--resume", action="store_true", help="全量模式跳过已有逐股票结果")
     parser.add_argument("--workers", type=int, default=4, help="全量模式最大并发 OpenCode 请求数，默认 4")
+    parser.add_argument(
+        "--local-only",
+        action="store_true",
+        help="仅使用本地证据；日常复核默认由宿主先补充巨潮官方披露再调用模型",
+    )
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     args = parser.parse_args()
     if args.all_a_shares:
         if args.skip_model:
             raise SystemExit("全量本地复核必须调用 OpenCode 模型；不能与 --skip-model 同时使用。")
-        counts = run_full_local(args.repo_root.resolve(), args.output_dir, resume=args.resume, workers=args.workers)
+        counts = run_full_local(
+            args.repo_root.resolve(),
+            args.output_dir,
+            resume=args.resume,
+            workers=args.workers,
+            include_official=not args.local_only,
+        )
         print(json.dumps(counts, ensure_ascii=False, indent=2))
         return
     if args.output is None:
