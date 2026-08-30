@@ -3,14 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0b1118" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#eef0f4" />
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=main-review-v8" />
-    <link rel="stylesheet" href="./assets/themes/_engine.css?v=main-review-v8" />
-    <link rel="stylesheet" href="./assets/themes/18-glass.css?v=main-review-v8" />
+    <link rel="stylesheet" href="./assets/styles.css?v=daylight-1" />
+    <link rel="stylesheet" href="./assets/themes/_engine.css?v=daylight-1" />
+    <link rel="stylesheet" href="./assets/themes/21-daylight.css?v=daylight-1" />
   </head>
   <body>
     <div class="app-shell">
@@ -31,6 +31,8 @@
           <a class="btn ghost" href="https://github.com/yuzi1441/ai-berkshire" target="_blank" rel="noreferrer">研究库</a>
         </div>
       </header>
+
+      <section class="pipe-strip" id="pipe-strip" aria-label="数据管线时间线" hidden></section>
 
       <section class="summary-band" aria-label="决策总览">
         <div class="summary-grid" id="summary"></div>
@@ -256,6 +258,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=main-review-v8"></script>
+    <script type="module" src="./assets/app.js?v=daylight-1"></script>
   </body>
 </html>

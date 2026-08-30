@@ -1,0 +1,220 @@
+/* Theme 21 · Daylight 浅色研报风 —— 方案 D「溯源中间态」：
+   画布安静、信号响亮。绿=可执行 琥珀=等待/验证 红=风险/分歧 灰=中性，
+   紫色仅作交互强调；数据溯源时间戳与价格档条为一级公民。 */
+
+:root {
+  color-scheme: light;
+  --bg-0: #eef0f4; --bg-1: #ffffff; --bg-2: #ffffff; --bg-3: #f2f4f8;
+  --bg-inset: #f3f5f8;
+  --line: #e2e6ed; --line-2: #d6dce5; --line-3: #c3cdd8;
+  --ink: #253041; --ink-strong: #111a24; --ink-soft: #57636f; --ink-faint: #8d97a3;
+  --brand: #5f49c7; --brand-soft: rgba(95, 73, 199, 0.10);
+  --buy: #1f8a54; --trial: #2f7d5f; --installment: #2f6fae;
+  --hold: #8a6410; --watch: #a3720e; --sell: #bf4a42;
+  --up: #c0392f; --down: #0f7d4d;
+  --shadow: 0 6px 18px rgba(16, 24, 40, 0.10);
+  --shadow-soft: 0 1px 3px rgba(16, 24, 40, 0.06);
+  --panel-bg: #ffffff;
+  --card-bg: #ffffff;
+  --row-alt: rgba(20, 30, 45, 0.016);
+  --violet: #5f49c7;
+}
+
+body {
+  background: var(--bg-0);
+  font-size: 14px;
+}
+
+/* ---------------- 顶栏与面板：白卡浮起 ---------------- */
+
+.topbar {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 12px rgba(16, 24, 40, 0.05);
+}
+
+.table-panel, .detail-panel, .index-band, .annual-panel,
+.automation-panel, .attention-panel, .control-band, .summary-band .metric,
+.search-box input, .chip, .btn {
+  box-shadow: var(--shadow-soft);
+}
+
+.table-panel, .detail-panel { border-radius: 12px; }
+
+tbody tr:hover { background: rgba(95, 73, 199, 0.04); }
+tbody tr.active { background: rgba(95, 73, 199, 0.07); box-shadow: inset 3px 0 0 var(--brand); }
+
+/* ---------------- 字号与关键数字 ---------------- */
+
+.company-name { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+.quote-price { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+.quote-change { font-weight: 700; }
+.ticker-code { font-size: 11.5px; }
+.company-sentiment { font-size: 12px; }
+
+/* ---------------- 徽章与判断强调 ---------------- */
+
+.badge, .action-badge, .decision-badge { font-weight: 700; }
+.conclusion-cell strong, .primary-action { color: var(--ink-strong); }
+
+.chip.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.chip.active .chip-count { color: rgba(255, 255, 255, 0.85); }
+
+.btn.primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.btn.primary:hover { background: #4e3cb0; border-color: #4e3cb0; color: #fff; }
+
+.search-box input:focus {
+  border-color: #b9aef2;
+  box-shadow: 0 0 0 3px rgba(95, 73, 199, 0.13);
+}
+
+/* ---------------- 数据管线时间线 ---------------- */
+
+.pipe-strip {
+  display: flex;
+  gap: 4px;
+  padding: 0 0 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pipe-strip::-webkit-scrollbar { display: none; }
+.pipe-chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--panel-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  box-shadow: var(--shadow-soft);
+  white-space: nowrap;
+}
+.pipe-chip b { font-weight: 700; color: var(--ink-strong); }
+.pipe-chip .pipe-t { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+.pipe-chip.fresh b::before { content: "●"; color: var(--buy); font-size: 8px; margin-right: 5px; vertical-align: 1px; }
+.pipe-chip.stale b::before { content: "●"; color: var(--watch); font-size: 8px; margin-right: 5px; vertical-align: 1px; }
+.pipe-chip .pipe-warn { color: var(--watch); font-weight: 700; }
+
+/* ---------------- 报告价格档 × 现价位置 ---------------- */
+
+.zone-cell { min-width: 200px; max-width: 320px; width: 280px; }
+.zone-cell .zone-list { max-width: 100%; }
+.zone-cell .zone-bar { max-width: 100%; }
+.zone-bar-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-bottom: 4px;
+}
+.zone-bar-top .zone-list {
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.zone-bar-top .zone-pos { flex-shrink: 0; white-space: nowrap; color: var(--ink-soft); }
+.zone-bar-top .zone-pos b { color: var(--watch); font-size: 12px; }
+.zone-bar {
+  position: relative;
+  height: 16px;
+  border-radius: 8px;
+  background: #e7eaef;
+  box-shadow: inset 0 0 0 1px rgba(20, 30, 45, 0.05);
+}
+.zone-seg {
+  position: absolute; top: 0; height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.85);
+  display: flex; align-items: center; overflow: hidden;
+}
+.zone-seg.zs-first { border-radius: 8px 0 0 8px; }
+.zone-seg.zs-last { border-radius: 0 8px 8px 0; }
+.zone-seg span {
+  font-size: 10.5px; font-weight: 700; padding-left: 6px; white-space: nowrap;
+}
+.zone-seg.k-buy { background: #c9e4d4; } .zone-seg.k-buy span { color: #175a3a; }
+.zone-seg.k-trial { background: #dcead2; } .zone-seg.k-trial span { color: #44631f; }
+.zone-seg.k-watch { background: #e2e6ec; } .zone-seg.k-watch span { color: #46505c; }
+.zone-seg.k-reduce { background: #f1d9d7; } .zone-seg.k-reduce span { color: #8c352e; }
+.zone-seg.cur { box-shadow: inset 0 0 0 2px rgba(23, 32, 43, 0.55); filter: saturate(1.15); }
+.zone-marker {
+  position: absolute; top: -4px; width: 3px; height: 24px;
+  background: #17202b; border-radius: 2px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+  z-index: 2;
+}
+.zone-marker::after {
+  content: attr(data-v);
+  position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+  color: #fff; background: #17202b;
+  padding: 1px 6px; border-radius: 4px; white-space: nowrap;
+  box-shadow: var(--shadow-soft);
+}
+/* 行高度预算：旗标伸出行外，需给行留呼吸 */
+tbody tr:has(.zone-marker) td { padding-bottom: 20px; }
+
+/* ---------------- 移动端 ---------------- */
+
+@media (max-width: 720px) {
+  body { font-size: 13.5px; }
+  .company-name { font-size: 15px; }
+  .quote-price { font-size: 17px; }
+}
+
+/* ---------------- 深色主题硬编码文字色的浅色映射 ----------------
+   styles.css 中为深色底设计的浅色文字，在浅色底上不可读。
+   此处按同选择器、同优先级在主题加载顺序中后置覆盖。 */
+
+a:hover { color: #4e3cb0; }
+.btn.primary:hover { color: #4e3cb0; }
+.btn.danger:hover { color: #a03530; background: rgba(191, 74, 66, 0.08); }
+.btn.text:hover { color: #4e3cb0; }
+
+.attention-toggle-meta[data-status="error"],
+.attention-panel-meta[data-status="error"] { color: #a8442f; }
+
+.attention-urgent .attention-badge { color: #a03530; }
+
+.sentiment-alert { color: #a03530; }
+.sentiment-alert[data-status="partial"] { color: #8a6410; background: #faf3e3; border-color: #ecd9b8; }
+.sentiment-alert[data-status="partial"] .eyebrow,
+.sentiment-alert[data-status="partial"] strong { color: #8a6410; }
+
+.report-review-alert-redline { color: #a03530; }
+.report-review-alert-historical { color: #6a56c4; }
+.human-review-task-row-due .human-review-task-meta { color: #8a6410; }
+
+.fundamental-review-partitions-total { color: #2f6fae; }
+.fundamental-review-partition.partition-redline strong { color: #a03530; }
+.fundamental-review-partition.partition-historical,
+.fundamental-review-partition.partition-historical strong { color: #6a56c4; }
+.review-filter-redline { color: #a03530; }
+.review-filter-historical { color: #6a56c4; }
+.fundamental-review-badge-redline,
+.fundamental-review-mini-badge-redline { color: #a03530; }
+.fundamental-review-badge-historical { color: #6a56c4; }
+.fundamental-review-badge-manual-active { color: #2f6fae; }
+.routine-review-history { color: #6a56c4; }
+.model-review-task.model-review-historical { color: #6a56c4; }
+
+.primary-judgment-conflict { color: #8a6410; }
+.decision-review-disclaimer { color: #5f49c7; }
+.decision-review-list.warning { color: #8a6410; }
+.decision-review-list.conflict { color: #a03530; }
+.decision-review-error { color: #a03530; }
+.deep-review-model h4 { color: #5f49c7; }
+.deep-review-challenge { color: #8a6410; }
+.deep-review-boundary { color: #12714a; }
+.technical-disclaimer { color: #8a6410; background: #faf3e3; }
+.checklist-warning { color: #a03530; }
+.sentiment-warning-note { color: #a03530; }

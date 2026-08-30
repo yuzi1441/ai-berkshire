@@ -3860,6 +3860,7 @@ function renderRows() {
     "人工价格分区",
     "报告复核提示",
     "现价",
+    "报告价格档 × 现价位置",
     "当前状态",
     "技术面（辅助）",
   ]);
@@ -3903,6 +3904,12 @@ function renderRows() {
     quoteChange.textContent = `${change.text}${quote?.source ? " · 同源快照" : ""}`;
     quoteTd.append(quotePrice, quoteChange);
     tr.append(quoteTd);
+
+    const zoneTd = document.createElement("td");
+    zoneTd.className = "zone-cell-col";
+    const zoneBar = renderZoneBar(item, quote);
+    if (zoneBar) zoneTd.append(zoneBar);
+    tr.append(zoneTd);
 
     const adviceTd = document.createElement("td");
     adviceTd.className = "execution-main-cell";
@@ -4791,6 +4798,201 @@ function closeDetail() {
   renderDetail();
 }
 
+/* ==================== 数据管线时间线（方案D） ==================== */
+
+function pipeAgeHours(ts) {
+  const t = new Date(ts || "").getTime();
+  return Number.isFinite(t) ? (Date.now() - t) / 36e5 : null;
+}
+
+function pipeDateText(ts) {
+  const t = new Date(ts || "");
+  if (Number.isNaN(t.getTime())) return "";
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(t.getMonth() + 1)}/${p(t.getDate())} ${p(t.getHours())}:${p(t.getMinutes())}`;
+}
+
+function pipeDateOnly(ts) {
+  const t = new Date(ts || "");
+  if (Number.isNaN(t.getTime())) return "";
+  const p = (n) => String(n).padStart(2, "0");
+  return `${p(t.getMonth() + 1)}/${p(t.getDate())}`;
+}
+
+function makePipeChip(label, text, ageHours, staleAfter, opts = {}) {
+  const chip = document.createElement("span");
+  chip.className = "pipe-chip" + (ageHours === null ? "" : ageHours <= staleAfter ? " fresh" : " stale");
+  chip.title = opts.title || "";
+  const b = document.createElement("b");
+  b.textContent = label;
+  const t = document.createElement("span");
+  t.className = "pipe-t";
+  t.textContent = text;
+  chip.append(b, t);
+  if (opts.warn) {
+    const w = document.createElement("span");
+    w.className = "pipe-warn";
+    w.textContent = opts.warn;
+    chip.append(w);
+  }
+  return chip;
+}
+
+function renderPipelineStrip() {
+  const strip = document.getElementById("pipe-strip");
+  if (!strip) return;
+  strip.replaceChildren();
+  const chips = [];
+
+  if (state.quoteUpdatedAt) {
+    chips.push(makePipeChip("行情", `${pipeDateText(state.quoteUpdatedAt)} · 腾讯`, pipeAgeHours(state.quoteUpdatedAt), 30, { title: "腾讯同源行情快照；超过 30 分钟视为陈旧" }));
+  }
+  const senti = state.sentimentSnapshot;
+  if (senti?.generated_at) {
+    const count = senti.company_count || state.sentiments.size;
+    chips.push(makePipeChip("情绪", `${count}只 · ${pipeDateText(senti.generated_at)}`, pipeAgeHours(senti.generated_at), 72, { title: `情绪快照生成于 ${senti.generated_at}` }));
+  }
+  const market = senti?.market_sentiment?.["A股"];
+  if (market && Number.isFinite(Number(market.score_0_100))) {
+    chips.push(makePipeChip("市场温度", `${market.score_0_100} ${market.state || ""} · ${pipeDateOnly(market.data_cutoff)}`, pipeAgeHours(market.data_cutoff), 72, { title: "A股市场情绪温度（zzshare 宽度数据）" }));
+  }
+  if (state.opportunityScansGeneratedAt) {
+    const st = state.opportunityScanStatus?.status ? ` · ${state.opportunityScanStatus.status}` : "";
+    chips.push(makePipeChip("机会扫描", `${pipeDateText(state.opportunityScansGeneratedAt)}${st}`, pipeAgeHours(state.opportunityScansGeneratedAt), 48, { title: "每日机会扫描（Flash）" }));
+  }
+  let intraDate = null;
+  for (const v of state.intradayTechnical.values()) {
+    if (v?.analysis_date && (!intraDate || v.analysis_date > intraDate)) intraDate = v.analysis_date;
+  }
+  if (intraDate) {
+    chips.push(makePipeChip("盘中技术", intraDate.slice(5), pipeAgeHours(intraDate), 48, { title: "A股 30 分钟盘中技术快照" }));
+  }
+  let reviewTs = null;
+  for (const it of state.decisions) {
+    const ts = it?.human_review_plan?.reviewed_at;
+    if (ts && (!reviewTs || ts > reviewTs)) reviewTs = ts;
+  }
+  if (reviewTs) {
+    chips.push(makePipeChip("人工复核", pipeDateText(reviewTs), pipeAgeHours(reviewTs), 24 * 30, { title: "A股主报告人工复核时间" }));
+  }
+  const mrcTs = state.modelReviewComparisonSnapshot?.generated_at;
+  if (mrcTs) {
+    chips.push(makePipeChip("模型对照", pipeDateText(mrcTs), pipeAgeHours(mrcTs), 24 * 7, { title: "ZCode × DeepSeek 双模型对照生成时间" }));
+  }
+
+  if (!chips.length) {
+    strip.hidden = true;
+    return;
+  }
+  chips.forEach((chip) => strip.append(chip));
+  strip.hidden = false;
+}
+
+/* ==================== 报告价格档 × 现价位置（方案D） ==================== */
+
+const ZONE_KIND_BY_ACTION = {
+  buy: "buy", trial: "trial", watch: "watch", hold: "watch",
+  reduce: "reduce", sell: "reduce", avoid: "reduce",
+};
+
+function zoneRulesForItem(item) {
+  const rules = item?.execution_policy?.price_rules;
+  if (!Array.isArray(rules) || !rules.length) return null;
+  const finite = [];
+  for (const rule of rules) {
+    if (!rule) continue;
+    const min = Number.isFinite(Number(rule.min)) ? Number(rule.min) : null;
+    const ceiling = Number.isFinite(Number(rule.ceiling)) ? Number(rule.ceiling) : null;
+    if (min === null && ceiling === null) continue;
+    finite.push({ rule, min, ceiling });
+  }
+  if (!finite.length) return null;
+  const lo = Math.min(...finite.map((r) => r.min ?? r.ceiling));
+  const hi = Math.max(...finite.map((r) => r.ceiling ?? r.min));
+  const span = hi - lo;
+  const pad = span > 0 ? span * 0.3 : Math.max(Math.abs(hi) * 0.08, 1);
+  const domainLo = lo - pad;
+  const domainHi = hi + pad;
+  const fmt = (v) => String(Math.round(v * 100) / 100);
+  const segments = finite
+    .map(({ rule, min, ceiling }) => {
+      let sMin = min;
+      let sMax = ceiling;
+      let rangeText;
+      if (min !== null && ceiling !== null) {
+        rangeText = `${fmt(min)}–${fmt(ceiling)}`;
+      } else if (ceiling !== null) {
+        sMin = domainLo;
+        rangeText = `≤${fmt(ceiling)}`;
+      } else {
+        sMax = domainHi;
+        rangeText = `≥${fmt(min)}`;
+      }
+      return {
+        label: rule.action || rule.action_kind || "区间",
+        rangeText,
+        min: Math.max(sMin, domainLo),
+        max: Math.min(sMax, domainHi),
+        kind: ZONE_KIND_BY_ACTION[rule.action_kind] || "watch",
+      };
+    })
+    .sort((a, b) => a.min - b.min);
+  return { segments, domainLo, domainHi };
+}
+
+function renderZoneBar(item, quote) {
+  const price = Number(quote?.price);
+  if (!Number.isFinite(price)) return null;
+  const zone = zoneRulesForItem(item);
+  if (!zone || !zone.segments.length) return null;
+  const { segments, domainLo, domainHi } = zone;
+  const span = domainHi - domainLo;
+  if (!(span > 0)) return null;
+
+  const wrap = document.createElement("div");
+  wrap.className = "zone-cell";
+
+  const top = document.createElement("div");
+  top.className = "zone-bar-top";
+  const list = document.createElement("span");
+  list.className = "zone-list";
+  list.textContent = segments.map((s) => `${s.label} ${s.rangeText}`).join(" · ");
+  list.title = list.textContent;
+  const pos = document.createElement("span");
+  pos.className = "zone-pos";
+  pos.append("现价 ");
+  const posB = document.createElement("b");
+  posB.textContent = String(price);
+  pos.append(posB);
+  top.append(list, pos);
+
+  const bar = document.createElement("div");
+  bar.className = "zone-bar";
+  segments.forEach((seg, i) => {
+    const el = document.createElement("div");
+    const cur = price >= seg.min && price <= seg.max ? " cur" : "";
+    const edge = (i === 0 ? " zs-first" : "") + (i === segments.length - 1 ? " zs-last" : "");
+    el.className = `zone-seg k-${seg.kind}${cur}${edge}`;
+    el.style.left = `${((seg.min - domainLo) / span) * 100}%`;
+    el.style.width = `${((seg.max - seg.min) / span) * 100}%`;
+    const label = document.createElement("span");
+    label.textContent = seg.label;
+    el.title = `${seg.label} ${seg.rangeText}`;
+    el.append(label);
+    bar.append(el);
+  });
+  const clamped = Math.max(domainLo, Math.min(domainHi, price));
+  const marker = document.createElement("div");
+  marker.className = "zone-marker";
+  marker.dataset.v = String(price);
+  marker.style.left = `${((clamped - domainLo) / span) * 100}%`;
+  marker.title = `现价 ${price}`;
+  bar.append(marker);
+
+  wrap.append(top, bar);
+  return wrap;
+}
+
 function renderAll() {
   renderIndexCards();
   renderAnnualReportDates();
@@ -4799,6 +5001,7 @@ function renderAll() {
   renderFundamentalReviewPartitions();
   renderRows();
   renderDetail();
+  renderPipelineStrip();
 }
 
 function setView(view) {
