@@ -4010,6 +4010,29 @@ function renderDualModelCompactCell(item, mrcGeneratedAt) {
   return td;
 }
 
+/* 段宽不足时把段标签换成短词，避免文字被硬裁成不可读碎片 */
+const ZONE_LABEL_SHORT = {
+  "积极建仓": "积极", "分批建仓": "分批", "观察/持有": "持有", "考虑减仓": "减仓",
+  "小额首批": "首批", "分批增加": "分批", "重点关注": "关注", "小仓试探": "小仓",
+  "稳健分批": "分批", "小仓分批": "小仓", "观察不追": "不追", "重点买入": "重点",
+  "分批买入": "分批", "小额分批": "分批", "观察或小仓": "观察", "业绩验证": "验证",
+  "安全边际": "边际", "强加仓": "加仓", "小仓试建": "试建", "稳健观察": "观察",
+  "保守分批": "分批", "小仓位分批": "小仓", "激进小仓": "激进", "稳健建仓": "建仓",
+  "现价附近": "附近", "只设观察仓，不追涨": "观察", "等待确认后分批买入": "待确认",
+};
+
+function refineZoneBarLabels(scope) {
+  scope.querySelectorAll(".zone-bar .zone-seg").forEach((seg) => {
+    const span = seg.querySelector("span");
+    if (!span) return;
+    if (span.scrollWidth <= seg.clientWidth) return;
+    const full = span.textContent;
+    const short = ZONE_LABEL_SHORT[full] || full.slice(0, 2);
+    span.textContent = short;
+    if (span.scrollWidth > seg.clientWidth) span.textContent = "";
+  });
+}
+
 function renderRows() {
   const visible = filteredDecisions();
   renderSummary(visible);
@@ -4081,6 +4104,7 @@ function renderRows() {
     els.rows.append(tr);
   });
 
+  refineZoneBarLabels(els.rows);
   mountInlineDetail(selectedItem());
 
   const remaining = Math.max(0, visible.length - rendered.length);

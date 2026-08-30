@@ -150,6 +150,7 @@ tbody tr.active { background: rgba(95, 73, 199, 0.07); box-shadow: inset 3px 0 0
 .zone-seg.zs-last { border-radius: 0 8px 8px 0; }
 .zone-seg span {
   font-size: 10.5px; font-weight: 700; padding-left: 6px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; display: block; min-width: 0;
 }
 .zone-seg.k-buy { background: #c9e4d4; } .zone-seg.k-buy span { color: #175a3a; }
 .zone-seg.k-trial { background: #dcead2; } .zone-seg.k-trial span { color: #44631f; }
