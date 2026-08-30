@@ -233,6 +233,62 @@ tbody tr:has(.zone-marker) td { padding-bottom: 20px; }
 
 .manual-cell, .dual-cell { min-width: 130px; }
 
+/* 中窄屏（720–1150px）：6 列表格会被挤压出竖排文字与横向截断，
+   决策表直接切换为卡片堆叠；复核/跟踪两张表列数不同，不在此范围内堆叠 */
+@media (max-width: 1149px) {
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) {
+    table-layout: auto;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) thead {
+    display: none;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5px 12px;
+    padding: 12px 4px;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td {
+    background: transparent;
+    border-top: none;
+    padding: 2px 0;
+    min-width: 0;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(1),
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(2),
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(3),
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(3) {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(3) .chg-pill { margin-top: 0; }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(4) {
+    padding-bottom: 24px;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(5)::before,
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(6)::before {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ink-faint);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(5)::before { content: "人工复核"; }
+  #decision-table:not(.tracking-table):not(.fundamental-review-table) tbody td:nth-child(6)::before { content: "双模型对照"; }
+  .verdict-cell .vbadge { white-space: normal; }
+  .verdict-cell .cell-ts { display: inline; margin-left: 8px; }
+  .quote-cell { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .quote-cell .chg-pill { margin-top: 0; }
+  .quote-cell .cell-ts { margin-top: 0; }
+  .zone-cell { width: 100%; max-width: 480px; padding-bottom: 0; }
+}
+
 /* ---------------- 移动端 ---------------- */
 
 @media (max-width: 720px) {
