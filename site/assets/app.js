@@ -3756,11 +3756,11 @@ function reportReviewAlert(review) {
   return { label: meta?.[1] || "复核待核对", detail, tone: meta?.[3] || "gap" };
 }
 
-function renderReportReviewAlertCell(review, { compact = false } = {}) {
+function renderReportReviewAlertCell(review, { compact = false, fundamentalReview = null } = {}) {
   const cell = document.createElement("td");
   cell.className = `report-review-alert-cell ${compact ? "report-review-alert-compact" : ""}`;
   cell.dataset.label = compact ? "报告复核摘要" : "对照分区";
-  const direct = review?.manual?.codex_direct;
+  const direct = fundamentalReview?.manual?.codex_direct || review?.manual?.codex_direct;
   if (compact && direct) {
     const directLabel = document.createElement("strong");
     directLabel.className = `report-review-direct-label report-review-direct-${direct.status || "unknown"}`;
@@ -3921,7 +3921,10 @@ function renderRows() {
     humanReviewTd.append(renderHumanReviewMainCell(item, quote));
     tr.append(humanReviewTd);
 
-    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), { compact: true });
+    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), {
+      compact: true,
+      fundamentalReview: fundamentalReviewForItem(item),
+    });
     tr.append(reportReviewTd);
 
     const change = formatChange(quote);
