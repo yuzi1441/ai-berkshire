@@ -4221,11 +4221,22 @@ function renderFundamentalReviewDetail(item) {
   const comparisonNote = document.createElement("p");
   comparisonNote.className = "fundamental-review-policy";
   comparisonNote.textContent = "两边都保留各自的规则文本和结果。只有引用主报告之后的本地或官方材料，才标为当前证据；这不会自动改变主报告判断或人工价格分区。";
+  const strictReview = fundamentalReviewForItem(item);
+  const priceContext = strictReview?.price_context || strictReview?.routine?.strict_incremental?.price_context;
+  const priceNote = document.createElement("p");
+  priceNote.className = "source-note";
+  if (priceContext?.price !== null && priceContext?.price !== undefined) {
+    const timing = priceContext.snapshot_generated_at ? shortReviewDate(priceContext.snapshot_generated_at) : "时间未记录";
+    const freshness = priceContext.status === "fresh" ? "新鲜" : "已过期";
+    priceNote.textContent = `复核行情上下文：${priceContext.price} ${priceContext.currency || ""} · ${timing} · ${freshness}。仅作价格背景，不参与经营结论。`;
+  } else {
+    priceNote.textContent = "复核行情上下文：快照缺失；不会以搜索摘要或推测补充价格。";
+  }
   const comparisonAlert = reportReviewAlert(comparison);
   const comparisonStatus = document.createElement("p");
   comparisonStatus.className = `report-review-alert-label report-review-alert-${comparisonAlert.tone}`;
   comparisonStatus.textContent = `${comparisonAlert.label}：${comparisonAlert.detail}`;
-  comparisonCard.append(comparisonEyebrow, comparisonTitle, comparisonStatus, comparisonNote);
+  comparisonCard.append(comparisonEyebrow, comparisonTitle, comparisonStatus, comparisonNote, priceNote);
   els.detailBody.append(comparisonCard);
 
   const statusClass = (task) => task?.evidence_quality === "current" ? "model-review-current" : "model-review-historical";

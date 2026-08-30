@@ -36,13 +36,20 @@ from source_hash import canonical_file_sha256, canonical_sha256_text
 
 
 SCHEMA_VERSION = 2
-PROTOCOL_VERSION = "main-report-review-v2.2"
+PROTOCOL_VERSION = "main-report-review-v2.3"
 RULE_GROUPS = {"entry", "holder", "improvement", "redline"}
 RULE_POLARITIES = {"positive", "negative", "monitoring"}
 RULE_STATES = {"active", "stale", "pending_manual_confirmation", "archived"}
 SCHEDULE_TYPES = {"price", "filing", "recurring_filing", "event"}
 TRUTH_STATES = {"met", "not_met", "unknown", "not_due"}
 REVIEW_EFFECTS = {"positive", "neutral", "warning", "redline"}
+EVENT_DISCLOSURE_STATES = {
+    "not_applicable",
+    "disclosed",
+    "not_disclosed",
+    "not_due",
+    "search_incomplete",
+}
 MISSING_CODES = {
     "no_current_value",
     "no_comparison",
@@ -50,6 +57,8 @@ MISSING_CODES = {
     "no_official_source",
     "no_event_confirmation",
 }
+MAX_OFFICIAL_EVIDENCE_DOCUMENTS = 12
+MAX_OFFICIAL_EVIDENCE_CHARS = 24000
 PROTOCOL_FINDING_CATEGORIES = {
     "evidence_gap_pattern",
     "source_access_issue",
@@ -128,6 +137,62 @@ PRICE_MARKERS = re.compile(r"股价|价格|价位|估值|PE|PB|PS|市值|\d+(?:\
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def read_price_context(repo_root: Path, ticker: str, *, now: datetime | None = None) -> dict[str, Any]:
+    """Return the existing quote snapshot as read-only context for a review.
+
+    A quote never becomes fundamental evidence and is deliberately excluded
+    from the review input fingerprint: a price change must not cause a model
+    rerun.  The dashboard's price partition remains the authority for price
+    bands and execution state.
+    """
+    checked_at = (now or datetime.now().astimezone()).astimezone()
+    for path in (
+        repo_root / "data" / "investment-dashboard" / "quotes" / "latest.json",
+        repo_root / "site" / "data" / "quotes" / "latest.json",
+    ):
+        payload = load_json(path, {})
+        if not isinstance(payload, dict):
+            continue
+        quote = next(
+            (
+                row
+                for row in (payload.get("quotes") or [])
+                if isinstance(row, dict) and str(row.get("ticker") or "") == ticker
+            ),
+            None,
+        )
+        if not isinstance(quote, dict):
+            continue
+        generated_at = str(payload.get("generated_at") or "")
+        try:
+            age_seconds = max(0, int((checked_at - datetime.fromisoformat(generated_at)).total_seconds()))
+        except ValueError:
+            age_seconds = None
+        freshness = "fresh" if age_seconds is not None and age_seconds <= 600 else "stale"
+        return {
+            "status": freshness,
+            "price": quote.get("price"),
+            "currency": quote.get("currency"),
+            "change_pct": quote.get("change_pct"),
+            "provider_timestamp": quote.get("provider_timestamp"),
+            "snapshot_generated_at": generated_at or None,
+            "age_seconds": age_seconds,
+            "source": quote.get("source") or "quote snapshot",
+            "statement": "只读行情上下文；不属于经营复核证据，不得改变规则、真值状态或价格分区。",
+        }
+    return {
+        "status": "missing",
+        "price": None,
+        "currency": None,
+        "change_pct": None,
+        "provider_timestamp": None,
+        "snapshot_generated_at": None,
+        "age_seconds": None,
+        "source": None,
+        "statement": "未找到行情快照；不得以搜索摘要或推测补充价格。",
+    }
 
 
 def canonical_json_sha256(payload: Any) -> str:
@@ -775,7 +840,8 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
     return documents
 
 
-def _download_official_pdf(url: str) -> tuple[str, str, int]:
+def _download_official_pdf(url: str) -> tuple[list[str], str, int]:
+    """Download an official PDF without deciding which pages matter yet."""
     if PdfReader is None:
         raise RuntimeError("official PDF review requires the optional pypdf package")
     completed = subprocess.run(
@@ -788,8 +854,86 @@ def _download_official_pdf(url: str) -> tuple[str, str, int]:
         path = Path(directory) / "official.pdf"
         path.write_bytes(completed.stdout)
         reader = PdfReader(str(path))
-        text = "\n".join(page.extract_text() or "" for page in reader.pages)
-    return text[:18000], hashlib.sha256(completed.stdout).hexdigest(), len(reader.pages)
+        pages = [page.extract_text() or "" for page in reader.pages]
+    return pages, hashlib.sha256(completed.stdout).hexdigest(), len(pages)
+
+
+def evidence_keywords(package: dict[str, Any]) -> list[str]:
+    """Build a compact, rule-led retrieval vocabulary for official filings."""
+    values: list[str] = []
+    for rule in package.get("active_rules") or []:
+        if rule.get("state") != "active" or rule.get("reviewable") is not True:
+            continue
+        values.extend(str(metric) for metric in (rule.get("metrics") or []) if metric)
+        values.extend(re.findall(r"[\u4e00-\u9fffA-Za-z0-9%./+-]{2,16}", str(rule.get("condition") or "")))
+    values.extend(("营业收入", "毛利率", "经营现金流", "净利润", "订单", "中标", "回款", "项目", "政策", "监管"))
+    return sorted({value for value in values if len(value) >= 2}, key=lambda value: (-len(value), value))
+
+
+def select_relevant_pdf_evidence(
+    pages: list[str],
+    package: dict[str, Any],
+    *,
+    max_chars: int = MAX_OFFICIAL_EVIDENCE_CHARS,
+) -> tuple[str, list[int]]:
+    """Select rule-relevant PDF passages with page references, not PDF prefixes."""
+    keywords = evidence_keywords(package)
+    ranked: list[tuple[int, int]] = []
+    for page_number, page in enumerate(pages, start=1):
+        score = sum(page.count(keyword) * max(2, min(len(keyword), 8)) for keyword in keywords)
+        if score:
+            ranked.append((score, page_number))
+    # A filing's title page is useful only as a fallback.  The normal path is
+    # driven by the locked rule vocabulary, so an appendix table can be chosen
+    # over the first 18k characters of a long annual report.
+    selected_pages: set[int] = set()
+    for _, page_number in sorted(ranked, key=lambda row: (-row[0], row[1]))[:12]:
+        selected_pages.add(page_number)
+        if page_number > 1:
+            selected_pages.add(page_number - 1)
+        if page_number < len(pages):
+            selected_pages.add(page_number + 1)
+    if not selected_pages:
+        selected_pages.update(range(1, min(len(pages), 3) + 1))
+
+    blocks: list[str] = []
+    used_chars = 0
+    kept_pages: list[int] = []
+    for page_number in sorted(selected_pages):
+        page = pages[page_number - 1]
+        lines = page.splitlines()
+        hit_indexes = [
+            index
+            for index, line in enumerate(lines)
+            if any(keyword in line for keyword in keywords)
+        ]
+        indexes: set[int] = set()
+        for index in hit_indexes:
+            indexes.update(range(max(0, index - 3), min(len(lines), index + 4)))
+        if not indexes:
+            indexes.update(range(min(len(lines), 80)))
+        passage = "\n".join(f"P{page_number} L{index + 1}: {lines[index]}" for index in sorted(indexes))
+        block = f"[PDF page {page_number}]\n{passage}".strip()
+        remaining = max_chars - used_chars
+        if remaining <= 0:
+            break
+        if len(block) > remaining:
+            block = block[:remaining]
+        blocks.append(block)
+        kept_pages.append(page_number)
+        used_chars += len(block) + 2
+    return "\n\n".join(blocks), kept_pages
+
+
+def official_candidate_score(row: dict[str, Any], package: dict[str, Any]) -> int:
+    title = str(row.get("title") or "")
+    score = 0
+    if any(token in title for token in FORMAL_FINANCIAL_REPORT_TOKENS) and "摘要" not in title:
+        score += 100
+    for keyword in evidence_keywords(package):
+        if keyword in title:
+            score += max(2, min(len(keyword), 10))
+    return score
 
 
 def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 120) -> list[dict[str, Any]]:
@@ -809,25 +953,24 @@ def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 1
         for row in rows
         if any(token in str(row.get("title") or "") for token in OFFICIAL_TITLE_TOKENS)
     ]
-    # A formal filing is the primary source for current operating facts.  Do
-    # not let a same-day project, buyback, or property-disposal notice crowd it
-    # out merely because it was returned first by the announcements endpoint.
-    formal_reports = [
-        row
-        for row in candidates
-        if any(token in str(row.get("title") or "") for token in FORMAL_FINANCIAL_REPORT_TOKENS)
-        and "摘要" not in str(row.get("title") or "")
-    ]
-    selected = (formal_reports + [row for row in candidates if row not in formal_reports])[:3]
+    # Select according to active-rule coverage rather than a mechanical
+    # "first three PDFs" limit.  The safety ceiling controls network/runtime
+    # cost, while the page extractor below keeps only rule-relevant passages.
+    maximum = min(MAX_OFFICIAL_EVIDENCE_DOCUMENTS, max(4, len([rule for rule in package.get("active_rules") or [] if rule.get("reviewable") is True]) + 2))
+    selected = sorted(
+        candidates,
+        key=lambda row: (-official_candidate_score(row, package), str(row.get("published_at") or "")),
+    )[:maximum]
     documents: list[dict[str, Any]] = []
     for row in selected:
         published = str(row.get("published_at") or "")
         if not is_post_baseline_evidence(published[:10] or None, baseline):
             continue
         try:
-            content, sha256, page_count = _download_official_pdf(str(row.get("url") or ""))
+            pages, sha256, page_count = _download_official_pdf(str(row.get("url") or ""))
         except Exception:
             continue
+        content, selected_pages = select_relevant_pdf_evidence(pages, package)
         documents.append(
             {
                 "document_id": f"official_{len(documents) + 1}",
@@ -837,7 +980,20 @@ def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 1
                 "document_date": published[:10] or None,
                 "canonical_sha256": sha256,
                 "page_count": page_count,
+                "selected_pages": selected_pages,
+                "selection_method": "locked_rule_keyword_passages",
                 "content": content,
+            }
+        )
+    if not documents:
+        documents.append(
+            {
+                "document_id": "official_search_1",
+                "path": "cninfo announcement search",
+                "source_role": "official_search_record",
+                "document_date": now_iso()[:10],
+                "search_coverage": f"巨潮资讯近 {lookback_days} 日，检索标题含规则相关财报/订单/项目/政策/监管关键词",
+                "content": "本次官方公告检索未取得主报告基线之后、可供规则核验的正式披露。该记录只能说明本次检索范围，不证明事件未发生。",
             }
         )
     return documents
@@ -888,6 +1044,7 @@ def semantic_relation_for_rule(rule: dict[str, Any]) -> str:
 def review_rules_with_model(
     package: dict[str, Any],
     documents: list[dict[str, Any]],
+    price_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     active_rules = [
         rule
@@ -905,6 +1062,7 @@ def review_rules_with_model(
                 "operator",
                 "threshold",
                 "periods",
+                "schedule_type",
                 "evidence_requirement",
             )
         }
@@ -930,6 +1088,9 @@ def review_rules_with_model(
         "只有 local_current_evidence、zcode_current_evidence_extract 或 official_current_evidence 可用于 met/not_met；"
         "zcode_current_evidence_extract 只复用旧任务抽取的当前值与原文证据，旧任务的状态结论无效；"
         "local_supporting_evidence 也不能单独证明当前状态。缺少当前值、对比期或事件确认必须 unknown。"
+        "price_context 只是看板行情快照，绝不是经营证据；不得用它判断任何规则真值、修改价格带或触发投资动作。"
+        "事件规则：只有正式官方披露及原文定位才能写 disclosed 并判 met/not_met；已检索但未披露必须写 not_disclosed + unknown，"
+        "不能把未披露当作未发生。not_due 仅适用于规则明确给出且尚未到达的未来事件窗口。"
         "只返回事实核验，不给投资、仓位或交易建议。严格输出 JSON。"
     )
     user = json.dumps(
@@ -941,6 +1102,7 @@ def review_rules_with_model(
                         "truth_state": "only met/not_met/unknown/not_due",
                         "current_value": "当前值或空字符串",
                         "comparison": "与阈值/对比期的简短比较或空字符串",
+                        "disclosure_state": "event only: disclosed/not_disclosed/not_due/search_incomplete; otherwise not_applicable",
                         "evidence_document_ids": "最多3个 document_catalog id",
                         "evidence_lines": "最多3项：document_id,line_ref,exact_quote",
                         "missing_codes": "only no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation",
@@ -959,6 +1121,7 @@ def review_rules_with_model(
             },
             "task_catalog": task_catalog,
             "document_catalog": document_catalog,
+            "price_context": price_context or {"status": "missing", "statement": "没有可用行情快照"},
             "verification_policy": {
                 "main_report_reference": "baseline_only",
                 "local_supporting_evidence": "context_only",
@@ -1032,6 +1195,24 @@ def review_rules_with_model(
             for value in evidence_ids
             if document_catalog[value].get("source_role") in allowed_current_roles
         ]
+        rule = next(rule for rule in active_rules if rule["rule_id"] == rule_id)
+        schedule_type = str(rule.get("schedule_type") or "event")
+        disclosure_state = str(raw.get("disclosure_state") or "not_applicable")
+        if disclosure_state not in EVENT_DISCLOSURE_STATES:
+            disclosure_state = "search_incomplete" if schedule_type == "event" else "not_applicable"
+        if schedule_type != "event":
+            disclosure_state = "not_applicable"
+        elif truth_state == "not_due":
+            # Existing locked rules do not carry an explicit future event date.
+            # Do not allow the model to hide an unverified event behind not_due.
+            truth_state = "unknown"
+            disclosure_state = "search_incomplete"
+            if "no_event_confirmation" not in missing_codes:
+                missing_codes.append("no_event_confirmation")
+        elif disclosure_state == "not_disclosed":
+            truth_state = "unknown"
+            if "no_event_confirmation" not in missing_codes:
+                missing_codes.append("no_event_confirmation")
         if truth_state in {"met", "not_met"} and (not current_ids or not evidence_lines):
             truth_state = "unknown"
             evidence_ids = current_ids
@@ -1044,12 +1225,21 @@ def review_rules_with_model(
             inferred_missing.append("no_current_value")
         if "comparison" in requirements and not compact_text(raw.get("comparison")):
             inferred_missing.append("no_comparison")
-        if "official_source" in requirements and not any(
+        has_official_current = any(
             document_catalog[value].get("source_role") == "official_current_evidence"
             for value in current_ids
+        )
+        has_search_record = any(
+            document.get("source_role") == "official_search_record"
+            for document in document_catalog.values()
+        )
+        if "official_source" in requirements and not has_official_current and not (
+            schedule_type == "event" and disclosure_state == "not_disclosed" and has_search_record
         ):
             inferred_missing.append("no_official_source")
-        if "event_confirmation" in requirements and not evidence_lines:
+        if "event_confirmation" in requirements and (
+            disclosure_state != "disclosed" or not has_official_current or not evidence_lines
+        ):
             inferred_missing.append("no_event_confirmation")
         for code in inferred_missing:
             if code not in missing_codes:
@@ -1058,13 +1248,13 @@ def review_rules_with_model(
         # This intentionally fails closed for both met and not_met.
         if truth_state in {"met", "not_met"} and missing_codes:
             truth_state = "unknown"
-        rule = next(rule for rule in active_rules if rule["rule_id"] == rule_id)
         by_id[rule_id] = {
             "rule_id": rule_id,
             "truth_state": truth_state,
             "review_effect": effect_for_rule(rule, truth_state),
             "current_value": compact_text(raw.get("current_value")),
             "comparison": compact_text(raw.get("comparison")),
+            "disclosure_state": disclosure_state,
             "evidence_document_ids": evidence_ids,
             "evidence_lines": evidence_lines,
             "missing_codes": missing_codes,
@@ -1080,6 +1270,7 @@ def review_rules_with_model(
                     "review_effect": "neutral",
                     "current_value": "",
                     "comparison": "",
+                    "disclosure_state": "search_incomplete" if rule.get("schedule_type") == "event" else "not_applicable",
                     "evidence_document_ids": [],
                     "evidence_lines": [],
                     "missing_codes": ["no_current_value"],
@@ -1168,6 +1359,7 @@ def result_payload(
     *,
     status: str | None = None,
     message: str | None = None,
+    price_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     fingerprint = input_fingerprint(package, documents)
     current_documents = [
@@ -1213,6 +1405,7 @@ def result_payload(
         "rule_state": package.get("rule_state"),
         "message": message,
         "main_report": package.get("main_report"),
+        "price_context": price_context or {"status": "missing", "statement": "本次未读取行情快照。"},
         "evidence_documents": [
             {key: value for key, value in document.items() if key != "content"}
             for document in documents
@@ -1246,6 +1439,7 @@ def process_package(
     dry_run: bool,
 ) -> tuple[str, str, dict[str, Any] | None]:
     ticker = str(package.get("ticker") or "")
+    price_context = read_price_context(repo_root, ticker)
     documents = collect_local_evidence(repo_root, package)
     if include_official and not any(
         document.get("source_role") in {"local_current_evidence", "zcode_current_evidence_extract"}
@@ -1258,13 +1452,13 @@ def process_package(
     if existing.get("input_fingerprint") == fingerprint and existing.get("summary", {}).get("status") != "error":
         return ticker, "skipped", existing
     if package.get("rule_state") != "active":
-        payload = result_payload(package, documents, None, status="stale_rules", message="主报告内容已变化，旧规则只读留档，等待人工重建")
+        payload = result_payload(package, documents, None, status="stale_rules", message="主报告内容已变化，旧规则只读留档，等待人工重建", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "stale", payload
     reviewable = [rule for rule in package.get("active_rules") or [] if rule.get("reviewable") is True]
     if not reviewable:
-        payload = result_payload(package, documents, None, status="no_rules", message="当前只有价格规则，由人工复核价格分区处理")
+        payload = result_payload(package, documents, None, status="no_rules", message="当前只有价格规则，由人工复核价格分区处理", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "no_rules", payload
@@ -1275,17 +1469,17 @@ def process_package(
         in {"local_current_evidence", "zcode_current_evidence_extract", "official_current_evidence"}
     ]
     if not current_documents:
-        payload = result_payload(package, documents, None, status="waiting_evidence", message="没有主报告基线之后的新证据，本次不调用模型")
+        payload = result_payload(package, documents, None, status="waiting_evidence", message="没有主报告基线之后的新证据，本次不调用模型", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "waiting", payload
     if dry_run:
         return ticker, "due", None
     try:
-        model_review = review_rules_with_model(package, documents)
-        payload = result_payload(package, documents, model_review)
+        model_review = review_rules_with_model(package, documents, price_context=price_context)
+        payload = result_payload(package, documents, model_review, price_context=price_context)
     except Exception as exc:
-        payload = result_payload(package, documents, None, status="error", message=str(exc))
+        payload = result_payload(package, documents, None, status="error", message=str(exc), price_context=price_context)
         atomic_write_json(output_path, payload)
         return ticker, "error", payload
     atomic_write_json(output_path, payload)
@@ -1810,6 +2004,7 @@ def public_review_snapshot(
     legacy_dir: Path | None = None,
 ) -> dict[str, Any]:
     generated_at = now_iso()
+    repo_root = rules_dir.resolve().parents[2]
     next_check_at = (datetime.now().astimezone() + timedelta(days=3)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
     codex_archive = load_json(rules_dir.parent / "codex_direct_manual_review.json", {})
@@ -1822,6 +2017,9 @@ def public_review_snapshot(
     status_counts: dict[str, int] = {}
     for ticker, package in sorted(rules_by_ticker.items()):
         result = load_json(output_dir / f"{ticker}.json", {})
+        price_context = result.get("price_context") if isinstance(result, dict) else None
+        if not isinstance(price_context, dict):
+            price_context = read_price_context(repo_root, ticker)
         legacy_payload = load_json(legacy_dir / f"{ticker}.json", {}) if legacy_dir else {}
         legacy_daily = compact_legacy_daily_review(legacy_payload)
         result_is_current = (
@@ -1944,6 +2142,7 @@ def public_review_snapshot(
                 "message": result.get("message"),
                 "latest_evidence_date": result.get("latest_evidence_date"),
                 "current_evidence_count": result.get("current_evidence_count", 0),
+                "price_context": price_context,
                 "evidence_documents": result.get("evidence_documents") or [],
                 "last_probe_at": generated_at,
                 "next_check_at": next_check_at,
@@ -1977,6 +2176,7 @@ def public_review_snapshot(
                         "generated_at": result.get("generated_at"),
                         "current_evidence_count": result.get("current_evidence_count", 0),
                         "latest_evidence_date": result.get("latest_evidence_date"),
+                        "price_context": price_context,
                         "message": result.get("message"),
                     },
                 },

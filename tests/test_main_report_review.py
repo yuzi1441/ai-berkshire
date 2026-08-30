@@ -340,18 +340,74 @@ class MainReportRuleTests(unittest.TestCase):
             self.assertEqual(old_document["source_role"], "local_supporting_evidence")
 
     def test_official_collection_prioritizes_full_financial_report_over_same_day_notice(self):
-        package = {"ticker": "600001.SH", "company": "样例公司", "main_report": {"path": "reports/x-20260801.md"}}
+        package = {
+            "ticker": "600001.SH",
+            "company": "样例公司",
+            "main_report": {"path": "reports/x-20260801.md"},
+            "active_rules": [{"state": "active", "reviewable": True, "condition": "核对毛利率", "metrics": ["毛利率"]}],
+        }
         rows = [
             {"title": "样例公司关于项目进展的公告", "published_at": "2026-08-29", "url": "project"},
             {"title": "样例公司2026年半年度报告摘要", "published_at": "2026-08-29", "url": "summary"},
             {"title": "样例公司2026年半年度报告", "published_at": "2026-08-29", "url": "report"},
         ]
         with patch.object(review.sentiment_snapshot, "fetch_cninfo_company_news", return_value=rows), patch.object(
-            review, "_download_official_pdf", return_value=("正式报告内容", "sha", 1)
+            review, "_download_official_pdf", return_value=(["正式报告内容\n毛利率 31%"], "sha", 1)
         ) as download:
             documents = review.collect_official_evidence(package)
         self.assertEqual(download.call_args_list[0].args[0], "report")
         self.assertEqual(documents[0]["title"], "样例公司2026年半年度报告")
+        self.assertEqual(documents[0]["selection_method"], "locked_rule_keyword_passages")
+
+    def test_pdf_selection_uses_rule_matching_pages_not_pdf_prefix(self):
+        package = {
+            "active_rules": [{"state": "active", "reviewable": True, "condition": "海外订单回款", "metrics": ["订单", "回款"]}],
+        }
+        pages = ["封面和目录", "普通说明", "其它内容", "海外订单 12 亿元\n项目回款 8 亿元"]
+        content, selected_pages = review.select_relevant_pdf_evidence(pages, package)
+        self.assertIn(4, selected_pages)
+        self.assertIn("P4 L1: 海外订单 12 亿元", content)
+
+    def test_event_not_disclosed_stays_unknown_after_official_search(self):
+        package = {
+            "active_rules": [{
+                "rule_id": "human_locked.redline.event.1", "state": "active", "reviewable": True,
+                "group": "redline", "polarity": "negative", "condition": "海外订单取消即重审",
+                "relation": "all_of", "metrics": ["订单"], "operator": None, "threshold": None,
+                "periods": [], "schedule_type": "event",
+                "evidence_requirement": ["official_source", "event_confirmation"],
+            }]
+        }
+        documents = [{
+            "document_id": "official_search_1", "path": "cninfo search", "source_role": "official_search_record",
+            "document_date": "2026-08-30", "content": "本次官方检索未见订单取消披露。",
+        }]
+        response = {"rule_results": [{
+            "rule_id": "human_locked.redline.event.1", "truth_state": "not_met", "current_value": "",
+            "comparison": "", "disclosure_state": "not_disclosed", "evidence_document_ids": ["official_search_1"],
+            "evidence_lines": [{"document_id": "official_search_1", "line_ref": "L1", "exact_quote": "未见订单取消披露"}],
+            "missing_codes": [],
+        }]}
+        with patch.object(review.opportunity_review, "model_config", return_value=SimpleNamespace(model="test")), patch.object(review.opportunity_review, "request_json", return_value=(response, "")):
+            result = review.review_rules_with_model(package, documents)
+        rule = result["rules"][0]
+        self.assertEqual(rule["truth_state"], "unknown")
+        self.assertEqual(rule["disclosure_state"], "not_disclosed")
+        self.assertIn("no_event_confirmation", rule["missing_codes"])
+
+    def test_price_context_is_read_only_and_marks_stale_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "data" / "investment-dashboard" / "quotes" / "latest.json"
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({
+                "generated_at": "2026-08-20T16:31:43+08:00",
+                "quotes": [{"ticker": "600001.SH", "price": 12.34, "currency": "CNY", "source": "Tencent quote"}],
+            }), encoding="utf-8")
+            context = review.read_price_context(root, "600001.SH")
+        self.assertEqual(context["price"], 12.34)
+        self.assertEqual(context["status"], "stale")
+        self.assertIn("不得改变规则", context["statement"])
 
     def test_model_error_keeps_reused_extract_in_atomic_result(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -502,6 +558,7 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("model_review_comparison.json", app)
         self.assertIn("ZCode 独立复核", app)
         self.assertIn("DeepSeek 复核", app)
+        self.assertIn("复核行情上下文", app)
         self.assertIn("双方证据不足 / 历史", app)
         self.assertIn(".fundamental-review-table", css)
 
