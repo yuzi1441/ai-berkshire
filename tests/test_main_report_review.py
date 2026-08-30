@@ -556,6 +556,8 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("fundamentalReviewPartitionKey", app)
         self.assertIn("reportReviewAlert", app)
         self.assertIn("model_review_comparison.json", app)
+        self.assertIn("Codex 直接复核", app)
+        self.assertIn("Codex 直接复核（当前证据）", app)
         self.assertIn("ZCode 独立复核", app)
         self.assertIn("DeepSeek 复核", app)
         self.assertIn("复核行情上下文", app)

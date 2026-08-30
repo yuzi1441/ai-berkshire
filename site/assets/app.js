@@ -3759,7 +3759,7 @@ function reportReviewAlert(review) {
 function renderReportReviewAlertCell(review, { compact = false } = {}) {
   const cell = document.createElement("td");
   cell.className = `report-review-alert-cell ${compact ? "report-review-alert-compact" : ""}`;
-  cell.dataset.label = compact ? "双模型复核" : "对照分区";
+  cell.dataset.label = compact ? "ZCode × DeepSeek" : "对照分区";
   const alert = reportReviewAlert(review);
   const label = document.createElement("strong");
   label.className = `report-review-alert-label report-review-alert-${alert.tone}`;
@@ -3799,8 +3799,29 @@ function renderModelReviewCell(packet, label) {
   return cell;
 }
 
+function renderCodexDirectReviewCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell codex-direct-review-cell";
+  cell.dataset.label = "Codex 直接复核";
+  const direct = review?.manual?.codex_direct;
+  if (!direct) {
+    cell.textContent = "未归档 Codex 直接复核";
+    return cell;
+  }
+  const source = document.createElement("strong");
+  source.textContent = `Codex 直接复核 · ${shortReviewDate(direct.reviewed_at)}`;
+  const verdict = document.createElement("p");
+  verdict.className = "fundamental-review-meta";
+  verdict.textContent = direct.label || direct.status || "未保存结论";
+  const evidence = document.createElement("p");
+  evidence.className = "fundamental-review-meta muted";
+  evidence.textContent = `${direct.evidence_count ?? 0} 份当前证据 · 红线 ${direct.redline_count ?? 0} · 关注 ${direct.warning_count ?? 0}`;
+  cell.append(source, verdict, evidence);
+  return cell;
+}
+
 function renderFundamentalReviewRows(visible) {
-  setTableHeader(["公司 / 代码", "对照分区", "ZCode 独立复核", "DeepSeek 复核", "对照说明"]);
+  setTableHeader(["公司 / 代码", "Codex 直接复核", "对照分区", "ZCode 独立复核", "DeepSeek 复核", "对照说明"]);
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
   rendered.forEach((item, index) => {
     const review = modelReviewForItem(item);
@@ -3813,6 +3834,7 @@ function renderFundamentalReviewRows(visible) {
     tr.append(renderIdentityCell(item));
 
     tr.append(
+      renderCodexDirectReviewCell(fundamentalReviewForItem(item)),
       renderReviewQueueStatusCell(review),
       renderModelReviewCell(review?.zcode, "ZCode 独立复核"),
       renderModelReviewCell(review?.deepseek, "DeepSeek 复核"),
@@ -3832,7 +3854,7 @@ function renderFundamentalReviewRows(visible) {
     els.loadMoreRows.hidden = remaining === 0;
     els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
   }
-  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 按双模型分歧与当前证据排序`;
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · Codex 当前结论与 ZCode / DeepSeek 交叉对照`;
   if (els.emptyState) els.emptyState.hidden = visible.length > 0;
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
@@ -4211,17 +4233,48 @@ function renderFundamentalReviewDetail(item) {
     els.detailBody.append(empty);
     return;
   }
+  const strictReview = fundamentalReviewForItem(item);
+  const direct = strictReview?.manual?.codex_direct;
+  if (direct) {
+    const directCard = document.createElement("section");
+    directCard.className = "card fundamental-review-overview-card codex-direct-review-card";
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "eyebrow";
+    eyebrow.textContent = "CODEX DIRECT EVIDENCE REVIEW";
+    const title = document.createElement("h3");
+    title.textContent = "Codex 直接复核（当前证据）";
+    const verdict = document.createElement("p");
+    verdict.className = "fundamental-review-policy";
+    verdict.textContent = direct.label || direct.status || "未保存结论";
+    directCard.append(eyebrow, title, verdict);
+    appendReviewFacts(directCard, [
+      ["复核时间", shortReviewDate(direct.reviewed_at)],
+      ["当前证据", `${direct.evidence_count ?? 0} 份`],
+      ["红线 / 关注", `${direct.redline_count ?? 0} / ${direct.warning_count ?? 0}`],
+      ["下一证据", direct.next_evidence || "未记录"],
+    ]);
+    if (direct.data_gaps?.length) {
+      const gaps = document.createElement("p");
+      gaps.className = "source-note";
+      gaps.textContent = `数据缺口：${direct.data_gaps.join("；")}`;
+      directCard.append(gaps);
+    }
+    const boundary = document.createElement("p");
+    boundary.className = "fundamental-review-policy";
+    boundary.textContent = direct.source_statement || direct.decision_boundary || "只核对主报告之后的证据；不改写人工锁定规则。";
+    directCard.append(boundary);
+    els.detailBody.append(directCard);
+  }
   const comparisonCard = document.createElement("section");
   comparisonCard.className = "card fundamental-review-overview-card";
   const comparisonEyebrow = document.createElement("p");
   comparisonEyebrow.className = "eyebrow";
   comparisonEyebrow.textContent = "SAVED MODEL REVIEW COMPARISON";
   const comparisonTitle = document.createElement("h3");
-  comparisonTitle.textContent = "ZCode 与 DeepSeek 双层复核";
+  comparisonTitle.textContent = "ZCode 与 DeepSeek 模型交叉对照";
   const comparisonNote = document.createElement("p");
   comparisonNote.className = "fundamental-review-policy";
   comparisonNote.textContent = "两边都保留各自的规则文本和结果。只有引用主报告之后的本地或官方材料，才标为当前证据；这不会自动改变主报告判断或人工价格分区。";
-  const strictReview = fundamentalReviewForItem(item);
   const priceContext = strictReview?.price_context || strictReview?.routine?.strict_incremental?.price_context;
   const priceNote = document.createElement("p");
   priceNote.className = "source-note";
