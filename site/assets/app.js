@@ -567,17 +567,6 @@ function renderPrimaryJudgment(item, { compact = true } = {}) {
     reviewed.className = "primary-judgment-consensus";
     reviewed.textContent = "已人工核对主报告原文 · 主报告结论优先于模型标签分歧";
     wrap.append(reviewed);
-  } else if (judgment.model_consensus === true) {
-    const consensus = document.createElement("p");
-    consensus.className = "primary-judgment-consensus";
-    const modelNames = Object.values(judgment.models || {}).filter(Boolean).join(" + ");
-    consensus.textContent = `双模型一致${modelNames ? ` · ${modelNames}` : ""}`;
-    wrap.append(consensus);
-  } else if (judgment.screening_consensus === true) {
-    const consensus = document.createElement("p");
-    consensus.className = "primary-judgment-consensus";
-    consensus.textContent = "双模型均不支持当前直接买入 · 细分口径按保守交集展示";
-    wrap.append(consensus);
   }
 
   if (judgment.report_field_conflict) {
@@ -652,7 +641,7 @@ function renderExecutionState(item, quote, { compact = true } = {}) {
   if (execution.policy?.reliability === "conservative") {
     const consensus = document.createElement("p");
     consensus.className = "primary-judgment-aux-note";
-    consensus.textContent = "双模型细分口径有分歧；本状态只采用两者对“当前不可直接买入”的安全交集。";
+    consensus.textContent = "主报告细分口径存在分歧；当前状态采用更保守的安全交集。";
     wrap.append(consensus);
   }
   if (

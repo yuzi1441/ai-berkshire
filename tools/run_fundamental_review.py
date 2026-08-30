@@ -179,7 +179,7 @@ def seed_legacy(repo_root: Path, rules_dir: Path, layers_dir: Path) -> int:
     for package in load_rule_packages(rules_dir):
         ticker = str(package.get("ticker"))
         model_packet = by_ticker.get(ticker) or {}
-        daily = packet_layer_run(model_packet.get("zcode"), layer="daily", default_reviewer="ZCode", rules_fingerprint=package.get("rules_fingerprint"), migrated_seed=True)
+        daily = packet_layer_run(model_packet.get("deepseek"), layer="daily", default_reviewer="DeepSeek", rules_fingerprint=package.get("rules_fingerprint"), migrated_seed=True)
         deep = codex_layer_run(codex_by_ticker.get(ticker), rules_fingerprint=package.get("rules_fingerprint"))
         for layer, payload in (("daily", daily), ("deep", deep)):
             if payload:

@@ -1,7 +1,7 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-29T19:50:47+08:00",
-  "generation_id": "60c2cf99a15d9a8c5783",
+  "generated_at": "2026-08-31T02:14:18+08:00",
+  "generation_id": "2dd4cfcb44874af19ce4",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 229,
@@ -20,13 +20,10 @@
   "main_report_review": {
     "stock_count": 93,
     "status_counts": {
-      "waiting_evidence": 89,
-      "error": 1,
-      "stale_rules": 1,
-      "no_rules": 2
+      "historical_review": 93
     },
-    "generated_at": "2026-08-29T19:50:47+08:00",
-    "next_check_at": "2026-09-01T19:50:47+08:00"
+    "generated_at": "2026-08-31T02:14:18+08:00",
+    "next_check_at": "2026-09-03T02:14:18+08:00"
   },
   "source_schema_version": 7,
   "detail_directory": "decision_details/",
@@ -236,7 +233,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -701,7 +698,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -1100,7 +1097,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -1551,7 +1548,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -1975,7 +1972,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -2376,7 +2373,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -2808,7 +2805,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -3280,7 +3277,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -3792,7 +3789,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -4298,7 +4295,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -4696,7 +4693,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -5100,7 +5097,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -5551,7 +5548,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -5947,7 +5944,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -6349,7 +6346,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -6798,7 +6795,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -7294,7 +7291,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -7753,7 +7750,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -7782,7 +7779,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -7845,7 +7842,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -7909,7 +7906,7 @@
         ],
         "task_count": 3,
         "due_count": 2,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -8249,7 +8246,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -8282,7 +8279,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -8375,7 +8372,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -8684,7 +8681,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -9288,7 +9285,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -9861,7 +9858,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -9887,8 +9884,8 @@
               }
             ],
             "schedule_label": "2026年中报、2026年年报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-08-31"
@@ -9966,7 +9963,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-31"
       },
       "execution_policy": {
@@ -10316,7 +10313,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -10819,7 +10816,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -10848,8 +10845,8 @@
               }
             ],
             "schedule_label": "2026年中报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-08-31"
@@ -10925,7 +10922,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-31"
       },
       "execution_policy": {
@@ -11249,7 +11246,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -11740,7 +11737,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -12323,7 +12320,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -12772,7 +12769,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -13261,7 +13258,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -13719,7 +13716,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -14221,7 +14218,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -14738,7 +14735,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -15198,7 +15195,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -15599,7 +15596,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -16076,7 +16073,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -16515,7 +16512,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -16987,7 +16984,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -17418,7 +17415,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -17977,7 +17974,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -18616,7 +18613,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -19139,7 +19136,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -19616,7 +19613,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -20100,7 +20097,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -20628,7 +20625,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -21163,7 +21160,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -21623,7 +21620,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -22128,7 +22125,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -22584,7 +22581,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -23204,7 +23201,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -23634,7 +23631,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -24464,7 +24461,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -25012,7 +25009,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -25585,7 +25582,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -26070,7 +26067,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -26482,7 +26479,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -26966,7 +26963,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -27413,7 +27410,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -27858,7 +27855,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -28318,7 +28315,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -28768,7 +28765,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -29159,7 +29156,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -29184,7 +29181,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -29276,7 +29273,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -29596,7 +29593,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -30115,7 +30112,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -30596,7 +30593,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -31059,7 +31056,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -31512,7 +31509,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -31967,7 +31964,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -32447,7 +32444,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -32851,7 +32848,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -33276,7 +33273,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -33745,7 +33742,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -34300,7 +34297,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -34749,7 +34746,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -35325,7 +35322,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -35793,7 +35790,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -36266,7 +36263,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -36714,7 +36711,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -37209,7 +37206,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -37775,7 +37772,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -38205,7 +38202,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -38689,7 +38686,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -39101,7 +39098,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -39509,7 +39506,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -40042,7 +40039,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -40504,7 +40501,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -41113,7 +41110,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -41611,7 +41608,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -42120,7 +42117,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -42145,7 +42142,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -42237,7 +42234,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -42591,7 +42588,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -42974,7 +42971,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -43463,7 +43460,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -43997,7 +43994,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-29T19:50:47+08:00",
+        "generated_at": "2026-08-31T02:14:18+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [

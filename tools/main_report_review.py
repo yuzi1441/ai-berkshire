@@ -2035,9 +2035,9 @@ def packet_layer_run(
 ) -> dict[str, Any] | None:
     """Make a saved legacy packet explicit about layer and evidence currency.
 
-    A migrated ZCode packet may occupy the current *daily slot* at the user's
-    request, but it must retain its real reviewer and evidence-quality labels.
-    It is never rewritten as a DeepSeek result or a current fact.
+    A migrated packet may occupy a review layer only as an explicitly labelled
+    historical seed.  It must retain its real reviewer and evidence-quality
+    labels and is never rewritten as another model's result or a current fact.
     """
     if not isinstance(packet, dict) or not packet:
         return None
@@ -2177,8 +2177,18 @@ def merge_saved_layer_snapshot(snapshot: dict[str, Any], saved: dict[str, Any]) 
         if not current_hash or current_hash != previous_hash:
             continue
         for layer in ("daily", "deep"):
-            if isinstance(previous.get(layer), dict):
-                row[layer] = previous[layer]
+            previous_layer = previous.get(layer)
+            previous_run = previous_layer.get("current") if isinstance(previous_layer, dict) else None
+            if not isinstance(previous_run, dict):
+                continue
+            # Releases created before the daily/deep ownership fix seeded the
+            # daily slot with ZCode.  Never resurrect that wrong mapping from a
+            # VPS snapshot.  Real atomic daily runs are not migrated seeds; a
+            # migrated DeepSeek run is still a correctly labelled baseline.
+            reviewer = str(previous_run.get("model") or previous_run.get("reviewer") or "").lower()
+            if layer == "daily" and previous_run.get("migrated_seed") and "deepseek" not in reviewer:
+                continue
+            row[layer] = previous_layer
         row["layer_comparison"] = layer_comparison(
             (row.get("daily") or {}).get("current"),
             (row.get("deep") or {}).get("current"),
@@ -2304,13 +2314,14 @@ def public_review_snapshot(
             layer="daily",
             rules_fingerprint=package.get("rules_fingerprint"),
         )
-        # The user selected ZCode as the current seed of the daily layer.  It
-        # remains explicitly labelled as ZCode until a newer DeepSeek run for
-        # this exact stock atomically replaces it.
-        daily_current = saved_daily or packet_layer_run(
-            legacy_models.get("zcode"),
+        # Daily review belongs to DeepSeek.  A legacy ZCode packet is an audit
+        # reference, never the current daily result.  Ignore the old seeded
+        # ZCode file while preserving any real, non-migrated atomic daily run.
+        usable_saved_daily = saved_daily if saved_daily and not saved_daily.get("migrated_seed") else None
+        daily_current = usable_saved_daily or packet_layer_run(
+            legacy_models.get("deepseek"),
             layer="daily",
-            default_reviewer="ZCode",
+            default_reviewer="DeepSeek",
             rules_fingerprint=package.get("rules_fingerprint"),
             migrated_seed=True,
         )
@@ -2324,25 +2335,26 @@ def public_review_snapshot(
             rules_fingerprint=package.get("rules_fingerprint"),
         )
         daily_history = []
-        deepseek_history = packet_layer_run(
-            legacy_models.get("deepseek"),
+        zcode_audit_history = packet_layer_run(
+            legacy_models.get("zcode"),
             layer="daily",
-            default_reviewer="DeepSeek",
+            default_reviewer="ZCode",
             rules_fingerprint=package.get("rules_fingerprint"),
             migrated_seed=True,
         )
-        if deepseek_history:
-            daily_history.append(deepseek_history)
-        if saved_daily and legacy_models.get("zcode"):
-            previous_zcode = packet_layer_run(
-                legacy_models.get("zcode"),
+        if zcode_audit_history:
+            zcode_audit_history["role"] = "rule_audit_reference"
+            daily_history.append(zcode_audit_history)
+        if usable_saved_daily and legacy_models.get("deepseek"):
+            previous_deepseek = packet_layer_run(
+                legacy_models.get("deepseek"),
                 layer="daily",
-                default_reviewer="ZCode",
+                default_reviewer="DeepSeek",
                 rules_fingerprint=package.get("rules_fingerprint"),
                 migrated_seed=True,
             )
-            if previous_zcode:
-                daily_history.append(previous_zcode)
+            if previous_deepseek:
+                daily_history.append(previous_deepseek)
         deep_history = []
         if saved_deep and codex_by_ticker.get(ticker):
             previous_codex = codex_layer_run(
@@ -2434,7 +2446,7 @@ def public_review_snapshot(
                     "current": daily_current,
                     "history": daily_history,
                     "due_at": (daily_current or {}).get("due_at") or next_check_at,
-                    "policy": "日常层由 DeepSeek 手动复核；当前 ZCode 仅为迁移的日常记录，直到该股新的 DeepSeek 结果覆盖。",
+                    "policy": "日常层只显示 DeepSeek 手动复核；ZCode 仅保留为规则审计与历史交叉材料。",
                 },
                 "deep": {
                     "current": deep_current,
@@ -2449,7 +2461,7 @@ def public_review_snapshot(
         "schema_version": PUBLIC_SNAPSHOT_VERSION,
         "generated_at": generated_at,
         "next_check_at": next_check_at,
-        "source": "human_locked_rules + migrated_zcode_daily + saved_deepseek_daily_history + codex_deep + atomic_layer_runs",
+        "source": "human_locked_rules + migrated_deepseek_daily + zcode_audit_history + codex_deep + atomic_layer_runs",
         "status_counts": status_counts,
         "stock_count": len(rows),
         "comparison": comparison.get("summary") if isinstance(comparison, dict) else None,

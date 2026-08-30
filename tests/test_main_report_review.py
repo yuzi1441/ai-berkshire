@@ -557,6 +557,31 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         deep["rules_fingerprint"] = "rule-v2"
         self.assertEqual(review.layer_comparison(daily, deep)["state"], "not_comparable")
 
+    def test_saved_zcode_seed_cannot_replace_deepseek_daily_layer(self):
+        snapshot = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH",
+                "rule_state": "active",
+                "main_report": {"canonical_sha256": "same-report"},
+                "daily": {"current": {"model": "deepseek-v4-flash", "migrated_seed": True}},
+                "deep": {"current": {"model": "new-deep"}},
+            }],
+        }
+        saved = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH",
+                "main_report": {"canonical_sha256": "same-report"},
+                "daily": {"current": {"model": "zcode-inline-review/GLM", "migrated_seed": True}},
+                "deep": {"current": {"model": "saved-deep"}},
+            }],
+        }
+        merged = review.merge_saved_layer_snapshot(snapshot, saved)
+        row = merged["reviews"][0]
+        self.assertEqual(row["daily"]["current"]["model"], "deepseek-v4-flash")
+        self.assertEqual(row["deep"]["current"]["model"], "saved-deep")
+
     def test_current_comparison_matches_inputs(self):
         snapshot = review.comparison_snapshot(self.ROOT)
         self.assertEqual(snapshot["summary"]["same_tasks"], 104)
@@ -659,8 +684,9 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertEqual(snapshot["schema_version"], 5)
         self.assertEqual(dongfang["manual"]["authority"], "human_locked")
         self.assertEqual(dongfang["manual"]["status"], "active")
-        self.assertIn("zcode", dongfang["daily"]["current"]["model"].lower())
+        self.assertIn("deepseek", dongfang["daily"]["current"]["model"].lower())
         self.assertTrue(dongfang["daily"]["current"]["migrated_seed"])
+        self.assertTrue(any("zcode" in row["model"].lower() for row in dongfang["daily"]["history"]))
         self.assertEqual(dongfang["deep"]["current"]["model"], "Codex 直接复核（未调用模型）")
         self.assertIn(dongfang["layer_comparison"]["state"], {"not_comparable", "aligned", "different", "not_available"})
         self.assertEqual(dongfang["routine"]["status"], "historical_review")
