@@ -238,7 +238,7 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-08-29T19:50:47+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
@@ -268,72 +268,7 @@
         "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
         "date_status": "due",
         "status_label": "已到期待确认",
-        "next_review_date": "2026-04-30",
-        "calendar_dates": [
-          "2026-04-30",
-          "2026-08-29"
-        ],
-        "calendar_date_details": [
-          {
-            "period_key": "2026Q1",
-            "period_label": "2026年一季报",
-            "actual_date": "2026-04-30",
-            "scheduled_date": "2026-04-30",
-            "effective_date": "2026-04-30",
-            "effective_type": "actual",
-            "actual_verification": "cross_checked",
-            "scheduled_verification": "cross_checked",
-            "actual_eastmoney": "2026-04-30",
-            "actual_cninfo": "2026-04-30",
-            "scheduled_eastmoney": "2026-04-30",
-            "scheduled_cninfo": "2026-04-30"
-          },
-          {
-            "period_key": "2026H1",
-            "period_label": "2026年中报",
-            "actual_date": "2026-08-29",
-            "scheduled_date": "2026-08-29",
-            "effective_date": "2026-08-29",
-            "effective_type": "actual",
-            "actual_verification": "single_source",
-            "scheduled_verification": "cross_checked",
-            "actual_eastmoney": "2026-08-29",
-            "actual_cninfo": null,
-            "scheduled_eastmoney": "2026-08-29",
-            "scheduled_cninfo": "2026-08-29"
-          }
-        ]
-      },
-      {
-        "task_id": "risk",
-        "scope": "risk",
-        "scope_label": "风险/失效条件",
-        "title": "复核风险/失效条件",
-        "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
-        "metrics": [
-          "毛利率",
-          "利润",
-          "收入",
-          "库存",
-          "产能/销量"
-        ],
-        "periods": [
-          "quarterly"
-        ],
-        "schedule_type": "recurring_filing",
-        "source_field": "trigger_condition",
-        "evidence": [
-          {
-            "line_start": 306,
-            "line_end": 431,
-            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
-            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
-          }
-        ],
-        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-        "date_status": "due",
-        "status_label": "已到期待确认",
-        "next_review_date": "2026-04-30",
+        "next_review_date": "2026-08-29",
         "calendar_dates": [
           "2026-04-30",
           "2026-08-29"
@@ -393,8 +328,8 @@
           }
         ],
         "schedule_label": "2026年中报",
-        "date_status": "pending",
-        "status_label": "待披露",
+        "date_status": "due",
+        "status_label": "已到期待确认",
         "next_review_date": "2026-08-29",
         "calendar_dates": [
           "2026-08-29"
@@ -415,11 +350,76 @@
             "scheduled_cninfo": "2026-08-29"
           }
         ]
+      },
+      {
+        "task_id": "risk",
+        "scope": "risk",
+        "scope_label": "风险/失效条件",
+        "title": "复核风险/失效条件",
+        "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+        "metrics": [
+          "毛利率",
+          "利润",
+          "收入",
+          "库存",
+          "产能/销量"
+        ],
+        "periods": [
+          "quarterly"
+        ],
+        "schedule_type": "recurring_filing",
+        "source_field": "trigger_condition",
+        "evidence": [
+          {
+            "line_start": 306,
+            "line_end": 431,
+            "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+            "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-29",
+        "calendar_dates": [
+          "2026-04-30",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-30",
+            "scheduled_date": "2026-04-30",
+            "effective_date": "2026-04-30",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-30",
+            "actual_cninfo": "2026-04-30",
+            "scheduled_eastmoney": "2026-04-30",
+            "scheduled_cninfo": "2026-04-30"
+          },
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
       }
     ],
     "task_count": 3,
-    "due_count": 2,
-    "next_review_date": "2026-04-30"
+    "due_count": 3,
+    "next_review_date": "2026-08-29"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -539,7 +539,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "60c2cf99a15d9a8c5783",
   "detail_id": "c618d3e5aae327e5d91d",
   "detail_path": "./data/decision_details/c618d3e5aae327e5d91d.json"
 }

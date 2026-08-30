@@ -28,6 +28,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from source_hash import canonical_file_sha256
+
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
@@ -175,7 +177,7 @@ def report_sha256(repo_root: Path, decision: dict[str, Any]) -> str:
     report_path = repo_root / str(decision.get("report_path") or "")
     if not report_path.is_file():
         raise OpportunityReviewError(f"main report does not exist: {decision.get('report_path')}")
-    return hashlib.sha256(report_path.read_bytes()).hexdigest()
+    return canonical_file_sha256(report_path)
 
 
 def load_json(path: Path, default: Any) -> Any:

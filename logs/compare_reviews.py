@@ -20,6 +20,10 @@ def brief(text, n=42):
 rows = []
 agree_matrix = {}
 status_ds, status_zc = {}, {}
+evidence_quality = {
+    "deepseek": {"non_gap": 0, "with_current_evidence": 0},
+    "zcode": {"non_gap": 0, "with_current_evidence": 0},
+}
 per_task_agree = {k: [0, 0] for k in ORDER}
 divergent = []
 for entry in manifest:
@@ -30,11 +34,23 @@ for entry in manifest:
     zc_tasks = {t["task_id"]: t for t in (zc.get("model_review") or {}).get("tasks", [])}
     ds_rules = {t["task_id"]: t for t in ds.get("fixed_tasks", [])}
     zc_rules = {t["task_id"]: t for t in zc.get("zcode_tasks", [])}
+    ds_docs = {item.get("document_id"): item for item in ds.get("local_evidence_documents", [])}
+    zc_docs = {item.get("document_id"): item for item in zc.get("local_evidence_documents", [])}
     stock_ok = True
     for tid in ORDER:
         d = ds_tasks.get(tid, {})
         z = zc_tasks.get(tid, {})
         s_d, s_z = d.get("status", "?"), z.get("status", "?")
+        for label, task, documents in (("deepseek", d, ds_docs), ("zcode", z, zc_docs)):
+            if task.get("status") == "data_insufficient":
+                continue
+            evidence_quality[label]["non_gap"] += 1
+            if any(
+                (documents.get(document_id) or {}).get("source_role")
+                in {"local_current_evidence", "official_current_evidence"}
+                for document_id in task.get("evidence_document_ids") or []
+            ):
+                evidence_quality[label]["with_current_evidence"] += 1
         status_ds[s_d] = status_ds.get(s_d, 0) + 1
         status_zc[s_z] = status_zc.get(s_z, 0) + 1
         agree_matrix[(s_d, s_z)] = agree_matrix.get((s_d, s_z), 0) + 1
@@ -95,6 +111,13 @@ lines = [
     f"- deepseek 状态分布：{json.dumps(status_ds, ensure_ascii=False)}",
     f"- ZCode 状态分布：{json.dumps(status_zc, ensure_ascii=False)}",
     "",
+    "## 当前证据合格率",
+    "",
+    f"- DeepSeek 非缺失结论：{evidence_quality['deepseek']['non_gap']} 条；其中引用当前证据：{evidence_quality['deepseek']['with_current_evidence']} 条；不合格：{evidence_quality['deepseek']['non_gap'] - evidence_quality['deepseek']['with_current_evidence']} 条。",
+    f"- ZCode 非缺失结论：{evidence_quality['zcode']['non_gap']} 条；其中引用当前证据：{evidence_quality['zcode']['with_current_evidence']} 条；不合格：{evidence_quality['zcode']['non_gap'] - evidence_quality['zcode']['with_current_evidence']} 条。",
+    "- 合格口径：非 `data_insufficient` 结论至少引用一份 `local_current_evidence` 或 `official_current_evidence`。主报告只能作为规则基线。",
+    "- 这批历史 DeepSeek 结果不得直接作为当前复核结论；修复后的日常任务必须重新取得当前证据并通过程序硬校验。",
+    "",
     "## 逐股一致性",
     "",
     f"- 全任务一致股票：{sum(1 for r in rows if r['agree'])}/93",
@@ -132,6 +155,7 @@ lines += [
     "- ZCode 独立轮执行了更严的证据纪律：79 只仅有主报告的股票，主报告一律只作基线、不冒充新独立验证，相关任务诚实判 `data_insufficient` 并标注缺口；deepseek 轮在同样证据条件下判出更多 `verified`（部分以报告基线数据充当验证）。",
     "- 因此『deepseek=verified / ZCode=data_insufficient』的组合主要反映**验证标准宽严差**，而非事实判断冲突；事实层面的红旗差异重点看 triggered/not_triggered 象限。",
     "- 全部 279 条 ZCode 结论的引文已与源文件逐字比对通过；锁定规则文件 `main_report_resolutions.json` 与 deepseek 结果在全程中未被修改。",
+    "- 本次 ZCode 历史轮使用的是从主报告独立抽取的 `zcode_tasks`，适合审计锁定规则是否遗漏，但不能冒充‘同一锁定规则下的人工作业结果’。后续人工复核应直接读取与 DeepSeek 相同的 `fixed_tasks` 和同一证据包。",
     "",
     "## 文件清单",
     "",
