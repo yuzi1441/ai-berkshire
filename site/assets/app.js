@@ -4019,6 +4019,15 @@ const ZONE_LABEL_SHORT = {
   "安全边际": "边际", "强加仓": "加仓", "小仓试建": "试建", "稳健观察": "观察",
   "保守分批": "分批", "小仓位分批": "小仓", "激进小仓": "激进", "稳健建仓": "建仓",
   "现价附近": "附近", "只设观察仓，不追涨": "观察", "等待确认后分批买入": "待确认",
+  "才进入深度研究/小仓试错": "深度研究", "分批观察": "分批", "只能小仓": "小仓",
+  "若基本面未恶化，安全边际较好，可重点买入研究区。": "重点研究",
+  "若基本面未恶化，可进入重点买入研究区。": "重点研究",
+  "只在深度折价时买入": "折价买入", "优先研究和配置": "研究配置",
+  "有安全边际，可分批建仓": "分批", "等待信号后小仓试错": "小仓试错",
+  "6.0-6.5 元可稳健分批，6.0 元以下安全边际更佳": "稳健分批",
+  "适合观察或小仓位分批，不能用热门叙事重仓追入": "观察",
+  "等待基本面未恶化后重新评估。": "重估",
+  "重点研究和配置 23–26.5": "研究配置",
 };
 
 function refineZoneBarLabels(scope) {
@@ -4027,9 +4036,9 @@ function refineZoneBarLabels(scope) {
     if (!span) return;
     if (span.scrollWidth <= seg.clientWidth) return;
     const full = span.textContent;
-    const short = ZONE_LABEL_SHORT[full] || full.slice(0, 2);
-    span.textContent = short;
-    if (span.scrollWidth > seg.clientWidth) span.textContent = "";
+    const short = ZONE_LABEL_SHORT[full];
+    /* 有短词映射就用短词；没有就直接隐藏——绝不显示"才进""若基"这类碎片 */
+    span.textContent = short && short.length <= 4 ? short : "";
   });
 }
 
@@ -5200,7 +5209,16 @@ function renderZoneBar(item, quote) {
   marker.title = `现价 ${price}`;
   bar.append(marker);
 
-  wrap.append(top, bar);
+  const legend = document.createElement("div");
+  legend.className = "zone-legend";
+  segments.forEach((seg) => {
+    const chip = document.createElement("span");
+    chip.className = `zl-chip k-${seg.kind}` + (price >= seg.min && price <= seg.max ? " cur" : "");
+    chip.textContent = `${seg.label} ${seg.rangeText}`;
+    legend.append(chip);
+  });
+
+  wrap.append(top, bar, legend);
   return wrap;
 }
 
