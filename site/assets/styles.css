@@ -1118,18 +1118,87 @@ tbody tr.detail-inline-row .detail-panel {
 #human-review-chips[hidden],
 #tracking-filter-row[hidden],
 #fundamental-review-filter-row[hidden],
+#fundamental-review-partitions[hidden],
 .sort-field[hidden] { display: none !important; }
 .review-view .index-band,
 .review-view .annual-panel,
 .review-view .automation-panel,
 .review-view .attention-panel { display: none !important; }
 .review-view .summary-band { margin-top: 2px; }
+.fundamental-review-partitions {
+  margin: 16px 0 2px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(76, 195, 255, 0.055), rgba(255, 255, 255, 0.012));
+}
+.fundamental-review-partitions-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.fundamental-review-partitions h2 { margin: 2px 0 3px; font-size: 16px; }
+.fundamental-review-partitions-head p:not(.eyebrow) {
+  max-width: 650px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.fundamental-review-partitions-total {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border: 1px solid rgba(76, 195, 255, 0.3);
+  border-radius: 999px;
+  color: #71c7ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+.fundamental-review-partition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 8px;
+}
+.fundamental-review-partition {
+  min-width: 0;
+  min-height: 104px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2);
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+.fundamental-review-partition:hover { transform: translateY(-1px); border-color: var(--ink-faint); }
+.fundamental-review-partition.active { background: rgba(76, 195, 255, 0.1); border-color: rgba(76, 195, 255, 0.55); }
+.fundamental-review-partition strong,
+.fundamental-review-partition span,
+.fundamental-review-partition small { display: block; }
+.fundamental-review-partition strong { font-size: 22px; line-height: 1; }
+.fundamental-review-partition span { margin-top: 7px; font-size: 11px; font-weight: 800; }
+.fundamental-review-partition small { margin-top: 4px; color: var(--ink-faint); font-size: 9.5px; line-height: 1.38; }
+.fundamental-review-partition.partition-redline { border-left-color: var(--sell); }
+.fundamental-review-partition.partition-redline strong { color: #ff8585; }
+.fundamental-review-partition.partition-attention,
+.fundamental-review-partition.partition-stale { border-left-color: var(--watch); }
+.fundamental-review-partition.partition-attention strong,
+.fundamental-review-partition.partition-stale strong { color: var(--watch); }
+.fundamental-review-partition.partition-improving { border-left-color: var(--buy); }
+.fundamental-review-partition.partition-improving strong { color: var(--buy); }
+.fundamental-review-partition.partition-historical { border-left-color: #c5afe8; }
+.fundamental-review-partition.partition-historical strong { color: #c5afe8; }
 .review-filter-redline { color: #ff8585; }
 .review-filter-attention,
 .review-filter-stale { color: var(--watch); }
 .review-filter-improving { color: var(--buy); }
 .review-filter-gap,
 .review-filter-waiting { color: var(--ink-soft); }
+.review-filter-historical { color: #c5afe8; }
 .fundamental-review-table { min-width: 1280px; }
 .fundamental-review-table tbody td { vertical-align: top; }
 .fundamental-review-table .company-sentiment { display: none; }

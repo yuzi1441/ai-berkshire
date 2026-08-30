@@ -90,6 +90,7 @@ const els = {
   humanReviewChips: document.querySelector("#human-review-chips"),
   viewTabs: document.querySelector("#view-tabs"),
   fundamentalReviewFilterRow: document.querySelector("#fundamental-review-filter-row"),
+  fundamentalReviewPartitions: document.querySelector("#fundamental-review-partitions"),
   fundamentalReviewCount: document.querySelector("#fundamental-review-count"),
   trackingFilterRow: document.querySelector("#tracking-filter-row"),
   trackingCount: document.querySelector("#tracking-count"),
@@ -1794,6 +1795,99 @@ function fundamentalReviewMeta(review) {
   return routineReviewMeta(review);
 }
 
+// A review screen needs one clear home for each stock.  Manual-rule staleness
+// takes priority over any saved daily result, so historical data is never
+// mistaken for a still-valid rule outcome.
+function fundamentalReviewPartitionKey(review) {
+  const manualStatus = manualReviewMeta(review).status;
+  const routineStatus = routineReviewMeta(review).status;
+  if (manualStatus === "stale" || routineStatus === "stale_rules") return "stale_rules";
+  if (routineStatus === "redline") return "redline";
+  if (routineStatus === "attention") return "attention";
+  if (routineStatus === "evidence_ready") return "evidence_ready";
+  if (routineStatus === "data_gap") return "data_gap";
+  if (routineStatus === "improving") return "improving";
+  if (routineStatus === "historical_review") return "historical_review";
+  if (routineStatus === "error") return "error";
+  if (routineStatus === "no_rules") return "no_rules";
+  return "waiting_evidence";
+}
+
+const fundamentalReviewPartitions = [
+  ["redline", "红线已触发", "当前日常证据已确认碰到负向红线，优先打开核对。", "redline"],
+  ["attention", "需要关注", "出现需要人工解释的变化，尚不是自动投资动作。", "attention"],
+  ["evidence_ready", "已有证据待判定", "已发现新材料，等待日常核验完成。", "gap"],
+  ["data_gap", "数据不足", "规则已锁定，但当前缺少完成判断所需的数据。", "gap"],
+  ["improving", "条件改善", "经营改善条件有信号，仍须对照完整主报告。", "improving"],
+  ["waiting_evidence", "等待新证据", "主报告规则有效，尚未发现报告之后可核验的新材料。", "waiting"],
+  ["stale_rules", "规则待人工更新", "主报告版本变化或规则已失效，日常层已停止判定。", "stale"],
+  ["historical_review", "上一轮日常复核", "保存的 DeepSeek 历史结果，仅供对照，不当作当前结论。", "historical"],
+  ["error", "日常复核失败", "本轮没有可信日常结论，需检查失败原因与证据来源。", "stale"],
+  ["no_rules", "暂无经营规则", "主报告没有可锁定的经营核验项。", "waiting"],
+];
+
+function setFundamentalReviewFilter(filter) {
+  state.fundamentalReviewFilter = filter || "all";
+  resetRowPage();
+  els.fundamentalReviewFilterRow?.querySelectorAll(".chip").forEach((node) => {
+    node.classList.toggle("active", node.dataset.fundamentalReviewFilter === state.fundamentalReviewFilter);
+  });
+  renderAll();
+}
+
+function renderFundamentalReviewPartitions() {
+  const root = els.fundamentalReviewPartitions;
+  if (!root) return;
+  root.hidden = state.view !== "review";
+  root.replaceChildren();
+  if (state.view !== "review") return;
+
+  const reviews = state.decisions
+    .filter((item) => item.market === "A股")
+    .map((item) => fundamentalReviewForItem(item));
+  const counts = reviews.reduce((total, review) => {
+    const key = fundamentalReviewPartitionKey(review);
+    total[key] = (total[key] || 0) + 1;
+    return total;
+  }, {});
+
+  const head = document.createElement("div");
+  head.className = "fundamental-review-partitions-head";
+  const copy = document.createElement("div");
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "REPORT REVIEW QUEUE";
+  const title = document.createElement("h2");
+  title.textContent = "报告复核分区";
+  const note = document.createElement("p");
+  note.textContent = "每只 A 股只进入一个优先级分区；人工规则失效优先于日常或历史结果。";
+  copy.append(eyebrow, title, note);
+  const total = document.createElement("span");
+  total.className = "fundamental-review-partitions-total";
+  total.textContent = `${reviews.length} 只 A 股`;
+  head.append(copy, total);
+  root.append(head);
+
+  const grid = document.createElement("div");
+  grid.className = "fundamental-review-partition-grid";
+  for (const [key, titleText, detail, tone] of fundamentalReviewPartitions) {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = `fundamental-review-partition partition-${tone}${state.fundamentalReviewFilter === key ? " active" : ""}`;
+    card.setAttribute("aria-pressed", String(state.fundamentalReviewFilter === key));
+    const count = document.createElement("strong");
+    count.textContent = String(counts[key] || 0);
+    const label = document.createElement("span");
+    label.textContent = titleText;
+    const explanation = document.createElement("small");
+    explanation.textContent = detail;
+    card.append(count, label, explanation);
+    card.addEventListener("click", () => setFundamentalReviewFilter(key));
+    grid.append(card);
+  }
+  root.append(grid);
+}
+
 function fundamentalReviewRules(review, group = null) {
   return (review?.rules || []).filter((rule) => !group || rule.group === group);
 }
@@ -1912,7 +2006,7 @@ function filteredDecisions() {
     const fundamentalReview = fundamentalReviewForItem(item);
     const fundamentalReviewMatch = state.view !== "review"
       || state.fundamentalReviewFilter === "all"
-      || fundamentalReviewMeta(fundamentalReview).status === state.fundamentalReviewFilter;
+      || fundamentalReviewPartitionKey(fundamentalReview) === state.fundamentalReviewFilter;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -4599,6 +4693,7 @@ function renderAll() {
   renderAnnualReportDates();
   renderAutomationStatus();
   renderAttentionPanel();
+  renderFundamentalReviewPartitions();
   renderRows();
   renderDetail();
 }
@@ -4740,12 +4835,7 @@ function bindEvents() {
   els.fundamentalReviewFilterRow?.addEventListener("click", (event) => {
     const chip = event.target.closest(".chip");
     if (!chip) return;
-    state.fundamentalReviewFilter = chip.dataset.fundamentalReviewFilter || "all";
-    resetRowPage();
-    els.fundamentalReviewFilterRow.querySelectorAll(".chip").forEach((node) => {
-      node.classList.toggle("active", node === chip);
-    });
-    renderRows();
+    setFundamentalReviewFilter(chip.dataset.fundamentalReviewFilter || "all");
   });
   els.trackingFilterRow?.addEventListener("click", (event) => {
     const chip = event.target.closest(".chip");

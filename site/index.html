@@ -177,6 +177,8 @@
           <button type="button" class="chip review-filter-waiting" data-fundamental-review-filter="waiting_evidence">等待新证据</button>
           <button type="button" class="chip review-filter-stale" data-fundamental-review-filter="stale_rules">规则已失效</button>
           <button type="button" class="chip review-filter-stale" data-fundamental-review-filter="error">日常复核失败</button>
+          <button type="button" class="chip review-filter-waiting" data-fundamental-review-filter="no_rules">暂无经营规则</button>
+          <button type="button" class="chip review-filter-historical" data-fundamental-review-filter="historical_review">上一轮日常复核</button>
         </div>
         <div class="control-meta">
           <label class="sort-field" id="sort-field">
@@ -194,6 +196,8 @@
           <p class="data-status" id="data-status"></p>
         </div>
       </section>
+
+      <section class="fundamental-review-partitions" id="fundamental-review-partitions" aria-label="报告复核分区" hidden></section>
 
       <div class="workspace" id="workspace">
         <section class="table-panel" aria-label="个股列表">
