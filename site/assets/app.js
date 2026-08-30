@@ -3759,11 +3759,21 @@ function reportReviewAlert(review) {
 function renderReportReviewAlertCell(review, { compact = false } = {}) {
   const cell = document.createElement("td");
   cell.className = `report-review-alert-cell ${compact ? "report-review-alert-compact" : ""}`;
-  cell.dataset.label = compact ? "ZCode × DeepSeek" : "对照分区";
+  cell.dataset.label = compact ? "报告复核摘要" : "对照分区";
+  const direct = review?.manual?.codex_direct;
+  if (compact && direct) {
+    const directLabel = document.createElement("strong");
+    directLabel.className = `report-review-direct-label report-review-direct-${direct.status || "unknown"}`;
+    directLabel.textContent = `Codex 直接复核 · 红线 ${direct.redline_count ?? 0} · 关注 ${direct.warning_count ?? 0}`;
+    const directDetail = document.createElement("p");
+    directDetail.className = "report-review-direct-detail";
+    directDetail.textContent = direct.label || direct.status || "尚未保存结论";
+    cell.append(directLabel, directDetail);
+  }
   const alert = reportReviewAlert(review);
   const label = document.createElement("strong");
   label.className = `report-review-alert-label report-review-alert-${alert.tone}`;
-  label.textContent = alert.label;
+  label.textContent = compact ? `ZCode × DeepSeek · ${alert.label}` : alert.label;
   const detail = document.createElement("p");
   detail.textContent = alert.detail;
   cell.append(label, detail);
