@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "分众传媒",
+  "ticker": "002027.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+    "sha256": "b92d58656ddb9a83b880977c67362622641fdbc78e85559b95d7adbe5276de00",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：报告基线价 5.14 元（2026-08-07）下建议分批买入，首仓不超过目标仓位的 25%-30%；进攻型现价附近小仓分批 4.8-5.3 元，稳健型等待更厚安全边际 4.3-4.8 元，保守型仅深度折价 3.8-4.2 元买入。",
+      "derivation_quote": "**分批买入**，首仓不超过目标仓位的 25%—30%",
+      "derivation_line_ref": 23,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：持有者持有、不追高，持有区 5.3-7.4 元；≥7.5 元且基本面未同步上修时考虑减持；建议 2026-09-05 前后复核 2026 年半年报的客户行业结构、阿里系贡献、租赁现金流、经济 FCF 及新潮审核与交易方案。",
+      "derivation_quote": "建议在 2026-09-05 前后复核**，重点看 2026 年半年报的客户行业结构",
+      "derivation_line_ref": 299,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "客户行业结构",
+        "阿里系贡献",
+        "租赁现金流",
+        "经济FCF",
+        "A股收盘价"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：（1）连续两个半年期楼宇媒体收入下降超 10% 且行业总量仍增长；（2）年化经济 FCF 降至 35 亿元以下；（3）第一大客户收入持续超 20% 后大幅削减投放且无新行业补位；（4）新潮完成后八个季度内每股经济 FCF 未恢复或发生重大商誉减值；（5）核心楼宇资源明显流失且媒体成本/租赁现金流连续两期快于收入增长。",
+      "derivation_quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长",
+      "derivation_line_ref": 291,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "楼宇媒体收入同比",
+        "经济FCF",
+        "第一大客户收入占比",
+        "每股经济FCF",
+        "商誉减值"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+      "source_role": "main_report_reference",
+      "sha256": "b92d58656ddb9a83b880977c67362622641fdbc78e85559b95d7adbe5276de00"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 23,
+            "exact_quote": "| 建议动作 | **分批买入**，首仓不超过目标仓位的 25%—30% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 251,
+            "exact_quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 239,
+            "exact_quote": "| 情景 | EPS 年增速 | 2029 EPS | 目标 PE | 目标价 | 较 5.14 元 |"
+          }
+        ],
+        "note": "证据包仅有主报告 local_1，5.14 元为 2026-08-07 数据截止日基线价，无当前股价，无法判断是否落入 4.8-5.3/4.3-4.8/3.8-4.2 元任一买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 254,
+            "exact_quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 299,
+            "exact_quote": "**建议在 2026-09-05 前后复核**，重点看 2026 年半年报的客户行业结构、阿里系贡献、租赁现金流、经济 FCF、新潮审核是否恢复及交易方案有无调整。"
+          }
+        ],
+        "note": "证据包中无 2026 半年报数据（客户行业结构、阿里系贡献、租赁现金流、经济 FCF 均无当前值与对比期），也无当前股价判断是否触及 ≥7.5 元减持线。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 291,
+            "exact_quote": "1. 连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 292,
+            "exact_quote": "2. 年化经济 FCF 降至 35 亿元以下，且非单纯因客户回款季节性波动；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 382,
+            "exact_quote": "| 买入失效条件 | 楼宇收入两个半年降幅超 10%；经济 FCF 低于 35 亿元；并购后八季度每股 FCF 未恢复或重大商誉减值 |"
+          }
+        ],
+        "note": "证据包中无最新半年度楼宇媒体收入、经济 FCF、第一大客户占比数据及对比期，五条失效条件触发状态未知。"
+      }
+    ]
+  }
+}

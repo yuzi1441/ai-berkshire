@@ -1,0 +1,411 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "华钰矿业",
+  "ticker": "601020.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+    "canonical_sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5",
+    "locked_sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "19.38 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "19.38 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "17-18 元且控制权过户、精矿销售或 OCF 至少一项硬改善时才可小仓，13-15 元稳健等待，10-12 元以下或连续两季产销和 OCF 改善后再重估",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "小仓可观察，但须把锑产销率、OCF 和控制权过户设为季度检查点",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重仓风险收益不匹配，应降低到可承受周期和治理波动的仓位",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "控制权和董事会改组完成且关联定价清楚、塔铝产销率连续两季改善、OCF 接近利润、泥堡节点兑现",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "库存和负现金流持续、关联交易异常、建设延后或过户长期不完成即重审",
+      "relation": "any_of",
+      "metrics": [
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或回避信号，任一触发即失效）：① 新控制人体系内交易增加、结算价/账期/毛利率异常",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 锑和金精矿库存继续上升、经营现金流连续为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 泥堡建设再次延后、资本开支超预算或持续大额担保输血",
+      "relation": "any_of",
+      "metrics": [
+        "控制权过户",
+        "库存",
+        "经营现金流",
+        "担保余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 塔吉克停产、物流、税务、合资方或回款重大问题",
+      "relation": "any_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 重大信息披露、资金占用或关联交易违规",
+      "relation": "any_of",
+      "metrics": [
+        "控制权过户",
+        "库存",
+        "经营现金流",
+        "担保余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑥ 2026-10-10 前后仍未完成控制权过户且无解释",
+      "relation": "all_of",
+      "metrics": [
+        "控制权过户",
+        "库存",
+        "经营现金流",
+        "担保余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑦ 亚太担保余额继续上升或发生代偿",
+      "relation": "any_of",
+      "metrics": [
+        "控制权过户",
+        "库存",
+        "经营现金流",
+        "担保余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 357,
+          "line_end": 357,
+          "quote": "2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "a5f889c085afc3592ad9b96475b2a5594699ad6650b172e6a1cba302b2200998",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 7
+  }
+}

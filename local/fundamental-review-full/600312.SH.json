@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:22:01+08:00",
+  "company": "平高电气",
+  "ticker": "600312.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/平高电气/平高电气研究报告-20260707.md",
+    "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 298,
+          "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+          "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 298,
+          "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+          "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 298,
+          "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
+          "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/平高电气/平高电气研究报告-20260707.md",
+      "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> **当前价格**：17.64 元/股（新浪与腾讯行情一致，2026-07-06 收盘）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L262",
+            "exact_quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L287",
+            "exact_quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L296",
+            "exact_quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L320",
+            "exact_quote": "| 下一步最好验证 | 跟踪 2026 半年报；拆解应收账款/合同资产；跟踪国网/南网高压设备招标份额；比较平高与思源/西电/许继在核心产品中的中标价格与份额。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L59",
+            "exact_quote": "| **高压板块** | 77.47 亿元 | **62.3%** | **27.76%** | +0.64% | 核心利润池，受益于高压/超高压/特高压开关设备需求。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L61",
+            "exact_quote": "| 国际板块 | 2.58 亿元 | 2.1% | -24.39% | +26.30% | 收入增长但亏损，受海外政治经济与存量项目推进影响。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L320",
+            "exact_quote": "| 下一步最好验证 | 跟踪 2026 半年报；拆解应收账款/合同资产；跟踪国网/南网高压设备招标份额；比较平高与思源/西电/许继在核心产品中的中标价格与份额。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

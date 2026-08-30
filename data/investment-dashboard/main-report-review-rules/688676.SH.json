@@ -1,0 +1,489 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "金盘科技",
+  "ticker": "688676.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+    "canonical_sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02",
+    "locked_sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 82.04 元不适合按价值投资标准主动买入",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "82.04 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "保守型等待 45-55 元或约 30 倍可持续 EPS，稳健型也需连续 2-3 个季度证明订单转化为利润和经营现金流后，再结合估值回落分批研究",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型只能事件驱动极小仓",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本可持有并设预警线，成本接近现价者谨慎持有、逢高降风险",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重点看现金流、AIDC/海外订单毛利和储能毛利率",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "经营现金流连续两个半年度覆盖净利润、AIDC 高增且毛利提升、海外交付和回款不恶化、储能毛利率回到 10%以上并叠加估值回落可上调",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "回款",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "10%",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "应收加合同资产占收入超过 50%且账龄恶化、主业毛利率下降超过 3 个百分点、低毛利储能扩张、募投低利用率或治理风险即回避",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "回款"
+      ],
+      "operator": "gt",
+      "threshold": "50%",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "## 第十二部分：最终决策与行动清单",
+          "supports": "工程护城河和订单景气真实，但 56.7 倍 TTM PE 已计入 AIDC、出海和增长预期；2022-2024 FCF 连续为负、2026Q1 OCF 再转负，订单尚不能等同于股东现金流。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避信号（任一触发即重审）：应收账款+合同资产/收入超过 50% 且账龄恶化",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "回款"
+      ],
+      "operator": "gt",
+      "threshold": "50%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "电气设备主业毛利率单年下降超过 3pct",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "gt",
+      "threshold": "3",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "储能业务继续低毛利扩张成为利润黑洞",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "可转债募投项目投产后产能利用率不足",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "海外受关税/本地化/认证问题影响明显",
+      "relation": "all_of",
+      "metrics": [
+        "政策",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "核心高管流失、关联交易放大、实控人大比例减持或质押",
+      "relation": "any_of",
+      "metrics": [
+        "应收账款+合同资产/收入",
+        "电气设备主业毛利率",
+        "储能毛利率",
+        "实控人减持/质押"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.7",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出",
+      "relation": "all_of",
+      "metrics": [
+        "应收账款+合同资产/收入",
+        "电气设备主业毛利率",
+        "储能毛利率",
+        "实控人减持/质押"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "应收账款+合同资产/收入超过50%且账龄恶化"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "d23e951c56fc3a019c13637aa13103b10640eb22bca1251767ae9cd3f7971f6e",
+  "summary": {
+    "active_rule_count": 7,
+    "reviewable_rule_count": 6,
+    "price_rule_count": 1,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 7
+  }
+}

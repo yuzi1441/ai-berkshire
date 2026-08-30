@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:05:45+08:00",
+  "company": "领益智造",
+  "ticker": "002600.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+    "sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 16.23 元即使跌停、破发、创新低也不抄底；等待静态 PE 回到 30 倍以下、约 8.5 元附近且基本面出现拐点后再评估。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 174,
+          "line_end": 230,
+          "quote": "## 七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前市场定价（工具验算） | 指标 | 数值 | 历史分位 |",
+          "supports": "L174-L230、L264-L285。契约粗字段写“观察”，但正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "逢反弹减仓；若坚持持有，必须跟踪扣非利润、毛利率、苹果订单、大股东减持和商誉。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 174,
+          "line_end": 230,
+          "quote": "## 七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前市场定价（工具验算） | 指标 | 数值 | 历史分位 |",
+          "supports": "L174-L230、L264-L285。契约粗字段写“观察”，但正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "扣非利润连续两季恢复增长、毛利率企稳，新赛道出现可审计的分部利润，同时估值回落至 30 倍以下。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 174,
+          "line_end": 230,
+          "quote": "## 七、估值与安全边际 —— 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前市场定价（工具验算） | 指标 | 数值 | 历史分位 |",
+          "supports": "L174-L230、L264-L285。契约粗字段写“观察”，但正文明确空仓回避、持仓减仓，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+      "sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L227",
+            "exact_quote": "| **空仓者** | **回避**。不因\\\"跌停/破发/创新低\\\"而抄底——静态PE 57x、扣非PE 74.8x、PB 93%分位，绝对估值不便宜；扣非利润萎缩、2026Q1净利−30.7%，基本面向下、估值向上背离。等待\\\"扣非利润重回增长 + 估值回落至30x以下\\\"再评估。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L230",
+            "exact_quote": "| **加仓信号** | ①扣非净利连续两季恢复正增长且毛利率企稳回升；②新赛道（液冷/AI眼镜/机器人）出现**分部利润**兑现（非仅收入）；③估值回落至静态PE 30x以下（对应股价约8.5元区域）并出现基本面拐点。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L228",
+            "exact_quote": "| **持仓者** | **逢反弹减仓**。核心逻辑（果链代工估值折价+新业务不确定）未改善，风险回报不对称向下。若坚持持有，须紧盯下方三个\\\"卖出信号\\\"。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L229",
+            "exact_quote": "| **卖出信号** | ①2026年扣非净利continue负增长/毛利率跌破14%；②苹果订单份额被明确摊薄的实锤；③大股东继续减持或质押比例快速上升；④商誉大额减值。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L44",
+            "exact_quote": "> **⚑ 第一处关键发现（工具验算揭示）**：2025年归母净利+30.34%的\\\"高增长\\\"中，**23.3%来自非经常性损益**；剔除后扣非净利从2024年的20.51亿**下降**至17.55亿（**−14.4%**）。即：**真实经营盈利在萎缩，报表增长是\\\"化妆\\\"出来的。** 这是全篇最重要的数字。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L24",
+            "exact_quote": "3. **分部盈利质量数据披露不足**：机器人/AI眼镜/液冷等新赛道多为定性披露，缺乏逐季分部收入与毛利率，其\\\"真实利润贡献\\\"无法精确验证——这恰恰是本报告核心分歧点所在。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L38",
+            "exact_quote": "| PE（静态，归母22.88亿） | 1,312 / 22.88 = **57.3x** | ✅ 精确 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=high"
+    }
+  }
+}

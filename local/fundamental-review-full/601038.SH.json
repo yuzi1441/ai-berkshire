@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:31:53+08:00",
+  "company": "一拖股份",
+  "ticker": "601038.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+    "sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "11.69 元不追价，优先等待 9.5 元附近，或正式财报证明利润中枢显著上修。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续观察，但不把单季改善当成加仓理由。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "9.5-10.5 元只适合小仓试错，9.0-9.5 元进入稳健买入区，不高于 9.0 元才有更强安全边际；同时验证回款、海外毛利和高端产品商业化。",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+      "sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L322",
+            "exact_quote": "| 空仓 | **等待，不在 11.69 元追价** | 价格进入 9.5 元附近，或正式财报证明利润中枢显著上修 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L347",
+            "exact_quote": "空仓者优先等待 9.5 元附近或更强的利润上修证据；持仓者可继续观察，不应把单季改善当成重仓理由。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "> **A 股价格锚**：11.69 元；**H 股价格锚**：7.35 港元"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_comparison",
+          "no_threshold"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L347",
+            "exact_quote": "持仓者可继续观察，不应把单季改善当成重仓理由。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L323",
+            "exact_quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L24",
+            "exact_quote": "4. 把 2026Q1 正增长与完整周期反转分开。一季度是春耕旺季，且缺少终端销量、渠道库存和分地区毛利。"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_comparison"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L278",
+            "exact_quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L279",
+            "exact_quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L280",
+            "exact_quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_comparison"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

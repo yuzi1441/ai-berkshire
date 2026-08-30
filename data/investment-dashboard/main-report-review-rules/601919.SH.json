@@ -1,0 +1,335 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中远海控",
+  "ticker": "601919.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中远海控/中远海控-research-20260707.md",
+    "canonical_sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
+    "locked_sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 13.98 元观望、不追",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "13.98 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告只允许极度看重股息且能承受波动者考虑折价 H 股试探仓，不能把该许可移植为 A 股当前买入机会",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续持有收息但控制仓位",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若仓位过重，可在运价或股价冲高时降至舒适水平",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待运价崩盘、公司微利或亏损、市场极度悲观，且 PB 明显低于 0.8、净现金和分红逻辑经租赁负债核验后仍成立，或行业出现实质拆船/减产",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": "lt",
+      "threshold": "0.8",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "红海复航、SCFI 持续下行、派息率跌破 30% 或租赁负债推翻净现金论即继续回避",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "### 8.2 最终决策表",
+          "supports": "报告将其定义为高股息周期工具而非长期复利生意，明确警告 6.9 倍 PE 是周期顶部低 PE；当前赔率取决于不可预测的红海复航和运价变量。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号（任一出现即触发）：①红海确认复航/停火",
+      "relation": "any_of",
+      "metrics": [
+        "SCFI运价指数",
+        "新船交付量",
+        "派息率",
+        "租赁负债"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②SCFI掉头持续下行且新船交付放量",
+      "relation": "all_of",
+      "metrics": [
+        "SCFI运价指数",
+        "新船交付量",
+        "派息率",
+        "租赁负债"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③派息率跌破30%下限或分红政策生变",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "政策"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [
+        "年度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④年报证实租赁负债导致实为净负债",
+      "relation": "all_of",
+      "metrics": [
+        "SCFI运价指数",
+        "新船交付量",
+        "派息率",
+        "租赁负债"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "4e775dbe71f0d5e966a6de84b98ec172783acb059924a63100496eba390645c8",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 0,
+    "price_rule_count": 6,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 4
+  }
+}

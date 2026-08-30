@@ -1,0 +1,213 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "汇川技术",
+  "ticker": "300124.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+    "canonical_sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f",
+    "locked_sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 64.34 元高于激进型价格带",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "gt",
+      "threshold": "64.34 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 183,
+          "line_end": 237,
+          "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+          "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "56-62 元且基本面未恶化时仅可小仓分批，48-55 元为稳健分批区，45 元以下才提供更厚安全边际",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 183,
+          "line_end": 237,
+          "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+          "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "工业自动化增长和新能源汽车业务毛利率未恶化时可以持有，但不因机器人或 AI 叙事追价",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 183,
+          "line_end": 237,
+          "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+          "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进入对应价格带，同时自动化业务保持增长、汽车业务毛利率改善、客户集中度下降且经营现金流恢复",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 183,
+          "line_end": 237,
+          "quote": "## 第七步：估值与安全边际 ### 当前定价与同业位置 | 公司 | PE TTM | PB MRQ | PS TTM | 解释 |",
+          "supports": "L183-L237、L272-L293。正文与契约方向一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：买入失效条件为自动化份额下降、汽车毛利率持续低于15%、客户集中度上升且经营现金流恶化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "15%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "自动化份额下降、汽车毛利率持续低于15%、客户集中度上升且经营现金流恶化"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "降低风险信号为股价高于 85-90 元但盈利预期未上修，或汽车毛利、现金流继续恶化",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "gt",
+      "threshold": "85-90 元",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "自动化份额下降、汽车毛利率持续低于15%、客户集中度上升且经营现金流恶化"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "7df5a1c71a0be4cab7cae9b813da7587745b0e8c99608ed7601cc6efc4638042",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 2
+  }
+}

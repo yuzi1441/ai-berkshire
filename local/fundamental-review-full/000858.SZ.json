@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:52:40+08:00",
+  "company": "五粮液",
+  "ticker": "000858.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+    "sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "当前不满足买入条件；激进型也只在 60 元以下试探且不超过 3%，稳健型必须等三类重估信号，保守型回避。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "不以高股息掩盖治理和报表问题，信号未齐备前不加仓。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "无补贴批价站稳、连续两季经营现金流转正且票据回落、监管商品款项下降且合同负债上升，并等待问询和治理闭环。",
+      "metrics": [
+        "经营现金流",
+        "政策"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+      "sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L12",
+            "exact_quote": "> 五粮液当前不是\"跌出来的价值股\"，而是\"高股息托底的困境反转候选\"：303亿会计差错更正证伪了历史增长质量，千元价位定价权已实质受损，按真实（重述后）盈利口径当前估值反而是四大名酒中最贵，2966亿市值的安全边际约为零。**建议观望，不满足买入条件**；跟踪可信口径下的动销验证与治理修复信号，回避重仓押注反转。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L147-L149",
+            "exact_quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |\n| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |\n| 保守型 | **回避**；同样的钱优先考虑茅台（生意质量与治理均更优，估值18.3x反而更便宜） | 不参与 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L12",
+            "exact_quote": "> 五粮液当前不是\"跌出来的价值股\"，而是\"高股息托底的困境反转候选\"：303亿会计差错更正证伪了历史增长质量，千元价位定价权已实质受损，按真实（重述后）盈利口径当前估值反而是四大名酒中最贵，2966亿市值的安全边际约为零。**建议观望，不满足买入条件**；跟踪可信口径下的动销验证与治理修复信号，回避重仓押注反转。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L139",
+            "exact_quote": "| 管理层 | 不合格（诚信记录破产），新班子待验证，分红政策是唯一可依赖项 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L153-L157",
+            "exact_quote": "**加仓/重估信号**（三者齐备前维持观望）：\n1. 普五批价在**无补贴状态下**站稳1019元以上，或补贴退坡而动销继续正增长\n2. 连续两个季度经营现金流转正 + 应收款项融资回落（真金白银打款替代票据）\n3. 278亿\"监管商品款项\"堰塞湖持续下降且合同负债同步上升（真实需求替代存量出清）\n4. 深交所问询闭环、信披调查落地且处罚有限、2026年报获无保留意见"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L48",
+            "exact_quote": "**价格体系（2026年7月）**：普五出厂价名义1019元、开票价实降至900元、批价约820-850元（深度倒挂）；同期飞天茅台批价约1730元且年内两度提价——同一行业，一个提价一个变相降价。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L43",
+            "exact_quote": "**2026年最新**：Q1营收228.38亿（重述基数+33.67%；按旧口径实际约-38.2%）、净利80.63亿；Q1经营现金流**-25.35亿**（转负）、应收款项融资207.06亿（+120%，回款票据化）；H1预告净利87.3-92亿（隐含Q2仅6.67-11.37亿，新口径下利润重心后移）；截至6月20日八代普五动销两位数增长，为近3年最好表现。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L102",
+            "exact_quote": "1. **历史报表可信度崩塌**：303亿重述官方坐实压货式增长，市场此前一切增长模型作废；\"仅调2025年\"的选择性追溯留下利润调节嫌疑，深交所问询未闭环"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

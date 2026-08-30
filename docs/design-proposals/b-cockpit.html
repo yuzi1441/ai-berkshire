@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方案B · 行动驾驶舱 | 设计预览</title>
+<script src="./shared-data.js"></script>
+<style>
+:root {
+  --bg: #0e1218; --panel: #151b25; --panel2: #10151d; --line: #232d3b;
+  --text: #eaf0f6; --muted: #93a1b3; --dim: #5f6d80;
+  --green: #34d178; --blue: #6fc0ff; --amber: #ffb02e; --red: #ff5d5d; --violet: #c792ea; --orange: #ff8f3f;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { color-scheme: dark; }
+body { background: var(--bg); color: var(--text); font: 14px/1.55 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding-bottom: 90px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.ribbon { position: fixed; right: 14px; bottom: 84px; z-index: 99; background: #6fc0ff; color: #0a1520; font-weight: 700; font-size: 12px; padding: 6px 12px; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+
+/* 顶栏 */
+.top { position: sticky; top: 0; z-index: 50; background: rgba(14,18,24,.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 10px 18px 0; }
+.top-row { display: flex; align-items: baseline; gap: 12px; }
+.top h1 { font-size: 17px; font-weight: 800; }
+.top .date { color: var(--dim); font-size: 12px; }
+.top .stale { color: var(--amber); font-size: 12px; margin-left: auto; }
+.segbar { display: flex; gap: 4px; margin-top: 10px; overflow-x: auto; }
+.segbar button { flex: 0 0 auto; background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 600; padding: 8px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; }
+.segbar button.active { color: var(--text); border-bottom-color: var(--amber); }
+.segbar button b { font-family: var(--mono); font-size: 12px; background: #232d3b; padding: 1px 7px; border-radius: 999px; margin-left: 4px; }
+.segbar button.active b { background: #3a2f1a; color: var(--amber); }
+
+.page { max-width: 1060px; margin: 0 auto; padding: 16px 18px; }
+
+/* 状态快照条 */
+.snapshot { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 16px; }
+.snap { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.snap b { display: block; font-size: 20px; font-family: var(--mono); }
+.snap span { font-size: 11px; color: var(--dim); }
+.snap.buy b { color: var(--green); } .snap.trial b { color: var(--blue); }
+.snap.val b { color: var(--amber); } .snap.warn b { color: var(--red); }
+
+/* 分组 */
+.group { margin-bottom: 22px; }
+.ghead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ghead .tag { font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 3px 10px; border-radius: 6px; }
+.ghead .desc { color: var(--dim); font-size: 12px; }
+.ghead .cnt { color: var(--dim); font-size: 12px; margin-left: auto; font-family: var(--mono); }
+
+/* 行动卡（核心组件） */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s; }
+.card:hover { border-color: #3b4a60; }
+.card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.card-head .nm { font-size: 15.5px; font-weight: 800; white-space: nowrap; }
+.card-head .cd { font-size: 11px; color: var(--dim); font-family: var(--mono); }
+.card-head .px { margin-left: auto; text-align: right; }
+.card-head .px b { font-size: 16px; font-family: var(--mono); }
+.card-head .px span { display: block; font-size: 11px; font-family: var(--mono); }
+.up { color: #ff7b72; } .down { color: #3fb950; }
+.card .why { font-size: 13px; color: #c9d4e0; margin-bottom: 10px; min-height: 40px; }
+.zonebar { position: relative; height: 18px; border-radius: 5px; background: #1a212c; margin: 10px 0 6px; }
+.zseg { position: absolute; top: 0; height: 100%; display: flex; align-items: center; overflow: hidden; border-right: 1px solid rgba(0,0,0,.3); }
+.zseg span { font-size: 9.5px; font-weight: 700; padding-left: 5px; white-space: nowrap; }
+.zseg.k-buy { background: #1f6f47; } .zseg.k-buy span { color: #b8f5d4; }
+.zseg.k-trial { background: #2b5d82; } .zseg.k-trial span { color: #cfe9ff; }
+.zseg.k-watch { background: #3a4353; } .zseg.k-watch span { color: #c3ccd8; }
+.zseg.k-reduce { background: #6e3a3a; } .zseg.k-reduce span { color: #ffd4d4; }
+.marker { position: absolute; top: -4px; width: 2px; height: 26px; background: #fff; box-shadow: 0 0 7px rgba(255,255,255,.9); z-index: 2; }
+.marker::after { content: attr(data-v); position: absolute; top: -14px; left: 50%; transform: translateX(-50%); font-size: 9.5px; background: #000; color: #fff; padding: 0 4px; border-radius: 3px; font-family: var(--mono); }
+.zlegend { display: flex; gap: 10px; font-size: 10.5px; color: var(--dim); flex-wrap: wrap; }
+.card-foot { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.chip { font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.chip.g { color: var(--green); border-color: #245a42; background: #14271e; }
+.chip.a { color: var(--amber); border-color: #5a451a; background: #241d0f; }
+.chip.r { color: var(--red); border-color: #5a2525; background: #241214; }
+.chip.v { color: var(--violet); border-color: #463054; background: #1e1526; }
+
+/* 警示卡 */
+.card.alert { border-color: #5a3a25; background: linear-gradient(180deg, #1d150f, #151b25); }
+.card.alert .alarm { font-size: 12px; font-weight: 700; color: var(--orange); margin-bottom: 6px; }
+.card.alert .alarm::before { content: "⚠ "; }
+
+/* 空态说明 */
+.morelink { display: block; text-align: center; color: var(--blue); font-size: 13px; padding: 12px; border: 1px dashed #2c3a50; border-radius: 10px; text-decoration: none; }
+
+/* 底部导航（移动端） */
+.bottomnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: none; background: rgba(16,21,29,.97); backdrop-filter: blur(14px); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); }
+.bottomnav button { flex: 1; background: none; border: none; color: var(--dim); font-size: 10.5px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.bottomnav button.active { color: var(--amber); }
+.bottomnav button i { font-style: normal; font-size: 17px; }
+
+@media (max-width: 720px) {
+  .page { padding: 12px 12px 100px; }
+  .snapshot { grid-template-columns: repeat(3, 1fr); }
+  .cards { grid-template-columns: 1fr; }
+  .bottomnav { display: flex; }
+  .segbar button { font-size: 13px; padding: 8px 10px 10px; }
+  .top .stale { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="ribbon">设计稿 B · 行动驾驶舱 · 仅供预览</div>
+
+<header class="top">
+  <div class="top-row">
+    <h1>决策看板</h1><span class="date">8月30日 周日</span>
+    <span class="stale">● 行情陈旧 9 天 · 非交易时段</span>
+  </div>
+  <nav class="segbar">
+    <button class="active">今日行动 <b>8</b></button>
+    <button>全部标的 <b>229</b></button>
+    <button>双模型复核 <b>93</b></button>
+    <button>买入后跟踪 <b>2</b></button>
+  </nav>
+</header>
+
+<div class="page">
+  <!-- 快照条 -->
+  <div class="snapshot">
+    <div class="snap buy"><b>0</b><span>当前可分批</span></div>
+    <div class="snap trial"><b>2</b><span>当前可小仓</span></div>
+    <div class="snap val"><b>3</b><span>价格已到待验证</span></div>
+    <div class="snap"><b>64</b><span>等待价格</span></div>
+    <div class="snap warn"><b>2</b><span>分歧 / 否决</span></div>
+    <div class="snap"><b>6</b><span>待人工复核</span></div>
+  </div>
+
+  <!-- ① 需要你决策 -->
+  <div class="group">
+    <div class="ghead">
+      <span class="tag" style="background:#241d0f;color:var(--amber)">① 需要你决策</span>
+      <span class="desc">价格已进入报告区间，或有冲突待裁决 —— 今天值得看的股票</span>
+      <span class="cnt">8 只</span>
+    </div>
+    <div class="cards" id="g-decide"></div>
+  </div>
+
+  <!-- ② 接近机会 -->
+  <div class="group">
+    <div class="ghead">
+      <span class="tag" style="background:#142a1f;color:var(--green)">② 接近机会</span>
+      <span class="desc">判断为正面但还差一个条件（价格略高 / 等财报确认）</span>
+      <span class="cnt">3 只</span>
+    </div>
+    <div class="cards" id="g-near"></div>
+  </div>
+
+  <!-- ③ 其余 -->
+  <div class="group">
+    <div class="ghead">
+      <span class="tag" style="background:#1a2230;color:var(--muted)">③ 其余标的</span>
+      <span class="desc">等待价格、回避或研究浏览 —— 无需今天处理</span>
+    </div>
+    <a class="morelink" href="javascript:void(0)">展开其余 74 只等待价格 + 12 只回避 + 港美股研究列表 →</a>
+  </div>
+</div>
+
+<nav class="bottomnav">
+  <button class="active"><i>◎</i>今日行动</button>
+  <button><i>☰</i>全部标的</button>
+  <button><i>⇄</i>复核对照</button>
+  <button><i>☆</i>跟踪</button>
+  <button><i>⚙</i>市场工具</button>
+</nav>
+
+<script>
+const decideKeys = ["东鹏饮料", "洛阳钼业", "分众传媒", "恒瑞医药", "贵州茅台", "东方电子", "紫金矿业", "长江电力"];
+const nearKeys = ["比亚迪", "美的集团", "一拖股份"];
+
+function zoneHTML(s, compact) {
+  if (!s.zones.length) return "";
+  const min = Math.min(...s.zones.map(z => z.min)), max = Math.max(...s.zones.map(z => z.max));
+  const span = max - min;
+  let h = "";
+  for (const z of s.zones) {
+    h += `<div class="zseg k-${z.kind}" style="left:${(z.min-min)/span*100}%;width:${(z.max-z.min)/span*100}%"><span>${z.label} ${z.range}</span></div>`;
+  }
+  if (s.price) {
+    const p = Math.max(min, Math.min(max, s.price));
+    h += `<div class="marker" data-v="${s.price}" style="left:${(p-min)/span*100}%"></div>`;
+  }
+  return `<div class="zonebar">${h}</div><div class="zlegend">${s.zones.map(z=>z.range).join(" · ")}</div>`;
+}
+function cardHTML(s, alert) {
+  const vcol = VKIND_COLOR[s.vkind] || "#9aa7b4";
+  const mcol = s.mkind ? (MKIND_COLOR[s.mkind] || "#9aa7b4") : null;
+  const chgCls = s.chg === null ? "" : (s.chg >= 0 ? "up" : "down");
+  const d = s.dkind ? DLABEL[s.dkind] : null;
+  return `<div class="card ${alert ? "alert" : ""}">
+    <div class="card-head">
+      <span class="nm">${s.name}</span><span class="cd">${s.code}</span>
+      ${alert ? `<span class="alarm" style="margin:0 0 0 8px">${s.mkind==="veto" ? "Checklist 否决中" : "双模型分歧"}</span>` : ""}
+      <span class="px"><b class="num">${s.price ?? "—"}</b><span class="${chgCls}">${s.chg === null ? "" : fmtPct(s.chg)}</span></span>
+    </div>
+    <p class="why">${s.line}</p>
+    ${zoneHTML(s)}
+    <div class="card-foot">
+      <span class="chip" style="color:${vcol};border-color:${vcol}44;background:${vcol}12">${s.verdict}</span>
+      ${mcol ? `<span class="chip" style="color:${mcol};border-color:${mcol}44;background:${mcol}12">人工 · ${s.manual}</span>` : ""}
+      ${d ? `<span class="chip" style="color:${d[1]};border-color:${d[1]}44;background:${d[1]}12">复核 · ${d[0]}</span>` : ""}
+      <span class="chip">情绪 ${s.senti.score ?? "—"} ${s.senti.state}</span>
+      <span class="chip">${s.due}</span>
+    </div>
+  </div>`;
+}
+const all = Object.fromEntries(DATA.stocks.map(s => [s.name, s]));
+document.getElementById("g-decide").innerHTML = decideKeys.map(n => cardHTML(all[n], all[n].mkind === "veto" || all[n].dkind === "conflict")).join("");
+document.getElementById("g-near").innerHTML = nearKeys.map(n => cardHTML(all[n], false)).join("");
+
+/* tab 切换演示 */
+document.querySelectorAll(".segbar button, .bottomnav button").forEach(b => {
+  b.addEventListener("click", () => {
+    b.parentElement.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+  });
+});
+</script>
+</body>
+</html>

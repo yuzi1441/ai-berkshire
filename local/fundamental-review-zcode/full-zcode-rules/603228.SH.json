@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "景旺电子",
+  "ticker": "603228.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+    "sha256": "14f1673edb5ca0498f1c854b72647828ca606fa2097fa8d05739f9c635989fa6",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓价值投资者不追高、放入观察名单。买入前提：价格回到30-40元（接近基准估值区，可进入重点买入研究区），或公司用财报证明18-20亿元净利润、毛利率与FCF修复。报告日（2026-07-09）约65.91元、57x TTM PE，几乎贴近乐观情景目标价101.7元，安全边际不足，不满足价值型买入前提。",
+      "derivation_quote": "等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。",
+      "derivation_line_ref": 298,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "TTM PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "已持有且成本低者可继续持有但设跟踪纪律：若毛利率连续低于18%、扣非净利连续下滑、存货继续上升，应减仓或重审。加仓信号：毛利率连续两个季度回到21%-22%以上；扣非归母净利恢复同比+20%以上；经营现金流/净利润连续大于1且FCF转正；净利润上修到18-20亿元级别且非一次性收益驱动。",
+      "derivation_quote": "若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。",
+      "derivation_line_ref": 299,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "综合毛利率",
+        "扣非归母净利同比",
+        "存货变动",
+        "经营现金流/净利润",
+        "FCF"
+      ],
+      "periods": [
+        "季度"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/回避信号（任一出现即触发）：综合毛利率连续两个季度低于18%；扣非归母净利连续两个季度同比下降超过20%；存货周转天数超过85天并继续上升；Capex/CFO连续两年超过1.5；资产负债率超过55%或有息负债继续快速上升；高端客户导入不及预期或AI/通信收入缺乏披露；大额关联交易、产能减值或环保处罚出现。",
+      "derivation_quote": "综合毛利率连续两个季度低于 18%；",
+      "derivation_line_ref": 314,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "综合毛利率",
+        "扣非归母净利同比",
+        "存货周转天数",
+        "Capex/CFO",
+        "资产负债率"
+      ],
+      "periods": [
+        "季度",
+        "年度"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "14f1673edb5ca0498f1c854b72647828ca606fa2097fa8d05739f9c635989fa6"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 298,
+            "exact_quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 234,
+            "exact_quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
+          }
+        ],
+        "note": "证据文档仅含主报告（65.91元、57x TTM PE为2026-07-09基线），无独立行情来源给出当前价格，无法验证价格是否已回到30-40元买入研究区。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 299,
+            "exact_quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
+          }
+        ],
+        "note": "证据文档无报告基线之后的新季报数据（毛利率、扣非净利、存货、FCF），缺少对比期与官方来源，无法验证持仓跟踪纪律条件是否触发。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 314,
+            "exact_quote": "- 综合毛利率连续两个季度低于 18%；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 316,
+            "exact_quote": "- 存货周转天数超过 85 天并继续上升；"
+          }
+        ],
+        "note": "减仓/回避信号阈值取自报告原文，但证据文档无最新季度财务数据可对照，无法确认任一减仓信号是否触发。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中国西电",
+  "ticker": "601179.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中国西电/中国西电研究报告-20260709.md",
+    "sha256": "aa0260655f0d2017bf67cc3aa8d29b0d47fbeaac50f12938fccb166828741e89",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：当前 12.93 元（约 52 倍静态 PE、2.88 倍 PB）不追高；空仓保守型等待价格回到 8.0-9.0 元且行业逻辑未破坏才具备较好安全边际；空仓稳健型只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 9.0-10.5 元区间小仓试探。",
+      "derivation_quote": "若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。",
+      "derivation_line_ref": 339,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "加权ROE",
+        "综合毛利率",
+        "订单质量"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持有且成本低者可持有但不盲目加仓，持续跟踪加权 ROE、毛利率、经营现金流；若估值继续上行（PE/PB 抬升）而基本面未同步，考虑分批降仓；已持有且成本接近现价者谨慎持有、等待验证。",
+      "derivation_quote": "持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。",
+      "derivation_line_ref": 342,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "加权ROE",
+        "综合毛利率",
+        "经营现金流",
+        "PB"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓/回避信号，出现即重审）：中标增长但毛利率下降；应收账款、合同资产和存货显著上升且现金流弱于利润；ROE 长期停留在 5%-6% 但 PB 仍维持高位；主题估值继续抬升而基本面兑现跟不上；关联交易对少数股东不友好。",
+      "derivation_quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。",
+      "derivation_line_ref": 359,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "加权ROE",
+        "PB",
+        "综合毛利率",
+        "经营现金流"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国西电/中国西电研究报告-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "aa0260655f0d2017bf67cc3aa8d29b0d47fbeaac50f12938fccb166828741e89"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 246,
+            "exact_quote": "| 股价 | 12.93 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 251,
+            "exact_quote": "| PE | 52.20 倍 |"
+          }
+        ],
+        "note": "仅有主报告作基线：基线价 12.93 元（PE 52.20 倍）高于 8.0-9.0 元保守买入带与 9.0-10.5 元稳健试探带；清单内无独立证据文档提供当前股价与最新 ROE/毛利率，买入带条件与基本面前置条件是否达成均无法核验。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 254,
+            "exact_quote": "| EPS / BVPS 隐含 ROE | 约 5.52%，与年报加权 ROE 5.64%接近 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 253,
+            "exact_quote": "| PB | 2.88 倍 |"
+          }
+        ],
+        "note": "持仓跟踪项（ROE、毛利率、现金流）基线仅有 2025 年度值（加权 ROE 5.64%、PB 2.88 倍），无 2026 年最新报告期数据与历史序列对比，\"估值继续上行而基本面未同步\"的分批降仓条件是否成立无法核验。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_comparison",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 254,
+            "exact_quote": "| EPS / BVPS 隐含 ROE | 约 5.52%，与年报加权 ROE 5.64%接近 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 253,
+            "exact_quote": "| PB | 2.88 倍 |"
+          }
+        ],
+        "note": "基线 2025 加权 ROE 5.64% 处于 5%-6% 区间且 PB 2.88 倍偏高，与减仓信号形态相似，但\"ROE 长期停留\"需多年序列验证，证据集中无 2021-2024 ROE 序列与最新报告期数据，减仓/回避信号是否触发无法判定。"
+      }
+    ]
+  }
+}

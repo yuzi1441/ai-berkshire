@@ -1,0 +1,278 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "chuanrun",
+  "ticker": "002272.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/chuanrun/chuanrun-research-20260623.md",
+    "canonical_sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
+    "locked_sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 18.50 元明确回避",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "18.50 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "只有估值回归 7-11 元、重点约 8-10 元，并出现业务兑现后才重新研究",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告给出的动作是减仓直至清仓，不应因液冷或风电叙事继续承担当前估值风险",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "8-10 元，且液冷订单达到可验证规模、连续两个季度盈利，管理层停止减持并出现增持后再评估",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "8-10 元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 235,
+          "line_end": 319,
+          "quote": "## 六、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 当前估值指标（经工具验算） | 指标 | 数据 | 说明 |",
+          "supports": "L235-L319、L371-L392。契约粗字段写“观察”，但正文对当前价明确要求空仓回避、持仓减仓至清仓，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/失效触发：实控人继续减持公告",
+      "relation": "all_of",
+      "metrics": [
+        "实控人减持公告",
+        "液冷订单",
+        "经营现金流",
+        "融资余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "实控人继续减持公告；2026H1液冷订单低于预期"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2026H1 液冷订单低于预期",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "实控人继续减持公告；2026H1液冷订单低于预期"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两季度经营现金流为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "实控人继续减持公告；2026H1液冷订单低于预期"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "融资余额继续攀升（杠杆踩踏风险）",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "实控人继续减持公告；2026H1液冷订单低于预期"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "99f97ea80d939d5ce7168f73033aae7f3712edfba6894a45e29157a35c6edec2",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "杭叉集团",
+  "ticker": "603298.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+    "canonical_sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
+    "locked_sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "26.45 元主要观察",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "26.45 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "24-26 元只允许不超过 5% 的激进型轻仓观察，正式建仓优先等待 20-23 元，保守型在 18 元以下才重新评估",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续跟踪但不因双寡头、电动化和全球化叙事加仓",
+      "relation": "all_of",
+      "metrics": [
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "应收、存货、治理与接班问题需要持续核对",
+      "relation": "all_of",
+      "metrics": [
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "应收周转连续两季改善、PE 回到 12-13 倍、毛利率回到 24%以上、泰国工厂如期投产且海外增长维持，或有效股权激励落地",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "应收继续恶化并伴随坏账、损害小股东的关联交易、接班失败、高关税或价格战即失效",
+      "relation": "any_of",
+      "metrics": [
+        "回款",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/清仓信号：应收账款持续恶化+坏账计提大增",
+      "relation": "all_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 166,
+          "line_end": 166,
+          "quote": "应收账款持续恶化+坏账计提大增"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "实际控制人利用控股地位进行不利的关联交易",
+      "relation": "all_of",
+      "metrics": [
+        "应收账款周转天数",
+        "坏账计提",
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 166,
+          "line_end": 166,
+          "quote": "应收账款持续恶化+坏账计提大增"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "欧美对中国叉车加征高额关税",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 166,
+          "line_end": 166,
+          "quote": "应收账款持续恶化+坏账计提大增"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "行业价格战爆发导致毛利率骤降",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 166,
+          "line_end": 166,
+          "quote": "应收账款持续恶化+坏账计提大增"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "基线：应收账款周转天数已由23天升至55天（2026Q1达57.92天）",
+      "relation": "all_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 166,
+          "line_end": 166,
+          "quote": "应收账款持续恶化+坏账计提大增"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "c106dd009a249ac2d997d49a0ebc7ec3e0657ff3cc586fea4fcc9297b8243846",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

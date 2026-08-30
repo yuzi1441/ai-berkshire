@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:42:33+08:00",
+  "company": "东方电缆",
+  "ticker": "603606.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/东方电缆/东方电缆-research-20260726.md",
+    "sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告明确要求先等半年报六项指标判决，验证前不建仓；四项及以上转正面后可在 36-45 元分批，30-36 元仍要求半年报未转负面。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "持有但不加仓；低估值不支持恐慌卖出，但订单结构、海缆增速和现金流恶化不允许在验证前加码。",
+      "metrics": [
+        "订单",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "H1 现金流转正、海缆毛利率不低于 30%、海缆收入增速高于整体、海缆订单守住 100 亿元、应收增速低于收入、扣套期后毛利率不低于 22%，六项中至少四项转正；三项以上转负或出现订单缩量、治理/海外减值即继续回避或减仓。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "回款"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东方电缆/东方电缆-research-20260726.md",
+      "sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "**2026 年中报（8 月 5 日）将同时揭晓六项判决数据，距今约 10 天，等待成本远低于猜错成本。**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L10",
+            "exact_quote": "报告中的价格区间是基于公开数据的研究结论，不是针对任何个人的操作建议。"
+          }
+        ],
+        "missing_codes": [
+          "no_threshold",
+          "no_event_confirmation",
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "**2026 年中报（8 月 5 日）将同时揭晓六项判决数据，距今约 10 天，等待成本远低于猜错成本。**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L131",
+            "exact_quote": "**海缆增速已从大幅领先整体，转为落后整体。**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L200",
+            "exact_quote": "**中标总额同比不降反升 +12.5%，但海缆含量从 84.7% 塌到 7.95%**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L177",
+            "exact_quote": "| **2026-04-21** | **184.12 亿** | **103.89 亿** | **43.67 亿** | **36.56 亿** | 2026 一季报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L283",
+            "exact_quote": "2026 年中报（8/5 披露）后，若毛利率在储备耗尽后仍能维持 23% 以上，才能确认是结构性改善。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

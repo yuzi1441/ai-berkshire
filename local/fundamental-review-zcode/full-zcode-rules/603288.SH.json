@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "海天味业",
+  "ticker": "603288.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+    "sha256": "698340899d93473b4dd298f0f1b3802503a421b7f1c9246a93edca99dae4699f",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "A股价格回落至激进型区间32-35元才考虑小额分批买入；28-32元为稳健型分批买入区；不高于28元为保守型重点关注区。报告基线现价36.78元高于三年Base折现价值32.08元，维持观察不追价。",
+      "derivation_quote": "32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。",
+      "derivation_line_ref": 19,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "已持有且成本显著低于32元者可继续持有，以2026H1为第一复核点：2026H1披露后5个交易日内验证收入和归母利润是否仍至少中高个位数增长，且Q1负经营现金流是否回正。",
+      "derivation_quote": "可继续持有，但不因高分红追价；把 2026H1 作为第一复核点",
+      "derivation_line_ref": 170,
+      "schedule_type": "filing",
+      "metrics": [
+        "收入增速",
+        "归母净利润增速",
+        "经营现金流"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "论文失效条件（满足任一项暂停买入并重做研究）：食品安全事件实质损害品牌并造成连续两个报告期收入或份额下滑；酱油收入连续两个报告期负增长；综合毛利率跌破37%且无法由短期原料价格解释；年度经营现金流/归母净利润连续两年低于80%。",
+      "derivation_quote": "综合毛利率跌破 37% 且无法由短期原料价格解释。",
+      "derivation_line_ref": 182,
+      "schedule_type": "filing",
+      "metrics": [
+        "综合毛利率",
+        "经营现金流/归母净利润"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "698340899d93473b4dd298f0f1b3802503a421b7f1c9246a93edca99dae4699f"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本股清单仅有主报告local_1，无独立行情证据文档。报告基线价为2026-08-10的36.78元（观察，不追价），无法确认当前A股价格是否已回落至32-35元或28-32元买入区间。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 13,
+            "exact_quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 158,
+            "exact_quote": "| 当前 | 36.78 元 | **观察，不追价** | 高于 Base 折现值，回报依赖 Bull 兑现 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "报告明示2026H1尚未披露（报告日期2026-08-10），本地证据中无2026H1财报或事件确认，无法验证收入与归母利润是否中高个位数增长及Q1经营现金流回正。",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 17,
+            "exact_quote": "| 研究置信度 | 中高：核心财务与公告充分；2026H1 尚未披露，海外和新品的中长期贡献仍缺少分部数据 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 191,
+            "exact_quote": "| 2026H1 披露后 5 个交易日内 | 收入和归母利润是否仍至少中高个位数增长；Q1 负经营现金流是否回正 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "失效阈值来自报告原文（毛利率37%、现金流/净利润80%）。本地无报告期后的官方财报数据可确认最新综合毛利率与现金流比率；报告基线2025年综合毛利率40.22%仅可作对照基线，不构成新的独立验证。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 182,
+            "exact_quote": "3. 综合毛利率跌破 37% 且无法由短期原料价格解释。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 40,
+            "exact_quote": "| 综合毛利率 | 40.22% | 约 +3.15pct（食品制造口径） | 41.99% | 约 +1.95pct | 修复明显，但原料成本下降贡献重要 |"
+          }
+        ]
+      }
+    ]
+  }
+}

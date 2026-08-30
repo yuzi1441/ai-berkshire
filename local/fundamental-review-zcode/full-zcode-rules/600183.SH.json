@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "生益科技",
+  "ticker": "600183.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/生益科技/生益科技研究报告-20260709.md",
+    "sha256": "0835ca525a39007c82d0171f23039e6173d92173dd8e91a3aba4d63e0bba9cb2",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓稳健型买入重估前提：TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏；空仓激进型小仓跟踪前提：2026Q2/Q3 继续高增长且毛利率维持 27%+，否则等待。",
+      "derivation_quote": "TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估",
+      "derivation_line_ref": 277,
+      "schedule_type": "price",
+      "metrics": [
+        "TTM PE",
+        "股价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者按季验证：毛利率连续维持 27% 以上（高端材料结构升级真实），2026 后续季度收入和归母净利继续高增长且 CFO/净利回到 1x 附近，库存和应收没有异常恶化。",
+      "derivation_quote": "毛利率连续维持 27% 以上，说明高端材料结构升级真实",
+      "derivation_line_ref": 285,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "CFO/净利",
+        "库存应收"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/论文重审信号：毛利率连续两个季度回落到 24% 以下；经营现金流持续低于净利润且应收、库存快速上升；高仓位者若 PE 仍 >80x 且增速放缓，应降低风险暴露。",
+      "derivation_quote": "毛利率连续两个季度回落到 24% 以下",
+      "derivation_line_ref": 292,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "PE",
+        "经营现金流/净利润"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "source_role": "main_report_reference",
+      "sha256": "0835ca525a39007c82d0171f23039e6173d92173dd8e91a3aba4d63e0bba9cb2"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 277,
+            "exact_quote": "TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 349,
+            "exact_quote": "| 数据截止日 | 2026-07-09 |"
+          }
+        ],
+        "note": "证据集仅含主报告基线（数据截止 2026-07-09，基线价 157.40 元、TTM PE 约 97.33x），无更新的独立行情或官方数据可判断 40-50x PE / 90-110 元条件当前是否触发，故按诚实原则记 data_insufficient。local_1 仅作报告基线引用，不作为新的独立验证。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 285,
+            "exact_quote": "毛利率连续维持 27% 以上，说明高端材料结构升级真实"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 319,
+            "exact_quote": "生益科技 2026 年第一季度报告 PDF"
+          }
+        ],
+        "note": "报告基线最新仅到 2025 年报与 2026Q1（line 319 为证据集中最新财报），无 2026Q2/Q3 财报数据可验证毛利率 27%、CFO/净利 1x 阈值，也无法判断连续两季趋势（缺对比期）。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 292,
+            "exact_quote": "毛利率连续两个季度回落到 24% 以下"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 280,
+            "exact_quote": "若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露"
+          }
+        ],
+        "note": "无 2026Q2 及以后毛利率与利润增速数据，也无最新 PE 快照，无法评估 24% 连续两季或 PE>80x 减仓信号是否触发；仅确认规则本身来自报告基线原文。"
+      }
+    ]
+  }
+}

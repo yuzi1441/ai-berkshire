@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "沪电股份",
+  "ticker": "002463.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/沪电股份/沪电股份-research-20260726.md",
+    "sha256": "6a3af5e2eb0dcc417ad8f3bc01826e0454e17a8b1a3453e4926d5a50e23242fa",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓买入前提：当前 112.22 元位于 101-125 元无安全边际区间中部，观望不买入；87-101 元为关注区（对应 2026E PE 25-29x，历史中位，可小仓位关注），70-87 元为分批建仓区（20-25x，有安全边际）；加仓信号为价格进入 70-87 元且基本面无恶化，或 AI服务器及HPC分部恢复双位数增长、公司公告切入 mSAP 量产、FCF/净利回升到 50% 以上、hyperscaler 给出 2027 年 capex 继续增长指引。",
+      "derivation_quote": "把 **87–101元** 设为关注区（对应2026E PE 25–29x，历史中位）",
+      "derivation_line_ref": 836,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "AI服务器及HPC分部增速",
+        "FCF/净利"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：可继续持有但必须设定纪律——成本 70 元以下者考虑在 120 元以上分批减持至舒适仓位，单一标的仓位不超过组合 10%（该股一年内曾回撤 -46.3%）；持有期间逐季核对基本面是否仍加速（H1 净利 +68%~78%、Q2 环比 +35%）及下方卖出信号指标。",
+      "derivation_quote": "可继续持有，但必须设定纪律。",
+      "derivation_line_ref": 837,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "单季毛利率环比",
+        "单季营收环比",
+        "AI服务器及HPC分部增速",
+        "交换机分部增速",
+        "经营现金流/净利润"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "失效/卖出信号（触发任一即重新评估）：1.单季毛利率环比下降超过2个百分点（跌破 33.5%）；2.单季营收环比负增长；3.AI服务器及HPC分部继续零增长且交换机分部增速跌破 +40%；4.经营现金流连续两个季度低于净利润的 60%（2026Q1 为 41%）；5.有息负债超过净资产的 50%（2026Q1 为 37.8%）；6.hyperscaler 2027 年 capex 指引下修；7.港股 IPO 发行价大幅折让或摊薄超过 15%；8.实控人（碧景控股/合拍友联）开始减持。",
+      "derivation_quote": "**单季毛利率环比下降超过2个百分点**（当前35.63%，跌破33.5%）",
+      "derivation_line_ref": 838,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "单季毛利率",
+        "单季营收环比",
+        "经营现金流/净利润",
+        "有息负债/净资产",
+        "H股摊薄比例"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/沪电股份/沪电股份-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "6a3af5e2eb0dcc417ad8f3bc01826e0454e17a8b1a3453e4926d5a50e23242fa"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/沪电股份/沪电股份-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "6866624624b65ba97094d5a2b8e6a1bf88b3f08d8faa6486231d41edbab63669"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope_label": "买入前提",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 836,
+            "exact_quote": "把 **87–101元** 设为关注区（对应2026E PE 25–29x，历史中位）"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 6,
+            "exact_quote": "124.66 元（2026-07-13 收盘，腾讯 / 新浪 / 东方财富一致）"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 97,
+            "exact_quote": "高于 105 元 | 不追高，不新增仓位"
+          }
+        ],
+        "note": "证据包中最新的本地价格为 local_2 的 124.66 元（2026-07-13 收盘），主报告基线为 112.22 元（数据截止 2026-07-24），均非 2026-08-29 当前价格，无法判定股价是否落入 87-101 元关注区或 70-87 元建仓区。"
+      },
+      {
+        "task_id": "holder",
+        "scope_label": "持仓验证",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 837,
+            "exact_quote": "若成本在70元以下，考虑在120元以上分批减持至舒适仓位"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 5,
+            "exact_quote": "最新财务期**：2026 年第一季度"
+          }
+        ],
+        "note": "持仓纪律阈值（成本 70 元以下、120 元以上减持、仓位 ≤10%）依赖个人成本与仓位信息，local_2 明示实际买入价与仓位未提供；核对卖出信号所需的 2026Q2/2026H1 财务数据在证据包中缺失（最新财务期仅 2026Q1）。"
+      },
+      {
+        "task_id": "risk",
+        "scope_label": "风险/失效条件",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 75,
+            "exact_quote": "Q1 现金转化较弱，但尚未满足“连续两个季度”条件"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 78,
+            "exact_quote": "H 股发行尚未完成，最终比例和发行价未知"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 838,
+            "exact_quote": "**单季毛利率环比下降超过2个百分点**（当前35.63%，跌破33.5%）"
+          }
+        ],
+        "note": "local_2（截止 2026-07-13）显示 2026Q1 现金流红线未触发但接近预警、H 股未完成发行；但判定 8 项卖出信号是否触发需要 2026Q2/2026H1 财报、hyperscaler capex 指引变动及实控人减持等事件的当前确认，证据包中均缺失，不能宣告未触发或已触发。"
+      }
+    ]
+  }
+}

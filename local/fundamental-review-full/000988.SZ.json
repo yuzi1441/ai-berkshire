@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:49:53+08:00",
+  "company": "hgtech",
+  "ticker": "000988.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/hgtech/hgtech-investment-research-20260623.md",
+    "sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价约 163.66 元、约 100 倍 PE 时明确回避；只有回落到 70-80 元附近才重新研究。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "强烈建议减仓至 5% 以下或退出，不以光模块叙事承受当前估值风险。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "70-80 元，且 1.6T 正式批量订单、市场份额超过 12% 或 CPO 收入开始兑现后再评估。",
+      "metrics": [
+        "收入",
+        "订单",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 215,
+          "line_end": 276,
+          "quote": "## 六、估值与安全边际 ### 当前市场定价 | 指标 | 数值 | 说明 |",
+          "supports": "L215-L276、L280-L300。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/hgtech/hgtech-investment-research-20260623.md",
+      "sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L297",
+            "exact_quote": "**空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L328",
+            "exact_quote": "如果回调至CNY 70-80（PE 30-35x），华工科技会成为一个不错的AI光模块投资标的——但在163元，它不是"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L298",
+            "exact_quote": "**持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L327",
+            "exact_quote": "**当前估值的最大问题不是\"公司不好\"，而是\"价格太贵\"**。以100倍PE买一个6-8%份额的第二梯队玩家，风险回报比严重失衡"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L300",
+            "exact_quote": "**加仓信号** | （1）股价回调至CNY 70-80（2026E PE 30-35x）；（2）1.6T光模块获得北美OTT正式大批量订单；（3）全球光模块市占率从6-8%提升至12%+；（4）CPO产品开始贡献收入"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

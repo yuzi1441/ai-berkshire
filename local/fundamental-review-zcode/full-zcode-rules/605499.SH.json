@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "东鹏饮料（集团）股份有限公司",
+  "ticker": "605499.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+    "sha256": "28ea827ee7fe45bd77994650ff76b8b8fc4a364b5e647acb1da2f7aea4c7e0b0",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "基本面建议动作分批买入：报告基线130.83元处于激进型区间（127-140元，对应TTM PE 19-21倍），可小额首批；114-127元进入稳健分批区（17-19倍）；100-114元在基本面不恶化时重点关注（15-17倍）；高于140元不追价，等待H2或下一份季报验证再评估。",
+      "derivation_quote": "130.83元可小额首批；114-127元进入稳健分批区；100-114元在基本面不恶化时重点关注",
+      "derivation_line_ref": 332,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "TTM PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓者以持有为主；股价低于127元且2026H2扣非利润仍保持双位数增长时，再评估增加（基线：2026H1扣非利润增速14.41%、归母利润增速20.72%）。",
+      "derivation_quote": "以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加",
+      "derivation_line_ref": 333,
+      "schedule_type": "filing",
+      "metrics": [
+        "扣非净利润增速",
+        "A股收盘价"
+      ],
+      "periods": [
+        "2026H2"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/卖出信号：核心能量饮料连续两个半年度零增长或份额下降超过3个百分点；重大低回报并购；治理或食品安全事件破坏品牌。估值卖出信号：股价超过202.5元而中期EPS增长预期仍低于13%，或PE超过30倍且核心特饮仍为个位数增长。暂停买入信号：销售费用连续两个报告期比收入多增10个百分点；扣非利润增速持续低于收入。",
+      "derivation_quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点",
+      "derivation_line_ref": 336,
+      "schedule_type": "filing",
+      "metrics": [
+        "核心能量饮料收入增速",
+        "市场份额",
+        "销售费用增速",
+        "扣非净利润增速"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "28ea827ee7fe45bd77994650ff76b8b8fc4a364b5e647acb1da2f7aea4c7e0b0"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "仅有主报告local_1，无独立行情证据。基线（2026-08-10）现价130.83元处于激进型区间127-140元，无当前股价，无法确认价格是否仍处买入带或已落入114-127元/100-114元区间。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 305,
+            "exact_quote": "当前130.83元处于激进型区间。公司2026H1回购成交区间为134.20-154.90元，当前价低于公司已回购价格下限，但这只能作为管理层行为证据，不能替代独立估值。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 300,
+            "exact_quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "加仓评估需2026H2财报确认扣非利润双位数增长，报告日期2026-08-10时H2尚未发生；本地仅有2026H1基线（归母+20.72%、扣非+14.41%）可作对照。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 333,
+            "exact_quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 280,
+            "exact_quote": "这个隐含要求低于2026H1归母利润增速20.72%，也低于扣非利润增速14.41%，但高于核心东鹏特饮收入增速6.89%。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "失效/卖出信号需期后半年度报告或公告确认核心能量饮料增速、份额与销售费用趋势；本地仅有2026H1基线（核心特饮收入增速6.89%）可作对照，无最新数据。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 336,
+            "exact_quote": "| 减仓/卖出信号 | 核心能量饮料连续两个半年度零增长或份额下降超过3个百分点；重大低回报并购；治理或食品安全事件破坏品牌 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 335,
+            "exact_quote": "| 暂停买入信号 | 销售费用连续两个报告期比收入多增10个百分点；扣非利润增速持续低于收入 |"
+          }
+        ]
+      }
+    ]
+  }
+}

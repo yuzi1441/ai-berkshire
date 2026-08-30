@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "中航光电科技股份有限公司",
+  "ticker": "002179.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/中航光电/中航光电研究报告-20260809.md",
+    "sha256": "f051ce949562014b31db9111e6872343cfd07238102bc9aadb31e8c3ccc1ee41",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：报告基线价 ¥35.46 位于三档买入区间之上，空仓者不追买；激进型 ¥29–32 小仓分批试仓（需毛利率停止下降且防务或数据中心至少一个终端出现可核验利润拐点），稳健型 ¥24–28 分批买入，保守型 ¥19–22 才考虑建立安全边际仓位。",
+      "derivation_quote": "当前 ¥35.46 位于三档买入区间之上。",
+      "derivation_line_ref": 300,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "TTM EPS"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：低成本持有者持有观察、不因短期反弹加仓，核心验证点为 2026 年中报；加仓信号为毛利率回到 31% 以上、防务订单/关联销售企稳、CFO/净利润持续改善、库存与应收增速回落至收入增速附近。",
+      "derivation_quote": "若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流",
+      "derivation_line_ref": 324,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "防务订单/关联销售",
+        "库存与应收增速"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/失效触发：两季毛利率低于 28%，或民品增长仍无法带动利润、新园区低利用率导致 ROIC 继续下降、海外准入显著恶化；论文失效条件为防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红。",
+      "derivation_quote": "两季毛利率低于 28%；民品增长仍无法带动利润",
+      "derivation_line_ref": 326,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "ROIC",
+        "经营现金流对资本开支与分红覆盖"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中航光电/中航光电研究报告-20260809.md",
+      "source_role": "main_report_reference",
+      "sha256": "f051ce949562014b31db9111e6872343cfd07238102bc9aadb31e8c3ccc1ee41"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-08-09 主报告基线：当时 ¥35.46 高于三档买入带，报告数据截止 2026-08-07 且看板下次复核日期 2026-08-28 已过。无复核日现价，无法判断股价是否进入 ¥29–32/¥24–28/¥19–22 任一买入带。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 300,
+            "exact_quote": "当前 ¥35.46 位于三档买入区间之上。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 323,
+            "exact_quote": "| 空仓者 | 不追买；¥29–32 仅适合激进小仓，¥24–28 才进入稳健分批区 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 409,
+            "exact_quote": "| 下次复核日期 | 2026-08-28 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "持有验证依赖 2026 年中报的毛利率、经营现金流、防务订单与库存应收数据；本地证据只有主报告基线（数据截止 2026-08-07），无中报官方披露数据，无法验证毛利率是否回到 31% 以上及加仓信号是否成立。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 324,
+            "exact_quote": "| 持仓者 | 若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 325,
+            "exact_quote": "| 加仓信号 | 毛利率回到 31% 以上；防务订单/关联销售企稳；CFO/净利润持续改善；库存与应收增速回落 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "失效条件以连续两季毛利率低于 28% 及经营现金流长期不能覆盖资本开支与分红为触发，需逐季财报比对；本地无 2026 中报及之后数据，仅有报告基线判断'2025–2026Q1 盈利和现金流尚未见底'，无法确认复核日是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 326,
+            "exact_quote": "| 卖出/减仓信号 | 两季毛利率低于 28%；民品增长仍无法带动利润；新园区低利用率导致 ROIC 继续下降；海外准入显著恶化 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 408,
+            "exact_quote": "| 买入失效条件 | 防务与民品同时失速且毛利率连续两季低于28%，经营现金流长期不能覆盖资本开支 |"
+          }
+        ]
+      }
+    ]
+  }
+}

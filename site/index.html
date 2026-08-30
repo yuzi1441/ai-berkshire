@@ -8,9 +8,9 @@
     <meta name="description" content="AI Berkshire 个股投资决策看板：主报告结论、技术面辅助观察与实时行情" />
     <title>投资决策看板 | AI Berkshire</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="./assets/styles.css?v=15d89a7f" />
-    <link rel="stylesheet" href="./assets/themes/_engine.css?v=15d89a7f" />
-    <link rel="stylesheet" href="./assets/themes/18-glass.css?v=15d89a7f" />
+    <link rel="stylesheet" href="./assets/styles.css?v=main-review-v8" />
+    <link rel="stylesheet" href="./assets/themes/_engine.css?v=main-review-v8" />
+    <link rel="stylesheet" href="./assets/themes/18-glass.css?v=main-review-v8" />
   </head>
   <body>
     <div class="app-shell">
@@ -96,6 +96,7 @@
       <section class="control-band" aria-label="筛选与检索">
         <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
           <button type="button" class="chip active" data-view="decision">买入前决策</button>
+          <button type="button" class="chip" data-view="review">双模型复核 <span class="chip-count" id="fundamental-review-count">0</span></button>
           <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
         </div>
         <div class="search-box">
@@ -165,8 +166,17 @@
           <button type="button" class="chip" data-tracking-filter="review">待复核</button>
           <button type="button" class="chip" id="restore-tracking" hidden>恢复已隐藏</button>
         </div>
+        <div class="chip-row fundamental-review-filter-row" id="fundamental-review-filter-row" role="tablist" aria-label="ZCode 与 DeepSeek 复核对照筛选" hidden>
+          <span class="filter-label">双模型复核（只把主报告后的材料视为当前证据）</span>
+          <button type="button" class="chip active" data-fundamental-review-filter="all">全部</button>
+          <button type="button" class="chip review-filter-redline" data-fundamental-review-filter="conflict">结果分歧</button>
+          <button type="button" class="chip review-filter-improving" data-fundamental-review-filter="consensus">双方当前证据一致</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="zcode_current">仅 ZCode 当前证据</button>
+          <button type="button" class="chip review-filter-attention" data-fundamental-review-filter="deepseek_current">仅 DeepSeek 当前证据</button>
+          <button type="button" class="chip review-filter-historical" data-fundamental-review-filter="both_insufficient">双方证据不足 / 历史</button>
+        </div>
         <div class="control-meta">
-          <label class="sort-field">
+          <label class="sort-field" id="sort-field">
             <span>排序</span>
             <select id="sort-select">
               <option value="execution">按当前可执行性</option>
@@ -181,6 +191,8 @@
           <p class="data-status" id="data-status"></p>
         </div>
       </section>
+
+      <section class="fundamental-review-partitions" id="fundamental-review-partitions" aria-label="报告复核分区" hidden></section>
 
       <div class="workspace" id="workspace">
         <section class="table-panel" aria-label="个股列表">
@@ -244,6 +256,6 @@
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=15d89a7f"></script>
+    <script type="module" src="./assets/app.js?v=main-review-v8"></script>
   </body>
 </html>

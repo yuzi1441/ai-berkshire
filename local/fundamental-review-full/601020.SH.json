@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:36:27+08:00",
+  "company": "华钰矿业",
+  "ticker": "601020.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+    "sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "19.38 元不追；17-18 元且控制权过户、精矿销售或 OCF 至少一项硬改善时才可小仓，13-15 元稳健等待，10-12 元以下或连续两季产销和 OCF 改善后再重估。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "小仓可观察，但须把锑产销率、OCF 和控制权过户设为季度检查点；重仓风险收益不匹配，应降低到可承受周期和治理波动的仓位。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "控制权和董事会改组完成且关联定价清楚、塔铝产销率连续两季改善、OCF 接近利润、泥堡节点兑现；库存和负现金流持续、关联交易异常、建设延后或过户长期不完成即重审。",
+      "metrics": [
+        "利润",
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 273,
+          "line_end": 367,
+          "quote": "### 7.3 操作价格带 | 投资者 | 建议 | 价格 / 条件 | |---|---|---|",
+          "supports": "L273-L367、L430-L451。契约摘要错误抓成 Checklist 标题，正文明确是“资源好、兑现难、治理待证明”，不能列为当前机会。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+      "sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L364",
+            "exact_quote": "| 空仓 | 19.38 元不追，优先等经营证据；激进者也应等 17-18 元与至少一项硬验证同时出现 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L277",
+            "exact_quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L279",
+            "exact_quote": "| 空仓保守型 | 回避或极低价再评估 | 10-12 元以下，或先看到连续两个季度经营现金流与产销率改善再接受更高价格 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L365",
+            "exact_quote": "| 小仓持有 | 可继续观察，但把锑产销率、OCF 和控制权过户设为季度检查点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L366",
+            "exact_quote": "| 重仓持有 | 风险收益不匹配，应评估降低至可承受周期和治理波动的仓位 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L343",
+            "exact_quote": "1. 控制权过户和董事会改组完成，关联交易制度、定价基准和客户结构披露清晰。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L351",
+            "exact_quote": "2. 锑和金精矿库存继续上升，经营现金流连续为负。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L357",
+            "exact_quote": "7. 2026-10-10 前后仍未完成过户，且公司没有解释审核、资金或协议延期安排。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

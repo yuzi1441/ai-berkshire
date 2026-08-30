@@ -1,0 +1,393 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中国平安",
+  "ticker": "601318.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/平安集团/中国平安-investment-research-20260810.md",
+    "canonical_sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73",
+    "locked_sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 53.32 元继续观察",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "53.32 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "47-50 元且半年报确认投资收益、NBV 质量和资本缓冲后才考虑小额分批",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "47-50 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "基本面未破坏可观察持有，不在现价机械加仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "H 股还需核算税费与汇率",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "47-50 元激进小仓、43-47 元稳健研究、40 元以下保守评估",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "偿付能力、NBV、COR、银行资产质量或投资回报触发失效条件时重审",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 333,
+          "line_end": 399,
+          "quote": "## 第八步：最终决策与行动清单 ### 综合判断 | 维度 | 结论 | 信心度 |",
+          "supports": "L333-L399。低 PE 和破净是研究线索，不是跳过半年报验证的理由。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（核心失效条件，任一触发即卖出/减仓重估）：集团或平安寿险综合偿付能力低于 150%",
+      "relation": "any_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": "lt",
+      "threshold": "150%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "寿险及健康险 NBV 连续两个披露期同比负增长",
+      "relation": "all_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "财险 COR 连续两个披露期高于 100%",
+      "relation": "all_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": "gt",
+      "threshold": "100%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "平安银行 NPL 高于 1.20% 且拨备覆盖率持续下降",
+      "relation": "all_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": "gt",
+      "threshold": "1.20%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "净投资收益率长期低于 EV 4.0% 假设并伴随减值",
+      "relation": "all_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": "lt",
+      "threshold": "4.0%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "重大房地产/非标减值、可转债摊薄或治理事件",
+      "relation": "any_of",
+      "metrics": [
+        "偿付能力充足率",
+        "NBV同比增速",
+        "财险COR",
+        "NPL",
+        "净投资收益率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "集团综合偿付能力或平安寿险综合偿付能力低于 150%。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "edbb751edc7b584fa535c2d957bb96c62fd3daafe541a9be841a5644892ff296",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

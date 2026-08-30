@@ -1,0 +1,352 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "leaderdrive",
+  "ticker": "688017.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+    "canonical_sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
+    "locked_sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价约 330 元处于概念泡沫区，当前回避",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "330 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "真心看好赛道也应等待 100-120 元再考虑，100 元以下且经营信号改善时吸引力才明显提高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "至少减至半仓，保留底仓也不宜超过组合 3%-5%",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不能把人形机器人长期方向正确等同于当前价格合理",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入 100-120 元、特斯拉确认大规模量产订单并指定公司供应，或季度毛利率重新稳定在 40%以上后重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "量产继续推迟、毛利率跌破 30%、实控人继续减持或杠杆资金异常攀升即维持回避/减仓",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "债务"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/卖出信号（任一触发即执行卖出）：人形机器人量产时间表再次推迟",
+      "relation": "any_of",
+      "metrics": [
+        "季度毛利率",
+        "实控人减持",
+        "融资余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "季度毛利率跌破 30%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "30%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "实控人继续减持",
+      "relation": "all_of",
+      "metrics": [
+        "季度毛利率",
+        "实控人减持",
+        "融资余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "融资余额/杠杆资金异常攀升",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出，失效条件以最终决策卖出信号为准",
+      "relation": "all_of",
+      "metrics": [
+        "季度毛利率",
+        "实控人减持",
+        "融资余额"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "f237f185e3543d9ace019b33f67c9a4b8de9c4ad9b9d6c5c212f000a0e184dc0",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

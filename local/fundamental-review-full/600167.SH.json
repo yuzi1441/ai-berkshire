@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:16:48+08:00",
+  "company": "联美量子股份有限公司",
+  "ticker": "600167.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+    "sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 5.78 元安全边际不足；5.20 元以下才考虑小仓，4.80-5.20 元为激进试买区，4.20-4.80 元稳健分批，4.20 元以下仍须确认前提未破坏。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有但不追涨，继续核对 2026 中报、回购执行、清洁能源毛利率及现金的真实配置效率；6.50 元以上而盈利未恢复时考虑减仓。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "TTM 扣非利润企稳、供暖面积保持增长、回购实际执行并增厚每股价值，且价格进入 4.20-4.80 元；清洁能源毛利率持续低于 28% 或供暖面积连续两年下降即重审。",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 347,
+          "quote": "### 7.3 反向估值：当前价格要求什么 若投资者要求 10% 年化回报、假设未来五年每年股息仍为 0.15 元、第五年市场给 16 倍 PE，那么 5.78 元需要第五年 EPS 达到约 0.535 元。相对当前 TTM 每股收益 0.265 元，隐含未来五年 EPS CAGR 约 **15.05%**。 这与成熟供热面积 2%-4% 的行业增速不匹配。实现它需要广告强修复、利润率回升、大规模低价回购或明显提高资本回报。反向估值的好处是直白：**当前价格不贵在资产，贵在盈利倍数。** 大额现金若能分配或注销式回购，会降低这一增长要求；若继续沉淀为金融资产，则不会自动创造回报。",
+          "supports": "L310-L347、L351-L375、L424-L445。正文与契约一致；低 PB 和净现金不能替代盈利与资本配置验证。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/联美控股/联美控股-investment-research-20260809.md",
+      "sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L335",
+            "exact_quote": "综合盈利倍数、净现金和历史区间，**基本面合理价值约 4.8-6.2 元**；想要足够安全边际，买入区应明显低于 5.2 元。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L343",
+            "exact_quote": "| 4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L345",
+            "exact_quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L371",
+            "exact_quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L341",
+            "exact_quote": "| 高于 6.50 元 | 对利润恢复和资本回报要求较高 | 无恢复证据则减仓 / 不追价 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L89",
+            "exact_quote": "公司预约在 2026-08-29 披露中报，本报告不使用尚未披露的中期数字。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L372",
+            "exact_quote": "| 加仓信号 | TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L373",
+            "exact_quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

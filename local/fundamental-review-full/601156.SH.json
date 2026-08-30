@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:35:55+08:00",
+  "company": "东方航空物流股份有限公司",
+  "ticker": "601156.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/东航物流/东航物流-investment-research-20260807.md",
+    "sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "17.35 元观察，不追价；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健区。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "已有仓位可持有，当前不加仓，把半年报作为第一复核点。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格不高于 14.5 元，同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元；航速毛利率连续两期低于 12% 或 FCF 转负即失效。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东航物流/东航物流-investment-research-20260807.md",
+      "sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L9",
+            "exact_quote": "| 2026-08-07 收盘价 | 17.35 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L302",
+            "exact_quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L303",
+            "exact_quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "| 最新已披露业绩 | 2025 年报、2026 年一季报；2026 半年报预约 2026-08-31 披露 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L304",
+            "exact_quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L306",
+            "exact_quote": "| 卖出 / 论文失效 | 航空速运毛利率连续两个报告期低于 12%、租赁调整后 FCF 转负，或重大安全与关联交易治理问题出现 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L82",
+            "exact_quote": "| 航空速运毛利率 | 12.98% | -4.34 个百分点 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

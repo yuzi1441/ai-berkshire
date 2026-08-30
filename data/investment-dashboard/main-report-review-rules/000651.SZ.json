@@ -1,0 +1,375 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "格力电器",
+  "ticker": "000651.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+    "canonical_sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
+    "locked_sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "高于 38 元观察",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": "gt",
+      "threshold": "38 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型 | 区间 | 动作建议 | 逻辑 | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低于 38 元才进入激进型分批区，32-35 元为稳健优先区，30 元以下且分红未恶化才是保守型高仓位候选",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型 | 区间 | 动作建议 | 逻辑 | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "38-52 元持有观察或小额定投",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "38-52 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型 | 区间 | 动作建议 | 逻辑 | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "高于 55 元降低新增买入",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": "gt",
+      "threshold": "55 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型 | 区间 | 动作建议 | 逻辑 | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进入相应价格带，并确认扣非利润、份额、毛利率、分红纪律与管理层传承未恶化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "扣非利润",
+        "利润",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 117,
+          "line_end": 125,
+          "quote": "### 6.3 价格区间建议 | 类型 | 区间 | 动作建议 | 逻辑 | | ---- | ------: | ------- | ------------------------------ |",
+          "supports": "L117-L125、L184-L218。契约“观察”与具体分批价格并存，执行采用更具体的价格层级并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓触发条件：扣非利润连续两年下滑且经营现金流同步恶化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "空调主业份额明显流失、线上均价与毛利率下滑不可逆",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "新能源/智能装备/格力钛继续消耗现金但无ROIC证明",
+      "relation": "all_of",
+      "metrics": [
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "大股东持续减持或质押风险扩大引发治理不稳定",
+      "relation": "any_of",
+      "metrics": [
+        "扣非归母净利",
+        "经营现金流",
+        "大股东减持与质押",
+        "分红政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "分红政策显著弱化且无高回报再投资",
+      "relation": "all_of",
+      "metrics": [
+        "分红",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价高于55元降低新增买入",
+      "relation": "all_of",
+      "metrics": [
+        "扣非归母净利",
+        "经营现金流",
+        "大股东减持与质押",
+        "分红政策"
+      ],
+      "operator": "gt",
+      "threshold": "55元",
+      "periods": [
+        "FY2026",
+        "FY2027"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "扣非利润连续两年下滑，且经营现金流同步恶化。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "f95f1bac4db48734685a416bf4be8ecaf0a451fa8e882236b1988946f9ce8812",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

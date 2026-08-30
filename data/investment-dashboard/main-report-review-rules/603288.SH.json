@@ -1,0 +1,335 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "海天味业",
+  "ticker": "603288.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+    "canonical_sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+    "locked_sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "36.78 元观察、不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "36.78 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "32-35 元才允许激进型小额分批，28-32 元可稳健分批，不高于 28 元才进入保守型重点关注区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本仓可继续持有但不因高分红追价",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "成本接近现价者应在半年报增长弱于 Base 且估值仍高时评估降低集中度",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入相应区间且品牌、渠道、份额和现金流未恶化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "食品安全损害品牌、酱油连续落后行业、毛利率低于 37%、现金流/利润长期低于 80%、分红承诺失守或资本配置损害每股价值即暂停买入",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "论文失效条件（满足任一项暂停买入并重做研究）：食品安全事件实质损害品牌并造成连续两个报告期收入或份额下滑",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "综合毛利率跌破 37% 且无法由短期原料价格解释。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "酱油收入连续两个报告期负增长",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "综合毛利率跌破 37% 且无法由短期原料价格解释。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "综合毛利率跌破37%且无法由短期原料价格解释",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "37%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "综合毛利率跌破 37% 且无法由短期原料价格解释。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "年度经营现金流/归母净利润连续两年低于80%",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "80%",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "综合毛利率跌破 37% 且无法由短期原料价格解释。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "7fde9df7392ecdaa78195e76896666a93edad13f75d1ae6435944c87e06f2285",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 4
+  }
+}

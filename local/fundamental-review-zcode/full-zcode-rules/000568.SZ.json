@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "泸州老窖",
+  "ticker": "000568.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+    "sha256": "2ae683fd45237d9b2bfd84070f0897aac9be68677e012316fb96999054664f22",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：激进型在80-85元建1/3底仓、75元以下加仓（报告基线82.46元、2026-07-17收盘，PE(TTM)12.2倍处十年约5%分位、股息率7.0%）；稳健型需两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）后90元以内介入；保守型等54-70元悲观情景锚区间。",
+      "derivation_quote": "80-85元建仓；75元以下加仓",
+      "derivation_line_ref": 131,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PE(TTM)"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证/加仓确认信号：合同负债连续两个季度环比回升；国窖1573批价站稳900元以上、向980元出厂线收敛；季度利润降幅收窄至个位数或转正；经销商库存从7个月回到4个月以内；28度/38度低度产品线放量。",
+      "derivation_quote": "国窖1573批价站稳900元以上、向980元出厂线收敛",
+      "derivation_line_ref": 139,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "合同负债环比",
+        "国窖1573批价",
+        "季度利润增速",
+        "经销商库存月数"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/离场触发条件：国窖出厂价被迫下调（挺价失败）；批价跌破700元（渠道信心崩塌阈值）；消费税以恶性方式落地（批发/零售环节征收+短过渡期）；分红率下调或85亿分红承诺不兑现；经销商出现成规模退网潮。",
+      "derivation_quote": "批价跌破700元（渠道信心崩塌阈值）",
+      "derivation_line_ref": 146,
+      "schedule_type": "event",
+      "metrics": [
+        "国窖批价",
+        "出厂价政策",
+        "消费税政策",
+        "分红兑现"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+      "source_role": "main_report_reference",
+      "sha256": "2ae683fd45237d9b2bfd84070f0897aac9be68677e012316fb96999054664f22"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "该股仅有主报告一个本地文档，82.46元（2026-07-17收盘）为报告基线快照；无独立证据提供复核日现价或估值分位，无法判断现价是否落入80-85元/75元以下/54-70元任一价格带。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 4,
+            "exact_quote": "**报告日期**：2026-07-19 ｜ **股价基准**：82.46元（2026-07-17收盘），总市值约1214亿元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 131,
+            "exact_quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "验证所需的2026Q2/Q3合同负债、批价、经销商库存数据在本地证据中完全缺失（报告基线判断'先行指标尚未转正'），无当前值与对比期，无法确认任何加仓确认信号已出现。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 138,
+            "exact_quote": "1. 合同负债连续两个季度环比回升（渠道信心最硬的先行指标）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 125,
+            "exact_quote": "| 时机 | 左侧。报表最坏时点大概率已过，但先行指标（合同负债/批价）尚未转正 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "批价跌破700元、出厂价下调、消费税落地、分红承诺兑现等失效条件均为报告基线后的未来事件，本地证据无任何行情或公告确认，无法判定是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 146,
+            "exact_quote": "2. 批价跌破700元（渠道信心崩塌阈值）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 148,
+            "exact_quote": "4. 分红率下调或85亿分红承诺不兑现"
+          }
+        ]
+      }
+    ]
+  }
+}

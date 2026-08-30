@@ -1,0 +1,296 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "藏格矿业",
+  "ticker": "000408.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+    "canonical_sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
+    "locked_sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前回避或观望",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "等待 35-40 元附近且基本面未恶化后重新评估",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "35-40 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "逢高分批减仓并可保留底仓，不在高 PB 区追加",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "35-40 元且巨龙分红、麻米措投产与商品周期未恶化",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "35-40 元",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "巨龙扩产兑现属于加仓验证",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 193,
+          "line_end": 228,
+          "quote": "## 七、估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\" ### 7.1 当前市场定价（已程序化验算） | 指标 | 数值 | 备注 |",
+          "supports": "L193-L228、L245-L252。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号触发条件：①锂/钾/铜价格明确转入趋势性下行",
+      "relation": "all_of",
+      "metrics": [
+        "锂钾铜商品价格趋势",
+        "巨龙分红与关联交易",
+        "麻米措达产时间",
+        "PB与盈利拐点"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②巨龙分红政策或与藏格关联交易明显损害少数股东利益",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③麻米措达产重大延期",
+      "relation": "all_of",
+      "metrics": [
+        "锂钾铜商品价格趋势",
+        "巨龙分红与关联交易",
+        "麻米措达产时间",
+        "PB与盈利拐点"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④估值维持PB 6x以上而盈利见顶（戴维斯双杀风险最大）",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "6x",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "e1b462614ff3aa2cd173f7d8a71b8fa1f1c4b06775a0f602f228680d4d3ae9a4",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

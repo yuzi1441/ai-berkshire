@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:36:34+08:00",
+  "company": "上海电气",
+  "ticker": "601727.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/上海电气/上海电气研究报告-20260730.md",
+    "sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 6.97 元没有安全边际，当前不买；即使进入 3.0-3.5 元也只观察，2.5-3.0 元也只能在证据改善后重新研究，不因题材和订单叙事建仓。",
+      "metrics": [
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "不因订单主题继续加仓；已有较大仓位应利用主题强势重新评估或降低仓位，只有经常性盈利、归母占比和营运资本同步改善后才重建论文。",
+      "metrics": [
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "A 股不高于 2.1 元，且扣非 ROE 连续两年高于 8%、扣非利润占净利润高于 70%、归母利润占合并利润高于 50%、经营现金流足以覆盖资本开支和分红后，才可考虑分批；治理处罚、扣非转负、存货应收快于收入、海外亏损或净负债恶化均为继续回避信号。",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "收入",
+        "ROE",
+        "回款",
+        "库存",
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 408,
+          "line_end": 408,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "报告明确区分 A/H 股，并在最终结论中将 601727.SH 归为“回避”；契约粗字段“观察”不能覆盖正文对 A 股估值、治理与盈利质量的明确否定。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/上海电气/上海电气研究报告-20260730.md",
+      "sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L393",
+            "exact_quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L391-L392",
+            "exact_quote": "| A 股观察 | 3.0—3.5 元 | 等待，不追价 |\n| A 股条件性研究 | 2.5—3.0 元 | 只研究，暂不建仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L424",
+            "exact_quote": "**A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L424",
+            "exact_quote": "**A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L427",
+            "exact_quote": "**上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L308",
+            "exact_quote": "真正的资本配置改善信号，应是关闭低回报项目、提高归母利润份额、减少营运资本占用，并让扣非 ROE持续超过资本成本。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L393",
+            "exact_quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L427",
+            "exact_quote": "**上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L426",
+            "exact_quote": "**卖出/回避触发：** 新的重大治理处罚、核心扣非再次转负、库存和应收持续快于收入、重大海外损失、严格净负债明显恶化。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "国药现代",
+  "ticker": "600420.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+    "sha256": "9116c476c3493820250960c4254c35912377a89ea43c5d76caa81b348ff1aeb0",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者买入前提：8.70 元附近观望为主、不急于买；价值型空仓者需股价 ≤7.0 元且 Q2/Q3 原料药毛利率止跌才可小仓试错（必须跟踪 API 毛利和现金流）；逆向型需 ≤5.5-6.0 元且资产负债表未恶化才出现较明显赔率，并确认利润不是永久下台阶。",
+      "derivation_quote": "空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。",
+      "derivation_line_ref": 255,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "原料药（API）毛利率"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持有者在 8-9 元区间可持有观察，不因 PB < 1 机械加仓；重点核对 2026 半年报的原料药毛利率、经营现金流、制剂收入是否止跌；若只是估值修复而利润仍下滑，股价 >10.5-11.0 元应考虑降低仓位。",
+      "derivation_quote": "可以持有观察，但不要因为 PB < 1 就机械加仓。",
+      "derivation_line_ref": 303,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "原料药毛利率",
+        "经营现金流",
+        "制剂收入",
+        "PB"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓信号：2026 半年报继续出现收入和利润双位数下滑且管理层无清晰改善路径；API 毛利率长期低位（价格战非短周期）；股价上涨到 10.5-11 元以上但盈利修复没有同步发生；关联交易、财务公司、合规处罚或质量事故带来治理折扣扩大。",
+      "derivation_quote": "2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。",
+      "derivation_line_ref": 314,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "收入增速",
+        "利润增速",
+        "API 毛利率",
+        "股价"
+      ],
+      "periods": [
+        "2026半年报"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/国药现代/国药现代-investment-team-20260708.md",
+      "source_role": "main_report_reference",
+      "sha256": "9116c476c3493820250960c4254c35912377a89ea43c5d76caa81b348ff1aeb0"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 254,
+            "exact_quote": "| 空仓、保守型 | 8.70 元附近 | **观望为主**；除非组合需要低估值医药观察仓，否则不急于买。 |"
+          }
+        ],
+        "notes": "仅主报告作基线：8.70 元为报告撰写时点价格（中性估值约 8.2 元），清单内无报告发布后的当前股价，无法判定 ≤7.0 元或 ≤5.5-6.0 元买入档位是否触发。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 392,
+            "exact_quote": "报告标记为“研究可用、非投资建议、需跟踪 2026 半年报后复核”。"
+          }
+        ],
+        "notes": "2026 半年报未在证据清单中出现，缺原料药毛利率、经营现金流、制剂收入的当前值与对比期，无法完成持仓验证。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 317,
+            "exact_quote": "| 减仓信号 4 | 股价上涨到 10.5-11 元以上，但盈利修复没有同步发生。 |"
+          }
+        ],
+        "notes": "缺报告期后收入/利润增速、API 毛利率与股价的当前值及对比期，无法判断任一减仓信号是否触发。"
+      }
+    ]
+  }
+}

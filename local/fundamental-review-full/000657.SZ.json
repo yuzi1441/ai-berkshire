@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:49:34+08:00",
+  "company": "中钨高新",
+  "ticker": "000657.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+    "sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "不追高；55-60 元且 2026H1 现金流修复才允许研究性小仓，稳健型等 35-45 元，保守型等 25-35 元并验证周期下行后的现金流。",
+      "metrics": [],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "高估值且现金流未改善时分批降风险，不继续扩大周期暴露。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "现金流覆盖利润、高端刀具与微钻利润持续放量、资产注入条件公平、存货周转改善和估值回落。",
+      "metrics": [
+        "利润",
+        "库存",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 193,
+          "line_end": 239,
+          "quote": "## 7. 估值与操作建议 ### 7.1 工具验算记录 本报告已将关键计算落盘至：`data/000657/financial_validation_20260709.txt`。",
+          "supports": "L193-L239、L287-L289。契约将激进型价格误简化为乐观目标价 58.5 元，正文真实条件为 55-60 元且现金流修复，标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+      "sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L222",
+            "exact_quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L223",
+            "exact_quote": "| 稳健型 | 等待 | 35-45 元区间再重估 | 需看到利润不是一次性钨价景气，并且高端刀具/微钻利润持续放量。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L224",
+            "exact_quote": "| 保守型 | 暂不买入 | 25-35 元且钨价下行后现金流仍稳，再重新评估 | 保守投资者应要求周期调整后的利润和治理折价。 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L225",
+            "exact_quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L104",
+            "exact_quote": "- 当前约 1,731.5 亿元市值对应 2025 PE 约 135x、TTM PE 约 89x、PB 约 17x，已经不是传统有色/材料企业的估值。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L102",
+            "exact_quote": "- 2025 经营现金流/归母净利润约 0.30x，利润没有充分转化为现金。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L228",
+            "exact_quote": "1. 2026H1/H2 利润继续高增且经营现金流同步转正、覆盖利润。  "
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L229",
+            "exact_quote": "2. 高端刀具/PCB 微钻收入占比、毛利率、客户认证明显提升。  "
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L230",
+            "exact_quote": "3. 集团资产注入价格合理、盈利承诺充分，且不明显摊薄少数股东。  "
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

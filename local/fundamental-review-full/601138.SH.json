@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:36:12+08:00",
+  "company": "工业富联",
+  "ticker": "601138.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/工业富联/工业富联-research-20260726.md",
+    "sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "60.25 元不追高；进取型不高于 55 元才可小仓，稳健型不高于 50 元且中报确认现金流，保守型不高于 43 元。",
+      "metrics": [],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本仓可持有但不加仓；明显超配者在利好兑现时降低集中度。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "正式中报确认 FCF 转正、短债下降、存货增速低于收入、云计算毛利额同步增长，并核实下一代平台份额；Rubin 延期、毛利率或现金流恶化即重审。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "收入",
+        "库存",
+        "债务"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/工业富联/工业富联-research-20260726.md",
+      "sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "> **行情基准**：**2026-07-24 收盘 60.25 元**（当日 -4.18%；7/25-26 休市）｜报告完成日 2026-07-26"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L47",
+            "exact_quote": "> **结论：观望。空仓者 50 元以下才进入分批观察区，43 元以下才有制造业估值保护。**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "> **一句话结论**：**观望，不追高。**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [],
+        "evidence_lines": [],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L125",
+            "exact_quote": "> ⚠️ **正式半年报预约披露日 2026-08-12，截至本报告完成日尚未披露。** 业绩预告只给了净利润区间，**没有披露营收、分部毛利率、存货、短期借款、经营现金流**——这四项恰恰是本报告认为最关键的观察指标。因此 8 月 12 日才是真正的验证时点。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "而支撑该估值的 2027 年利润接力（Rubin 份额）在公开信息中存在 **15% 与 80-90% 两个相差 5 倍的互斥口径**，公司从未给过任何数字。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

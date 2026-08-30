@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:18:59+08:00",
+  "company": "生益科技",
+  "ticker": "600183.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/生益科技/生益科技研究报告-20260709.md",
+    "sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "157.40 元不追；激进型也只有在 2026Q2/Q3 继续高增长且毛利率维持 27% 以上时小仓试错，稳健型等待 TTM PE 回落到 40-50 倍或股价 90-110 元且业绩未坏。",
+      "metrics": [
+        "毛利率",
+        "估值"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有但设置基本面止损，不继续扩大高估值暴露；PE 仍高于 80 倍且增速放缓时应降低风险。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "收入和利润继续高增长、CFO/净利回到约 1 倍、毛利率维持 27% 以上、新产能顺利爬坡且高端材料出现明确批量认证或订单；毛利率连续两季低于 24% 或现金流、库存应收恶化即重审。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "订单",
+        "回款",
+        "库存",
+        "产能/销量",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> 当前价格口径：腾讯行情接口 2026-07-09 16:14:49，收盘价 157.40 元；总市值约 3823.43 亿元。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L276",
+            "exact_quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L277",
+            "exact_quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L52",
+            "exact_quote": "| TTM PE | 97.33x | 总市值 / TTM 归母净利 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L279",
+            "exact_quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L280",
+            "exact_quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L284",
+            "exact_quote": "- 2026 后续季度收入和归母净利继续高增长，同时 CFO/净利回到 1x 附近；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L285",
+            "exact_quote": "- 毛利率连续维持 27% 以上，说明高端材料结构升级真实；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L287",
+            "exact_quote": "- 高速/高频/封装材料获得明确批量认证或订单证据；"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

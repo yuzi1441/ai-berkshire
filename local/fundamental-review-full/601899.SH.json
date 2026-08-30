@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:46:58+08:00",
+  "company": "紫金矿业",
+  "ticker": "601899.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+    "sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 32.55 元合理但安全边际薄，当前观察、不追价；26-30 元且论文未受损时才可小仓分批，25 元以下安全边际才明显改善。H 股折价机会不适用于 601899.SH 的 A 股判断。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "A 股当前位于报告的 30-36 元观察区；报告明确指出周期上行利润抬高估值分母，当前悲观下行大于偏保守中性上行。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "基本面未破坏可继续持有观察，不因半年报预增追高；优先核对正式半年报、Kamoa 修复和新管理层资本纪律。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "A 股当前位于报告的 30-36 元观察区；报告明确指出周期上行利润抬高估值分母，当前悲观下行大于偏保守中性上行。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "正式半年报兑现利润并保持现金流质量，Kamoa 守住 29 万吨且 C1 不高于 3 美元/磅，巨龙二期达产，同时价格进入 26-30 元；矿产品毛利率持续低于 50%、并购减值或商品下跌时杠杆恶化即失效。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "债务",
+        "产品/客户"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "### 最终决策",
+          "supports": "A 股当前位于报告的 30-36 元观察区；报告明确指出周期上行利润抬高估值分母，当前悲观下行大于偏保守中性上行。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+      "sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "A 股 32.55 元基本透支了偏保守中性情景，适合持有或观察、不追价。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L289",
+            "exact_quote": "| 30-36 元 | 约 34.9-41.8 港元 | 观察，不建大仓 | 持有观察；A 股当前 32.55 元在此区间 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L290",
+            "exact_quote": "| 26-30 元 | 约 30.2-34.9 港元 | 可小仓分批 | 论文未受损时才考虑加仓；H 股当前 32.92 港元在此区间 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L9",
+            "exact_quote": "**持仓与成本：** 用户未提供；本报告不假设持仓、成本或交易历史。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L315",
+            "exact_quote": "| 持仓者 | 未提供成本。当前可持有观察，A 股不宜因 H1 预增继续追高；优先等待正式半年报和 Kamoa 修复证据 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "1. **正式 2026H1 报告：** 391 亿元预告是否兑现，经营现金流、税费和少数股东损益如何变化。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L317",
+            "exact_quote": "| 减仓/卖出信号 | 2026 Kamoa 低于 29 万吨或 C1 超 3 美元/磅；矿产品毛利率持续低于 50%；重大收购减值；商品下跌时杠杆重新恶化 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L83",
+            "exact_quote": "这些都是基于预告的算术推导，不是正式半年报数据。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L334",
+            "exact_quote": "2. **Kamoa 修复：** 2026 全年产量是否守住 29 万吨，C1 是否控制在 3 美元/磅以内。"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:49:15+08:00",
+  "company": "东方电子",
+  "ticker": "000682.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+    "sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "不追“AI+电网”情绪；12 元附近可以观察仓，10-11 元且基本面未坏时性价比更好。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有，以扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "10-11 元，或连续 2-3 季扣非增速超过 15%、现金流改善且毛利率稳定在 32% 以上。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+      "sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/东方电子/东方电子-thesis-tracker-20260819.md",
+      "sha256": "6022e7b6eb004525d9d5e10cf14ba53f9dbba3d45474709a0496bf6b6d33e748",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_3",
+      "path": "reports/东方电子/东方电子-thesis.md",
+      "sha256": "012fe1af719d31c2b5efbdfc9cabc108e617b8a56372ecc183a8f24ce33fa2f9",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2",
+          "local_3"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L365",
+            "exact_quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L68",
+            "exact_quote": "2026-08-19 收盘价为 11.58 元，腾讯与新浪两源一致。"
+          },
+          {
+            "document_id": "local_3",
+            "line_ref": "L14",
+            "exact_quote": "成本 11.765 元落在原主报告“10–13 元可小仓观察或分批”区间，并低于 2026-08-18 收盘价 11.83 元。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L366",
+            "exact_quote": "| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L17",
+            "exact_quote": "**本次唯一动作：继续持有现有 200 股，10% 仓位不增加。**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L367",
+            "exact_quote": "| 加仓信号 | 股价回落至 10-11 元；或连续 2-3 个季度扣非利润增速 >15%、经营现金流改善、毛利率稳定在 32% 以上。 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L68",
+            "exact_quote": "2026-08-19 收盘价为 11.58 元，腾讯与新浪两源一致。"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L39",
+            "exact_quote": "| 1 | 营收与扣非利润长期同比增长不低于 10% | 收入 +15.98%，扣非利润 +7.76%；Q2 单季收入 +22.32%、扣非利润 +6.55% | 🟡 | 需求端强，主业利润增速连续两个季度低于 10% 阈值，但仍为正增长 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

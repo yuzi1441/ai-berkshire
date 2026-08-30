@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:55:38+08:00",
+  "company": "北化股份",
+  "ticker": "002246.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/北化股份/北化股份研究报告-20260709.md",
+    "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 18.60 元处于 16.5-20 元激进型景气跟踪区，只能小仓且不当作价值低估；稳健型等 13-16.5 元并验证利润，保守型等 13 元以下。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有但设验证线，不应把硝化棉景气、军工资质和重组预期直接当作长期利润。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "中报/三季报继续证明硝化棉毛利、国外业务、防护订单和经营现金流，并确认扩产回报及实控人变更不损害上市公司。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "订单"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/北化股份/北化股份研究报告-20260709.md",
+      "sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "> 估值基准价：18.60 元/股（用于敏感性测算；行情数据需以交易终端复核）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L246-L248",
+            "exact_quote": "| 保守型空仓 | ≤13元且无治理恶化 | 才进入深度研究/小仓试错 | 对应 TTM PE 约 23x，给周期和不透明度留出折价 |\n| 稳健型空仓 | 13-16.5元，且 2026H1/H2 继续验证利润 | 分批观察 | 需要硝化棉毛利和现金流继续确认 |\n| 激进型 | 16.5-20元 | 只能小仓位主题/景气跟踪 | 当前安全边际一般，不能把重组预期当现金流 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L309",
+            "exact_quote": "| 已持有者 | **持有但设验证线** | 若硝化棉毛利率和现金流维持，可继续；若业绩靠重组预期支撑，应降低仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L129",
+            "exact_quote": "聪明的反方会这样说：北化股份 2025 年的利润改善可能是硝化棉景气、出口结构和防护器材批次订单共同带来的阶段性高点，而不是长期 ROE 中枢抬升。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L308",
+            "exact_quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L317-L320",
+            "exact_quote": "1. 2026H1/H2 硝化棉毛利率仍维持高位，国外市场毛利不明显回落。\n2. 防护器材收入不是一次性批次，合同负债、订单和现金流有连续性。\n3. 南充产线披露清晰客户、回报周期和产能消化路径。\n4. 实控人变更方案明确有利于上市公司独立性和资产质量。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

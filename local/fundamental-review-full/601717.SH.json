@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:47:20+08:00",
+  "company": "中创智领",
+  "ticker": "601717.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+    "sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "15.05 元可用小仓位介入“高股息现金牛 + 转型期权”，但 2026Q1 盈利拐点未确认，不允许重仓。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有收息并控制权重，把它定位为退潮期现金牛而非确定成长股。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "中报验证煤机订单与盈利重回增长、现金流和应收改善后再加仓；12-13 元是更好的击球点；煤机持续负增长、分红下降或接班失误即重审。",
+      "metrics": [
+        "订单",
+        "回款",
+        "分红"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 274,
+          "line_end": 323,
+          "quote": "| 策略 | 建议 | |---|---| | **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |",
+          "supports": "L274-L323。报告明确给出当前“小仓位介入”许可，价格便宜但周期拐点风险决定只能小仓验证。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+      "sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "当前A股股价：**15.05 元**（2026-07-06 收盘）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L276",
+            "exact_quote": "当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L20",
+            "exact_quote": "强制纳入 **2026Q1 净利 -18% 的拐点信号**，并做盈利负增长的深熊压力测试"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L277",
+            "exact_quote": "**持有收息**。基本面未破位、股息率 8.3% 提供强持有理由，无需在低位区恐慌卖出。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L257",
+            "exact_quote": "你买的是**一台在退潮期高效分红的现金牛 + 一张电驱/机器人的免费期权**，而不是一个成长故事。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L278",
+            "exact_quote": "①2026 中报/三季报确认煤机订单与利润同比持续负增长（拐点坐实）；②分红率因现金流恶化被迫下调；③焦承尧换届后战略摇摆或核心团队流失；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L279",
+            "exact_quote": "①2026 中报煤机订单额创新高、智能化改造放量，盈利重回正增长；②经营现金流/自由现金流回升、应收账款周转改善；③电驱 SES 拿到主流主机厂大额定点、汽零净利率抬升；④股价跌向 12–13 元（股息率 >9.5%、深熊已计入）时是更好的击球点。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "当前A股股价：**15.05 元**（2026-07-06 收盘）"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

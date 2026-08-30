@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:57:54+08:00",
+  "company": "顺丰控股股份有限公司",
+  "ticker": "002352.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+    "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 175,
+          "line_end": 241,
+          "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+          "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "收入"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 175,
+          "line_end": 241,
+          "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+          "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "收入"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 175,
+          "line_end": 241,
+          "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
+          "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+      "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L209",
+            "exact_quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L212",
+            "exact_quote": "A股33.80元仅位于激进型区间上沿，适合观察或极小仓位，而非一次性重仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L237",
+            "exact_quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L238",
+            "exact_quote": "| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L53",
+            "exact_quote": "2026年一季度总件量37.3亿票，同比增长4.9%，收入741.42亿元，同比增长6.14%，扣非归母净利润23.17亿元，同比增长17.42%，毛利率13.74%。6月速运物流收入200.17亿元，同比增长0.28%，件量13.89亿票，同比下降4.86%，单票收入14.41元，同比增长5.41%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L39",
+            "exact_quote": "公司定义自由现金流为经营现金流减不含股权投资的资本支出，2025年为179.33亿元，同比下降19.57%。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> A股收盘价：33.80元；H股收盘价：33.26港元，按港元兑人民币0.859906656719折合28.60元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L53",
+            "exact_quote": "2026年一季度总件量37.3亿票，同比增长4.9%，收入741.42亿元，同比增长6.14%，扣非归母净利润23.17亿元，同比增长17.42%，毛利率13.74%。6月速运物流收入200.17亿元，同比增长0.28%，件量13.89亿票，同比下降4.86%，单票收入14.41元，同比增长5.41%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L39",
+            "exact_quote": "公司定义自由现金流为经营现金流减不含股权投资的资本支出，2025年为179.33亿元，同比下降19.57%。"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_threshold"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

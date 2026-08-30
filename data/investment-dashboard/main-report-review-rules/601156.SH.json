@@ -1,0 +1,239 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "东方航空物流股份有限公司",
+  "ticker": "601156.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/东航物流/东航物流-investment-research-20260807.md",
+    "canonical_sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
+    "locked_sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "17.35 元观察，不追价",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "17.35 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "已有仓位可持有，当前不加仓，把半年报作为第一复核点",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格不高于 14.5 元，同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "航速毛利率连续两期低于 12% 或 FCF 转负即失效",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "operator": "lt",
+      "threshold": "12%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 280,
+          "line_end": 338,
+          "quote": "--- ## 第八步：最终决策与行动清单 ### 综合评分",
+          "supports": "L280-L338。低 PE 不等于错价，新增运力尚未证明提高单位资本回报。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：航空速运毛利率连续两个报告期低于 12%、租赁调整后 FCF 转负，或出现重大安全与关联交易治理问题，即触发卖出/论文失效",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流"
+      ],
+      "operator": "lt",
+      "threshold": "12%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 306,
+          "line_end": 306,
+          "quote": "航空速运毛利率连续两个报告期低于 12%、租赁调整后 FCF 转负，或重大安全与关联交易治理问题出现"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价高于 22 元但 EPS 和租赁调整后 FCF 未同步增长时减仓",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "22 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 306,
+          "line_end": 306,
+          "quote": "航空速运毛利率连续两个报告期低于 12%、租赁调整后 FCF 转负，或重大安全与关联交易治理问题出现"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "6e345f57fbaac98a3938ae71e2d7b03b333f0650c672617967b2abc3e81d813e",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 4,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 2
+  }
+}

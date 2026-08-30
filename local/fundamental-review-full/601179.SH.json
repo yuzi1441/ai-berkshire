@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:35:25+08:00",
+  "company": "中国西电",
+  "ticker": "601179.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中国西电/中国西电研究报告-20260709.md",
+    "sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "12.93 元不追；激进型主题交易也只能小仓，不能视作基本面买点。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本仓可继续观察 ROE 与订单质量；估值上行而基本面未同步时降低仓位。",
+      "metrics": [
+        "ROE",
+        "订单",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓；8.0-9.0 元且行业逻辑未破坏才有较好安全边际。",
+      "metrics": [
+        "毛利率",
+        "ROE",
+        "订单"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国西电/中国西电研究报告-20260709.md",
+      "sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L341",
+            "exact_quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "| 综合建议 | 观望 / 小仓跟踪；不建议主题热度下追高。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L36",
+            "exact_quote": "**当前建议：观望 / 已持有者控制仓位。**若没有持仓，不建议因主题热度追高；若已有低成本仓位，可继续观察 ROE 与订单质量是否兑现。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L342",
+            "exact_quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "> 价格口径：以 2026-07-09 可核验行情页约 **12.93 元**为主口径；盘中/不同平台可能存在差异。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L340",
+            "exact_quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L339",
+            "exact_quote": "| 空仓、保守型 | 等待 | 若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

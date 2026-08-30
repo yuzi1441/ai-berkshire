@@ -1,0 +1,336 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "一拖股份",
+  "ticker": "601038.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+    "canonical_sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364",
+    "locked_sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "11.69 元不追价，优先等待 9.5 元附近，或正式财报证明利润中枢显著上修",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续观察，但不把单季改善当成加仓理由",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "9.5-10.5 元只适合小仓试错，9.0-9.5 元进入稳健买入区，不高于 9.0 元才有更强安全边际",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "同时验证回款、海外毛利和高端产品商业化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 274,
+          "line_end": 285,
+          "quote": "### 7.4 价格带 | 价格区间 | 对应动作 | 逻辑 | |---|---|---|",
+          "supports": "L274-L285、L318-L347。正文明确“空仓等待、持仓观察”，契约粗字段“买入”不能覆盖正文价格纪律。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或论文重审信号，任一触发即重审）：① 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "收入",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 雷沃份额和高端商业化持续领先、一拖只能靠降价守份额",
+      "relation": "all_of",
+      "metrics": [
+        "股价",
+        "应收/贴息/销售费用",
+        "海外毛利率",
+        "产能利用率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 海外收入增长但毛利率、回款或保修成本持续恶化",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "回款",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 在建工程与折旧明显上升而产能利用率未改善",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 再次发生重大会计差错、监管警示或关联资金风险",
+      "relation": "any_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑥ 股价升至 16.5 元以上且基本面未上修",
+      "relation": "all_of",
+      "metrics": [
+        "股价",
+        "应收/贴息/销售费用",
+        "海外毛利率",
+        "产能利用率"
+      ],
+      "operator": null,
+      "threshold": "16.5 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "若升至 16.5 元且基本面未上修，考虑减仓"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "c91616320bb520cebc6260387e74c11ead96647ad5984dc3441e516d916284ed",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 6
+  }
+}

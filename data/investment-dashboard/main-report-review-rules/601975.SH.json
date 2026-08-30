@@ -1,0 +1,377 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "招商局南京油运股份有限公司",
+  "ticker": "601975.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/招商南油/招商南油-investment-research-20260810.md",
+    "canonical_sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb",
+    "locked_sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "3.71 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "3.71 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "3.2-3.5 元只允许激进型小额试仓，2.7-3.2 元可稳健分批，2.1-2.7 元且经营未恶化才进入更强安全边际区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "已有仓位可观察持有并等待半年报，不因 Q1 表观净利增长追涨",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "1",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告并不知道用户成本和仓位",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入相应区间，同时亚太 MR TCE 连续两季不低于约 20,000 美元/天、扣非利润与经营现金流改善、新船交付后收入/载重吨和 ROIC 不下降",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "收入",
+        "ROIC"
+      ],
+      "operator": "gte",
+      "threshold": "000 美元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "TCE 跌破该线、利用率与 ROIC 下滑、净债务和减值上升或关联交易缺乏公允性即失效",
+      "relation": "any_of",
+      "metrics": [
+        "ROIC",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 276,
+          "line_end": 276,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "2025 年利润与现金流已下降，在建载重吨约为现有船队 29.64%；报告明确将 3.71 元放在买入带之外并要求等待 2026H1。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓或卖出触发（任一出现即触发）：亚太MR TCE连续两个季度低于约20000美元/天",
+      "relation": "any_of",
+      "metrics": [
+        "亚太MR TCE(美元/天)",
+        "新船利用率",
+        "单船收入/载重吨",
+        "ROIC",
+        "净债务",
+        "船舶减值",
+        "关联交易公允性"
+      ],
+      "operator": "lt",
+      "threshold": "20000美元",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "新船交付后利用率、收入/载重吨和ROIC明显下降",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "净债务持续上升并伴随新增船舶减值",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联船价、利率或托管费缺乏公允对照",
+      "relation": "any_of",
+      "metrics": [
+        "亚太MR TCE(美元/天)",
+        "新船利用率",
+        "单船收入/载重吨",
+        "ROIC",
+        "净债务",
+        "船舶减值",
+        "关联交易公允性"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "出现重大安全、监管和资金占用问题",
+      "relation": "all_of",
+      "metrics": [
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "季度"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "b181e15841ffe7b75fff2a85f49cfcc7dc1e564f76ae3dac3ccad658e01f2aa5",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

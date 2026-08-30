@@ -1,0 +1,332 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "美的集团",
+  "ticker": "000333.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/美的集团/美的集团-investment-team-20260713.md",
+    "canonical_sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5",
+    "locked_sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型不高于 75.27 元才小仓，稳健型 68-71 元，保守型不高于 65.87 元",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本持有者继续持有收息",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "接近报告基准价的持仓者等待扣非利润、现金流与 ToB 回报验证",
+      "relation": "all_of",
+      "metrics": [
+        "扣非利润",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入对应区间且扣非利润、经营现金流不继续恶化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "楼宇科技利润与资产周转改善可提高仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 391,
+          "line_end": 410,
+          "quote": "### 3. 要求回报率倒推 中性情景三年总价值为 87.2849 元目标价加 12.9 元股息，即 100.1849 元。 | 要求年化回报 | 倒推最高买入价 | 对应动作 |",
+          "supports": "L391-L410、L458-L491。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓或论文重审触发条件：海外利润率连续两年下降超过 3 个百分点",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": "gt",
+      "threshold": "3",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 483,
+          "line_end": 483,
+          "quote": "海外利润率连续两年下降超过 3 个百分点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "大额跨界并购或商誉减值明显超预期（KUKA 相关商誉约 234.35 亿元）",
+      "relation": "any_of",
+      "metrics": [
+        "海外利润率",
+        "商誉减值",
+        "股息加净回购对FCF覆盖"
+      ],
+      "operator": null,
+      "threshold": "234.35 亿元",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 483,
+          "line_end": 483,
+          "quote": "海外利润率连续两年下降超过 3 个百分点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两年依靠增债维持分红回购",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 483,
+          "line_end": 483,
+          "quote": "海外利润率连续两年下降超过 3 个百分点。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价高于 100 元重审或部分降低仓位",
+      "relation": "any_of",
+      "metrics": [
+        "海外利润率",
+        "商誉减值",
+        "股息加净回购对FCF覆盖"
+      ],
+      "operator": "gt",
+      "threshold": "100 元",
+      "periods": [
+        "FY2026"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 483,
+          "line_end": 483,
+          "quote": "海外利润率连续两年下降超过 3 个百分点。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "c3597c174fe3179dc1db1c2508f867e93191ffcbd84fc543d7953728cddf6c49",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 4
+  }
+}

@@ -24,6 +24,9 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from source_hash import canonical_file_sha256, canonical_sha256_text
+import main_report_review
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORTS_DIRECTORY = ROOT / "reports"
@@ -570,7 +573,7 @@ def file_sha256(repo_root: Path, relative_path: str | None) -> str | None:
         return None
     if not candidate.is_file():
         return None
-    return hashlib.sha256(candidate.read_bytes()).hexdigest()
+    return canonical_file_sha256(candidate)
 
 
 def manual_review_source_snapshot(
@@ -1496,7 +1499,7 @@ def checklist_record(
         "market": market,
         "report_path": relative.as_posix(),
         "report_link": relative.as_posix(),
-        "report_sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+        "report_sha256": canonical_sha256_text(text),
         "title": extract_title(lines, report_path.stem),
         "source_type": source_type,
         "decision_contract": metadata_contract,
@@ -2015,7 +2018,7 @@ def attach_report_judgments(
         source_path = repo_root / report_path
         expected_hash = str(artifact.get("report_sha256") or "")
         actual_hash = (
-            hashlib.sha256(source_path.read_bytes()).hexdigest() if source_path.is_file() else ""
+            canonical_file_sha256(source_path) if source_path.is_file() else ""
         )
         source_matches = (
             artifact.get("report_path") == report_path
@@ -2070,7 +2073,7 @@ def attach_main_report_resolutions(
         source_path = repo_root / report_path
         expected_hash = str(resolution.get("report_sha256") or "")
         actual_hash = (
-            hashlib.sha256(source_path.read_bytes()).hexdigest() if source_path.is_file() else ""
+            canonical_file_sha256(source_path) if source_path.is_file() else ""
         )
         source_matches = (
             resolution.get("report_path") == report_path
@@ -5370,6 +5373,38 @@ def attach_post_buy_tracking(
     return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
 
 
+def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
+    """Build the read-only dashboard layer from atomic per-stock review files."""
+    rules_directory = repo_root / "data" / "investment-dashboard" / "main-report-review-rules"
+    results_directory = repo_root / "local" / "fundamental-review-current"
+    legacy_directory = repo_root / "local" / "fundamental-review-full"
+    if not rules_directory.is_dir() or not any(rules_directory.glob("*.json")):
+        return {
+            "schema_version": 4,
+            "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
+            "status_counts": {},
+            "stock_count": 0,
+            "comparison": None,
+            "reviews": [],
+        }
+    comparison_path = results_directory / "comparison-current.json"
+    comparison = load_json(comparison_path, {})
+    if not main_report_review.comparison_snapshot_is_current(repo_root, comparison):
+        comparison = main_report_review.comparison_snapshot(repo_root)
+    return main_report_review.public_review_snapshot(
+        rules_directory,
+        results_directory,
+        comparison,
+        legacy_directory,
+    )
+
+
+def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
+    """Publish the saved ZCode and DeepSeek comparison without rebuilding either run."""
+    return main_report_review.model_review_comparison_snapshot(repo_root)
+
+
 def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
@@ -5421,6 +5456,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
+    main_report_review_snapshot = build_main_report_review_snapshot(repo_root)
+    model_review_comparison_snapshot = build_model_review_comparison_snapshot(repo_root)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     generation_id = hashlib.sha256(
         (
@@ -5452,6 +5489,12 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         },
         "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,
+        "main_report_review": {
+            "stock_count": main_report_review_snapshot.get("stock_count", 0),
+            "status_counts": main_report_review_snapshot.get("status_counts", {}),
+            "generated_at": main_report_review_snapshot.get("generated_at"),
+            "next_check_at": main_report_review_snapshot.get("next_check_at"),
+        },
         "decisions": decisions,
     }
     history_board = {
@@ -5474,6 +5517,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "decision_reviews.json", decision_reviews)
     write_json(data_directory / "manual_execution_reviews.json", manual_execution_reviews)
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
+    write_json(data_directory / "main_report_review.json", main_report_review_snapshot)
+    write_json(data_directory / "model_review_comparison.json", model_review_comparison_snapshot)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     split_dashboard_files(board, site_directory, data_directory)
@@ -5481,10 +5526,12 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
     write_json(site_directory / "data" / "manual_execution_reviews.json", manual_execution_reviews)
+    write_json(site_directory / "data" / "model_review_comparison.json", model_review_comparison_snapshot)
     write_json(
         site_directory / "data" / "opportunity_scans.json",
         public_opportunity_scans(opportunity_scans),
     )
+    write_json(site_directory / "data" / "main_report_review.json", main_report_review_snapshot)
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)

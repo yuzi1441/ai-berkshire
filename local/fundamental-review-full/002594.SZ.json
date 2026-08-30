@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:00:50+08:00",
+  "company": "BYD",
+  "ticker": "002594.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/BYD/BYD-research-20260624.md",
+    "sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 85 元观望偏积极，但不直接建仓；等待 Q2/Q3 利润拐点、75 元以下的更厚安全边际，或欧盟关税政策明朗化。",
+      "metrics": [
+        "利润",
+        "政策"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "长期逻辑未被破坏时继续持有；若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险。",
+      "metrics": [
+        "自由现金流",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "A 股低于 75 元，70 元以下更具安全边际；或 Q2/Q3 净利润转正、海外毛利率维持 19% 以上、储能放量、欧盟关税缓和。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "政策"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 391,
+          "line_end": 408,
+          "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+          "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/BYD/BYD-research-20260624.md",
+      "sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L30",
+            "exact_quote": "| 股价 | 85.00元 | 75.85港元 | Investing.com |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L395",
+            "exact_quote": "**空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L396",
+            "exact_quote": "**持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L53",
+            "exact_quote": "| 自由现金流（亿元） | 281 | 434 | 476 | 361 | **-977** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L197",
+            "exact_quote": "| 海外工厂执行失败 | 中 | 高 | 同时在6个国家建厂，管理难度极大。巴西已出现劳工争议 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L395",
+            "exact_quote": "（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L71",
+            "exact_quote": "| **境外** | **3,107** | **38.7%** | **19.46%** | **+40.1%** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L297",
+            "exact_quote": "2025年比亚迪超越特斯拉成为**全球最大储能系统集成商**，出货超60GWh，市占率13%。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

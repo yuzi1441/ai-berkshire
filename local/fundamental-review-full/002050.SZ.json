@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:54:02+08:00",
+  "company": "浙江三花智能控制股份有限公司",
+  "ticker": "002050.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/三花智控/三花智控-investment-research-20260810.md",
+    "sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股不追；28-32 元才进入激进型小额分批区，23-28 元为稳健区，16-23 元为保守型重点研究区；也可等待半年报证明核心业务重新提速和新业务形成可核验收入。",
+      "metrics": [
+        "收入"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "基本面未坏可持有，但当前不加仓；若显著高于 50 元且利润未上修，可降低估值风险。",
+      "metrics": [
+        "利润",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "A 股进入对应价格带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润，液冷/机器人出现可核验收入。",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "收入"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/三花智控/三花智控-investment-research-20260810.md",
+      "sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L291",
+            "exact_quote": "**A 股基本面建议：观察。** 公司质量优秀，但 38.53 元、39.67 倍 TTM PE 对增长和估值稳定性的要求过高。等待 28-32 元才进入激进型小额分批区，或等待 2026 半年报证明核心业务重新提速、新业务开始形成可核验收入。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L262",
+            "exact_quote": "| A 股激进型 | 28-32 元 | 小额分批 | 接近基准现值，仍需承受新业务兑现波动 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L268",
+            "exact_quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L298",
+            "exact_quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "| 2026-08-10 收盘价 | 38.53 元 | 26.10 港元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L10",
+            "exact_quote": "| TTM PE | 39.67 倍 | 23.12 倍 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L300",
+            "exact_quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L87",
+            "exact_quote": "> **数据收集结论：** 核心财务和行情数据可复核，2025 年质量较强，2026Q1 则提示增速回归常态。机器人与液冷的定量收入仍是公开信息缺口。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L268",
+            "exact_quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

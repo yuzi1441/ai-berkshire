@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:45:35+08:00",
+  "company": "leaderdrive",
+  "ticker": "688017.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+    "sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价约 330 元处于概念泡沫区，当前回避；真心看好赛道也应等待 100-120 元再考虑，100 元以下且经营信号改善时吸引力才明显提高。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "至少减至半仓，保留底仓也不宜超过组合 3%-5%；不能把人形机器人长期方向正确等同于当前价格合理。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入 100-120 元、特斯拉确认大规模量产订单并指定公司供应，或季度毛利率重新稳定在 40%以上后重审；量产继续推迟、毛利率跌破 30%、实控人继续减持或杠杆资金异常攀升即维持回避/减仓。",
+      "metrics": [
+        "毛利率",
+        "订单",
+        "债务"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "### 最终决策表",
+          "supports": "毛利率由 53% 连降至 37%、ROE 仅约 4.2%，而基准 PE 约 485 倍；即使假设未来三年利润年增 60%并给 100 倍 PE，目标价仍低于基准价，赔率严重失衡。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+      "sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**股价**：~330元 | **市值**：~605亿元 | **总股本**：1.8333亿股"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L321",
+            "exact_quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L324",
+            "exact_quote": "| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L322",
+            "exact_quote": "| **持仓者** | **减仓。** 股价已远超7家券商均价目标238元。至少减至半仓，锁定部分利润。底仓可保留参与长期赛道，但仓位不宜超过组合的3-5%。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L334",
+            "exact_quote": "> **李录**：\"人形机器人如果成功，确实是文明级的变革。但投资的关键是择时和择价——即使方向100%正确，以当前价格买入，你的回报可能远不如等一年在更合理的价格买入。1999年买入互联网公司的人方向完全正确，但以泡沫价格买入的投资者等了15年才解套。\""
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L321",
+            "exact_quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L323",
+            "exact_quote": "| **卖出信号** | 人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L324",
+            "exact_quote": "| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

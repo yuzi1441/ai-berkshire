@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:29:34+08:00",
+  "company": "长江电力",
+  "ticker": "600900.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+    "sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "28.42 元不追；25-26 元只可小仓试建，23-25 元稳健分批，22.5 元以下且水文、电价、治理和项目回报未恶化时才考虑较高仓位。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "作为长期现金流资产可继续收息并按季度复核；当前中性资本利得有限，不因除息机械下跌加仓。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "进入 23-25 元且六站量价未结构恶化，调节/容量收益可重复、抽蓄 IRR 高于资金成本、债务下降；估值超过 21 倍而盈利现金分红未改善、单位电量现金贡献持续下降或低回报资产注入时重审。",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/长江电力/长江电力-thesis.md",
+      "sha256": "e512c832bf8306ace75beb9cdac7ff70775b11f7cc1912d530f934220b9b5010",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L174",
+            "exact_quote": "| 2026-07-13 | 6/10 | 首次建立：核心六库论文成立；现金流趋势、市场化收益权、集团治理和新增资本回报为四个黄灯；当前价格接近乐观价值 | 无仓位等待；有仓位持有复核；不在 28.42 元加仓 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L278",
+            "exact_quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L280",
+            "exact_quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L14",
+            "exact_quote": "| 当前动作基调 | 无仓位：等待，不在 28.42 元追买；有仓位：持有复核，不因除息机械下跌误判基本面 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L13",
+            "exact_quote": "> 长江电力拥有近乎不可复制的长江干流六库水电资产、优秀现金流和明确分红纪律，生意质量很高；但 28.42 元对应 19.27 倍 TTM PE、3.52% 静态股息率，中性五年情景的资本利得仅约 3.1%，当前更适合持有或等待，而不是追逐“类债券”溢价。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L282",
+            "exact_quote": "2026-07-13 的 28.42 元仍包含 7 月 16 日登记、7 月 17 日发放的末期 0.79 元权利。除息日的机械价格调整既不等于基本面恶化，也不能自动当作便宜；新买家应按是否获得该笔现金和更新后的每股净资产重新比较总回报。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L103",
+            "exact_quote": "| 10 | PE 超过 21x，而连续两年归母净利增速低于 5%、无新现金回报证据 | 估值警告 | 未触发 | 停止加仓，仓位过高者考虑再平衡 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L96",
+            "exact_quote": "| 3 | 境内水电毛利率连续两个报告期低于 55%，或综合结算价连续两年累计下降超过 5%且无水文解释 | 严重 | 未触发 | 暂停加仓，重估电价与成本护城河 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L102",
+            "exact_quote": "| 9 | 抽蓄、海外或股权投资出现连续重大减值、延期或回报低于资金成本 | 严重 | 未触发 | 下调资本配置评分和目标估值 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

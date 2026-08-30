@@ -1,0 +1,373 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "guangdong-hongda",
+  "ticker": "002683.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+    "canonical_sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
+    "locked_sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错",
+      "relation": "any_of",
+      "metrics": [
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": "28.34 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可审慎持有，但要严格跟踪现金流、商誉、应收/合同资产、安全生产和防务兑现",
+      "relation": "all_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际",
+      "relation": "any_of",
+      "metrics": [
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "失效/减仓重新审视信号：",
+      "relation": "all_of",
+      "metrics": [
+        "应收账款增速",
+        "经营现金流",
+        "商誉减值",
+        "防务收入",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "发生重大安全事故、停产整改或关键资质受影响",
+      "relation": "any_of",
+      "metrics": [
+        "应收账款增速",
+        "经营现金流",
+        "商誉减值",
+        "防务收入",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款、合同资产继续快于收入增长，经营现金流持续为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "收入",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "商誉减值、并购标的业绩承诺落空或少数股东权益显著稀释归母利润",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "防务业务收入增长停滞、研发资本化或审价回款出现异常",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "继续大额并购但没有清晰 ROIC 和现金流约束",
+      "relation": "all_of",
+      "metrics": [
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "应收账款、合同资产继续快于收入增长，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "1179ad563fb6ac68335d002d71a7742ee2859579d191059c034799346d383f7e",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

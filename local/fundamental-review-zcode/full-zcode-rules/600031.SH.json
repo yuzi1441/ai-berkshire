@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "三一重工",
+  "ticker": "600031.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/三一重工/三一重工研究报告-20260808.md",
+    "sha256": "eddbfbf9e2443a264bb2113c4917824974e3ba355ddfd857f4e1a0167b2185bf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：动作观察，当前 19.58 元（报告基线）高于三档计划买入区间，不追价；激进型 17.0-18.0 元小仓分批；稳健型 14.5-16.0 元分批买入；保守型 12.0-13.5 元才有较厚安全边际；减仓观察区 28.0-31.0 元，除非盈利预测同步上修。",
+      "derivation_quote": "当前 19.58 元高于三档计划买入区间，不追价。",
+      "derivation_line_ref": 243,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已有且仓位合理者可持有，2026-09-15 复核；未来 12 个月验证清单：2026 中报扣非净利是否转正增长且财务费用构成解释清楚；国际主营收入增速、毛利率和区域回款质量；应收账款、逾期垫款与信用减值；净利润增长能否超过股本稀释、ROE 能否稳定在 10% 以上。",
+      "derivation_quote": "2026 中报：扣非净利是否转正增长，财务费用构成是否解释清楚。",
+      "derivation_line_ref": 251,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "扣非净利润同比",
+        "国际收入增速",
+        "国际毛利率",
+        "ROE"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：主要失效条件为海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润，应重审全球化与盈利质量假设；此外国内收入连续两个半年度负增长、综合毛利率跌破 25% 且份额未改善、信用减值超过收入 2% 或 CFO/净利持续低于 1 均触发论文重审。",
+      "derivation_quote": "海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润",
+      "derivation_line_ref": 247,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "国际收入增速",
+        "国际毛利率",
+        "经营现金流/净利润",
+        "综合毛利率"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/三一重工/三一重工研究报告-20260808.md",
+      "source_role": "main_report_reference",
+      "sha256": "eddbfbf9e2443a264bb2113c4917824974e3ba355ddfd857f4e1a0167b2185bf"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 243,
+            "exact_quote": "**动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 222,
+            "exact_quote": "保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际"
+          }
+        ],
+        "note": "清单内仅有主报告 local_1，无独立行情证据。19.58 元为 2026-08-08 报告基线价，无当前股价判断是否进入 17.0-18.0/14.5-16.0/12.0-13.5 元任一买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 251,
+            "exact_quote": "2026 中报：扣非净利是否转正增长，财务费用构成是否解释清楚。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 254,
+            "exact_quote": "每股价值：净利润增长能否超过股本稀释，ROE 能否稳定在 10% 以上。"
+          }
+        ],
+        "note": "证据文档中无 2026 中报数据（报告日 2026-08-08 时尚未披露，复核日证据包中亦无），扣非净利、国际收入、ROE 均无当前值与对比期，无法执行验证清单。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 247,
+            "exact_quote": "**主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 153,
+            "exact_quote": "国际收入连续两个半年度增速低于 5% 或毛利率低于 28%"
+          }
+        ],
+        "note": "证据文档中无最新半年度国际收入增速、国际毛利率与经营现金流数据及对比期，失效条件触发状态未知。"
+      }
+    ]
+  }
+}

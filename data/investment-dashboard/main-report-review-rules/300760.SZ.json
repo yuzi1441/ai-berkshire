@@ -1,0 +1,344 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "迈瑞医疗",
+  "ticker": "300760.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+    "canonical_sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489",
+    "locked_sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 139.68 元处于 130-160 元合理观察区",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "15%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：出现任一情形触发减仓或论文重审——2026H2 国内收入仍连续双位数下降",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "国际收入降至个位数增长且海外费用率上升",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "综合或 IVD 毛利率继续显著下降且份额无法带来利润",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "商誉减值、惠泰协同不及预期或继续高价并购",
+      "relation": "any_of",
+      "metrics": [
+        "国内收入同比",
+        "国际收入同比",
+        "商誉减值",
+        "质押比例"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "重大 FDA/CE、招采、反商业贿赂或数据合规事件",
+      "relation": "any_of",
+      "metrics": [
+        "国内收入同比",
+        "国际收入同比",
+        "商誉减值",
+        "质押比例"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "控股股东质押比例继续上升或继任不确定",
+      "relation": "any_of",
+      "metrics": [
+        "国内收入同比",
+        "国际收入同比",
+        "商誉减值",
+        "质押比例"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "重大 FDA/CE、招采、反商业贿赂或数据合规事件。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "2de2c27e610458d81a8438fd860298e8f9d584ab680939b11930ca75ec43948b",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 1,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

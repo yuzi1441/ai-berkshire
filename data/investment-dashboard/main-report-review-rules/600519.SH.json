@@ -1,0 +1,331 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "茅台",
+  "ticker": "600519.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/茅台/贵州茅台-investment-research-20260627.md",
+    "canonical_sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
+    "locked_sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 1168.63 元已进入 1100-1300 元合理偏低区，可分批建仓但不能一次打满",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "900-1100 元吸引力更强，900 元以下仍须排除基本面恶化",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "轻仓者可低吸并等待 1100 元附近",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "1100 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重仓者以持有为主，不因“便宜”继续加满",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.3",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "1300-1500 元持有不追，1500 元以上等待利润重新加速",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "1000-1100 元且 Q2/Q3 利润恢复到 5% 以上时加仓",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "连续两季利润负增长、飞天批价持续跌破出厂价或治理出现重大问题时重审",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 205,
+          "line_end": 238,
+          "quote": "| 价格 | 判断 | |------|------| | 900 元以下 | 明显低估，除非基本面恶化 |",
+          "supports": "L205-L238、L252-L267、L284-L317。正文和补充行动价格带一致；这是分批许可，不是满仓信号。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出信号：连续两个季度利润负增长",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "卖出信号 | 连续两季度利润负增长、飞天批价持续跌破出厂价、治理再出重大问题 |"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "飞天批价持续跌破出厂价",
+      "relation": "all_of",
+      "metrics": [
+        "净利润增速",
+        "飞天批价",
+        "出厂价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "卖出信号 | 连续两季度利润负增长、飞天批价持续跌破出厂价、治理再出重大问题 |"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "公司治理再出重大问题",
+      "relation": "all_of",
+      "metrics": [
+        "净利润增速",
+        "飞天批价",
+        "出厂价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "卖出信号 | 连续两季度利润负增长、飞天批价持续跌破出厂价、治理再出重大问题 |"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "10894c03fe0258a9c64064ebd1531bcc4933bcb3f6014a58a9cfefd37f4d15f0",
+  "summary": {
+    "active_rule_count": 7,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 5,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

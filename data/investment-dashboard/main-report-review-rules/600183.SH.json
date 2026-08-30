@@ -1,0 +1,323 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "生益科技",
+  "ticker": "600183.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/生益科技/生益科技研究报告-20260709.md",
+    "canonical_sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180",
+    "locked_sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "157.40 元不追",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "157.40 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型也只有在 2026Q2/Q3 继续高增长且毛利率维持 27% 以上时小仓试错，稳健型等待 TTM PE 回落到 40-50 倍或股价 90-110 元且业绩未坏",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有但设置基本面止损，不继续扩大高估值暴露",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "PE 仍高于 80 倍且增速放缓时应降低风险",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "80 倍",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "收入和利润继续高增长、CFO/净利回到约 1 倍、毛利率维持 27% 以上、新产能顺利爬坡且高端材料出现明确批量认证或订单",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "订单",
+        "产能/销量",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "毛利率连续两季低于 24% 或现金流、库存应收恶化即重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "库存"
+      ],
+      "operator": "lt",
+      "threshold": "24%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 270,
+          "line_end": 297,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** | ### 2. 分层操作建议 | 投资者类型 | 建议 | 价格/条件区间 |",
+          "supports": "L270-L297、L339-L360。契约遗漏正文明确写出的稳健价格带、基本面前提和失效条件，采用正文并标记字段不完整。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/论文重审信号：毛利率连续两个季度回落到 24% 以下",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "24%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "毛利率连续两个季度回落到 24% 以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流持续低于净利润且应收、库存快速上升",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "毛利率连续两个季度回落到 24% 以下"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "高仓位者若 PE 仍 >80x 且增速放缓，应降低风险暴露",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "80x",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "毛利率连续两个季度回落到 24% 以下"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "dd80207fbe7c7124894effa08d7d892e49bbe4ea4a62aa58a9c56d1cc7a142f9",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

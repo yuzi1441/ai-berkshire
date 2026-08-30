@@ -1,0 +1,381 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "华明装备",
+  "ticker": "002270.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+    "canonical_sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd",
+    "locked_sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 17.81 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "17.81 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "14-16 元才允许分批研究，13.90 元以下且基本面未恶化时吸引力进一步提高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "16-20 元以持有观察、不加仓为主",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "16-20 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若股价进入 20-24 元而利润预期没有同步上修，可考虑降低仓位",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "20-24 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入 14-16 元，或 Q2/Q3 核心业务收入、扣非利润、毛利率和现金流同步恢复",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "扣非利润",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "14-16 元",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "海外毛利、特高压项目、服务业务和 H 股条款也是验证项",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 315,
+          "line_end": 328,
+          "quote": "### 7.4 价格与行动阈值 以中性目标价 17.7 元与三年累计股息 1.83 元反推： | 价格区间 | 空仓者动作 | 逻辑 |",
+          "supports": "L315-L328、L332-L408、L462-L483。正文与契约方向一致，但契约没有完整表达分层价格带。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/重审触发：重大质量事故、召回、索赔或供应商资格暂停",
+      "relation": "any_of",
+      "metrics": [
+        "核心收入/毛利/扣非/现金流",
+        "应收与坏账",
+        "质量事故/召回/索赔事件"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两季核心收入、毛利、扣非和现金流同时弱化",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "海外收入增长依赖更长账期、普通应收与坏账持续上升",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "回款",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "H 股低价摊薄、跨能力圈并购或商誉/负债快速增加",
+      "relation": "any_of",
+      "metrics": [
+        "核心收入/毛利/扣非/现金流",
+        "应收与坏账",
+        "质量事故/召回/索赔事件"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": ">24.00 元基本面未上修时考虑减仓",
+      "relation": "all_of",
+      "metrics": [
+        "核心收入/毛利/扣非/现金流",
+        "应收与坏账",
+        "质量事故/召回/索赔事件"
+      ],
+      "operator": "gt",
+      "threshold": "24.00 元",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "8995acfd9ff5a4361e8422df43153ca1f0dfa1acdaac7196ae2932097436a240",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

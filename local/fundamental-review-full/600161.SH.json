@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:18:27+08:00",
+  "company": "天坛生物",
+  "ticker": "600161.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+    "sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "12.42 元不追；8.5-9 元且毛利率不再创新低、应收/收入开始下降时只建三分之一观察仓，7-8 元且现金转化和库存改善时稳健分批，6.3 元以下仍需排除质量与治理问题。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 306,
+          "line_end": 431,
+          "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+          "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "小比例观察仓可等待中报和后续两个季度，不在应收与库存未修复时机械补仓；14 元以上而盈利没有上修可减仓，17 元附近接近乐观终值。",
+      "metrics": [
+        "回款",
+        "库存"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 306,
+          "line_end": 431,
+          "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+          "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "收入",
+        "库存",
+        "产能/销量"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 306,
+          "line_end": 431,
+          "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+          "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+      "sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "| 股价 / 总股本 / 市值 | 12.42 元 / 19.7737 亿股 / 245.59 亿元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L94",
+            "exact_quote": "| 毛利率 | 34.59% | -11.28 个百分点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L80",
+            "exact_quote": "| 期末产品库存量 | 271.79 万瓶 | 534.04 万瓶 | +96.49%，库存瓶数/销量由 16.38% 升至 27.58% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L6",
+            "exact_quote": "| 股价 / 总股本 / 市值 | 12.42 元 / 19.7737 亿股 / 245.59 亿元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L98",
+            "exact_quote": "2026H1 预告归母净利 3.0523 亿元，同比 -51.75%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L340",
+            "exact_quote": "0.686 元 / 13.56 亿元 | 25 倍 | **17.14 元**"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L94",
+            "exact_quote": "| 毛利率 | 34.59% | -11.28 个百分点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L81",
+            "exact_quote": "-58.68%，经营现金流/归母净利仅 31.05%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L176",
+            "exact_quote": "10% 静丙与 5% 产品适应证相同；新品溢价和渗透率尚未披露"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

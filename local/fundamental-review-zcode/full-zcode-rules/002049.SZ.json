@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "紫光国微",
+  "ticker": "002049.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+    "sha256": "d6bcd1d5da03eb8017181e8197978651def1099994c8867d76f00a3c10ad3649",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：报告基线价 68.00 元（2026-08-10）不在买入带，观察，不因 Q1 高增追价；激进型 55-60 元小额分批（仍需半年报确认现金流）；稳健型 48-55 元分批买入；保守型 38-48 元重点研究后买入；加仓条件为价格不高于 55 元且 LTM CFO/归母净利回到 70% 以上且特种 IC 未出现收入与毛利率同步恶化。",
+      "derivation_quote": "价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。",
+      "derivation_line_ref": 239,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "LTM CFO/归母净利"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已有持仓者可持有观察，但不宜因单季高增机械加仓；优先等待 2026H1 的回款、特种 IC 毛利率与安全芯片收入数据及瑞能半导审核进展再验证；看板下次复核日期为 2026-08-17。",
+      "derivation_quote": "未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。",
+      "derivation_line_ref": 238,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "经营现金流/归母净利",
+        "特种IC毛利率",
+        "安全芯片收入",
+        "瑞能半导审核进展"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件：论文失效为特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值/治理异常；减仓条件为股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。",
+      "derivation_quote": "特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%",
+      "derivation_line_ref": 241,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "特种IC收入同比",
+        "特种IC毛利率",
+        "LTM CFO/归母净利",
+        "商誉减值"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "d6bcd1d5da03eb8017181e8197978651def1099994c8867d76f00a3c10ad3649"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 212,
+            "exact_quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 209,
+            "exact_quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 239,
+            "exact_quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+          }
+        ],
+        "note": "证据包仅有主报告 local_1，68.00 元为 2026-08-10 报告基线价，无当前股价与最新 LTM CFO/归母净利，无法判断是否落入 55-60/48-55/38-48 元买入带及加仓条件是否满足。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 238,
+            "exact_quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 69,
+            "exact_quote": "只有 2026H1 年报正式披露后，才能判断这属于季节性回款、需求恢复，还是利润表与现金流持续背离。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 290,
+            "exact_quote": "| 下次复核日期 | 2026-08-17 |"
+          }
+        ],
+        "note": "证据包中无 2026H1 半年报数据（回款、特种 IC 毛利率、安全芯片收入均无当前值与对比期），亦无瑞能半导审核进展事件确认，持仓验证清单无法执行。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 241,
+            "exact_quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 240,
+            "exact_quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
+          }
+        ],
+        "note": "证据包中无最新两个报告期的特种 IC 收入/毛利率与 LTM CFO/归母净利数据及对比期，也无当前股价，失效与减仓条件触发状态未知。"
+      }
+    ]
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "Goldwind",
+  "ticker": "002202.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/Goldwind/Goldwind-research-20260623.md",
+    "canonical_sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
+    "locked_sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "21.75 元、34 倍 PE 缺乏安全边际，等待 15-17 元分批",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若 Q2/Q3 持续超预期且海外毛利率保持 24% 以上，可重新提高可接受价格",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "24%",
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持有但不加仓，重点核对海外高毛利增长、价格战和应收坏账风险",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "15-17 元且基本面未恶化，或海外收入占比超过 30%、风机毛利率恢复至 15% 以上、分红显著提高",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "分红",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/失效触发：风机含塔筒均价重新跌破 1,500 元/kW",
+      "relation": "all_of",
+      "metrics": [
+        "风机含塔筒均价",
+        "单季应收坏账计提",
+        "海外毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "500 元",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "单季度应收坏账计提超 5 亿元",
+      "relation": "all_of",
+      "metrics": [
+        "回款"
+      ],
+      "operator": null,
+      "threshold": "5 亿元",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "欧盟正式限制金风在欧洲投标",
+      "relation": "all_of",
+      "metrics": [
+        "风机含塔筒均价",
+        "单季应收坏账计提",
+        "海外毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "海外毛利率跌破 15%",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "15%",
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "a27dcd27cfe41777a71fdb40c23cd10574c215b3f31e7c9467187c6a2487c10e",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 4
+  }
+}

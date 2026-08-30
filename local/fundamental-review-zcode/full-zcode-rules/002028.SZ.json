@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:08+08:00",
+  "company": "思源电气",
+  "ticker": "002028.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+    "sha256": "972ea44812e7c5c78e290584b10c720f65dba9997ae277ec3a44c3984d715d53",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：145 元以上空仓者以跟踪为主、不追高；125-145 元仅激进型小仓分批（接受估值压缩）；110-125 元风险收益开始合理（需同时确认核心毛利和现金流）；90-110 元保守型安全边际较明显（前提是论文未坏）；空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会。",
+      "derivation_quote": "空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会",
+      "derivation_line_ref": 426,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已有仓位可以持有验证，仓位上限由能否承受估值压缩决定；持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件；任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。",
+      "derivation_quote": "持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件",
+      "derivation_line_ref": 399,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "开关/变压器毛利率",
+        "海外回款",
+        "CFO/归母净利",
+        "应收账龄",
+        "H股发行条款"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓或论文重审信号）：CFO/净利连续两期低于 60% 且应收账龄、收款诉讼继续上升；开关、变压器毛利率连续显著下滑；海外重大延期、坏账、索赔、制裁或供应资格问题；订单放缓时产能仍快速扩张；H 股大比例折价发行或资金进入低回报并购；创始团队异常减持、关键高管流失；重大质量事故、召回、停标；SST/无 SF6 技术迁移加速而公司明显落后。",
+      "derivation_quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；",
+      "derivation_line_ref": 413,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "CFO/归母净利",
+        "开关/变压器毛利率",
+        "应收账龄",
+        "H股发行折价"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/思源电气/思源电气-investment-team-20260714.md",
+      "source_role": "main_report_reference",
+      "sha256": "972ea44812e7c5c78e290584b10c720f65dba9997ae277ec3a44c3984d715d53"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/思源电气/思源电气-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "6b60b396ada4e0506dd81b3cd302a8b7a6fe7cf6236a00c18868de614df90f67"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 90,
+            "exact_quote": "| 股价 | 155.01 元 | 腾讯与新浪，2026-07-14 10:34:36 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 113,
+            "exact_quote": "当前 155.01 元只比中性三年目标 159.3 元低约 2.69%，没有达到首次买入要求。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 426,
+            "exact_quote": "154.27 元对应约 36.1 倍 TTM PE，中性三年情景只有约 3.2% 价差。"
+          }
+        ],
+        "note": "证据包最新行情锚点为 local_2 的 155.01 元（2026-07-14），高于 145 元，110-125 元与 90-110 元买入带均未触发，空仓观察成立；2026-07-14 之后无更新价格，后续仍需按最新价重判。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 48,
+            "exact_quote": "2025 为 70.9%；按快报近似计算 TTM 约 94.9%，但 H1 单期仅约 15.1%，仍需正式中报复核"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 46,
+            "exact_quote": "2025 两项毛利率为 36.88%、36.39%；H1 净利率 13.76%，同比下降 1.45pct，且快报未披露分部数据"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 399,
+            "exact_quote": "持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件。"
+          }
+        ],
+        "note": "local_2 已按 2026H1 业绩快报建立初始追踪（健康度 7/10），但核心两大业务毛利率、应收账龄、海外回款、扩产利用率在快报中未披露，H 股最终条款尚未公布，正式中报发布前无法完成全部每季检查项。"
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "missing_codes": [],
+        "evidence_document_ids": [
+          "local_2",
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 59,
+            "exact_quote": "- 红线触发：0 项"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 76,
+            "exact_quote": "| 6 | H 股实际稀释超过 12%、发行价较 A 股 20 日均价折价超过 15%，或非核心并购使用超过 30% 募资且预期 ROIC 低于 15% | 严重 | 否 | 取消买入并重算每股价值；未来持仓减半 |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": 121,
+            "exact_quote": "H1 净利率同比下降约 1.45pct，经营现金流约 2.25 亿元，仅为当期归母利润约 15.1%。"
+          }
+        ],
+        "note": "local_2 于 2026-07-14 建档时八条红线均未触发；但 H1 单期 CFO/归母净利约 15.1% 已低于 60%，若正式中报确认，则距'CFO/净利连续两期低于 60%'重审信号仅差一个披露期，需在正式中报后重判。"
+      }
+    ]
+  }
+}

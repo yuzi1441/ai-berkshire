@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:53:18+08:00",
+  "company": "紫光国微",
+  "ticker": "002049.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+    "sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "68 元不因一季度高增追价；55-60 元只小额分批，48-55 元为稳健区，38-48 元在排除基本面恶化后重点研究。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 214,
+          "quote": "### 5. 可执行价格带 | 风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L205-L214、L218-L241、L270-L291。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有观察，但不因单季高增机械加仓。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 214,
+          "quote": "### 5. 可执行价格带 | 风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L205-L214、L218-L241、L270-L291。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上、特种 IC 收入和毛利率未同步恶化；并继续核对瑞能半导治理与商誉风险。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 205,
+          "line_end": 214,
+          "quote": "### 5. 可执行价格带 | 风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L205-L214、L218-L241、L270-L291。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+      "sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L237",
+            "exact_quote": "| 空仓者 | 当前观察，不因 Q1 高增追价；先看 2026H1 的回款、特种 IC 毛利率与安全芯片收入。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L209-L211",
+            "exact_quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |\n| 稳健型 | 48-55 元 | 分批买入 | 对约 54 元的折现中性参考值提供更多缓冲 |\n| 保守型 | 38-48 元 | 重点研究后买入 | 接近悲观终值与历史低估区，仍要排除基本面恶化 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L212",
+            "exact_quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L238",
+            "exact_quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L239",
+            "exact_quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L116",
+            "exact_quote": "| 瑞能半导整合或订单不达预期 | 中高 | 高 | 标的收入、利润、SiC/IGBT 毛利率、商誉测试 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L118",
+            "exact_quote": "| 无实际控制人结构下的关联治理 | 中 | 高 | 重组关联方回避、定价、公允性和后续交易 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

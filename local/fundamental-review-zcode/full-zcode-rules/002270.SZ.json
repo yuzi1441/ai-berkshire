@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "华明装备",
+  "ticker": "002270.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+    "sha256": "766eb1b0f2014bd44b458c7718ee5ed8256302832e92cae7364cfe66ef7052bf",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：报告基线 17.81 元空仓者不追；≤13.90 元基本面未损时分批买入（中性情景约 12% 年化）；13.90—14.67 元较有吸引力分批建仓；14.67—16.00 元小仓分批等待季报验证；16.00—20.00 元观察或持有不主动加仓；保守型等 ≤13.90 元且论文完好。",
+      "derivation_quote": "17.81 元不追；优先等 14—16 元",
+      "derivation_line_ref": 385,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：小仓持有者持有观察不加仓，等待 2026Q2/Q3 核心收入、扣非、毛利和现金流同步恢复；加仓信号为电力设备收入恢复双位数增长且扣非利润增速不低于收入、海外收入增长且国际毛利率止跌回款改善、500kV/±800kV 产品进入第二第三个独立批量项目。",
+      "derivation_quote": "或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复",
+      "derivation_line_ref": 385,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "核心收入增速",
+        "扣非利润增速",
+        "毛利率",
+        "经营现金流"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/重审触发：重大质量事故、召回、索赔或供应商资格暂停；连续两季核心收入、毛利、扣非和现金流同时弱化；海外收入增长依赖更长账期、普通应收与坏账持续上升；H 股低价摊薄、跨能力圈并购或商誉/负债快速增加；>24.00 元基本面未上修时考虑减仓。",
+      "derivation_quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。",
+      "derivation_line_ref": 401,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "核心收入/毛利/扣非/现金流",
+        "应收与坏账",
+        "质量事故/召回/索赔事件"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/华明装备/华明装备-investment-team-20260713.md",
+      "source_role": "main_report_reference",
+      "sha256": "766eb1b0f2014bd44b458c7718ee5ed8256302832e92cae7364cfe66ef7052bf"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/华明装备/华明装备-thesis.md",
+      "source_role": "local_current_evidence",
+      "sha256": "7b03a28edbc78cab84f4e13c0bae713a8cb8776e8b136f6a4c7c211aa3bb2aed"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地证据 thesis 档案最近一次记录为 2026-07-13：股价降至 17.81 元、处于 16—20 元'观察或持有不主动加仓'带、未达 14—16 元买入带；但距复核日 2026-08-29 已无更新价格，无法判断当前是否进入任一买入带。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_2",
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 125,
+            "exact_quote": "| 2026-07-13 | 6/10 | 无新财报或新重大公告；股价降至 17.81 元，估值略降；海外仍属起步期，回购股份已全部转为员工持股 | 已有仓位持有观察、不加仓；无仓位等待 14—16 元或中报验证 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 324,
+            "exact_quote": "| **16.00—20.00 元** | 观察或持有，不主动加仓 | 中性回报偏低，依赖乐观兑现 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "thesis 档案 2026-07-13 记录'无新财报或新重大公告'，持仓验证等待的 2026Q2/中报收入、扣非、应收回款数据在本地证据中不存在；亦无其后季报，无法验证加仓信号是否成立。基线纪律为持有观察、不加仓。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_2",
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 145,
+            "exact_quote": "| 该怎么做？ | **持有/观察，不加仓**；若无实际仓位，等待 15—18 元甚至 13—15 元区间，或等待中报把估值消化掉 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 392,
+            "exact_quote": "电力设备收入恢复双位数增长，扣非利润增速不低于收入。"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "thesis 档案基线（2026-07-13）红线触发为 0、观察健康度 6/10，属建档基线而非复核日新验证；其后无财报或公告证据，无法确认连续两季弱化、应收恶化、质量事故或 >24 元减仓线是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_2",
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": 181,
+            "exact_quote": "| 红线触发 | 0 | 0 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 401,
+            "exact_quote": "连续两季核心收入、毛利、扣非和现金流同时弱化。"
+          }
+        ]
+      }
+    ]
+  }
+}

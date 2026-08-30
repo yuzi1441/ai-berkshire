@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:49:02+08:00",
+  "company": "skyverse-tech",
+  "ticker": "688361.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+    "sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 275.90 元严重透支未来 5-7 年增长，当前回避；等待 57-86 元、对应 PS 10-15 倍后再研究。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "强烈建议减仓或清仓；国产替代趋势确定不等于公司在 966 亿元市值上仍有合理赔率。",
+      "metrics": [
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "57-86 元、单季度经营现金流转正、产品进入 14nm 及以下先进制程，或连续两个季度净利率超过 10%后重审；全年经营现金流仍为负、合同负债环比下降、PS 超过 50 倍或 KLA 制裁松绑即维持回避/卖出。",
+      "metrics": [
+        "经营现金流",
+        "产品/客户",
+        "估值"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 282,
+          "line_end": 282,
+          "quote": "### 最终决策",
+          "supports": "2025 收入 20.53 亿元但净利仅 0.59 亿元、经营现金流为负 8.62 亿元，基准 PS 47 倍、PE 1,642 倍；即使三年盈利年增 50%并给 80 倍 PE，上行空间也只有约 3.7%。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
+      "sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L265",
+            "exact_quote": "**市值降至200-300亿（对应股价~57-86元），即PS降至10-15倍**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L286",
+            "exact_quote": "**回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L287",
+            "exact_quote": "**强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元。即使乐观情景3年也仅+3.7%。这是一个“叙事极好但价格极差”的典型案例"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L315",
+            "exact_quote": "**赛道确定性高≠公司投资确定性高**——国产替代的趋势毫无疑问，但中科飞测在967亿市值上的投资确定性极低"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "> **股价**：CNY 275.90 | **市值**：CNY 966亿"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L288",
+            "exact_quote": "（1）2026年全年经营现金流仍为负；（2）合同负债环比下降（订单放缓信号）；（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L289",
+            "exact_quote": "（1）股价回调至CNY 57-86（PS 10-15x）；（2）单季度经营现金流转正；（3）产品成功进入14nm及以下先进制程产线；（4）连续2个季度净利率超过10%"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

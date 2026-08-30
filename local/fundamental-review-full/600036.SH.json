@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:21:45+08:00",
+  "company": "招商银行",
+  "ticker": "600036.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+    "sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "38.80 元、5.20% 税前静态股息率仅属合理偏低；36.65 元以下才开始小仓研究，34-36 元为稳健研究区，33.60 元以下提供更厚收益率缓冲。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "分红覆盖与资本缓冲仍强时可长期持有，但不能把银行当成债券；持仓和加仓仍需受银行股总暴露约束。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入对应收益率档，且净息差止跌、信用卡不良与关注率不继续恶化、CET1 较监管要求保持至少 4 个百分点缓冲、财富管理手续费恢复。",
+      "metrics": [
+        "回款",
+        "政策"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 137,
+          "line_end": 217,
+          "quote": "## 9. Valuation and margin of safety | 指标 | 当前值 | 口径 | |---|---:|---|",
+          "supports": "L137-L217、L229-L250。正文与契约一致；收益率门槛必须与信用和资本条件同时满足。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/招商银行/招商银行-income-investment-20260807.md",
+      "sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "A 股 38.80 元，普通股 TTM PE 6.80 倍，静态调整 PB 0.88 倍，按 2025 年 DPS 计算税前股息率 5.20%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L155",
+            "exact_quote": "38.80 元是合理偏低，不是厚安全边际。按 2025 DPS 不变，34-36 元对应约 5.60%-5.93%税前收益率"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L202",
+            "exact_quote": "DPS 2.016 元不变时，36.65 元对应 5.50%税前收益率；35.06 元对应 5.75%；33.60 元对应 6.00%。优先研究 34-36 元"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L41",
+            "exact_quote": "Dividend coverage | Strong | 2025 正式派息率 35.34%，普通股盈利覆盖约 2.83 倍"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L61",
+            "exact_quote": "它不是债券替代品，也不适合被当作低波动现金账户。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L62",
+            "exact_quote": "若现有银行股、地产信用或中国金融资产暴露已经较高，即使公司层面合格，也应保持小仓或不新增。"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "A 股 38.80 元，普通股 TTM PE 6.80 倍，静态调整 PB 0.88 倍，按 2025 年 DPS 计算税前股息率 5.20%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L18",
+            "exact_quote": "净息差降至 1.83%，信用卡不良率升至 1.90%，关注率升至 5.20%，逾期率升至 3.41%，信用卡新生成不良 120.42 亿元。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L16",
+            "exact_quote": "2026Q1 高级法核心一级资本充足率为 14.13%，高于 8.25% 的监管要求 5.88 个百分点"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=high"
+    }
+  }
+}

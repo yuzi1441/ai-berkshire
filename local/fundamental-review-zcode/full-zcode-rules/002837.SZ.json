@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "英维克",
+  "ticker": "002837.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/英维克/英维克投资研究报告-20260706.md",
+    "sha256": "3832d32158255e0c02b56141129b94e1471827f2b90880e8c11f98dd5e58edda",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：空仓者回避当前 74.06 元（显著高估区，价格已透支乐观情景）；需股价跌至 30 元以下（市值约 380 亿以下）方具备安全边际（内在价值参考区间 24-32 元），30-50 元区间只可观察不可重仓；且跌入安全区后还需以下任一兑现：公司以公告形式披露海外大客户批量订单、海外收入占比升至 25%+、净现比回到 0.7 以上、毛利率连续两季回升。",
+      "derivation_quote": "等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓",
+      "derivation_line_ref": 266,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "海外收入占比",
+        "净现比",
+        "毛利率"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：建议减仓至可完全承受 -60% 回撤的比例；当前价格的持有逻辑只剩海外订单公告落地这一个催化剂（事件博弈而非价值投资）；若成本很低且仓位小，可留观察仓，等 2026 半年报验证海外收入是否兑现。",
+      "derivation_quote": "建议减仓至可完全承受-60%回撤的比例",
+      "derivation_line_ref": 267,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "海外收入",
+        "海外收入占比",
+        "仓位占比"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "失效/卖出信号：① 2026 半年报海外收入占比未显著提升或液冷收入不及预期；② 毛利率跌破 24% 且无企稳迹象；③ 再现董监高减持公告；④ 经营现金流连续第三年恶化；⑤ 谷歌/英伟达订单传闻被公告证伪。",
+      "derivation_quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化",
+      "derivation_line_ref": 268,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "海外收入占比",
+        "液冷收入",
+        "毛利率",
+        "董监高减持",
+        "经营现金流"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "source_role": "main_report_reference",
+      "sha256": "3832d32158255e0c02b56141129b94e1471827f2b90880e8c11f98dd5e58edda"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope_label": "买入前提",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 266,
+            "exact_quote": "等30元以下（市值380亿以下）再谈安全边际；30-50元区间只可观察不可重仓"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 243,
+            "exact_quote": "当前74.06元：显著高估区**，价格已透支乐观情景。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 241,
+            "exact_quote": "**具备安全边际的买点：30元以下**（对应市值约380亿以下）。"
+          }
+        ],
+        "note": "本地证据仅主报告基线（74.06 元，数据截止 2026-07-06），无 2026-08-29 当前股价与市值，海外订单公告、海外收入占比、净现比、毛利率等加仓前提亦无最新官方数据，无法判定是否跌入 30 元以下安全区。"
+      },
+      {
+        "task_id": "holder",
+        "scope_label": "持仓验证",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 267,
+            "exact_quote": "建议减仓至可完全承受-60%回撤的比例"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 268,
+            "exact_quote": "①2026半年报海外收入占比未显著提升或液冷收入不及预期；②毛利率跌破24%且无企稳迹象"
+          }
+        ],
+        "note": "半年报验证所需的 2026H1 海外收入尚未出现在证据包中；海外大客户订单是否以公告落地属事件且无确认；持有人可承受回撤比例与成本信息亦缺失，持仓验证无法执行。"
+      },
+      {
+        "task_id": "risk",
+        "scope_label": "风险/失效条件",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 268,
+            "exact_quote": "②毛利率跌破24%且无企稳迹象；③再现董监高减持公告；④经营现金流连续第三年恶化"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 245,
+            "exact_quote": "944亿买一家净现比0.30的设备商，生意本身撑不起这个价。"
+          }
+        ],
+        "note": "判定毛利率是否跌破 24%、现金流是否连续第三年恶化需要 2026 半年报及以前年度对比数据；董监高减持公告与订单传闻证伪属事件且无确认，五项卖出信号均无法判定。"
+      }
+    ]
+  }
+}

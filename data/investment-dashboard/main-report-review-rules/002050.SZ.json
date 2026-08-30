@@ -1,0 +1,286 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "浙江三花智能控制股份有限公司",
+  "ticker": "002050.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/三花智控/三花智控-investment-research-20260810.md",
+    "canonical_sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
+    "locked_sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股不追",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "28-32 元才进入激进型小额分批区，23-28 元为稳健区，16-23 元为保守型重点研究区",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "也可等待半年报证明核心业务重新提速和新业务形成可核验收入",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "基本面未坏可持有，但当前不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "若显著高于 50 元且利润未上修，可降低估值风险",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "50 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股进入对应价格带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润，液冷/机器人出现可核验收入",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 258,
+          "line_end": 302,
+          "quote": "### 5. 可执行价格带 | 市场与风格 | 基本面价格区间 | 动作 | 逻辑 | |---|---:|---|---|",
+          "supports": "L258-L302。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作，不能把 H 股小额分批许可映射到 A 股。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：论文失效为核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "产品/客户"
+      ],
+      "operator": "lt",
+      "threshold": "25%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 302,
+          "line_end": 302,
+          "quote": "核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓信号为估值进入乐观现值附近但液冷和机器人仍无可核验收入，或核心业务增速继续降档",
+      "relation": "any_of",
+      "metrics": [
+        "收入",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 302,
+          "line_end": 302,
+          "quote": "核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "a9be4a13ea0d6ed9a4c20e5101d2673e4fa41ba78a2d8da70820118251e0d808",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 2
+  }
+}

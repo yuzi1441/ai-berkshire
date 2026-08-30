@@ -1,0 +1,357 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "长江电力",
+  "ticker": "600900.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/长江电力/长江电力-investment-team-20260713.md",
+    "canonical_sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
+    "locked_sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "28.42 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "28.42 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "25-26 元只可小仓试建，23-25 元稳健分批，22.5 元以下且水文、电价、治理和项目回报未恶化时才考虑较高仓位",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "作为长期现金流资产可继续收息并按季度复核",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前中性资本利得有限，不因除息机械下跌加仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进入 23-25 元且六站量价未结构恶化，调节/容量收益可重复、抽蓄 IRR 高于资金成本、债务下降",
+      "relation": "all_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "23-25 元",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "估值超过 21 倍而盈利现金分红未改善、单位电量现金贡献持续下降或低回报资产注入时重审",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "21 倍",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 259,
+          "line_end": 300,
+          "quote": "## 11. 最终投资建议 ### 11.1 定性判断 | 项目 | 判断 |",
+          "supports": "L259-L300、L354-L375。契约粗字段写“分批买入”，但正文明确当前空仓等待，采用正文的现价动作与完整价格层级。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或论文重审信号，任一触发即重审）：① 估值升至 21 倍以上而盈利、现金流和分红没有同步改善",
+      "relation": "any_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "21 倍",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 连续 2-3 年综合结算价或单位电量现金贡献下降超过 5%",
+      "relation": "any_of",
+      "metrics": [
+        "PE",
+        "综合结算价",
+        "长期资产现金支出/OCF",
+        "净债务"
+      ],
+      "operator": "gt",
+      "threshold": "5%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 长期资产现金支出连续两年超过 OCF 50% 且净债务上升",
+      "relation": "all_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": "gt",
+      "threshold": "50%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 抽蓄、海外或关联资产重大减值、延期、超支或低回报注入",
+      "relation": "any_of",
+      "metrics": [
+        "PE",
+        "综合结算价",
+        "长期资产现金支出/OCF",
+        "净债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 重大大坝、机组、生态事故或市场化规则永久削弱收益权",
+      "relation": "any_of",
+      "metrics": [
+        "PE",
+        "综合结算价",
+        "长期资产现金支出/OCF",
+        "净债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "估值升至 21 倍以上而盈利、现金流和分红没有同步改善"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "837be2d1c65740f8414acfaa7c819f44b8ce1238353355b0068f911d95d2a4b3",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

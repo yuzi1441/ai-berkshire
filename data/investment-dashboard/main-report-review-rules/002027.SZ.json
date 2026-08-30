@@ -1,0 +1,336 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "分众传媒",
+  "ticker": "002027.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+    "canonical_sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
+    "locked_sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "5.3-7.4 元以持有、不追为主",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "5.3-7.4 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "基本面未同步改善而股价达到 7.5 元以上时可考虑减仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "7.5 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流",
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：",
+      "relation": "all_of",
+      "metrics": [
+        "楼宇媒体收入同比",
+        "经济FCF",
+        "第一大客户收入占比",
+        "每股经济FCF",
+        "商誉减值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两个半年期楼宇媒体收入下降超 10% 且行业总量仍增长",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "10%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "年化经济 FCF 降至 35 亿元以下",
+      "relation": "all_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": "35 亿元",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "第一大客户收入持续超 20% 后大幅削减投放且无新行业补位",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "20%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "新潮完成后八个季度内每股经济 FCF 未恢复或发生重大商誉减值",
+      "relation": "any_of",
+      "metrics": [
+        "自由现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "核心楼宇资源明显流失且媒体成本/租赁现金流连续两期快于收入增长",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "55b1df552c0a4ae10e58b8038e414734758b3191da42688b6ff52ddcee60e2a5",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

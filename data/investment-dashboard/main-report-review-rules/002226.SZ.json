@@ -1,0 +1,318 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "江南化工",
+  "ticker": "002226.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+    "canonical_sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
+    "locked_sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "4.47 元不追",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "4.47 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "4 元以下只允许小仓观察，3.3-3.7 元且 2026 利润与现金流改善时稳健研究，3.0-3.3 元或以下才有保守安全边际",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续跟踪，但安全事故、治理变化、债务和利润质量恶化时重审或减仓",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "更低价格，或连续 2-3 个季度扣非利润和现金流修复、爆破服务毛利率提升、实控人变更有利于资产边界与同业竞争解决",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "扣非利润",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "2-3",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/重审触发：发生重大安全事故、环保处罚、许可证/爆破资质异常",
+      "relation": "all_of",
+      "metrics": [
+        "扣非净利同比增速",
+        "经营现金流",
+        "有息债务",
+        "安全事故/环保处罚/资质事件"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "实控人变更导致不利资产注入、同业竞争加剧或关联交易扩大",
+      "relation": "any_of",
+      "metrics": [
+        "扣非净利同比增速",
+        "经营现金流",
+        "有息债务",
+        "安全事故/环保处罚/资质事件"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "连续两个季度扣非净利下滑超过 30% 且经营现金流持续为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "扣非利润"
+      ],
+      "operator": "gt",
+      "threshold": "30%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "有息债务继续快速上升、财务费用明显侵蚀利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "大股东可交换债换股/减持带来股权与供给冲击",
+      "relation": "all_of",
+      "metrics": [
+        "扣非净利同比增速",
+        "经营现金流",
+        "有息债务",
+        "安全事故/环保处罚/资质事件"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "974f6e3e39d5ef561ae963f20d563a79e6c944b90657f0945c2562affbd46426",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

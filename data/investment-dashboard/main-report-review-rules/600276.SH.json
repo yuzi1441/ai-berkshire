@@ -1,0 +1,377 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "恒瑞医疗",
+  "ticker": "600276.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+    "canonical_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+    "locked_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "55.75 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "55.75 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元三项至少满足两项",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "43-46 元",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.3",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "47-50 元只允许激进小仓，43-46 元稳健分批，37-40 元才接近保守安全区",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本持仓可继续验证创新药销售、OCF、许可收入和 FDA 整改",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "高成本或重仓持仓若价格上行但盈利预期不升，应降低集中度",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "半年报创新药增速接近或超过 30%、经营现金流转化修复、卡瑞利珠单抗整改重报或获批、真实里程碑兑现，且价格进入安全区",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": "gt",
+      "threshold": "30%",
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "重大临床、安全性或连续海外质量问题即重审",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 300,
+          "line_end": 373,
+          "quote": "## 第八步：最终决策与行动清单 ### 四维评分 | 维度 | 框架 | 评分 | 核心判断 |",
+          "supports": "L300-L373、L433-L451。契约粗字段写“分批买入”，但正文明确现价不追且要求价格、半年报、CRL 三项至少满足两项，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/重审信号：创新药增速明显低于 +20% 且仿制药继续下滑",
+      "relation": "all_of",
+      "metrics": [
+        "创新药收入增速",
+        "仿制药收入增速",
+        "动态 PE"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "创新药增速明显低于 +20%，仿制药继续下滑"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "OCF 长期低于净利润且应收、合同资产恶化",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "创新药增速明显低于 +20%，仿制药继续下滑"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "PE 扩张至 55x 以上但增长预期不升（>61 元且盈利未上修降仓位）",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "创新药增速明显低于 +20%，仿制药继续下滑"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "临床数据被否定或重大安全性问题时应先重审论文",
+      "relation": "any_of",
+      "metrics": [
+        "创新药收入增速",
+        "仿制药收入增速",
+        "动态 PE"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "创新药增速明显低于 +20%，仿制药继续下滑"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "64426a832ba04e853bc9b347d7fd547e6beb7cf7e07b465697f7d313d094e795",
+  "summary": {
+    "active_rule_count": 7,
+    "reviewable_rule_count": 4,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 4
+  }
+}

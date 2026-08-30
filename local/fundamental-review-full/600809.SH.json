@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:24:54+08:00",
+  "company": "汾酒",
+  "ticker": "600809.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+    "sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 116.24 元可先建四分之一观察仓但不追反弹；110 元以下分批，100 元以下加快，90-100 元才属于重注研究区。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "持有收息；成本高于 150 元者等待中性目标区但不补仓，重点核对青花20 批价和季度合同负债。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "100 元以下或连续两季合同负债同比正增长且批价企稳；青花20 批价持续跌破 320 元、分红率下降/跨界并购、品质安全事件或估值透支时重审。",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 206,
+          "line_end": 260,
+          "quote": "### 价格区间结论 - **合理价值区间（中性）**：150-170 元（对应 2028E 一致预期净利 137.74 亿的 13-15 倍） - **具备安全边际的买入区**：**110 元以下**（对应静态 PE <11 倍、股息率 >6%，且低于悲观情景与中性情景的概率加权值）",
+          "supports": "L206-L260、L289-L310。正文最终结论是分批买入，但 116 元只允许观察仓，故不升级为无条件普通买入。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+      "sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**股价基准**：116.24 元（2026-07-17 收盘）｜总市值 1,418.1 亿元｜PE-TTM 12.91 倍｜股息率 5.64%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L235",
+            "exact_quote": "空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L250",
+            "exact_quote": "**最终结论：买入（分批、控节奏）**。116 元起可建观察仓，110 元以下积极分批，90-100 元重注；"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L236",
+            "exact_quote": "持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L237",
+            "exact_quote": "卖出信号 | ① 青花20 批价跌破 320 元且持续一季（价盘失守）；② 分红率掉头下降或出现跨界并购（资本配置变质）；③ 股价升至 190-210 元（约 18-20 倍 2027E）而收入增速未回到双位数（估值透支）；④ 品质安全事件"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L238",
+            "exact_quote": "加仓信号 | ① 股价回到 100 元下方（悲观情景定价）；② 连续两季合同负债同比正增长 + 批价企稳（右侧确认）；③ 行业出清见底信号扩散（茅台批价站稳 1,700 元上方）"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

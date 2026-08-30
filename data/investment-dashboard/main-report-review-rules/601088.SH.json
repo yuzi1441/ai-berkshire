@@ -1,0 +1,357 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中国神华",
+  "ticker": "601088.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中国神华/中国神华-investment-team-20260714.md",
+    "canonical_sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf",
+    "locked_sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 43.42 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "43.42 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "现有持仓者可持有收息，但这是持仓口径，不能转写成空仓买入机会",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前以持有收息为主，不新增",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "46 元以上且盈利未上修时控制机会成本",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "46 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "A 股 36 元以下才适合激进分批，33 元以下更适合稳健型",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "正式半年报还需验证每股经营现金流、ROIC、分部利润和短借去化",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "ROIC"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 287,
+          "line_end": 304,
+          "quote": "### 7.5 行动价格带 | A 股价格 | 判断 | 行动含义 | |---|---|---|",
+          "supports": "L287-L304、L356-L383。报告结论为“A 股一般价格”，并购后每股价值尚未验证；契约“持有”不是空仓买入动作。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或论文失效信号，任一触发即重审）：① 并购后每股经营现金流连续两个报告期下降",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 379,
+          "line_end": 379,
+          "quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "② 资本开支持续接近或超过 OCF、需举债维持股息",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 379,
+          "line_end": 379,
+          "quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③ 分红率低于公司回报规划或股息依赖一次性资产处置",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 379,
+          "line_end": 379,
+          "quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④ 重大安全环保事故、关联交易定价异常或财务公司资金安全事件",
+      "relation": "any_of",
+      "metrics": [
+        "每股经营现金流",
+        "资本开支/OCF",
+        "分红率",
+        "自产煤毛利率",
+        "单位生产成本"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 379,
+          "line_end": 379,
+          "quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤ 自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 379,
+          "line_end": 379,
+          "quote": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "531fea665b45aaa6abaf1b40993a26d45a8cc173300b53e85e0d14947c018ea0",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 1,
+    "price_rule_count": 5,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

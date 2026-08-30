@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:42:50+08:00",
+  "company": "璞泰来",
+  "ticker": "603659.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/Putailai/Putailai-investment-research-20260624.md",
+    "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 29.07 元不买；理想区间 22-25 元，但只有价格低于 25 元且 Q2/Q3 业绩持续向好时，才允许建立小仓位，价格条件单独满足不够。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续持有，但必须跟踪宁德采购、负极出货恢复和涂覆市占率是否守住 40%以上。",
+      "metrics": [
+        "产能/销量"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "22-25 元且季度经营验证向好，或负极产能利用率回升、硅碳大客户订单落地；宁德自建负极、涂覆市占率连续两季低于 35%、质押强平或硅碳渗透提高而产品缺乏竞争力即失效。",
+      "metrics": [
+        "订单",
+        "产能/销量",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "### 最终决策",
+          "supports": "涂覆隔膜/PVDF 是好生意，但负极材料份额下滑、高质押、多平台资本运作和弱股东回报使价格到位后仍必须验证基本面。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/Putailai/Putailai-investment-research-20260624.md",
+      "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L427",
+            "exact_quote": "如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L402",
+            "exact_quote": "> **理想买入区间**：22-25元（对应2025年盈利的20-22x PE，提供了足够的悲观情景保护）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L333",
+            "exact_quote": "| 股价 | 29.07元 | 2026年6月24日 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L428",
+            "exact_quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L429",
+            "exact_quote": "| **卖出信号** | (1) 宁德时代明确启动负极材料自建项目；(2) 涂覆隔膜市占率连续两季度下降至35%以下；(3) 梁丰被迫平仓质押股份；(4) 硅碳负极渗透率超过40%且璞泰来产品缺乏竞争力 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L430",
+            "exact_quote": "| **加仓信号** | (1) 股价回落至22-25元区间；(2) 负极材料行业产能利用率回升至80%+；(3) 硅碳负极大客户订单落地；(4) 港股成功上市且估值合理 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

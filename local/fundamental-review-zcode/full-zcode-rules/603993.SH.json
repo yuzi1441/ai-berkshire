@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "CMOC",
+  "ticker": "603993.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/CMOC/CMOC-research-20260623.md",
+    "sha256": "336785bb013e61e7df8ff0fc2dfc0888b7084d928973561099f91d196f4ab9d9",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者可适度建仓（3-5%仓位）但必须分批买入；报告基线A股19.49元（6/22收盘）、铜价$13,595/吨处于高位，等待铜价回调至$11,000-12,000再加仓更安全；股价回调至15-17元（PE 16-18x基于2025年EPS）安全边际更充分；不建议在当前位置一次性重仓。",
+      "derivation_quote": "股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分",
+      "derivation_line_ref": 427,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "铜价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "继续持有但设置跟踪止损；验证KFM二期投产进度（基线计划2027年投产、新增10万吨铜）带来的新增量；持仓成本低于15元安全边际充足，成本高于25元考虑部分减仓。",
+      "derivation_quote": "若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓",
+      "derivation_line_ref": 428,
+      "schedule_type": "event",
+      "metrics": [
+        "KFM二期投产进度",
+        "铜产量"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出信号：铜价跌破$10,000/吨并持续3个月以上；刚果金出台重大不利政策（如矿业税提高至50%以上或强制国有化）；Q2-Q3利润增速放缓至个位数；管理层出现诚信问题或重大战略失误。",
+      "derivation_quote": "铜价跌破$10,000/吨并持续3个月以上",
+      "derivation_line_ref": 429,
+      "schedule_type": "filing",
+      "metrics": [
+        "铜价",
+        "归母净利润增速",
+        "刚果金矿业政策"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/CMOC/CMOC-research-20260623.md",
+      "source_role": "main_report_reference",
+      "sha256": "336785bb013e61e7df8ff0fc2dfc0888b7084d928973561099f91d196f4ab9d9"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "仅有主报告local_1，无独立行情证据。基线为2026-06-22 A股19.49元、铜价$13,595/吨，无当前股价与铜价，无法判断是否已回调至15-17元建仓区或铜价$11,000-12,000加仓区。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 5,
+            "exact_quote": "**当前股价**：A股 19.49元（6/22收盘）/ H股 17.47港元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 316,
+            "exact_quote": "| 当前铜价 | $13,595/吨（2026/6/22） |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "KFM二期投产事件未在本地证据中获得任何期后确认（报告基线计划2027年投产、新增10万吨铜）；持仓成本为个人数据、报告明示不编造，无法执行成本阈值判断。",
+        "missing_codes": [
+          "no_event_confirmation",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 189,
+            "exact_quote": "- KFM二期2027年投产，新增10万吨铜"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 428,
+            "exact_quote": "| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "铜价$10,000阈值与Q2-Q3利润增速均需期后行情和财报数据；本地仅有报告基线（2026/6/22铜价$13,595/吨）可作对照，无法确认任何卖出信号是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 429,
+            "exact_quote": "| **卖出信号** | 铜价跌破$10,000/吨并持续3个月以上；刚果金出台重大不利政策（如将矿业税提高至50%以上或强制国有化）；Q2-Q3利润增速放缓至个位数；管理层出现诚信问题或重大战略失误 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 141,
+            "exact_quote": "- 价：铜价从2023年约$8,500/吨→2026年6月$13,595/吨（+60%）"
+          }
+        ]
+      }
+    ]
+  }
+}

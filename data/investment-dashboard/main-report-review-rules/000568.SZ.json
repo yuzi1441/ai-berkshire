@@ -1,0 +1,358 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "泸州老窖",
+  "ticker": "000568.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+    "canonical_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
+    "locked_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型可在 80-85 元建 1/3 底仓、75 元以下加仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "稳健型必须等待经营确认，保守型仅在 54-70 元极端赔率区研究",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "54-70 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "底仓可用股息等待，但不可把低估值当作反转已确认",
+      "relation": "all_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "确认前不升级仓位",
+      "relation": "all_of",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "合同负债连续两季回升、利润降幅收窄至个位数、国窖批价站稳",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "确认后 90 元以内仍可介入",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "90 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 116,
+          "line_end": 153,
+          "quote": "## 7. 最终投资建议 ### 定性判断 | 项目 | 判断 |",
+          "supports": "L116-L153。契约粗字段“观察”未表达正文允许激进型现价底仓，采用正文分层动作并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/离场触发条件：国窖出厂价被迫下调（挺价失败）",
+      "relation": "all_of",
+      "metrics": [
+        "国窖批价",
+        "出厂价政策",
+        "消费税政策",
+        "分红兑现"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 146,
+          "quote": "批价跌破700元（渠道信心崩塌阈值）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "批价跌破700元（渠道信心崩塌阈值）",
+      "relation": "all_of",
+      "metrics": [
+        "国窖批价",
+        "出厂价政策",
+        "消费税政策",
+        "分红兑现"
+      ],
+      "operator": "lt",
+      "threshold": "700元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 146,
+          "quote": "批价跌破700元（渠道信心崩塌阈值）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "消费税以恶性方式落地（批发/零售环节征收+短过渡期）",
+      "relation": "all_of",
+      "metrics": [
+        "国窖批价",
+        "出厂价政策",
+        "消费税政策",
+        "分红兑现"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 146,
+          "quote": "批价跌破700元（渠道信心崩塌阈值）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "分红率下调或85亿分红承诺不兑现",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": "85",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 146,
+          "quote": "批价跌破700元（渠道信心崩塌阈值）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经销商出现成规模退网潮",
+      "relation": "all_of",
+      "metrics": [
+        "国窖批价",
+        "出厂价政策",
+        "消费税政策",
+        "分红兑现"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 146,
+          "line_end": 146,
+          "quote": "批价跌破700元（渠道信心崩塌阈值）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "58cd8d95f068671a63ed7f0ce558633ad540e767422d4b822d8fc74c932ca3b6",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

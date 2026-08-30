@@ -1,0 +1,385 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "联影医疗",
+  "ticker": "688271.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
+    "canonical_sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
+    "locked_sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 106.75 元位于 95-110 元激进型小仓观察区，但许可只适用于能持续跟踪现金流、毛利率与海外质量者，不得当作普通低估买点",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "一般空仓者等待 80-95 元，保守型等待 70-80 元或更强经营证据",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有但不因国产替代叙事盲目加仓",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "高于 120 元且现金流未同步改善时，应降低估值风险暴露",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "120 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "80-95 元并伴随经营现金流连续改善，或服务占比提升、海外高增且回款不恶化、ROE 回到 12%-15%后可上调",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "ROE",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "毛利率跌破 45%、应收存货持续快于收入、经营现金流连续两个半年度为负、海外失速、研发资本化/关联交易扩大或质量合规事件即暂停",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "operator": "lt",
+      "threshold": "45%",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 182,
+          "line_end": 182,
+          "quote": "## 7. 估值与最终投资建议",
+          "supports": "全产品矩阵、研发与装机服务网络构成复合护城河，但 46.82 倍 PE、0.67% FCF yield、应收加存货约占收入 82.7%，说明当前安全边际主要依赖未来兑现。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/重审信号（任一触发即重审）：毛利率跌破 45% 且非一次性因素",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "45%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "毛利率跌破 45%且非一次性因素"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收+存货增速连续高于收入增速且经营现金流连续两个半年度为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "毛利率跌破 45%且非一次性因素"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "海外收入增速明显放缓但费用继续高增",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "毛利率跌破 45%且非一次性因素"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易持续扩大、核心人员持续减持或出现质量/合规事件",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "应收+存货增速",
+        "经营现金流",
+        "关联交易"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "毛利率跌破 45%且非一次性因素"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "应收+存货增速",
+        "经营现金流",
+        "关联交易"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "毛利率跌破 45%且非一次性因素"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "ad448edda9de276c5c00caf113c3d28cea11aeb4cc3a0057c0c131808d3b000b",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

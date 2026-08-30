@@ -1,0 +1,187 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "四方股份",
+  "ticker": "601126.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+    "canonical_sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07",
+    "locked_sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "60 元以上不因新型电力系统、AIDC 或 SST 叙事追高",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "60 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 21,
+          "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+          "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有跟踪，但需前置仓位上限和卖出纪律",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 21,
+          "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+          "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "45-55 元只进入研究区，35-45 元且基本面未恶化才接近分批研究买点",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 21,
+          "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+          "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "同时要求毛利率企稳、经营现金流/净利润恢复到 1 倍以上",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "1 倍",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 12,
+          "line_end": 21,
+          "quote": "## 0. 结论先行 四方股份是中国新型电力系统中的“二次设备 + 保护自动化 + 电力电子 + 储能系统”解决方案公司，核心根基是继电保护、变电站自动化、安全稳定控制和系统级工程经验。2025 年公司收入 81.93 亿元、归母净利润 8.29 亿元、经营现金流 12.25 亿元，均创阶段高点；2026Q1 收入 21.58 亿元、归母净利润 2.71 亿元，同比仍增长，但经营现金流显著走弱至 0.14 亿元，反映项目制业务的采购、回款和营运资本波动。 **我的明确判断**：",
+          "supports": "L12-L21、L260-L290。公司质量较好，但约 61 倍 PE 已透支增长，新业务扩张同时拉低毛利率。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件：综合毛利率跌破 28%，或经营现金流连续两年弱于净利润，或大客户订单/回款恶化，或新业务收入增长但利润率持续低迷，或估值维持 60x 而增速降至 10% 附近，触发卖出/减仓",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "订单",
+        "回款",
+        "产品/客户",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "综合毛利率跌破 28%；经营现金流连续两年弱于净利润"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "3bc892742d9825ddee3e8bd682900cf61bacd33e99f4e26e9f9d432e4a2a23ba",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 1
+  }
+}

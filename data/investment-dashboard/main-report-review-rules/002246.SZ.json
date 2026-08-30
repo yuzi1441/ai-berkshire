@@ -1,0 +1,320 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "北化股份",
+  "ticker": "002246.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/北化股份/北化股份研究报告-20260709.md",
+    "canonical_sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
+    "locked_sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 18.60 元处于 16.5-20 元激进型景气跟踪区，只能小仓且不当作价值低估",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "稳健型等 13-16.5 元并验证利润，保守型等 13 元以下",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可持有但设验证线，不应把硝化棉景气、军工资质和重组预期直接当作长期利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "中报/三季报继续证明硝化棉毛利、国外业务、防护订单和经营现金流，并确认扩产回报及实控人变更不损害上市公司",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 232,
+          "line_end": 250,
+          "quote": "### 2. 三情景估值 | 情景 | 3年 EPS 年增速 | 目标 PE | 3年后 EPS | 目标价 | 较18.60涨跌幅 | 需要发生什么 | |---|---:|---:|---:|---:|---:|---|",
+          "supports": "L232-L250、L254-L329、L370-L391。正文与契约基本一致；主判断采用正文在报告基准价明确允许的激进型小仓层级。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避触发：硝化棉毛利率快速回落且库存和应收账款上升",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易占比继续提高且披露透明度下降",
+      "relation": "all_of",
+      "metrics": [
+        "硝化棉毛利率",
+        "库存/应收账款",
+        "关联交易占比",
+        "安全环保处罚事件",
+        "EPS 上修"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "实控人变更伴随复杂资产置换或弱资产注入",
+      "relation": "any_of",
+      "metrics": [
+        "硝化棉毛利率",
+        "库存/应收账款",
+        "关联交易占比",
+        "安全环保处罚事件",
+        "EPS 上修"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "安全环保处罚、停产整改或重大质量问题",
+      "relation": "any_of",
+      "metrics": [
+        "硝化棉毛利率",
+        "库存/应收账款",
+        "关联交易占比",
+        "安全环保处罚事件",
+        "EPS 上修"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价 >25 元且无 EPS 上修时减仓/降低预期",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "25 元",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 325,
+          "line_end": 325,
+          "quote": "硝化棉毛利率快速回落，库存和应收账款上升。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "5844eab5f14c2277457e7b05fce15f05d7ac78976370481a4c54897d2a4c423a",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

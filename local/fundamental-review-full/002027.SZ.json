@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:53:50+08:00",
+  "company": "分众传媒",
+  "ticker": "002027.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+    "sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "4.8-5.3 元可小仓分批，4.3-4.8 元进入稳健分批区，3.8-4.2 元才是保守型更厚安全边际区，不宜一次重仓。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "5.3-7.4 元以持有、不追为主；基本面未同步改善而股价达到 7.5 元以上时可考虑减仓。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入对应区间，同时持续核对楼宇媒体收入、经济自由现金流、客户集中度和并购后每股现金流。",
+      "metrics": [
+        "自由现金流",
+        "收入",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 247,
+          "line_end": 257,
+          "quote": "### 8.3 价格与动作 | 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 | |---|---|---:|---:|---|",
+          "supports": "L247-L257、L261-L299、L363-L384。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+      "sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "最新收盘：5.14 元；总市值：742.33 亿元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L251",
+            "exact_quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L252",
+            "exact_quote": "| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "最新收盘：5.14 元；总市值：742.33 亿元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L254",
+            "exact_quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L255",
+            "exact_quote": "| 所有投资者 | 考虑减持 | ≥7.5 元 | ≥19.8 倍 | 若基本面没有同步上修，股息与增长难支撑更高估值 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L170",
+            "exact_quote": "交易于 2026-06-30 因申报财务数据过期被深交所中止审核；公司称将更新资料后申请恢复。截至本报告日，未找到恢复审核的正式公告，交易仍需深交所审核、证监会注册与市场监管总局经营者集中审查。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L294",
+            "exact_quote": "新潮完成后八个季度内，每股经济 FCF 仍未恢复至并购前水平，或发生重大商誉减值；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L299",
+            "exact_quote": "**建议在 2026-09-05 前后复核**，重点看 2026 年半年报的客户行业结构、阿里系贡献、租赁现金流、经济 FCF、新潮审核是否恢复及交易方案有无调整。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "兴发集团",
+  "ticker": "600141.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+    "canonical_sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64",
+    "locked_sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价约 48 元处于概念异动高位，不追",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "48 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 122,
+          "line_end": 174,
+          "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+          "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "26-32 元才开始稳健研究，22-26 元、正常化 PE 约 10-12 倍时才具更强吸引力",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 122,
+          "line_end": 174,
+          "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+          "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "异动高位可部分止盈，不能把磷化铟、固态电池叙事当作已兑现利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 122,
+          "line_end": 174,
+          "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+          "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "长期跟踪磷矿与兴福电子的真实价值",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 122,
+          "line_end": 174,
+          "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+          "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价格回到对应正常化估值区，同时磷矿价格中枢和兴福电子业绩兑现、五硫化二磷取得正式订单、磷石膏治理取得实质进展",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 122,
+          "line_end": 174,
+          "quote": "## 7. 最终投资建议 ### 定性判断表 | 维度 | 判断 |",
+          "supports": "L122-L174、L179-L196。正文与契约方向一致，但契约遗漏稳健与保守价格带，裁决按正文补全。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/回避信号：磷化铟/AI 算力概念被证伪（公司暂无产能、纯研发阶段）",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "磷矿 2025-2026 新产能集中投放压垮价格",
+      "relation": "all_of",
+      "metrics": [
+        "产能/销量"
+      ],
+      "operator": null,
+      "threshold": "2025-2026",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "有机硅反内卷失败、需求端无硬支撑",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "新能源材料持续亏损、资本开支失控侵蚀主业现金流",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "概念热度退潮、股价从异动高位快速回落",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "08b303ee66cd685c9d08c6335588c9f017088023a9677e70e4be8a569279ca45",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

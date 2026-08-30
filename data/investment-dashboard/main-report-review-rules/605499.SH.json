@@ -1,0 +1,397 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "东鹏饮料（集团）股份有限公司",
+  "ticker": "605499.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+    "canonical_sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c",
+    "locked_sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 130.83 元位于 127-140 元激进型区间，可小额首批而非一次买满",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "114-127 元进入稳健分批区，100-114 元在基本面未恶化时重点关注，高于 140 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "以持有为主",
+      "relation": "all_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低于 127 元且 H2 扣非利润仍保持双位数增长时，再评估增加",
+      "relation": "all_of",
+      "metrics": [
+        "扣非利润",
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "127 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "东鹏特饮恢复 10%以上增长、茶饮料高增同时销售费用率不升、海外或新基地披露明确回报可增强判断",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "10%",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "销售费用连续两个报告期比收入多增 10 个百分点、扣非增速持续低于收入、核心能量饮料连续两个半年度零增长或份额下降超过 3 个百分点、低回报并购、治理或食品安全事件即暂停或退出",
+      "relation": "any_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 311,
+          "line_end": 311,
+          "quote": "## 第八步：最终决策与行动清单",
+          "supports": "TTM PE 19.57 倍、扣净现金 PE 16.46 倍，当前价格已具一定安全边际；但核心特饮 H1 仅增长 6.89%、销售费用增速高于收入，新品效率仍需验证，因此只能分批开始。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/卖出信号：核心能量饮料连续两个半年度零增长或份额下降超过3个百分点",
+      "relation": "any_of",
+      "metrics": [
+        "核心能量饮料收入增速",
+        "市场份额",
+        "销售费用增速",
+        "扣非净利润增速"
+      ],
+      "operator": "gt",
+      "threshold": "3",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "重大低回报并购",
+      "relation": "all_of",
+      "metrics": [
+        "核心能量饮料收入增速",
+        "市场份额",
+        "销售费用增速",
+        "扣非净利润增速"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "治理或食品安全事件破坏品牌",
+      "relation": "any_of",
+      "metrics": [
+        "核心能量饮料收入增速",
+        "市场份额",
+        "销售费用增速",
+        "扣非净利润增速"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "估值卖出信号：股价超过202.5元而中期EPS增长预期仍低于13%，或PE超过30倍且核心特饮仍为个位数增长",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "暂停买入信号：销售费用连续两个报告期比收入多增10个百分点",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "10",
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "扣非利润增速持续低于收入",
+      "relation": "all_of",
+      "metrics": [
+        "扣非利润",
+        "利润",
+        "收入"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "403fc67ed65824dea5d9edb33d21161da73cfa4dc8aa7feaf52cea4c0b7d5d36",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 1,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 6
+  }
+}

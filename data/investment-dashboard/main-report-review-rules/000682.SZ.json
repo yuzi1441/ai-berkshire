@@ -1,0 +1,242 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "东方电子",
+  "ticker": "000682.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+    "canonical_sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+    "locked_sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不追“AI+电网”情绪",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "12 元附近可以观察仓，10-11 元且基本面未坏时性价比更好",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "可继续持有，以扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "10-11 元，或连续 2-3 季扣非增速超过 15%、现金流改善且毛利率稳定在 32% 以上",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "### 7.4 安全边际区间 | 股价区间 | 对应判断 | 动作建议 | |---:|---|---|",
+          "supports": "L335-L368、L383-L395。契约粗字段“观察”漏掉正文当前观察仓许可，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/卖出触发条件：股价涨到18元以上但扣非增速没有提升",
+      "relation": "all_of",
+      "metrics": [
+        "A股收盘价",
+        "扣非利润增速",
+        "经营现金流/净利润",
+        "储能与工程业务占比"
+      ],
+      "operator": null,
+      "threshold": "18元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流连续两年低于净利润70%",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润"
+      ],
+      "operator": "lt",
+      "threshold": "70%",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "储能/工程低毛利业务占比快速上升",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "b010b99d258e9eb10676793c14eb86834eeb78d10ed1ef96a40221355f783679",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 1,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 3
+  }
+}

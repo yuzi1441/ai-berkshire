@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:06:33+08:00",
+  "company": "阳光电源",
+  "ticker": "300274.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/阳光电源/阳光电源-research-20260726.md",
+    "sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 113.42 元不追；103.55 元以下只建立不超过目标仓位三分之一的观察仓，92.04 元以下且基本面未进一步恶化时才分批建立有意义仓位，80.54 元以下为深度价值区。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
+      "metrics": [],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "美国 FCC 规则范围有限或不溯及既往、储能毛利率回到 33% 以上、TTM 净利润恢复增长、境外毛利率维持 38% 以上，且储能出货增速重新追上行业。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "产能/销量"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 529,
+          "line_end": 608,
+          "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+          "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/阳光电源/阳光电源-research-20260726.md",
+      "sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**股价与市值：** 113.42 元；总股本 2,073,211,424 股；总市值 2,351.44 亿元人民币"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L45",
+            "exact_quote": "| 2026-07-24 收盘价 | 113.42 元 | 腾讯行情、东方财富一致 |"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source",
+          "no_comparison"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**股价与市值：** 113.42 元；总股本 2,073,211,424 股；总市值 2,351.44 亿元人民币"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L364",
+            "exact_quote": "| 2026 全年指引大幅落空引发戴维斯双杀 | **高** | 高 | 半年报（预计 8 月）、Q3 报 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L176",
+            "exact_quote": "| **境外（含港澳台）** | **539.92** | **60.54%** | **+48.76%** | **40.36%** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L273",
+            "exact_quote": "| **2026-06-30** | **路透独家：美国政府正起草针对外国逆变器的进口禁令，由 FCC 牵头，理由是担心中国可能利用这些设备干扰电力供应；规则适用于新型号外国逆变器，最早可能今年发布** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L348",
+            "exact_quote": "**已经体现在数据里：** 阳光电源储能毛利率轨迹为 2025H1 约 39.9%（二手口径）→ **2025 全年 36.49%（年报口径）** → **2026Q1 约 30%**（管理层业绩会口径）。"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

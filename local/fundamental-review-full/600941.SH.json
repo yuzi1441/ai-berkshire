@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:28:57+08:00",
+  "company": "中国移动有限公司",
+  "ticker": "600941.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+    "sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "A 股 96.70 元不追；88-92 元只考虑小额试仓，78-84 元稳健分批，70-75 元才进入重点关注区；能买 H 股者还需比较税费、汇率和约 36% 名义价差。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "以股息为主且仓位合理可持有，当前不加仓；114 元以上而基本面未上修时可降低仓位。",
+      "metrics": [
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "半年报主营恢复增长、EBITDA 率回到 30% 以上、算力增速与现金回报同时改善且价格进入对应区间；ARPU 跌破 45 元并伴客户下降、FCF/股利连续两年低于 1 或算力重投入无回报披露即重审。",
+      "metrics": [
+        "自由现金流",
+        "产品/客户"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 295,
+          "line_end": 344,
+          "quote": "### 7. 可执行价格带 | 风格 | A 股基本面价格区间 | 动作 | 核心依据 | |---|---:|---|---|",
+          "supports": "L295-L344、L387-L408。正文与契约方向一致；A 股当前接近中性价值，不能因公司质量高直接列为机会。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/中国移动/中国移动-investment-research-20260810.md",
+      "sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L328",
+            "exact_quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L301",
+            "exact_quote": "| 保守型 | 70-75 元 | 重点关注并分批买入 | 接近 H 股折算价和悲观价值上沿，但仍需确认利润没有结构性下滑 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L277",
+            "exact_quote": "H 股 82.05 港元折人民币约 71.00 元，A 股相对溢价约 36.19%。A/H 同股同权，但税费、交易制度、流动性、人民币与港币、港股通股息税及账户条件不同，因此不能把价差当作无风险套利。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L329",
+            "exact_quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L9",
+            "exact_quote": "| 2026-08-10 A 股收盘价 | 96.70 元 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L15",
+            "exact_quote": "| 2025 A 股实际税前股息 / 当前股息率 | 4.7037 元 / 4.86% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L8",
+            "exact_quote": "| 最新已披露业绩 | 2025 年报、2026 年一季报；2026 半年报拟于 2026-08-13 披露 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L34",
+            "exact_quote": "**AI 研究局限性声明：** 截至截止日，2026 半年报尚未披露。公司未提供通信、算力、智能三大主业的独立利润率，也未披露 AIDC/GPU 利用率、单卡收入、Token 毛利、政企云续约率等关键回报数据。运营商客户数不是独立自然人数，行业基站口径也受共建共享影响。本文可以较高置信度判断资产质量、现金流和当前价格，但无法精确预测算力投资的长期回报。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L354",
+            "exact_quote": "1. 2026H1 主营收入能否转正，EBITDA 率能否回到 30% 以上。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

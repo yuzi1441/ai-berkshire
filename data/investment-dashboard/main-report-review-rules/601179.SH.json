@@ -1,0 +1,362 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "中国西电",
+  "ticker": "601179.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/中国西电/中国西电研究报告-20260709.md",
+    "canonical_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+    "locked_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "12.93 元不追",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "12.93 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型主题交易也只能小仓，不能视作基本面买点",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本仓可继续观察 ROE 与订单质量",
+      "relation": "all_of",
+      "metrics": [
+        "ROE",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "估值上行而基本面未同步时降低仓位",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "9.0-10.5 元且 ROE、毛利率、订单质量改善时小仓",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "ROE",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "9.0-10.5 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.2",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "8.0-9.0 元且行业逻辑未破坏才有较好安全边际",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "ROE",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": "8.0-9.0 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 347,
+          "line_end": 391,
+          "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。 2. 高毛利产品占比提升，综合毛利率继续改善。 3. 经营现金流 / 净利润连续接近或大于 1。",
+          "supports": "L347-L391。行业确定性高，但 52 倍 PE、2.88 倍 PB 与 5.64% ROE 不匹配。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓/回避信号，出现即重审）：中标增长但毛利率下降",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 359,
+          "line_end": 359,
+          "quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "应收账款、合同资产和存货显著上升且现金流弱于利润",
+      "relation": "all_of",
+      "metrics": [
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 359,
+          "line_end": 359,
+          "quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "ROE 长期停留在 5%-6% 但 PB 仍维持高位",
+      "relation": "all_of",
+      "metrics": [
+        "ROE",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 359,
+          "line_end": 359,
+          "quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "主题估值继续抬升而基本面兑现跟不上",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 359,
+          "line_end": 359,
+          "quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "关联交易对少数股东不友好",
+      "relation": "all_of",
+      "metrics": [
+        "加权ROE",
+        "PB",
+        "综合毛利率",
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 359,
+          "line_end": 359,
+          "quote": "ROE 长期停留在 5%-6%，但 PB 仍维持高位。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "82c8914187af0a1b899252d86611024e5964cd9f1640d25eadb8f1c93fbb1279",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 3,
+    "redline_count": 0,
+    "improvement_count": 2,
+    "pending_redline_candidate_count": 5
+  }
+}

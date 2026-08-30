@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "BYD",
+  "ticker": "002594.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/BYD/BYD-research-20260624.md",
+    "sha256": "bf86222be570d77044abc8b7734594d13524a0490756da134ca6d5e998ab2548",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓建仓前提（等待以下信号之一出现）：(1) 2026Q2/Q3 财报确认利润拐点；(2) A股跌至 75 元以下（对应 PE~21 倍）；(3) 欧盟关税政策明朗化；深度加仓信号为 A股跌至 70 元以下（PE~20 倍，积极建仓）。当前 A股 85 元（PE 24 倍）处观望/持有区，不满足买入前提。",
+      "derivation_quote": "建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）",
+      "derivation_line_ref": 395,
+      "schedule_type": "price",
+      "metrics": [
+        "A股股价",
+        "净利润同比",
+        "欧盟关税政策"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：继续持有（电动化趋势+垂直整合优势+全球化潜力的长期逻辑未破坏），验证 2026 年下半年补贴退坡与透支效应消化后利润是否回暖；若该股仓位超过投资组合的 20%，适度减至 15% 以下；A 股 85-110 元（PE 24-31 倍）为持有区间。",
+      "derivation_quote": "但如果仓位超过投资组合的20%，建议适度减至15%以下",
+      "derivation_line_ref": 396,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "净利润同比",
+        "海外销量",
+        "毛利率",
+        "仓位占比"
+      ],
+      "periods": [
+        "2026H2"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "失效/卖出信号：(1) 连续两个季度海外销量同比负增长；(2) 毛利率跌破 15% 且无改善迹象；(3) 王传福因健康或其他原因卸任且无合格接班人；(4) 固态电池大规模量产且比亚迪在该路线上明显落后；另 A股 >130 元（PE >36 倍）偏高区考虑减仓。",
+      "derivation_quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象",
+      "derivation_line_ref": 397,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "海外销量同比",
+        "毛利率",
+        "A股股价"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/BYD/BYD-research-20260624.md",
+      "source_role": "main_report_reference",
+      "sha256": "bf86222be570d77044abc8b7734594d13524a0490756da134ca6d5e998ab2548"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "scope_label": "买入前提",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 395,
+            "exact_quote": "建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 406,
+            "exact_quote": "| **当前位置** | **85元** | **24倍** | **观望/持有** |"
+          }
+        ],
+        "note": "本地证据仅主报告基线（数据截止 2026-06-24，A 股 85 元）；无 2026-08-29 当前股价、无 2026Q2/Q3 财报数据，也没有欧盟关税政策明朗化与否的事件确认，三个建仓信号均无法判定。"
+      },
+      {
+        "task_id": "holder",
+        "scope_label": "持仓验证",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 396,
+            "exact_quote": "但如果仓位超过投资组合的20%，建议适度减至15%以下"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 407,
+            "exact_quote": "| 合理 | 85-110元 | 24-31倍 | 持有 |"
+          }
+        ],
+        "note": "2026H2 尚未结束，无利润回暖的当前值或对比期；持有人实际仓位占比信息在证据包中亦不存在，持仓验证无法执行。"
+      },
+      {
+        "task_id": "risk",
+        "scope_label": "风险/失效条件",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 397,
+            "exact_quote": "（1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 408,
+            "exact_quote": "| 偏高 | >130元 | >36倍 | 考虑减仓 |"
+          }
+        ],
+        "note": "无最近连续两个季度海外销量与毛利率的独立数据，王传福任职与固态电池路线进展无事件确认，当前股价未知，四项卖出信号与 >130 元减仓线均无法判定是否触发。"
+      }
+    ]
+  }
+}

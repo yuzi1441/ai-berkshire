@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:57:14+08:00",
+  "company": "海康威视",
+  "ticker": "002415.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/海康威视/海康威视研究报告-20260803.md",
+    "sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 37.95 元处于合理偏贵区，不追；30-34 元建立观察仓，30 元以下且现金流、库存未恶化时才分批研究或买入。",
+      "metrics": [
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "持有并跟踪，不因单季利润增长加仓；重点核对经营现金流、存货、应收、国内主业和创新业务利润。",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "30-34 元，或连续两个季度经营现金流/净利润不低于 1、存货增速低于收入增速且主业毛利率稳定。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "库存"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 238,
+          "line_end": 272,
+          "quote": "### 价格带与行动规则 | 价格区间 | 估值含义 | 行动条件 | |---:|---|---|",
+          "supports": "L238-L272、L317-L338。正文与契约一致，无字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/海康威视/海康威视研究报告-20260803.md",
+      "sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L7",
+            "exact_quote": "37.95 元对应近期历史中枢附近，属于“好公司、合理偏贵”，空仓不追高，等待 30-34 元或现金转换进一步验证。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L242",
+            "exact_quote": "≤30 元 | 约 16.7x TTM PE，具备较明显安全边际 | 论文未恶化、存货/应收可控时，空仓者可分批研究或买入"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L243",
+            "exact_quote": "30-34 元 | 约 16.7-19.0x TTM PE | 适合建立观察仓，要求经营现金流不再连续弱于利润"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L270",
+            "exact_quote": "持仓者 | **持有并跟踪。** 重点看 H2 经营现金流、存货、应收账款、国内主业和创新业务利润；不因单季利润增长盲目加仓。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L271",
+            "exact_quote": "加仓信号 | 股价进入 30-34 元；或连续两个季度经营现金流/净利润 ≥1、存货增速低于收入增速、主业毛利率稳定。"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

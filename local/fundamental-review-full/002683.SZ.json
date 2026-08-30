@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:03:28+08:00",
+  "company": "guangdong-hongda",
+  "ticker": "002683.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+    "sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "28.34 元不适合保守或稳健资金直接买入，但激进型可把“行业整合 + 防务期权”作为小仓试错；稳健型等待 24-25 元且现金流、应收和防务订单验证，保守型等待 21 元以下。",
+      "metrics": [
+        "订单",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可审慎持有，但要严格跟踪现金流、商誉、应收/合同资产、安全生产和防务兑现。",
+      "metrics": [
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "24 元以下且基本面未恶化，或 21 元以下形成更厚安全边际；并购标的贡献归母利润和现金流、防务订单连续兑现、应收与合同资产占比下降可提高仓位。",
+      "metrics": [
+        "利润",
+        "订单",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 210,
+          "line_end": 218,
+          "quote": "### 3. 行动价格带（非投资建议） | 投资者类型 | 合理动作 | 价格 / 条件 | |---|---|---|",
+          "supports": "L210-L218、L253-L280、L320-L341。正文与契约一致；当前小仓许可只适用于能承受事件不确定性的激进型投资者。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+      "sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L4",
+            "exact_quote": "**行情基准**：2026-07-09 16:14:15，腾讯行情显示收盘价 **28.34 元**"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L214-L216",
+            "exact_quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |\n| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |\n| 空仓激进型 | 小仓位跟踪 | 现价附近只适合以“行业整合 + 防务期权”小仓试错，必须设定基本面止损条件 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L88",
+            "exact_quote": "5. **防务装备兑现**：当前收入占比仅 2.26%，但毛利率和估值叙事弹性高。必须以订单、回款和验收节奏验证。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L9",
+            "exact_quote": "已有持仓者可继续持有但必须盯紧应收、商誉、安全生产和防务订单兑现。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L217",
+            "exact_quote": "| 已有持仓 | 持有但严控风险 | 若 Q2-Q4 现金流修复、商誉无减值、防务收入继续增长，可持有；若应收/合同资产继续高增、重大安全事故或并购失控，应减仓 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L268-L272",
+            "exact_quote": "1. 2026 年全年经营现金流明显修复，且不再高度依赖 Q4 单季回款。  \n2. 应收账款和合同资产占收入比重下降或稳定，坏账准备未异常上升。  \n3. 雪峰科技、长之琳贡献可见归母利润和现金流，商誉减值风险下降。  \n4. 防务装备收入、订单和回款有连续披露验证，而不是停留在概念。  \n5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

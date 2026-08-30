@@ -1,0 +1,412 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "东方电缆",
+  "ticker": "603606.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/东方电缆/东方电缆-research-20260726.md",
+    "canonical_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+    "locked_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告明确要求先等半年报六项指标判决，验证前不建仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "四项及以上转正面后可在 36-45 元分批，30-36 元仍要求半年报未转负面",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "持有但不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低估值不支持恐慌卖出，但订单结构、海缆增速和现金流恶化不允许在验证前加码",
+      "relation": "all_of",
+      "metrics": [
+        "订单",
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "H1 现金流转正、海缆毛利率不低于 30%、海缆收入增速高于整体、海缆订单守住 100 亿元、应收增速低于收入、扣套期后毛利率不低于 22%，六项中至少四项转正",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "订单",
+        "回款"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "三项以上转负或出现订单缩量、治理/海外减值即继续回避或减仓",
+      "relation": "any_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 762,
+          "line_end": 762,
+          "quote": "### 8.2 最终结论",
+          "supports": "正文最终结论是“观望并等待判决”，底部契约粗字段“持有”混入持仓者口径，不能拿来允许空仓者买入。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "卖出/减仓信号：①H1经营现金流仍为负",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流"
+      ],
+      "operator": null,
+      "threshold": "1",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "②海缆毛利率连续两期下行",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "③新增中标海缆占比连续两次低于20%",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": "lt",
+      "threshold": "20%",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "④在手订单海缆分部跌破90亿",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": "lt",
+      "threshold": "90",
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑤重大订单再次缩量（青洲四式）",
+      "relation": "all_of",
+      "metrics": [
+        "订单"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "⑥新增重大治理事件或海外减值",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "海缆毛利率",
+        "中标海缆占比",
+        "在手订单海缆分部"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "2026H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 821,
+          "line_end": 821,
+          "quote": "①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "2237a9b92b936c9828a6375aff6f59428706c3d79e89713e33788718a087115e",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 6,
+    "price_rule_count": 0,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

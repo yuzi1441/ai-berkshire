@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:20:23+08:00",
+  "company": "万华化学",
+  "ticker": "600309.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+    "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 75.72 元没有足够安全边际；70-75 元只允许小仓试错，63-69 元稳健分批，55-60 元才适合扩大研究仓位。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "合理仓位可持有但不追半年预告；重仓者应控制强周期重资产集中度，必须能承受悲观情景约 34% 的回撤。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "正式 2026H1 验证利润、自由现金流和债务，聚氨酯毛利率稳定、新材料项目资本回报合理，且价格进入对应区间；聚氨酯毛利率连续两期低于 20%、净债务/EBITDA 持续高于 4.5 倍或建设高峰后连续两年 FCF 为负即重审。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "利润",
+        "债务"
+      ],
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 196,
+          "line_end": 212,
+          "quote": "## 九、行动结论与持续验证 ### 对不同投资者 - **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。",
+          "supports": "L196-L212、L252-L273。正文与契约一致；半年业绩预告尚未审计，不能替代正式财报验证。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/万华化学/万华化学-投资研究-20260808.md",
+      "sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L192",
+            "exact_quote": "以预告中值 EPS 的 14—16 倍计，当前合理价值约 73.81—84.36 元；75.72 元处于合理区间下沿，而不是显著低估。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L188",
+            "exact_quote": "| 进取型 | 70—75 元 | 13.3—14.2 倍 | 只适合小仓试买，承受周期波动 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L190",
+            "exact_quote": "| 保守型 | 55—60 元 | 10.4—11.4 倍 | 才具备较充分周期安全边际 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L201",
+            "exact_quote": "- **已有合理仓位者：持有。** 不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L202",
+            "exact_quote": "- **重仓者：控制集中度。** 万华是强周期重资产公司，单一公司仓位应能承受悲观情景约 34% 的价格回撤。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L180",
+            "exact_quote": "| 悲观 | -5% | 11 倍 | 4.52 元 | 49.70 元 | -34.3% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L206",
+            "exact_quote": "1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L207",
+            "exact_quote": "2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L212",
+            "exact_quote": "下一次重点复核：正式 2026H1 报告、福建 MDI 项目公开投产进度、聚氨酯毛利率、广义净债务、经营现金流与新增项目资本回报。建议复核日：2026-09-05。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

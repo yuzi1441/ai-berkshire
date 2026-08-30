@@ -1,0 +1,323 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "湖南黄金",
+  "ticker": "002155.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
+    "canonical_sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1",
+    "locked_sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "价值投资者不在 24 元附近追高，等待 17-20 元或资产注入细节证明每股价值显著增厚",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "趋势投资者的小仓跟踪不能当作低估买入",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本持仓可分批管理，高成本持仓要降低预期收益率",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "金锑价格、注入条款或中报转弱时减仓复盘",
+      "relation": "any_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.improvement.1",
+      "group": "improvement",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "17-20 元且金锑钨价格未系统性反转，或资产注入评估、矿权成本和业绩承诺明确增厚每股价值，同时自产资源利润和安全生产得到验证",
+      "relation": "any_of",
+      "metrics": [
+        "利润"
+      ],
+      "operator": null,
+      "threshold": "17-20 元",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 281,
+          "line_end": 291,
+          "quote": "### 4. 价格带和安全边际 | 价格区间 | 对应判断 | 操作含义 | |---:|---|---|",
+          "supports": "L281-L291、L295-L350。契约只保留价值投资者观察和保守回避，未表达趋势跟踪与持仓分层；主判断仍以价值投资空仓口径为准。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓/卖出信号）：金价回撤 15% 以上、锑价回撤 25%-30% 且公司毛利率同步下行",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "资产注入估值偏高、发行摊薄明显、业绩承诺弱",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "安全事故连续发生或核心矿山长期停产",
+      "relation": "any_of",
+      "metrics": [
+        "金价",
+        "锑价",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "经营现金流显著低于净利润、库存和应收账款异常上升",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "利润",
+        "回款",
+        "库存"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price",
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "股价涨至 28 元以上但基本面未同步超预期",
+      "relation": "all_of",
+      "metrics": [
+        "金价",
+        "锑价",
+        "A股收盘价"
+      ],
+      "operator": null,
+      "threshold": "28 元",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "f5a9e69555f36a322947262282b09b8f2c79337b77f25658a8222ef0d653bdbe",
+  "summary": {
+    "active_rule_count": 5,
+    "reviewable_rule_count": 3,
+    "price_rule_count": 2,
+    "redline_count": 0,
+    "improvement_count": 1,
+    "pending_redline_candidate_count": 5
+  }
+}

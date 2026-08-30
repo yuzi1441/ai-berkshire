@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:22:44+08:00",
+  "company": "山东华鲁恒升化工股份有限公司",
+  "ticker": "600426.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+    "sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "21.11 元赔率不足；18-21 元只适合激进小仓，15-17 元稳健分批，11-14 元才给保守资金更厚缓冲。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可持有核心仓但 21 元以上不追；半年报继续确认价差、现金流、荆州装置爬坡和净债务后再决定是否维持。",
+      "metrics": [
+        "债务"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "15-17 元且基本面未恶化，或连续两季毛利率高于 20%、OCF 改善且荆州新装置确认正 ROIC；连续四季毛利率低于 15%、FCF/净利持续低于 50% 或主要新项目 ROIC 低于 8% 即失效。",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "ROIC"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 335,
+          "line_end": 368,
+          "quote": "> **段永平式追问：如果股市明天关闭五年，你愿意以这个价格持有吗？** > > 愿意持有一小部分高质量周期仓位，但不愿在21.11元重仓。五年回报高度依赖尚未披露的维护性资本开支与新项目ROIC，而不是只依赖销量增长。",
+          "supports": "L335-L368、L419-L439。正文与契约一致；当前利润能否高比例转成所有者收益仍需半年报验证。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+      "sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L330-L333",
+            "exact_quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |\n| 稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |\n| 保守型 | 11-14元 | 分批买入 | 接近悲观目标区，对低回报项目留出保护 |\n| 当前21.11元 | — | 观察 | 中性赔率偏弱，不追价 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L361",
+            "exact_quote": "| 持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L368",
+            "exact_quote": "2026年半年报是当前最重要的复核点：需要看Q1的量价齐升能否延续、经营现金流能否跟上利润、荆州新装置的负荷与毛利、净债务是否继续上升，以及管理层对剩余NMP/PBAT和TDI规划的正式表述。"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L362",
+            "exact_quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L364",
+            "exact_quote": "| 卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

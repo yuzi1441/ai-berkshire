@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "deye",
+  "ticker": "605117.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/deye/deye-investment-research-20260623.md",
+    "sha256": "29685b3ed2579599b2e57d0f2250771a911750a97bc9e19baab74306ca29e23c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "空仓者等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓；基线当前101.85元（处于100-110区间，2026E PE 19-21x，PE 41x TTM对硬件制造商偏高）且欧盟禁令尚未充分定价；如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓。",
+      "derivation_quote": "等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓",
+      "derivation_line_ref": 358,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "2026E PE"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有但控制仓位在10%以内；验证2026Q2-Q3是否继续保持高增长（基线2026Q1净利+68%）；密切关注2027年欧盟禁令的实际执行和应收账款趋势。",
+      "derivation_quote": "持有但控制仓位在10%以内",
+      "derivation_line_ref": 359,
+      "schedule_type": "filing",
+      "metrics": [
+        "净利润增速",
+        "应收账款增速",
+        "欧盟禁令执行进展"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026Q3"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出信号：(1) 欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；(2) 储能逆变器毛利率跌破40%；(3) 应收账款增速持续超过营收增速2倍以上；(4) 张和君大幅减持（>1%持股）。",
+      "derivation_quote": "（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上",
+      "derivation_line_ref": 360,
+      "schedule_type": "filing",
+      "metrics": [
+        "德国/欧洲收入环比",
+        "储能逆变器毛利率",
+        "应收账款增速",
+        "张和君持股变动"
+      ],
+      "periods": []
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/deye/deye-investment-research-20260623.md",
+      "source_role": "main_report_reference",
+      "sha256": "29685b3ed2579599b2e57d0f2250771a911750a97bc9e19baab74306ca29e23c"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "仅有主报告local_1，无独立行情证据。基线（2026-06-23报告）现价101.85元、处于100-110区间（2026E PE 19-21x），无当前股价，无法判断是否已回调至70-80元建仓区或85-95元观察仓区。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 320,
+            "exact_quote": "| 100-110 | **当前价位** | 19-21x |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 358,
+            "exact_quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "2026Q2-Q3业绩与应收账款趋势需期后财报确认；本地仅有报告基线（2026Q1净利+68%）可作对照，欧盟禁令执行情况亦无期后事件确认。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 359,
+            "exact_quote": "| **持仓者** | **持有但控制仓位在10%以内**。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 350,
+            "exact_quote": "| 最大风险 | 欧盟逆变器禁令（已立法，2027年全面生效）是最大的确定性中期利空 | 80%（风险确定性高） |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "四条卖出信号均需期后定期报告、公告或事件确认；本地无最新欧洲收入环比、储能逆变器毛利率、应收增速与张和君持股变动数据，仅报告基线可作对照。",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source",
+          "no_event_confirmation"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 360,
+            "exact_quote": "| **卖出信号** | （1）欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上；（4）张和君大幅减持（>1%持股） |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 347,
+            "exact_quote": "| 生意质量 | 优秀——新兴市场户储刚需+51%逆变器毛利率+极低费用率，ROE>30% | 85% |"
+          }
+        ]
+      }
+    ]
+  }
+}

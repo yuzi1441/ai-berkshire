@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "顺丰控股股份有限公司",
+  "ticker": "002352.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+    "sha256": "2251cc9b5eaaa443f90e80eca8e3c42452130ced26d56b4ac61d3264cef42815",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：A 股激进型 30-34 元小额试探、稳健型 27-30 元分批买入、保守型 23-26 元重点研究买入；H 股稳健型 31.4-34.9 港元分批买入，前提是半年报确认扣非利润和 FCF 改善；报告基线 A 股 33.80 元仅位于激进型区间上沿，适合观察或极小仓位而非一次性重仓。",
+      "derivation_quote": "A股33.80元仅位于激进型区间上沿，适合观察或极小仓位，而非一次性重仓。",
+      "derivation_line_ref": 212,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "H股收盘价"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：持仓者继续持有、不在 A 股 33.80 元追涨，以半年报和经营简报为复核节点；加仓信号为 A 股回到 30 元以下或 H 股回到 31.4 港元以下，且单票收入稳定、毛利率不低于 13%、FCF 不再连续下降。",
+      "derivation_quote": "继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点",
+      "derivation_line_ref": 238,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "单票收入",
+        "毛利率",
+        "自由现金流（FCF）"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "减仓/失效触发：股价进入情景上沿但利润和 FCF 不跟随，或国际业务收入增速明显高于利润增速则减仓；卖出或论文失效为连续两个报告期毛利率低于 12.5%，扣非利润同比转负且经营现金流低于资本支出，或出现重大安全、治理和减值事件。",
+      "derivation_quote": "连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出",
+      "derivation_line_ref": 241,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利率",
+        "扣非利润同比",
+        "经营现金流/资本支出",
+        "国际业务收入增速与利润增速差"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+      "source_role": "main_report_reference",
+      "sha256": "2251cc9b5eaaa443f90e80eca8e3c42452130ced26d56b4ac61d3264cef42815"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-08-10 主报告基线（A 股 33.80 元、H 股 33.26 港元）；看板下次复核日期为 2026-08-31（尚未到期）。无复核日 A/H 现价，无法判断是否进入 27-30 元稳健买入带或 H 股 31.4-34.9 港元分批区。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 209,
+            "exact_quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 212,
+            "exact_quote": "价格带是基本面安全边际，不是技术面支撑位。H股当前33.26港元已落在稳健型区间内，但仍需用半年报验证；A股33.80元仅位于激进型区间上沿，适合观察或极小仓位，而非一次性重仓。"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "加仓信号需同时满足价格（A 股 ≤30 元或 H 股 ≤31.4 港元）与半年报确认的单票收入、毛利率 ≥13%、FCF 不再连续下降；本地无复核日价格，也无 2026 半年报官方数据，无法验证任一条件。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 238,
+            "exact_quote": "| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 239,
+            "exact_quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "论文失效条件以'连续两个报告期毛利率低于 12.5% 且扣非转负、经营现金流低于资本支出'为准，需逐报告期财报比对；本地仅有报告基线（2025 综合物流利润率 13.32%）而无其后报告期数据与安全/治理/减值事件确认，无法判断是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 241,
+            "exact_quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 240,
+            "exact_quote": "| 减仓信号 | 股价进入情景上沿但利润和FCF不跟随，或国际业务收入增速明显高于利润增速 |"
+          }
+        ]
+      }
+    ]
+  }
+}

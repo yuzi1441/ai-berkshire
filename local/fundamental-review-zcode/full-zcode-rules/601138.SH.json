@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "工业富联",
+  "ticker": "601138.SH",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/工业富联/工业富联-research-20260726.md",
+    "sha256": "0580ffe1c5c6f91c001171d08cdd5c37863312981eb3f8e43555d8d2c3341e78",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "买入前提：现价 60.25 元（PE 分位 88.9%）不追高；空仓保守型等待 ≤43 元（PE 18.13x），稳健型 ≤50 元（PE 21.08x）且中报确认 FCF 转正、短债回落，进取型 ≤55 元（PE 23.19x）且 8/12 中报现金流未再恶化。",
+      "derivation_quote": "≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落",
+      "derivation_line_ref": 835,
+      "schedule_type": "price",
+      "metrics": [
+        "股价",
+        "PE",
+        "FCF",
+        "短期借款"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持仓验证：已持仓且成本低者持有但不加仓，紧盯毛利额、CFO/净利、存货、下一代平台份额四项；明显超配者现价以上不再加仓，逢强降低集中度；若 8/12 正式中报显示 FCF 转正、存货增速低于收入、短债下降、云计算毛利额实质增长，估值中枢可上修。",
+      "derivation_quote": "紧盯毛利额、CFO/净利、存货、下一代平台份额四项",
+      "derivation_line_ref": 837,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "毛利额",
+        "CFO/净利润",
+        "存货增速",
+        "下一代平台份额"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "风险/失效条件（减仓或重审信号，任一出现即重审）：连续两个季度综合毛利率低于 6.5%（剔除 consign 影响）；全年 CFO/净利低于 80% 或 FCF 继续为负；资产负债率回升超 65% 或短期借款大幅增加；存货增速持续高于收入 20 个百分点；Rubin/VR200 量产延期或大客户分单。",
+      "derivation_quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）",
+      "derivation_line_ref": 851,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "综合毛利率",
+        "CFO/净利润",
+        "FCF",
+        "资产负债率",
+        "存货增速"
+      ],
+      "periods": [
+        "2026Q2",
+        "2026全年"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/工业富联/工业富联-research-20260726.md",
+      "source_role": "main_report_reference",
+      "sha256": "0580ffe1c5c6f91c001171d08cdd5c37863312981eb3f8e43555d8d2c3341e78"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 747,
+            "exact_quote": "| **60.25 元（现价）** | **25.40x** | **上市以来分位 88.9%** | **不追高** |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 826,
+            "exact_quote": "| 10 | 当前有安全边际 | ❌ **不通过** | PE 分位 88.9%，中性三年回报仅 +10.6% |"
+          }
+        ],
+        "note": "仅有主报告作基线：报告基线现价 60.25 元（对应 PE 25.40x、上市以来分位 88.9%）高于全部三个买入观察带（≤43/≤50/≤55 元）， Checklist 第 10 项安全边际不通过；但清单内无独立证据文档提供当前股价，无法确认当前是否已回落进入买入带。"
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_comparison",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 894,
+            "exact_quote": "| **2026H1 盈利置信度** | **中高** | 公司正式预告，且同比增速经手算复核吻合；但**未经审计**，正式中报 8/12 才出 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 770,
+            "exact_quote": "| **工业富联 601138.SH** | **7.35%** | 环比回升（2025 全年 6.98%） |"
+          }
+        ],
+        "note": "持仓监控四项（毛利额、CFO/净利、存货、下一代平台份额）的核验依赖 8/12 正式中报；报告基线仅有 H1 预告（未经审计）与 2026Q1 毛利率 7.35%，无正式中报对比数据，四项指标当前状态无法核验。"
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "missing_codes": [
+          "no_comparison",
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 770,
+            "exact_quote": "| **工业富联 601138.SH** | **7.35%** | 环比回升（2025 全年 6.98%） |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 894,
+            "exact_quote": "| **2026H1 盈利置信度** | **中高** | 公司正式预告，且同比增速经手算复核吻合；但**未经审计**，正式中报 8/12 才出 |"
+          }
+        ],
+        "note": "基线 2026Q1 综合毛利率 7.35% 高于 6.5% 阈值、2025 全年 6.98% 亦高于阈值，\"连续两个季度低于 6.5%\"截至基线未成立；但 2026Q2 及以后季度毛利率、全年 CFO/净利、资产负债率等均无证据数据，减仓/重审信号无法判定。"
+      }
+    ]
+  }
+}

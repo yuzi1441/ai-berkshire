@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:53:43+08:00",
+  "company": "Goldwind",
+  "ticker": "002202.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/Goldwind/Goldwind-research-20260623.md",
+    "sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "21.75 元、34 倍 PE 缺乏安全边际，等待 15-17 元分批；若 Q2/Q3 持续超预期且海外毛利率保持 24% 以上，可重新提高可接受价格。",
+      "metrics": [
+        "毛利率",
+        "估值"
+      ],
+      "periods": [
+        "H1",
+        "Q3"
+      ],
+      "schedule_type": "filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "持有但不加仓，重点核对海外高毛利增长、价格战和应收坏账风险。",
+      "metrics": [
+        "毛利率",
+        "回款"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "15-17 元且基本面未恶化，或海外收入占比超过 30%、风机毛利率恢复至 15% 以上、分红显著提高。",
+      "metrics": [
+        "毛利率",
+        "收入",
+        "分红",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 250,
+          "line_end": 325,
+          "quote": "## 第七步：估值与安全边际 ### 当前估值（工具验算） | 指标 | 数值 |",
+          "supports": "L250-L325、L378-L399。报告同时覆盖 A/H，本条只采用 A 股价格和动作；契约未结构化激进/稳健/保守层级。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/Goldwind/Goldwind-research-20260623.md",
+      "sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L5",
+            "exact_quote": "**当前股价**：A股 21.75元（6/23收盘）/ H股 ~17.40港元"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L322",
+            "exact_quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L47",
+            "exact_quote": "| 海外毛利率 | **24.29%** | +10.45ppt |"
+          }
+        ],
+        "missing_codes": [
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L323",
+            "exact_quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L47",
+            "exact_quote": "| 海外毛利率 | **24.29%** | +10.45ppt |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L167",
+            "exact_quote": "| **应收账款坏账** | 中高 | 高 | 337亿应收中47亿超3年。国补退坡后回收难度增加，大额坏账将直接冲击利润 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L325",
+            "exact_quote": "| **加仓信号** | 股价跌至15-17元区间且基本面未恶化；海外收入占比突破30%；风机毛利率恢复至15%+；宣布大幅提高分红比例 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L46",
+            "exact_quote": "| 占总收入 | 21.2% | — |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L33",
+            "exact_quote": "| **风机制造** | 572.05 | 78.3% | +47.0% | **8.95%**（+3.9pct） |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

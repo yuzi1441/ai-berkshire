@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:13:02+08:00",
+  "company": "迈瑞医疗",
+  "ticker": "300760.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+    "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "报告基准价 139.68 元处于 130-160 元合理观察区；125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏。",
+      "metrics": [
+        "毛利率"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长。",
+      "metrics": [
+        "毛利率",
+        "经营现金流",
+        "利润",
+        "收入",
+        "产品/客户"
+      ],
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 327,
+          "line_end": 411,
+          "quote": "--- ## 第十步：巴菲特买入前 Checklist | # | 检查项 | 通过？ | 说明 |",
+          "supports": "L327-L411、L418-L455。正文与契约均指向等待；契约价格档过于简略，裁决保留基本面验证条件。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+      "sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    },
+    {
+      "document_id": "local_2",
+      "path": "reports/迈瑞医疗/迈瑞医疗-thesis.md",
+      "sha256": "898a1a8d50131b7fbe4c982dc49c2375bc907c42a7fda7d169670cbe800fa552",
+      "source_role": "local_current_evidence",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "not_triggered",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L16",
+            "exact_quote": "| 当前动作 | **等待，不在 139.68 元激活买入论文** |"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L62",
+            "exact_quote": "2026Q1 仍 -11.13%；降幅收窄但离转正较远"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L43",
+            "exact_quote": "环比修复，较 2025Q1 仍下降 0.66pct"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1",
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L193",
+            "exact_quote": "2026Q1 112.07 亿元，占归母净资产 27.94%"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L223",
+            "exact_quote": "Magnifice 解除质押 1,020 万股后仍质押 6,700 万股，占公司总股本 5.53%"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L64",
+            "exact_quote": "2026Q1 IVD 收入 +4.96%、核心份额升至约 13%；但 2025 IVD 毛利率 58.33%、同比下降 3.88pct，单机产出未披露"
+          }
+        ],
+        "missing_codes": [
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_2"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_2",
+            "line_ref": "L62",
+            "exact_quote": "2026Q1 仍 -11.13%；降幅收窄但离转正较远"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L64",
+            "exact_quote": "但 2025 IVD 毛利率 58.33%、同比下降 3.88pct，单机产出未披露"
+          },
+          {
+            "document_id": "local_2",
+            "line_ref": "L65",
+            "exact_quote": "2026Q1 新兴业务 +18.22%、占比 17%；2025 毛利率 63.74%，但惠泰并表影响未拆分"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

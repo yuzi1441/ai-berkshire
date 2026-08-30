@@ -1,0 +1,299 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "五粮液",
+  "ticker": "000858.SZ",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+    "canonical_sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
+    "locked_sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前不满足买入条件",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "激进型也只在 60 元以下试探且不超过 3%，稳健型必须等三类重估信号，保守型回避",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "不以高股息掩盖治理和报表问题，信号未齐备前不加仓",
+      "relation": "all_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "无补贴批价站稳、连续两季经营现金流转正且票据回落、监管商品款项下降且合同负债上升，并等待问询和治理闭环",
+      "relation": "all_of",
+      "metrics": [
+        "经营现金流",
+        "政策"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 113,
+          "line_end": 165,
+          "quote": "## 6. 巴菲特买入前 Checklist | # | 检查项 | 通过? | 说明 | |---|--------|-------|------|",
+          "supports": "L113-L165、L169-L180。契约只提取激进价格，遗漏稳健型“信号未齐前不设买点”，采用正文并标记字段冲突。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "减仓/离场触发条件：普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价",
+      "relation": "any_of",
+      "metrics": [
+        "普五批价",
+        "出厂价政策",
+        "分红兑现",
+        "立案调查与非标意见"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 161,
+          "line_end": 161,
+          "quote": "普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "问询升级为立案调查或年报被出非标意见",
+      "relation": "any_of",
+      "metrics": [
+        "普五批价",
+        "出厂价政策",
+        "分红兑现",
+        "立案调查与非标意见"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "FY"
+      ],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 161,
+          "line_end": 161,
+          "quote": "普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "分红承诺失守（2026年度分红<200亿或比例<70%）",
+      "relation": "any_of",
+      "metrics": [
+        "分红"
+      ],
+      "operator": "lt",
+      "threshold": "70%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 161,
+          "line_end": 161,
+          "quote": "普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "新任董事长或总经理再度被查（任何时候触发即离场重审）",
+      "relation": "any_of",
+      "metrics": [
+        "普五批价",
+        "出厂价政策",
+        "分红兑现",
+        "立案调查与非标意见"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 161,
+          "line_end": 161,
+          "quote": "普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "汾酒营收正式反超五粮液（当前差距仅4.5%）",
+      "relation": "all_of",
+      "metrics": [
+        "收入"
+      ],
+      "operator": null,
+      "threshold": "4.5%",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 161,
+          "line_end": 161,
+          "quote": "普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "44e52ee93977c2d88572293205db19fd0aa2f0c5711bae8adf43b9fd7211f248",
+  "summary": {
+    "active_rule_count": 4,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 2,
+    "redline_count": 1,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

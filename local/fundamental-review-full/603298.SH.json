@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:42:46+08:00",
+  "company": "杭叉集团",
+  "ticker": "603298.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+    "sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "26.45 元主要观察；24-26 元只允许不超过 5% 的激进型轻仓观察，正式建仓优先等待 20-23 元，保守型在 18 元以下才重新评估。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续跟踪但不因双寡头、电动化和全球化叙事加仓；应收、存货、治理与接班问题需要持续核对。",
+      "metrics": [
+        "回款",
+        "库存"
+      ],
+      "periods": [],
+      "schedule_type": "event",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "应收周转连续两季改善、PE 回到 12-13 倍、毛利率回到 24%以上、泰国工厂如期投产且海外增长维持，或有效股权激励落地；应收继续恶化并伴随坏账、损害小股东的关联交易、接班失败、高关税或价格战即失效。",
+      "metrics": [
+        "毛利率",
+        "回款",
+        "政策",
+        "估值"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 143,
+          "line_end": 143,
+          "quote": "## 七、最终投资建议",
+          "supports": "当前安全边际约 16%，未达到报告要求；应收周转天数由 23 天恶化至约 55-58 天，是比表面低 PE 更重要的限制。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/杭叉集团-deepseek分析/最终报告.md",
+      "sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L3",
+            "exact_quote": "**报告日期**：2026-04-25 | **当前股价**：26.45元 | **币种**：人民币"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L158",
+            "exact_quote": "| **激进型** | **轻仓观察** | 24-26元 | ≤5% |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L159",
+            "exact_quote": "| **稳健型** | **等待** | 20-23元（PE 12-13x） | ≤10% |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L10",
+            "exact_quote": "> 当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L40",
+            "exact_quote": "| 应收账款周转天数 | 30.96 | 33.29 | 44.52 | 54.66 | 57.92 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L41",
+            "exact_quote": "| 存货周转天数 | 56.69 | 56.74 | 64.14 | 73.59 | 78.19 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "risk",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L166",
+            "exact_quote": "| 应收账款周转天数连续2个季度改善 | 应收账款持续恶化+坏账计提大增 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L167",
+            "exact_quote": "| PE跌至12-13x（约20-23元） | 实际控制人利用控股地位进行不利的关联交易 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L169",
+            "exact_quote": "| 泰国工厂如期投产且海外增速维持25%+ | 欧美对中国叉车加征高额关税 |"
+          }
+        ],
+        "missing_codes": []
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

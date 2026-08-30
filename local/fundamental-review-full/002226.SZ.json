@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T14:56:31+08:00",
+  "company": "江南化工",
+  "ticker": "002226.SZ",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+    "sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "4.47 元不追；4 元以下只允许小仓观察，3.3-3.7 元且 2026 利润与现金流改善时稳健研究，3.0-3.3 元或以下才有保守安全边际。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "可继续跟踪，但安全事故、治理变化、债务和利润质量恶化时重审或减仓。",
+      "metrics": [
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "更低价格，或连续 2-3 个季度扣非利润和现金流修复、爆破服务毛利率提升、实控人变更有利于资产边界与同业竞争解决。",
+      "metrics": [
+        "毛利率",
+        "利润"
+      ],
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 146,
+          "line_end": 204,
+          "quote": "## 7. 估值与操作建议 ### 7.1 本地财务工具验证记录 ```text",
+          "supports": "L146-L204、L235-L272。契约结论摘要错误抽成章节标题，且漏掉激进与保守价格层级，采用正文并标记字段冲突。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/江南化工/江南化工-investment-team-20260709.md",
+      "sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L186",
+            "exact_quote": "| 激进型 | 小仓位观察/事件驱动 | 4.0元以下更合理；4.47元附近不追 | 博弈实控人变更、整合改善、利润修复，但承受治理与安全折价 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L187",
+            "exact_quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L188",
+            "exact_quote": "| 保守型 | 只在深度折价时考虑 | 3.0-3.3元或更低 | 接近保守所有者盈余估值，才有较明确安全边际 |"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L97",
+            "exact_quote": "3. 2026-05-20公告提示控股股东及实际控制人或将发生变更，是当前最重要治理变量。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L202",
+            "exact_quote": "| 3 | 连续两个季度扣非净利下滑超过30%，经营现金流持续为负。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L203",
+            "exact_quote": "| 4 | 有息债务继续快速上升，财务费用明显侵蚀利润。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L193",
+            "exact_quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L194",
+            "exact_quote": "2. 连续2-3个季度扣非净利恢复增长，经营现金流同步改善。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L195",
+            "exact_quote": "3. 爆破工程服务毛利率提升，应收/合同资产未明显恶化。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

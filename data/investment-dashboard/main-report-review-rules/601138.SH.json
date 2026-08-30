@@ -1,0 +1,370 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "工业富联",
+  "ticker": "601138.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/工业富联/工业富联-research-20260726.md",
+    "canonical_sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
+    "locked_sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "60.25 元不追高",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": "60.25 元",
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "进取型不高于 55 元才可小仓，稳健型不高于 50 元且中报确认现金流，保守型不高于 43 元",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "低成本仓可持有但不加仓",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "明显超配者在利好兑现时降低集中度",
+      "relation": "all_of",
+      "metrics": [],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "正式中报确认 FCF 转正、短债下降、存货增速低于收入、云计算毛利额同步增长，并核实下一代平台份额",
+      "relation": "all_of",
+      "metrics": [
+        "毛利率",
+        "自由现金流",
+        "收入",
+        "库存",
+        "债务"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "Rubin 延期、毛利率或现金流恶化即重审",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [
+        "H1"
+      ],
+      "schedule_type": "filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 730,
+          "line_end": 889,
+          "quote": "| 悲观 | 0% | 13x | 2.37 元 | **30.8 元** | **-48.8%** | > **风险收益结构**：中性情景三年累计价格回报仅 **+10.6% ~ +13.8%**（年化约 3.4%~4.4%），加上 1.63% 股息也难以覆盖机会成本；而悲观情景的下行是 **-44.3% ~ -48.8%**。 >",
+          "supports": "L730-L889。正文结论是“强执行、高景气、薄价值捕获、贵价格”，不能把 AI 产业景气直接归为当前机会。"
+        }
+      ],
+      "reviewable": true
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "风险/失效条件（减仓或重审信号，任一出现即重审）：连续两个季度综合毛利率低于 6.5%（剔除 consign 影响）",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": "lt",
+      "threshold": "6.5%",
+      "periods": [
+        "quarterly"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 851,
+          "line_end": 851,
+          "quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "全年 CFO/净利低于 80% 或 FCF 继续为负",
+      "relation": "any_of",
+      "metrics": [
+        "经营现金流",
+        "自由现金流"
+      ],
+      "operator": "lt",
+      "threshold": "80%",
+      "periods": [
+        "2026Q2",
+        "2026全年"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 851,
+          "line_end": 851,
+          "quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "资产负债率回升超 65% 或短期借款大幅增加",
+      "relation": "any_of",
+      "metrics": [
+        "债务"
+      ],
+      "operator": null,
+      "threshold": "65%",
+      "periods": [
+        "2026Q2",
+        "2026全年"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 851,
+          "line_end": 851,
+          "quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "存货增速持续高于收入 20 个百分点",
+      "relation": "all_of",
+      "metrics": [
+        "收入",
+        "库存"
+      ],
+      "operator": "gt",
+      "threshold": "20",
+      "periods": [
+        "2026Q2",
+        "2026全年"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 851,
+          "line_end": 851,
+          "quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "Rubin/VR200 量产延期或大客户分单",
+      "relation": "any_of",
+      "metrics": [
+        "产品/客户"
+      ],
+      "operator": null,
+      "threshold": "200",
+      "periods": [
+        "2026Q2",
+        "2026全年"
+      ],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 851,
+          "line_end": 851,
+          "quote": "连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "bede3f1febf7f733e8aecfd7bfadc29e5ebaec3e16550dcac2ed3fadd052446f",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 5,
+    "price_rule_count": 1,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 5
+  }
+}

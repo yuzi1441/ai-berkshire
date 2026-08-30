@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T15:42:21+08:00",
+  "company": "海天味业",
+  "ticker": "603288.SH",
+  "scope": "A股主报告固定任务的本地证据复核；不读取 Checklist、技术面、情绪面或旧人工执行复核。",
+  "main_report": {
+    "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+    "sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "manual_judgment_reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "fixed_tasks": [
+    {
+      "task_id": "entry",
+      "scope": "entry",
+      "scope_label": "买入前提",
+      "title": "复核买入前提",
+      "content": "36.78 元观察、不追；32-35 元才允许激进型小额分批，28-32 元可稳健分批，不高于 28 元才进入保守型重点关注区。",
+      "metrics": [],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "empty_position_action",
+      "evidence": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ]
+    },
+    {
+      "task_id": "holder",
+      "scope": "holder",
+      "scope_label": "持仓验证",
+      "title": "复核持仓验证",
+      "content": "低成本仓可继续持有但不因高分红追价；成本接近现价者应在半年报增长弱于 Base 且估值仍高时评估降低集中度。",
+      "metrics": [
+        "分红",
+        "估值"
+      ],
+      "periods": [
+        "H1",
+        "FY"
+      ],
+      "schedule_type": "filing",
+      "source_field": "holder_action",
+      "evidence": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ]
+    },
+    {
+      "task_id": "risk",
+      "scope": "risk",
+      "scope_label": "风险/失效条件",
+      "title": "复核风险/失效条件",
+      "content": "价格进入相应区间且品牌、渠道、份额和现金流未恶化；食品安全损害品牌、酱油连续落后行业、毛利率低于 37%、现金流/利润长期低于 80%、分红承诺失守或资本配置损害每股价值即暂停买入。",
+      "metrics": [
+        "毛利率",
+        "利润",
+        "分红"
+      ],
+      "periods": [],
+      "schedule_type": "price",
+      "source_field": "trigger_condition",
+      "evidence": [
+        {
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |",
+          "supports": "优秀公司不等于当前好价格；36.78 元高于三年 Base 折现值 32.08 元，且长期增长中枢已降至低个位数。"
+        }
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/海天味业/海天味业-investment-research-20260810.md",
+      "sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
+      "source_role": "main_report_reference",
+      "purpose": "只作为复核证据；不得修改主报告规则。"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "verified",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L19",
+            "exact_quote": "36.78 元附近，公司质量足以支撑长期跟踪，却没有提供足够的预期回报缓冲。32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L158",
+            "exact_quote": "| 当前 | 36.78 元 | **观察，不追价** | 高于 Base 折现值，回报依赖 Bull 兑现 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L169",
+            "exact_quote": "| 空仓 | 36.78 元不追；32-35 元才考虑小额分批，28-32 元再提高研究优先级 |"
+          }
+        ],
+        "missing_codes": []
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L170",
+            "exact_quote": "| 已持有且成本显著低于 32 元 | 可继续持有，但不因高分红追价；把 2026H1 作为第一复核点 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L171",
+            "exact_quote": "| 已持有且成本接近或高于现价 | 不因“好公司”标签忽视机会成本；若 H1 增长低于 Base 且估值仍高，考虑降低集中度 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L17",
+            "exact_quote": "2026H1 尚未披露，海外和新品的中长期贡献仍缺少分部数据"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": "L180",
+            "exact_quote": "1. 食品安全或产品质量事件实质损害品牌信任，并造成连续两个报告期收入或份额下滑。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L181",
+            "exact_quote": "2. 酱油收入连续两个报告期低于行业或录得负增长，且并非短期高基数。"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": "L184",
+            "exact_quote": "4. 年度经营现金流/归母净利润连续两年低于 80%。"
+          }
+        ],
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation"
+        ]
+      }
+    ],
+    "model": "deepseek-v4-flash",
+    "reasoning": {
+      "requested": "thinking=enabled; reasoning_effort=max",
+      "effective": "thinking=enabled; reasoning_effort=max"
+    }
+  }
+}

@@ -1,0 +1,392 @@
+{
+  "schema_version": 2,
+  "protocol_version": "main-report-review-v2.2",
+  "generated_at": "2026-08-29T19:58:33+08:00",
+  "company": "长鑫存储",
+  "ticker": "688825.SH",
+  "rule_state": "active",
+  "authority_policy": {
+    "active_authority": "human_locked",
+    "model_rule_update": "forbidden",
+    "zcode_role": "audit_candidate_only"
+  },
+  "main_report": {
+    "path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+    "canonical_sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
+    "locked_sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
+    "reviewed_at": "2026-08-27T00:00:00+08:00"
+  },
+  "active_rules": [
+    {
+      "rule_id": "human_locked.entry.entry.1",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "报告基准价 49 元、3 万亿元以上市值区间任何理由都不追",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.entry.entry.2",
+      "group": "entry",
+      "polarity": "positive",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "24-45 元仍只观望，16-24 元且无实体清单落地、HBM 未证伪时最多建 2% 观察仓，15 元以下且仅周期杀估值、基本面未坏时才进入系统性价值建仓区",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "empty_position_action",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.holder.holder.1",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "当前高估值区应控制或退出风险暴露",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.holder.holder.2",
+      "group": "holder",
+      "polarity": "monitoring",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "发行申购的巨大赔率已经过去，不能把发行价机会迁移到二级市场",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "holder_action",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "human_locked.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "HBM3/3E 综合良率突破 60%的第三方证据、华为昇腾规模采用、实体清单风险实质解除、G5 按期量产且拆解确认，或周期下行仍保持正毛利可上调",
+      "relation": "any_of",
+      "metrics": [
+        "毛利率"
+      ],
+      "operator": null,
+      "threshold": "60%",
+      "periods": [],
+      "schedule_type": "recurring_filing",
+      "evidence_requirement": [
+        "current_value",
+        "official_source",
+        "event_confirmation"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": true
+    },
+    {
+      "rule_id": "human_locked.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "active",
+      "authority": "human_locked",
+      "condition": "列入实体清单、DRAM 合约价转负叠加三巨头扩产、G5 延期超过两个季度、关联交易异常或解禁前估值仍超 2 万亿元即回避/清仓",
+      "relation": "any_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": "gt",
+      "threshold": "2 万",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "trigger_condition",
+      "source_lines": [
+        {
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "**投资评级：观望（跟踪池一级标的，当前价位不买入）**",
+          "supports": "中国 DRAM 自主化和份额提升高度确定，但这是强周期、重资本、无定价权且成本落后三巨头约 30%的生意；基准价把周期顶部利润和未兑现 HBM 一并计价，概率加权期望约为 -35%。"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "audit_candidates": [
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.1",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "回避/清仓信号（任一触发即执行）：列入实体清单（先减后评估，杀伤在扩产而非存量）",
+      "relation": "any_of",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.2",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "DRAM 合约价环比转负 + 三巨头资本开支上修共振",
+      "relation": "all_of",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "comparison"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.3",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "G5 延期超过两个季度",
+      "relation": "all_of",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "operator": "gt",
+      "threshold": "5",
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.4",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "兆易关联交易出现定价异常",
+      "relation": "all_of",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.5",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "2027 年起解禁高峰前的估值仍在 2 万亿以上",
+      "relation": "all_of",
+      "metrics": [
+        "估值"
+      ],
+      "operator": null,
+      "threshold": "2 万",
+      "periods": [],
+      "schedule_type": "price",
+      "evidence_requirement": [
+        "current_price"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    },
+    {
+      "rule_id": "zcode_audit_candidate.risk.redline.6",
+      "group": "redline",
+      "polarity": "negative",
+      "state": "pending_manual_confirmation",
+      "authority": "zcode_audit_candidate",
+      "condition": "看板『买入失效条件』字段为未给出，失效条件以决策表回避/清仓信号为准",
+      "relation": "all_of",
+      "metrics": [
+        "实体清单",
+        "DRAM合约价环比",
+        "G5延期",
+        "解禁前估值"
+      ],
+      "operator": null,
+      "threshold": null,
+      "periods": [],
+      "schedule_type": "event",
+      "evidence_requirement": [
+        "current_value"
+      ],
+      "source_field": "zcode_independent_risk_audit",
+      "source_lines": [
+        {
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "DRAM 合约价环比转负 + 三巨头资本开支上修共振"
+        }
+      ],
+      "reviewable": false
+    }
+  ],
+  "rules_fingerprint": "61ef45d2568b58a471477132da54bcbb9c4df7006bfb9c13497461a8c63835ba",
+  "summary": {
+    "active_rule_count": 6,
+    "reviewable_rule_count": 2,
+    "price_rule_count": 4,
+    "redline_count": 2,
+    "improvement_count": 0,
+    "pending_redline_candidate_count": 6
+  }
+}

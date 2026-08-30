@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-29T17:50:09+08:00",
+  "company": "chuanrun",
+  "ticker": "002272.SZ",
+  "scope": "ZCode 独立规则包 v1：规则由 ZCode 直接从主报告正文推导（未读取人工锁定规则），再按封闭协议用本地证据复核；规则不回写、不影响人工裁决。",
+  "main_report": {
+    "path": "reports/chuanrun/chuanrun-research-20260623.md",
+    "sha256": "45385686b4b2990153d36e741a696c9faf4b60444bd523b03b2dec7f0e8addc2",
+    "rule_update_mode": "manual_only",
+    "automatic_rule_replacement": false,
+    "rule_package_source": "zcode_inline_v1"
+  },
+  "zcode_tasks": [
+    {
+      "task_id": "entry",
+      "scope_label": "买入前提",
+      "content": "价格条件：报告基线 18.50 元（PB 6.15x）估值严重透支，空仓者回避；等待估值回归至 7-11 元区间（PB 2.5-3 倍）再考虑买入。",
+      "derivation_quote": "等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。",
+      "derivation_line_ref": 316,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PB"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "holder",
+      "scope_label": "持仓验证",
+      "content": "持有验证条件：持仓者应减仓至清仓——股价从 6.80 元涨至 18.50 元已实现 172% 涨幅、当前估值无安全边际且实控人都在卖；重新转多的加仓信号为股价回落至 8-10 元（PB 约 3 倍）、液冷订单超过 5 亿/年、连续两个季度盈利、实控人停止减持并增持。",
+      "derivation_quote": "股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。",
+      "derivation_line_ref": 317,
+      "schedule_type": "price",
+      "metrics": [
+        "A股收盘价",
+        "PB",
+        "液冷订单",
+        "实控人增减持"
+      ],
+      "periods": []
+    },
+    {
+      "task_id": "risk",
+      "scope_label": "风险/失效条件",
+      "content": "卖出/失效触发：实控人继续减持公告；2026H1 液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险）。",
+      "derivation_quote": "实控人继续减持公告；2026H1液冷订单低于预期",
+      "derivation_line_ref": 318,
+      "schedule_type": "recurring_filing",
+      "metrics": [
+        "实控人减持公告",
+        "液冷订单",
+        "经营现金流",
+        "融资余额"
+      ],
+      "periods": [
+        "2026H1"
+      ]
+    }
+  ],
+  "local_evidence_documents": [
+    {
+      "document_id": "local_1",
+      "path": "reports/chuanrun/chuanrun-research-20260623.md",
+      "source_role": "main_report_reference",
+      "sha256": "45385686b4b2990153d36e741a696c9faf4b60444bd523b03b2dec7f0e8addc2"
+    }
+  ],
+  "model_review": {
+    "status": "completed",
+    "rule_update": "manual_only",
+    "model": "zcode-inline-review/GLM",
+    "tasks": [
+      {
+        "task_id": "entry",
+        "status": "data_insufficient",
+        "conclusion": "本地仅有 2026-06-23 主报告基线（18.50 元/PB 6.15x，建议回避、等 7-11 元），看板契约价格区间与复核日期均为'未给出'；无复核日现价与最新 PB，无法判断是否回落至 7-11 元考虑区。",
+        "missing_codes": [
+          "no_current_value"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 316,
+            "exact_quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 391,
+            "exact_quote": "| 下次复核日期 | 未给出 |"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "status": "data_insufficient",
+        "conclusion": "'减仓至清仓'结论基于报告时点 6.80→18.50 元（+172%）与实控人减持行为；本地无复核日价格、最新 PB、实控人增减持公告及液冷订单数据，无法验证持仓者当前应执行的动作或加仓信号是否成立。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 317,
+            "exact_quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。 |"
+          },
+          {
+            "document_id": "local_1",
+            "line_ref": 319,
+            "exact_quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
+          }
+        ]
+      },
+      {
+        "task_id": "risk",
+        "status": "data_insufficient",
+        "conclusion": "四条卖出触发依赖 2026H1 液冷订单、连续两季经营现金流、融资余额及实控人减持公告；本地无主报告基线之后的财报、公告或两融数据，无对比期与事件确认，无法判断是否触发。",
+        "missing_codes": [
+          "no_current_value",
+          "no_comparison",
+          "no_event_confirmation",
+          "no_official_source"
+        ],
+        "evidence_document_ids": [
+          "local_1"
+        ],
+        "evidence_lines": [
+          {
+            "document_id": "local_1",
+            "line_ref": 318,
+            "exact_quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
+          }
+        ]
+      }
+    ]
+  }
+}
