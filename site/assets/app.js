@@ -1514,10 +1514,8 @@ function renderHumanReviewPlan(item, { compact = false } = {}) {
     wrap.append(note);
     return wrap;
   }
-  // The main table also needs to expose every human-review task directly.
-  // Keep the compact mode visually lighter, but do not reduce it to a single
-  // summary task; the user should be able to see all report conditions and
-  // their review dates without opening the detail drawer.
+  // The detail drawer is the place for every locked condition.  Table rows
+  // deliberately stay short so the decision page remains a usable scan.
   const visibleTasks = tasks;
   for (const task of visibleTasks) {
     const taskWrap = document.createElement("div");
@@ -1545,12 +1543,6 @@ function renderHumanReviewPlan(item, { compact = false } = {}) {
       taskWrap.append(source);
     }
     wrap.append(taskWrap);
-  }
-  if (compact && tasks.length > visibleTasks.length) {
-    const more = document.createElement("p");
-    more.className = "human-review-note";
-    more.textContent = `另有 ${tasks.length - visibleTasks.length} 项，打开详情查看全部`;
-    wrap.append(more);
   }
   return wrap;
 }
@@ -1643,37 +1635,14 @@ function renderHumanReviewMainCell(item, quote) {
     return wrap;
   }
 
-  const planBlock = document.createElement("div");
-  planBlock.className = "human-review-main-plan";
-  const planHeader = document.createElement("div");
-  planHeader.className = "human-review-main-plan-header";
-  const planTitle = document.createElement("span");
-  planTitle.textContent = `固定复核 ${plan.task_count} 项`;
+  const planSummary = document.createElement("p");
+  planSummary.className = "human-review-main-muted";
   const dueCount = Number(plan.due_count || 0);
-  const planStatus = document.createElement("span");
-  planStatus.className = dueCount ? "human-review-main-due" : "human-review-main-muted";
-  planStatus.textContent = dueCount ? `${dueCount} 项待确认` : "均未到期";
-  planHeader.append(planTitle, planStatus);
-  planBlock.append(planHeader);
-
-  const taskList = document.createElement("div");
-  taskList.className = "human-review-task-list";
-  for (const task of plan.tasks) {
-    const taskRow = document.createElement("div");
-    taskRow.className = `human-review-task-row human-review-task-row-${task.date_status || "unknown"}`;
-    taskRow.title = task.content || "主报告未提供具体复核内容";
-    const taskName = document.createElement("span");
-    taskName.className = "human-review-task-name";
-    taskName.textContent = task.scope_label || task.title || "复核事项";
-    const taskMeta = document.createElement("span");
-    taskMeta.className = "human-review-task-meta";
-    const metrics = task.metrics?.length ? task.metrics.join("、") : "主报告条件";
-    taskMeta.textContent = `${metrics} · ${humanReviewTaskCompactDateText(task)}`;
-    taskRow.append(taskName, taskMeta);
-    taskList.append(taskRow);
-  }
-  planBlock.append(taskList);
-  wrap.append(planBlock);
+  const next = plan.tasks[0];
+  planSummary.textContent = dueCount
+    ? `固定复核 ${plan.task_count} 项 · ${dueCount} 项待确认${next ? ` · 最近：${next.title || next.scope_label}` : ""}`
+    : `固定复核 ${plan.task_count} 项 · 当前均未到期`;
+  wrap.append(planSummary);
   return wrap;
 }
 
@@ -3761,8 +3730,130 @@ function renderRoutineReviewCell(review) {
   return cell;
 }
 
+function reportReviewAlert(review) {
+  const partition = fundamentalReviewPartitionKey(review);
+  const manual = manualReviewMeta(review);
+  const routine = routineReviewMeta(review);
+  if (!review) {
+    return {
+      label: "复核快照缺失",
+      detail: "尚未加载主报告复核快照。",
+      tone: "gap",
+    };
+  }
+  if (manual.status === "stale") {
+    return {
+      label: "人工规则待更新",
+      detail: "主报告版本已变化；日常结果停止作为当前判断使用。",
+      tone: "stale",
+    };
+  }
+  const alerts = fundamentalReviewRules(review)
+    .filter((rule) => ["redline", "warning"].includes(rule?.result?.review_effect));
+  const nextRule = alerts[0]
+    || fundamentalReviewRules(review)
+      .filter((rule) => rule.reviewable && ["unknown", "not_due"].includes(rule?.result?.truth_state))
+      .sort((left, right) => {
+        const rank = { redline: 0, holder: 1, entry: 2, improvement: 3 };
+        return (rank[left.group] ?? 9) - (rank[right.group] ?? 9);
+      })[0];
+  if (alerts.length && nextRule) {
+    const current = nextRule.result?.current_value ? ` · 当前：${nextRule.result.current_value}` : "";
+    return {
+      label: routine.label || "需要关注",
+      detail: `${conciseRuleCondition(nextRule)}${current}`,
+      tone: partition === "redline" ? "redline" : "attention",
+    };
+  }
+  if (nextRule && ["evidence_ready", "data_gap", "waiting_evidence"].includes(partition)) {
+    return {
+      label: routine.label || "待日常核验",
+      detail: conciseRuleCondition(nextRule),
+      tone: partition === "data_gap" ? "gap" : "waiting",
+    };
+  }
+  const legacyTasks = review.routine?.legacy_daily?.tasks || [];
+  if (partition === "historical_review" && legacyTasks.length) {
+    const labels = { entry: "买入前提", holder: "持仓验证", risk: "原始风险任务" };
+    const states = { verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足" };
+    return {
+      label: "上一轮日常复核",
+      detail: legacyTasks.map((task) => `${labels[task.task_id] || task.task_id}：${states[task.status] || task.status}`).join(" · "),
+      tone: "historical",
+    };
+  }
+  return {
+    label: routine.label || "等待新证据",
+    detail: manual.status === "active"
+      ? "人工锁定规则有效；暂无需要升级到主决策页的具体预警。"
+      : "主报告尚未锁定可日常核验的经营条件。",
+    tone: routine.tone || "waiting",
+  };
+}
+
+function renderReportReviewAlertCell(review, { compact = false } = {}) {
+  const cell = document.createElement("td");
+  cell.className = `report-review-alert-cell ${compact ? "report-review-alert-compact" : ""}`;
+  cell.dataset.label = compact ? "报告复核提示" : "当前预警 / 待办";
+  const layers = document.createElement("div");
+  layers.className = "report-review-layer-strip";
+  appendManualReviewBadge(layers, review);
+  appendReviewBadge(layers, review);
+  const alert = reportReviewAlert(review);
+  const label = document.createElement("strong");
+  label.className = `report-review-alert-label report-review-alert-${alert.tone}`;
+  label.textContent = alert.label;
+  const detail = document.createElement("p");
+  detail.textContent = alert.detail;
+  cell.append(layers, label, detail);
+  return cell;
+}
+
+function renderReviewQueueStatusCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell";
+  cell.dataset.label = "复核分区";
+  const key = fundamentalReviewPartitionKey(review);
+  const meta = fundamentalReviewPartitions.find(([partition]) => partition === key);
+  const badge = document.createElement("strong");
+  badge.className = `fundamental-review-badge fundamental-review-badge-${meta?.[3] || "waiting"}`;
+  badge.textContent = meta?.[1] || "等待新证据";
+  cell.append(badge);
+  return cell;
+}
+
+function renderReviewQueueRuleCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell";
+  cell.dataset.label = "人工规则";
+  const manual = manualReviewMeta(review);
+  appendManualReviewBadge(cell, review);
+  const text = document.createElement("p");
+  text.className = "fundamental-review-meta muted";
+  const count = review?.manual?.rule_count ?? review?.rules?.length ?? 0;
+  text.textContent = manual.status === "active"
+    ? `${count} 条锁定规则 · 人工确认 ${shortReviewDate(review?.manual?.reviewed_at || review?.main_report?.reviewed_at)}`
+    : "规则已停止参与日常判断";
+  cell.append(text);
+  return cell;
+}
+
+function renderReviewQueueScheduleCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell";
+  cell.dataset.label = "日常检查";
+  const routine = review?.routine || {};
+  const source = document.createElement("strong");
+  source.textContent = routine.reviewer || "DeepSeek 日常核验";
+  const timing = document.createElement("p");
+  timing.className = "fundamental-review-meta muted";
+  timing.textContent = `上次 ${shortReviewDate(routine.generated_at || review?.generated_at)} · 下次 ${shortReviewDate(review?.next_check_at || state.fundamentalReviewSnapshot?.next_check_at)}`;
+  cell.append(source, timing);
+  return cell;
+}
+
 function renderFundamentalReviewRows(visible) {
-  setTableHeader(["公司 / 代码", "人工锁定规则", "日常证据复核", "日常红线 / 预警", "日常待核验", "日常改善信号"]);
+  setTableHeader(["公司 / 代码", "复核分区", "当前预警 / 待办", "人工规则", "日常检查"]);
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
   rendered.forEach((item, index) => {
     const review = fundamentalReviewForItem(item);
@@ -3774,39 +3865,12 @@ function renderFundamentalReviewRows(visible) {
     tr.tabIndex = 0;
     tr.append(renderIdentityCell(item));
 
-    tr.append(renderManualReviewCell(review), renderRoutineReviewCell(review));
-
-    const riskTd = document.createElement("td");
-    riskTd.dataset.label = "日常红线 / 预警";
-    const riskRules = review
-      ? [...activeReviewResultRules(review, "redline"), ...activeReviewResultRules(review, "warning")]
-      : [];
-    appendFundamentalRuleList(
-      riskTd,
-      riskRules,
-      manualReviewMeta(review).status === "stale" ? "人工规则已失效，停止日常判断" : "暂无经当前证据确认的红线",
+    tr.append(
+      renderReviewQueueStatusCell(review),
+      renderReportReviewAlertCell(review),
+      renderReviewQueueRuleCell(review),
+      renderReviewQueueScheduleCell(review),
     );
-    tr.append(riskTd);
-
-    const dueTd = document.createElement("td");
-    dueTd.dataset.label = "日常待核验";
-    const dueRules = fundamentalReviewRules(review)
-      .filter((rule) => rule.reviewable
-        && rule.group !== "improvement"
-        && (!rule.result || ["unknown", "not_due"].includes(rule.result.truth_state)))
-      .sort((a, b) => {
-        const rank = { redline: 0, holder: 1, entry: 2, improvement: 3 };
-        return (rank[a.group] ?? 9) - (rank[b.group] ?? 9);
-      });
-    appendFundamentalRuleList(dueTd, dueRules, "当前没有到期但未完成的经营复核");
-    tr.append(dueTd);
-
-    const improvementTd = document.createElement("td");
-    improvementTd.dataset.label = "日常改善信号";
-    const improvementRules = fundamentalReviewRules(review, "improvement")
-      .filter((rule) => rule.schedule_type !== "price");
-    appendFundamentalRuleList(improvementTd, improvementRules, "主报告未给出独立改善条件");
-    tr.append(improvementTd);
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {
@@ -3846,7 +3910,8 @@ function renderRows() {
   setTableHeader([
     "公司 / 代码",
     "主报告判断",
-    "人工复核",
+    "人工价格分区",
+    "报告复核提示",
     "现价",
     "当前状态",
     "技术面（辅助）",
@@ -3876,6 +3941,9 @@ function renderRows() {
     humanReviewTd.className = "human-review-cell";
     humanReviewTd.append(renderHumanReviewMainCell(item, quote));
     tr.append(humanReviewTd);
+
+    const reportReviewTd = renderReportReviewAlertCell(fundamentalReviewForItem(item), { compact: true });
+    tr.append(reportReviewTd);
 
     const change = formatChange(quote);
     const quoteTd = document.createElement("td");

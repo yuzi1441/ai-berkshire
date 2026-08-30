@@ -1015,6 +1015,23 @@ tbody tr.detail-inline-row .detail-panel {
 .human-review-state-human_trial strong { color: var(--trial); }
 .human-review-state-human_buy strong { color: var(--buy); }
 .human-review-cell { min-width: 220px; max-width: 290px; }
+.report-review-alert-cell { min-width: 235px; max-width: 320px; }
+.report-review-layer-strip { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+.report-review-alert-label { display: block; color: var(--ink); font-size: 11px; line-height: 1.35; }
+.report-review-alert-cell p { margin: 4px 0 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.42; }
+.report-review-alert-cell.report-review-alert-compact p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.report-review-alert-redline { color: #ff8585; }
+.report-review-alert-attention,
+.report-review-alert-stale { color: var(--watch); }
+.report-review-alert-historical { color: #c5afe8; }
+.report-review-alert-gap { color: var(--ink-soft); }
+.fundamental-review-queue-cell { min-width: 150px; }
+.fundamental-review-queue-cell > strong:not(.fundamental-review-badge) { color: var(--ink); font-size: 11px; }
 .human-review-state-human_wait_price strong,
 .human-review-state-human_wait_event strong { color: var(--watch); }
 .human-review-state-human_no strong { color: var(--sell); }

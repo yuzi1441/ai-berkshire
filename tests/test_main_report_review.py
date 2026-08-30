@@ -353,6 +353,8 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("renderFundamentalReviewDetail", app)
         self.assertIn("renderFundamentalReviewPartitions", app)
         self.assertIn("fundamentalReviewPartitionKey", app)
+        self.assertIn("reportReviewAlert", app)
+        self.assertIn("report-review-layer-strip", app)
         self.assertIn("main_report_review.json", app)
         self.assertIn("人工锁定规则", app)
         self.assertIn("日常证据复核", app)
