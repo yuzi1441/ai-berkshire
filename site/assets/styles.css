@@ -1209,6 +1209,8 @@ tbody tr.detail-inline-row .detail-panel {
 .fundamental-review-partition.partition-improving strong { color: var(--buy); }
 .fundamental-review-partition.partition-historical { border-left-color: #c5afe8; }
 .fundamental-review-partition.partition-historical strong { color: #c5afe8; }
+.fundamental-review-partition.partition-gap { border-left-color: var(--ink-soft); }
+.fundamental-review-partition.partition-gap strong { color: var(--ink-soft); }
 .review-filter-redline { color: #ff8585; }
 .review-filter-attention,
 .review-filter-stale { color: var(--watch); }
@@ -1356,6 +1358,29 @@ tbody tr.detail-inline-row .detail-panel {
 .fundamental-review-layer-card h4 { margin: 1px 0 0; color: var(--ink); font-size: 12px; }
 .manual-review-card { border-color: rgba(113, 199, 255, 0.28); }
 .routine-review-card { border-color: rgba(255, 178, 36, 0.2); }
+.model-review-detail-card { border-color: rgba(113, 199, 255, 0.18); }
+.model-review-task-list { display: grid; gap: 9px; margin-top: 11px; }
+.model-review-task {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.model-review-task.model-review-current { border-left-color: var(--buy); }
+.model-review-task.model-review-historical { border-left-color: #c5afe8; }
+.model-review-task > strong { display: block; color: var(--ink); font-size: 11px; }
+.model-review-task > p { margin: 6px 0 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.48; }
+.model-review-task .model-review-conclusion { color: var(--ink); }
+.model-review-task blockquote {
+  margin: 7px 0 0;
+  padding: 6px 8px;
+  border-left: 2px solid var(--line-2);
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.42;
+}
+.model-review-task small { display: block; margin-top: 7px; color: var(--watch); font-size: 10px; }
 .fundamental-review-layer-card .fundamental-review-overview-facts {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 10px;

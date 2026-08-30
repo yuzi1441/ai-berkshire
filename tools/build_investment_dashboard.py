@@ -5400,6 +5400,11 @@ def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
     )
 
 
+def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
+    """Publish the saved ZCode and DeepSeek comparison without rebuilding either run."""
+    return main_report_review.model_review_comparison_snapshot(repo_root)
+
+
 def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
@@ -5452,6 +5457,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
     main_report_review_snapshot = build_main_report_review_snapshot(repo_root)
+    model_review_comparison_snapshot = build_model_review_comparison_snapshot(repo_root)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     generation_id = hashlib.sha256(
         (
@@ -5512,6 +5518,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "manual_execution_reviews.json", manual_execution_reviews)
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(data_directory / "main_report_review.json", main_report_review_snapshot)
+    write_json(data_directory / "model_review_comparison.json", model_review_comparison_snapshot)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     split_dashboard_files(board, site_directory, data_directory)
@@ -5519,6 +5526,7 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(site_directory / "data" / "intraday_technical.json", intraday_technical)
     write_json(site_directory / "data" / "decision_reviews.json", decision_reviews)
     write_json(site_directory / "data" / "manual_execution_reviews.json", manual_execution_reviews)
+    write_json(site_directory / "data" / "model_review_comparison.json", model_review_comparison_snapshot)
     write_json(
         site_directory / "data" / "opportunity_scans.json",
         public_opportunity_scans(opportunity_scans),

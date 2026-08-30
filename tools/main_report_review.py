@@ -1358,6 +1358,167 @@ def compact_legacy_daily_review(payload: dict[str, Any]) -> dict[str, Any] | Non
     }
 
 
+CURRENT_EVIDENCE_ROLES = {
+    "local_current_evidence",
+    "official_current_evidence",
+    "zcode_current_evidence_extract",
+}
+
+
+def compact_model_review_task(
+    task: dict[str, Any],
+    rule: dict[str, Any] | None,
+    documents: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """Expose one saved model task while proving whether its evidence is current.
+
+    A task which only cites the main report is historical context, not a current
+    verification.  This deliberately does not reinterpret either model's rule.
+    """
+    evidence_ids = [str(value) for value in task.get("evidence_document_ids") or [] if value]
+    roles = sorted(
+        {
+            str((documents.get(document_id) or {}).get("source_role") or "unknown")
+            for document_id in evidence_ids
+        }
+    )
+    evidence_quality = "current" if any(role in CURRENT_EVIDENCE_ROLES for role in roles) else (
+        "historical" if evidence_ids else "missing"
+    )
+    evidence_lines = []
+    for line in task.get("evidence_lines") or []:
+        if not isinstance(line, dict):
+            continue
+        evidence_lines.append(
+            {
+                "document_id": line.get("document_id"),
+                "line_ref": line.get("line_ref"),
+                "exact_quote": line.get("exact_quote"),
+            }
+        )
+    return {
+        "task_id": task.get("task_id") or (rule or {}).get("task_id") or "unknown",
+        "scope_label": (rule or {}).get("scope_label") or task.get("scope_label") or task.get("task_id") or "未命名事项",
+        "rule_content": (rule or {}).get("content") or "",
+        "status": task.get("status") or "unknown",
+        "conclusion": task.get("conclusion") or "",
+        "evidence_quality": evidence_quality,
+        "evidence_document_ids": evidence_ids,
+        "evidence_roles": roles,
+        "evidence_lines": evidence_lines[:4],
+        "missing_codes": task.get("missing_codes") or [],
+    }
+
+
+def model_review_comparison_partition(zcode_tasks: list[dict[str, Any]], deepseek_tasks: list[dict[str, Any]]) -> str:
+    """Classify two saved model runs without declaring different rules equivalent."""
+    zcode_by_id = {str(task.get("task_id")): task for task in zcode_tasks}
+    deepseek_by_id = {str(task.get("task_id")): task for task in deepseek_tasks}
+    qualified = lambda task: bool(task) and task.get("evidence_quality") == "current" and task.get("status") not in {"data_insufficient", "unknown", "missing"}
+    paired = [
+        (zcode_by_id.get(task_id), deepseek_by_id.get(task_id))
+        for task_id in sorted(set(zcode_by_id) | set(deepseek_by_id))
+    ]
+    if any(qualified(left) and qualified(right) and left.get("status") != right.get("status") for left, right in paired):
+        return "conflict"
+    if any(qualified(left) and qualified(right) for left, right in paired):
+        return "consensus"
+    if any(qualified(task) for task in zcode_tasks):
+        return "zcode_current"
+    if any(qualified(task) for task in deepseek_tasks):
+        return "deepseek_current"
+    return "both_insufficient"
+
+
+def _model_review_packet(payload: dict[str, Any], *, model_name: str, rule_key: str) -> dict[str, Any]:
+    review = payload.get("model_review") if isinstance(payload, dict) else {}
+    review = review if isinstance(review, dict) else {}
+    documents = {
+        str(document.get("document_id")): document
+        for document in payload.get("local_evidence_documents") or []
+        if isinstance(document, dict) and document.get("document_id")
+    }
+    rules = {
+        str(rule.get("task_id")): rule
+        for rule in payload.get(rule_key) or []
+        if isinstance(rule, dict) and rule.get("task_id")
+    }
+    return {
+        "model": review.get("model") or model_name,
+        "generated_at": payload.get("generated_at"),
+        "scope": payload.get("scope") or "",
+        "run_status": review.get("status") or "missing",
+        "tasks": [
+            compact_model_review_task(task, rules.get(str(task.get("task_id"))), documents)
+            for task in review.get("tasks") or []
+            if isinstance(task, dict)
+        ],
+    }
+
+
+def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
+    """Create the public ZCode-versus-DeepSeek comparison from saved runs.
+
+    On the VPS the private local review directories are intentionally absent.
+    In that case preserve the last generated public snapshot instead of replacing
+    it with an empty result during a normal dashboard rebuild.
+    """
+    deepseek_dir = repo_root / "local" / "fundamental-review-full"
+    zcode_dir = repo_root / "local" / "fundamental-review-zcode" / "full-zcode-rules"
+    public_path = repo_root / "data" / "investment-dashboard" / "model_review_comparison.json"
+    deepseek_paths = {path.stem: path for path in deepseek_dir.glob("*.json")} if deepseek_dir.is_dir() else {}
+    zcode_paths = {path.stem: path for path in zcode_dir.glob("*.json")} if zcode_dir.is_dir() else {}
+    tickers = sorted(set(deepseek_paths) | set(zcode_paths))
+    if not tickers:
+        saved = load_json(public_path, {})
+        if isinstance(saved, dict) and saved.get("reviews"):
+            return saved
+        return {
+            "schema_version": 1,
+            "generated_at": now_iso(),
+            "stock_count": 0,
+            "summary": {},
+            "reviews": [],
+            "source": "saved ZCode and DeepSeek review outputs are unavailable",
+        }
+
+    reviews = []
+    inputs = []
+    counts: dict[str, int] = {}
+    for ticker in tickers:
+        deepseek_path = deepseek_paths.get(ticker)
+        zcode_path = zcode_paths.get(ticker)
+        deepseek_payload = load_json(deepseek_path, {}) if deepseek_path else {}
+        zcode_payload = load_json(zcode_path, {}) if zcode_path else {}
+        for path in (deepseek_path, zcode_path):
+            if path:
+                inputs.append({"path": str(path.relative_to(repo_root)), "sha256": canonical_file_sha256(path)})
+        zcode = _model_review_packet(zcode_payload, model_name="ZCode", rule_key="zcode_tasks")
+        deepseek = _model_review_packet(deepseek_payload, model_name="DeepSeek", rule_key="fixed_tasks")
+        partition = model_review_comparison_partition(zcode["tasks"], deepseek["tasks"])
+        counts[partition] = counts.get(partition, 0) + 1
+        reviews.append(
+            {
+                "ticker": ticker,
+                "company": zcode_payload.get("company") or deepseek_payload.get("company") or ticker,
+                "partition": partition,
+                "zcode": zcode,
+                "deepseek": deepseek,
+            }
+        )
+    return {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "stock_count": len(reviews),
+        "input_fingerprint": canonical_json_sha256(inputs),
+        "input_files": inputs,
+        "summary": {"partition_counts": counts},
+        "reviews": reviews,
+        "source": "ZCode independent saved review + DeepSeek saved review; only post-main-report local/official evidence is current evidence.",
+        "caveat": "The two models independently derived task wording. A status difference is a review conflict to inspect, not an automatic rule or investment-action change.",
+    }
+
+
 def public_review_snapshot(
     rules_dir: Path,
     output_dir: Path,
@@ -1535,6 +1696,7 @@ def main() -> int:
     parser.add_argument("--ticker", action="append", default=[])
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--write-comparison", action="store_true")
+    parser.add_argument("--write-model-comparison-snapshot", action="store_true")
     parser.add_argument("--write-public-snapshot", action="store_true")
     parser.add_argument("--snapshot-only", action="store_true")
     args = parser.parse_args()
@@ -1555,6 +1717,10 @@ def main() -> int:
             snapshot = public_review_snapshot(rules_dir, output_dir, comparison, legacy_dir)
             atomic_write_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", snapshot)
             atomic_write_json(repo_root / "site" / "data" / "main_report_review.json", snapshot)
+        if args.write_model_comparison_snapshot:
+            model_snapshot = model_review_comparison_snapshot(repo_root)
+            atomic_write_json(repo_root / "data" / "investment-dashboard" / "model_review_comparison.json", model_snapshot)
+            atomic_write_json(repo_root / "site" / "data" / "model_review_comparison.json", model_snapshot)
         print(json.dumps({"generated_at": now_iso(), "snapshot_only": True}, ensure_ascii=False, indent=2))
         return 0
     run_status = run_incremental(
@@ -1574,6 +1740,10 @@ def main() -> int:
         snapshot = public_review_snapshot(rules_dir, output_dir, comparison, legacy_dir)
         atomic_write_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", snapshot)
         atomic_write_json(repo_root / "site" / "data" / "main_report_review.json", snapshot)
+    if args.write_model_comparison_snapshot and not args.dry_run:
+        model_snapshot = model_review_comparison_snapshot(repo_root)
+        atomic_write_json(repo_root / "data" / "investment-dashboard" / "model_review_comparison.json", model_snapshot)
+        atomic_write_json(repo_root / "site" / "data" / "model_review_comparison.json", model_snapshot)
     print(json.dumps(run_status, ensure_ascii=False, indent=2))
     return 1 if run_status["counts"]["error"] else 0
 

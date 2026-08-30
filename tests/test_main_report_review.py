@@ -354,13 +354,49 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("renderFundamentalReviewPartitions", app)
         self.assertIn("fundamentalReviewPartitionKey", app)
         self.assertIn("reportReviewAlert", app)
-        self.assertIn("report-review-layer-strip", app)
-        self.assertIn("main_report_review.json", app)
-        self.assertIn("人工锁定规则", app)
-        self.assertIn("日常证据复核", app)
-        self.assertIn("日常层可复用的 ZCode 当前事实", app)
-        self.assertIn("zcode_current_evidence_extract", app)
+        self.assertIn("model_review_comparison.json", app)
+        self.assertIn("ZCode 独立复核", app)
+        self.assertIn("DeepSeek 复核", app)
+        self.assertIn("双方证据不足 / 历史", app)
         self.assertIn(".fundamental-review-table", css)
+
+    def test_model_comparison_marks_main_report_only_tasks_as_historical(self):
+        task = {
+            "task_id": "holder",
+            "status": "verified",
+            "evidence_document_ids": ["main"],
+            "evidence_lines": [],
+        }
+        result = review.compact_model_review_task(
+            task,
+            {"task_id": "holder", "scope_label": "持仓验证", "content": "毛利率"},
+            {"main": {"source_role": "main_report_reference"}},
+        )
+        self.assertEqual(result["evidence_quality"], "historical")
+        self.assertEqual(
+            review.model_review_comparison_partition([], [result]),
+            "both_insufficient",
+        )
+
+    def test_model_comparison_uses_current_evidence_and_keeps_conflicts_visible(self):
+        zcode = {"task_id": "risk", "status": "triggered", "evidence_quality": "current"}
+        deepseek = {"task_id": "risk", "status": "not_triggered", "evidence_quality": "current"}
+        self.assertEqual(
+            review.model_review_comparison_partition([zcode], [deepseek]),
+            "conflict",
+        )
+        self.assertEqual(
+            review.model_review_comparison_partition([zcode], []),
+            "zcode_current",
+        )
+
+    def test_saved_model_comparison_covers_all_a_shares(self):
+        snapshot = review.model_review_comparison_snapshot(self.ROOT)
+        self.assertEqual(snapshot["stock_count"], 93)
+        self.assertEqual(len(snapshot["reviews"]), 93)
+        dongfang = next(row for row in snapshot["reviews"] if row["ticker"] == "000682.SZ")
+        self.assertEqual(dongfang["partition"], "consensus")
+        self.assertTrue(all(task["evidence_quality"] in {"current", "historical", "missing"} for task in dongfang["zcode"]["tasks"]))
 
     def test_public_snapshot_covers_all_rules_without_changing_price_layers(self):
         snapshot = json.loads(
