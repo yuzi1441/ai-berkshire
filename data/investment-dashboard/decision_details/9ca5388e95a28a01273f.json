@@ -1363,7 +1363,7 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-08-30T18:18:09+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
@@ -1526,7 +1526,7 @@
     "market": "A股",
     "report_path": "reports/长江电力/巴菲特Checklist-长江电力.md",
     "report_link": "reports/长江电力/巴菲特Checklist-长江电力.md",
-    "report_sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe",
+    "report_sha256": "7faf13a0221de618cf89371842b803be767d2986e242c971633b17539c4af526",
     "title": "巴菲特Checklist-长江电力",
     "source_type": "standalone",
     "decision_contract": null,
@@ -1596,9 +1596,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -1606,7 +1606,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -1620,7 +1620,7 @@
       },
       "checklist": {
         "path": "reports/长江电力/巴菲特Checklist-长江电力.md",
-        "sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe"
+        "sha256": "7faf13a0221de618cf89371842b803be767d2986e242c971633b17539c4af526"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -1628,10 +1628,10 @@
       }
     },
     "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
-    "current_source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d"
+    "current_source_fingerprint_sha256": "7a80b0d0318c677c0f9e17da85ccb8a0e76cdcf2e6a510eaf4fbce0bcc3b9836"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
   "market_session_state": "runtime_required",
@@ -1681,7 +1681,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "9fe0da4e48e7434fdf2f",
   "detail_id": "9ca5388e95a28a01273f",
   "detail_path": "./data/decision_details/9ca5388e95a28a01273f.json"
 }

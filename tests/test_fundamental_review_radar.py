@@ -2,6 +2,7 @@ import unittest
 import json
 import tempfile
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from tools import fundamental_review_radar as radar
@@ -182,7 +183,11 @@ class FundamentalReviewRadarTests(unittest.TestCase):
             "evidence_lines": [{"document_id": "local_1", "line_ref": "L1", "exact_quote": "毛利率为30%"}],
             "missing_codes": [],
         }]}
-        with patch.object(radar.opportunity_review, "request_json", return_value=(response, None)):
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(response, None)):
             result = radar.review_locked_tasks_with_local_model(resolution, documents)
         task = result["tasks"][0]
         self.assertEqual(task["status"], "data_insufficient")
@@ -202,13 +207,21 @@ class FundamentalReviewRadarTests(unittest.TestCase):
             "evidence_lines": [{"document_id": "official_1", "line_ref": "P12", "exact_quote": "综合毛利率为30.68%"}],
             "missing_codes": [],
         }]}
-        with patch.object(radar.opportunity_review, "request_json", return_value=(valid, None)):
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(valid, None)):
             result = radar.review_locked_tasks_with_local_model(resolution, documents)
         self.assertEqual(result["tasks"][0]["status"], "verified")
 
         invalid = json.loads(json.dumps(valid))
         invalid["task_results"][0]["evidence_lines"][0]["exact_quote"] = "综合毛利率为32%"
-        with patch.object(radar.opportunity_review, "request_json", return_value=(invalid, None)):
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(invalid, None)):
             result = radar.review_locked_tasks_with_local_model(resolution, documents)
         self.assertEqual(result["tasks"][0]["status"], "data_insufficient")
         self.assertIn("quote_not_found:official_1", result["tasks"][0]["evidence_validation_errors"])

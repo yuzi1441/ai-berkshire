@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-30T09:47:47+08:00",
+  "generated_at": "2026-08-30T18:18:10+08:00",
   "stock_count": 93,
   "input_fingerprint": "5d56aef41060ea007d29ca7922a1ab12b5eb68c5f9663f6dd881f863e816c723",
   "input_files": [
@@ -751,18 +751,16 @@
   ],
   "summary": {
     "partition_counts": {
-      "deepseek_current": 3,
-      "both_insufficient": 79,
-      "consensus": 2,
-      "zcode_current": 5,
-      "conflict": 4
+      "both_insufficient": 90,
+      "consensus": 1,
+      "conflict": 2
     }
   },
   "reviews": [
     {
       "ticker": "000333.SZ",
       "company": "美的集团",
-      "partition": "deepseek_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:08+08:00",
@@ -775,13 +773,14 @@
             "rule_content": "价格条件：A股进入 71-75 元区间可小仓分批（要求年化回报 12% 对应最高买入价 71.31 元）；不高于 66 元（15% 回报对应 65.87 元）为强安全边际区；当前 80.40 元位于 75-88 元观察/持有区，不构成买入前提。",
             "status": "data_insufficient",
             "conclusion": "证据档案仅提供 2026-07-13 报告基线快照价 80.40 元（与主报告同源，明确标注'不得解释成实际成交'），无复核日新价格，无法判断股价是否进入 71-75 元或 66 元以下买入带。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -804,13 +803,14 @@
             "rule_content": "持有验证条件：低成本持有者继续持有收息并跟踪五项季度指标；加仓前提为扣非归母净利润恢复正增长且经营现金流同步改善（2026Q1 扣非 109.62 亿元、同比 -14.02% 为当前核心黄灯），不因短期波动交易。",
             "status": "data_insufficient",
             "conclusion": "证据档案数据截止 2026-07-13，仅含 2026Q1 扣非 -14.02% 的黄灯基线（与主报告同源），无 2026H1/2026Q3 新财报数据可验证'扣非恢复正增长、经营现金流同步改善'是否发生；建档结论为持有/观察。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -834,13 +834,14 @@
             "rule_content": "减仓或论文重审触发条件：海外利润率连续两年下降超过 3 个百分点；大额跨界并购或商誉减值明显超预期（KUKA 相关商誉约 234.35 亿元）；连续两年依靠增债维持分红回购；股价高于 100 元重审或部分降低仓位。",
             "status": "data_insufficient",
             "conclusion": "证据档案仅在 2026-07-13 首次建档时确认 7 条红线'0 条触发'，属报告基线而非新独立验证；无其后财报或公告数据，无法确认海外利润率、商誉减值、增债分红等失效条件在复核日是否触发。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -873,13 +874,14 @@
             "rule_content": "当前不追；激进型不高于 75.27 元才小仓，稳健型 68-71 元，保守型不高于 65.87 元。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -905,13 +907,14 @@
             "rule_content": "低成本持有者继续持有收息；接近报告基准价的持仓者等待扣非利润、现金流与 ToB 回报验证。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -937,13 +940,14 @@
             "rule_content": "价格进入对应区间且扣非利润、经营现金流不继续恶化；楼宇科技利润与资产周转改善可提高仓位。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -991,6 +995,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1020,6 +1027,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -1051,6 +1061,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -1091,6 +1104,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1126,6 +1142,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1160,6 +1179,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -1210,6 +1232,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1240,6 +1263,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1271,6 +1295,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1305,6 +1330,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1332,6 +1358,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1354,6 +1381,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1394,6 +1422,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1423,6 +1454,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -1454,6 +1488,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -1493,6 +1530,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1525,6 +1565,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1556,6 +1599,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -1602,6 +1648,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1632,6 +1681,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1657,6 +1709,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -1697,6 +1752,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1732,6 +1790,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1761,6 +1822,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -1810,6 +1874,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1839,6 +1906,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -1870,6 +1940,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -1909,6 +1982,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1946,6 +2022,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -1982,6 +2061,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -2033,6 +2115,9 @@
             "evidence_roles": [
               "local_current_evidence"
             ],
+            "evidence_dates": [
+              "2026-08-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -2059,6 +2144,9 @@
             ],
             "evidence_roles": [
               "local_current_evidence"
+            ],
+            "evidence_dates": [
+              "2026-08-19"
             ],
             "evidence_lines": [
               {
@@ -2091,6 +2179,9 @@
             ],
             "evidence_roles": [
               "local_current_evidence"
+            ],
+            "evidence_dates": [
+              "2026-08-19"
             ],
             "evidence_lines": [
               {
@@ -2128,7 +2219,12 @@
             ],
             "evidence_roles": [
               "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07",
+              "2026-08-19"
             ],
             "evidence_lines": [
               {
@@ -2164,6 +2260,10 @@
               "local_current_evidence",
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07",
+              "2026-08-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2192,6 +2292,10 @@
             "evidence_roles": [
               "local_current_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07",
+              "2026-08-19"
             ],
             "evidence_lines": [
               {
@@ -2238,6 +2342,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2267,6 +2374,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -2298,6 +2408,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -2337,6 +2450,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2363,6 +2479,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -2395,6 +2514,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -2441,6 +2563,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2471,6 +2596,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2500,6 +2628,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -2539,6 +2670,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2571,6 +2705,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2602,6 +2739,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -2643,6 +2783,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2673,6 +2816,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2702,6 +2848,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -2738,6 +2887,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2765,6 +2917,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2791,6 +2946,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -2827,6 +2985,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2862,6 +3023,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2892,6 +3056,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -2937,6 +3104,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -2968,6 +3138,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -3001,6 +3174,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3029,7 +3205,7 @@
     {
       "ticker": "002028.SZ",
       "company": "思源电气",
-      "partition": "zcode_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:08+08:00",
@@ -3042,14 +3218,17 @@
             "rule_content": "买入前提：145 元以上空仓者以跟踪为主、不追高；125-145 元仅激进型小仓分批（接受估值压缩）；110-125 元风险收益开始合理（需同时确认核心毛利和现金流）；90-110 元保守型安全边际较明显（前提是论文未坏）；空仓者等待 125 元以下更合理、110 元以下更有安全边际的机会。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -3076,14 +3255,17 @@
             "rule_content": "持仓验证：已有仓位可以持有验证，仓位上限由能否承受估值压缩决定；持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件；任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -3114,14 +3296,17 @@
             "rule_content": "风险/失效条件（减仓或论文重审信号）：CFO/净利连续两期低于 60% 且应收账龄、收款诉讼继续上升；开关、变压器毛利率连续显著下滑；海外重大延期、坏账、索赔、制裁或供应资格问题；订单放缓时产能仍快速扩张；H 股大比例折价发行或资金进入低回报并购；创始团队异常减持、关键高管流失；重大质量事故、召回、停标；SST/无 SF6 技术迁移加速而公司明显落后。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2",
               "local_1"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -3163,6 +3348,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3189,6 +3377,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -3218,6 +3409,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -3266,6 +3460,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3300,6 +3497,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3336,6 +3536,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3376,6 +3579,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3408,6 +3614,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3429,6 +3638,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3479,6 +3691,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3513,6 +3728,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3549,6 +3767,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3589,6 +3810,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3626,6 +3850,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3661,6 +3888,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3712,6 +3942,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3741,6 +3974,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3777,6 +4013,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3822,6 +4061,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3856,6 +4098,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3882,6 +4127,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -3931,6 +4179,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -3965,6 +4216,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4001,6 +4255,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4045,6 +4302,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4078,6 +4338,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4113,6 +4376,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4163,6 +4429,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4197,6 +4466,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4227,6 +4499,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -4267,6 +4542,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4299,6 +4577,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4325,6 +4606,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -4361,6 +4645,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4389,6 +4676,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -4420,6 +4710,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -4454,6 +4747,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -4490,6 +4786,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4521,6 +4820,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -4567,6 +4869,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4595,6 +4900,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4626,6 +4934,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4667,6 +4978,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4701,6 +5015,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4737,6 +5054,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4788,6 +5108,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4817,6 +5140,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4849,6 +5175,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4890,6 +5219,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4916,6 +5248,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -4944,6 +5279,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -4968,7 +5306,7 @@
     {
       "ticker": "002270.SZ",
       "company": "华明装备",
-      "partition": "deepseek_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -4981,14 +5319,17 @@
             "rule_content": "价格条件：报告基线 17.81 元空仓者不追；≤13.90 元基本面未损时分批买入（中性情景约 12% 年化）；13.90—14.67 元较有吸引力分批建仓；14.67—16.00 元小仓分批等待季报验证；16.00—20.00 元观察或持有不主动加仓；保守型等 ≤13.90 元且论文完好。",
             "status": "data_insufficient",
             "conclusion": "本地证据 thesis 档案最近一次记录为 2026-07-13：股价降至 17.81 元、处于 16—20 元'观察或持有不主动加仓'带、未达 14—16 元买入带；但距复核日 2026-08-29 已无更新价格，无法判断当前是否进入任一买入带。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2",
               "local_1"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5012,14 +5353,17 @@
             "rule_content": "持有验证条件：小仓持有者持有观察不加仓，等待 2026Q2/Q3 核心收入、扣非、毛利和现金流同步恢复；加仓信号为电力设备收入恢复双位数增长且扣非利润增速不低于收入、海外收入增长且国际毛利率止跌回款改善、500kV/±800kV 产品进入第二第三个独立批量项目。",
             "status": "data_insufficient",
             "conclusion": "thesis 档案 2026-07-13 记录'无新财报或新重大公告'，持仓验证等待的 2026Q2/中报收入、扣非、应收回款数据在本地证据中不存在；亦无其后季报，无法验证加仓信号是否成立。基线纪律为持有观察、不加仓。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2",
               "local_1"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5045,14 +5389,17 @@
             "rule_content": "减仓/重审触发：重大质量事故、召回、索赔或供应商资格暂停；连续两季核心收入、毛利、扣非和现金流同时弱化；海外收入增长依赖更长账期、普通应收与坏账持续上升；H 股低价摊薄、跨能力圈并购或商誉/负债快速增加；>24.00 元基本面未上修时考虑减仓。",
             "status": "data_insufficient",
             "conclusion": "thesis 档案基线（2026-07-13）红线触发为 0、观察健康度 6/10，属建档基线而非复核日新验证；其后无财报或公告证据，无法确认连续两季弱化、应收恶化、质量事故或 >24 元减仓线是否触发。",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2",
               "local_1"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5086,14 +5433,17 @@
             "rule_content": "报告基准价 17.81 元不追；14-16 元才允许分批研究，13.90 元以下且基本面未恶化时吸引力进一步提高。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5120,14 +5470,17 @@
             "rule_content": "16-20 元以持有观察、不加仓为主；若股价进入 20-24 元而利润预期没有同步上修，可考虑降低仓位。",
             "status": "triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5160,6 +5513,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -5209,6 +5565,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5237,6 +5596,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -5268,6 +5630,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -5304,6 +5669,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5336,6 +5704,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5367,6 +5738,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -5418,6 +5792,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5446,6 +5823,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -5477,6 +5857,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -5518,6 +5901,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5550,6 +5936,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5581,6 +5970,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -5630,6 +6022,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5658,6 +6053,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -5689,6 +6087,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -5725,6 +6126,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5757,6 +6161,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5778,6 +6185,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -5828,6 +6238,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5863,6 +6276,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5893,6 +6309,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -5932,6 +6351,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5964,6 +6386,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -5986,6 +6411,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6001,7 +6429,7 @@
     {
       "ticker": "002463.SZ",
       "company": "沪电股份",
-      "partition": "deepseek_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -6014,14 +6442,17 @@
             "rule_content": "空仓买入前提：当前 112.22 元位于 101-125 元无安全边际区间中部，观望不买入；87-101 元为关注区（对应 2026E PE 25-29x，历史中位，可小仓位关注），70-87 元为分批建仓区（20-25x，有安全边际）；加仓信号为价格进入 70-87 元且基本面无恶化，或 AI服务器及HPC分部恢复双位数增长、公司公告切入 mSAP 量产、FCF/净利回升到 50% 以上、hyperscaler 给出 2027 年 capex 继续增长指引。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6051,14 +6482,17 @@
             "rule_content": "持仓验证：可继续持有但必须设定纪律——成本 70 元以下者考虑在 120 元以上分批减持至舒适仓位，单一标的仓位不超过组合 10%（该股一年内曾回撤 -46.3%）；持有期间逐季核对基本面是否仍加速（H1 净利 +68%~78%、Q2 环比 +35%）及下方卖出信号指标。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6084,14 +6518,17 @@
             "rule_content": "失效/卖出信号（触发任一即重新评估）：1.单季毛利率环比下降超过2个百分点（跌破 33.5%）；2.单季营收环比负增长；3.AI服务器及HPC分部继续零增长且交换机分部增速跌破 +40%；4.经营现金流连续两个季度低于净利润的 60%（2026Q1 为 41%）；5.有息负债超过净资产的 50%（2026Q1 为 37.8%）；6.hyperscaler 2027 年 capex 指引下修；7.港股 IPO 发行价大幅折让或摊薄超过 15%；8.实控人（碧景控股/合拍友联）开始减持。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6129,14 +6566,17 @@
             "rule_content": "报告基准价 112.22 元无安全边际；87-101 元只进入关注区，70-87 元且基本面未恶化才分批建仓。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6165,14 +6605,17 @@
             "rule_content": "基本面仍在加速时可以持有，但要限制单票风险并执行毛利率、现金流、负债和客户分部的卖出纪律。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6199,14 +6642,17 @@
             "rule_content": "70-87 元，或 AI 服务器/HPC 恢复双位数增长、mSAP 量产、FCF/净利润回到 50% 以上且 2027 云厂商资本开支未下修。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -6251,6 +6697,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6282,6 +6731,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6311,6 +6763,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -6350,6 +6805,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6379,6 +6837,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -6413,6 +6874,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -6463,6 +6927,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6498,6 +6965,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6527,6 +6997,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -6566,6 +7039,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6600,6 +7076,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -6636,6 +7115,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -6686,6 +7168,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6721,6 +7206,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6750,6 +7238,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -6790,6 +7281,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6817,6 +7311,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6843,6 +7340,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -6889,6 +7389,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6924,6 +7427,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -6953,6 +7459,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -6992,6 +7501,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7024,6 +7536,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7050,6 +7565,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -7090,6 +7608,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7125,6 +7646,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7154,6 +7678,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -7194,6 +7721,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7226,6 +7756,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7257,6 +7790,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -7303,6 +7839,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7338,6 +7877,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7367,6 +7909,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -7412,6 +7957,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7444,6 +7992,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7470,6 +8021,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -7516,6 +8070,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7545,6 +8102,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-24"
             ],
             "evidence_lines": [
               {
@@ -7576,6 +8136,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-24"
             ],
             "evidence_lines": [
               {
@@ -7610,6 +8173,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7642,6 +8208,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7673,6 +8242,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-24"
             ],
             "evidence_lines": [
               {
@@ -7719,6 +8291,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7749,6 +8324,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7774,6 +8352,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -7813,6 +8394,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7845,6 +8429,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7871,6 +8458,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -7917,6 +8507,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -7946,6 +8539,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -7977,6 +8573,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -8017,6 +8616,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8046,6 +8648,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -8078,6 +8683,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8106,7 +8714,7 @@
     {
       "ticker": "300760.SZ",
       "company": "迈瑞医疗",
-      "partition": "zcode_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -8119,13 +8727,14 @@
             "rule_content": "买入前提：空仓者不在当前价（报告基线 139.68 元）重仓追买；激进型 125 元附近或 2026H1 利润明确转正后重新估值（仅观察仓）；稳健型 115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定；保守型 100 元附近并确认论文未破坏。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -8148,13 +8757,14 @@
             "rule_content": "持仓验证：已有持仓有条件持有、仓位不过度集中，按信号跟踪；加仓/重新评级信号包括：国内收入连续两个季度转正（非低价大单一次性波动）、归母净利润恢复正增长且经营现金流同步改善、IVD 毛利率不再下降且份额继续提升、国际收入保持 15% 左右增长。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -8180,13 +8790,14 @@
             "rule_content": "风险/失效条件：出现任一情形触发减仓或论文重审——2026H2 国内收入仍连续双位数下降；国际收入降至个位数增长且海外费用率上升；综合或 IVD 毛利率继续显著下降且份额无法带来利润；商誉减值、惠泰协同不及预期或继续高价并购；重大 FDA/CE、招采、反商业贿赂或数据合规事件；控股股东质押比例继续上升或继任不确定。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -8220,13 +8831,14 @@
             "rule_content": "报告基准价 139.68 元处于 130-160 元合理观察区；125 元附近只适合激进型观察仓，115-120 元且海外双位数增长、国内止跌和毛利率稳定时才稳健分批，100 元附近需确认投资论文未破坏。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -8252,14 +8864,17 @@
             "rule_content": "仓位不过度集中时可有条件持有，持续核对国内收入、利润与经营现金流、IVD 毛利率、海外高端客户横向采购、商誉和控股股东质押。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -8288,13 +8903,14 @@
             "rule_content": "国内收入连续两个季度转正、归母利润与经营现金流同步改善、IVD 份额提升但毛利率不再下降、海外收入保持约 15% 增长，且新兴业务剔除并表后仍有双位数有机增长。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -8343,6 +8959,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8372,6 +8991,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -8403,6 +9025,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -8438,6 +9063,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8470,6 +9098,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8501,6 +9132,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -8547,6 +9181,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8577,6 +9214,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8601,6 +9241,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -8641,6 +9284,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8673,6 +9319,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8704,6 +9353,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -8750,6 +9402,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-05"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8780,6 +9435,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-05"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8805,6 +9463,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-05"
             ],
             "evidence_lines": [
               {
@@ -8840,6 +9501,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-05"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8872,6 +9536,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-05"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8898,6 +9565,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-05"
             ],
             "evidence_lines": [
               {
@@ -8944,6 +9614,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -8973,6 +9646,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -9004,6 +9680,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -9044,6 +9723,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9075,6 +9757,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -9111,6 +9796,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -9161,6 +9849,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9189,6 +9880,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -9220,6 +9914,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -9259,6 +9956,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9292,6 +9992,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -9327,6 +10030,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9354,7 +10060,7 @@
     {
       "ticker": "600089.SH",
       "company": "特变电工",
-      "partition": "conflict",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -9367,13 +10073,14 @@
             "rule_content": "空仓买入前提（价格分层）：18 元以上不买；13.3-15.0 元仅在半年报确认设备毛利、扣非和现金流未恶化时建立不超过目标仓位 1/4 的研究仓；稳健型 11.8-13.3 元为分批买入区（接近中性情景 8% 年化回报阈值）；保守型 10.7 元以下接近 10% 中性回报阈值。价格与基本面必须同时满足。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -9401,13 +10108,14 @@
             "rule_content": "持仓者以现金流和资本纪律而非订单新闻作为去留标准，逐季/年度验证：滚动 OCF/归母净利保持大于 1，Capex/OCF 先降至 1.5x 以下并继续向 1x 收敛；电气设备毛利率稳定在 20% 左右或继续提升；海外收入增长同时境外毛利回升且应收和合同资产不快于收入。半年报若显著改变扣非利润、资本开支、设备毛利或净资产应重新计算。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -9428,13 +10136,14 @@
             "rule_content": "减仓/论文失效信号：电气设备毛利率跌破 18% 且订单增速放缓；订单增长但经营现金流、应收和合同资产继续恶化；多晶硅新增大额减值或低利用率长期化；煤制气超预算、延期、追加大额融资或 IRR 低于资本成本；核心债务和财务费用持续快于经营利润增长；关联交易扩大但缺少第三方定价与增量 ROIC 证据。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -9470,6 +10179,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-13"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9495,14 +10207,17 @@
             "rule_content": "成本低、现金流和设备毛利未破坏时可持有观察，不因低 PB 或订单新闻加仓；仓位重且价格接近 19-21.5 元时应降低集中度。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -9532,14 +10247,17 @@
             "rule_content": "电气设备毛利率约 20%、海外增长同时改善毛利和回款、滚动 OCF/归母净利大于 1、Capex/OCF 向 1 倍收敛、硅料毛利转正且无新增大额减值。",
             "status": "triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -9586,6 +10304,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9614,6 +10335,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -9644,6 +10368,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -9677,6 +10404,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9709,6 +10439,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9740,6 +10473,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -9786,6 +10522,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9821,6 +10560,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9845,6 +10587,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-23"
             ],
             "evidence_lines": [
               {
@@ -9890,6 +10635,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9922,6 +10670,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -9953,6 +10704,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-23"
             ],
             "evidence_lines": [
               {
@@ -10003,6 +10757,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10032,6 +10789,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10063,6 +10823,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10103,6 +10866,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10135,6 +10901,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10166,6 +10935,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10207,6 +10979,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10241,6 +11016,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10277,6 +11055,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10317,6 +11098,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10349,6 +11133,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10375,6 +11162,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -10424,6 +11214,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10454,6 +11247,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10483,6 +11279,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -10522,6 +11321,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10556,6 +11358,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10587,6 +11392,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -10636,6 +11444,9 @@
             "evidence_roles": [
               "local_current_evidence"
             ],
+            "evidence_dates": [
+              "2026-08-21"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -10668,6 +11479,9 @@
             "evidence_roles": [
               "local_current_evidence"
             ],
+            "evidence_dates": [
+              "2026-08-21"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -10699,6 +11513,9 @@
             ],
             "evidence_roles": [
               "local_current_evidence"
+            ],
+            "evidence_dates": [
+              "2026-08-21"
             ],
             "evidence_lines": [
               {
@@ -10740,6 +11557,9 @@
             "evidence_roles": [
               "local_current_evidence"
             ],
+            "evidence_dates": [
+              "2026-08-21"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -10771,7 +11591,11 @@
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_current_evidence",
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-08-21"
             ],
             "evidence_lines": [
               {
@@ -10801,6 +11625,9 @@
             ],
             "evidence_roles": [
               "local_current_evidence"
+            ],
+            "evidence_dates": [
+              "2026-08-21"
             ],
             "evidence_lines": [
               {
@@ -10847,6 +11674,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10876,6 +11706,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10900,6 +11733,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -10939,6 +11775,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -10971,6 +11810,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11002,6 +11844,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-08"
             ],
             "evidence_lines": [
               {
@@ -11052,6 +11897,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11075,6 +11923,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -11101,6 +11952,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -11135,6 +11989,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11167,6 +12024,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11197,6 +12057,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -11248,6 +12111,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11271,6 +12137,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -11297,6 +12166,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -11331,6 +12203,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11363,6 +12238,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11390,6 +12268,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11415,7 +12296,7 @@
     {
       "ticker": "600406.SH",
       "company": "国电南瑞",
-      "partition": "zcode_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -11428,12 +12309,15 @@
             "rule_content": "空仓者买入前提：观察、不买入；等待股价 ≤21.84 元（中性现值）开始分批建仓，≤17.48 元（20% 安全边际候选价）积极建仓，≤15.29 元（30% 安全边际）重仓候选；现价 23.58 元比 17.48 元高 34.9%，现价买入期望年化约 7.8% 低于 10% 要求回报，没有需要现在就买的理由。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_4"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-23"
             ],
             "evidence_lines": [
               {
@@ -11455,13 +12339,17 @@
             "rule_content": "持仓验证：持仓者持有、不加仓，前提为全部红线未触发（标准无保留审计、无处罚、无重大诉讼、无大股东减持、商誉 144.47 万元、有息负债率 0.60%、FCF/净利 1.29、分红率 60% 连续三年）；已无安全边际，不应在此价位增加仓位；若仓位 >15% 不再投入新资金，等 2026-08-27 中报验证 Q2 单季毛利率同比、现金流与 750 亿收入目标。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_4",
               "local_6"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-13",
+              "2026-07-23"
             ],
             "evidence_lines": [
               {
@@ -11488,13 +12376,17 @@
             "rule_content": "卖出信号（任一触发即重审）：① 股价 ≥30 元而归母增速仍 <10%；② 年度经营现金流连续 2 年低于净利润；③ 综合毛利率跌破 24% 或核心电网智能业务毛利率跌破 28%；④ 网内收入连续 2 年零增长或负增长；⑤ 非国网应收账款占比超 55% 且计提率升破 20%；⑥ 非标审计意见或内控非标；⑦ 控股股东/董监高重大诚信或监管处罚；⑧ 2026 年收入低于 700 亿元。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_4",
               "local_6"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-13",
+              "2026-07-23"
             ],
             "evidence_lines": [
               {
@@ -11531,6 +12423,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11553,13 +12448,16 @@
             "rule_content": "生意未坏可持有但不加仓；仓位超过 15% 时不再投入新资金，等待中报核对毛利率、现金流、订单和回购用途。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2",
               "local_5"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -11584,14 +12482,18 @@
             "rule_content": "价格不高于 21.84/17.48 元、所有卖出红线未触发，并至少满足 Q2 毛利率同比转正、利润增速不低于 12%、海外毛利率不低于 22%、注销式回购或网内业务增速不低于 10% 之一。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06",
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -11641,6 +12543,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11664,6 +12569,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -11690,6 +12598,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -11724,6 +12635,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11756,6 +12670,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-08"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11782,6 +12699,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-08"
             ],
             "evidence_lines": [
               {
@@ -11828,6 +12748,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11851,6 +12774,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -11877,6 +12803,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -11911,6 +12840,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -11932,6 +12864,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -11959,6 +12894,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-09"
             ],
             "evidence_lines": [
               {
@@ -12000,6 +12938,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-27"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12024,6 +12965,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-27"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12047,6 +12991,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-27"
             ],
             "evidence_lines": [
               {
@@ -12081,6 +13028,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-27"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12112,6 +13062,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-27"
             ],
             "evidence_lines": [
               {
@@ -12145,6 +13098,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-27"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12169,7 +13125,7 @@
     {
       "ticker": "600549.SH",
       "company": "厦门钨业",
-      "partition": "zcode_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -12182,13 +13138,14 @@
             "rule_content": "空仓者买入前提：回避，不因股价从 96.85 元跌到 48.39 元（-50%）就认为便宜；需等两个条件之一：(a) 价格跌至 33.5 元以下（28-33.5 元为主要建仓区，对应 20% 安全边际及 PB 2.5-3.0x）；或 (b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上；两者都不满足前不建仓。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -12209,13 +13166,14 @@
             "rule_content": "持仓验证：持有但不加仓，并主动降低仓位至可承受水平；悲观情景下行至 15.8 元（-67%），需确认自己能承受；若仓位超过组合 10%，建议在半年报前减至 5% 以内。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -12239,13 +13197,14 @@
             "rule_content": "卖出信号：① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；③ 滚动 OCF/归母净利连续两期 < 0.7 且存货、短债同时上升；④ 钨价跌破 35 万/标吨；⑤ 洛阳豫鹭停产超 180 天且影响年度归母净利 > 5%；⑥ 关联交易或资产注入明显损害少数股东；⑦ 券商 2026E 一致预期下修至 35 亿元以下且股价未同步调整。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -12278,14 +13237,17 @@
             "rule_content": "48.39 元回避，不因较高点腰斩就抄底；33.5-42 元仅是研究性小仓候选，28-33.5 元为主要建仓研究区，且必须先验证存货减值、现金流、短债和钨价。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -12314,13 +13276,14 @@
             "rule_content": "持有但不加仓并降低到可承受仓位；报告建议超过组合 10% 时在半年报前降到 5% 以内，55 元以上而正常化利润未上修时进一步减仓。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -12344,14 +13307,17 @@
             "rule_content": "价格不高于 33.5 元且论文未受损，或半年报证明 OCF 明显改善、存货/短债至少一项下降且钨价稳定在 45 万以上；重大存货减值、Q3 利润低于 6 亿元、OCF 覆盖持续不足或钨价跌破 35 万即重审。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -12396,6 +13362,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12426,6 +13395,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12451,6 +13423,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -12485,6 +13460,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12517,6 +13495,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12543,6 +13524,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -12584,6 +13568,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12619,6 +13606,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12644,6 +13634,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -12678,6 +13671,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12710,6 +13706,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-19"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12731,6 +13730,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-19"
             ],
             "evidence_lines": [
               {
@@ -12772,6 +13774,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12807,6 +13812,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12832,6 +13840,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -12866,6 +13877,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12897,6 +13911,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -12930,6 +13947,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -12950,7 +13970,7 @@
     {
       "ticker": "600900.SH",
       "company": "长江电力",
-      "partition": "consensus",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -12963,13 +13983,14 @@
             "rule_content": "买入前提：股价进入稳健型 23-25 元区间（PE 15.60-16.95x、股息率 4.00%-4.35%）且六站来水、电量、综合结算价没有结构性恶化，方可分批建仓；25-26 元为激进型小仓试建带；当前 28.42 元（PE 19.27x、股息率 3.52%）空仓不追价。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -12990,13 +14011,14 @@
             "rule_content": "持仓验证：持仓者可继续收息并按季度复核；跟踪末期 0.79 元股息（2026-07-16 登记、07-17 发放）是否按期到账，六站发电量与来水是否结构性恶化，TTM EPS 1.4747 元、简化 FCF/股 1.77035 元观察锚与 70% 分红纪律是否保持。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -13017,13 +14039,14 @@
             "rule_content": "风险/失效条件（减仓或论文重审信号，任一触发即重审）：① 估值升至 21 倍以上而盈利、现金流和分红没有同步改善；② 连续 2-3 年综合结算价或单位电量现金贡献下降超过 5%；③ 长期资产现金支出连续两年超过 OCF 50% 且净债务上升；④ 抽蓄、海外或关联资产重大减值、延期、超支或低回报注入；⑤ 重大大坝、机组、生态事故或市场化规则永久削弱收益权。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -13057,14 +14080,17 @@
             "rule_content": "28.42 元不追；25-26 元只可小仓试建，23-25 元稳健分批，22.5 元以下且水文、电价、治理和项目回报未恶化时才考虑较高仓位。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -13091,14 +14117,17 @@
             "rule_content": "作为长期现金流资产可继续收息并按季度复核；当前中性资本利得有限，不因除息机械下跌加仓。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-13"
             ],
             "evidence_lines": [
               {
@@ -13125,13 +14154,14 @@
             "rule_content": "进入 23-25 元且六站量价未结构恶化，调节/容量收益可重复、抽蓄 IRR 高于资金成本、债务下降；估值超过 21 倍而盈利现金分红未改善、单位电量现金贡献持续下降或低回报资产注入时重审。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -13177,6 +14207,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13206,6 +14239,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -13237,6 +14273,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -13276,6 +14315,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13308,6 +14350,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13339,6 +14384,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -13389,6 +14437,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13424,6 +14475,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13454,6 +14508,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -13498,6 +14555,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13530,6 +14590,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13556,6 +14619,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -13602,6 +14668,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13637,6 +14706,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13667,6 +14739,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -13711,6 +14786,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13747,6 +14825,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -13781,6 +14862,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-14"
             ],
             "evidence_lines": [
               {
@@ -13831,6 +14915,9 @@
             "evidence_roles": [
               "local_current_evidence"
             ],
+            "evidence_dates": [
+              "2026-07-20"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -13857,7 +14944,11 @@
               "local_3"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_current_evidence",
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-20"
             ],
             "evidence_lines": [
               {
@@ -13890,7 +14981,11 @@
               "local_3"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_current_evidence",
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-20"
             ],
             "evidence_lines": [
               {
@@ -13931,7 +15026,11 @@
               "local_3"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_current_evidence",
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-20"
             ],
             "evidence_lines": [
               {
@@ -13964,7 +15063,11 @@
               "local_3"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_current_evidence",
+              "local_supporting_evidence"
+            ],
+            "evidence_dates": [
+              "2026-07-20"
             ],
             "evidence_lines": [
               {
@@ -14000,6 +15103,10 @@
               "local_current_evidence",
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-14",
+              "2026-07-20"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -14028,7 +15135,7 @@
     {
       "ticker": "601126.SH",
       "company": "四方股份",
-      "partition": "conflict",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -14041,13 +15148,14 @@
             "rule_content": "买入前提：股价回落到 35-45 元区间且基本面未恶化——2026/2027 年利润维持 15%+ 增长、毛利率企稳、经营现金流/净利润恢复到 1x 以上——才更接近有安全边际的研究买点；60 元以上空仓不追高。",
             "status": "data_insufficient",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -14075,14 +15183,17 @@
             "rule_content": "持仓验证：持仓者把仓位上限和卖出纪律前置，持续跟踪毛利率、经营现金流和新业务利润质量；若 PE 继续扩张而业绩增速未同步，应分批降低风险暴露。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -14109,13 +15220,14 @@
             "rule_content": "风险/失效条件：综合毛利率跌破 28%，或经营现金流连续两年弱于净利润，或大客户订单/回款恶化，或新业务收入增长但利润率持续低迷，或估值维持 60x 而增速降至 10% 附近，触发卖出/减仓。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -14151,6 +15263,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14171,14 +15286,17 @@
             "rule_content": "可持有跟踪，但需前置仓位上限和卖出纪律。",
             "status": "verified",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -14211,6 +15329,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -14257,6 +15378,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14287,6 +15409,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14317,6 +15440,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14355,6 +15479,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14382,6 +15507,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14411,6 +15537,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14458,6 +15585,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14488,6 +15618,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14517,6 +15650,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -14556,6 +15692,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14584,6 +15723,7 @@
             "evidence_quality": "missing",
             "evidence_document_ids": [],
             "evidence_roles": [],
+            "evidence_dates": [],
             "evidence_lines": [],
             "missing_codes": [
               "no_current_value",
@@ -14602,6 +15742,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -14647,6 +15790,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14677,6 +15823,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14706,6 +15855,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -14745,6 +15897,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14773,6 +15928,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -14804,6 +15962,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-07"
             ],
             "evidence_lines": [
               {
@@ -14854,6 +16015,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14884,6 +16048,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14913,6 +16080,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -14952,6 +16122,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -14979,6 +16152,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15005,6 +16181,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -15051,6 +16230,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15081,6 +16263,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15110,6 +16295,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -15149,6 +16337,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15180,6 +16371,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -15213,6 +16407,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15238,7 +16435,7 @@
     {
       "ticker": "601398.SH",
       "company": "工商银行",
-      "partition": "zcode_current",
+      "partition": "both_insufficient",
       "zcode": {
         "model": "zcode-inline-review/GLM",
         "generated_at": "2026-08-29T17:50:09+08:00",
@@ -15251,14 +16448,17 @@
             "rule_content": "买入前提：基于 2025 EPS 1.00 元、BVPS 10.83 元的价格带——≤6.0 元（≤6x PE、≤0.55x PB）较有安全边际可重点研究/分批配置；6.0-6.5 元稳健型小仓；6.5-7.5 元当前附近观望或小仓；≥8.5 元不追高；加仓还需净息差连续两个季度稳定或回升且非一次性因素。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_1",
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence",
+              "local_supporting_evidence",
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -15285,13 +16485,14 @@
             "rule_content": "持仓验证：持有者重在股息而非弹性，跟踪 ROE 与净息差走势及分红/资本充足率；加仓信号要求 ROE 止跌、年化维持在 9% 以上并有改善迹象，手续费净收入恢复可持续增长，房地产与地方债相关不良不再恶化。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -15317,13 +16518,14 @@
             "rule_content": "风险/失效条件（减仓/回避信号，出现即重审）：净息差继续显著下行且负债成本难以下降；房地产、个人贷款、地方平台风险显著暴露；资本充足率下降导致分红政策受压；贷款减值损失持续快于收入增长；股价上涨仅由高股息抱团推动而基本面未改善。",
             "status": "not_triggered",
             "conclusion": "",
-            "evidence_quality": "current",
+            "evidence_quality": "historical",
             "evidence_document_ids": [
               "local_2"
             ],
             "evidence_roles": [
-              "local_current_evidence"
+              "local_supporting_evidence"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_2",
@@ -15364,6 +16566,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15396,6 +16601,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15427,6 +16635,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -15473,6 +16684,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15503,6 +16717,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15532,6 +16749,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -15571,6 +16791,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15603,6 +16826,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15629,6 +16855,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -15675,6 +16904,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15705,6 +16937,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15730,6 +16965,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-30"
             ],
             "evidence_lines": [
               {
@@ -15775,6 +17013,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15807,6 +17048,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15838,6 +17082,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-30"
             ],
             "evidence_lines": [
               {
@@ -15884,6 +17131,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15914,6 +17164,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -15940,6 +17193,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -15980,6 +17236,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-03"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16011,6 +17270,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -16045,6 +17307,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-03"
             ],
             "evidence_lines": [
               {
@@ -16094,6 +17359,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16118,6 +17386,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -16144,6 +17415,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -16180,6 +17454,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16212,6 +17489,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-07"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16233,6 +17513,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-07"
             ],
             "evidence_lines": [
               {
@@ -16283,6 +17566,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16312,6 +17598,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -16343,6 +17632,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -16383,6 +17675,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16405,6 +17700,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16426,6 +17724,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -16467,6 +17768,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-25"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16497,6 +17801,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-25"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16522,6 +17829,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-25"
             ],
             "evidence_lines": [
               {
@@ -16557,6 +17867,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-25"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16589,6 +17902,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-25"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16620,6 +17936,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-25"
             ],
             "evidence_lines": [
               {
@@ -16671,6 +17990,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16695,6 +18017,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -16721,6 +18046,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -16756,6 +18084,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16788,6 +18119,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16809,6 +18143,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -16855,6 +18192,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16885,6 +18225,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16910,6 +18253,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -16950,6 +18296,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -16984,6 +18333,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17012,6 +18364,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -17062,6 +18417,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17092,6 +18450,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17121,6 +18482,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -17160,6 +18524,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17191,6 +18558,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -17228,6 +18598,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -17278,6 +18651,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17308,6 +18682,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17339,6 +18714,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17378,6 +18754,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17410,6 +18787,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17442,6 +18820,7 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17487,6 +18866,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17518,6 +18900,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17547,6 +18932,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -17587,6 +18975,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-26"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17617,6 +19008,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -17649,6 +19043,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-26"
             ],
             "evidence_lines": [
               {
@@ -17693,6 +19090,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17722,6 +19122,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -17753,6 +19156,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -17793,6 +19199,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17825,6 +19234,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17846,6 +19258,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -17887,6 +19302,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17917,6 +19335,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -17946,6 +19367,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -17986,6 +19410,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18018,6 +19445,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18044,6 +19474,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18090,6 +19523,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18119,6 +19555,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18150,6 +19589,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18190,6 +19632,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18221,6 +19666,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18257,6 +19705,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18308,6 +19759,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18338,6 +19792,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18367,6 +19824,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -18407,6 +19867,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18439,6 +19902,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-08-10"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18465,6 +19931,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-08-10"
             ],
             "evidence_lines": [
               {
@@ -18515,6 +19984,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18544,6 +20016,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18575,6 +20050,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18614,6 +20092,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18646,6 +20127,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18672,6 +20156,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18722,6 +20209,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18751,6 +20241,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18782,6 +20275,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18821,6 +20317,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18853,6 +20352,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-23"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18879,6 +20381,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-23"
             ],
             "evidence_lines": [
               {
@@ -18925,6 +20430,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -18954,6 +20462,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -18985,6 +20496,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -19029,6 +20543,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19063,6 +20580,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -19099,6 +20619,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -19149,6 +20672,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19184,6 +20710,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19213,6 +20742,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -19258,6 +20790,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19293,6 +20828,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-06"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19323,6 +20861,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-06"
             ],
             "evidence_lines": [
               {
@@ -19374,6 +20915,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19403,6 +20947,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -19434,6 +20981,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -19473,6 +21023,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-06-24"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19501,6 +21054,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -19535,6 +21091,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-06-24"
             ],
             "evidence_lines": [
               {
@@ -19580,6 +21139,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19609,6 +21171,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -19645,6 +21210,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -19689,6 +21257,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19721,6 +21292,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-09"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19747,6 +21321,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-09"
             ],
             "evidence_lines": [
               {
@@ -19793,6 +21370,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19828,6 +21408,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19857,6 +21440,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-30"
             ],
             "evidence_lines": [
               {
@@ -19896,6 +21482,9 @@
             "evidence_roles": [
               "main_report_reference"
             ],
+            "evidence_dates": [
+              "2026-07-30"
+            ],
             "evidence_lines": [
               {
                 "document_id": "local_1",
@@ -19924,6 +21513,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-30"
             ],
             "evidence_lines": [
               {
@@ -19956,6 +21548,9 @@
             ],
             "evidence_roles": [
               "main_report_reference"
+            ],
+            "evidence_dates": [
+              "2026-07-30"
             ],
             "evidence_lines": [
               {

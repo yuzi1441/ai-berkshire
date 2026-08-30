@@ -1,7 +1,7 @@
 ---
 title: "报告库 MOC"
 type: generated-index
-generated_at: 2026-08-27T22:04:57+08:00
+generated_at: 2026-08-30T18:18:10+08:00
 ---
 
 # 报告库 MOC
@@ -181,6 +181,7 @@ generated_at: 2026-08-27T22:04:57+08:00
 - [china-shenhua](../china-shenhua/)
 - [community](../community/)
 - [focus-media](../focus-media/)
+- [fundamental-review-radar](../fundamental-review-radar/)
 - [liblibAI](../liblibAI/)
 - [openrouter](../openrouter/)
 - [zijin-mining](../zijin-mining/)

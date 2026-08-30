@@ -416,7 +416,7 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-08-30T18:18:09+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
@@ -633,7 +633,7 @@
     "market": "A股",
     "report_path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
     "report_link": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
-    "report_sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db",
+    "report_sha256": "ff8d5d3da1d5fe2158b6b1302953d952386f0d3cdafaa55ff774f3e86eab2479",
     "title": "巴菲特Checklist-联影医疗",
     "source_type": "standalone",
     "decision_contract": null,
@@ -691,9 +691,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -701,7 +701,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -715,7 +715,7 @@
       },
       "checklist": {
         "path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
-        "sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db"
+        "sha256": "ff8d5d3da1d5fe2158b6b1302953d952386f0d3cdafaa55ff774f3e86eab2479"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -723,10 +723,10 @@
       }
     },
     "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
-    "current_source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8"
+    "current_source_fingerprint_sha256": "e561afd6819aa83b50d1edd7c534adde21e4f7dec7ddd0dca7165e9ab08cfc90"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
   "market_session_state": "runtime_required",
@@ -776,7 +776,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "9fe0da4e48e7434fdf2f",
   "detail_id": "b5f7ea483670f74a94be",
   "detail_path": "./data/decision_details/b5f7ea483670f74a94be.json"
 }
