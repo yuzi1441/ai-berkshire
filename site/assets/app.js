@@ -4244,8 +4244,8 @@ function renderFundamentalReviewDetail(item) {
     return;
   }
   const strictReview = fundamentalReviewForItem(item);
-  const direct = strictReview?.manual?.codex_direct;
-  if (direct) {
+  const codexDirect = strictReview?.manual?.codex_direct;
+  if (codexDirect) {
     const directCard = document.createElement("section");
     directCard.className = "card fundamental-review-overview-card codex-direct-review-card";
     const eyebrow = document.createElement("p");
@@ -4255,23 +4255,23 @@ function renderFundamentalReviewDetail(item) {
     title.textContent = "Codex 直接复核（当前证据）";
     const verdict = document.createElement("p");
     verdict.className = "fundamental-review-policy";
-    verdict.textContent = direct.label || direct.status || "未保存结论";
+    verdict.textContent = codexDirect.label || codexDirect.status || "未保存结论";
     directCard.append(eyebrow, title, verdict);
     appendReviewFacts(directCard, [
-      ["复核时间", shortReviewDate(direct.reviewed_at)],
-      ["当前证据", `${direct.evidence_count ?? 0} 份`],
-      ["红线 / 关注", `${direct.redline_count ?? 0} / ${direct.warning_count ?? 0}`],
-      ["下一证据", direct.next_evidence || "未记录"],
+      ["复核时间", shortReviewDate(codexDirect.reviewed_at)],
+      ["当前证据", `${codexDirect.evidence_count ?? 0} 份`],
+      ["红线 / 关注", `${codexDirect.redline_count ?? 0} / ${codexDirect.warning_count ?? 0}`],
+      ["下一证据", codexDirect.next_evidence || "未记录"],
     ]);
-    if (direct.data_gaps?.length) {
+    if (codexDirect.data_gaps?.length) {
       const gaps = document.createElement("p");
       gaps.className = "source-note";
-      gaps.textContent = `数据缺口：${direct.data_gaps.join("；")}`;
+      gaps.textContent = `数据缺口：${codexDirect.data_gaps.join("；")}`;
       directCard.append(gaps);
     }
     const boundary = document.createElement("p");
     boundary.className = "fundamental-review-policy";
-    boundary.textContent = direct.source_statement || direct.decision_boundary || "只核对主报告之后的证据；不改写人工锁定规则。";
+    boundary.textContent = codexDirect.source_statement || codexDirect.decision_boundary || "只核对主报告之后的证据；不改写人工锁定规则。";
     directCard.append(boundary);
     els.detailBody.append(directCard);
   }
