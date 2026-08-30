@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方案C · 清晰卡片 | 设计预览</title>
+<script src="./shared-data.js"></script>
+<style>
+:root {
+  --bg: #f4f6f9; --card: #ffffff; --line: #e3e8ef; --line2: #eceff4;
+  --text: #1a2330; --muted: #5f6d80; --dim: #94a1b2;
+  --green: #16a05f; --green-bg: #e5f6ee; --blue: #1f7fd1; --blue-bg: #e7f2fc;
+  --amber: #b97900; --amber-bg: #fdf3dd; --red: #d64545; --red-bg: #fdeaea;
+  --violet: #8250c8; --violet-bg: #f1eafb; --orange: #c25e12; --orange-bg: #fdefe2;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font: 15px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding-bottom: 40px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.ribbon { position: fixed; right: 14px; bottom: 14px; z-index: 99; background: #16a05f; color: #fff; font-weight: 700; font-size: 12px; padding: 6px 12px; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+
+/* 顶栏 */
+.top { position: sticky; top: 0; z-index: 50; background: rgba(244,246,249,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.top-row { max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 12px 16px 8px; }
+.top h1 { font-size: 19px; font-weight: 800; }
+.status-pill { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--amber); background: var(--amber-bg); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.status-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+.segbar { max-width: 720px; margin: 0 auto; display: flex; gap: 6px; padding: 0 16px 10px; overflow-x: auto; }
+.segbar button { flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--muted); font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+.segbar button.active { background: var(--text); color: #fff; border-color: var(--text); }
+.segbar button b { font-family: var(--mono); font-size: 11.5px; margin-left: 3px; opacity: .75; }
+
+.page { max-width: 720px; margin: 0 auto; padding: 14px 16px; }
+
+/* 分组 */
+.group { margin-bottom: 20px; }
+.ghead { display: flex; align-items: baseline; gap: 8px; padding: 0 2px 8px; }
+.ghead h2 { font-size: 14px; font-weight: 800; }
+.ghead h2 i { font-style: normal; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 6px; }
+.ghead span { font-size: 12px; color: var(--dim); }
+.ghead b { margin-left: auto; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+
+/* 股票卡 */
+.stock { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 13px 15px 12px; margin-bottom: 8px; cursor: pointer; }
+.stock:active { background: #f8fafc; }
+.s-row1 { display: flex; align-items: center; gap: 8px; }
+.s-name { font-size: 15.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-code { font-size: 11.5px; color: var(--dim); font-family: var(--mono); flex-shrink: 0; }
+.s-px { margin-left: auto; text-align: right; flex-shrink: 0; }
+.s-px b { font-size: 16.5px; font-family: var(--mono); }
+.s-px span { display: block; font-size: 11.5px; font-family: var(--mono); }
+.up { color: #d64545; } .down { color: #16a05f; }
+.s-row2 { display: flex; align-items: center; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+.vbadge { font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+.mb { font-size: 11.5px; padding: 3px 9px; border-radius: 6px; font-weight: 600; }
+/* 迷你价格档条 */
+.minizone { flex: 1 1 130px; height: 10px; border-radius: 4px; background: #edf0f4; position: relative; min-width: 100px; max-width: 240px; }
+.mz { position: absolute; top: 0; height: 100%; border-right: 1px solid #fff; }
+.mz.k-buy { background: #9ed8bd; } .mz.k-trial { background: #a8cdf0; } .mz.k-watch { background: #ccd4de; } .mz.k-reduce { background: #eab3b3; }
+.mmark { position: absolute; top: -3px; width: 2.5px; height: 16px; background: #1a2330; border-radius: 2px; z-index: 2; }
+.s-note { font-size: 12px; color: var(--muted); margin-top: 7px; display: flex; gap: 10px; flex-wrap: wrap; }
+.s-note .warn { color: var(--orange); font-weight: 700; }
+
+/* 底部弹层详情 */
+.sheet-mask { position: fixed; inset: 0; background: rgba(10,16,24,.45); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 81; background: var(--card); border-radius: 18px 18px 0 0; transform: translateY(105%); transition: transform .25s ease; max-height: 82vh; display: flex; flex-direction: column; max-width: 720px; margin: 0 auto; }
+.sheet-mask.show { opacity: 1; pointer-events: auto; }
+.sheet.show { transform: translateY(0); }
+.sheet-grab { width: 40px; height: 4px; border-radius: 2px; background: #d6dde6; margin: 10px auto 4px; flex-shrink: 0; }
+.sheet-head { display: flex; align-items: center; gap: 10px; padding: 6px 18px 12px; border-bottom: 1px solid var(--line2); }
+.sheet-head h3 { font-size: 17px; font-weight: 800; }
+.sheet-head .px { margin-left: auto; text-align: right; }
+.sheet-body { overflow-y: auto; padding: 14px 18px 30px; }
+.sec { margin-bottom: 16px; }
+.sec h4 { font-size: 11px; color: var(--dim); letter-spacing: .1em; font-weight: 700; margin-bottom: 6px; }
+.sec p { font-size: 14px; }
+.kvs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kv { background: #f7f9fb; border: 1px solid var(--line2); border-radius: 10px; padding: 9px 11px; font-size: 12.5px; color: var(--muted); }
+.kv b { display: block; color: var(--text); font-size: 13.5px; margin-top: 2px; }
+.sheet-actions { display: flex; gap: 10px; padding: 12px 18px calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line2); }
+.sheet-actions button { flex: 1; padding: 12px; border-radius: 12px; font-size: 14px; font-weight: 700; border: 1px solid var(--line); background: var(--card); color: var(--text); }
+.sheet-actions button.pri { background: var(--text); color: #fff; border-color: var(--text); }
+
+@media (min-width: 721px) {
+  body { background: #eef1f5; }
+  .top { border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+<div class="ribbon">设计稿 C · 清晰卡片 · 仅供预览</div>
+
+<header class="top">
+  <div class="top-row">
+    <h1>投资看板</h1>
+    <span class="status-pill"><i></i>非交易时段 · 行情陈旧 9 天</span>
+  </div>
+  <div class="segbar">
+    <button class="active">全部 <b>229</b></button>
+    <button>可执行 <b>5</b></button>
+    <button>待验证 <b>3</b></button>
+    <button>分歧/否决 <b>2</b></button>
+    <button>回避 <b>12</b></button>
+  </div>
+</header>
+
+<div class="page" id="page"></div>
+
+<!-- 底部弹层 -->
+<div class="sheet-mask" id="mask"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head">
+    <h3 id="sh-name">—</h3>
+    <span class="s-code num" id="sh-code"></span>
+    <span class="px"><b class="num" id="sh-px"></b><br><span class="num" id="sh-chg"></span></span>
+  </div>
+  <div class="sheet-body" id="sh-body"></div>
+  <div class="sheet-actions">
+    <button>研报原文</button>
+    <button>深度复核</button>
+    <button class="pri">打开主报告</button>
+  </div>
+</div>
+
+<script>
+/* 分组定义：把股票按「你需要做什么」分组 */
+const GROUPS = [
+  { key: "act", title: "现在可执行", color: "#16a05f", desc: "价格在报告允许区间，当天可下单", keys: ["东鹏饮料", "洛阳钼业"] },
+  { key: "decide", title: "需要你裁决", color: "#c25e12", desc: "模型分歧或 Checklist 否决，先看再动", keys: ["分众传媒", "恒瑞医药"] },
+  { key: "verify", title: "价格已到 · 等验证", color: "#b97900", desc: "价格进入区间，但需财报/条件确认", keys: ["贵州茅台", "东方电子"] },
+  { key: "wait", title: "等待价格", color: "#94a1b2", desc: "还没到报告买入区，放到自动提醒", keys: ["比亚迪", "一拖股份", "美的集团", "紫金矿业", "长江电力"] },
+  { key: "avoid", title: "回避 / 研究", color: "#d64545", desc: "明确回避或仅研究浏览", keys: ["大普微-UW", "腾讯控股"] }
+];
+const byName = Object.fromEntries(DATA.stocks.map(s => [s.name, s]));
+
+function miniZone(s) {
+  if (!s.zones.length) return "";
+  const min = Math.min(...s.zones.map(z => z.min)), max = Math.max(...s.zones.map(z => z.max));
+  const span = max - min;
+  let h = "";
+  for (const z of s.zones) h += `<div class="mz k-${z.kind}" style="left:${(z.min-min)/span*100}%;width:${(z.max-z.min)/span*100}%"></div>`;
+  if (s.price) h += `<div class="mmark" style="left:${(Math.max(min,Math.min(max,s.price))-min)/span*100}%"></div>`;
+  return `<div class="minizone" title="${s.zones.map(z=>z.label+" "+z.range).join(" · ")}">${h}</div>`;
+}
+function vColor(k) { return { buy:["var(--green)","var(--green-bg)"], trial:["var(--blue)","var(--blue-bg)"], validation:["var(--amber)","var(--amber-bg)"], watch:["var(--muted)","#eef1f5"], hold:["var(--muted)","#eef1f5"], no:["var(--red)","var(--red-bg)"], conflict:["var(--orange)","var(--orange-bg)"], reduce:["var(--orange)","var(--orange-bg)"] }[k]; }
+function mColor(k) { return { actionable:["var(--green)","var(--green-bg)"], wait_price:["var(--muted)","#eef1f5"], validation:["var(--amber)","var(--amber-bg)"], review:["var(--violet)","var(--violet-bg)"], veto:["#fff","var(--red)"], no:["var(--red)","var(--red-bg)"] }[k]; }
+
+document.getElementById("page").innerHTML = GROUPS.map(g => {
+  const cards = g.keys.map(k => byName[k]).filter(Boolean).map(s => {
+    const [vc, vg] = vColor(s.vkind);
+    const chgCls = s.chg === null ? "" : (s.chg >= 0 ? "up" : "down");
+    const warn = (s.mkind === "veto" || s.dkind === "conflict")
+      ? `<span class="warn">⚠ ${s.mkind === "veto" ? "Checklist 硬性否决中" : "双模型结果分歧"}</span>` : "";
+    const [mc, mg] = s.mkind ? (mColor(s.mkind) || ["var(--muted)","#eef1f5"]) : ["var(--muted)","#eef1f5"];
+    return `<div class="stock" data-name="${s.name}">
+      <div class="s-row1">
+        <span class="s-name">${s.name}</span><span class="s-code">${s.code}</span>
+        <span class="s-px"><b>${s.price ?? "—"}</b><span class="${chgCls}">${s.chg === null ? "" : fmtPct(s.chg)}</span></span>
+      </div>
+      <div class="s-row2">
+        <span class="vbadge" style="color:${vc};background:${vg}">${s.verdict}</span>
+        ${miniZone(s)}
+        <span class="mb" style="color:${mc};background:${mg}">${s.manual ?? "研究浏览"}</span>
+      </div>
+      <div class="s-note">
+        ${warn}
+        <span>情绪 ${s.senti.score ?? "—"} · ${s.senti.state}</span>
+        <span>${s.due}</span>
+        <span>报告截止 ${s.cutoff}</span>
+      </div>
+    </div>`;
+  }).join("");
+  return `<div class="group">
+    <div class="ghead"><h2><i style="background:${g.color}"></i>${g.title}</h2><span>${g.desc}</span><b>${g.keys.length}</b></div>
+    ${cards}
+  </div>`;
+}).join("");
+
+/* 弹层交互 */
+const mask = document.getElementById("mask"), sheet = document.getElementById("sheet");
+function openSheet(s) {
+  document.getElementById("sh-name").textContent = s.name;
+  document.getElementById("sh-code").textContent = s.code + " · " + s.industry;
+  document.getElementById("sh-px").textContent = s.price ?? "—";
+  const chg = document.getElementById("sh-chg");
+  chg.textContent = s.chg === null ? "" : fmtPct(s.chg);
+  chg.className = "num " + (s.chg === null ? "" : (s.chg >= 0 ? "up" : "down"));
+  const d = s.dkind ? DLABEL[s.dkind] : null;
+  document.getElementById("sh-body").innerHTML = `
+    <div class="sec"><h4>判断</h4><p style="font-weight:700;font-size:15px;color:${vColor(s.vkind)[0]}">${s.verdict}</p>
+    <p style="margin-top:4px">${s.line}</p></div>
+    <div class="sec"><h4>报告价格档位</h4>
+      ${s.zones.length ? `<div class="kvs">${s.zones.map(z=>`<div class="kv">${z.label}<b>${z.range} 元</b></div>`).join("")}</div>` : "<p style='color:var(--dim)'>报告未给出价格档位</p>"}
+    </div>
+    <div class="sec"><h4>触发 / 失效条件</h4><p>${s.trigger}</p></div>
+    <div class="sec"><h4>复核状态</h4>
+      <div class="kvs">
+        <div class="kv">人工复核<b>${s.manual ?? "—"}</b></div>
+        <div class="kv">双模型对照<b style="color:${d ? d[1] : "inherit"}">${s.dual ?? "—"}</b></div>
+        <div class="kv">待办<b>${s.due}</b></div>
+        <div class="kv">情绪（个/行/市）<b>${s.senti.c ?? "—"} / ${s.senti.i ?? "—"} / ${s.senti.m ?? "—"}</b></div>
+      </div>
+    </div>`;
+  mask.classList.add("show"); sheet.classList.add("show");
+}
+function closeSheet() { mask.classList.remove("show"); sheet.classList.remove("show"); }
+document.getElementById("page").addEventListener("click", e => {
+  const el = e.target.closest(".stock");
+  if (el) openSheet(byName[el.dataset.name]);
+});
+mask.addEventListener("click", closeSheet);
+document.querySelectorAll(".segbar button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".segbar button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+}));
+</script>
+</body>
+</html>
