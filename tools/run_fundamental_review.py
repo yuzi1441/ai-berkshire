@@ -158,8 +158,16 @@ def layer_payload(
 
 def publish_snapshot(repo_root: Path, rules_dir: Path, legacy_dir: Path, layers_dir: Path) -> None:
     snapshot = public_review_snapshot(rules_dir, repo_root / "local" / "fundamental-review-current", legacy_dir=legacy_dir, layers_dir=layers_dir)
-    atomic_write_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", snapshot)
-    atomic_write_json(repo_root / "site" / "data" / "main_report_review.json", snapshot)
+    public_paths = (
+        repo_root / "data" / "investment-dashboard" / "main_report_review.json",
+        repo_root / "site" / "data" / "main_report_review.json",
+    )
+    for path in public_paths:
+        atomic_write_json(path, snapshot)
+        # The runner is invoked as root on the VPS, while dashboard_server runs
+        # as an unprivileged account.  These are explicitly public dashboard
+        # snapshots, so keep their final atomic replacement world-readable.
+        path.chmod(0o644)
 
 
 def seed_legacy(repo_root: Path, rules_dir: Path, layers_dir: Path) -> int:
