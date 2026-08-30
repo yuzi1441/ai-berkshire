@@ -3869,179 +3869,6 @@ function renderFundamentalReviewRows(visible) {
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
 
-/* ==================== 决策行紧凑列（方案D 视觉语言） ==================== */
-
-const HUMAN_KEY_COLOR = {
-  human_buy: "#1f8a54",
-  human_trial: "#2f7d5f",
-  human_wait_price: "#68747f",
-  human_wait_event: "#68747f",
-  human_hold: "#68747f",
-  human_no: "#bf4a42",
-  human_review: "#a3720e",
-};
-
-const DUAL_PARTITION_LABEL = {
-  conflict: ["结果分歧", "#bf4a42"],
-  consensus: ["双方一致", "#1f8a54"],
-  zcode_current: ["仅ZCode新证", "#57636f"],
-  deepseek_current: ["仅DeepSeek新证", "#57636f"],
-  both_insufficient: ["证据不足/历史", "#8d97a3"],
-};
-
-function verdictStyleForItem(item) {
-  const pj = item.primary_judgment || {};
-  const kind = pj.action_kind || "watch";
-  const checklistStatus = item.checklist?.status || "";
-  if (["未通过", "否决"].includes(checklistStatus)) {
-    return {
-      text: "已否决 ⚠",
-      style: "solid-risk",
-      title: `Checklist ${checklistStatus}：原判断「${pj.label || ""}」暂停买入，详情可查看`,
-    };
-  }
-  /* 字段冲突很常见（已按主报告正文处理），只加警示号，不改变判断主色；
-     红色实底保留给 Checklist 否决与明确回避。 */
-  const conflictMark = pj.report_field_conflict === true ? " ⚠" : "";
-  if (kind === "buy") return { text: (pj.label || "可买入") + conflictMark, style: "solid-buy", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
-  if (kind === "trial") return { text: (pj.label || "可小仓") + conflictMark, style: "soft-trial", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
-  if (kind === "no") return { text: pj.label || "回避", style: "solid-risk", title: "" };
-  return { text: (pj.label || "—") + conflictMark, style: "soft-neutral", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
-}
-
-function renderVerdictCell(item) {
-  const td = document.createElement("td");
-  td.className = "verdict-cell";
-  const v = verdictStyleForItem(item);
-  const badge = document.createElement("span");
-  badge.className = `vbadge vbadge-${v.style}`;
-  badge.textContent = v.text;
-  if (v.title) badge.title = v.title;
-  td.append(badge);
-  const ts = document.createElement("span");
-  ts.className = "cell-ts";
-  const cutoff = item.data_cutoff ? pipeDateOnly(item.data_cutoff) : "";
-  ts.textContent = cutoff ? `报告 ${cutoff}` : "报告日期未给出";
-  td.append(ts);
-  return td;
-}
-
-function renderQuoteCell(item, quote) {
-  const td = document.createElement("td");
-  td.className = "quote-cell";
-  const price = document.createElement("div");
-  price.className = "quote-price";
-  price.textContent = formatPrice(quote);
-  td.append(price);
-
-  const change = formatChange(quote);
-  if (change.text && change.text !== "—") {
-    const pill = document.createElement("span");
-    const dir = change.text.startsWith("+") ? "up" : change.text.startsWith("-") ? "down" : "flat";
-    pill.className = `chg-pill ${dir}`;
-    pill.textContent = change.text;
-    td.append(pill);
-  }
-
-  const ts = document.createElement("span");
-  ts.className = "cell-ts";
-  const tsText = quote?.snapshot_generated_at ? pipeDateText(quote.snapshot_generated_at) : "";
-  if (tsText) {
-    const age = pipeAgeHours(quote.snapshot_generated_at);
-    const stale = age !== null && age > 30;
-    ts.textContent = `${tsText}${stale ? " ⚠陈旧" : ""}`;
-    if (stale) ts.classList.add("w");
-  } else {
-    ts.textContent = "无行情";
-  }
-  td.append(ts);
-  return td;
-}
-
-function renderHumanReviewCompactCell(item, quote) {
-  const td = document.createElement("td");
-  td.className = "manual-cell";
-  const result = humanReviewForItem(item, quote);
-  const row = document.createElement("div");
-  row.className = "dot-label";
-  const dot = document.createElement("i");
-  dot.style.background = HUMAN_KEY_COLOR[result?.key] || "#68747f";
-  const label = document.createElement("span");
-  label.textContent = result?.label || "—";
-  row.append(dot, label);
-  td.append(row);
-
-  const ts = document.createElement("span");
-  ts.className = "cell-ts";
-  const parts = [];
-  const reviewed = item.human_review_plan?.reviewed_at;
-  if (reviewed) parts.push(`复核 ${pipeDateOnly(reviewed)}`);
-  if (item.valid_until) parts.push(`至 ${pipeDateOnly(item.valid_until)}`);
-  ts.textContent = parts.join(" · ") || "—";
-  td.append(ts);
-  return td;
-}
-
-function renderDualModelCompactCell(item, mrcGeneratedAt) {
-  const td = document.createElement("td");
-  td.className = "dual-cell";
-  const review = modelReviewForItem(item);
-  const meta = review ? (DUAL_PARTITION_LABEL[review.partition] || [review.partition || "—", "#8d97a3"]) : null;
-  const row = document.createElement("div");
-  row.className = "dot-label";
-  if (meta) {
-    const dot = document.createElement("i");
-    dot.style.background = meta[1];
-    const label = document.createElement("span");
-    label.textContent = meta[0];
-    row.append(dot, label);
-  } else {
-    const label = document.createElement("span");
-    label.textContent = "—";
-    label.style.color = "var(--ink-faint)";
-    row.append(label);
-  }
-  td.append(row);
-
-  const ts = document.createElement("span");
-  ts.className = "cell-ts";
-  ts.textContent = mrcGeneratedAt ? `对照 ${pipeDateOnly(mrcGeneratedAt)}` : "—";
-  td.append(ts);
-  return td;
-}
-
-/* 段宽不足时把段标签换成短词，避免文字被硬裁成不可读碎片 */
-const ZONE_LABEL_SHORT = {
-  "积极建仓": "积极", "分批建仓": "分批", "观察/持有": "持有", "考虑减仓": "减仓",
-  "小额首批": "首批", "分批增加": "分批", "重点关注": "关注", "小仓试探": "小仓",
-  "稳健分批": "分批", "小仓分批": "小仓", "观察不追": "不追", "重点买入": "重点",
-  "分批买入": "分批", "小额分批": "分批", "观察或小仓": "观察", "业绩验证": "验证",
-  "安全边际": "边际", "强加仓": "加仓", "小仓试建": "试建", "稳健观察": "观察",
-  "保守分批": "分批", "小仓位分批": "小仓", "激进小仓": "激进", "稳健建仓": "建仓",
-  "现价附近": "附近", "只设观察仓，不追涨": "观察", "等待确认后分批买入": "待确认",
-  "才进入深度研究/小仓试错": "深度研究", "分批观察": "分批", "只能小仓": "小仓",
-  "若基本面未恶化，安全边际较好，可重点买入研究区。": "重点研究",
-  "若基本面未恶化，可进入重点买入研究区。": "重点研究",
-  "只在深度折价时买入": "折价买入", "优先研究和配置": "研究配置",
-  "有安全边际，可分批建仓": "分批", "等待信号后小仓试错": "小仓试错",
-  "6.0-6.5 元可稳健分批，6.0 元以下安全边际更佳": "稳健分批",
-  "适合观察或小仓位分批，不能用热门叙事重仓追入": "观察",
-  "等待基本面未恶化后重新评估。": "重估",
-  "重点研究和配置 23–26.5": "研究配置",
-};
-
-function refineZoneBarLabels(scope) {
-  scope.querySelectorAll(".zone-bar .zone-seg").forEach((seg) => {
-    const span = seg.querySelector("span");
-    if (!span) return;
-    if (span.scrollWidth <= seg.clientWidth) return;
-    const full = span.textContent;
-    const short = ZONE_LABEL_SHORT[full];
-    /* 有短词映射就用短词；没有就直接隐藏——绝不显示"才进""若基"这类碎片 */
-    span.textContent = short && short.length <= 4 ? short : "";
-  });
-}
-
 function renderRows() {
   const visible = filteredDecisions();
   renderSummary(visible);
@@ -4062,14 +3889,14 @@ function renderRows() {
   setTableHeader([
     "公司 / 代码",
     "主报告判断",
+    "人工价格分区",
+    "报告复核提示",
     "现价",
-    "报告价格档 × 现价位置",
-    "人工复核",
-    "双模型对照",
+    "当前状态",
+    "技术面（辅助）",
   ]);
 
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
-  const mrcGeneratedAt = state.modelReviewComparisonSnapshot?.generated_at || null;
   rendered.forEach((item, index) => {
     const tr = document.createElement("tr");
     const key = itemKey(item);
@@ -4081,30 +3908,43 @@ function renderRows() {
     tr.append(renderIdentityCell(item));
 
     const quote = state.quotes.get(item.ticker);
+    const actionTd = document.createElement("td");
+    actionTd.className = "conclusion-cell";
+    actionTd.append(
+      renderPrimaryJudgment(item, { compact: true })
+      || renderPriceActionTable(item, quote, { compact: true }),
+    );
+    tr.append(actionTd);
 
-    tr.append(renderVerdictCell(item));
-    tr.append(renderQuoteCell(item, quote));
+    const humanReviewTd = document.createElement("td");
+    humanReviewTd.className = "human-review-cell";
+    humanReviewTd.append(renderHumanReviewMainCell(item, quote));
+    tr.append(humanReviewTd);
 
-    const zoneTd = document.createElement("td");
-    zoneTd.className = "zone-cell-col";
-    const zoneBar = renderZoneBar(item, quote);
-    if (zoneBar) {
-      zoneTd.append(zoneBar);
-    } else {
-      const none = document.createElement("div");
-      none.className = "zone-cell zone-none";
-      none.textContent = quote
-        ? "— 报告未给出数值价格档 —"
-        : "— 无行情快照 —";
-      none.title = quote
-        ? "该报告未写出可量化的买入价格区间，无法绘制档位条；条件见详情"
-        : "该市场暂无行情快照";
-      zoneTd.append(none);
-    }
-    tr.append(zoneTd);
+    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), {
+      compact: true,
+      fundamentalReview: fundamentalReviewForItem(item),
+    });
+    tr.append(reportReviewTd);
 
-    tr.append(renderHumanReviewCompactCell(item, quote));
-    tr.append(renderDualModelCompactCell(item, mrcGeneratedAt));
+    const change = formatChange(quote);
+    const quoteTd = document.createElement("td");
+    quoteTd.className = "quote-block";
+    const quotePrice = document.createElement("div");
+    quotePrice.className = "quote-price";
+    quotePrice.textContent = formatPrice(quote);
+    const quoteChange = document.createElement("div");
+    quoteChange.className = `quote-change ${change.className}`;
+    quoteChange.textContent = `${change.text}${quote?.source ? " · 同源快照" : ""}`;
+    quoteTd.append(quotePrice, quoteChange);
+    tr.append(quoteTd);
+
+    const adviceTd = document.createElement("td");
+    adviceTd.className = "execution-main-cell";
+    adviceTd.append(renderExecutionMainCell(item, quote));
+    tr.append(adviceTd);
+
+    tr.append(renderTechnicalCell(item, { includeCross: true }));
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {
@@ -4113,7 +3953,6 @@ function renderRows() {
     els.rows.append(tr);
   });
 
-  refineZoneBarLabels(els.rows);
   mountInlineDetail(selectedItem());
 
   const remaining = Math.max(0, visible.length - rendered.length);
@@ -5018,210 +4857,6 @@ function closeDetail() {
   renderDetail();
 }
 
-/* ==================== 数据管线时间线（方案D） ==================== */
-
-function pipeAgeHours(ts) {
-  const t = new Date(ts || "").getTime();
-  return Number.isFinite(t) ? (Date.now() - t) / 36e5 : null;
-}
-
-function pipeDateText(ts) {
-  const t = new Date(ts || "");
-  if (Number.isNaN(t.getTime())) return "";
-  const p = (n) => String(n).padStart(2, "0");
-  return `${p(t.getMonth() + 1)}/${p(t.getDate())} ${p(t.getHours())}:${p(t.getMinutes())}`;
-}
-
-function pipeDateOnly(ts) {
-  const t = new Date(ts || "");
-  if (Number.isNaN(t.getTime())) return "";
-  const p = (n) => String(n).padStart(2, "0");
-  return `${p(t.getMonth() + 1)}/${p(t.getDate())}`;
-}
-
-function makePipeChip(label, text, ageHours, staleAfter, opts = {}) {
-  const chip = document.createElement("span");
-  chip.className = "pipe-chip" + (ageHours === null ? "" : ageHours <= staleAfter ? " fresh" : " stale");
-  chip.title = opts.title || "";
-  const b = document.createElement("b");
-  b.textContent = label;
-  const t = document.createElement("span");
-  t.className = "pipe-t";
-  t.textContent = text;
-  chip.append(b, t);
-  if (opts.warn) {
-    const w = document.createElement("span");
-    w.className = "pipe-warn";
-    w.textContent = opts.warn;
-    chip.append(w);
-  }
-  return chip;
-}
-
-function renderPipelineStrip() {
-  const strip = document.getElementById("pipe-strip");
-  if (!strip) return;
-  strip.replaceChildren();
-  const chips = [];
-
-  if (state.quoteUpdatedAt) {
-    chips.push(makePipeChip("行情", `${pipeDateText(state.quoteUpdatedAt)} · 腾讯`, pipeAgeHours(state.quoteUpdatedAt), 30, { title: "腾讯同源行情快照；超过 30 分钟视为陈旧" }));
-  }
-  const senti = state.sentimentSnapshot;
-  if (senti?.generated_at) {
-    const count = senti.company_count || state.sentiments.size;
-    chips.push(makePipeChip("情绪", `${count}只 · ${pipeDateText(senti.generated_at)}`, pipeAgeHours(senti.generated_at), 72, { title: `情绪快照生成于 ${senti.generated_at}` }));
-  }
-  const market = senti?.market_sentiment?.["A股"];
-  if (market && Number.isFinite(Number(market.score_0_100))) {
-    chips.push(makePipeChip("市场温度", `${market.score_0_100} ${market.state || ""} · ${pipeDateOnly(market.data_cutoff)}`, pipeAgeHours(market.data_cutoff), 72, { title: "A股市场情绪温度（zzshare 宽度数据）" }));
-  }
-  if (state.opportunityScansGeneratedAt) {
-    const st = state.opportunityScanStatus?.status ? ` · ${state.opportunityScanStatus.status}` : "";
-    chips.push(makePipeChip("机会扫描", `${pipeDateText(state.opportunityScansGeneratedAt)}${st}`, pipeAgeHours(state.opportunityScansGeneratedAt), 48, { title: "每日机会扫描（Flash）" }));
-  }
-  let intraDate = null;
-  for (const v of state.intradayTechnical.values()) {
-    if (v?.analysis_date && (!intraDate || v.analysis_date > intraDate)) intraDate = v.analysis_date;
-  }
-  if (intraDate) {
-    chips.push(makePipeChip("盘中技术", intraDate.slice(5), pipeAgeHours(intraDate), 48, { title: "A股 30 分钟盘中技术快照" }));
-  }
-  let reviewTs = null;
-  for (const it of state.decisions) {
-    const ts = it?.human_review_plan?.reviewed_at;
-    if (ts && (!reviewTs || ts > reviewTs)) reviewTs = ts;
-  }
-  if (reviewTs) {
-    chips.push(makePipeChip("人工复核", pipeDateText(reviewTs), pipeAgeHours(reviewTs), 24 * 30, { title: "A股主报告人工复核时间" }));
-  }
-  const mrcTs = state.modelReviewComparisonSnapshot?.generated_at;
-  if (mrcTs) {
-    chips.push(makePipeChip("模型对照", pipeDateText(mrcTs), pipeAgeHours(mrcTs), 24 * 7, { title: "ZCode × DeepSeek 双模型对照生成时间" }));
-  }
-
-  if (!chips.length) {
-    strip.hidden = true;
-    return;
-  }
-  chips.forEach((chip) => strip.append(chip));
-  strip.hidden = false;
-}
-
-/* ==================== 报告价格档 × 现价位置（方案D） ==================== */
-
-const ZONE_KIND_BY_ACTION = {
-  buy: "buy", trial: "trial", watch: "watch", hold: "watch",
-  reduce: "reduce", sell: "reduce", avoid: "reduce",
-};
-
-function zoneRulesForItem(item) {
-  const rules = item?.execution_policy?.price_rules;
-  if (!Array.isArray(rules) || !rules.length) return null;
-  const finite = [];
-  for (const rule of rules) {
-    if (!rule) continue;
-    const min = Number.isFinite(Number(rule.min)) ? Number(rule.min) : null;
-    const ceiling = Number.isFinite(Number(rule.ceiling)) ? Number(rule.ceiling) : null;
-    if (min === null && ceiling === null) continue;
-    finite.push({ rule, min, ceiling });
-  }
-  if (!finite.length) return null;
-  const lo = Math.min(...finite.map((r) => r.min ?? r.ceiling));
-  const hi = Math.max(...finite.map((r) => r.ceiling ?? r.min));
-  const span = hi - lo;
-  const pad = span > 0 ? span * 0.3 : Math.max(Math.abs(hi) * 0.08, 1);
-  const domainLo = lo - pad;
-  const domainHi = hi + pad;
-  const fmt = (v) => String(Math.round(v * 100) / 100);
-  const segments = finite
-    .map(({ rule, min, ceiling }) => {
-      let sMin = min;
-      let sMax = ceiling;
-      let rangeText;
-      if (min !== null && ceiling !== null) {
-        rangeText = `${fmt(min)}–${fmt(ceiling)}`;
-      } else if (ceiling !== null) {
-        sMin = domainLo;
-        rangeText = `≤${fmt(ceiling)}`;
-      } else {
-        sMax = domainHi;
-        rangeText = `≥${fmt(min)}`;
-      }
-      return {
-        label: rule.action || rule.action_kind || "区间",
-        rangeText,
-        min: Math.max(sMin, domainLo),
-        max: Math.min(sMax, domainHi),
-        kind: ZONE_KIND_BY_ACTION[rule.action_kind] || "watch",
-      };
-    })
-    .sort((a, b) => a.min - b.min);
-  return { segments, domainLo, domainHi };
-}
-
-function renderZoneBar(item, quote) {
-  const price = Number(quote?.price);
-  if (!Number.isFinite(price)) return null;
-  const zone = zoneRulesForItem(item);
-  if (!zone || !zone.segments.length) return null;
-  const { segments, domainLo, domainHi } = zone;
-  const span = domainHi - domainLo;
-  if (!(span > 0)) return null;
-
-  const wrap = document.createElement("div");
-  wrap.className = "zone-cell";
-
-  const top = document.createElement("div");
-  top.className = "zone-bar-top";
-  const list = document.createElement("span");
-  list.className = "zone-list";
-  list.textContent = segments.map((s) => `${s.label} ${s.rangeText}`).join(" · ");
-  list.title = list.textContent;
-  const pos = document.createElement("span");
-  pos.className = "zone-pos";
-  pos.append("现价 ");
-  const posB = document.createElement("b");
-  posB.textContent = String(price);
-  pos.append(posB);
-  top.append(list, pos);
-
-  const bar = document.createElement("div");
-  bar.className = "zone-bar";
-  segments.forEach((seg, i) => {
-    const el = document.createElement("div");
-    const cur = price >= seg.min && price <= seg.max ? " cur" : "";
-    const edge = (i === 0 ? " zs-first" : "") + (i === segments.length - 1 ? " zs-last" : "");
-    el.className = `zone-seg k-${seg.kind}${cur}${edge}`;
-    el.style.left = `${((seg.min - domainLo) / span) * 100}%`;
-    el.style.width = `${((seg.max - seg.min) / span) * 100}%`;
-    const label = document.createElement("span");
-    label.textContent = seg.label;
-    el.title = `${seg.label} ${seg.rangeText}`;
-    el.append(label);
-    bar.append(el);
-  });
-  const clamped = Math.max(domainLo, Math.min(domainHi, price));
-  const marker = document.createElement("div");
-  marker.className = "zone-marker";
-  marker.dataset.v = String(price);
-  marker.style.left = `${((clamped - domainLo) / span) * 100}%`;
-  marker.title = `现价 ${price}`;
-  bar.append(marker);
-
-  const legend = document.createElement("div");
-  legend.className = "zone-legend";
-  segments.forEach((seg) => {
-    const chip = document.createElement("span");
-    chip.className = `zl-chip k-${seg.kind}` + (price >= seg.min && price <= seg.max ? " cur" : "");
-    chip.textContent = `${seg.label} ${seg.rangeText}`;
-    legend.append(chip);
-  });
-
-  wrap.append(top, bar, legend);
-  return wrap;
-}
-
 function renderAll() {
   renderIndexCards();
   renderAnnualReportDates();
@@ -5230,7 +4865,6 @@ function renderAll() {
   renderFundamentalReviewPartitions();
   renderRows();
   renderDetail();
-  renderPipelineStrip();
 }
 
 function setView(view) {
