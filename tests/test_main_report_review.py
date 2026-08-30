@@ -556,6 +556,8 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("fundamentalReviewPartitionKey", app)
         self.assertIn("reportReviewAlert", app)
         self.assertIn("model_review_comparison.json", app)
+        self.assertIn("Codex 直接复核", app)
+        self.assertIn("Codex 直接复核（当前证据）", app)
         self.assertIn("ZCode 独立复核", app)
         self.assertIn("DeepSeek 复核", app)
         self.assertIn("复核行情上下文", app)
@@ -635,14 +637,12 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertEqual(dongfang["routine"]["reviewer"], "deepseek-v4-flash")
         self.assertEqual(len(dongfang["routine"]["legacy_daily"]["tasks"]), 3)
         self.assertEqual(dongfang["routine"]["strict_incremental"]["status"], dongfang["summary"]["status"])
-        self.assertEqual(dongfang["current_evidence_count"], 2)
-        self.assertEqual(
-            sum(
-                document.get("source_role") == "zcode_current_evidence_extract"
-                for document in dongfang["evidence_documents"]
-            ),
-            3,
-        )
+        # The saved DeepSeek result is retained as historical context only.
+        # Its pre-v2.3 evidence cannot become current evidence by implication.
+        self.assertEqual(dongfang["current_evidence_count"], 0)
+        self.assertEqual(dongfang["evidence_documents"], [])
+        self.assertEqual(dongfang["routine"]["strict_incremental"]["status"], "waiting_evidence")
+        self.assertEqual(dongfang["routine"]["legacy_daily"]["local_evidence_count"], 3)
         midea = next(row for row in snapshot["reviews"] if row["ticker"] == "000333.SZ")
         confirmation = next(
             rule
