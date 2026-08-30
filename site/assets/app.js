@@ -3869,6 +3869,147 @@ function renderFundamentalReviewRows(visible) {
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
 
+/* ==================== 决策行紧凑列（方案D 视觉语言） ==================== */
+
+const HUMAN_KEY_COLOR = {
+  human_buy: "#1f8a54",
+  human_trial: "#2f7d5f",
+  human_wait_price: "#68747f",
+  human_wait_event: "#68747f",
+  human_hold: "#68747f",
+  human_no: "#bf4a42",
+  human_review: "#a3720e",
+};
+
+const DUAL_PARTITION_LABEL = {
+  conflict: ["结果分歧", "#bf4a42"],
+  consensus: ["双方一致", "#1f8a54"],
+  zcode_current: ["仅ZCode新证", "#57636f"],
+  deepseek_current: ["仅DeepSeek新证", "#57636f"],
+  both_insufficient: ["证据不足/历史", "#8d97a3"],
+};
+
+function verdictStyleForItem(item) {
+  const pj = item.primary_judgment || {};
+  const kind = pj.action_kind || "watch";
+  const checklistStatus = item.checklist?.status || "";
+  if (["未通过", "否决"].includes(checklistStatus)) {
+    return {
+      text: "已否决 ⚠",
+      style: "solid-risk",
+      title: `Checklist ${checklistStatus}：原判断「${pj.label || ""}」暂停买入，详情可查看`,
+    };
+  }
+  /* 字段冲突很常见（已按主报告正文处理），只加警示号，不改变判断主色；
+     红色实底保留给 Checklist 否决与明确回避。 */
+  const conflictMark = pj.report_field_conflict === true ? " ⚠" : "";
+  if (kind === "buy") return { text: (pj.label || "可买入") + conflictMark, style: "solid-buy", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
+  if (kind === "trial") return { text: (pj.label || "可小仓") + conflictMark, style: "soft-trial", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
+  if (kind === "no") return { text: pj.label || "回避", style: "solid-risk", title: "" };
+  return { text: (pj.label || "—") + conflictMark, style: "soft-neutral", title: conflictMark ? "字段冲突：已按主报告正文处理" : "" };
+}
+
+function renderVerdictCell(item) {
+  const td = document.createElement("td");
+  td.className = "verdict-cell";
+  const v = verdictStyleForItem(item);
+  const badge = document.createElement("span");
+  badge.className = `vbadge vbadge-${v.style}`;
+  badge.textContent = v.text;
+  if (v.title) badge.title = v.title;
+  td.append(badge);
+  const ts = document.createElement("span");
+  ts.className = "cell-ts";
+  const cutoff = item.data_cutoff ? pipeDateOnly(item.data_cutoff) : "";
+  ts.textContent = cutoff ? `报告 ${cutoff}` : "报告日期未给出";
+  td.append(ts);
+  return td;
+}
+
+function renderQuoteCell(item, quote) {
+  const td = document.createElement("td");
+  td.className = "quote-cell";
+  const price = document.createElement("div");
+  price.className = "quote-price";
+  price.textContent = formatPrice(quote);
+  td.append(price);
+
+  const change = formatChange(quote);
+  if (change.text && change.text !== "—") {
+    const pill = document.createElement("span");
+    const dir = change.text.startsWith("+") ? "up" : change.text.startsWith("-") ? "down" : "flat";
+    pill.className = `chg-pill ${dir}`;
+    pill.textContent = change.text;
+    td.append(pill);
+  }
+
+  const ts = document.createElement("span");
+  ts.className = "cell-ts";
+  const tsText = quote?.snapshot_generated_at ? pipeDateText(quote.snapshot_generated_at) : "";
+  if (tsText) {
+    const age = pipeAgeHours(quote.snapshot_generated_at);
+    const stale = age !== null && age > 30;
+    ts.textContent = `${tsText}${stale ? " ⚠陈旧" : ""}`;
+    if (stale) ts.classList.add("w");
+  } else {
+    ts.textContent = "无行情";
+  }
+  td.append(ts);
+  return td;
+}
+
+function renderHumanReviewCompactCell(item, quote) {
+  const td = document.createElement("td");
+  td.className = "manual-cell";
+  const result = humanReviewForItem(item, quote);
+  const row = document.createElement("div");
+  row.className = "dot-label";
+  const dot = document.createElement("i");
+  dot.style.background = HUMAN_KEY_COLOR[result?.key] || "#68747f";
+  const label = document.createElement("span");
+  label.textContent = result?.label || "—";
+  row.append(dot, label);
+  td.append(row);
+
+  const ts = document.createElement("span");
+  ts.className = "cell-ts";
+  const parts = [];
+  const reviewed = item.human_review_plan?.reviewed_at;
+  if (reviewed) parts.push(`复核 ${pipeDateOnly(reviewed)}`);
+  if (item.valid_until) parts.push(`至 ${pipeDateOnly(item.valid_until)}`);
+  ts.textContent = parts.join(" · ") || "—";
+  td.append(ts);
+  return td;
+}
+
+function renderDualModelCompactCell(item, mrcGeneratedAt) {
+  const td = document.createElement("td");
+  td.className = "dual-cell";
+  const review = modelReviewForItem(item);
+  const meta = review ? (DUAL_PARTITION_LABEL[review.partition] || [review.partition || "—", "#8d97a3"]) : null;
+  const row = document.createElement("div");
+  row.className = "dot-label";
+  if (meta) {
+    const dot = document.createElement("i");
+    dot.style.background = meta[1];
+    const label = document.createElement("span");
+    label.textContent = meta[0];
+    row.append(dot, label);
+  } else {
+    const label = document.createElement("span");
+    label.textContent = "—";
+    label.style.color = "var(--ink-faint)";
+    row.append(label);
+  }
+  td.append(row);
+
+  const ts = document.createElement("span");
+  ts.className = "cell-ts";
+  ts.textContent = mrcGeneratedAt ? `对照 ${pipeDateOnly(mrcGeneratedAt)}` : "—";
+  td.append(ts);
+  return td;
+}
+
 function renderRows() {
   const visible = filteredDecisions();
   renderSummary(visible);
@@ -3889,15 +4030,14 @@ function renderRows() {
   setTableHeader([
     "公司 / 代码",
     "主报告判断",
-    "人工价格分区",
-    "报告复核提示",
     "现价",
     "报告价格档 × 现价位置",
-    "当前状态",
-    "技术面（辅助）",
+    "人工复核",
+    "双模型对照",
   ]);
 
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
+  const mrcGeneratedAt = state.modelReviewComparisonSnapshot?.generated_at || null;
   rendered.forEach((item, index) => {
     const tr = document.createElement("tr");
     const key = itemKey(item);
@@ -3909,49 +4049,30 @@ function renderRows() {
     tr.append(renderIdentityCell(item));
 
     const quote = state.quotes.get(item.ticker);
-    const actionTd = document.createElement("td");
-    actionTd.className = "conclusion-cell";
-    actionTd.append(
-      renderPrimaryJudgment(item, { compact: true })
-      || renderPriceActionTable(item, quote, { compact: true }),
-    );
-    tr.append(actionTd);
 
-    const humanReviewTd = document.createElement("td");
-    humanReviewTd.className = "human-review-cell";
-    humanReviewTd.append(renderHumanReviewMainCell(item, quote));
-    tr.append(humanReviewTd);
-
-    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), {
-      compact: true,
-      fundamentalReview: fundamentalReviewForItem(item),
-    });
-    tr.append(reportReviewTd);
-
-    const change = formatChange(quote);
-    const quoteTd = document.createElement("td");
-    quoteTd.className = "quote-block";
-    const quotePrice = document.createElement("div");
-    quotePrice.className = "quote-price";
-    quotePrice.textContent = formatPrice(quote);
-    const quoteChange = document.createElement("div");
-    quoteChange.className = `quote-change ${change.className}`;
-    quoteChange.textContent = `${change.text}${quote?.source ? " · 同源快照" : ""}`;
-    quoteTd.append(quotePrice, quoteChange);
-    tr.append(quoteTd);
+    tr.append(renderVerdictCell(item));
+    tr.append(renderQuoteCell(item, quote));
 
     const zoneTd = document.createElement("td");
     zoneTd.className = "zone-cell-col";
     const zoneBar = renderZoneBar(item, quote);
-    if (zoneBar) zoneTd.append(zoneBar);
+    if (zoneBar) {
+      zoneTd.append(zoneBar);
+    } else {
+      const none = document.createElement("div");
+      none.className = "zone-cell zone-none";
+      none.textContent = quote
+        ? "— 报告未给出数值价格档 —"
+        : "— 无行情快照 —";
+      none.title = quote
+        ? "该报告未写出可量化的买入价格区间，无法绘制档位条；条件见详情"
+        : "该市场暂无行情快照";
+      zoneTd.append(none);
+    }
     tr.append(zoneTd);
 
-    const adviceTd = document.createElement("td");
-    adviceTd.className = "execution-main-cell";
-    adviceTd.append(renderExecutionMainCell(item, quote));
-    tr.append(adviceTd);
-
-    tr.append(renderTechnicalCell(item, { includeCross: true }));
+    tr.append(renderHumanReviewCompactCell(item, quote));
+    tr.append(renderDualModelCompactCell(item, mrcGeneratedAt));
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {
