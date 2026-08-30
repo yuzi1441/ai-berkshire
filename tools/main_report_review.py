@@ -21,7 +21,10 @@ import subprocess
 import tempfile
 from typing import Any, Iterable
 
-from pypdf import PdfReader
+try:
+    from pypdf import PdfReader
+except ModuleNotFoundError:  # Snapshot-only dashboard builds do not parse PDFs.
+    PdfReader = None
 
 TOOLS_DIR = str(Path(__file__).resolve().parent)
 if TOOLS_DIR not in __import__("sys").path:
@@ -696,6 +699,8 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
 
 
 def _download_official_pdf(url: str) -> tuple[str, str, int]:
+    if PdfReader is None:
+        raise RuntimeError("official PDF review requires the optional pypdf package")
     completed = subprocess.run(
         ["curl", "-fsSL", "--noproxy", "*", "-H", "User-Agent: Mozilla/5.0", url],
         check=True,
