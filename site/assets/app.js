@@ -1733,6 +1733,35 @@ function fundamentalReviewMeta(review) {
   return routineReviewMeta(review);
 }
 
+function reviewTaskIsImprovement(task) {
+  const group = String(task?.semantic_group || task?.group || "");
+  const ruleId = String(task?.rule_id || "");
+  return group === "improvement" || /(?:^|\.)improvement(?:\.|$)/.test(ruleId);
+}
+
+// A positive condition is a separate signal from the stock's overall queue
+// state.  A stock may have one improvement condition confirmed while another
+// condition remains unknown, so the improvement filter is intentionally
+// multi-label and must not hide redlines or unresolved evidence.
+function reviewHasImprovement(review) {
+  if (!review) return false;
+  if (review.summary?.status === "improving") return true;
+  return ["daily", "deep"].some((layer) => {
+    const run = review?.[layer]?.current;
+    if (run?.status === "improving") return true;
+    return (run?.tasks || []).some((task) => {
+      if (!reviewTaskIsImprovement(task)) return false;
+      const truthState = task.truth_state || task.status;
+      return ["met", "verified"].includes(truthState) && task.review_effect !== "redline";
+    });
+  });
+}
+
+function fundamentalReviewFilterMatches(review, filter) {
+  if (filter === "improving") return reviewHasImprovement(review);
+  return fundamentalReviewPartitionKey(review) === filter;
+}
+
 // A review screen needs one clear home for each stock.  Manual-rule staleness
 // takes priority over any saved daily result, so historical data is never
 // mistaken for a still-valid rule outcome.
@@ -1741,6 +1770,7 @@ function fundamentalReviewPartitionKey(review) {
   const layerStatuses = [review.daily?.current?.status, review.deep?.current?.status, review.summary?.status];
   if (layerStatuses.includes("redline")) return "redline";
   if (layerStatuses.includes("attention")) return "attention";
+  if (layerStatuses.includes("improving")) return "improving";
   const now = Date.now();
   const dailyDue = new Date(review.daily?.due_at || 0).getTime();
   const deepDue = new Date(review.deep?.due_at || 0).getTime();
@@ -1753,6 +1783,7 @@ function fundamentalReviewPartitionKey(review) {
 const fundamentalReviewPartitions = [
   ["redline", "红线已触发", "锁定负向条件已有当前证据支持；需要打开详情核对原文。", "redline"],
   ["attention", "需要关注", "持仓验证或条件未满足，尚不改变主报告判断。", "attention"],
+  ["improving", "条件改善", "日常或深度复核已明确确认正向经营条件；不覆盖红线、主报告判断或价格分区。", "improving"],
   ["daily_due", "日常待复核", "日常层每三天到期；由你手动启动 DeepSeek。", "attention"],
   ["deep_due", "深度待复核", "深度层每三十天到期；由你选择模型和推理档位。", "attention"],
   ["data_gap", "数据不足", "当前证据不完整，不能用主报告历史基线补写结论。", "historical"],
@@ -1775,7 +1806,7 @@ function modelReviewEvidenceLabel(task) {
 }
 
 function modelReviewPartitionRank(review) {
-  return ({ redline: 7, stale_rules: 6, attention: 5, daily_due: 4, deep_due: 3, data_gap: 2, clear: 1 })[fundamentalReviewPartitionKey(review)] || 0;
+  return ({ redline: 8, stale_rules: 7, attention: 6, improving: 5, daily_due: 4, deep_due: 3, data_gap: 2, clear: 1 })[fundamentalReviewPartitionKey(review)] || 0;
 }
 
 function setFundamentalReviewFilter(filter) {
@@ -1799,7 +1830,12 @@ function renderFundamentalReviewPartitions() {
     .map((item) => fundamentalReviewForItem(item));
   const counts = reviews.reduce((total, review) => {
     const key = fundamentalReviewPartitionKey(review);
-    total[key] = (total[key] || 0) + 1;
+    if (key === "improving" || reviewHasImprovement(review)) {
+      total.improving = (total.improving || 0) + 1;
+    }
+    if (key !== "improving") {
+      total[key] = (total[key] || 0) + 1;
+    }
     return total;
   }, {});
 
@@ -1993,7 +2029,7 @@ function filteredDecisions() {
     const fundamentalReview = modelReviewForItem(item);
     const fundamentalReviewMatch = state.view !== "review"
       || state.fundamentalReviewFilter === "all"
-      || fundamentalReviewPartitionKey(fundamentalReview) === state.fundamentalReviewFilter;
+      || fundamentalReviewFilterMatches(fundamentalReview, state.fundamentalReviewFilter);
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
