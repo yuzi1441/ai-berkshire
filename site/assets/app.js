@@ -4340,6 +4340,80 @@ function reviewEvidenceLineText(line) {
   return `${line.line_ref || line.document_id || "原文"} · ${line.exact_quote || line.quote || "未保存引文"}`;
 }
 
+function appendReportInlineText(parent, text) {
+  const parts = String(text || "").split(/(\*\*[^*]+\*\*)/g);
+  for (const part of parts) {
+    if (!part) continue;
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const strong = document.createElement("strong");
+      strong.textContent = part.slice(2, -2);
+      parent.append(strong);
+    } else {
+      parent.append(document.createTextNode(part));
+    }
+  }
+}
+
+function renderReportExcerpt(sourceLine) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "report-review-excerpt";
+  const excerpt = typeof sourceLine?.report_excerpt === "string"
+    ? { text: sourceLine.report_excerpt }
+    : sourceLine?.report_excerpt;
+  const rawText = excerpt?.text || sourceLine?.quote || sourceLine?.supports || "";
+  const hasExactExcerpt = Boolean(excerpt?.text);
+  const start = excerpt?.line_start || sourceLine?.line_start;
+  const end = excerpt?.line_end || sourceLine?.line_end || start;
+  const meta = document.createElement("div");
+  meta.className = "report-review-excerpt-meta";
+  meta.textContent = start
+    ? `原文摘录 · L${start}${end && end !== start ? `–L${end}` : ""}${hasExactExcerpt ? " · 内容未改写" : " · 完整摘录未保存"}`
+    : "原文摘录";
+  wrapper.append(meta);
+
+  const body = document.createElement("div");
+  body.className = "report-review-excerpt-body";
+  const lines = String(rawText).replace(/\r\n?/g, "\n").split("\n");
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\s+$/, "");
+    if (!line.trim()) {
+      const spacer = document.createElement("div");
+      spacer.className = "report-review-excerpt-spacer";
+      body.append(spacer);
+      continue;
+    }
+    const isQuote = /^\s*>\s?/.test(line);
+    const value = line.replace(/^\s*>\s?/, "");
+    const heading = value.match(/^\s*(#{1,6})\s+(.+?)\s*$/);
+    if (isQuote) {
+      const quote = document.createElement("blockquote");
+      quote.className = "report-review-excerpt-quote";
+      appendReportInlineText(quote, heading ? heading[2] : value);
+      body.append(quote);
+    } else if (heading) {
+      const headingNode = document.createElement("div");
+      headingNode.className = "report-review-excerpt-heading";
+      appendReportInlineText(headingNode, heading[2]);
+      body.append(headingNode);
+    } else {
+      const paragraph = document.createElement("p");
+      paragraph.className = /^\s*\*\*.+\*\*\s*$/.test(value)
+        ? "report-review-excerpt-emphasis"
+        : "report-review-excerpt-line";
+      appendReportInlineText(paragraph, value);
+      body.append(paragraph);
+    }
+  }
+  if (!rawText) {
+    const missing = document.createElement("p");
+    missing.className = "report-review-evidence-missing";
+    missing.textContent = "已记录原文位置，但没有保存可显示的摘录。";
+    body.append(missing);
+  }
+  wrapper.append(body);
+  return wrapper;
+}
+
 function renderReviewEvidenceTask(review, task, layerLabel) {
   const article = document.createElement("article");
   const taskStatus = task?.truth_state || task?.status;
@@ -4416,15 +4490,21 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   reportLabel.className = "report-review-evidence-label";
   reportLabel.textContent = "主报告原文";
   reportBox.append(reportLabel);
+  const reportHint = document.createElement("span");
+  reportHint.className = "report-review-excerpt-hint";
+  reportHint.textContent = "按报告正文排版显示，保留原文内容";
+  reportBox.append(reportHint);
   const sourceLines = rule?.source_lines || [];
   if (sourceLines.length) {
+    const seen = new Set();
     for (const line of sourceLines.slice(0, 2)) {
-      const quote = document.createElement("blockquote");
       const excerpt = typeof line?.report_excerpt === "string"
         ? line.report_excerpt
         : line?.report_excerpt?.text;
-      quote.textContent = excerpt || line?.quote || line?.supports || "已记录原文位置，但未保存摘录";
-      reportBox.append(quote);
+      const key = `${line?.line_start || ""}|${line?.line_end || ""}|${excerpt || line?.quote || line?.supports || ""}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      reportBox.append(renderReportExcerpt(line));
     }
   } else {
     const missingSource = document.createElement("p");
