@@ -2051,6 +2051,25 @@ function reviewTaskFirstQuote(task) {
   return "";
 }
 
+function reviewTaskRuleCondition(review, task) {
+  const rule = reviewRuleForTask(review, task);
+  return rule?.condition || task?.rule_content || "";
+}
+
+function appendReviewQueueCompareRow(parent, labelText, valueText, tone = "") {
+  if (!reviewFieldHasValue(valueText)) return;
+  const row = document.createElement("div");
+  row.className = `fundamental-review-key-data-compare-row${tone ? ` fundamental-review-key-data-compare-${tone}` : ""}`;
+  const label = document.createElement("span");
+  label.className = "fundamental-review-key-data-compare-label";
+  label.textContent = labelText;
+  const value = document.createElement("p");
+  value.className = "fundamental-review-key-data-compare-value";
+  value.textContent = valueText;
+  row.append(label, value);
+  parent.append(row);
+}
+
 function reviewGapLabels(review) {
   const requirements = review?.summary?.missing_requirements || [];
   return [...new Set(requirements.map(reviewMissingFieldLabel).filter(Boolean))];
@@ -3958,49 +3977,29 @@ function renderReviewLayerKeyData(review, run) {
   box.append(label);
 
   const mode = reviewTaskDataMode(task);
+  const comparison = document.createElement("div");
+  comparison.className = "fundamental-review-key-data-compare";
+  appendReviewQueueCompareRow(comparison, "主报告要求", reviewTaskRuleCondition(review, task), "requirement");
   if (mode === "structured") {
-    const value = document.createElement("strong");
-    value.textContent = reviewFieldHasValue(task.current_value)
-      ? `当前值：${task.current_value}`
-      : "当前值：未结构化保存";
-    box.append(value);
-    if (reviewFieldHasValue(task.comparison)) {
-      const comparison = document.createElement("p");
-      comparison.textContent = `对比：${task.comparison}`;
-      box.append(comparison);
-    }
+    appendReviewQueueCompareRow(
+      comparison,
+      "本次抓取",
+      reviewFieldHasValue(task.current_value) ? task.current_value : "当前值未结构化保存",
+      "observed",
+    );
+    appendReviewQueueCompareRow(comparison, "与要求对照", task.comparison, "comparison");
+    appendReviewQueueCompareRow(comparison, "详情摘要", task.conclusion, "summary");
   } else if (mode === "summary") {
-    const summary = document.createElement("strong");
-    summary.className = "fundamental-review-key-data-summary";
-    summary.textContent = "已保存核验摘要（当前值未结构化）";
-    box.append(summary);
-    const conclusion = document.createElement("p");
-    conclusion.className = "fundamental-review-key-data-fallback";
-    conclusion.textContent = task.conclusion;
-    box.append(conclusion);
+    appendReviewQueueCompareRow(comparison, "已保存摘要", task.conclusion, "summary");
   } else if (mode === "current_evidence") {
-    const evidence = document.createElement("strong");
-    evidence.className = "fundamental-review-key-data-summary";
-    evidence.textContent = "已保存当前原文依据（当前值未拆分）";
-    box.append(evidence);
     const quote = reviewTaskFirstQuote(task);
-    if (quote) {
-      const quoteNode = document.createElement("p");
-      quoteNode.className = "fundamental-review-key-data-fallback";
-      quoteNode.textContent = quote;
-      box.append(quoteNode);
-    }
+    appendReviewQueueCompareRow(comparison, "原文依据", quote || "当前值未拆分", "summary");
   } else if (mode === "historical") {
-    const history = document.createElement("strong");
-    history.className = "fundamental-review-key-data-summary";
-    history.textContent = "已保存主报告历史参考（不作为当前值）";
-    box.append(history);
+    appendReviewQueueCompareRow(comparison, "历史参考", "已保存主报告历史参考，不作为本次当前值", "summary");
   } else {
-    const missingValue = document.createElement("strong");
-    missingValue.className = "fundamental-review-key-data-fallback";
-    missingValue.textContent = "当前值：未保存";
-    box.append(missingValue);
+    appendReviewQueueCompareRow(comparison, "本次抓取", "当前值未保存", "missing");
   }
+  if (comparison.childElementCount) box.append(comparison);
 
   const missingFields = reviewRunMissingFields(review, run);
   if (missingFields.length) {
