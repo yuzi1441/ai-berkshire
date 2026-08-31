@@ -4315,6 +4315,169 @@ function appendFundamentalReviewSection(title, note, rules, review = null) {
   els.detailBody.append(card);
 }
 
+function reviewTaskGroupKey(task) {
+  const scope = String(task?.scope_label || task?.group || task?.semantic_group || "");
+  if (scope.includes("买入")) return "entry";
+  if (scope.includes("持仓")) return "holder";
+  if (scope.includes("改善")) return "improvement";
+  if (scope.includes("风险") || scope.includes("失效")) return "redline";
+  return null;
+}
+
+function reviewRuleForTask(review, task) {
+  if (!review) return null;
+  const exact = task?.rule_id && review.rules?.find((rule) => rule.rule_id === task.rule_id);
+  if (exact) return exact;
+  const group = reviewTaskGroupKey(task);
+  return group
+    ? review.rules?.find((rule) => (rule.semantic_group || rule.group) === group && rule.reviewable)
+    : null;
+}
+
+function renderReviewEvidenceTask(review, task, layerLabel) {
+  const article = document.createElement("article");
+  const taskStatus = task?.truth_state || task?.status;
+  article.className = `report-review-evidence-task report-review-evidence-${taskStatus || "unknown"}`;
+
+  const head = document.createElement("div");
+  head.className = "report-review-evidence-task-head";
+  const title = document.createElement("strong");
+  title.textContent = `${layerLabel} · ${task?.scope_label || task?.group || "复核事项"}`;
+  const status = document.createElement("span");
+  status.textContent = `${modelReviewTaskStatus(task)} · ${modelReviewEvidenceLabel(task)}`;
+  head.append(title, status);
+  article.append(head);
+
+  const rule = reviewRuleForTask(review, task);
+  const evidenceLines = task?.evidence_lines || [];
+  const ruleBox = document.createElement("div");
+  ruleBox.className = "report-review-evidence-block";
+  const ruleLabel = document.createElement("span");
+  ruleLabel.className = "report-review-evidence-label";
+  ruleLabel.textContent = "主报告锁定规则";
+  const ruleText = document.createElement("p");
+  ruleText.textContent = rule?.condition || task?.rule_content || "主报告未保存可对照规则";
+  ruleBox.append(ruleLabel, ruleText);
+  article.append(ruleBox);
+
+  const dataBox = document.createElement("div");
+  dataBox.className = "report-review-evidence-block report-review-evidence-data";
+  const dataLabel = document.createElement("span");
+  dataLabel.className = "report-review-evidence-label";
+  dataLabel.textContent = "实际抓取数据 / 对比";
+  const dataText = document.createElement("p");
+  if (task?.current_value != null || task?.comparison) {
+    dataText.textContent = [
+      task.current_value != null ? `当前值：${task.current_value}` : "当前值：未结构化保存",
+      task.comparison ? `对比：${task.comparison}` : "",
+    ].filter(Boolean).join("；");
+  } else {
+    dataText.textContent = evidenceLines.length
+      ? "未结构化保存；下方列出本次实际引用原文。"
+      : "未结构化保存；不能把复核结论文字当作逐项原始数据。";
+    dataText.className = "report-review-evidence-missing";
+  }
+  dataBox.append(dataLabel, dataText);
+  const evidenceMeta = document.createElement("small");
+  const evidenceDates = (task?.evidence_dates || []).filter(Boolean);
+  const evidenceDocuments = (task?.evidence_document_ids || []).filter(Boolean);
+  evidenceMeta.textContent = [
+    evidenceDates.length ? `证据日期：${[...new Set(evidenceDates)].join("、")}` : "证据日期：未记录",
+    evidenceDocuments.length ? `文档：${[...new Set(evidenceDocuments)].join("、")}` : "文档：未记录",
+  ].join(" · ");
+  evidenceMeta.className = "report-review-evidence-meta";
+  dataBox.append(evidenceMeta);
+  article.append(dataBox);
+
+  if (task?.conclusion) {
+    const conclusion = document.createElement("div");
+    conclusion.className = "report-review-evidence-block";
+    const conclusionLabel = document.createElement("span");
+    conclusionLabel.className = "report-review-evidence-label";
+    conclusionLabel.textContent = "复核结论";
+    const conclusionText = document.createElement("p");
+    conclusionText.textContent = task.conclusion;
+    conclusion.append(conclusionLabel, conclusionText);
+    article.append(conclusion);
+  }
+
+  const sourceLines = rule?.source_lines || [];
+  if (sourceLines.length) {
+    const source = document.createElement("div");
+    source.className = "report-review-evidence-block report-review-evidence-source";
+    const sourceLabel = document.createElement("span");
+    sourceLabel.className = "report-review-evidence-label";
+    sourceLabel.textContent = "主报告原文定位";
+    source.append(sourceLabel);
+    for (const line of sourceLines.slice(0, 2)) {
+      const quote = document.createElement("blockquote");
+      const location = line.line_start
+        ? `L${line.line_start}${line.line_end && line.line_end !== line.line_start ? `–L${line.line_end}` : ""} · `
+        : "";
+      quote.textContent = `${location}${line.quote || line.supports || "已记录原文位置"}`;
+      source.append(quote);
+    }
+    if (review.main_report?.path) {
+      const link = document.createElement("a");
+      const firstLine = sourceLines[0]?.line_start;
+      link.href = `${repositoryUrl}${review.main_report.path}${firstLine ? `#L${firstLine}` : ""}`;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "打开主报告原文文件";
+      source.append(link);
+    }
+    article.append(source);
+  }
+
+  if (evidenceLines.length) {
+    const evidence = document.createElement("div");
+    evidence.className = "report-review-evidence-block report-review-evidence-source";
+    const evidenceLabel = document.createElement("span");
+    evidenceLabel.className = "report-review-evidence-label";
+    evidenceLabel.textContent = "本次实际引用原文";
+    evidence.append(evidenceLabel);
+    for (const line of evidenceLines.slice(0, 5)) {
+      const quote = document.createElement("blockquote");
+      quote.textContent = `${line.line_ref || line.document_id || "原文"} · ${line.exact_quote || "未保存引文"}`;
+      evidence.append(quote);
+    }
+    article.append(evidence);
+  } else {
+    const missing = document.createElement("p");
+    missing.className = "report-review-evidence-missing";
+    missing.textContent = "本层结果未保存逐条原文引用；当前只能审阅复核记录，不能把它当作完整证据闭环。";
+    article.append(missing);
+  }
+  return article;
+}
+
+function renderFundamentalReviewEvidenceComparison(review) {
+  const card = document.createElement("section");
+  card.className = "card report-review-evidence-card";
+  const title = document.createElement("h3");
+  title.textContent = "原文与实际数据对照";
+  const note = document.createElement("p");
+  note.className = "source-note";
+  note.textContent = "先看主报告锁定规则，再看本层实际抓取值、对比期和原文引用。没有结构化数值或逐条引文的结果会明确标注，不把结论文字当作原始证据。";
+  card.append(title, note);
+  const grid = document.createElement("div");
+  grid.className = "report-review-evidence-grid";
+  for (const [layer, label] of [["daily", "日常复核"], ["deep", "深度复核"]]) {
+    const run = review?.[layer]?.current;
+    if (!run) continue;
+    const tasks = (run.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
+    for (const task of tasks) grid.append(renderReviewEvidenceTask(review, task, label));
+  }
+  if (!grid.childElementCount) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "当前没有可展示的复核数据。";
+    grid.append(empty);
+  }
+  card.append(grid);
+  els.detailBody.append(card);
+}
+
 function appendReviewFacts(parent, rows) {
   const facts = document.createElement("div");
   facts.className = "fundamental-review-overview-facts";
@@ -4468,6 +4631,7 @@ function renderFundamentalReviewDetail(item) {
     renderLayerSummary("deep", "深度复核", "每次由你指定模型与推理档位；不固定模型，不改写主报告。"),
   );
   els.detailBody.append(layers);
+  renderFundamentalReviewEvidenceComparison(review);
 
   const details = document.createElement("details");
   details.className = "card report-review-details";
