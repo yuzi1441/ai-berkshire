@@ -1037,6 +1037,53 @@ tbody tr.detail-inline-row .detail-panel {
 .report-review-alert-stale { color: var(--watch); }
 .report-review-alert-historical { color: #c5afe8; }
 .report-review-alert-gap { color: var(--ink-soft); }
+.report-review-priority-card {
+  border-color: rgba(255, 178, 36, 0.28);
+  background: linear-gradient(145deg, rgba(255, 178, 36, 0.08), rgba(255, 255, 255, 0.012));
+}
+.report-review-priority-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.report-review-priority-head h3 { margin: 2px 0 0; }
+.report-review-priority-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.report-review-priority-redline { color: #ff8585; }
+.report-review-priority-attention,
+.report-review-priority-waiting { color: var(--watch); }
+.report-review-priority-historical,
+.report-review-priority-stale { color: #c5afe8; }
+.report-review-priority-improving { color: var(--buy); }
+.report-review-priority-headline { margin: 8px 0 0; color: var(--ink); font-size: 13px; line-height: 1.45; font-weight: 700; }
+.report-review-priority-facts,
+.report-review-layer-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 13px; }
+.report-review-priority-facts > div { min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 7px; background: rgba(0, 0, 0, 0.1); }
+.report-review-priority-facts span { display: block; color: var(--ink-faint); font-size: 10px; }
+.report-review-priority-facts strong { display: block; margin-top: 3px; overflow: hidden; color: var(--ink); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.report-review-key-points { margin-top: 13px; padding-top: 10px; border-top: 1px solid var(--line); }
+.report-review-key-points > strong { color: var(--ink); font-size: 11px; }
+.report-review-key-points ul { margin: 7px 0 0; padding-left: 18px; }
+.report-review-key-points li { margin: 4px 0; color: var(--ink-soft); font-size: 11px; line-height: 1.45; }
+.report-review-key-points li.report-review-point-redline { color: #ff8585; }
+.report-review-key-points li.report-review-point-attention { color: var(--watch); }
+.report-review-key-points li.report-review-point-gap { color: #d5c5ec; }
+.report-review-key-points li.report-review-point-clear { color: var(--buy); }
+.report-review-layer-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 10px; }
+.report-review-layer-summary { min-width: 0; }
+.report-review-layer-summary h3 { margin: 0; }
+.report-review-layer-status { display: block; margin-top: 10px; color: var(--ink); font-size: 12px; }
+.report-review-layer-point { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--line); color: var(--ink-soft); font-size: 10.5px; line-height: 1.45; }
+.report-review-details { margin-top: 10px; }
+.report-review-details > summary { cursor: pointer; color: var(--ink); font-size: 12px; font-weight: 700; }
+.report-review-details[open] > summary { margin-bottom: 10px; }
+.report-review-detail-group { margin-top: 14px; }
+.report-review-detail-group h4 { margin: 0 0 8px; color: var(--ink-soft); font-size: 11px; }
+.report-review-detail-group .fundamental-review-rule-card { margin-top: 8px; }
 .fundamental-review-queue-cell { min-width: 150px; }
 .fundamental-review-queue-cell > strong:not(.fundamental-review-badge) { color: var(--ink); font-size: 11px; }
 .human-review-state-human_wait_price strong,
@@ -3013,6 +3060,8 @@ tbody tr.active .valuation-chip.ready {
   .fundamental-review-table .fundamental-review-rule-list { min-width: 0; }
   .fundamental-review-overview-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .fundamental-review-layer-grid { grid-template-columns: 1fr; }
+  .report-review-priority-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .report-review-layer-summary-grid { grid-template-columns: 1fr; }
   .fundamental-review-section-head { display: block; }
   .fundamental-review-section-head p { max-width: none; margin-top: 4px; text-align: left; }
 }

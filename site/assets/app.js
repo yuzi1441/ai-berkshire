@@ -1863,9 +1863,44 @@ function reviewTruthLabel(result) {
   return {
     met: "条件满足",
     not_met: "条件未满足",
-    unknown: "数据不足",
+    unknown: result?.disclosure_state === "not_disclosed" ? "官方未披露" : "证据未闭合",
     not_due: "尚未到期",
   }[result?.truth_state] || "尚未核验";
+}
+
+function isOperationalReviewRule(rule) {
+  if (!rule || rule.schedule_type === "price") return false;
+  const hasStructuredRequirement = Boolean(
+    (rule.metrics || []).length
+    || rule.operator
+    || rule.threshold
+    || (rule.periods || []).length,
+  );
+  if (hasStructuredRequirement) return true;
+  // A qualitative rule is still useful when it names a verifiable filing,
+  // event, contract, policy, product, or operating milestone.  Pure action
+  // instructions such as “不追” or “可持有” belong to the report/action
+  // columns and should not inflate the evidence-review queue.
+  return /(财报|中报|半年报|三季报|年报|季度|连续|订单|回款|应收|存货|库存|短债|毛利率|现金流|扣非|利润|收入|ROE|ROIC|产销|过户|公告|披露|政策|项目|产品|合同|交付|减值|上市|落地)/i.test(rule.condition || "");
+}
+
+function reviewResultForRule(review, rule) {
+  if (rule?.result) return { ...rule.result, review_layer: "当前复核" };
+  const deepTasks = review?.deep?.current?.tasks || [];
+  const deep = deepTasks.find((task) => task?.rule_id === rule?.rule_id);
+  if (deep) {
+    return {
+      truth_state: deep.truth_state || deep.status,
+      current_value: deep.current_value,
+      comparison: deep.comparison || deep.conclusion,
+      missing_codes: deep.missing_codes || [],
+      disclosure_state: deep.disclosure_state,
+      review_layer: "深度复核",
+    };
+  }
+  // The legacy daily layer is intentionally not promoted to a rule-level
+  // verdict: its old entry/holder/risk tasks were coarse and may be historical.
+  return null;
 }
 
 function shortReviewDate(value) {
@@ -4150,7 +4185,7 @@ const fundamentalReviewGroupMeta = {
   entry: { label: "买入前提", tone: "waiting" },
 };
 
-function renderFundamentalReviewRule(rule) {
+function renderFundamentalReviewRule(rule, review = null) {
   const article = document.createElement("article");
   const groupMeta = fundamentalReviewGroupMeta[rule.semantic_group || rule.group] || fundamentalReviewGroupMeta.holder;
   article.className = `fundamental-review-rule-card fundamental-review-rule-card-${groupMeta.tone}`;
@@ -4161,7 +4196,8 @@ function renderFundamentalReviewRule(rule) {
   group.textContent = groupMeta.label;
   const truth = document.createElement("span");
   truth.className = "fundamental-review-rule-truth";
-  truth.textContent = `日常：${reviewTruthLabel(rule.result)}`;
+  const reviewResult = reviewResultForRule(review, rule);
+  truth.textContent = `${reviewResult?.review_layer || "当前复核"}：${reviewTruthLabel(reviewResult)}`;
   head.append(group, truth);
   const condition = document.createElement("p");
   condition.className = "fundamental-review-rule-condition";
@@ -4183,21 +4219,21 @@ function renderFundamentalReviewRule(rule) {
   }
   article.append(head, condition, meta);
 
-  if (rule.result) {
-    const result = document.createElement("div");
-    result.className = "fundamental-review-result";
+  if (reviewResult) {
+    const resultBox = document.createElement("div");
+    resultBox.className = "fundamental-review-result";
     const value = document.createElement("strong");
-    value.textContent = `日常当前值：${rule.result.current_value || "未取得"}`;
+    value.textContent = `${reviewResult.review_layer || "当前"}当前值：${reviewResult.current_value || "未取得"}`;
     const comparison = document.createElement("p");
-    comparison.textContent = rule.result.comparison || "尚无可完成条件判断的当前对比";
-    result.append(value, comparison);
-    if (rule.result.missing_codes?.length) {
+    comparison.textContent = reviewResult.comparison || "尚无可完成条件判断的当前对比";
+    resultBox.append(value, comparison);
+    if (reviewResult.missing_codes?.length) {
       const missing = document.createElement("p");
       missing.className = "fundamental-review-missing";
-      missing.textContent = `缺口码：${rule.result.missing_codes.join("、")}`;
-      result.append(missing);
+      missing.textContent = `缺口码：${reviewResult.missing_codes.join("、")}`;
+      resultBox.append(missing);
     }
-    article.append(result);
+    article.append(resultBox);
   }
 
   const sourceLines = rule.source_lines || [];
@@ -4218,7 +4254,7 @@ function renderFundamentalReviewRule(rule) {
   return article;
 }
 
-function appendFundamentalReviewSection(title, note, rules) {
+function appendFundamentalReviewSection(title, note, rules, review = null) {
   const card = document.createElement("section");
   card.className = "card fundamental-review-detail-section";
   const heading = document.createElement("div");
@@ -4237,7 +4273,7 @@ function appendFundamentalReviewSection(title, note, rules) {
   } else {
     const grid = document.createElement("div");
     grid.className = "fundamental-review-detail-grid";
-    for (const rule of rules) grid.append(renderFundamentalReviewRule(rule));
+    for (const rule of rules) grid.append(renderFundamentalReviewRule(rule, review));
     card.append(grid);
   }
   els.detailBody.append(card);
@@ -4259,6 +4295,181 @@ function appendReviewFacts(parent, rows) {
 }
 
 function renderFundamentalReviewDetail(item) {
+  const review = fundamentalReviewForItem(item);
+  if (!review) {
+    const empty = document.createElement("section");
+    empty.className = "card";
+    empty.innerHTML = "<h3>暂无报告复核快照</h3><p class=\"source-note\">当前没有找到人工锁定规则或有效复核结果。</p>";
+    els.detailBody.append(empty);
+    return;
+  }
+
+  const deep = review.deep?.current || null;
+  const direct = review.manual?.codex_direct || null;
+  const tasks = deep?.tasks || [];
+  const redlines = tasks.filter((task) => task.review_effect === "redline" && ["met", "triggered"].includes(task.truth_state || task.status));
+  const attention = tasks.filter((task) => ["not_met", "unknown", "data_insufficient"].includes(task.truth_state || task.status));
+  const gapValues = [
+    ...(review.summary?.missing_requirements || []),
+    ...(review.summary?.data_gaps || []),
+    ...(deep?.data_gaps || []),
+    ...(direct?.data_gaps || []),
+  ].filter(Boolean);
+  const gaps = [...new Set(gapValues)];
+  const statusKey = fundamentalReviewPartitionKey(review);
+  const statusMeta = fundamentalReviewPartitions.find(([key]) => key === statusKey);
+  const currentPrice = state.quotes.get(item.ticker);
+
+  const summary = document.createElement("section");
+  summary.className = "card report-review-priority-card";
+  const eyebrow = document.createElement("p");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "REPORT REVIEW · PRIORITY SUMMARY";
+  const heading = document.createElement("div");
+  heading.className = "report-review-priority-head";
+  const title = document.createElement("h3");
+  title.textContent = "先看结论";
+  const badge = document.createElement("strong");
+  badge.className = `report-review-priority-badge report-review-priority-${statusMeta?.[3] || "waiting"}`;
+  badge.textContent = statusMeta?.[1] || review.summary?.label || "等待复核";
+  heading.append(title, badge);
+  const headline = document.createElement("p");
+  headline.className = "report-review-priority-headline";
+  headline.textContent = deep?.label || direct?.label || review.summary?.label || "当前没有有效复核结论";
+  summary.append(eyebrow, heading, headline);
+
+  const facts = document.createElement("div");
+  facts.className = "report-review-priority-facts";
+  const factRows = [
+    ["当前价格", currentPrice?.price == null ? "未取得" : `${currentPrice.price} ${currentPrice.currency || "CNY"}`],
+    ["深度复核", deep ? `${shortReviewDate(deep.generated_at)} · ${deep.model || deep.reviewer || "已保存"}` : "未保存"],
+    ["当前证据", deep ? `${deep.current_evidence_count ?? 0} 份 · ${deep.evidence_state === "current" ? "当前" : "历史/不足"}` : "无"],
+    ["下次检查", shortReviewDate(review.deep?.due_at || review.next_check_at)],
+  ];
+  for (const [label, value] of factRows) {
+    const fact = document.createElement("div");
+    const name = document.createElement("span");
+    name.textContent = label;
+    const valueNode = document.createElement("strong");
+    valueNode.textContent = value;
+    fact.append(name, valueNode);
+    facts.append(fact);
+  }
+  summary.append(facts);
+
+  const keyPoints = document.createElement("div");
+  keyPoints.className = "report-review-key-points";
+  const keyTitle = document.createElement("strong");
+  keyTitle.textContent = "关键事项";
+  keyPoints.append(keyTitle);
+  const pointList = document.createElement("ul");
+  const addPoint = (text, tone = "") => {
+    const li = document.createElement("li");
+    if (tone) li.className = `report-review-point-${tone}`;
+    li.textContent = text;
+    pointList.append(li);
+  };
+  if (redlines.length) {
+    for (const task of redlines.slice(0, 2)) addPoint(`红线：${task.conclusion || task.rule_content || "已满足负向条件"}`, "redline");
+  } else if (attention.length) {
+    for (const task of attention.slice(0, 2)) addPoint(`${task.scope_label || "经营条件"}：${task.conclusion || "证据未闭合，不能确认条件已满足"}`, "attention");
+  } else if (statusKey === "data_gap" || statusKey === "stale_rules") {
+    addPoint(statusMeta?.[2] || "当前没有足够证据形成结论", "gap");
+  } else {
+    addPoint("当前没有确认的红线或待处理经营条件", "clear");
+  }
+  if (gaps.length) addPoint(`还缺：${gaps.slice(0, 4).join("、")}`, "gap");
+  const nextEvidence = direct?.next_evidence || deep?.next_evidence || review.summary?.next_evidence;
+  if (nextEvidence) addPoint(`下一步：${nextEvidence}`);
+  keyPoints.append(pointList);
+  summary.append(keyPoints);
+  els.detailBody.append(summary);
+
+  const layers = document.createElement("div");
+  layers.className = "report-review-layer-summary-grid";
+  const renderLayerSummary = (layer, label, policy) => {
+    const info = review[layer] || {};
+    const run = info.current;
+    const card = document.createElement("section");
+    card.className = "card report-review-layer-summary";
+    const title = document.createElement("h3");
+    title.textContent = label;
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = policy;
+    card.append(title, note);
+    if (!run) {
+      const empty = document.createElement("p");
+      empty.textContent = "尚未保存结果";
+      card.append(empty);
+      return card;
+    }
+    const runStatus = document.createElement("strong");
+    runStatus.className = "report-review-layer-status";
+    runStatus.textContent = layerReviewLabel(run);
+    const meta = document.createElement("p");
+    meta.className = "fundamental-review-meta";
+    const evidenceState = run.evidence_state === "current" ? "当前证据" : "历史/不足";
+    meta.textContent = `${run.model || run.reviewer || "复核者未记录"} · ${shortReviewDate(run.generated_at)} · ${run.current_evidence_count ?? 0} 份${evidenceState}`;
+    card.append(runStatus, meta);
+    const layerTasks = (run.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
+    for (const task of layerTasks.slice(0, 2)) {
+      const item = document.createElement("p");
+      item.className = "report-review-layer-point";
+      item.textContent = `${task.scope_label || task.group || "复核事项"} · ${modelReviewTaskStatus(task)}：${task.conclusion || task.rule_content || "未保存说明"}`;
+      card.append(item);
+    }
+    if (layerTasks.length > 2) {
+      const more = document.createElement("p");
+      more.className = "source-note";
+      more.textContent = `还有 ${layerTasks.length - 2} 项，见下方详细依据`;
+      card.append(more);
+    }
+    return card;
+  };
+  layers.append(
+    renderLayerSummary("daily", "日常复核", "DeepSeek 手动运行，每三天检查一次；只核验新证据。"),
+    renderLayerSummary("deep", "深度复核", "每次由你指定模型与推理档位；不固定模型，不改写主报告。"),
+  );
+  els.detailBody.append(layers);
+
+  const details = document.createElement("details");
+  details.className = "card report-review-details";
+  const detailsSummary = document.createElement("summary");
+  detailsSummary.textContent = "查看完整规则、证据状态与主报告依据";
+  details.append(detailsSummary);
+  const detailNote = document.createElement("p");
+  detailNote.className = "source-note";
+  detailNote.textContent = "以下是审计明细，不是新的投资动作；价格和仓位仍由主报告与人工价格分区处理。";
+  details.append(detailNote);
+  const ruleGroups = [
+    ["风险红线", fundamentalReviewRules(review, "redline").filter(isOperationalReviewRule)],
+    ["经营条件", fundamentalReviewRules(review).filter((rule) => rule.reviewable && isOperationalReviewRule(rule))],
+    ["改善条件", fundamentalReviewRules(review, "improvement").filter(isOperationalReviewRule)],
+  ];
+  for (const [label, rules] of ruleGroups) {
+    const group = document.createElement("section");
+    group.className = "report-review-detail-group";
+    const groupTitle = document.createElement("h4");
+    groupTitle.textContent = `${label} · ${rules.length}`;
+    group.append(groupTitle);
+    for (const rule of rules) group.append(renderFundamentalReviewRule(rule, review));
+    if (!rules.length) {
+      const empty = document.createElement("p");
+      empty.className = "source-note";
+      empty.textContent = "主报告没有锁定这一类可核验条件。";
+      group.append(empty);
+    }
+    details.append(group);
+  }
+  const comparison = document.createElement("p");
+  comparison.className = "source-note";
+  comparison.textContent = `两层一致性：${review.layer_comparison?.label || "尚无可比较结果"}；锁定规则 ${review.manual?.rule_count ?? review.rules?.length ?? 0} 条。`;
+  details.append(comparison);
+  els.detailBody.append(details);
+}
+
+function renderFundamentalReviewDetailLegacy(item) {
   const reviewLayer = fundamentalReviewForItem(item);
   if (!reviewLayer) {
     const empty = document.createElement("div");
@@ -4367,12 +4578,12 @@ function renderFundamentalReviewDetail(item) {
   comparisonCard.append(comparisonTitle, comparisonNote);
   els.detailBody.append(comparisonCard);
 
-  const redlines = fundamentalReviewRules(reviewLayer, "redline").filter((rule) => rule.schedule_type !== "price");
-  const due = fundamentalReviewRules(reviewLayer).filter((rule) => rule.reviewable && rule.schedule_type !== "price");
-  const improvements = fundamentalReviewRules(reviewLayer, "improvement").filter((rule) => rule.schedule_type !== "price");
-  appendFundamentalReviewSection("锁定风险红线", "只有当前证据支持负向条件时，才会进入红线分区。", redlines);
-  appendFundamentalReviewSection("待核验事项", "财报、经营和事件条件按原报告核验；价格条件仍由人工价格分区处理。", due);
-  appendFundamentalReviewSection("改善与升级条件", "正向条件单独显示，不能和红线混为同一个“触发”。", improvements);
+  const redlines = fundamentalReviewRules(reviewLayer, "redline").filter(isOperationalReviewRule);
+  const due = fundamentalReviewRules(reviewLayer).filter((rule) => rule.reviewable && isOperationalReviewRule(rule));
+  const improvements = fundamentalReviewRules(reviewLayer, "improvement").filter(isOperationalReviewRule);
+  appendFundamentalReviewSection("锁定风险红线", "只列出需要财报、经营或事件证据核对的条件；纯动作和价格规则不计入。", redlines, reviewLayer);
+  appendFundamentalReviewSection("需核验的经营条件", "这里只列客观指标或可确认事件，不代表每一项都已经到期。", due, reviewLayer);
+  appendFundamentalReviewSection("改善与升级条件", "正向条件单独显示，不能和红线混为同一个“触发”。", improvements, reviewLayer);
   return;
 
   // 保留旧版复核详情实现以便回溯；当前实现已经在上方返回。
