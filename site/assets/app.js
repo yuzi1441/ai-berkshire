@@ -1792,8 +1792,13 @@ const fundamentalReviewPartitions = [
 ];
 
 function modelReviewTaskStatus(task) {
-  if ((task?.status || task?.truth_state) === "unknown" && task?.disclosure_state === "not_disclosed") {
+  const state = task?.status || task?.truth_state;
+  if (state === "unknown" && task?.disclosure_state === "not_disclosed") {
     return "官方未披露";
+  }
+  if (state === "data_insufficient") {
+    if (task?.evidence_quality === "historical" && (task?.evidence_lines || []).length) return "历史参考";
+    if (task?.conclusion || (task?.evidence_lines || []).length) return "部分核验";
   }
   return ({
     verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足",
@@ -1969,16 +1974,86 @@ function conciseRuleCondition(rule) {
   return text.length > 92 ? `${text.slice(0, 92)}…` : text;
 }
 
+const reviewMissingFieldLabels = {
+  current_price: "当前价格",
+  current_value: "当前值",
+  comparison: "对比期",
+  threshold: "阈值",
+  official_source: "官方来源",
+  event_confirmation: "事件确认",
+  no_current_value: "当前值",
+  no_comparison: "对比期",
+  no_threshold: "阈值",
+  no_official_source: "官方来源",
+  no_event_confirmation: "事件确认",
+};
+
+function reviewMissingFieldLabel(value) {
+  const key = String(value || "").trim();
+  return reviewMissingFieldLabels[key] || key;
+}
+
+function reviewFieldHasValue(value) {
+  return value !== null && value !== undefined && String(value).trim() !== "";
+}
+
+function reviewTaskHasStructuredData(task) {
+  return reviewFieldHasValue(task?.current_value) || reviewFieldHasValue(task?.comparison);
+}
+
+function reviewTaskHasCurrentEvidence(task) {
+  const roles = task?.evidence_roles || [];
+  return task?.evidence_quality === "current"
+    || roles.some((role) => ["local_current_evidence", "official_current_evidence", "zcode_current_evidence_extract"].includes(role));
+}
+
+function reviewLayerTasks(run) {
+  return (run?.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
+}
+
+function reviewTaskDataMode(task) {
+  if (reviewTaskHasStructuredData(task)) return "structured";
+  if (task?.conclusion) return "summary";
+  if (reviewTaskHasCurrentEvidence(task) && (task?.evidence_lines || []).length) return "current_evidence";
+  if ((task?.evidence_quality === "historical" || (task?.evidence_roles || []).includes("main_report_reference"))
+    && (task?.evidence_lines || []).length) return "historical";
+  return "missing";
+}
+
+function reviewTaskMissingFields(task, { includeDefault = false } = {}) {
+  const values = [
+    ...(task?.missing_codes || []),
+    ...(task?.missing_fields || []),
+    ...(task?.data_gaps || []),
+  ].filter(Boolean);
+  if (includeDefault && !values.length && !reviewTaskHasStructuredData(task) && !task?.conclusion) {
+    values.push("current_value");
+  }
+  return [...new Set(values.map(reviewMissingFieldLabel).filter(Boolean))];
+}
+
+function reviewRunMissingFields(review, run, tasks = reviewLayerTasks(run)) {
+  const values = [
+    ...(run?.data_gaps || []),
+    ...tasks.flatMap((task) => reviewTaskMissingFields(task)),
+  ].filter(Boolean);
+  if (!values.length && !tasks.some((task) => reviewTaskHasStructuredData(task) || task?.conclusion)) {
+    values.push(...(review?.summary?.missing_requirements || []));
+  }
+  return [...new Set(values.map(reviewMissingFieldLabel).filter(Boolean))];
+}
+
+function reviewTaskFirstQuote(task) {
+  for (const line of task?.evidence_lines || []) {
+    const quote = reviewEvidenceLineText(line);
+    if (quote) return quote;
+  }
+  return "";
+}
+
 function reviewGapLabels(review) {
-  const mapping = {
-    current_price: "当前价格",
-    current_value: "当前值",
-    comparison: "对比期",
-    official_source: "官方来源",
-    event_confirmation: "事件确认",
-  };
   const requirements = review?.summary?.missing_requirements || [];
-  return [...new Set(requirements.map((value) => mapping[value] || value))];
+  return [...new Set(requirements.map(reviewMissingFieldLabel).filter(Boolean))];
 }
 
 function filteredDecisions() {
@@ -3846,22 +3921,28 @@ function renderReviewQueueStatusCell(review) {
 }
 
 function layerReviewLabel(run) {
+  if (run?.status === "data_gap") {
+    const tasks = reviewLayerTasks(run);
+    const hasSavedMaterial = tasks.some((task) => reviewTaskDataMode(task) !== "missing");
+    if (hasSavedMaterial && run.evidence_state === "historical_or_insufficient") return "部分记录 · 历史";
+    if (hasSavedMaterial) return "部分核验";
+  }
   return fundamentalReviewStatusMeta[run?.status]?.label || run?.label || "尚未复核";
 }
 
 function reviewLayerPrimaryTask(run) {
-  const tasks = (run?.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
+  const tasks = reviewLayerTasks(run);
   const effectRank = { redline: 5, warning: 4, positive: 3, neutral: 1 };
   return [...tasks].sort((left, right) => {
-    const leftStructured = Number(left?.current_value != null || left?.comparison);
-    const rightStructured = Number(right?.current_value != null || right?.comparison);
+    const leftStructured = Number(reviewTaskHasStructuredData(left));
+    const rightStructured = Number(reviewTaskHasStructuredData(right));
     const leftScore = leftStructured * 10 + (effectRank[left?.review_effect] || 0);
     const rightScore = rightStructured * 10 + (effectRank[right?.review_effect] || 0);
     return rightScore - leftScore;
   })[0] || null;
 }
 
-function renderReviewLayerKeyData(run) {
+function renderReviewLayerKeyData(review, run) {
   const box = document.createElement("div");
   box.className = "fundamental-review-key-data";
   const task = reviewLayerPrimaryTask(run);
@@ -3876,24 +3957,56 @@ function renderReviewLayerKeyData(run) {
   label.textContent = `关键数据 · ${task.scope_label || "复核事项"}`;
   box.append(label);
 
-  if (task.current_value != null || task.comparison) {
+  const mode = reviewTaskDataMode(task);
+  if (mode === "structured") {
     const value = document.createElement("strong");
-    value.textContent = task.current_value != null ? `当前值：${task.current_value}` : "当前值：未结构化保存";
+    value.textContent = reviewFieldHasValue(task.current_value)
+      ? `当前值：${task.current_value}`
+      : "当前值：未结构化保存";
     box.append(value);
-    if (task.comparison) {
+    if (reviewFieldHasValue(task.comparison)) {
       const comparison = document.createElement("p");
       comparison.textContent = `对比：${task.comparison}`;
       box.append(comparison);
     }
-  } else if (task.conclusion) {
+  } else if (mode === "summary") {
+    const summary = document.createElement("strong");
+    summary.className = "fundamental-review-key-data-summary";
+    summary.textContent = "已保存核验摘要（当前值未结构化）";
+    box.append(summary);
     const conclusion = document.createElement("p");
     conclusion.className = "fundamental-review-key-data-fallback";
-    conclusion.textContent = `未拆分当前值：${task.conclusion}`;
+    conclusion.textContent = task.conclusion;
     box.append(conclusion);
+  } else if (mode === "current_evidence") {
+    const evidence = document.createElement("strong");
+    evidence.className = "fundamental-review-key-data-summary";
+    evidence.textContent = "已保存当前原文依据（当前值未拆分）";
+    box.append(evidence);
+    const quote = reviewTaskFirstQuote(task);
+    if (quote) {
+      const quoteNode = document.createElement("p");
+      quoteNode.className = "fundamental-review-key-data-fallback";
+      quoteNode.textContent = quote;
+      box.append(quoteNode);
+    }
+  } else if (mode === "historical") {
+    const history = document.createElement("strong");
+    history.className = "fundamental-review-key-data-summary";
+    history.textContent = "已保存主报告历史参考（不作为当前值）";
+    box.append(history);
   } else {
+    const missingValue = document.createElement("strong");
+    missingValue.className = "fundamental-review-key-data-fallback";
+    missingValue.textContent = "当前值：未保存";
+    box.append(missingValue);
+  }
+
+  const missingFields = reviewRunMissingFields(review, run);
+  if (missingFields.length) {
     const missing = document.createElement("p");
-    missing.className = "fundamental-review-key-data-fallback";
-    missing.textContent = "当前值未结构化保存";
+    missing.className = "fundamental-review-key-data-missing";
+    missing.textContent = `未获取：${missingFields.join("、")}`;
     box.append(missing);
   }
   return box;
@@ -3910,7 +4023,7 @@ function renderReviewLayerCell(review, layer, label) {
   }
   const heading = document.createElement("strong");
   heading.textContent = layerReviewLabel(run);
-  cell.append(renderReviewLayerKeyData(run));
+  cell.append(renderReviewLayerKeyData(review, run));
   const model = document.createElement("p");
   model.className = "fundamental-review-meta";
   model.textContent = run.model || run.reviewer || "复核者未记录";
@@ -4479,10 +4592,10 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
 
   const rule = reviewRuleForTask(review, task);
   const evidenceLines = task?.evidence_lines || [];
-  const evidenceRoles = task?.evidence_roles || [];
-  const hasCurrentEvidence = task?.evidence_quality === "current"
-    || evidenceRoles.some((role) => ["local_current_evidence", "official_current_evidence", "zcode_current_evidence_extract"].includes(role));
-  const hasStructuredData = task?.current_value != null || Boolean(task?.comparison);
+  const dataMode = reviewTaskDataMode(task);
+  const hasCurrentEvidence = reviewTaskHasCurrentEvidence(task);
+  const hasStructuredData = dataMode === "structured";
+  const missingFields = reviewTaskMissingFields(task, { includeDefault: dataMode === "missing" });
   const taskGrid = document.createElement("div");
   taskGrid.className = "report-review-evidence-task-grid";
 
@@ -4495,25 +4608,45 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   dataBox.className = "report-review-evidence-block report-review-evidence-data report-review-evidence-primary";
   const dataLabel = document.createElement("span");
   dataLabel.className = "report-review-evidence-label";
-  dataLabel.textContent = hasStructuredData ? "本次实际抓取数据 / 对比" : "本次核验记录（原结果未结构化拆分）";
+  dataLabel.textContent = ({
+    structured: "本次实际抓取数据 / 对比",
+    summary: "已保存核验摘要（当前值未结构化）",
+    current_evidence: "已保存当前原文依据（当前值未拆分）",
+    historical: "主报告历史参考（不作为当前值）",
+    missing: "本次当前数据",
+  })[dataMode];
   const dataText = document.createElement("p");
-  if (hasStructuredData) {
+  if (dataMode === "structured") {
     dataText.textContent = [
-      task.current_value != null ? `当前值：${task.current_value}` : "当前值：未结构化保存",
-      task.comparison ? `对比：${task.comparison}` : "",
+      reviewFieldHasValue(task.current_value) ? `当前值：${task.current_value}` : "当前值：未结构化保存",
+      reviewFieldHasValue(task.comparison) ? `对比：${task.comparison}` : "",
     ].filter(Boolean).join("；");
     dataText.className = "report-review-evidence-data-value";
-  } else if (task?.conclusion) {
+  } else if (dataMode === "summary") {
     dataText.textContent = task.conclusion;
     dataText.className = "report-review-evidence-data-value report-review-evidence-data-fallback";
-  } else if (hasCurrentEvidence && evidenceLines.length) {
-    dataText.textContent = "已保存抓取依据，但本层没有单独拆分当前数值。";
+  } else if (dataMode === "current_evidence") {
+    dataText.textContent = "已保存当前抓取依据，但本层没有单独拆分当前数值。";
+    dataText.className = "report-review-evidence-data-fallback";
+  } else if (dataMode === "historical") {
+    dataText.textContent = "已保存主报告历史参考；本次复核没有当前数据。";
     dataText.className = "report-review-evidence-data-fallback";
   } else {
-    dataText.textContent = "没有保存实际数值或可对照的复核记录。";
+    dataText.textContent = "没有保存当前值或可对照数据。";
     dataText.className = "report-review-evidence-missing";
   }
   dataBox.append(dataLabel, dataText);
+  if (missingFields.length) {
+    const missingBox = document.createElement("div");
+    missingBox.className = "report-review-evidence-missing-fields";
+    const missingLabel = document.createElement("span");
+    missingLabel.className = "report-review-evidence-label";
+    missingLabel.textContent = "未获取 / 未闭合";
+    const missingText = document.createElement("p");
+    missingText.textContent = `未获取：${missingFields.join("、")}`;
+    missingBox.append(missingLabel, missingText);
+    dataBox.append(missingBox);
+  }
   const evidenceMeta = document.createElement("small");
   const evidenceDates = (task?.evidence_dates || []).filter(Boolean);
   const evidenceDocuments = (task?.evidence_document_ids || []).filter(Boolean);
@@ -4561,13 +4694,41 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
     conclusion.append(conclusionLabel, conclusionText);
     article.append(conclusion);
   }
-  if (!hasCurrentEvidence && !hasStructuredData && !task?.conclusion) {
-    const missing = document.createElement("p");
-    missing.className = "report-review-evidence-missing";
-    missing.textContent = "本层没有保存当前证据；当前只能审阅复核记录，不能把主报告历史基线当作实际数据。";
-    article.append(missing);
-  }
   return article;
+}
+
+function renderReviewLayerCoverage(review, run) {
+  const box = document.createElement("div");
+  box.className = "report-review-layer-coverage";
+  const tasks = reviewLayerTasks(run);
+  const structured = tasks.filter(reviewTaskHasStructuredData);
+  const summaries = tasks.filter((task) => reviewTaskDataMode(task) === "summary");
+  const currentEvidence = tasks.filter((task) => reviewTaskDataMode(task) === "current_evidence");
+  const historical = tasks.filter((task) => reviewTaskDataMode(task) === "historical");
+
+  const available = document.createElement("p");
+  available.className = "report-review-layer-coverage-available";
+  if (structured.length) {
+    available.textContent = `已获取：${structured.length} 项有当前值或对比值，详见下方逐项数据。`;
+  } else if (summaries.length) {
+    available.textContent = `已保存：${summaries.length} 项核验摘要；当前值未结构化保存。`;
+  } else if (currentEvidence.length || (run?.evidence_state === "current" && (run?.current_evidence_count || 0) > 0)) {
+    available.textContent = `已保存：${run?.current_evidence_count || currentEvidence.length} 份当前依据；当前值未拆分。`;
+  } else if (historical.length) {
+    available.textContent = `已保存：${historical.length} 项主报告历史参考，不作为本次当前数据。`;
+  } else {
+    available.textContent = "已获取：没有可展示的当前数值。";
+  }
+  box.append(available);
+
+  const missing = reviewRunMissingFields(review, run, tasks);
+  if (missing.length) {
+    const missingText = document.createElement("p");
+    missingText.className = "report-review-layer-coverage-missing";
+    missingText.textContent = `未获取：${missing.join("、")}`;
+    box.append(missingText);
+  }
+  return box;
 }
 
 function renderSharedReportSource(review) {
@@ -4637,6 +4798,7 @@ function renderFundamentalReviewEvidenceComparison(review) {
       layerHead.append(layerMeta);
     }
     layerColumn.append(layerHead);
+    if (run) layerColumn.append(renderReviewLayerCoverage(review, run));
     const taskGrid = document.createElement("div");
     taskGrid.className = "report-review-evidence-layer-tasks";
     if (!run) {
@@ -4797,7 +4959,7 @@ function renderFundamentalReviewDetail(item) {
     meta.className = "fundamental-review-meta";
     const evidenceState = run.evidence_state === "current" ? "当前证据" : "历史/不足";
     meta.textContent = `${run.model || run.reviewer || "复核者未记录"} · ${shortReviewDate(run.generated_at)} · ${run.current_evidence_count ?? 0} 份${evidenceState}`;
-    card.append(runStatus, meta);
+    card.append(runStatus, meta, renderReviewLayerCoverage(review, run));
     const layerTasks = (run.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
     for (const task of layerTasks.slice(0, 2)) {
       const item = document.createElement("p");
