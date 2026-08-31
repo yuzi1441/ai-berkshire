@@ -2056,6 +2056,29 @@ function reviewTaskRuleCondition(review, task) {
   return rule?.condition || task?.rule_content || "";
 }
 
+function reviewTaskCompactDetail(task) {
+  const values = [
+    reviewFieldHasValue(task?.current_value) ? `当前值：${task.current_value}` : "",
+    reviewFieldHasValue(task?.comparison) ? `对比：${task.comparison}` : "",
+    reviewFieldHasValue(task?.conclusion) ? task.conclusion : "",
+  ].filter(Boolean);
+  return values.join("；");
+}
+
+function reviewLayerSupplementalTasks(run, primaryTask) {
+  const effectRank = { redline: 5, warning: 4, positive: 3, neutral: 1 };
+  return reviewLayerTasks(run)
+    .filter((task) => task !== primaryTask && reviewTaskHasStructuredData(task))
+    .sort((left, right) => {
+      const leftDigits = (reviewTaskCompactDetail(left).match(/\d/g) || []).length;
+      const rightDigits = (reviewTaskCompactDetail(right).match(/\d/g) || []).length;
+      const leftScore = leftDigits * 10 + (effectRank[left?.review_effect] || 0);
+      const rightScore = rightDigits * 10 + (effectRank[right?.review_effect] || 0);
+      return rightScore - leftScore;
+    })
+    .slice(0, 2);
+}
+
 function appendReviewQueueCompareRow(parent, labelText, valueText, tone = "") {
   if (!reviewFieldHasValue(valueText)) return;
   const row = document.createElement("div");
@@ -3998,6 +4021,17 @@ function renderReviewLayerKeyData(review, run) {
     appendReviewQueueCompareRow(comparison, "历史参考", "已保存主报告历史参考，不作为本次当前值", "summary");
   } else {
     appendReviewQueueCompareRow(comparison, "本次抓取", "当前值未保存", "missing");
+  }
+  const supplementalTasks = reviewLayerSupplementalTasks(run, task);
+  if (supplementalTasks.length) {
+    appendReviewQueueCompareRow(
+      comparison,
+      "同层补充",
+      supplementalTasks
+        .map((supplementalTask) => `${supplementalTask.scope_label || "复核事项"}：${reviewTaskCompactDetail(supplementalTask)}`)
+        .join("；"),
+      "summary",
+    );
   }
   if (comparison.childElementCount) box.append(comparison);
 

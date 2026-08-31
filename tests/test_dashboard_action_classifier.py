@@ -423,6 +423,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("本次抓取", app)
         self.assertIn("与要求对照", app)
         self.assertIn("详情摘要", app)
+        self.assertIn("同层补充", app)
         self.assertIn("reviewRunMissingFields", app)
         self.assertIn("未获取：", app)
         self.assertIn("已保存核验摘要（当前值未结构化）", app)
