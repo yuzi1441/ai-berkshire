@@ -423,6 +423,8 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("report-review-evidence-layer-grid", app)
         self.assertIn("report-review-evidence-task-grid", app)
         self.assertIn("主报告原文", app)
+        self.assertIn("report-review-evidence-shared-source", app)
+        self.assertIn("正文只显示一次", app)
         self.assertIn("renderReportExcerpt", app)
         self.assertIn("原文摘录", app)
         self.assertIn("内容未改写", app)
