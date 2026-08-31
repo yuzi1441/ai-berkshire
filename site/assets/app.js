@@ -4679,14 +4679,7 @@ function renderDetail() {
 
   els.detailBody.replaceChildren();
   const detailTabs = document.querySelector(".detail-tabs");
-  if (detailTabs) detailTabs.hidden = state.view === "review";
-  if (state.view === "review") {
-    const review = fundamentalReviewForItem(item);
-    const partition = fundamentalReviewStatusMeta[fundamentalReviewPartitionKey(review)]?.label || "等待复核";
-    els.detailSub.textContent = `${partition} · 日常 ${shortReviewDate(review?.daily?.current?.generated_at)} · 深度 ${shortReviewDate(review?.deep?.current?.generated_at)}`;
-    renderFundamentalReviewDetail(item);
-    return;
-  }
+  if (detailTabs) detailTabs.hidden = false;
   const tracking = trackingForItem(item);
   const trackingTab = document.querySelector(".tracking-tab");
   if (trackingTab) {
@@ -4695,7 +4688,12 @@ function renderDetail() {
   }
   const checklistTab = document.querySelector(".checklist-tab");
   const deepReviewTab = document.querySelector(".deep-review-tab");
+  const reportReviewTab = document.querySelector(".report-review-tab");
   const isAShare = item.market === "A股";
+  if (reportReviewTab) {
+    reportReviewTab.hidden = !isAShare;
+    if (!isAShare && state.detailTab === "report-review") state.detailTab = "technical";
+  }
   if (deepReviewTab) {
     deepReviewTab.hidden = !isAShare || !isAdminOrigin();
     if ((!isAShare || !isAdminOrigin()) && state.detailTab === "deep-review") state.detailTab = "overview";
@@ -4708,6 +4706,14 @@ function renderDetail() {
   document.querySelectorAll(".detail-tabs .tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === state.detailTab);
   });
+
+  if (state.detailTab === "report-review") {
+    const review = fundamentalReviewForItem(item);
+    const partition = fundamentalReviewStatusMeta[fundamentalReviewPartitionKey(review)]?.label || "等待复核";
+    els.detailSub.textContent = `${partition} · 日常 ${shortReviewDate(review?.daily?.current?.generated_at)} · 深度 ${shortReviewDate(review?.deep?.current?.generated_at)}`;
+    renderFundamentalReviewDetail(item);
+    return;
+  }
 
   const detailNeeded = ["overview", "history"].includes(state.detailTab);
   if (detailNeeded && !detailLoaded(item)) {
@@ -4952,15 +4958,6 @@ function openDetail(item, { scrollRow = true, updateUrl = true } = {}) {
   if (updateUrl) updateHash(item);
   renderRows();
   renderDetail();
-  if (state.view === "review") {
-    if (els.detailBody) els.detailBody.scrollTop = 0;
-    if (scrollRow) {
-      const row = Array.from(els.rows.querySelectorAll("tr[data-key]")).find((node) => node.dataset.key === state.selectedKey);
-      revealTableRow(row);
-    }
-    revealDetailPanel();
-    return;
-  }
   loadDecisionDetail(item)
     .then(() => {
       if (state.selectedKey === itemKey(item)) {
@@ -5004,7 +5001,9 @@ function setView(view) {
   resetRowPage();
   if (state.view === "tracking") {
     state.detailTab = "tracking";
-  } else if (state.detailTab === "tracking") {
+  } else if (state.view === "review") {
+    state.detailTab = "report-review";
+  } else if (["tracking", "report-review"].includes(state.detailTab)) {
     state.detailTab = "technical";
   }
   els.viewTabs?.querySelectorAll(".chip").forEach((chip) => {

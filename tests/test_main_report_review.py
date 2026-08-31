@@ -604,6 +604,9 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn('data-view="review"', html)
         self.assertIn('id="fundamental-review-filter-row"', html)
         self.assertIn('id="fundamental-review-partitions"', html)
+        self.assertIn('data-tab="technical"', html)
+        self.assertIn('data-tab="report-review"', html)
+        self.assertIn('class="tab report-review-tab"', html)
         self.assertIn("renderFundamentalReviewRows", app)
         self.assertIn("renderFundamentalReviewDetail", app)
         self.assertIn("renderFundamentalReviewPartitions", app)
@@ -612,6 +615,8 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("日常复核", app)
         self.assertIn("深度复核", app)
         self.assertIn("renderReviewLayerCell", app)
+        self.assertIn('state.detailTab === "report-review"', app)
+        self.assertNotIn('detailTabs.hidden = state.view === "review"', app)
         self.assertNotIn('"报告复核提示"', app)
         self.assertIn(".fundamental-review-table", css)
 
