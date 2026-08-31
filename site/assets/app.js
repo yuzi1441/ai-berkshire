@@ -4372,6 +4372,8 @@ function renderFundamentalReviewDetail(item) {
   appendFundamentalReviewSection("改善与升级条件", "正向条件单独显示，不能和红线混为同一个“触发”。", improvements);
   return;
 
+  // 保留旧版复核详情实现以便回溯；当前实现已经在上方返回。
+  if (false) {
   const comparison = modelReviewForItem(item);
   const strictReview = fundamentalReviewForItem(item);
   const codexDirect = strictReview?.manual?.codex_direct;
@@ -4643,6 +4645,7 @@ function renderFundamentalReviewDetail(item) {
   audit.textContent = `${review.audit_candidates?.length || 0} 条 ZCode 审计候选仅用于发现遗漏，尚未人工确认，因此不参与任何当前判断。`;
   gaps.append(gapTitle, gapText, audit);
   els.detailBody.append(gaps);
+  }
 }
 
 function renderDetail() {
