@@ -419,6 +419,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("renderHumanReviewMainCell", app)
         self.assertIn("renderFundamentalReviewEvidenceComparison", app)
         self.assertIn("实际抓取数据 / 对比", app)
+        self.assertIn("本次核验记录（原结果未结构化拆分）", app)
         self.assertIn("本次实际引用原文", app)
         self.assertIn("humanReviewTd.append(renderHumanReviewMainCell(item, quote))", app)
         self.assertIn("humanReviewTaskCompactDateText", app)

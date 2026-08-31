@@ -4350,31 +4350,24 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
 
   const rule = reviewRuleForTask(review, task);
   const evidenceLines = task?.evidence_lines || [];
-  const ruleBox = document.createElement("div");
-  ruleBox.className = "report-review-evidence-block";
-  const ruleLabel = document.createElement("span");
-  ruleLabel.className = "report-review-evidence-label";
-  ruleLabel.textContent = "主报告锁定规则";
-  const ruleText = document.createElement("p");
-  ruleText.textContent = rule?.condition || task?.rule_content || "主报告未保存可对照规则";
-  ruleBox.append(ruleLabel, ruleText);
-  article.append(ruleBox);
-
   const dataBox = document.createElement("div");
-  dataBox.className = "report-review-evidence-block report-review-evidence-data";
+  dataBox.className = "report-review-evidence-block report-review-evidence-data report-review-evidence-primary";
   const dataLabel = document.createElement("span");
   dataLabel.className = "report-review-evidence-label";
-  dataLabel.textContent = "实际抓取数据 / 对比";
+  const hasStructuredData = task?.current_value != null || Boolean(task?.comparison);
+  dataLabel.textContent = hasStructuredData ? "本次实际抓取数据 / 对比" : "本次核验记录（原结果未结构化拆分）";
   const dataText = document.createElement("p");
-  if (task?.current_value != null || task?.comparison) {
+  if (hasStructuredData) {
     dataText.textContent = [
       task.current_value != null ? `当前值：${task.current_value}` : "当前值：未结构化保存",
       task.comparison ? `对比：${task.comparison}` : "",
     ].filter(Boolean).join("；");
+    dataText.className = "report-review-evidence-data-value";
+  } else if (task?.conclusion) {
+    dataText.textContent = task.conclusion;
+    dataText.className = "report-review-evidence-data-value report-review-evidence-data-fallback";
   } else {
-    dataText.textContent = evidenceLines.length
-      ? "未结构化保存；下方列出本次实际引用原文。"
-      : "未结构化保存；不能把复核结论文字当作逐项原始数据。";
+    dataText.textContent = "没有保存实际数值或可对照的复核记录。";
     dataText.className = "report-review-evidence-missing";
   }
   dataBox.append(dataLabel, dataText);
@@ -4389,7 +4382,7 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   dataBox.append(evidenceMeta);
   article.append(dataBox);
 
-  if (task?.conclusion) {
+  if (task?.conclusion && hasStructuredData) {
     const conclusion = document.createElement("div");
     conclusion.className = "report-review-evidence-block";
     const conclusionLabel = document.createElement("span");
@@ -4400,6 +4393,16 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
     conclusion.append(conclusionLabel, conclusionText);
     article.append(conclusion);
   }
+
+  const ruleBox = document.createElement("div");
+  ruleBox.className = "report-review-evidence-block report-review-evidence-rule";
+  const ruleLabel = document.createElement("span");
+  ruleLabel.className = "report-review-evidence-label";
+  ruleLabel.textContent = "主报告锁定规则";
+  const ruleText = document.createElement("p");
+  ruleText.textContent = rule?.condition || task?.rule_content || "主报告未保存可对照规则";
+  ruleBox.append(ruleLabel, ruleText);
+  article.append(ruleBox);
 
   const sourceLines = rule?.source_lines || [];
   if (sourceLines.length) {
