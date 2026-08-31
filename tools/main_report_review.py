@@ -2269,6 +2269,8 @@ def merge_saved_layer_snapshot(snapshot: dict[str, Any], saved: dict[str, Any]) 
             previous_run = previous_layer.get("current") if isinstance(previous_layer, dict) else None
             if not isinstance(previous_run, dict):
                 continue
+            current_layer = row.get(layer)
+            current_run = current_layer.get("current") if isinstance(current_layer, dict) else None
             # Releases created before the daily/deep ownership fix seeded the
             # daily slot with ZCode.  Never resurrect that wrong mapping from a
             # VPS snapshot.  Real atomic daily runs are not migrated seeds; a
@@ -2276,6 +2278,17 @@ def merge_saved_layer_snapshot(snapshot: dict[str, Any], saved: dict[str, Any]) 
             reviewer = str(previous_run.get("model") or previous_run.get("reviewer") or "").lower()
             if layer == "daily" and previous_run.get("migrated_seed") and "deepseek" not in reviewer:
                 continue
+            # A release may contain a newer source-hashed direct/deep review
+            # than the runtime snapshot saved by the previous release.  Never
+            # let that older VPS carry-over overwrite the newly published run.
+            # Conversely, a genuinely newer runtime run must survive deploys.
+            if isinstance(current_run, dict):
+                if previous_run.get("migrated_seed") and not current_run.get("migrated_seed"):
+                    continue
+                current_at = str(current_run.get("generated_at") or "")
+                previous_at = str(previous_run.get("generated_at") or "")
+                if current_at and previous_at and current_at >= previous_at:
+                    continue
             row[layer] = previous_layer
         row["layer_comparison"] = layer_comparison(
             (row.get("daily") or {}).get("current"),

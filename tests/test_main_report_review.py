@@ -292,6 +292,52 @@ class MainReportRuleTests(unittest.TestCase):
         self.assertEqual(layer["tasks"][0]["evidence_quality"], "historical")
         self.assertIn("等待主报告后新材料", layer["label"])
 
+    def test_runtime_merge_does_not_overwrite_newer_published_deep_review(self):
+        snapshot = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH",
+                "rule_state": "active",
+                "main_report": {"canonical_sha256": "same"},
+                "daily": {"current": None},
+                "deep": {"current": {"generated_at": "2026-08-31T10:00:00+08:00", "status": "redline", "migrated_seed": False}},
+            }],
+        }
+        saved = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH",
+                "rule_state": "active",
+                "main_report": {"canonical_sha256": "same"},
+                "daily": {"current": None},
+                "deep": {"current": {"generated_at": "2026-08-30T10:00:00+08:00", "status": "attention", "migrated_seed": False}},
+            }],
+        }
+        merged = review.merge_saved_layer_snapshot(snapshot, saved)
+        self.assertEqual(merged["reviews"][0]["deep"]["current"]["status"], "redline")
+
+    def test_runtime_merge_keeps_genuinely_newer_runtime_deep_review(self):
+        snapshot = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH", "rule_state": "active",
+                "main_report": {"canonical_sha256": "same"},
+                "daily": {"current": None},
+                "deep": {"current": {"generated_at": "2026-08-30T10:00:00+08:00", "status": "attention", "migrated_seed": False}},
+            }],
+        }
+        saved = {
+            "schema_version": review.PUBLIC_SNAPSHOT_VERSION,
+            "reviews": [{
+                "ticker": "600001.SH", "rule_state": "active",
+                "main_report": {"canonical_sha256": "same"},
+                "daily": {"current": None},
+                "deep": {"current": {"generated_at": "2026-08-31T10:00:00+08:00", "status": "clear", "migrated_seed": False}},
+            }],
+        }
+        merged = review.merge_saved_layer_snapshot(snapshot, saved)
+        self.assertEqual(merged["reviews"][0]["deep"]["current"]["status"], "clear")
+
     def test_zcode_current_extract_is_reused_but_old_verdict_is_not_authority(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
