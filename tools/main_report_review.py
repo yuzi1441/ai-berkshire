@@ -1616,8 +1616,53 @@ def codex_direct_manual_snapshot(source_dir: Path) -> dict[str, Any]:
         if not ticker or not summary:
             continue
         evidence = [row for row in (payload.get("evidence") or []) if isinstance(row, dict)]
+        main_report = payload.get("main_report") if isinstance(payload.get("main_report"), dict) else {}
+        report_path = Path(str(main_report.get("path") or ""))
+        baseline_date = extract_document_date(report_path, "") or str(main_report.get("reviewed_at") or "")[:10] or None
+        primary_current_evidence = []
+        for row in evidence:
+            kind = str(row.get("kind") or "")
+            document_date = str(row.get("published_at") or row.get("document_date") or "")[:10] or None
+            if kind == "local_evidence" and not document_date and row.get("path"):
+                local_path = Path(str(row.get("path")))
+                if local_path.is_file():
+                    raw = local_path.read_text(encoding="utf-8", errors="replace") if local_path.suffix.lower() in TEXT_EVIDENCE_SUFFIXES else ""
+                    document_date = extract_document_date(local_path, raw)
+            is_formal_official = kind in {"official_filing", "official_disclosure_directory"} and bool(row.get("url"))
+            is_current_local = kind == "local_evidence" and bool(row.get("path"))
+            if (is_formal_official or is_current_local) and is_post_baseline_evidence(document_date, baseline_date):
+                primary_current_evidence.append(row)
+        # A structured provider is a valid independent cross-check only when a
+        # post-report primary filing/local document exists in the same review.
+        # It cannot make a review current on its own because REPORT_DATE is the
+        # accounting period, not the publication time.
+        current_evidence = list(primary_current_evidence)
+        if primary_current_evidence:
+            current_evidence.extend(
+                row
+                for row in evidence
+                if str(row.get("kind") or "") in {"structured_cross_check", "structured_public_data"}
+            )
+        rule_results = []
+        for rule in payload.get("rules") or []:
+            if not isinstance(rule, dict) or not rule.get("rule_id"):
+                continue
+            rule_results.append(
+                {
+                    "rule_id": rule.get("rule_id"),
+                    "truth_state": rule.get("truth_state") or "unknown",
+                    "review_effect": rule.get("review_effect") or "warning",
+                    "reason": rule.get("reason") or "未保存复核说明。",
+                    "current_value": rule.get("current_value"),
+                    "comparison": rule.get("comparison"),
+                    "disclosure_state": rule.get("disclosure_state"),
+                    "missing_codes": rule.get("missing_codes") or [],
+                    "evidence_document_ids": rule.get("evidence_document_ids") or [],
+                    "evidence_lines": rule.get("evidence_lines") or [],
+                }
+            )
         dated_evidence = sorted(
-            (str(row.get("published_at") or row.get("document_date") or "") for row in evidence if row.get("published_at") or row.get("document_date")),
+            (str(row.get("published_at") or row.get("document_date") or "") for row in current_evidence if row.get("published_at") or row.get("document_date")),
             reverse=True,
         )
         status = str(summary.get("status") or "data_insufficient")
@@ -1629,7 +1674,11 @@ def codex_direct_manual_snapshot(source_dir: Path) -> dict[str, Any]:
                 "company": payload.get("company"),
                 "reviewed_at": payload.get("reviewed_at"),
                 "reviewer": "Codex 直接复核（未调用模型）",
-                "rule_state": (payload.get("main_report") or {}).get("rule_state"),
+                "rule_state": main_report.get("rule_state"),
+                "main_report": {
+                    "path": main_report.get("path"),
+                    "canonical_sha256": main_report.get("canonical_sha256"),
+                },
                 "status": status,
                 "label": summary.get("label") or status,
                 "redline_count": len(summary.get("redline_rule_ids") or []),
@@ -1637,8 +1686,12 @@ def codex_direct_manual_snapshot(source_dir: Path) -> dict[str, Any]:
                 "positive_count": len(summary.get("positive_rule_ids") or []),
                 "data_gaps": summary.get("data_gaps") or [],
                 "next_evidence": summary.get("next_evidence"),
-                "evidence_count": len(evidence),
+                "evidence_count": len(current_evidence),
+                "archived_evidence_count": len(evidence),
+                "evidence_quality": "current" if current_evidence else ("historical_or_unproven" if evidence else "missing"),
                 "latest_evidence_date": dated_evidence[0] if dated_evidence else None,
+                "evidence_fingerprint": canonical_json_sha256(evidence),
+                "rule_results": rule_results,
                 "source_statement": reviewer.get("statement"),
                 "decision_boundary": summary.get("decision_boundary"),
             }
@@ -2093,15 +2146,49 @@ def codex_layer_run(
     direct: dict[str, Any] | None,
     *,
     rules_fingerprint: str | None,
+    report_sha256: str | None = None,
 ) -> dict[str, Any] | None:
     if not isinstance(direct, dict) or not direct:
         return None
     generated_at = direct.get("reviewed_at")
+    direct_report = direct.get("main_report") if isinstance(direct.get("main_report"), dict) else {}
+    direct_report_sha256 = direct_report.get("canonical_sha256")
+    if direct.get("rule_state") != "active":
+        return None
+    if report_sha256 and direct_report_sha256 and report_sha256 != direct_report_sha256:
+        return None
     raw_status = str(direct.get("status") or "data_gap")
     # The older direct-review archive used a slightly different vocabulary.
     # Normalize only the dashboard state; retain its human-readable label and
     # source intact so a legacy warning is not misreported as a fresh redline.
-    status = normalized_layer_status(raw_status)
+    has_current_evidence = bool(direct.get("evidence_count"))
+    status = normalized_layer_status(raw_status) if has_current_evidence else "data_gap"
+    tasks = []
+    for result in direct.get("rule_results") or []:
+        if not isinstance(result, dict) or not result.get("rule_id"):
+            continue
+        tasks.append(
+            {
+                "rule_id": result.get("rule_id"),
+                "scope_label": {
+                    "entry": "买入前提",
+                    "holder": "持仓验证",
+                    "improvement": "改善条件",
+                    "redline": "风险红线",
+                }.get(str(result.get("rule_id")).split(".")[-2], "复核事项"),
+                "status": result.get("truth_state") or "unknown",
+                "truth_state": result.get("truth_state") or "unknown",
+                "review_effect": result.get("review_effect") or "warning",
+                "conclusion": result.get("reason") or "未保存复核说明。",
+                "current_value": result.get("current_value"),
+                "comparison": result.get("comparison"),
+                "disclosure_state": result.get("disclosure_state"),
+                "missing_codes": result.get("missing_codes") or [],
+                "evidence_document_ids": result.get("evidence_document_ids") or [],
+                "evidence_lines": result.get("evidence_lines") or [],
+                "evidence_quality": "current" if has_current_evidence else "historical",
+            }
+        )
     return {
         "layer": "deep",
         "run_id": f"codex-direct-{str(generated_at or 'undated')}",
@@ -2110,14 +2197,15 @@ def codex_layer_run(
         "variant": None,
         "generated_at": generated_at,
         "rules_fingerprint": rules_fingerprint,
-        "evidence_fingerprint": None,
+        "evidence_fingerprint": direct.get("evidence_fingerprint"),
         "run_status": "completed",
         "status": status,
-        "label": direct.get("label") or status,
-        "evidence_state": "current" if direct.get("evidence_count") else "historical_or_insufficient",
+        "label": (direct.get("label") or status) if has_current_evidence else "仅有历史或未证明证据，等待主报告后新材料",
+        "evidence_state": "current" if has_current_evidence else "historical_or_insufficient",
         "current_evidence_count": direct.get("evidence_count") or 0,
-        "tasks": [],
-        "migrated_seed": True,
+        "tasks": tasks,
+        "migrated_seed": False,
+        "comparison_eligible": True,
         "source": direct.get("source_statement") or "Codex 直接复核归档。",
         "due_at": review_due_at(generated_at, DEEP_REVIEW_DUE_DAYS),
         "redline_count": direct.get("redline_count") or 0,
@@ -2330,9 +2418,15 @@ def public_review_snapshot(
             layer="deep",
             rules_fingerprint=package.get("rules_fingerprint"),
         )
-        deep_current = saved_deep or codex_layer_run(
+        # Releases before the direct-review ownership fix stored the genuine
+        # Codex review as a migrated seed with no rule-level tasks.  Prefer the
+        # source-hashed direct archive over that lossy seed.  A real later
+        # atomic deep run remains authoritative.
+        usable_saved_deep = saved_deep if saved_deep and not saved_deep.get("migrated_seed") else None
+        deep_current = usable_saved_deep or codex_layer_run(
             codex_by_ticker.get(ticker),
             rules_fingerprint=package.get("rules_fingerprint"),
+            report_sha256=(package.get("main_report") or {}).get("canonical_sha256"),
         )
         daily_history = []
         zcode_audit_history = packet_layer_run(
@@ -2356,10 +2450,11 @@ def public_review_snapshot(
             if previous_deepseek:
                 daily_history.append(previous_deepseek)
         deep_history = []
-        if saved_deep and codex_by_ticker.get(ticker):
+        if usable_saved_deep and codex_by_ticker.get(ticker):
             previous_codex = codex_layer_run(
                 codex_by_ticker.get(ticker),
                 rules_fingerprint=package.get("rules_fingerprint"),
+                report_sha256=(package.get("main_report") or {}).get("canonical_sha256"),
             )
             if previous_codex:
                 deep_history.append(previous_codex)
@@ -2483,6 +2578,7 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--write-comparison", action="store_true")
     parser.add_argument("--write-model-comparison-snapshot", action="store_true")
+    parser.add_argument("--write-codex-direct-snapshot", action="store_true")
     parser.add_argument("--write-protocol-findings", action="store_true")
     parser.add_argument("--write-public-snapshot", action="store_true")
     parser.add_argument("--snapshot-only", action="store_true")
@@ -2496,6 +2592,10 @@ def main() -> int:
         if args.migrate_only:
             return 0
     if args.snapshot_only:
+        if args.write_codex_direct_snapshot:
+            direct_snapshot = codex_direct_manual_snapshot(repo_root / "local" / "fundamental-review-codex-manual")
+            atomic_write_json(repo_root / "data" / "investment-dashboard" / "codex_direct_manual_review.json", direct_snapshot)
+            atomic_write_json(repo_root / "site" / "data" / "codex_direct_manual_review.json", direct_snapshot)
         comparison = comparison_snapshot(repo_root)
         if args.write_comparison:
             atomic_write_json(output_dir / "comparison-current.json", comparison)
@@ -2531,6 +2631,10 @@ def main() -> int:
         model_snapshot = model_review_comparison_snapshot(repo_root)
         atomic_write_json(repo_root / "data" / "investment-dashboard" / "model_review_comparison.json", model_snapshot)
         atomic_write_json(repo_root / "site" / "data" / "model_review_comparison.json", model_snapshot)
+    if args.write_codex_direct_snapshot and not args.dry_run:
+        direct_snapshot = codex_direct_manual_snapshot(repo_root / "local" / "fundamental-review-codex-manual")
+        atomic_write_json(repo_root / "data" / "investment-dashboard" / "codex_direct_manual_review.json", direct_snapshot)
+        atomic_write_json(repo_root / "site" / "data" / "codex_direct_manual_review.json", direct_snapshot)
     if args.write_protocol_findings and not args.dry_run:
         atomic_write_json(output_dir / "protocol-findings-current.json", protocol_findings_snapshot(output_dir))
     print(json.dumps(run_status, ensure_ascii=False, indent=2))

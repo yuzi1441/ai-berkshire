@@ -1761,9 +1761,12 @@ const fundamentalReviewPartitions = [
 ];
 
 function modelReviewTaskStatus(task) {
+  if ((task?.status || task?.truth_state) === "unknown" && task?.disclosure_state === "not_disclosed") {
+    return "官方未披露";
+  }
   return ({
     verified: "已验证", not_triggered: "未触发", triggered: "有触发", data_insufficient: "数据不足",
-    met: "条件满足", not_met: "条件未满足", unknown: "数据不足", not_due: "尚未到期",
+    met: "条件满足", not_met: "条件未满足", unknown: "证据未闭合", not_due: "尚未到期",
   })[task?.status || task?.truth_state] || "未完成";
 }
 

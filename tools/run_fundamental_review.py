@@ -180,7 +180,11 @@ def seed_legacy(repo_root: Path, rules_dir: Path, layers_dir: Path) -> int:
         ticker = str(package.get("ticker"))
         model_packet = by_ticker.get(ticker) or {}
         daily = packet_layer_run(model_packet.get("deepseek"), layer="daily", default_reviewer="DeepSeek", rules_fingerprint=package.get("rules_fingerprint"), migrated_seed=True)
-        deep = codex_layer_run(codex_by_ticker.get(ticker), rules_fingerprint=package.get("rules_fingerprint"))
+        deep = codex_layer_run(
+            codex_by_ticker.get(ticker),
+            rules_fingerprint=package.get("rules_fingerprint"),
+            report_sha256=(package.get("main_report") or {}).get("canonical_sha256"),
+        )
         for layer, payload in (("daily", daily), ("deep", deep)):
             if payload:
                 path = layers_dir / layer / f"{ticker}.json"

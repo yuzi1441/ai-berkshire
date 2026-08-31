@@ -239,14 +239,58 @@ class MainReportRuleTests(unittest.TestCase):
             review.atomic_write_json(source / "600001.SH.json", {
                 "ticker": "600001.SH", "company": "样例公司", "reviewed_at": "2026-08-30T12:00:00+08:00",
                 "reviewer": {"type": "codex_direct_manual", "models_used": [], "statement": "未调用模型"},
-                "main_report": {"rule_state": "active"},
+                "main_report": {"rule_state": "active", "path": "reports/样例.md", "canonical_sha256": "abc"},
                 "evidence": [{"published_at": "2026-08-30"}],
+                "rules": [{"rule_id": "human_locked.holder.holder.1", "truth_state": "not_met", "review_effect": "warning", "reason": "毛利率未达标"}],
                 "summary": {"status": "warning", "label": "需补回款证据", "warning_rule_ids": ["r1"], "data_gaps": ["回款"]},
             })
             snapshot = review.codex_direct_manual_snapshot(source)
         self.assertEqual(snapshot["stock_count"], 1)
         self.assertEqual(snapshot["reviews"][0]["reviewer"], "Codex 直接复核（未调用模型）")
+        self.assertEqual(snapshot["reviews"][0]["main_report"]["canonical_sha256"], "abc")
+        self.assertEqual(snapshot["reviews"][0]["rule_results"][0]["truth_state"], "not_met")
         self.assertIn("not a DeepSeek model result", snapshot["source"])
+
+    def test_codex_direct_review_is_current_deep_layer_not_migrated_seed(self):
+        direct = {
+            "reviewed_at": "2026-08-30T12:00:00+08:00",
+            "reviewer": "Codex 直接复核（未调用模型）",
+            "rule_state": "active",
+            "main_report": {"canonical_sha256": "abc"},
+            "status": "warning",
+            "label": "毛利率未达标",
+            "evidence_count": 1,
+            "evidence_fingerprint": "evidence-sha",
+            "rule_results": [{
+                "rule_id": "human_locked.holder.holder.1",
+                "truth_state": "not_met",
+                "review_effect": "warning",
+                "reason": "毛利率 29%，低于 30%。",
+            }],
+        }
+        layer = review.codex_layer_run(direct, rules_fingerprint="rules-sha", report_sha256="abc")
+        self.assertFalse(layer["migrated_seed"])
+        self.assertTrue(layer["comparison_eligible"])
+        self.assertEqual(layer["evidence_fingerprint"], "evidence-sha")
+        self.assertEqual(layer["tasks"][0]["status"], "not_met")
+        self.assertIsNone(review.codex_layer_run(direct, rules_fingerprint="rules-sha", report_sha256="changed"))
+
+    def test_codex_direct_review_without_post_report_evidence_is_data_gap(self):
+        direct = {
+            "reviewed_at": "2026-08-30T12:00:00+08:00",
+            "reviewer": "Codex 直接复核（未调用模型）",
+            "rule_state": "active",
+            "main_report": {"canonical_sha256": "report-sha"},
+            "status": "attention",
+            "label": "旧结论需要关注",
+            "evidence_count": 0,
+            "rule_results": [{"rule_id": "human_locked.redline.1", "truth_state": "unknown"}],
+        }
+        layer = review.codex_layer_run(direct, rules_fingerprint="rules", report_sha256="report-sha")
+        self.assertEqual(layer["status"], "data_gap")
+        self.assertEqual(layer["evidence_state"], "historical_or_insufficient")
+        self.assertEqual(layer["tasks"][0]["evidence_quality"], "historical")
+        self.assertIn("等待主报告后新材料", layer["label"])
 
     def test_zcode_current_extract_is_reused_but_old_verdict_is_not_authority(self):
         with tempfile.TemporaryDirectory() as directory:
