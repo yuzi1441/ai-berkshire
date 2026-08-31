@@ -3849,6 +3849,56 @@ function layerReviewLabel(run) {
   return fundamentalReviewStatusMeta[run?.status]?.label || run?.label || "尚未复核";
 }
 
+function reviewLayerPrimaryTask(run) {
+  const tasks = (run?.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
+  const effectRank = { redline: 5, warning: 4, positive: 3, neutral: 1 };
+  return [...tasks].sort((left, right) => {
+    const leftStructured = Number(left?.current_value != null || left?.comparison);
+    const rightStructured = Number(right?.current_value != null || right?.comparison);
+    const leftScore = leftStructured * 10 + (effectRank[left?.review_effect] || 0);
+    const rightScore = rightStructured * 10 + (effectRank[right?.review_effect] || 0);
+    return rightScore - leftScore;
+  })[0] || null;
+}
+
+function renderReviewLayerKeyData(run) {
+  const box = document.createElement("div");
+  box.className = "fundamental-review-key-data";
+  const task = reviewLayerPrimaryTask(run);
+  if (!task) {
+    box.textContent = "暂无可展示的关键数据";
+    box.classList.add("muted");
+    return box;
+  }
+
+  const label = document.createElement("span");
+  label.className = "fundamental-review-key-data-label";
+  label.textContent = `关键数据 · ${task.scope_label || "复核事项"}`;
+  box.append(label);
+
+  if (task.current_value != null || task.comparison) {
+    const value = document.createElement("strong");
+    value.textContent = task.current_value != null ? `当前值：${task.current_value}` : "当前值：未结构化保存";
+    box.append(value);
+    if (task.comparison) {
+      const comparison = document.createElement("p");
+      comparison.textContent = `对比：${task.comparison}`;
+      box.append(comparison);
+    }
+  } else if (task.conclusion) {
+    const conclusion = document.createElement("p");
+    conclusion.className = "fundamental-review-key-data-fallback";
+    conclusion.textContent = `未拆分当前值：${task.conclusion}`;
+    box.append(conclusion);
+  } else {
+    const missing = document.createElement("p");
+    missing.className = "fundamental-review-key-data-fallback";
+    missing.textContent = "当前值未结构化保存";
+    box.append(missing);
+  }
+  return box;
+}
+
 function renderReviewLayerCell(review, layer, label) {
   const cell = document.createElement("td");
   cell.className = "fundamental-review-queue-cell review-layer-queue-cell";
@@ -3860,6 +3910,7 @@ function renderReviewLayerCell(review, layer, label) {
   }
   const heading = document.createElement("strong");
   heading.textContent = layerReviewLabel(run);
+  cell.append(renderReviewLayerKeyData(run));
   const model = document.createElement("p");
   model.className = "fundamental-review-meta";
   model.textContent = run.model || run.reviewer || "复核者未记录";

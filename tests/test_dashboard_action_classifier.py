@@ -417,6 +417,8 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("fundamentalReviewFilterMatches", app)
         self.assertIn("renderHumanReviewPlan", app)
         self.assertIn("renderHumanReviewMainCell", app)
+        self.assertIn("renderReviewLayerKeyData", app)
+        self.assertIn("关键数据", app)
         self.assertIn("renderFundamentalReviewEvidenceComparison", app)
         self.assertIn("实际抓取数据 / 对比", app)
         self.assertIn("本次核验记录（原结果未结构化拆分）", app)
