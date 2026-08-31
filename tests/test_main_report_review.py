@@ -30,6 +30,24 @@ class CanonicalSourceHashTests(unittest.TestCase):
             path.write_text("毛利率红线 29%\n", encoding="utf-8")
             self.assertNotEqual(before, canonical_file_sha256(path))
 
+    def test_public_source_lines_include_exact_report_excerpt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report = root / "reports" / "样例" / "样例报告-20260801.md"
+            report.parent.mkdir(parents=True)
+            report.write_text(
+                "标题\n" * 4 + "\n### 最终结论\n\n毛利率低于 30% 即重审。\n",
+                encoding="utf-8",
+            )
+            enriched = review.enrich_report_source_lines(
+                root,
+                str(report.relative_to(root)),
+                [{"line_start": 5, "line_end": 5, "quote": "### 最终结论"}],
+            )
+            excerpt = enriched[0]["report_excerpt"]
+            self.assertEqual(excerpt["line_start"], 5)
+            self.assertIn("毛利率低于 30% 即重审", excerpt["text"])
+
 
 class MainReportRuleTests(unittest.TestCase):
     def make_resolution(self, root: Path):

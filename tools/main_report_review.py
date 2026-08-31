@@ -366,6 +366,64 @@ def source_lines_from_locked(task: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
+def enrich_report_source_lines(
+    repo_root: Path,
+    report_relative: str,
+    source_lines: list[dict[str, Any]],
+    *,
+    max_excerpt_chars: int = 1800,
+) -> list[dict[str, Any]]:
+    """Attach a short, exact excerpt from the locked main report.
+
+    The locked-rule record historically kept a line number and a human
+    explanation, but not the report text at that location.  Keep those fields
+    unchanged and add an explicit excerpt so the dashboard can show the
+    primary source without treating a rule summary as quoted evidence.
+    """
+    if not source_lines or not report_relative:
+        return source_lines
+    report_path = repo_root / report_relative
+    if not report_path.is_file():
+        return source_lines
+    try:
+        report_lines = report_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return source_lines
+
+    enriched: list[dict[str, Any]] = []
+    for source_line in source_lines:
+        row = dict(source_line)
+        try:
+            start = max(1, int(source_line.get("line_start") or 0))
+        except (TypeError, ValueError):
+            start = 0
+        try:
+            end = max(start, int(source_line.get("line_end") or start))
+        except (TypeError, ValueError):
+            end = start
+        if start and start <= len(report_lines):
+            # A heading-only source pointer is common in the hand-reviewed
+            # resolutions.  Include the following few exact lines so the
+            # actual conclusion/threshold is visible, while keeping the
+            # snapshot compact and bounded.
+            excerpt_end = min(len(report_lines), max(end, start + 7))
+            selected = report_lines[start - 1 : excerpt_end]
+            rendered = "\n".join(
+                f"L{index}: {report_lines[index - 1]}"
+                for index in range(start, excerpt_end + 1)
+            ).strip()
+            if len(rendered) > max_excerpt_chars:
+                rendered = rendered[: max_excerpt_chars - 1].rstrip() + "…"
+            if rendered:
+                row["report_excerpt"] = {
+                    "line_start": start,
+                    "line_end": excerpt_end,
+                    "text": rendered,
+                }
+        enriched.append(row)
+    return enriched
+
+
 def locked_group(task: dict[str, Any], clause: str) -> tuple[str, str]:
     task_id = str(task.get("task_id") or "")
     if task_id == "entry":
@@ -2355,6 +2413,7 @@ def public_review_snapshot(
             if isinstance(row, dict)
         }
         public_rules = []
+        report_relative = str((package.get("main_report") or {}).get("path") or "")
         for rule in package.get("active_rules") or []:
             saved_result = results_by_id.get(rule.get("rule_id"))
             # Older saved results used the coarse raw group.  Recalculate only
@@ -2373,6 +2432,11 @@ def public_review_snapshot(
                     **rule,
                     "semantic_group": semantic_group_for_rule(rule),
                     "semantic_relation": semantic_relation_for_rule(rule),
+                    "source_lines": enrich_report_source_lines(
+                        repo_root,
+                        report_relative,
+                        rule.get("source_lines") or [],
+                    ),
                     "result": saved_result,
                 }
             )
