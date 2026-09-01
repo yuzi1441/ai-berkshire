@@ -6,6 +6,9 @@
 - `reports/00-index/报告库-MOC.md`：报告库导航
 - `data/investment-dashboard/decision_board.json`：当前个股结论
 - `data/investment-dashboard/report_history.json`：每家公司的历史研报结论
+- `data/investment-dashboard/lifecycle.json`：生命周期状态覆盖层
+- `data/investment-dashboard/thesis_drift.json`：结构化 thesis-drift 当前记录与最多 12 条历史
+- `data/investment-dashboard/watch_tracking.json`：观察池的轻量跟踪，不建立买入论文
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
 - `data/investment-dashboard/opportunity_scans.json`：Flash 的全量机会扫描、当前机会与临近机会分层
@@ -16,10 +19,24 @@
 只收录**个股**研究。行业、主题、对比、漏斗、筛选类报告保留在 `reports/`，
 不会进入网页看板和投资决策总表。
 
+## 投资生命周期
+
+看板是一个四状态状态机，而不是“最新研报列表”：
+
+`WATCH → PRE_BUY → HOLDING → EXITED`
+
+- `WATCH`：已研究或进入观察池，但尚未满足买入前闸门；只记录观察理由、买入条件、放弃条件和复核日期。
+- `PRE_BUY`：观察条件已接近满足，下一动作只能是 `RUN CHECKLIST`；Checklist 通过也不会自动变成持仓。
+- `HOLDING`：只有用户明确确认成交并登记后才进入；以原始买入论文的估值锚、核心假设、红线、管理层和护城河为固定基线。
+- `EXITED`：明确结束的持仓保留历史，但不再进入持仓跟踪操作。
+
+生命周期字段是决策主线；主报告、Checklist、技术面、情绪和机会扫描是不同职责的辅助层。没有确认成交记录的“买入”结论不会自动创建持仓或买入后论文。
+
 ## 选择规则
 
-每个公司只展示一份“当前结论”：按报告正文明确的数据截止日排序，不用文件修改时间。
-若最新有效报告没有价格，显示 `价格未给出`，不会沿用旧报告价格。
+每个公司只展示一份 canonical 主报告。选择优先级是：公司覆盖配置、报告/路由提示、旧库兼容的明确数据截止日回退；回退记录会标注“主报告待锁定”。不使用文件修改时间，也不会让历史报告覆盖 canonical 主报告。
+
+若 canonical 主报告没有价格，显示 `价格未给出`，不会沿用旧报告价格。
 
 同时保留该公司全部历史研报结论（`report_history`），按数据截止日从新到旧排列。
 
@@ -107,11 +124,51 @@ py -3 tools\market_snapshot.py
 因此：新公司研报只要按路由保存到 `reports/<公司>/` 并推送到 `main`，VPS 会拉取你的代码和研报。
 VPS 自动生成的行情、情绪、机会和看板文件则只推送到 `vps-generated`，不会和你的 `main` 抢提交。
 
+## thesis-drift 与 Checklist
+
+默认执行 `thesis-drift 公司名` 时，先读取看板生命周期：
+
+- `WATCH / PRE_BUY`：比较基线事实与当前事实，输出 `improved / unchanged / weakened`、`none / minor / major`、买入条件满足数、受影响章节和 `KEEP WATCH / RUN CHECKLIST / DROP`。
+- `HOLDING`：不拿新旧完整研报互相替代，而是对照原始买入论文的五个固定维度，输出 `ADD / HOLD / REDUCE / EXIT`。
+- 无变化不改报告；价格/估值变化只更新看板或必要的 Checklist；基本面变化才 patch canonical 主报告，重大变化先深度复核再 patch。
+
+Checklist 只属于 `PRE_BUY` 闸门，状态统一为 `not_run / pass / conditional_pass / fail / stale`，并记录 `checked_at`、`hard_veto` 和 `summary`。
+
+## Decision Rules 决策规则层
+
+看板在主报告和生命周期之间读取一个持久化的规则层：
+
+```text
+主报告 → tools/extract_decision_rules.py → data/investment-dashboard/decision_rules.json → 看板
+```
+
+每家公司允许 0～N 条规则。规则支持 `price`、`price_range`、`metric`、`event`、
+`all_of`、`any_of`，并保留 `category`、`action`、`confidence`、`automation` 和来源证据。
+`automation=auto` 只用于可由同标的同币种数据确定性评估的条件；财报/连续季度判断使用
+`review`，护城河、管理层和商业模式等上下文判断使用 `manual`。
+
+迁移脚本默认是 dry-run，不改报告也不静默落盘：
+
+```bash
+python3 tools/extract_decision_rules.py --dry-run
+python3 tools/extract_decision_rules.py --write
+python3 tools/build_investment_dashboard.py
+```
+
+`--write` 生成 `decision_rules.json`、`decision_rule_candidates.json` 和
+`decision_rule_migration_report.json`。低置信度候选会保留原文证据、标记待人工确认并关闭
+自动判断；没有规则的公司继续使用 `price_plan`、`decision_contract` 和生命周期旧字段。
+
+网页总览新增“价格机会”和“条件机会”两个榜单。价格榜按已触发、接近触发、仍在观察排序，
+条件榜明确展示正常、接近、已触发、待复核和无法自动判断。触发只提示 Checklist / Thesis
+Drift / 加减仓复核，不直接产生 BUY/SELL。价格规则严格绑定 `ticker`、`market`、`currency`；
+跨市场同公司的基本面规则才允许共享 `company_id`。
+
 ## 买入后跟踪与预警
 
 “买入前决策”和“买入后跟踪”在网页中分开显示。主报告里的`买入`或`分批买入`不会自动创建持仓，也不会因技术面、股价异动或论文健康度而被自动改写。
 
-只有确认实际买入后，才登记持仓并建立投资论文：
+只有确认实际买入后，才登记持仓并建立投资论文；登记动作同时把生命周期切换为 `HOLDING`：
 
 ```powershell
 py -3 tools\post_buy_tracking.py register `
@@ -144,7 +201,7 @@ py -3 tools\post_buy_tracking.py check
 py -3 tools\build_investment_dashboard.py
 ```
 
-默认预警线为单日涨跌幅 `±5%`、复核日前 7 天、复核日到期/逾期。预警只标记“待分析”或“待复核”，不会自动下单、调仓或改变基本面建议。
+默认预警线为单日涨跌幅 `±5%`、复核日前 7 天、复核日到期/逾期。预警只标记“待分析”或“待复核”，不会自动下单、调仓或改变基本面建议。持仓默认季度复核；观察池默认 3—6 个月复核。
 
 ## 本地预览
 
@@ -172,6 +229,8 @@ py -3 tools\dashboard_server.py --port 8000 --directory site
 可按「买入建议」排序。详情摘要页同步展示该判断。
 
 ## 网页操作体验
+
+网页首屏分成三个工作区：`决策总览`、`观察池`、`持仓跟踪`。总览六张卡片固定显示 WATCH、PRE_BUY、待跑 Checklist、HOLDING、待复核、重大负向漂移；列表固定展示公司、生命周期、主报告判断、现价、漂移、状态、下次复核、下一动作，情绪和技术面明确标为辅助信息。
 
 - **自动跳转**：点击表格行打开右侧/底部详情；URL hash 支持 `#ticker=000651.SZ` 或 `#company=格力电器`，可分享直达。
 - **键盘**：`/` 聚焦搜索，`j/k` 或方向键切换个股，`Enter` 打开并跳到估值原文，`Esc` 关闭，`o` 打开研报。

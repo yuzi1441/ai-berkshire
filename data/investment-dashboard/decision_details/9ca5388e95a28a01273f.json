@@ -99,6 +99,9 @@
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -1264,56 +1267,45 @@
   ],
   "report_history_count": 20,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "持仓者可继续持有，若价格进入对应区间可考虑加仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "medium",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [
-      {
-        "line_start": 365,
-        "line_end": 365,
-        "quote": "| 基本面建议动作 | 分批买入 |",
-        "supports": "明确建议分批买入，但结合价格区间，需等待价格条件"
-      },
-      {
-        "line_start": 366,
-        "line_end": 366,
-        "quote": "| 结论摘要 | 生意质量 优秀，接近顶级存量基础设施资产 |",
-        "supports": "看好基本面，支持买入逻辑"
-      },
-      {
-        "line_start": 368,
-        "line_end": 368,
-        "quote": "| 激进型价格区间 | 25-26 元 |",
-        "supports": "给出激进型买入价格触发区间，空仓者需等待价格达到"
-      },
-      {
-        "line_start": 370,
-        "line_end": 370,
-        "quote": "| 稳健型价格区间 | 23-25 元 |",
-        "supports": "给出稳健型买入价格触发区间，空仓者需等待价格达到"
-      }
-    ],
-    "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
-    "model_consensus": false,
-    "label_detail_consensus": false,
-    "conflict_flag_consensus": true,
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "报告基准价28.42元时空仓等待，不在当前估值下直接建仓",
+    "holder_action": "持仓者可继续收息并按季度复核",
+    "trigger_condition": "25-26元可小仓试建；23-25元可分批建仓但需基本面未坏；22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+    "summary": "主报告明确写明当前空仓等待，只有进入对应价格带并满足保护条件后才可行动。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "粗字段写分批买入，但正文当前价格行和最终总结明确要求空仓等待价格。",
+    "source_basis": "人工逐行核对当前价格行、分层价格表与最终总结",
     "currency": "CNY",
     "entry_ceiling": 26.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
     "trial_range": {
       "min": 25.0,
       "max": 26.0
     },
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:58:16+00:00",
+    "price_source": "主报告第273至280行与第302行",
+    "evidence": [
+      {
+        "line_start": 273,
+        "line_end": 280,
+        "quote": "25-26元小仓试建，23-25元分批且要求基本面未坏，22.5元以下须先排除永久性损伤；当前28.42元空仓等待。",
+        "supports": "当前不能买和未来价格触发条件都写得明确。"
+      },
+      {
+        "line_start": 302,
+        "line_end": 302,
+        "quote": "对空仓者，23-25元更接近好公司与合理安全边际的交集。",
+        "supports": "最终总结再次确认等待更低价格。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-13T11:14:00+08:00",
+    "model_consensus": false,
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-13T11:14:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -1321,15 +1313,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
-    "price_rules": [],
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+    "guard_condition": "23-25元可分批建仓但需基本面未坏",
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "price_range": "22.5元以下",
+        "min": null,
+        "ceiling": 22.5,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "23-25元可分批建仓但需基本面未坏",
+        "price_range": "23-25元",
+        "min": 23.0,
+        "ceiling": 25.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "trial",
+        "action": "小仓试建，保留回撤加仓空间",
+        "price_range": "25-26 元",
+        "min": 25.0,
+        "ceiling": 26.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "22.5元以下可考虑加仓但须先确认基本面没有永久性损伤",
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 2,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -1408,9 +1437,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -1418,7 +1447,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -1428,22 +1457,22 @@
       "ticker": "600900.SH",
       "main_report": {
         "path": "reports/长江电力/长江电力-investment-team-20260713.md",
-        "sha256": "fb475ebf6846edbd8275536d2075f1763232097a26a435c36684f5e072e7ea9f"
+        "sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99"
       },
       "checklist": {
         "path": "reports/长江电力/巴菲特Checklist-长江电力.md",
-        "sha256": "8e1371b2cfe69e7be3e47d8c8a2d68404b4cd955a8258aea7c822b0fa5245715"
+        "sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
-    "current_source_fingerprint_sha256": "aa10102c7a32009df28ac0d233d2dccb0f3787b0adefaeed6a7b22cec6f4594e"
+    "current_source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
   "market_session_state": "runtime_required",
@@ -1493,7 +1522,199 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "conditional_pass",
+    "checked_at": "2026-07-07",
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "❓ 灰色地带 — 5/6 关通过，安全边际未完全通过",
+    "next_review_date": null,
+    "source_report_path": "reports/长江电力/巴菲特Checklist-长江电力.md"
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "长江电力",
+  "decision_rules": [
+    {
+      "id": "rule_963f62d21002bbd9",
+      "company_id": "长江电力",
+      "company": "长江电力",
+      "ticker": "600900.SH",
+      "market": "A股",
+      "category": "entry",
+      "trigger_type": "price_range",
+      "operator": "",
+      "value": {
+        "min": 25.0,
+        "max": 26.0
+      },
+      "currency": "CNY",
+      "metric": "",
+      "event_type": "",
+      "conditions": [],
+      "action": "达到加仓复核条件",
+      "action_key": "review_add",
+      "description": "价格达到 25-26 元，达到加仓复核条件",
+      "source": "main_report",
+      "origin": "migration_candidate",
+      "source_report": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "source_section": "11.2 分层操作价格",
+      "source_text": "|---|---:|---|---| | 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 | | 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "status": "watching",
+      "created_at": "2026-09-02T01:05:44+08:00",
+      "updated_at": "2026-09-02T01:05:44+08:00"
+    },
+    {
+      "id": "rule_aa9746f0bfab4a38",
+      "company_id": "长江电力",
+      "company": "长江电力",
+      "ticker": "600900.SH",
+      "market": "A股",
+      "category": "entry",
+      "trigger_type": "price_range",
+      "operator": "",
+      "value": {
+        "min": 23.0,
+        "max": 25.0
+      },
+      "currency": "CNY",
+      "metric": "",
+      "event_type": "",
+      "conditions": [],
+      "action": "达到买入前 Checklist 复核条件",
+      "action_key": "run_checklist",
+      "description": "价格达到 23-25 元，达到买入前 Checklist 复核条件",
+      "source": "main_report",
+      "origin": "migration_candidate",
+      "source_report": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "source_section": "11.2 分层操作价格",
+      "source_text": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 | | 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 | | 保守型 | 22.5 元以下 | 约 15.3x PE 以下；股息率约 4.44%以上 | 先排除永久性损伤，再考虑较高仓位 |",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "status": "watching",
+      "created_at": "2026-09-02T01:05:44+08:00",
+      "updated_at": "2026-09-02T01:05:44+08:00"
+    }
+  ],
+  "decision_rules_source": "decision_rules",
+  "decision_rule_summary": {
+    "rule_count": 2,
+    "price_rule_count": 2,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": false,
+    "fallback_fields": [],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [
+    {
+      "rule_id": "rule_963f62d21002bbd9",
+      "company_id": "长江电力",
+      "company": "长江电力",
+      "ticker": "600900.SH",
+      "market": "A股",
+      "currency": "CNY",
+      "category": "entry",
+      "trigger_type": "price_range",
+      "status": "watching",
+      "status_label": "正常观察",
+      "auto_evaluable": false,
+      "current_value": null,
+      "distance_pct": null,
+      "reason": "价格达到 25-26 元，达到加仓复核条件",
+      "description": "价格达到 25-26 元，达到加仓复核条件",
+      "operator": "",
+      "value": {
+        "min": 25.0,
+        "max": 26.0
+      },
+      "metric": "",
+      "event_type": "",
+      "action": "达到加仓复核条件",
+      "action_key": "review_add",
+      "source": "main_report",
+      "source_report": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "source_section": "11.2 分层操作价格",
+      "source_text": "|---|---:|---|---| | 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 | | 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "list_type": "price"
+    },
+    {
+      "rule_id": "rule_aa9746f0bfab4a38",
+      "company_id": "长江电力",
+      "company": "长江电力",
+      "ticker": "600900.SH",
+      "market": "A股",
+      "currency": "CNY",
+      "category": "entry",
+      "trigger_type": "price_range",
+      "status": "watching",
+      "status_label": "正常观察",
+      "auto_evaluable": false,
+      "current_value": null,
+      "distance_pct": null,
+      "reason": "价格达到 23-25 元，达到买入前 Checklist 复核条件",
+      "description": "价格达到 23-25 元，达到买入前 Checklist 复核条件",
+      "operator": "",
+      "value": {
+        "min": 23.0,
+        "max": 25.0
+      },
+      "metric": "",
+      "event_type": "",
+      "action": "达到买入前 Checklist 复核条件",
+      "action_key": "run_checklist",
+      "source": "main_report",
+      "source_report": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "source_section": "11.2 分层操作价格",
+      "source_text": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 | | 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 | | 保守型 | 22.5 元以下 | 约 15.3x PE 以下；股息率约 4.44%以上 | 先排除永久性损伤，再考虑较高仓位 |",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "list_type": "price"
+    }
+  ],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "9ca5388e95a28a01273f",
   "detail_path": "./data/decision_details/9ca5388e95a28a01273f.json"
 }

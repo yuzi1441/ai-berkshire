@@ -24,6 +24,22 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from investment_lifecycle import (
+    classify_lifecycle,
+    lifecycle_contract,
+    normalize_checklist_status,
+    normalize_drift_record,
+)
+from decision_rules import (
+    RULE_STATUSES,
+    STATUS_LABELS,
+    company_id_for,
+    decision_rule_opportunity,
+    drift_rule_status,
+    normalize_layer as normalize_decision_rules_layer,
+    rules_for_decision,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORTS_DIRECTORY = ROOT / "reports"
@@ -31,6 +47,10 @@ DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"
 SITE_DIRECTORY = ROOT / "site"
 REGISTRY_PATH = ROOT / "data" / "report-routing" / "company_registry.json"
 OVERRIDES_PATH = DATA_DIRECTORY / "overrides.json"
+LIFECYCLE_PATH = DATA_DIRECTORY / "lifecycle.json"
+THESIS_DRIFT_PATH = DATA_DIRECTORY / "thesis_drift.json"
+WATCH_TRACKING_PATH = DATA_DIRECTORY / "watch_tracking.json"
+DECISION_RULES_PATH = DATA_DIRECTORY / "decision_rules.json"
 SKIPPED_PATH_PARTS = {"00-index", "_inbox", "_scripts", "_templates", "sources", "source_docs"}
 TOPIC_DIRECTORIES = {
     "AI产业研究",
@@ -4346,6 +4366,11 @@ def candidate_record(
         "report_path": report_relative,
         "report_link": report_path.relative_to(repo_root / "reports").as_posix(),
     }
+    registry_canonical = registry_entry.get("canonical_main_report") if registry_entry else None
+    if report_override.get("canonical_main_report") is True:
+        record["canonical_report_hint"] = True
+    if registry_canonical:
+        record["canonical_report_path_hint"] = str(registry_canonical)
     if decision_contract:
         record["decision_source"] = "看板决策契约"
         record["decision_contract"] = decision_contract
@@ -4586,11 +4611,40 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
     selections: list[dict[str, Any]] = []
     for candidates in groups.values():
         ordered = sorted(candidates, key=record_rank, reverse=True)
-        selected = ordered[0].copy()
-        company = str(selected["company"])
+        legacy_selected = ordered[0]
+        company = str(legacy_selected["company"])
         company_override = overrides.get("companies", {}).get(company, {})
         if not isinstance(company_override, dict):
             raise ValueError(f"Company override must be an object: {company}")
+        requested_path = company_override.get("canonical_main_report_path") or company_override.get(
+            "canonical_main_report"
+        )
+        hinted = [
+            item
+            for item in candidates
+            if item.get("canonical_report_hint") is True
+            or item.get("report_path") == item.get("canonical_report_path_hint")
+        ]
+        if requested_path:
+            normalized_path = str(requested_path).replace("\\", "/")
+            if not normalized_path.startswith("reports/"):
+                normalized_path = f"reports/{normalized_path.lstrip('/')}"
+            matching = [item for item in candidates if item.get("report_path") == normalized_path]
+            if len(matching) != 1:
+                raise ValueError(
+                    f"Canonical main report does not match exactly one candidate: {company}: {normalized_path}"
+                )
+            selected = matching[0].copy()
+            canonical_source = "company_override"
+        elif hinted:
+            hinted_paths = {item.get("report_path") for item in hinted}
+            if len(hinted_paths) > 1:
+                raise ValueError(f"Multiple canonical main report hints: {company}: {sorted(hinted_paths)}")
+            selected = hinted[0].copy()
+            canonical_source = "report_or_registry_hint"
+        else:
+            selected = legacy_selected.copy()
+            canonical_source = "legacy_latest_fallback"
         selected.update(company_override)
         primary_judgment = normalize_primary_judgment(
             company_override.get("primary_judgment"), company
@@ -4608,7 +4662,12 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
             selected["historical_price_reference"] = historical_reference
         selected["price_status"] = price_status_for(selected, historical_reference)
         selected["data_status"] = "已标注" if selected.get("data_cutoff") else "待复核：未标注数据截止日"
-        selected["selection_basis"] = "报告数据截止日"
+        selected["canonical_main_report_path"] = selected.get("report_path")
+        selected["canonical_report_source"] = canonical_source
+        selected["canonical_report_locked"] = canonical_source != "legacy_latest_fallback"
+        selected["selection_basis"] = (
+            "canonical_main_report" if canonical_source != "legacy_latest_fallback" else "报告数据截止日"
+        )
         # Full history remains newest-first. Historical prices never become this
         # report's price plan; a separately labelled display-only reference may
         # be attached above when the selected report itself has no usable price.
@@ -4659,53 +4718,42 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
         'title: "投资决策总表"',
         "type: generated-index",
         f"generated_at: {generated_at}",
-        "selection_rule: report-data-cutoff-only",
+        "selection_rule: canonical-main-report-and-lifecycle",
         "scope: individual-stocks-only",
         "---",
         "",
         "# 投资决策总表",
         "",
         "> 仅收录个股研究结论，不收录行业/主题/筛选类报告。",
-        "> 当前结论只按报告明确的“数据截止日”排序，不按文件修改时间排序。",
-        "> 当前结论优先读取报告末尾已校验的「看板决策契约」；旧报告则兼容解析第八步「最终决策与行动清单」等原文。粗粒度标签仅作筛选辅助。",
-        "> 技术面仅用于辅助观察，不参与分层结论、综合操作筛选或买入建议。下方另附每家公司的历史研报结论。",
-        "> 买入后论文追踪和异动报告仅进入持仓跟踪层，不替换基本面结论、分层价格或技术面快照。",
+        "> 每家公司只锁定一份 canonical 主报告；旧报告保留在 report_history，不能覆盖主报告。未锁定的旧库记录会明确标记为“主报告待锁定”。",
+        "> 生命周期由 WATCH / PRE_BUY / HOLDING / EXITED 驱动；没有用户确认成交记录的公司不会被自动当作持仓。",
+        "> thesis-drift、Checklist、技术面和情绪都是辅助层；漂移动作与买入前闸门不会改写基本面主报告结论。",
+        "> 主报告判断保留原报告的分层结论；技术面状态如“待复核技术报告”只在辅助附录展示。",
         "> 仅供学习与研究，不构成投资建议。",
         "",
-        "| 公司 | 市场 / 代码 | 数据截止日 | 分层结论（激进/稳健/保守） | 粗粒度 | 技术面 | Checklist | 历史研报数 | 报告 |",
-        "|---|---|---|---|---|---|---|---:|---|",
+        "| 公司 | 生命周期 | 主报告 | 主报告判断 | 漂移 | Checklist | 下次复核 | 下一动作 | 历史研报数 |",
+        "|---|---|---|---|---|---|---|---|---:|",
     ]
     for item in decisions:
-        market_ticker = " / ".join(part for part in (item["market"], item.get("ticker")) if part)
         link = item["report_link"].rsplit(".", 1)[0]
-        technical = item.get("technical_analysis") or {}
-        technical_status = technical.get("status") if isinstance(technical, dict) else "missing"
-        if technical_status == "ready":
-            technical_label = f"{technical.get('state', '待复核')}（技术日 {technical.get('data_cutoff', '待复核')}）"
-        elif technical_status == "review":
-            technical_label = "待复核技术报告"
-        else:
-            technical_label = "未生成技术面报告"
         checklist = item.get("checklist") or {}
-        if checklist.get("status") == "missing":
-            checklist_label = "未生成"
-        else:
-            checklist_label = checklist.get("status", "待复核")
-            if checklist.get("passed_count") is not None:
-                checklist_label += f"（{checklist['passed_count']}/6）"
+        checklist_contract = item.get("checklist_state") or {}
+        checklist_label = checklist_contract.get("status") or ("not_run" if checklist.get("status") == "missing" else checklist.get("status", "not_run"))
         layered = item.get("conclusion_summary") or investor_stances_summary(item.get("investor_stances") or []) or item.get("action")
+        drift = item.get("thesis_drift") or {}
+        drift_label = f"{drift.get('direction', 'unchanged')} / {drift.get('severity', 'none')}"
         lines.append(
-            "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {technical} | {checklist} | {history} | [[{link}|{title}]] |".format(
+            "| {company} | {lifecycle} | [[{link}|{report_title}]] | {layered} | {drift} | {checklist} | {next_review} | {next_action} | {history} |".format(
                 company=markdown_cell(str(item["company"])),
-                market_ticker=markdown_cell(market_ticker),
-                cutoff=markdown_cell(item.get("data_cutoff") or "待复核"),
-                layered=markdown_cell(layered),
-                action=markdown_cell(item["action"]),
-                technical=markdown_cell(technical_label),
-                checklist=markdown_cell(checklist_label),
-                history=item.get("report_history_count", len(item.get("report_history", []))),
+                lifecycle=markdown_cell(item.get("lifecycle") or "WATCH"),
                 link=link,
-                title=markdown_cell(item["title"]),
+                report_title=markdown_cell(item["title"]),
+                layered=markdown_cell(layered),
+                drift=markdown_cell(drift_label),
+                checklist=markdown_cell(checklist_label),
+                next_review=markdown_cell(item.get("next_review_date") or item.get("review_frequency") or "未安排"),
+                next_action=markdown_cell(item.get("next_action") or "待复核"),
+                history=item.get("report_history_count", len(item.get("report_history", []))),
             )
         )
     review = [item for item in decisions if not item.get("data_cutoff")]
@@ -4907,7 +4955,7 @@ def split_dashboard_files(board: dict[str, Any], site_directory: Path, data_dire
         for key, value in board.items()
         if key != "decisions"
     }
-    summary_board["schema_version"] = 7
+    summary_board["schema_version"] = 9
     summary_board["source_schema_version"] = board.get("schema_version")
     summary_board["generation_id"] = generation_id
     summary_board["detail_directory"] = "decision_details/"
@@ -4986,10 +5034,12 @@ def attach_post_buy_tracking(
         status = registered.get("status") or "holding"
         decision["post_buy_tracking"] = {
             "status": status,
+            "lifecycle": "EXITED" if status in {"closed", "exited"} else "HOLDING",
             "buy_date": registered.get("buy_date"),
             "cost_basis": registered.get("cost_basis"),
             "position_weight": registered.get("position_weight"),
             "thesis_report_path": registered.get("thesis_report_path"),
+            "thesis_baseline": registered.get("thesis_baseline"),
             "thesis_status": registered.get("thesis_status") or "not_established",
             "health_score": registered.get("health_score"),
             "last_review_date": registered.get("last_review_date"),
@@ -5002,6 +5052,226 @@ def attach_post_buy_tracking(
     return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
 
 
+def load_lifecycle_layers(data_directory: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Load the explicit lifecycle, drift, and lightweight watch layers.
+
+    These files are additive contracts. An absent layer means "not checked"
+    rather than a negative conclusion, which keeps old repositories safe to
+    rebuild during the migration.
+    """
+    defaults = (
+        {"schema_version": 1, "default_lifecycle": "WATCH", "companies": {}},
+        {"schema_version": 1, "records": {}, "history_limit": 12},
+        {"schema_version": 1, "records": {}},
+    )
+    paths = (LIFECYCLE_PATH.name, THESIS_DRIFT_PATH.name, WATCH_TRACKING_PATH.name)
+    payloads: list[dict[str, Any]] = []
+    for filename, default in zip(paths, defaults):
+        payload = load_json(data_directory / filename, default)
+        if payload.get("schema_version") != 1:
+            raise ValueError(f"Unsupported lifecycle layer schema: {filename}")
+        payloads.append(payload)
+    lifecycle, drift, watch = payloads
+    for filename, payload, keys in (
+        (paths[0], lifecycle, ("companies", "records")),
+        (paths[1], drift, ("records", "companies")),
+        (paths[2], watch, ("records", "companies")),
+    ):
+        if not any(isinstance(payload.get(key), dict) for key in keys):
+            raise ValueError(f"Lifecycle layer records must be an object: {filename}")
+    return lifecycle, drift, watch
+
+
+def load_decision_rules(data_directory: Path) -> dict[str, Any]:
+    """Load the additive rules layer; an absent file means legacy fallback."""
+    payload = load_json(data_directory / DECISION_RULES_PATH.name, {})
+    if not payload:
+        payload = {
+            "schema_version": 1,
+            "generated_at": None,
+            "description": "尚未迁移 Decision Rules；看板继续使用旧决策字段。",
+            "rules": [],
+            "migration": {},
+        }
+    return normalize_decision_rules_layer(payload)
+
+
+def attach_decision_rules(
+    decisions: list[dict[str, Any]],
+    rules_layer: dict[str, Any],
+) -> dict[str, int]:
+    """Attach matching rules while preserving legacy fields as a fallback.
+
+    This function only attaches durable rule definitions.  Current price and
+    event status are evaluated by the browser or a future review job with a
+    fresh context; stale report prices never masquerade as live quotations.
+    """
+    counts = {"rules": 0, "price": 0, "fundamental": 0, "event": 0, "composite": 0, "needs_review": 0}
+    for decision in decisions:
+        decision["company_id"] = company_id_for(decision)
+        matched = rules_for_decision(rules_layer, decision)
+        price_rules = [item for item in matched if item.get("trigger_type") in {"price", "price_range"}]
+        condition_rules = [item for item in matched if item.get("trigger_type") not in {"price", "price_range"}]
+        for rule in matched:
+            counts["rules"] += 1
+            trigger = rule.get("trigger_type")
+            if trigger in {"price", "price_range"}:
+                counts["price"] += 1
+            elif trigger == "metric":
+                counts["fundamental"] += 1
+            elif trigger == "event":
+                counts["event"] += 1
+            elif trigger in {"all_of", "any_of"}:
+                counts["composite"] += 1
+            if rule.get("needs_review") or rule.get("status") == "needs_review":
+                counts["needs_review"] += 1
+        def stored_opportunity(rule: dict[str, Any]) -> dict[str, Any]:
+            status, drift_reason = drift_rule_status(rule, decision.get("thesis_drift"))
+            return decision_rule_opportunity(
+                rule,
+                {
+                    "rule": rule,
+                    "status": status,
+                    "status_label": STATUS_LABELS.get(status, STATUS_LABELS["needs_review"]),
+                    "auto_evaluable": False,
+                    "reason": drift_reason or rule.get("description") or "等待新鲜上下文评估",
+                },
+            )
+        decision["decision_rules"] = matched
+        decision["decision_rules_source"] = "decision_rules" if matched else "legacy_compatibility"
+        decision["decision_rule_summary"] = {
+            "rule_count": len(matched),
+            "price_rule_count": len(price_rules),
+            "condition_rule_count": len(condition_rules),
+            "needs_review_count": sum(
+                1 for item in matched if item.get("needs_review") or item.get("status") == "needs_review"
+            ),
+            "fallback": not bool(matched),
+            "fallback_fields": ["price_plan", "decision_contract", "invalidation_triggers"] if not matched else [],
+            "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。",
+        }
+        decision["price_opportunities"] = [stored_opportunity(rule) for rule in price_rules]
+        decision["condition_opportunities"] = [stored_opportunity(rule) for rule in condition_rules]
+    return counts
+
+
+def lifecycle_layer_record(payload: dict[str, Any], decision: dict[str, Any]) -> dict[str, Any]:
+    """Find a lifecycle-layer record by ticker first, then canonical company."""
+    records = payload.get("records") or payload.get("companies") or {}
+    if not isinstance(records, dict):
+        return {}
+    ticker = str(decision.get("ticker") or "").upper()
+    company = str(decision.get("company") or "")
+    for key in (ticker, company):
+        value = records.get(key)
+        if isinstance(value, dict):
+            return value
+    return {}
+
+
+def holding_thesis_baseline(
+    tracking: dict[str, Any], explicit: dict[str, Any], drift: dict[str, Any]
+) -> dict[str, Any]:
+    """Keep the original buy thesis dimensions fixed after purchase."""
+    supplied = tracking.get("thesis_baseline") or explicit.get("thesis_baseline") or drift.get("thesis_baseline") or {}
+    if not isinstance(supplied, dict):
+        supplied = {}
+    dimensions = {}
+    for key in ("valuation_anchor", "core_assumptions", "red_lines", "management", "moat"):
+        value = supplied.get(key)
+        if value in (None, "", []):
+            value = "待从买入论文抽取"
+        dimensions[key] = value
+    return {
+        "source": tracking.get("thesis_report_path"),
+        "status": "original_buy_thesis" if tracking.get("thesis_report_path") else "not_established",
+        "dimensions": dimensions,
+    }
+
+
+def checklist_state(checklist: dict[str, Any]) -> dict[str, Any]:
+    """Expose the lifecycle Checklist contract without replacing the legacy object."""
+    checklist = checklist if isinstance(checklist, dict) else {}
+    checked_at = checklist.get("data_cutoff") or checklist.get("report_date")
+    return {
+        "status": normalize_checklist_status(checklist.get("status"), checked_at=checked_at),
+        "checked_at": checked_at,
+        "hard_veto": checklist.get("hard_veto") is True,
+        "hard_veto_state": checklist.get("hard_veto_state") or "unknown",
+        "summary": checklist.get("summary") or "",
+        "next_review_date": checklist.get("next_review_date"),
+        "source_report_path": checklist.get("report_path"),
+    }
+
+
+def attach_lifecycle_layers(
+    decisions: list[dict[str, Any]],
+    lifecycle: dict[str, Any],
+    drift_layer: dict[str, Any],
+    watch_layer: dict[str, Any],
+) -> None:
+    """Decorate each board row with one explicit lifecycle state."""
+    for decision in decisions:
+        tracking = decision.get("post_buy_tracking") or {}
+        actual_tracking = tracking if tracking.get("status") != "not_tracked" else None
+        explicit = lifecycle_layer_record(lifecycle, decision)
+        stored_drift = lifecycle_layer_record(drift_layer, decision)
+        watch = lifecycle_layer_record(watch_layer, decision)
+        state, source = classify_lifecycle(
+            tracking=actual_tracking,
+            lifecycle_record=explicit,
+            default=str(lifecycle.get("default_lifecycle") or "WATCH"),
+        )
+        # Existing post-buy health is the compatibility baseline until a
+        # structured thesis-drift run records a more specific comparison.
+        if not stored_drift and actual_tracking and actual_tracking.get("last_review_date"):
+            thesis_status = str(actual_tracking.get("thesis_status") or "")
+            direction = "weakened" if thesis_status in {"borderline", "damaged", "broken"} else "unchanged"
+            severity = "major" if thesis_status == "broken" else "minor" if thesis_status in {"borderline", "damaged"} else "none"
+            stored_drift = {
+                "status": "checked",
+                "direction": direction,
+                "severity": severity,
+                "last_checked": actual_tracking.get("last_review_date"),
+                "next_review": actual_tracking.get("next_review_date"),
+                "summary": "由现有 post_buy_tracking 论文状态兼容承接；需下次正式漂移复核确认。",
+                "source": "post_buy_tracking_compat",
+            }
+        contract = lifecycle_contract(
+            state,
+            tracking=actual_tracking,
+            drift=stored_drift,
+            explicit={**explicit, "source": source},
+        )
+        drift_record = contract["drift"]
+        drift_record["action"] = contract["action"]
+        decision.update(
+            {
+                "lifecycle": contract["lifecycle"],
+                "lifecycle_source": contract["lifecycle_source"],
+                "review_frequency": contract["review_frequency"],
+                "next_review_date": contract["next_review_date"],
+                "next_action": contract["next_action"],
+                "lifecycle_action": contract["action"],
+                "thesis_drift": drift_record,
+                "checklist_state": checklist_state(decision.get("checklist") or {}),
+            }
+        )
+        if state in {"WATCH", "PRE_BUY"}:
+            watch_record = dict(watch)
+            watch_record.setdefault("status", "watching")
+            watch_record.setdefault("reason", "尚未登记结构化观察理由；以主报告和漂移结果为准。")
+            watch_record.setdefault("buy_conditions", [])
+            watch_record.setdefault("drop_conditions", [])
+            watch_record["lifecycle"] = state
+            watch_record["thesis_created"] = False
+            watch_record.setdefault("last_checked", drift_record.get("last_checked"))
+            watch_record.setdefault("next_review_date", contract["next_review_date"])
+            decision["watch_tracking"] = watch_record
+        if state == "HOLDING" and actual_tracking:
+            decision["thesis_baseline"] = holding_thesis_baseline(actual_tracking, explicit, stored_drift)
+
+
 def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
@@ -5012,6 +5282,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     decision_reviews = load_decision_reviews(data_directory)
     manual_execution_reviews = load_manual_execution_reviews(data_directory)
     opportunity_scans = load_opportunity_scans(data_directory)
+    lifecycle_layer, thesis_drift_layer, watch_tracking_layer = load_lifecycle_layers(data_directory)
+    decision_rules_layer = load_decision_rules(data_directory)
     registry = load_registry(repo_root / "data" / "report-routing" / "company_registry.json")
     overrides = load_json(
         data_directory / "overrides.json",
@@ -5048,6 +5320,8 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
+    attach_lifecycle_layers(decisions, lifecycle_layer, thesis_drift_layer, watch_tracking_layer)
+    decision_rule_summary = attach_decision_rules(decisions, decision_rules_layer)
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     generation_id = hashlib.sha256(
         (
@@ -5063,11 +5337,11 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "records": records,
     }
     board = {
-        "schema_version": 7,
+        "schema_version": 9,
         "generated_at": generated_at,
         "generation_id": generation_id,
         "scope": "individual-stocks-only",
-        "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
+        "selection_rule": "Each stock has one canonical main report. Explicit company/report-routing overrides win; legacy repositories fall back to the report with the newest explicit data cutoff and mark that fallback. Filesystem modification times and filename dates are excluded. Historical report conclusions remain in report_history and never replace the canonical report. Decision Rules are an additive persisted layer extracted once from the canonical report; when absent, price_plan/decision_contract/invalidation_triggers remain the compatibility fallback. Lifecycle state is resolved independently: explicit holding records win over report language, and unregistered stocks default to WATCH. Checklist, technical, sentiment, opportunity, and post-buy layers remain auxiliary contracts.",
         "decision_count": len(decisions),
         "real_time_execution_scope": "A股",
         "a_share_execution_summary": {
@@ -5079,6 +5353,32 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         },
         "checklist_count": len(checklist_records),
         "post_buy_tracking": post_buy_summary,
+        "decision_rules": {
+            "schema_version": decision_rules_layer.get("schema_version", 1),
+            "rule_count": decision_rule_summary["rules"],
+            "price_rule_count": decision_rule_summary["price"],
+            "fundamental_rule_count": decision_rule_summary["fundamental"],
+            "event_rule_count": decision_rule_summary["event"],
+            "composite_rule_count": decision_rule_summary["composite"],
+            "needs_review_count": decision_rule_summary["needs_review"],
+            "source": "data/investment-dashboard/decision_rules.json",
+            "fallback": "没有匹配规则的公司继续读取旧字段；不会重新解析报告。",
+            "statuses": sorted(RULE_STATUSES),
+        },
+        "lifecycle_contract": {
+            "states": ["WATCH", "PRE_BUY", "HOLDING", "EXITED"],
+            "watch_actions": ["KEEP WATCH", "RUN CHECKLIST", "DROP"],
+            "watch_action_keys": ["keep_watch", "run_checklist", "drop"],
+            "holding_actions": ["ADD", "HOLD", "REDUCE", "EXIT"],
+            "checklist_statuses": ["not_run", "pass", "conditional_pass", "fail", "stale"],
+            "drift_history_limit": 12,
+            "default_review_frequency": {
+                "WATCH": "180d",
+                "PRE_BUY": "30d",
+                "HOLDING": "quarterly",
+                "EXITED": "archived",
+            },
+        },
         "decisions": decisions,
     }
     history_board = {
@@ -5101,6 +5401,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "decision_reviews.json", decision_reviews)
     write_json(data_directory / "manual_execution_reviews.json", manual_execution_reviews)
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
+    write_json(data_directory / "lifecycle.json", lifecycle_layer)
+    write_json(data_directory / "thesis_drift.json", thesis_drift_layer)
+    write_json(data_directory / "watch_tracking.json", watch_tracking_layer)
+    write_json(data_directory / "decision_rules.json", decision_rules_layer)
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     split_dashboard_files(board, site_directory, data_directory)
@@ -5112,6 +5416,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         site_directory / "data" / "opportunity_scans.json",
         public_opportunity_scans(opportunity_scans),
     )
+    write_json(site_directory / "data" / "lifecycle.json", lifecycle_layer)
+    write_json(site_directory / "data" / "thesis_drift.json", thesis_drift_layer)
+    write_json(site_directory / "data" / "watch_tracking.json", watch_tracking_layer)
+    write_json(site_directory / "data" / "decision_rules.json", decision_rules_layer)
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)

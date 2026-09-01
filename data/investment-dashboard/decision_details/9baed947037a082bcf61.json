@@ -115,6 +115,9 @@
     ],
     "usage": "display_only"
   },
+  "canonical_main_report_path": "reports/东方电缆/东方电缆-research-20260726.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -335,22 +338,40 @@
   ],
   "report_history_count": 3,
   "primary_judgment": {
+    "label": "等待验证",
+    "action_kind": "watch",
+    "empty_position_action": "等待中报经营指标验证；报告明确要求验证前不建仓",
+    "holder_action": "持有但不加仓，等待中报判决",
+    "trigger_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+    "summary": "低估值不能单独触发买入，空仓者必须先核对中报经营动能。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板粗字段写持有，但正文分别明确了空仓者等待验证与持仓者持有不加仓。",
+    "source_basis": "人工逐行核对主报告最终结论及空仓者、持仓者行动表",
+    "currency": "CNY",
+    "price_source": "主报告第818至820行",
+    "evidence": [
+      {
+        "line_start": 764,
+        "line_end": 764,
+        "quote": "观望；等待2026年中报判决，不必在判决前抢跑。",
+        "supports": "主报告最终结论明确为等待经营验证。"
+      },
+      {
+        "line_start": 818,
+        "line_end": 820,
+        "quote": "空仓者在中报前不建仓；四项及以上转正面后在36-45元分批，30-36元也要求中报未转负面。",
+        "supports": "价格条件不能脱离中报验证单独触发买入。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-13T11:14:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:49:34+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-13T11:14:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -358,15 +379,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待验证",
+    "condition_mode": "price_and_event",
+    "event_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "股价30-36元时仍需中报未转负面",
+        "price_range": "30-36元",
+        "min": 30.0,
+        "ceiling": 36.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓",
+        "price_range": "36-45元",
+        "min": 36.0,
+        "ceiling": 45.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "中报六项判决中四项及以上转正面后，可在36-45元分批建仓；股价30-36元时仍需中报未转负面",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -475,9 +521,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-20）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -485,7 +531,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "D",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：Checklist 硬性否决",
     "detail": "买入前 Checklist 存在硬性否决；即使价格进入主报告区间，也不得进入当前可买名单。",
     "opportunity_tier": null,
@@ -495,22 +541,22 @@
       "ticker": "603606.SH",
       "main_report": {
         "path": "reports/东方电缆/东方电缆-research-20260726.md",
-        "sha256": "1349109f76ad62f5833291c1dbdb29b90a07b478c8aabe80b539ae5295d5d0cf"
+        "sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3"
       },
       "checklist": {
         "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
-        "sha256": "e02ae945feeb6cdeb5417a7842f7cde6e2fcd683e5078488cb5108cf7299c187"
+        "sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "7477106651076e961a23b962af9f359f37d168b76fbd05b482485482b73c5263",
-    "current_source_fingerprint_sha256": "c4906e1c33f7501486e9423fa8f4375a38732512aa65afa4455287d53457d28a"
+    "current_source_fingerprint_sha256": "7477106651076e961a23b962af9f359f37d168b76fbd05b482485482b73c5263"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-20）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "7477106651076e961a23b962af9f359f37d168b76fbd05b482485482b73c5263",
   "market_session_state": "runtime_required",
@@ -560,7 +606,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "fail",
+    "checked_at": "2026-08-20",
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "未通过Checklist，治理记录与安全边际不足触发否决",
+    "next_review_date": "2026-10-31",
+    "source_report_path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md"
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "东方电缆",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "9baed947037a082bcf61",
   "detail_path": "./data/decision_details/9baed947037a082bcf61.json"
 }

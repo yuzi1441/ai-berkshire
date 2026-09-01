@@ -17,6 +17,8 @@ This skill is generated from `skills/investment-checklist.md` so Claude Code and
 
 对 $ARGUMENTS 执行巴菲特价值投资买入前 Checklist 分析。
 
+Checklist 只服务于 `PRE_BUY` 的买入前闸门。它不能把 `WATCH` 自动升级为 `HOLDING`；只有用户明确确认成交后，才由 `thesis-tracker` 和 `post_buy_tracking.json` 建立持仓层。
+
 **支持输入格式**：单个或多个公司，用逗号/顿号/空格分隔。例如：`腾讯, 茅台, 英伟达` 或 `NVDA AAPL MSFT`
 
 ## 执行流程
@@ -55,6 +57,8 @@ This skill is generated from `skills/investment-checklist.md` so Claude Code and
 8. **最新动态**：近6个月重大事件（业绩、并购、监管、管理层变动等）
 
 ### 第三步：逐公司执行六关 Checklist
+
+看板状态契约固定为：`not_run`（尚未执行）、`pass`（通过）、`conditional_pass`（条件通过/灰色地带）、`fail`（未通过或硬性否决）、`stale`（超过复核窗口）。缺少数据必须是 `not_run` 或 `conditional_pass`，不能误归为 `fail`。
 
 对每家已上市公司，依次过六关：
 
@@ -235,6 +239,8 @@ python3 tools/financial_rigor.py three-scenario \
 - ❓ **灰色地带** — 说明关键争议点是什么，投资者需要自行判断什么
 - N/A — 未上市/无法买入
 
+Checklist 运行前必须由 `thesis-drift` 给出 `RUN CHECKLIST`，或由用户明确要求执行。完成后只更新 `checklist_state` 和观察池记录，不直接写入持仓，不生成买入后论文。
+
 对单一上市公司，保留以上 Checklist 正文不变，并在报告**最后**追加以下「看板决策契约」表。它只让系统稳定识别该 Checklist 的基本面状态，不能把“通过 Checklist”写成买入建议，也**不能覆盖看板中的完整基本面研报结论**：通过或灰色地带通常填`观察`，否决/重大红线填`减仓/卖出`或`观察`，以正文为准。多公司对比报告不要附该表。
 
 - `数据截止日`写本次判断实际使用数据的截止日，不等同于报告撰写日。
@@ -266,6 +272,20 @@ python3 tools/financial_rigor.py three-scenario \
 | 下次复核日期 | {YYYY-MM-DD；未安排填未给出} |
 | 研究置信度 | {高/中/低/待复核} |
 
+看板层将上述契约归一化为：
+
+```json
+{
+  "status": "not_run|pass|conditional_pass|fail|stale",
+  "checked_at": "YYYY-MM-DD",
+  "hard_veto": false,
+  "summary": "",
+  "next_review_date": "YYYY-MM-DD"
+}
+```
+
+`pass` 只表示六关检查通过，不表示已经买入；`conditional_pass` 仍留在 `PRE_BUY`，直到买入条件和用户确认均满足。
+
 将完整报告写入 `~/巴菲特Checklist-[公司名或"多公司对比"].md`
 
 ## 输出格式要求
@@ -283,3 +303,12 @@ python3 tools/financial_rigor.py three-scenario \
 - **诚实面对能力圈**：看不懂就说看不懂，不要勉强分析
 - **安全边际是生命线**：好公司买贵了也会亏钱
 - **镜子测试不可跳过**：说不清楚理由就不买，没有例外
+
+## 与 Decision Rules 的边界
+
+看板的 Decision Rules 只负责提示“值得重新决策”的价格、指标、事件或组合条件。
+规则触发后的下一步是 `RUN CHECKLIST`、`Thesis Review` 或人工复核；规则不能把
+Checklist 自动改成通过，也不能把任何条件直接变成买入、卖出或持仓记录。
+
+规则没有明确证据时必须保留 `needs_review=true`，不为提高看板覆盖率补造激进、稳健、
+保守三档价格。Checklist 仍是独立六关闸门，只有用户确认成交后才进入持仓论文。

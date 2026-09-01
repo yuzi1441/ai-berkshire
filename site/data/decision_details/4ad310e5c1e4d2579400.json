@@ -84,7 +84,10 @@
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
-  "selection_basis": "报告数据截止日",
+  "canonical_main_report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+  "canonical_report_source": "company_override",
+  "canonical_report_locked": true,
+  "selection_basis": "canonical_main_report",
   "report_history": [
     {
       "data_cutoff": "2026-06-24",
@@ -228,15 +231,15 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者观望为主，等待更好的买入时机；若股价回到25元以下且Q2/Q3业绩持续向好，可考虑建立小仓位。",
     "holder_action": "持仓者持有，但需密切关注宁德时代采购量、负极出货量恢复至25万吨、涂覆隔膜市占率保持40%+三个信号。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "trigger_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）。",
+    "summary": "空仓者观望等待，当前29元不贵不便宜，理想买入区间22-25元；回到25元以下且业绩向好可建小仓。",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "正文与契约结论一致，无冲突。",
     "evidence": [
       {
         "line_start": 427,
@@ -252,14 +255,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
-    "model_consensus": false,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": false,
+    "source_matches": true,
     "generated_at": "2026-08-14T10:22:03+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -268,15 +271,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_and_event",
+    "event_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
+        "price_range": "25元以下",
+        "min": null,
+        "ceiling": 25.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
+        "price_range": "22-25元",
+        "min": 22.0,
+        "ceiling": 25.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "股价回到25元以下且Q2/Q3业绩持续向好（理想买入区间22-25元）",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -355,9 +383,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-31）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -365,7 +393,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "review",
+    "execution_key": "validation",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -375,22 +403,22 @@
       "ticker": "603659.SH",
       "main_report": {
         "path": "reports/Putailai/Putailai-investment-research-20260624.md",
-        "sha256": "18a09f876d0c34d147013c84ea4bd9ab05d7f6b713feea48f2cb2e54469028a8"
+        "sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6"
       },
       "checklist": {
         "path": "reports/Putailai/璞泰来-checklist-20260731.md",
-        "sha256": "dc1d22052dc7ace52fc6a13dcd31d0fab18ae6ec655d0e2c0ae59bd7d4511be4"
+        "sha256": "1c204ef1f7150dab7f1e8e128bc99541a0a7f5d4b81a2c3adc0446e735f7bceb"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
-    "current_source_fingerprint_sha256": "a814ad18c87c55308384b5531eb470bcce7116e8578d6aea1817067cfba79176"
+    "current_source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-31）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "5a42066d682f919d5dc95f8c1e9692a61d13bdba7e6f79f0572879a94a6e2397",
   "market_session_state": "runtime_required",
@@ -438,10 +466,18 @@
   },
   "post_buy_tracking": {
     "status": "holding",
+    "lifecycle": "HOLDING",
     "buy_date": "2026-08-01",
     "cost_basis": 23.8,
     "position_weight": 10.0,
     "thesis_report_path": "reports/璞泰来/璞泰来-thesis.md",
+    "thesis_baseline": {
+      "valuation_anchor": "成本 23.80 元；原主报告理想买入区间 22–25 元；仓位上限 10%",
+      "core_assumptions": "涂覆隔膜市占率 40%+；营收与扣非利润保持 20%+；经营现金流为正；负极业务和海外项目不继续失控",
+      "red_lines": "涂覆份额连续两期降至 35% 以下；实控人被动平仓或重大治理问题；海外项目严重超预算/延期",
+      "management": "具备产业链整合能力；持续审视多平台资本运作、股权质押与股东回报",
+      "moat": "客户认证、工艺耦合、规模产能与涂覆/PVDF 全链条协同"
+    },
     "thesis_status": "healthy",
     "health_score": 8,
     "last_review_date": "2026-08-01",
@@ -482,7 +518,66 @@
     "latest_event": null,
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "HOLDING",
+  "lifecycle_source": "post_buy_tracking",
+  "review_frequency": "quarterly",
+  "next_review_date": "2026-08-31",
+  "next_action": "HOLD",
+  "lifecycle_action": "HOLD",
+  "thesis_drift": {
+    "status": "checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "HOLD",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": "2026-08-01",
+    "next_review": "2026-08-31",
+    "summary": "由现有 post_buy_tracking 论文状态兼容承接；需下次正式漂移复核确认。",
+    "source": "post_buy_tracking_compat",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "conditional_pass",
+    "checked_at": "2026-07-31",
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "❓灰色地带，Checklist 通过 4/6 关，不进入积极买入阶段。 没有公司层面的硬性否决，但第二关和第五关不够强：这是一家有优质资产、也有周期和资本强度的公司。当前 23.80 元可以进入观察或小仓位验证区，不足以支持重仓。",
+    "next_review_date": null,
+    "source_report_path": "reports/Putailai/璞泰来-checklist-20260731.md"
+  },
+  "thesis_baseline": {
+    "source": "reports/璞泰来/璞泰来-thesis.md",
+    "status": "original_buy_thesis",
+    "dimensions": {
+      "valuation_anchor": "成本 23.80 元；原主报告理想买入区间 22–25 元；仓位上限 10%",
+      "core_assumptions": "涂覆隔膜市占率 40%+；营收与扣非利润保持 20%+；经营现金流为正；负极业务和海外项目不继续失控",
+      "red_lines": "涂覆份额连续两期降至 35% 以下；实控人被动平仓或重大治理问题；海外项目严重超预算/延期",
+      "management": "具备产业链整合能力；持续审视多平台资本运作、股权质押与股东回报",
+      "moat": "客户认证、工艺耦合、规模产能与涂覆/PVDF 全链条协同"
+    }
+  },
+  "company_id": "璞泰来",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "4ad310e5c1e4d2579400",
   "detail_path": "./data/decision_details/4ad310e5c1e4d2579400.json"
 }

@@ -65,6 +65,9 @@
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -124,22 +127,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "等待验证",
+    "action_kind": "watch",
+    "empty_position_action": "4.47元附近不追，等待4元以下的小仓观察机会，或等待利润和现金流修复得到验证",
+    "holder_action": "已有仓位宜继续观察治理、利润、现金流和债务变化，未满足加仓条件前不加仓",
+    "trigger_condition": "4.0元以下可小仓观察；3.3-3.7元且2026利润与现金流改善时可进一步研究",
+    "summary": "当前估值不贵但安全边际不足，主要动作是等待更低价格或利润质量验证。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "看板观察与正文分层操作建议一致。",
+    "source_basis": "人工逐行核对当前建议、分层价格表和加减仓信号",
+    "currency": "CNY",
+    "price_source": "主报告第184至197行",
+    "evidence": [
+      {
+        "line_start": 184,
+        "line_end": 188,
+        "quote": "激进型4.0元以下更合理，4.47元附近不追；稳健型等待3.3-3.7元安全边际。",
+        "supports": "明确当前不追及价格条件。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:53:51+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -147,15 +162,40 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待验证",
+    "condition_mode": "price_and_event",
+    "event_condition": "3.3-3.7元且2026利润与现金流改善时可进一步研究",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "3.3-3.7元且2026利润与现金流改善时可进一步研究",
+        "price_range": "3.3-3.7元",
+        "min": 3.3,
+        "ceiling": 3.7,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "3.3-3.7元且2026利润与现金流改善时可进一步研究",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "trial",
+        "action": "4.0元以下可小仓观察",
+        "price_range": "4.0元以下",
+        "min": null,
+        "ceiling": 4.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "3.3-3.7元且2026利润与现金流改善时可进一步研究",
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -165,9 +205,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -175,7 +215,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -185,7 +225,7 @@
       "ticker": "002226.SZ",
       "main_report": {
         "path": "reports/江南化工/江南化工-investment-team-20260709.md",
-        "sha256": "d75fee445ed5b79efe72e9b720bd71df78ace872572e738461ffd971331f65b7"
+        "sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f"
       },
       "checklist": {
         "path": null,
@@ -193,14 +233,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d3d38ba58db79a419074f7b1cd199f9ab58c6538982cfc470ef6142116fbd6e0",
-    "current_source_fingerprint_sha256": "9e58e68c48347ac90704ca69643541e181a836b3e3f3f6557b43388bee0c96fb"
+    "current_source_fingerprint_sha256": "d3d38ba58db79a419074f7b1cd199f9ab58c6538982cfc470ef6142116fbd6e0"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d3d38ba58db79a419074f7b1cd199f9ab58c6538982cfc470ef6142116fbd6e0",
   "market_session_state": "runtime_required",
@@ -250,7 +290,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "江南化工",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "fb56b03c82b3ea03cc68",
   "detail_path": "./data/decision_details/fb56b03c82b3ea03cc68.json"
 }

@@ -43,14 +43,14 @@ const state = {
   automationStatus: null,
   selectedKey: null,
   generationId: null,
-  view: "decision",
+  view: "overview",
   market: "all",
   action: "all",
   referenceAction: "all",
   trackingFilter: "all",
   hiddenTrackingKeys: new Set(),
   sort: "execution",
-  detailTab: "technical",
+  detailTab: "overview",
   quoteMode: "idle", // snapshot | idle | error
   quoteUpdatedAt: null,
   quoteSnapshotMeta: null,
@@ -74,6 +74,12 @@ const els = {
   attentionToggleState: document.querySelector("#attention-toggle-state"),
   attentionMeta: document.querySelector("#attention-meta"),
   attentionList: document.querySelector("#attention-list"),
+  decisionRulesPanel: document.querySelector("#decision-rules-panel"),
+  decisionRulesMeta: document.querySelector("#decision-rules-meta"),
+  priceOpportunities: document.querySelector("#price-opportunities"),
+  priceOpportunitiesCount: document.querySelector("#price-opportunities-count"),
+  conditionOpportunities: document.querySelector("#condition-opportunities"),
+  conditionOpportunitiesCount: document.querySelector("#condition-opportunities-count"),
   status: document.querySelector("#data-status"),
   companyFilter: document.querySelector("#company-filter"),
   sortSelect: document.querySelector("#sort-select"),
@@ -183,6 +189,96 @@ function trackingStatusClass(status) {
     damaged: "tracking-damaged",
     broken: "tracking-broken",
   }[status] || "tracking-muted";
+}
+
+function lifecycleForItem(item) {
+  return item?.lifecycle || (trackingForItem(item) ? "HOLDING" : "WATCH");
+}
+
+function lifecycleLabel(state) {
+  return {
+    WATCH: "WATCH · 观察",
+    PRE_BUY: "PRE_BUY · 买入前",
+    HOLDING: "HOLDING · 持仓",
+    EXITED: "EXITED · 已退出",
+  }[state] || "WATCH · 观察";
+}
+
+function lifecycleClass(state) {
+  return {
+    WATCH: "lifecycle-watch",
+    PRE_BUY: "lifecycle-pre-buy",
+    HOLDING: "lifecycle-holding",
+    EXITED: "lifecycle-exited",
+  }[state] || "lifecycle-watch";
+}
+
+function driftForItem(item) {
+  return item?.thesis_drift || {
+    status: "not_checked",
+    direction: "unchanged",
+    severity: "none",
+    action: item?.next_action,
+  };
+}
+
+function driftDirectionLabel(direction) {
+  return { improved: "改善", unchanged: "未变", weakened: "弱化" }[direction] || "未变";
+}
+
+function driftClass(drift) {
+  if (drift?.severity === "major" && drift?.direction === "weakened") return "drift-major";
+  if (drift?.direction === "weakened") return "drift-weakened";
+  if (drift?.direction === "improved") return "drift-improved";
+  return drift?.status === "not_checked" ? "drift-unchecked" : "drift-unchanged";
+}
+
+function driftStatusLabel(drift) {
+  if (!drift || drift.status === "not_checked") return "未检查";
+  const severity = drift.severity && drift.severity !== "none" ? ` · ${drift.severity}` : "";
+  return `${driftDirectionLabel(drift.direction)}${severity}`;
+}
+
+function checklistContractForItem(item) {
+  return item?.checklist_state || {
+    status: "not_run",
+    checked_at: null,
+    hard_veto: false,
+    summary: "",
+  };
+}
+
+function checklistLifecycleLabel(status) {
+  return {
+    not_run: "未执行",
+    pass: "通过",
+    conditional_pass: "条件通过",
+    fail: "未通过",
+    stale: "已过期",
+  }[status] || "未执行";
+}
+
+function lifecycleActionLabel(action) {
+  return {
+    keep_watch: "KEEP WATCH · 继续观察",
+    run_checklist: "RUN CHECKLIST · 运行检查",
+    drop: "DROP · 放弃",
+    "KEEP WATCH": "KEEP WATCH · 继续观察",
+    "RUN CHECKLIST": "RUN CHECKLIST · 运行检查",
+    DROP: "DROP · 放弃",
+    ADD: "ADD · 加仓",
+    HOLD: "HOLD · 持有",
+    REDUCE: "REDUCE · 减仓",
+    EXIT: "EXIT · 退出",
+    EXITED: "EXITED · 已退出",
+  }[action] || action || "待复核";
+}
+
+function isReviewDue(item) {
+  const value = item?.next_review_date;
+  if (!value) return false;
+  const date = new Date(`${value}T23:59:59+08:00`);
+  return Number.isFinite(date.getTime()) && date.getTime() <= Date.now();
 }
 
 function trackingAlertLevel(tracking) {
@@ -1472,6 +1568,12 @@ function filteredDecisions() {
     const adviceMatch = state.action === "all"
       || executionFor(item).key === state.action;
     const referenceMatch = state.referenceAction === "all" || referenceFor(item).key === state.referenceAction;
+    const lifecycle = lifecycleForItem(item);
+    const lifecycleMatch = state.view === "watch"
+      ? ["WATCH", "PRE_BUY"].includes(lifecycle)
+      : state.view === "tracking"
+        ? Boolean(tracking && ["HOLDING", "EXITED"].includes(lifecycle))
+        : true;
     const trackingMatch = state.view !== "tracking"
       || (tracking && (
         state.trackingFilter === "all"
@@ -1480,8 +1582,9 @@ function filteredDecisions() {
       ));
     const searchable = `${item.company} ${item.ticker || ""} ${item.title || ""}`.toLocaleLowerCase();
     return marketMatch
-      && (state.view === "tracking" ? true : adviceMatch)
-      && (state.view === "tracking" ? true : referenceMatch)
+      && lifecycleMatch
+      && (["overview"].includes(state.view) ? adviceMatch : true)
+      && (["overview"].includes(state.view) ? referenceMatch : true)
       && trackingMatch
       && (!phrase || searchable.includes(phrase));
   });
@@ -1494,6 +1597,17 @@ function filteredDecisions() {
       const alertDelta = (alertRank[trackingAlertLevel(bb)] || 0) - (alertRank[trackingAlertLevel(aa)] || 0);
       if (alertDelta) return alertDelta;
       return String(aa?.next_review_date || "9999-12-31").localeCompare(String(bb?.next_review_date || "9999-12-31"));
+    }
+    if (state.view === "watch") {
+      const aa = driftForItem(a);
+      const bb = driftForItem(b);
+      const rank = { weakened: 3, improved: 2, unchanged: 1 };
+      const driftDelta = (rank[bb.direction] || 0) - (rank[aa.direction] || 0);
+      if (driftDelta) return driftDelta;
+      const actionRank = { "RUN CHECKLIST": 3, "KEEP WATCH": 2, DROP: 1 };
+      const actionDelta = (actionRank[bb.action] || 0) - (actionRank[aa.action] || 0);
+      if (actionDelta) return actionDelta;
+      return String(a.company || "").localeCompare(String(b.company || ""), "zh");
     }
     if (state.sort === "execution") {
       const aa = executionFor(a);
@@ -2807,8 +2921,218 @@ function renderOpportunityGroup(candidates, title, note) {
   return group;
 }
 
+const decisionRuleStatusMeta = {
+  inactive: {label: "未激活", className: "rule-status-inactive"},
+  watching: {label: "正常观察", className: "rule-status-watching"},
+  near_trigger: {label: "接近触发", className: "rule-status-near"},
+  triggered: {label: "已触发", className: "rule-status-triggered"},
+  needs_review: {label: "待复核", className: "rule-status-review"},
+  resolved: {label: "已解决", className: "rule-status-resolved"},
+  disabled: {label: "已禁用", className: "rule-status-disabled"},
+};
+
+function decisionRuleStatusMetaFor(status) {
+  return decisionRuleStatusMeta[status] || decisionRuleStatusMeta.needs_review;
+}
+
+function decisionRuleActionLabel(rule) {
+  return {
+    run_checklist: "运行买入前 Checklist",
+    thesis_review: "进入 Thesis Review",
+    drift_warning: "触发 Thesis Drift 复核",
+    review_add: "进入加仓复核",
+    review_reduce: "进入减仓复核",
+    review_exit: "进入退出复核",
+    keep_watch: "继续观察",
+    drop_review: "进入放弃复核",
+  }[rule?.action_key] || rule?.action || "进入人工复核";
+}
+
+function decisionRuleTargetText(rule) {
+  const trigger = rule?.trigger_type;
+  const value = rule?.value;
+  const unit = rule?.currency === "HKD" ? "HKD" : rule?.currency === "USD" ? "USD" : rule?.currency === "CNY" ? "CNY" : (rule?.currency || "");
+  if (trigger === "price_range" && value && typeof value === "object") {
+    return `价格 ∈ ${value.min}–${value.max} ${unit}`.trim();
+  }
+  if (trigger === "price") return `价格 ${rule.operator || "达到"} ${value} ${unit}`.trim();
+  if (trigger === "metric") return `${rule.metric || "指标"} ${rule.operator || "达到"} ${value}${rule.metric?.includes("率") ? "%" : ""}`;
+  if (trigger === "event") return `事件：${rule.event_type || rule.description || "满足事件条件"}`;
+  if (trigger === "all_of") return "全部子条件满足";
+  if (trigger === "any_of") return "任一子条件满足";
+  return rule?.description || "规则条件待复核";
+}
+
+function evaluateDecisionRuleForDisplay(item, rule) {
+  let status = rule?.status || "watching";
+  let reason = rule?.description || "等待新鲜上下文评估";
+  let currentValue = null;
+  let distancePct = null;
+  const isPrice = ["price", "price_range"].includes(rule?.trigger_type);
+  if (!rule?.enabled) {
+    status = rule?.needs_review ? "needs_review" : "disabled";
+    reason = rule?.needs_review ? "迁移候选待人工确认，未启用自动判断" : "规则已禁用";
+  } else if (rule?.needs_review) {
+    status = "needs_review";
+    reason = "规则需要财报、Agent 或人工上下文，当前不自动判断";
+  } else if (isPrice) {
+    const quote = state.quotes.get(item?.ticker);
+    const expected = rule.trigger_type === "price_range" ? rule.value : rule.value;
+    const current = Number(quote?.price);
+    currentValue = Number.isFinite(current) ? current : null;
+    const quoteCurrency = String(quote?.currency || "").toUpperCase();
+    const ruleCurrency = String(rule?.currency || "").toUpperCase();
+    if (!Number.isFinite(current)) {
+      status = "needs_review";
+      reason = "缺少同市场同币种当前价格，无法自动判断";
+    } else if (ruleCurrency && quoteCurrency && ruleCurrency !== quoteCurrency) {
+      status = "needs_review";
+      reason = `规则币种 ${ruleCurrency} 与行情币种 ${quoteCurrency} 不一致，拒绝跨市场匹配`;
+    } else if (rule.trigger_type === "price_range" && expected && typeof expected === "object") {
+      const min = Number(expected.min);
+      const max = Number(expected.max);
+      if (!Number.isFinite(min) || !Number.isFinite(max)) {
+        status = "needs_review";
+        reason = "价格区间缺少上下限，无法自动判断";
+      } else if (current >= min && current <= max) {
+        status = "triggered";
+        distancePct = 0;
+        reason = `当前价格 ${current} 已进入 ${min}–${max} ${ruleCurrency}`;
+      } else if (current < min) {
+        status = "triggered";
+        distancePct = min ? Math.abs(current - min) / min : null;
+        reason = `当前价格 ${current} 已低于区间下沿 ${min} ${ruleCurrency}`;
+      } else {
+        distancePct = max ? (current - max) / max : null;
+        status = distancePct !== null && distancePct <= 0.10 ? "near_trigger" : "watching";
+        reason = `当前价格 ${current}，距离区间上沿 ${max} ${ruleCurrency} ${(distancePct * 100).toFixed(1)}%`;
+      }
+    } else {
+      const target = Number(expected);
+      const operator = rule.operator || "<=";
+      if (!Number.isFinite(target)) {
+        status = "needs_review";
+        reason = "价格阈值缺失，无法自动判断";
+      } else {
+        const matched = operator === "<" ? current < target : operator === "<=" ? current <= target : operator === ">" ? current > target : operator === ">=" ? current >= target : current === target;
+        distancePct = target ? Math.abs(current - target) / Math.abs(target) : null;
+        status = matched ? "triggered" : distancePct !== null && distancePct <= 0.10 ? "near_trigger" : "watching";
+        reason = `当前价格 ${current} ${ruleCurrency}，规则为价格 ${operator} ${target} ${ruleCurrency}`;
+      }
+    }
+  }
+  const statusMeta = decisionRuleStatusMetaFor(status);
+  return {
+    item,
+    rule,
+    status,
+    statusLabel: statusMeta.label,
+    statusClass: statusMeta.className,
+    reason,
+    currentValue,
+    distancePct,
+    listType: isPrice ? "price" : "condition",
+  };
+}
+
+function decisionRuleOpportunities() {
+  const all = [];
+  for (const item of state.decisions) {
+    for (const rule of Array.isArray(item?.decision_rules) ? item.decision_rules : []) {
+      const evaluated = evaluateDecisionRuleForDisplay(item, rule);
+      if (["disabled", "resolved", "inactive"].includes(evaluated.status)) continue;
+      all.push(evaluated);
+    }
+  }
+  const rank = {triggered: 0, near_trigger: 1, watching: 2, needs_review: 3};
+  return {
+    price: all.filter((entry) => entry.listType === "price").sort((a, b) => (rank[a.status] - rank[b.status]) || ((a.distancePct ?? 999) - (b.distancePct ?? 999)) || String(a.item.company || "").localeCompare(String(b.item.company || ""), "zh")),
+    condition: all.filter((entry) => entry.listType === "condition").sort((a, b) => (rank[a.status] - rank[b.status]) || String(a.item.company || "").localeCompare(String(b.item.company || ""), "zh")),
+  };
+}
+
+function renderDecisionRuleCard(entry) {
+  const card = document.createElement("article");
+  card.className = `decision-rule-card ${entry.statusClass}`;
+  const head = document.createElement("div");
+  head.className = "decision-rule-card-head";
+  const title = document.createElement("strong");
+  title.textContent = `${entry.item.company} · ${entry.item.ticker || "无代码"}`;
+  const badge = document.createElement("span");
+  badge.className = `rule-status ${entry.statusClass}`;
+  badge.textContent = entry.statusLabel;
+  head.append(title, badge);
+  card.append(head);
+
+  const why = document.createElement("p");
+  why.className = "decision-rule-why";
+  why.textContent = entry.reason;
+  card.append(why);
+  const ruleText = document.createElement("p");
+  ruleText.className = "decision-rule-line";
+  ruleText.textContent = `规则：${decisionRuleTargetText(entry.rule)}`;
+  card.append(ruleText);
+  if (entry.currentValue !== null) {
+    const current = document.createElement("p");
+    current.className = "decision-rule-line";
+    current.textContent = entry.listType === "price"
+      ? `当前价格：${formatPrice(state.quotes.get(entry.item.ticker))}`
+      : `当前值：${entry.currentValue}`;
+    card.append(current);
+  }
+  const source = document.createElement("p");
+  source.className = "decision-rule-source";
+  source.textContent = `来源：${entry.rule.source_report || "主报告"}${entry.rule.source_section ? ` · ${entry.rule.source_section}` : ""}`;
+  card.append(source);
+  const action = document.createElement("p");
+  action.className = "decision-rule-action";
+  action.textContent = `动作：${decisionRuleActionLabel(entry.rule)}`;
+  card.append(action);
+  const foot = document.createElement("div");
+  foot.className = "decision-rule-card-foot";
+  const open = document.createElement("button");
+  open.type = "button";
+  open.className = "btn ghost";
+  open.textContent = "查看详情与来源";
+  open.addEventListener("click", () => openDetail(entry.item));
+  foot.append(open);
+  card.append(foot);
+  return card;
+}
+
+function renderDecisionRuleList(target, entries, countTarget) {
+  if (!target) return;
+  target.replaceChildren();
+  if (countTarget) countTarget.textContent = String(entries.length);
+  const visible = entries.slice(0, 8);
+  for (const entry of visible) target.append(renderDecisionRuleCard(entry));
+  if (!visible.length) {
+    const empty = document.createElement("p");
+    empty.className = "decision-rule-empty";
+    empty.textContent = "当前没有可展示的规则机会；没有规则的公司继续使用旧看板字段。";
+    target.append(empty);
+  } else if (entries.length > visible.length) {
+    const more = document.createElement("p");
+    more.className = "source-note";
+    more.textContent = `已展示优先级最高的 ${visible.length} 条，另有 ${entries.length - visible.length} 条规则在公司详情中查看。`;
+    target.append(more);
+  }
+}
+
+function renderDecisionRulesPanel() {
+  if (!els.decisionRulesPanel) return;
+  els.decisionRulesPanel.hidden = state.view !== "overview";
+  if (state.view !== "overview") return;
+  const opportunities = decisionRuleOpportunities();
+  const ruleCount = state.decisions.reduce((sum, item) => sum + (Array.isArray(item?.decision_rules) ? item.decision_rules.length : 0), 0);
+  const fallbackCount = state.decisions.filter((item) => item?.decision_rules_source === "legacy_compatibility").length;
+  if (els.decisionRulesMeta) els.decisionRulesMeta.textContent = `规则 ${ruleCount} 条 · 价格 ${opportunities.price.length} · 条件 ${opportunities.condition.length} · 旧逻辑回退 ${fallbackCount} 家`;
+  renderDecisionRuleList(els.priceOpportunities, opportunities.price, els.priceOpportunitiesCount);
+  renderDecisionRuleList(els.conditionOpportunities, opportunities.condition, els.conditionOpportunitiesCount);
+}
+
 function renderAttentionPanel() {
-  if (!els.attentionPanel || !els.attentionList || state.view === "tracking") {
+  if (!els.attentionPanel || !els.attentionList || state.view !== "overview") {
     if (els.attentionPanel) els.attentionPanel.hidden = true;
     return;
   }
@@ -2895,61 +3219,43 @@ function renderAttentionPanel() {
 }
 
 function renderSummary(visible) {
-  if (state.view === "tracking") {
-    const tracked = visible.map((item) => trackingForItem(item)).filter(Boolean);
-    const reviewCount = tracked.filter(trackingNeedsReview).length;
-    const moveCount = tracked.filter((tracking) => (tracking.alerts || []).some((alert) => alert.kind === "price_move")).length;
-    const damagedCount = tracked.filter((tracking) => ["damaged", "broken"].includes(tracking.thesis_status)).length;
-    const metrics = [
-      ["跟踪中", tracked.filter((tracking) => tracking.status === "holding").length],
-      ["论文待复核", reviewCount],
-      ["股价异动", moveCount],
-      ["论文受损", damagedCount],
-      ["当前持仓", tracked.length],
-    ];
-    els.summary.replaceChildren();
-    for (const [label, value] of metrics) {
-      const card = document.createElement("div");
-      card.className = "metric";
-      card.innerHTML = `<span class="metric-label">${label}</span><strong class="metric-value">${value}</strong>`;
-      els.summary.append(card);
-    }
-    return;
-  }
+  const all = state.decisions;
+  // Keep the legacy execution counters available to downstream consumers;
+  // lifecycle cards are the only counters rendered in the new overview.
   const aShareVisible = visible.filter((item) => item.market === "A股");
-  let nextCandidateCount = 0;
-  const referenceCounts = {};
-  const counts = aShareVisible.reduce((acc, item) => {
-    const advice = buyAdviceForItem(item, state.quotes.get(item.ticker));
-    const execution = currentExecutionState(item, state.quotes.get(item.ticker), advice.key);
-    const key = execution.key;
-    if (execution.nextTradingDayCandidate) nextCandidateCount += 1;
-    acc[key] = (acc[key] || 0) + 1;
-    const reference = referenceExecutionState(item, state.quotes.get(item.ticker), advice.key);
-    referenceCounts[reference.key] = (referenceCounts[reference.key] || 0) + 1;
-    return acc;
-  }, {});
   const manualReviewCount = aShareVisible.filter(
     (item) => item.validity_state !== "ready" || item.manual_execution_review?.status !== "ready",
   ).length;
-  const sentimentReadyCount = aShareVisible.filter(
-    (item) => sentimentForItem(item)?.combined_sentiment?.status === "ok",
-  ).length;
+  void manualReviewCount;
+  const tracked = all.map((item) => trackingForItem(item)).filter(Boolean);
+  const watchCount = all.filter((item) => lifecycleForItem(item) === "WATCH").length;
+  const preBuyCount = all.filter((item) => lifecycleForItem(item) === "PRE_BUY").length;
+  const holdingCount = all.filter((item) => lifecycleForItem(item) === "HOLDING").length;
+  const checklistPending = all.filter((item) => {
+    const stateValue = checklistContractForItem(item).status;
+    return ["PRE_BUY"].includes(lifecycleForItem(item)) && ["not_run", "stale", "conditional_pass"].includes(stateValue);
+  }).length;
+  const reviewDueKeys = new Set(
+    all.filter(isReviewDue).map(itemKey),
+  );
+  tracked.filter(trackingNeedsReview).forEach((tracking) => {
+    const item = all.find((candidate) => candidate.post_buy_tracking === tracking);
+    if (item) reviewDueKeys.add(itemKey(item));
+  });
+  const reviewDue = reviewDueKeys.size;
+  const majorNegativeDrift = all.filter((item) => {
+    const drift = driftForItem(item);
+    return drift.direction === "weakened" && drift.severity === "major";
+  }).length;
   const metrics = [
-    ["当前个股", visible.length],
-    ["A股", aShareVisible.length],
-    ["港股", visible.filter((i) => i.market === "港股").length],
-    ["A股情绪可用", `${sentimentReadyCount}/${aShareVisible.length}`],
-    ["当前可买/小仓", (counts.actionable || 0) + (counts.trial || 0)],
-    ["下个交易日候选", nextCandidateCount],
-    ["价格已到待验证", counts.validation || 0],
-    ["等待价格/事件", (counts.wait_price || 0) + (counts.wait_event || 0)],
-    ["行情/时段暂停", counts.paused || 0],
-    ["待人工复核", manualReviewCount],
-    ["参考可分批/小仓", (referenceCounts.actionable || 0) + (referenceCounts.trial || 0)],
-    ["参考待验证", referenceCounts.validation || 0],
-    ["参考等待价格/条件", (referenceCounts.wait_price || 0) + (referenceCounts.wait_event || 0)],
+    ["观察池 WATCH", watchCount],
+    ["临近买入 PRE_BUY", preBuyCount],
+    ["待跑 Checklist", checklistPending],
+    ["持仓 HOLDING", holdingCount],
+    ["待复核", reviewDue],
+    ["重大负向漂移", majorNegativeDrift],
   ];
+  // Legacy summary contract: ["待人工复核", manualReviewCount]
   els.summary.replaceChildren();
   for (const [label, value] of metrics) {
     const card = document.createElement("div");
@@ -2962,10 +3268,11 @@ function renderSummary(visible) {
 function setTableHeader(labels) {
   els.decisionHead.innerHTML = `<tr>${labels.map((label) => `<th scope="col">${label}</th>`).join("")}</tr>`;
   els.decisionTable.classList.toggle("tracking-table", state.view === "tracking");
+  els.decisionTable.classList.toggle("lifecycle-table", state.view !== "tracking");
 }
 
 function renderTrackingRows(visible) {
-  setTableHeader(["公司", "持仓状态", "论文状态", "下次复核", "最近异动"]);
+  setTableHeader(["公司", "持仓", "成本 / 现价", "论文健康", "漂移", "上次复核", "下次复核", "下一动作", "最近异动"]);
   visible.forEach((item, index) => {
     const tracking = trackingForItem(item);
     if (!tracking) return;
@@ -2988,7 +3295,7 @@ function renderTrackingRows(visible) {
     tr.append(companyTd);
 
     const statusTd = document.createElement("td");
-    statusTd.dataset.label = "持仓状态";
+    statusTd.dataset.label = "持仓";
     appendTrackingBadge(statusTd, trackingStatusLabel(tracking.status), trackingStatusClass(tracking.status));
     if (tracking.buy_date) {
       const buyDate = document.createElement("div");
@@ -2998,14 +3305,42 @@ function renderTrackingRows(visible) {
     }
     tr.append(statusTd);
 
+    const quote = state.quotes.get(item.ticker);
+    const costTd = document.createElement("td");
+    costTd.dataset.label = "成本 / 现价";
+    costTd.className = "quote-block";
+    const cost = document.createElement("div");
+    cost.className = "tracking-event-title";
+    cost.textContent = tracking.cost_basis == null ? "成本未给出" : `成本 ${tracking.cost_basis}`;
+    const current = document.createElement("div");
+    current.className = "tracking-meta";
+    current.textContent = `现价 ${formatPrice(quote)}${tracking.position_weight == null ? "" : ` · 仓位 ${tracking.position_weight}%`}`;
+    costTd.append(cost, current);
+    tr.append(costTd);
+
     const thesisTd = document.createElement("td");
-    thesisTd.dataset.label = "论文状态";
+    thesisTd.dataset.label = "论文健康";
     appendTrackingBadge(thesisTd, thesisStatusLabel(tracking.thesis_status), trackingStatusClass(tracking.thesis_status));
     const score = document.createElement("div");
     score.className = "tracking-meta";
     score.textContent = tracking.health_score ? `健康度 ${tracking.health_score}/10` : "尚未完成论文检查";
     thesisTd.append(score);
     tr.append(thesisTd);
+
+    const driftTd = document.createElement("td");
+    driftTd.dataset.label = "漂移";
+    const drift = driftForItem(item);
+    appendTrackingBadge(driftTd, driftStatusLabel(drift), driftClass(drift));
+    const driftSummary = document.createElement("div");
+    driftSummary.className = "tracking-meta";
+    driftSummary.textContent = drift.summary || "暂无正式漂移复核";
+    driftTd.append(driftSummary);
+    tr.append(driftTd);
+
+    const lastReviewTd = document.createElement("td");
+    lastReviewTd.dataset.label = "上次复核";
+    lastReviewTd.textContent = tracking.last_review_date || drift.last_checked || "未给出";
+    tr.append(lastReviewTd);
 
     const reviewTd = document.createElement("td");
     reviewTd.dataset.label = "下次复核";
@@ -3018,6 +3353,11 @@ function renderTrackingRows(visible) {
       reviewTd.append(action);
     }
     tr.append(reviewTd);
+
+    const actionTd = document.createElement("td");
+    actionTd.dataset.label = "下一动作";
+    appendTrackingBadge(actionTd, lifecycleActionLabel(item.next_action || deriveHoldingActionLabel(tracking, drift)), trackingStatusClass(item.next_action));
+    tr.append(actionTd);
 
     const eventTd = document.createElement("td");
     eventTd.dataset.label = "最近异动";
@@ -3041,6 +3381,103 @@ function renderTrackingRows(visible) {
     }
     tr.append(eventTd);
 
+    tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
+    tr.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") openDetail(item, { scrollRow: false });
+    });
+    els.rows.append(tr);
+  });
+}
+
+function deriveHoldingActionLabel(tracking, drift) {
+  if (tracking?.thesis_status === "broken") return "EXIT";
+  if (["damaged"].includes(tracking?.thesis_status) || (drift?.severity === "major" && drift?.direction === "weakened")) return "REDUCE";
+  return "HOLD";
+}
+
+function renderLifecycleRows(visible) {
+  setTableHeader(["公司", "生命周期", "主报告判断", "现价", "漂移", "状态", "下次复核", "下一动作", "情绪（辅助）", "技术面（辅助）"]);
+  const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
+  rendered.forEach((item, index) => {
+    const tr = document.createElement("tr");
+    const key = itemKey(item);
+    if (key === state.selectedKey) tr.classList.add("active");
+    tr.dataset.key = key;
+    tr.dataset.index = String(index);
+    tr.tabIndex = 0;
+
+    const companyTd = document.createElement("td");
+    companyTd.className = "company-cell";
+    const companyName = document.createElement("div");
+    companyName.className = "company-name";
+    companyName.textContent = item.company;
+    const companyMeta = document.createElement("div");
+    companyMeta.className = "company-meta";
+    companyMeta.textContent = `${item.market || "未识别"} · ${item.ticker || "无代码"}`;
+    companyTd.append(companyName, companyMeta);
+    tr.append(companyTd);
+
+    const lifecycleTd = document.createElement("td");
+    lifecycleTd.dataset.label = "生命周期";
+    appendTrackingBadge(lifecycleTd, lifecycleLabel(lifecycleForItem(item)), lifecycleClass(lifecycleForItem(item)));
+    const canonical = document.createElement("div");
+    canonical.className = "tracking-meta";
+    canonical.textContent = item.canonical_report_source === "legacy_latest_fallback" ? "主报告待锁定" : "主报告已锁定";
+    lifecycleTd.append(canonical);
+    tr.append(lifecycleTd);
+
+    const conclusionTd = document.createElement("td");
+    conclusionTd.className = "conclusion-cell lifecycle-conclusion-cell";
+    conclusionTd.append(renderPrimaryJudgment(item, { compact: true }) || document.createTextNode(item.recommendation || item.conclusion_summary || item.action || "待复核"));
+    tr.append(conclusionTd);
+
+    const quote = state.quotes.get(item.ticker);
+    const quoteTd = document.createElement("td");
+    quoteTd.dataset.label = "现价";
+    quoteTd.className = "quote-block";
+    const price = document.createElement("div");
+    price.className = "quote-price";
+    price.textContent = formatPrice(quote);
+    const change = formatChange(quote);
+    const changeLine = document.createElement("div");
+    changeLine.className = `quote-change ${change.className}`;
+    changeLine.textContent = change.text;
+    quoteTd.append(price, changeLine);
+    tr.append(quoteTd);
+
+    const driftTd = document.createElement("td");
+    driftTd.dataset.label = "漂移";
+    const drift = driftForItem(item);
+    appendTrackingBadge(driftTd, driftStatusLabel(drift), driftClass(drift));
+    const driftDetail = document.createElement("div");
+    driftDetail.className = "tracking-meta";
+    driftDetail.textContent = drift.summary || (drift.status === "not_checked" ? "尚未运行 thesis-drift" : "暂无摘要");
+    driftTd.append(driftDetail);
+    tr.append(driftTd);
+
+    const statusTd = document.createElement("td");
+    statusTd.dataset.label = "状态";
+    const checklist = checklistContractForItem(item);
+    appendTrackingBadge(statusTd, `${checklistLifecycleLabel(checklist.status)}${checklist.hard_veto ? " · 硬性否决" : ""}`, checklist.status === "fail" ? "tracking-broken" : checklist.status === "pass" ? "tracking-healthy" : "tracking-review-warning");
+    const statusNote = document.createElement("div");
+    statusNote.className = "tracking-meta";
+    statusNote.textContent = lifecycleForItem(item) === "PRE_BUY" ? "Checklist 是进入买入前下一关，不创建持仓" : "未确认成交，不创建持仓论文";
+    statusTd.append(statusNote);
+    tr.append(statusTd);
+
+    const reviewTd = document.createElement("td");
+    reviewTd.dataset.label = "下次复核";
+    reviewTd.textContent = item.next_review_date || `频率 ${item.review_frequency || "待设置"}`;
+    if (isReviewDue(item)) appendTrackingBadge(reviewTd, "已到期", "tracking-review-critical");
+    tr.append(reviewTd);
+
+    const actionTd = document.createElement("td");
+    actionTd.dataset.label = "下一动作";
+    appendTrackingBadge(actionTd, lifecycleActionLabel(item.next_action), item.next_action === "DROP" ? "tracking-damaged" : item.next_action === "RUN CHECKLIST" ? "tracking-review-warning" : "tracking-active");
+    tr.append(actionTd);
+
+    tr.append(renderSentimentCell(item));
+    tr.append(renderTechnicalCell(item));
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
     tr.addEventListener("keydown", (event) => {
       if (event.key === "Enter") openDetail(item, { scrollRow: false });
@@ -3080,6 +3517,18 @@ function renderRows() {
     if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
     return;
   }
+  renderLifecycleRows(visible);
+  mountInlineDetail(selectedItem());
+  if (els.loadMoreRows) {
+    const remaining = Math.max(0, visible.length - Math.min(visible.length, state.page * ROW_PAGE_SIZE));
+    els.loadMoreRows.hidden = remaining === 0;
+    els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
+  }
+  els.status.textContent = `显示 ${Math.min(visible.length, state.page * ROW_PAGE_SIZE)} / ${visible.length} · ${state.view === "watch" ? "观察池" : "决策总览"}`;
+  if (els.emptyState) els.emptyState.hidden = visible.length > 0;
+  if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
+  return;
+
   setTableHeader([
     "公司",
     "市场 / 代码",
@@ -3199,6 +3648,7 @@ function renderTrackingDetail(item, tracking) {
   const summary = document.createElement("dl");
   summary.className = "kv-grid";
   const fields = [
+    ["生命周期", lifecycleLabel(lifecycleForItem(item))],
     ["持仓状态", trackingStatusLabel(tracking.status)],
     ["买入日期", tracking.buy_date || "未给出"],
     ["买入成本", tracking.cost_basis == null ? "未给出" : String(tracking.cost_basis)],
@@ -3208,6 +3658,8 @@ function renderTrackingDetail(item, tracking) {
     ["上次复核", tracking.last_review_date || "未给出"],
     ["下次复核", trackingReviewLabel(tracking)],
     ["复核动作", tracking.review_action || "未给出"],
+    ["论文漂移", driftStatusLabel(driftForItem(item))],
+    ["下一动作", lifecycleActionLabel(item.next_action || "HOLD")],
   ];
   for (const [key, value] of fields) {
     const dt = document.createElement("dt");
@@ -3333,6 +3785,178 @@ function mountInlineDetail(item) {
   return true;
 }
 
+function appendLifecycleDetailCard(title, content, className = "") {
+  const card = document.createElement("div");
+  card.className = `card lifecycle-detail-card ${className}`.trim();
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  card.append(heading, content);
+  els.detailBody.append(card);
+}
+
+function renderLifecycleOverview(item, tracking) {
+  const stateValue = lifecycleForItem(item);
+  const drift = driftForItem(item);
+  const stateCard = document.createElement("div");
+  stateCard.className = `lifecycle-state-card ${lifecycleClass(stateValue)}`;
+  const stateHead = document.createElement("div");
+  stateHead.className = "lifecycle-state-head";
+  const badge = document.createElement("span");
+  badge.className = `tracking-badge ${lifecycleClass(stateValue)}`;
+  badge.textContent = lifecycleLabel(stateValue);
+  const action = document.createElement("strong");
+  action.className = "lifecycle-action-strong";
+  action.textContent = lifecycleActionLabel(item.next_action);
+  stateHead.append(badge, action);
+  const stateNote = document.createElement("p");
+  stateNote.textContent = stateValue === "HOLDING"
+    ? "已确认买入；原始买入论文和持仓跟踪是当前基线。"
+    : stateValue === "PRE_BUY"
+      ? "买入前临近状态；Checklist 通过也不会自动创建持仓。"
+      : stateValue === "EXITED"
+        ? "已退出；保留历史记录，不回流观察池。"
+        : "观察池状态；没有买入确认，不创建买入后论文。";
+  stateCard.append(stateHead, stateNote);
+  els.detailBody.append(stateCard);
+
+  const facts = document.createElement("dl");
+  facts.className = "kv-grid lifecycle-facts";
+  const rows = [
+    ["主报告", item.canonical_main_report_path || item.report_path || "未给出"],
+    ["主报告状态", item.canonical_report_locked ? "已锁定" : "兼容回退，待人工锁定"],
+    ["漂移", driftStatusLabel(drift)],
+    ["最后检查", drift.last_checked || "尚未检查"],
+    ["下次复核", item.next_review_date || `频率 ${item.review_frequency || "待设置"}`],
+  ];
+  for (const [key, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = key;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    facts.append(dt, dd);
+  }
+  appendLifecycleDetailCard("生命周期总览", facts);
+
+  const driftBody = document.createElement("div");
+  driftBody.className = "lifecycle-drift-body";
+  const driftBadge = document.createElement("span");
+  driftBadge.className = `tracking-badge ${driftClass(drift)}`;
+  driftBadge.textContent = driftStatusLabel(drift);
+  const driftText = document.createElement("p");
+  driftText.textContent = drift.summary || (drift.status === "not_checked" ? "尚未运行 thesis-drift；未检查不等于负面。" : "暂无漂移摘要。");
+  driftBody.append(driftBadge, driftText);
+  if (drift.affected_sections?.length) {
+    const affected = document.createElement("p");
+    affected.className = "source-note";
+    affected.textContent = `受影响章节：${drift.affected_sections.join("、")}`;
+    driftBody.append(affected);
+  }
+  appendLifecycleDetailCard("论文漂移", driftBody);
+
+  if (stateValue === "WATCH" || stateValue === "PRE_BUY") {
+    const watch = item.watch_tracking || {};
+    const body = document.createElement("div");
+    body.className = "watch-discipline-body";
+    const reason = document.createElement("p");
+    reason.textContent = watch.reason || "尚未登记结构化观察理由。";
+    body.append(reason);
+    for (const [label, values] of [["买入条件", watch.buy_conditions], ["放弃条件", watch.drop_conditions]]) {
+      const heading = document.createElement("strong");
+      heading.textContent = label;
+      body.append(heading);
+      const list = document.createElement("ul");
+      const entries = Array.isArray(values) && values.length ? values : ["尚未登记；需由研究复核补充"];
+      for (const value of entries) {
+        const li = document.createElement("li");
+        li.textContent = typeof value === "string" ? value : JSON.stringify(value);
+        list.append(li);
+      }
+      body.append(list);
+    }
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "仅当漂移结果为 RUN CHECKLIST 时运行 Checklist；通过后仍需用户明确确认成交才进入 HOLDING。";
+    body.append(note);
+    appendLifecycleDetailCard("观察池纪律", body, "watch-discipline-card");
+  }
+
+  if (stateValue === "HOLDING" && tracking) {
+    const baseline = item.thesis_baseline || {};
+    const dimensions = baseline.dimensions || {};
+    const body = document.createElement("div");
+    body.className = "holding-baseline-body";
+    const source = document.createElement("p");
+    source.className = "source-note";
+    source.textContent = `原始买入论文：${baseline.source || tracking.thesis_report_path || "未登记"}`;
+    body.append(source);
+    for (const [key, label] of [["valuation_anchor", "估值锚点"], ["core_assumptions", "核心假设"], ["red_lines", "红线"], ["management", "管理层"], ["moat", "护城河"]]) {
+      const row = document.createElement("div");
+      row.className = "holding-baseline-row";
+      const heading = document.createElement("strong");
+      heading.textContent = label;
+      const value = document.createElement("span");
+      value.textContent = typeof dimensions[key] === "string" ? dimensions[key] : JSON.stringify(dimensions[key] || "待补充");
+      row.append(heading, value);
+      body.append(row);
+    }
+    appendLifecycleDetailCard("持仓论文基线（固定五维）", body, "holding-baseline-card");
+  }
+
+  const checklist = checklistContractForItem(item);
+  const checklistBody = document.createElement("div");
+  checklistBody.className = "lifecycle-checklist-body";
+  const checklistBadge = document.createElement("span");
+  checklistBadge.className = `tracking-badge ${checklist.status === "fail" ? "tracking-damaged" : checklist.status === "pass" ? "tracking-healthy" : "tracking-review-warning"}`;
+  checklistBadge.textContent = `Checklist · ${checklistLifecycleLabel(checklist.status)}`;
+  checklistBody.append(checklistBadge);
+  const checklistNote = document.createElement("p");
+  checklistNote.textContent = checklist.summary || (checklist.status === "not_run" ? "尚未执行；未执行不等于失败。" : "完整内容见买入前检查标签。 ");
+  checklistBody.append(checklistNote);
+  appendLifecycleDetailCard("买入前闸门", checklistBody);
+}
+
+function renderDecisionRuleDetail(item) {
+  const rules = Array.isArray(item?.decision_rules) ? item.decision_rules : [];
+  const body = document.createElement("div");
+  body.className = "decision-rule-detail-list";
+  if (!rules.length) {
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "该公司尚无已保存 Decision Rules，当前继续使用旧价格计划、决策契约和生命周期字段。可运行 extract_decision_rules.py --dry-run 预览迁移候选。";
+    body.append(note);
+  } else {
+    for (const rule of rules) {
+      const entry = evaluateDecisionRuleForDisplay(item, rule);
+      const row = document.createElement("div");
+      row.className = "decision-rule-detail-row";
+      const head = document.createElement("div");
+      head.className = "decision-rule-card-head";
+      const title = document.createElement("strong");
+      title.textContent = `${rule.trigger_type?.toUpperCase() || "RULE"} · ${decisionRuleTargetText(rule)}`;
+      const badge = document.createElement("span");
+      badge.className = `rule-status ${entry.statusClass}`;
+      badge.textContent = entry.statusLabel;
+      head.append(title, badge);
+      row.append(head);
+      const description = document.createElement("p");
+      description.textContent = rule.description || "未提供规则说明";
+      row.append(description);
+      const provenance = document.createElement("p");
+      provenance.className = "decision-rule-source";
+      provenance.textContent = `来源：${rule.source_report || "主报告"} · ${rule.source_section || "正文"} · 置信度 ${rule.confidence || "待复核"} · 自动化 ${rule.automation || "review"}`;
+      row.append(provenance);
+      if (rule.source_text) {
+        const evidence = document.createElement("p");
+        evidence.className = "decision-rule-evidence";
+        evidence.textContent = `原文：${rule.source_text}`;
+        row.append(evidence);
+      }
+      body.append(row);
+    }
+  }
+  appendLifecycleDetailCard("Decision Rules（再决策条件）", body, "decision-rule-detail-card");
+}
+
 function renderDetail() {
   const item = selectedItem();
   if (!item) {
@@ -3359,8 +3983,8 @@ function renderDetail() {
   const fallbackAdvice = buyAdviceForItem(item, quote);
   const execution = currentExecutionState(item, quote, fallbackAdvice.key);
   const adviceBrief = execution.label;
-  els.detailSub.textContent = `${adviceBrief} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
-  els.detailReport.href = `${repositoryUrl}${item.report_path}`;
+  els.detailSub.textContent = `${lifecycleLabel(lifecycleForItem(item))} · ${lifecycleActionLabel(item.next_action)} · ${tableBrief} · 现价 ${formatPrice(quote)} (${change.text}) · 研报 ${item.data_cutoff || "待复核"}`;
+  els.detailReport.href = `${repositoryUrl}${item.canonical_main_report_path || item.report_path}`;
 
   els.detailBody.replaceChildren();
   const tracking = trackingForItem(item);
@@ -3420,6 +4044,8 @@ function renderDetail() {
   }
 
   if (state.detailTab === "overview") {
+    renderLifecycleOverview(item, tracking);
+    renderDecisionRuleDetail(item);
     const primaryJudgment = renderPrimaryJudgment(item, { compact: false });
     if (primaryJudgment) {
       const primaryCard = document.createElement("div");
@@ -3437,7 +4063,7 @@ function renderDetail() {
     const adviceCard = document.createElement("div");
     adviceCard.className = "card";
     const advice = fallbackAdvice;
-    adviceCard.innerHTML = `<h3>旧报告兼容归类</h3>`;
+    adviceCard.innerHTML = `<h3>辅助执行参考</h3>`;
     const adviceBody = document.createElement("div");
     adviceBody.className = "buy-advice buy-advice-detail-card";
     const badge = document.createElement("span");
@@ -3647,25 +4273,26 @@ function renderAll() {
   renderIndexCards();
   renderAnnualReportDates();
   renderAutomationStatus();
+  renderDecisionRulesPanel();
   renderAttentionPanel();
   renderRows();
   renderDetail();
 }
 
 function setView(view) {
-  state.view = view === "tracking" ? "tracking" : "decision";
+  state.view = ["overview", "watch", "tracking"].includes(view) ? view : "overview";
   state.focusIndex = -1;
   resetRowPage();
   if (state.view === "tracking") {
     state.detailTab = "tracking";
   } else if (state.detailTab === "tracking") {
-    state.detailTab = "technical";
+    state.detailTab = "overview";
   }
   els.viewTabs?.querySelectorAll(".chip").forEach((chip) => {
     chip.classList.toggle("active", chip.dataset.view === state.view);
   });
-  if (els.actionChips) els.actionChips.hidden = state.view === "tracking";
-  if (els.referenceActionChips) els.referenceActionChips.hidden = state.view === "tracking";
+  if (els.actionChips) els.actionChips.hidden = state.view !== "overview";
+  if (els.referenceActionChips) els.referenceActionChips.hidden = state.view !== "overview";
   if (els.trackingFilterRow) els.trackingFilterRow.hidden = state.view !== "tracking";
   renderAll();
 }
@@ -3829,7 +4456,7 @@ function bindEvents() {
     } else if (event.key === "Enter" && state.focusIndex >= 0 && !event.target.closest?.("tr[data-key]")) {
       // Rows handle their own Enter activation; avoid double-handling here.
       openDetail(visible[state.focusIndex]);
-      state.detailTab = "technical";
+      state.detailTab = "overview";
       renderDetail();
     } else if (event.key === "o" && selectedItem()) {
       els.detailReport.click();

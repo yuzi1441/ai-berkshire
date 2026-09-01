@@ -5,7 +5,7 @@
 **支持输入格式**：
 - `公司名 旧报告路径 新报告路径` — 指定两份研究报告或论文快照进行对比
 - `公司名 reports/{公司名}-thesis-旧日期.md reports/{公司名}-thesis-新日期.md` — 对比两份带日期的论文快照
-- `公司名` — 自动查找 `reports/{公司名}-thesis.md` 及同目录历史快照；如果没有基线则转入缺失基线处理
+- `公司名` — 默认进入看板生命周期漂移模式：先读取 `decision_board.json`、`thesis_drift.json`、`watch_tracking.json` 和 `post_buy_tracking.json`，以基线和最新事实做增量检查；如果没有基线则转入缺失基线处理
 
 > "当事实改变时，我就改变想法。你呢？" —— 凯恩斯
 >
@@ -20,21 +20,78 @@
 
 投资论文漂移检测的目标是：**只在证据变化时承认论文变化**。不能因为报告换了写法就制造漂移，也不能因为股价涨跌就误判基本面。
 
-本 Skill 依赖 `/thesis-tracker` 输出的结构化维度：核心假设清单、红线清单、估值锚点、追踪记录表。没有这些结构时，先补齐基线，再做漂移检测。
+本 Skill 依赖 `/thesis-tracker` 输出的结构化维度：核心假设清单、红线清单、估值锚点、追踪记录表。看板中的 `post_buy_tracking` 是持仓真相源；`WATCH/PRE_BUY` 不得创建买入论文。没有结构化基线时，先标注缺失，不得把最新主报告直接伪装成历史基线。
 
 ## 执行流程
 
 ### 第一步：判断操作模式
 
 解析 `$ARGUMENTS`：
-- 如果提供两份报告路径 → 进入**指定报告对比**模式
-- 如果只提供公司名 → 查找 `reports/{公司名}-thesis.md` 及历史快照，进入**自动快照对比**模式
-- 如果只找到一份报告或没有历史基线 → 进入**缺失基线处理**模式
+- 如果只提供公司名且看板能找到标的 → 默认进入**生命周期模式**，先分流 WATCH/PRE_BUY 或 HOLDING
+- 如果提供两份报告路径 → 进入**手动指定报告对比**模式
+- 如果只提供公司名但找不到结构化基线 → 进入**缺失基线处理**模式
 - 如果两份报告不是同一家公司 → 停止并要求用户确认，不做跨公司漂移判断
+
+## 模式0：生命周期漂移（默认路径）
+
+### 0A：识别生命周期
+
+按以下优先级解析当前状态：
+
+1. `post_buy_tracking.positions[ticker]` 中 `status=holding/paused` → `HOLDING`
+2. `status=closed` 或显式退出记录 → `EXITED`
+3. `lifecycle.json` 的显式记录 → `WATCH` 或 `PRE_BUY`
+4. 没有实际买入确认 → 默认 `WATCH`
+
+主报告写着“买入/分批买入”不能创建持仓，也不能跳过 Checklist。`WATCH` 与 `PRE_BUY` 只允许 `KEEP WATCH / RUN CHECKLIST / DROP`。
+
+### 0B：WATCH/PRE_BUY MODE
+
+读取 `watch_tracking.json` 的轻量记录和当前 canonical main report，只关注买入条件、放弃条件、估值/价格锚点与最新事实。不得写入买入论文，不得输出 `ADD/HOLD/REDUCE/EXIT`。
+
+固定输出：
+
+```json
+{
+  "mode": "watch",
+  "lifecycle": "WATCH",
+  "drift_direction": "improved|unchanged|weakened",
+  "severity": "none|minor|major",
+  "action": "keep_watch|run_checklist|drop",
+  "buy_conditions_met": 0,
+  "buy_conditions_total": 0,
+  "patch_required": false,
+  "affected_sections": [],
+  "last_checked": "YYYY-MM-DD",
+  "next_review": "YYYY-MM-DD"
+}
+```
+
+判定规则：没有新事实就是 `unchanged + none + keep_watch`；只有价格/估值变化时更新看板或建议复跑 Checklist，不改写主报告；买入条件全部满足才输出 `run_checklist`；重大负面事实或红线触发才输出 `drop`。minor/major 基本面变化要列出受影响的主报告章节，但只有确有必要时才 patch canonical report，不新建一篇完整报告。
+
+### 0C：HOLDING MODE
+
+持仓基线只来自原始买入论文和 `post_buy_tracking`，固定检查五个维度：`valuation_anchor`、`core_assumptions`、`red_lines`、`management`、`moat`。价格跌涨本身不能判定论文破裂。
+
+固定输出动作只有 `ADD / HOLD / REDUCE / EXIT`：红线或核心假设破裂 → `EXIT`；重大弱化/论文受损 → `REDUCE`；健康且新增加仓条件已验证 → `ADD`；其余 → `HOLD`。输出后必须保留并更新原有持仓字段、健康度、指标、复核日期和事件记录，不能另建一套持仓真相源。
+
+### 0D：增量更新与历史上限
+
+每次运行只记录本次新事实和五维变化。`data/investment-dashboard/thesis_drift.json` 中每个标的的 `history` 最多保留 12 条；无变化时不修改 canonical main report。结构化结果至少包含 `status`、`direction`、`severity`、`action`、`patch_required`、`affected_sections`、`last_checked`、`next_review` 和证据摘要。
+
+### 0E：主报告修改门槛
+
+- `none`：不改主报告。
+- 只有价格/估值：更新看板，必要时 `RUN CHECKLIST`，不重写主报告。
+- `minor` 基本面变化：只 patch 受影响章节，并保留原文历史。
+- `major` 基本面变化：先做深度复核，再 patch canonical main report；不得让旧报告继续充当当前主报告。
+- 每家公司只能有一个 canonical main report；旧报告进入 `report_history`，不是第二个当前决策。
+
+该模式的最终报告必须同时列出：当前生命周期、漂移方向/严重度、五维证据对照、动作、是否需要 patch、下次复核日期，以及“技术面/情绪面仅辅助”的说明。
 
 ---
 
-## 模式A：指定报告对比
+## 兼容模式A：指定报告对比
 
 ### A1：读取并校验两份报告
 
@@ -149,7 +206,7 @@ python3 tools/financial_rigor.py calc --expr '{精确算式}'
 
 ---
 
-## 模式B：自动快照对比
+## 兼容模式B：自动快照对比
 
 ### B1：查找快照
 
@@ -208,3 +265,30 @@ python3 tools/financial_rigor.py calc --expr '{精确算式}'
 - **不确定就标注不确定** — 来源缺失、口径不一致、无法复核时，不要硬判
 - **红线单独处理** — 红线触发优先级高于估值便宜，不能被低 PE 掩盖
 - **输出必须可复盘** — 每个 Improved / Weakened 结论都要能追溯到具体证据
+- **生命周期先于报告措辞** — 看板先回答“现在处于观察、买入前、持仓还是退出”，报告结论只是证据层
+- **默认增量，不默认重写** — `thesis-drift 公司名` 不把新报告和旧报告全文机械比较，也不因为措辞变化生成新主报告
+- **动作必须受状态约束** — 未实际买入不能出现持仓动作；已持仓不能退回观察池掩盖卖出判断
+
+## Decision Rules 联动
+
+看板在主报告与生命周期之间增加持久化的 Decision Rules 层。规则只记录
+“什么情况下值得重新做决策”，不替代投资论文，也不直接生成 BUY/SELL。
+
+首次迁移使用 `python3 tools/extract_decision_rules.py --dry-run` 预览；确认后才使用
+`--write` 保存到 `data/investment-dashboard/decision_rules.json`。每条规则必须保留
+`source_report`、`source_section`、`source_text`、`created_at`、`updated_at`，抽取不明确的
+条件标记 `confidence=low` / `needs_review=true`，并关闭自动判断。
+
+规则状态与漂移的衔接如下：
+
+```text
+主报告 → 首次规则抽取 → WATCH
+价格规则 → 新鲜同市场行情自动评估
+指标/事件规则 → 财报、事件或 thesis-drift 复核
+规则接近/触发 → RUN CHECKLIST 或 Thesis Review
+用户确认成交 → Buy Thesis → HOLDING Drift
+```
+
+价格规则必须绑定具体 `ticker`、`market`、`currency`；基本面规则可以使用共同的
+`company_id`。漂移变弱时，看板只将相关条件规则标为 `needs_review`，不会自动调仓；
+`HOLDING` 的最终动作仍由原始买入论文和用户确认的跟踪结果决定。

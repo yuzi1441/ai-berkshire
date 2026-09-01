@@ -15,10 +15,10 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 
 # 投资论文追踪：买入后的纪律系统
 
-对 $ARGUMENTS 执行投资论文追踪检查。
+对 $ARGUMENTS 执行买入后投资论文追踪检查。
 
 **支持输入格式**：
-- `公司名` — 首次使用时建立投资论文，后续使用时追踪检查
+- `公司名` — 仅对已明确买入并登记的持仓执行；首次使用时建立买入后投资论文，后续使用时追踪检查
 - `公司名 建立论文` — 强制重新建立投资论文
 - `公司名 季度检查` — 基于最新财报进行论文检查
 
@@ -39,14 +39,19 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 
 ### 第一步：判断操作模式
 
-检查是否已存在该公司的投资论文文件（`reports/{公司名}-thesis.md`）：
+先读取 `data/investment-dashboard/post_buy_tracking.json`，按股票代码确认用户已经明确登记实际买入：
+- `status=holding/paused` → 允许进入建立或追踪模式
+- 没有登记、只有主报告“买入/分批买入”、或只存在 `WATCH/PRE_BUY` → 停止，不建立持仓论文；返回观察池并提示先确认成交信息
+- `status=closed` → 只允许归档/复盘，不得重新创建一条持仓
+
+确认存在实际持仓后，再检查是否已存在该公司的投资论文文件（`reports/{公司名}-thesis.md`）：
 - 如果不存在 → 进入**建立论文**模式
 - 如果存在 → 进入**追踪检查**模式
 - 如果找不到但用户表示已有 → 询问文件路径
 
 ---
 
-## 模式A：建立投资论文
+## 模式A：建立买入后投资论文
 
 ### A0：数据收集
 
@@ -120,6 +125,8 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 
 **只有用户明确确认已实际买入时**，才建立持仓跟踪；基本面主报告中的“买入/分批买入”不能替代这一确认。
 
+本模式不接受“帮我看看是否值得买”作为买入确认。缺少成交日期、成本或仓位时，保留 WATCH/PRE_BUY 状态，不猜测、不登记、不创建 thesis。
+
 从主报告、用户提供的成交信息和本次论文中取得公司、股票代码、市场、买入日期、成本、仓位和下次复核日期。缺少股票代码、市场或买入日期时，不得猜测或登记，明确向用户索取缺失项。
 
 确认信息齐全后，使用项目工具登记一条持仓。`position-weight` 使用百分比，例如 `5` 表示 5% 仓位；`metrics` 填入本论文的 3-5 个核心跟踪指标（JSON 列表）。
@@ -143,7 +150,7 @@ python3 tools/build_investment_dashboard.py
 
 ---
 
-## 模式B：追踪检查
+## 模式B：持仓追踪检查
 
 ### B1：读取现有论文
 
@@ -255,6 +262,15 @@ python3 tools/build_investment_dashboard.py
 
 若该公司尚未登记为实际持仓，保留论文文件但不要尝试用论文结论自动建立持仓。
 
+### B9：与生命周期漂移衔接
+
+`thesis-tracker` 只维护 `HOLDING` 的买入基线和健康度；`thesis-drift` 负责把五个固定维度映射为 `ADD/HOLD/REDUCE/EXIT`。输出必须写回已有 `post_buy_tracking`，不能另建持仓表。价格/估值变化单独记录，除非核心假设或红线变化，不得把价格波动写成论文破裂。
+
+Decision Rules 是买入前和持仓后之间的再决策提示层，不是持仓表。价格规则只能提示
+重新运行 Checklist；指标、事件和组合规则交给 thesis-drift / review 核对。进入 `HOLDING`
+后，规则触发只作为论文复核输入，最终 `ADD/HOLD/REDUCE/EXIT` 仍以原始买入论文和本次
+持仓复核为准，不自动调仓。
+
 ---
 
 ## 关键原则
@@ -264,3 +280,4 @@ python3 tools/build_investment_dashboard.py
 - **红线一旦触发就行动** — 最怕的是"再等等看"，这是亏大钱的开始
 - **论文破裂 ≠ 股价下跌** — 股价跌30%不一定要卖，论文破裂才要卖
 - **诚实面对错误** — 论文建错了就承认，不要为了面子硬撑
+- **没有成交就没有持仓论文** — 观察池是合法终点，不是等待被自动升级的临时状态

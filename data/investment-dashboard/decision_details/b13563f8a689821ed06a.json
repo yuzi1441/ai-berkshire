@@ -72,6 +72,9 @@
   },
   "price_status": "已提取",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -143,22 +146,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
+    "label": "等待验证",
+    "action_kind": "watch",
+    "empty_position_action": "当前不急追；等待更厚安全边际，或等待后续季度收入、GAAP利润率和自由现金流继续验证",
+    "holder_action": "可继续持有但设置验证线，重点跟踪2026收入指引、GAAP经营利润、BRUKINSA增速和自由现金流",
+    "trigger_condition": "ONC回到240-260美元且基本面未恶化时可重新研究；或后续季度收入保持高增长、GAAP利润率提升且FCF为正",
+    "summary": "公司质量和现金流正在改善，但当前估值合理偏贵；空仓耐心等待，持仓围绕经营杠杆和管线兑现继续验证。",
+    "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "conflict_note": "看板观察与正文持有或观察优先、空仓不急追一致；美元价格是美股ADS参考，不能直接用于A股。",
+    "source_basis": "人工逐行核对综合结论、分层操作建议和加减仓信号",
+    "currency": "CNY",
+    "price_source": "A股主记录使用CNY；主报告仅给出ONC 240-260 USD回调参考",
+    "evidence": [
+      {
+        "line_start": 352,
+        "line_end": 360,
+        "quote": "持有或观察优先，等待回调或继续验证；空仓不急追。ONC回到240-260美元且基本面未恶化时再研究建仓。",
+        "supports": "明确主动作是观察，并给出回调与经营验证条件。"
+      }
+    ],
+    "enabled": true,
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:55:22+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -166,15 +181,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
-    "guard_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待验证",
+    "condition_mode": "event_only",
+    "event_condition": "或后续季度收入保持高增长、GAAP利润率提升且FCF为正",
+    "guard_condition": "ONC回到240-260美元且基本面未恶化时可重新研究",
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -253,9 +268,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -263,7 +278,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -273,22 +288,22 @@
       "ticker": "688235.SH",
       "main_report": {
         "path": "reports/百济神州/百济神州研究报告-20260706.md",
-        "sha256": "74e492d472d638c78e7522b7738054bb68f3965c59f403d7a97d88f5e74cbb68"
+        "sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263"
       },
       "checklist": {
         "path": "reports/百济神州/巴菲特Checklist-百济神州-20260706.md",
-        "sha256": "660be4aabf8b9dfa2e76bed872ab20262c764b6570635fa3c51cd758112374fa"
+        "sha256": "ad2a82741e1e63177ef1291d65a8f47aa8a36dd253130a0652ad527aeb07d4ff"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4",
-    "current_source_fingerprint_sha256": "06af4bbbe000dc4f4a89651f545f57c6a73e7bff890df2e322eb1be2a6459b65"
+    "current_source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "9d384ea68977a601207abdbdf10c2e278ff414f79551d1055b3ff1f09d3910a4",
   "market_session_state": "runtime_required",
@@ -338,7 +353,125 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "conditional_pass",
+    "checked_at": "2026-07-06",
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "❓ 灰色地带 / 当前不通过买入 Checklist（4/6 通过）",
+    "next_review_date": null,
+    "source_report_path": "reports/百济神州/巴菲特Checklist-百济神州-20260706.md"
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "百济神州",
+  "decision_rules": [
+    {
+      "id": "rule_eebcca93c1a2c013",
+      "company_id": "百济神州",
+      "company": "百济神州",
+      "ticker": "688235.SH",
+      "market": "A股",
+      "category": "fundamental",
+      "trigger_type": "metric",
+      "operator": "<",
+      "value": 85.0,
+      "currency": "CNY",
+      "metric": "毛利率",
+      "event_type": "",
+      "conditions": [],
+      "action": "进入 Thesis Drift / Review",
+      "action_key": "thesis_review",
+      "description": "毛利率 跌破 85.0%，需要复核",
+      "source": "main_report",
+      "origin": "migration_candidate",
+      "source_report": "reports/百济神州/百济神州研究报告-20260706.md",
+      "source_section": "4. 减仓或重审信号",
+      "source_text": "2. 公司下调 2026 或 2027 收入/经营利润指引。 3. 毛利率跌破 85% 且不是短期产品组合扰动。 4. FCF margin 低于 10%，同时费用继续扩张。",
+      "confidence": "medium",
+      "automation": "review",
+      "enabled": false,
+      "needs_review": true,
+      "status": "needs_review",
+      "created_at": "2026-09-02T01:05:44+08:00",
+      "updated_at": "2026-09-02T01:05:44+08:00"
+    }
+  ],
+  "decision_rules_source": "decision_rules",
+  "decision_rule_summary": {
+    "rule_count": 1,
+    "price_rule_count": 0,
+    "condition_rule_count": 1,
+    "needs_review_count": 1,
+    "fallback": false,
+    "fallback_fields": [],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [
+    {
+      "rule_id": "rule_eebcca93c1a2c013",
+      "company_id": "百济神州",
+      "company": "百济神州",
+      "ticker": "688235.SH",
+      "market": "A股",
+      "currency": "CNY",
+      "category": "fundamental",
+      "trigger_type": "metric",
+      "status": "needs_review",
+      "status_label": "待复核",
+      "auto_evaluable": false,
+      "current_value": null,
+      "distance_pct": null,
+      "reason": "迁移候选待人工确认，未启用自动判断",
+      "description": "毛利率 跌破 85.0%，需要复核",
+      "operator": "<",
+      "value": 85.0,
+      "metric": "毛利率",
+      "event_type": "",
+      "action": "进入 Thesis Drift / Review",
+      "action_key": "thesis_review",
+      "source": "main_report",
+      "source_report": "reports/百济神州/百济神州研究报告-20260706.md",
+      "source_section": "4. 减仓或重审信号",
+      "source_text": "2. 公司下调 2026 或 2027 收入/经营利润指引。 3. 毛利率跌破 85% 且不是短期产品组合扰动。 4. FCF margin 低于 10%，同时费用继续扩张。",
+      "confidence": "medium",
+      "automation": "review",
+      "enabled": false,
+      "needs_review": true,
+      "list_type": "condition"
+    }
+  ],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "b13563f8a689821ed06a",
   "detail_path": "./data/decision_details/b13563f8a689821ed06a.json"
 }

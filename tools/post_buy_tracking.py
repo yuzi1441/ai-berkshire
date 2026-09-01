@@ -120,6 +120,7 @@ def default_position(args: argparse.Namespace) -> dict[str, Any]:
         "ticker": key_for_ticker(args.ticker),
         "market": args.market,
         "status": "holding",
+        "lifecycle": "HOLDING",
         "buy_date": buy_date,
         "cost_basis": args.cost_basis,
         "position_weight": args.position_weight,
@@ -128,6 +129,7 @@ def default_position(args: argparse.Namespace) -> dict[str, Any]:
         "health_score": None,
         "last_review_date": None,
         "next_review_date": next_review,
+        "review_frequency": args.review_frequency or "quarterly",
         "review_action": None,
         "metrics": metrics,
         "thresholds": dict(DEFAULT_THRESHOLDS),
@@ -183,6 +185,10 @@ def command_update(args: argparse.Namespace, repo_root: Path) -> None:
             raise ValueError("--metrics must be a JSON list")
         updates["metrics"] = metrics
     item.update(updates)
+    if item.get("status") in {"holding", "paused"}:
+        item["lifecycle"] = "HOLDING"
+    elif item.get("status") in {"closed", "exited"}:
+        item["lifecycle"] = "EXITED"
     item["updated_at"] = iso_now()
     payload["updated_at"] = iso_now()
     save_json(path, payload)
@@ -325,6 +331,7 @@ def build_parser() -> argparse.ArgumentParser:
     register.add_argument("--cost-basis", type=float)
     register.add_argument("--position-weight", type=float, help="portfolio weight in percent, e.g. 5 for 5 percent")
     register.add_argument("--next-review")
+    register.add_argument("--review-frequency", help="review cadence label, e.g. quarterly or 180d")
     register.add_argument("--thesis-report")
     register.add_argument("--metrics", help="JSON list of 3-5 tracked metrics")
     register.add_argument("--force", action="store_true")

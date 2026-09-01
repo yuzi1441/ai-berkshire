@@ -120,6 +120,9 @@
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -234,40 +237,45 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "报告未给出明确减/增持建议，基本面建议为‘观察’，可推断为持有观察，暂无加仓或卖出动作。",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "高于38元继续观察；低于38元才进入报告允许的分批区",
+    "holder_action": "38-52元可持有观察或小额定投，高于55元降低新增买入",
+    "trigger_condition": "低于38元可分批买入；32-35元为优先买入区；或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
+    "summary": "粗标签是观察，但主报告给出了明确的价格动作表；分类应随现价跨越38、35和30元而变化。",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "粗粒度观察与具体价格动作并存，执行时采用主报告更具体的价格层级。",
+    "source_basis": "人工逐行核对价格区间建议与最终操作建议",
+    "currency": "CNY",
+    "entry_ceiling": 38.0,
+    "trial_range": {
+      "min": 35.0,
+      "max": 38.0
+    },
+    "price_source": "主报告第121至125行与第200至202行",
     "evidence": [
       {
-        "line_start": 284,
-        "line_end": 284,
-        "quote": "| 基本面建议动作 | 观察 |",
-        "supports": "支持最终结论为观察，空仓者不应立即行动，应等待价格或信号。"
+        "line_start": 121,
+        "line_end": 125,
+        "quote": "低于38元可分批，32-35元优先买入，低于30元为有条件的重仓候选；38-52元持有观察。",
+        "supports": "主报告已经提供可直接用于现价分类的完整价格动作表。"
       },
       {
-        "line_start": 286,
-        "line_end": 288,
-        "quote": "| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 | | 激进型价格区间 | 38 元 | | 稳健型动作 | 等待 32-35 元或基本面改善信号 |",
-        "supports": "支持空仓者需等待价格触发，不同风险偏好对应不同触发价格，当前未知价格下不构成立即买入条件。"
+        "line_start": 200,
+        "line_end": 202,
+        "quote": "激进型38元以下分批；稳健型等32-35元或改善信号；保守型30元以下且分红未恶化才考虑重仓。",
+        "supports": "最终操作建议与价格表一致。"
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-13T11:14:00+08:00",
     "model_consensus": false,
-    "label_detail_consensus": true,
-    "conflict_flag_consensus": true,
-    "currency": "CNY",
-    "entry_ceiling": 55.0,
-    "price_source": "本地程序从主报告价格行动表确定性提取",
-    "artifact_status": "review",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:54:48+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-13T11:14:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -275,15 +283,52 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_or_event",
+    "event_condition": "或基本面改善时可重新评估；低于30元且基本面未永久恶化时才考虑较高仓位",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "低于30元且基本面未永久恶化时才考虑较高仓位",
+        "price_range": "低于30元",
+        "min": null,
+        "ceiling": 30.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": true,
+        "validation_condition": "低于30元且基本面未永久恶化时才考虑较高仓位",
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "32-35元为优先买入区",
+        "price_range": "32-35元",
+        "min": 32.0,
+        "ceiling": 35.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      },
+      {
+        "action_kind": "buy",
+        "action": "可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围",
+        "price_range": "38 元",
+        "min": null,
+        "ceiling": 38.0,
+        "mode": "ceiling",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "report_price_plan"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 1,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -293,9 +338,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -303,7 +348,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -313,7 +358,7 @@
       "ticker": "000651.SZ",
       "main_report": {
         "path": "reports/格力电器/格力电器投资研究报告-20260706.md",
-        "sha256": "b02729c13934c3035c819cb279265a5c9e2f7f12e3d713332584cc391f3faac0"
+        "sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9"
       },
       "checklist": {
         "path": null,
@@ -321,14 +366,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "b998eee8d3c9b248c5aec8a3e50f246fb4194c1cbabd590b1d755ae1e5876004",
-    "current_source_fingerprint_sha256": "70cbc84d5f7c2c25edfdd7ee21a7f12d0d0a4a13a3eecf654d4a6bb5f8019e93"
+    "current_source_fingerprint_sha256": "b998eee8d3c9b248c5aec8a3e50f246fb4194c1cbabd590b1d755ae1e5876004"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b998eee8d3c9b248c5aec8a3e50f246fb4194c1cbabd590b1d755ae1e5876004",
   "market_session_state": "runtime_required",
@@ -378,7 +423,125 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "格力电器",
+  "decision_rules": [
+    {
+      "id": "rule_13110db65aa146cc",
+      "company_id": "格力电器",
+      "company": "格力电器",
+      "ticker": "000651.SZ",
+      "market": "A股",
+      "category": "entry",
+      "trigger_type": "price",
+      "operator": "<=",
+      "value": 38.0,
+      "currency": "CNY",
+      "metric": "",
+      "event_type": "",
+      "conditions": [],
+      "action": "达到买入前 Checklist 复核条件",
+      "action_key": "run_checklist",
+      "description": "价格达到 38 元，达到买入前 Checklist 复核条件",
+      "source": "main_report",
+      "origin": "migration_candidate",
+      "source_report": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "source_section": "6.2 估值基准与工具校验",
+      "source_text": "估值解释：格力当前的吸引力来自低 PE 和高股息，而不是高增长。若 5.2 元 EPS 能保持，8x PE 对应约 41.7 元，10x PE 对应约 52.1 元；若利润每年下滑 5%，3 年后 8x PE 的价值约 35.7 元。因此，37-38 元附近具备一定下行保护，但安全边际并非无限，核心风险是“利润中枢下移 + 估值不重估”。",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "status": "watching",
+      "created_at": "2026-09-02T01:05:44+08:00",
+      "updated_at": "2026-09-02T01:05:44+08:00"
+    }
+  ],
+  "decision_rules_source": "decision_rules",
+  "decision_rule_summary": {
+    "rule_count": 1,
+    "price_rule_count": 1,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": false,
+    "fallback_fields": [],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [
+    {
+      "rule_id": "rule_13110db65aa146cc",
+      "company_id": "格力电器",
+      "company": "格力电器",
+      "ticker": "000651.SZ",
+      "market": "A股",
+      "currency": "CNY",
+      "category": "entry",
+      "trigger_type": "price",
+      "status": "watching",
+      "status_label": "正常观察",
+      "auto_evaluable": false,
+      "current_value": null,
+      "distance_pct": null,
+      "reason": "价格达到 38 元，达到买入前 Checklist 复核条件",
+      "description": "价格达到 38 元，达到买入前 Checklist 复核条件",
+      "operator": "<=",
+      "value": 38.0,
+      "metric": "",
+      "event_type": "",
+      "action": "达到买入前 Checklist 复核条件",
+      "action_key": "run_checklist",
+      "source": "main_report",
+      "source_report": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "source_section": "6.2 估值基准与工具校验",
+      "source_text": "估值解释：格力当前的吸引力来自低 PE 和高股息，而不是高增长。若 5.2 元 EPS 能保持，8x PE 对应约 41.7 元，10x PE 对应约 52.1 元；若利润每年下滑 5%，3 年后 8x PE 的价值约 35.7 元。因此，37-38 元附近具备一定下行保护，但安全边际并非无限，核心风险是“利润中枢下移 + 估值不重估”。",
+      "confidence": "high",
+      "automation": "auto",
+      "enabled": true,
+      "needs_review": false,
+      "list_type": "price"
+    }
+  ],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "fef417b532e2d7bed34e",
   "detail_path": "./data/decision_details/fef417b532e2d7bed34e.json"
 }

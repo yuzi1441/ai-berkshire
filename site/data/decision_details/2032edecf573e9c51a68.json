@@ -47,6 +47,9 @@
   },
   "price_status": "已提取",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/港股召回池/哔哩哔哩-被排除/最终报告.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -143,7 +146,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "哔哩哔哩",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "2032edecf573e9c51a68",
   "detail_path": "./data/decision_details/2032edecf573e9c51a68.json"
 }

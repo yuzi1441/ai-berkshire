@@ -69,6 +69,9 @@
   },
   "price_status": "已提取三情景",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -173,15 +176,15 @@
   ],
   "report_history_count": 2,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "回避，不在中报预增743倍时买入；等待周期下行出清、PB回到8倍以下且企业级存储收入占比升至20%以上再评估",
     "holder_action": "分批止盈，至少减半；剩余仓位定性为周期投机头寸，设置严格卖出纪律；若成本极低至少收回本金",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "trigger_condition": "NAND/DRAM合约价环比转负、季报存货跌价准备大额计提、实控人减持或定增落地价显著低于市价；买入需PB回到8倍以下且企业级存储占比超20%",
+    "summary": "江波龙是周期股非投资标的，当前618元无安全边际，空仓者回避，持仓者分批止盈至少减半",
     "confidence": "high",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "正文明确给出空仓者回避、持仓者止盈，而看板契约基本面建议动作标为‘待复核’，正文与契约冲突，按正文优先原则采用正文结论",
     "evidence": [
       {
         "line_start": 240,
@@ -197,14 +200,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
-    "model_consensus": false,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": false,
+    "source_matches": true,
     "generated_at": "2026-08-14T10:18:27+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -213,15 +216,15 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "NAND/DRAM合约价环比转负、季报存货跌价准备大额计提、实控人减持或定增落地价显著低于市价",
     "guard_condition": null,
     "price_rules": [],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -231,9 +234,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -241,7 +244,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -251,7 +254,7 @@
       "ticker": "301308.SZ",
       "main_report": {
         "path": "reports/江波龙/江波龙投资研究报告-20260706.md",
-        "sha256": "c46555dfd3cc95be6688883a518aedfd56db44bda7377dc2871acffc1c74c0b7"
+        "sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d"
       },
       "checklist": {
         "path": null,
@@ -259,14 +262,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6",
-    "current_source_fingerprint_sha256": "04b26d25cf40b5c9f8c85a97a54324d478652a389cc5a892fc20b48b7b2433e2"
+    "current_source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "d185309a90cd6d5015bf2bc91d3d0c2eef740eedbe9fc3b19342bb69f4f933a6",
   "market_session_state": "runtime_required",
@@ -316,7 +319,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "江波龙",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "81f27336692b05595d5f",
   "detail_path": "./data/decision_details/81f27336692b05595d5f.json"
 }

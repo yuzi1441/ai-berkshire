@@ -69,6 +69,9 @@
   },
   "price_status": "已提取三情景",
   "data_status": "待复核：未标注数据截止日",
+  "canonical_main_report_path": "reports/中创智领/中创智领投资研究报告-20260707.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -132,15 +135,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "label": "小仓验证",
+    "action_kind": "trial",
+    "empty_position_action": "可小仓位介入，不建议重仓all-in，宜等2026中报验证煤机订单与盈利趋势后再决定加不加",
     "holder_action": "持有收息，基本面未破位、股息率8.3%提供强持有理由，无需在低位区恐慌卖出，但需控制仓位权重",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "trigger_condition": "2026中报验证煤机订单与盈利趋势；股价跌向12–13元（股息率>9.5%）是更好的击球点",
+    "summary": "空仓者可小仓位介入，基于8.3%股息保护与中性情景+84%赔率，但2026Q1拐点未确认，宜等2026中报验证后再决定加仓，不建议重仓。",
     "confidence": "medium",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "report_field_conflict": true,
+    "conflict_note": "正文L276明确建议空仓者‘可小仓位介入’，而看板契约L344的‘基本面建议动作’为‘观察’，存在表述差异；正文动作更具体，故按正文判断。",
     "evidence": [
       {
         "line_start": 276,
@@ -162,14 +165,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
-    "model_consensus": false,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": false,
+    "source_matches": true,
     "generated_at": "2026-08-14T10:07:14+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -178,15 +181,22 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "trial",
+    "main_label": "小仓验证",
+    "condition_mode": "current_action",
+    "event_condition": "2026中报验证煤机订单与盈利趋势",
     "guard_condition": null,
     "price_rules": [],
-    "current_action": null,
+    "current_action": {
+      "action_kind": "trial",
+      "action": "可小仓位介入，不建议重仓all-in，宜等2026中报验证煤机订单与盈利趋势后再决定加不加",
+      "currency": "CNY",
+      "reference_price": 15.05,
+      "reference_source": "主报告明确标注的分析基准价",
+      "requires_validation": false
+    },
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -196,9 +206,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -206,7 +216,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -216,7 +226,7 @@
       "ticker": "601717.SH",
       "main_report": {
         "path": "reports/中创智领/中创智领投资研究报告-20260707.md",
-        "sha256": "02de943591babaa7d5ce926c36ee64dfbf94a022f602969bf2666739a4dfd984"
+        "sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044"
       },
       "checklist": {
         "path": null,
@@ -224,14 +234,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "c4db49b14ec7e4cfee668bba8e4fe621d1f4aca1e333cf860cf807cf49162861",
-    "current_source_fingerprint_sha256": "829986ffa6b4e040285828492ccd39d7d1d4067912c987f993366c95e3b0589c"
+    "current_source_fingerprint_sha256": "c4db49b14ec7e4cfee668bba8e4fe621d1f4aca1e333cf860cf807cf49162861"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "c4db49b14ec7e4cfee668bba8e4fe621d1f4aca1e333cf860cf807cf49162861",
   "market_session_state": "runtime_required",
@@ -281,7 +291,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "中创智领",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "ad6fc7aca3e4b0116c1a",
   "detail_path": "./data/decision_details/ad6fc7aca3e4b0116c1a.json"
 }

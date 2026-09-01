@@ -69,6 +69,9 @@
   },
   "price_status": "已提取三情景",
   "data_status": "待复核：未标注数据截止日",
+  "canonical_main_report_path": "reports/Jereh/Jereh-research-20260624.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -132,22 +135,34 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
+    "label": "回避/卖出",
+    "action_kind": "no",
+    "empty_position_action": "回避当前价位，不建仓；将80-100元设为观察区，到达后重新评估",
+    "holder_action": "考虑减仓30%-50%锁定利润，保留底仓跟踪长期成长",
+    "trigger_condition": "股价回落至80-100元后重新评估；自研燃气轮机突破或毛利率连续多季度回升至35%以上时再复核",
+    "summary": "公司质量较好，但159元和57.7倍PE已透支乐观预期；空仓者当前应回避，持仓者宜部分止盈。",
+    "confidence": "high",
+    "report_field_conflict": true,
+    "conflict_note": "看板契约写观察，但正文最终决策对空仓者明确写回避当前价位，并要求持仓者减仓30%-50%。",
+    "source_basis": "人工逐行核对主报告最终决策、加仓信号与看板决策契约",
+    "currency": "CNY",
+    "price_source": "主报告第401至404行",
+    "evidence": [
+      {
+        "line_start": 401,
+        "line_end": 402,
+        "quote": "空仓者回避当前价位；观察价位80-100元。持仓者考虑部分止盈，建议至少减仓30%-50%。",
+        "supports": "分别明确空仓回避和持仓减仓动作。"
+      }
+    ],
     "enabled": true,
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
-    "holder_action": "打开主报告人工核对",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
-    "confidence": "low",
-    "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
-    "evidence": [],
-    "source_basis": "报告判断缓存状态检查",
+    "human_reviewed": true,
+    "human_reviewed_at": "2026-08-23T16:15:00+08:00",
     "model_consensus": false,
-    "artifact_status": "error",
-    "source_matches": false,
-    "generated_at": "2026-08-14T10:47:58+00:00",
+    "screening_consensus": false,
+    "artifact_status": "human_reviewed",
+    "source_matches": true,
+    "generated_at": "2026-08-23T16:15:00+08:00",
     "models": {
       "primary": "deepseek-v4-flash",
       "review": "mimo-v2.5-pro"
@@ -155,15 +170,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
-    "event_condition": null,
+    "main_action_kind": "no",
+    "main_label": "回避/卖出",
+    "condition_mode": "no_buy",
+    "event_condition": "自研燃气轮机突破或毛利率连续多季度回升至35%以上时再复核",
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "trial",
+        "action": "股价回落至80-100元后重新评估",
+        "price_range": "回落至80-100元",
+        "min": 80.0,
+        "ceiling": 100.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -173,9 +201,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -183,7 +211,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "E",
-    "execution_key": "review",
+    "execution_key": "no",
     "label": "人工复核：当前不买",
     "detail": "估值、盈利质量、现金流、产业兑现或报告时效至少一项不满足，当前不新增买入。",
     "opportunity_tier": null,
@@ -193,7 +221,7 @@
       "ticker": "002353.SZ",
       "main_report": {
         "path": "reports/Jereh/Jereh-research-20260624.md",
-        "sha256": "9dc454047c82a3ce76414a209377e39e0266fb62605846df5d4e5dd49ce8976b"
+        "sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11"
       },
       "checklist": {
         "path": null,
@@ -201,14 +229,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "670d6f91b6fa7774d6a1baa073dd1319f0010859969b039967146c8535523860",
-    "current_source_fingerprint_sha256": "a446883f1d09d1a973b7f370fba2faaba66e2f4027ab35c545e52426cd5e2172"
+    "current_source_fingerprint_sha256": "670d6f91b6fa7774d6a1baa073dd1319f0010859969b039967146c8535523860"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "670d6f91b6fa7774d6a1baa073dd1319f0010859969b039967146c8535523860",
   "market_session_state": "runtime_required",
@@ -258,7 +286,125 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "jereh",
+  "decision_rules": [
+    {
+      "id": "rule_de91dd75cfdae087",
+      "company_id": "jereh",
+      "company": "Jereh",
+      "ticker": "002353.SZ",
+      "market": "A股",
+      "category": "fundamental",
+      "trigger_type": "metric",
+      "operator": ">",
+      "value": 35.0,
+      "currency": "CNY",
+      "metric": "毛利率",
+      "event_type": "",
+      "conditions": [],
+      "action": "进入 Thesis Drift / Review",
+      "action_key": "thesis_review",
+      "description": "毛利率 超过 35.0%，需要复核",
+      "source": "main_report",
+      "origin": "migration_candidate",
+      "source_report": "reports/Jereh/Jereh-research-20260624.md",
+      "source_section": "最终决策",
+      "source_text": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 | | **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |",
+      "confidence": "medium",
+      "automation": "review",
+      "enabled": false,
+      "needs_review": true,
+      "status": "needs_review",
+      "created_at": "2026-09-02T01:05:43+08:00",
+      "updated_at": "2026-09-02T01:05:43+08:00"
+    }
+  ],
+  "decision_rules_source": "decision_rules",
+  "decision_rule_summary": {
+    "rule_count": 1,
+    "price_rule_count": 0,
+    "condition_rule_count": 1,
+    "needs_review_count": 1,
+    "fallback": false,
+    "fallback_fields": [],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [
+    {
+      "rule_id": "rule_de91dd75cfdae087",
+      "company_id": "jereh",
+      "company": "Jereh",
+      "ticker": "002353.SZ",
+      "market": "A股",
+      "currency": "CNY",
+      "category": "fundamental",
+      "trigger_type": "metric",
+      "status": "needs_review",
+      "status_label": "待复核",
+      "auto_evaluable": false,
+      "current_value": null,
+      "distance_pct": null,
+      "reason": "迁移候选待人工确认，未启用自动判断",
+      "description": "毛利率 超过 35.0%，需要复核",
+      "operator": ">",
+      "value": 35.0,
+      "metric": "毛利率",
+      "event_type": "",
+      "action": "进入 Thesis Drift / Review",
+      "action_key": "thesis_review",
+      "source": "main_report",
+      "source_report": "reports/Jereh/Jereh-research-20260624.md",
+      "source_section": "最终决策",
+      "source_text": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 | | **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |",
+      "confidence": "medium",
+      "automation": "review",
+      "enabled": false,
+      "needs_review": true,
+      "list_type": "condition"
+    }
+  ],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "5a212540ce7a7114584b",
   "detail_path": "./data/decision_details/5a212540ce7a7114584b.json"
 }

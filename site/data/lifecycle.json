@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "description": "Explicit lifecycle overrides. A holding is never inferred from a report recommendation; it comes from post_buy_tracking or an explicit record here.",
+  "default_lifecycle": "WATCH",
+  "default_review_frequency": {
+    "WATCH": "180d",
+    "PRE_BUY": "30d",
+    "HOLDING": "quarterly",
+    "EXITED": "archived"
+  },
+  "companies": {}
+}

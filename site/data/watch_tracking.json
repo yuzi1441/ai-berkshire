@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "description": "Lightweight WATCH/PRE_BUY tracking. This file must not contain a buy thesis or create a holding.",
+  "records": {
+    "002594.SZ": {
+      "company": "比亚迪",
+      "ticker": "002594.SZ",
+      "lifecycle": "WATCH",
+      "migration_sample": true,
+      "status": "watching",
+      "reason": "生命周期迁移样本：没有用户确认成交记录，等待结构化买入条件。",
+      "review_frequency": "180d",
+      "buy_conditions": [],
+      "drop_conditions": []
+    },
+    "600406.SH": {
+      "company": "国电南瑞",
+      "ticker": "600406.SH",
+      "lifecycle": "WATCH",
+      "migration_sample": true,
+      "status": "watching",
+      "reason": "生命周期迁移样本：没有用户确认成交记录，等待结构化买入条件。",
+      "review_frequency": "180d",
+      "buy_conditions": [],
+      "drop_conditions": []
+    }
+  }
+}

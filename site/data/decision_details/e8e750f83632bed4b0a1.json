@@ -89,6 +89,9 @@
   },
   "price_status": "已提取价格计划",
   "data_status": "已标注",
+  "canonical_main_report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+  "canonical_report_source": "legacy_latest_fallback",
+  "canonical_report_locked": false,
   "selection_basis": "报告数据截止日",
   "report_history": [
     {
@@ -172,15 +175,15 @@
   ],
   "report_history_count": 1,
   "primary_judgment": {
-    "label": "待人工复核",
-    "action_kind": "unknown",
-    "empty_position_action": "模型结果不可用，暂停自动归类",
+    "label": "等待价格",
+    "action_kind": "watch",
+    "empty_position_action": "空仓者应回避追高，将公司列入观察名单，等待周期回落或概念退潮，待股价降至正常化PE 10-12x（约22-26元）区间再重点研究介入",
     "holder_action": "若已持有可部分止盈，不建议在异动高位新开仓",
-    "trigger_condition": "重新解析当前主报告并完成人工复核",
-    "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+    "trigger_condition": "正常化PE 10-12x，约22-26元价格区间",
+    "summary": "公司值得长期跟踪但当前高位，价值投资者应回避追高，等待回落至22-26元再介入",
     "confidence": "high",
     "report_field_conflict": false,
-    "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+    "conflict_note": "正文与契约均要求回避追高、等待更好价格，方向一致，无冲突",
     "evidence": [
       {
         "line_start": 162,
@@ -196,14 +199,14 @@
       }
     ],
     "enabled": true,
-    "source_basis": "报告判断缓存状态检查",
-    "model_consensus": false,
+    "source_basis": "双模型核对主报告空仓行动表与最终结论",
+    "model_consensus": true,
     "label_detail_consensus": true,
     "conflict_flag_consensus": true,
     "currency": "CNY",
     "price_source": "主报告未提取到可执行买入价格档",
     "artifact_status": "ready",
-    "source_matches": false,
+    "source_matches": true,
     "generated_at": "2026-08-14T10:52:02+00:00",
     "models": {
       "primary": "deepseek-v4-flash",
@@ -212,15 +215,28 @@
   },
   "execution_policy": {
     "schema_version": 1,
-    "main_action_kind": "unknown",
-    "main_label": "待人工复核",
-    "condition_mode": "review",
+    "main_action_kind": "watch",
+    "main_label": "等待价格",
+    "condition_mode": "price_only",
     "event_condition": null,
     "guard_condition": null,
-    "price_rules": [],
+    "price_rules": [
+      {
+        "action_kind": "buy",
+        "action": "正常化PE 10-12x，约22-26元价格区间",
+        "price_range": "约22-26元",
+        "min": 22.0,
+        "ceiling": 26.0,
+        "mode": "range",
+        "currency": "CNY",
+        "requires_validation": false,
+        "validation_condition": null,
+        "source": "validated_judgment_trigger"
+      }
+    ],
     "current_action": null,
     "report_rule_count": 0,
-    "reliability": "review",
+    "reliability": "high",
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
@@ -230,9 +246,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "stale",
-    "validity_state": "stale",
-    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+    "status": "ready",
+    "validity_state": "ready",
+    "invalidation_reason": null,
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -240,7 +256,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "review",
+    "execution_key": "wait_price",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -250,7 +266,7 @@
       "ticker": "600141.SH",
       "main_report": {
         "path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
-        "sha256": "a3680f7c233c98beb2d0883a7862b416f6e97f9a05cba8d8739efe2ac63b1813"
+        "sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64"
       },
       "checklist": {
         "path": null,
@@ -258,14 +274,14 @@
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
-        "sha256": "69a094a6c1bac254c9abdb21657949095b9d02980167886faf4bedb53a17d7c4"
+        "sha256": "2ab05b5fb3213929c54a37db5e950e7defa287c70be0d8b22f443f672eba5991"
       }
     },
     "source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72",
-    "current_source_fingerprint_sha256": "e12ef0d5eb20d1e7ba2717323ccc4438535859da816ca45d1d8580e6bf2d818d"
+    "current_source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72"
   },
-  "validity_state": "stale",
-  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化",
+  "validity_state": "ready",
+  "invalidation_reason": null,
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "2a1f8cd9958b5fc4a301ccf6ff1cac766b337a1d4ea35328ee9ac9fd1c86de72",
   "market_session_state": "runtime_required",
@@ -315,7 +331,65 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "db8fb03db80665ae2abd",
+  "lifecycle": "WATCH",
+  "lifecycle_source": "default_watch",
+  "review_frequency": "180d",
+  "next_review_date": "2027-03-01",
+  "next_action": "KEEP WATCH",
+  "lifecycle_action": "keep_watch",
+  "thesis_drift": {
+    "status": "not_checked",
+    "direction": "unchanged",
+    "severity": "none",
+    "action": "keep_watch",
+    "buy_conditions_met": null,
+    "buy_conditions_total": null,
+    "patch_required": false,
+    "affected_sections": [],
+    "last_checked": null,
+    "next_review": null,
+    "summary": "",
+    "source": "structured_drift",
+    "history": []
+  },
+  "checklist_state": {
+    "status": "not_run",
+    "checked_at": null,
+    "hard_veto": false,
+    "hard_veto_state": "unknown",
+    "summary": "",
+    "next_review_date": null,
+    "source_report_path": null
+  },
+  "watch_tracking": {
+    "status": "watching",
+    "reason": "尚未登记结构化观察理由；以主报告和漂移结果为准。",
+    "buy_conditions": [],
+    "drop_conditions": [],
+    "lifecycle": "WATCH",
+    "thesis_created": false,
+    "last_checked": null,
+    "next_review_date": "2027-03-01"
+  },
+  "company_id": "兴发集团",
+  "decision_rules": [],
+  "decision_rules_source": "legacy_compatibility",
+  "decision_rule_summary": {
+    "rule_count": 0,
+    "price_rule_count": 0,
+    "condition_rule_count": 0,
+    "needs_review_count": 0,
+    "fallback": true,
+    "fallback_fields": [
+      "price_plan",
+      "decision_contract",
+      "invalidation_triggers"
+    ],
+    "evaluation_note": "价格规则需要同市场同币种新鲜行情；条件/事件规则需要 Review 或人工上下文。"
+  },
+  "price_opportunities": [],
+  "condition_opportunities": [],
+  "generation_id": "5db9e03751a9dbc94aec",
   "detail_id": "e8e750f83632bed4b0a1",
   "detail_path": "./data/decision_details/e8e750f83632bed4b0a1.json"
 }
