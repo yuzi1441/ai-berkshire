@@ -2,6 +2,7 @@ import unittest
 import json
 import tempfile
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from tools import fundamental_review_radar as radar
@@ -19,6 +20,18 @@ def record(period, *, deducted_profit, deducted_profit_yoy, gross_margin, cash_f
 
 
 class FundamentalReviewRadarTests(unittest.TestCase):
+    def test_eastmoney_uses_exact_operating_cash_flow_not_eps_implied_estimate(self):
+        row = {
+            "REPORT_DATE_NAME": "2026中报",
+            "REPORT_DATE": "2026-06-30",
+            "PARENTNETPROFIT": 100,
+            "EPSJB": 0.3,
+            "MGJYXJJE": 0.2,
+            "NETCASH_OPERATE_PK": 61,
+        }
+        result = radar.normalise_financial_record(row)
+        self.assertEqual(result["operating_cash_flow"], 61)
+
     def test_dongfang_rules_keep_positive_conditions_and_redlines_separate(self):
         records = [
             record("2026中报", deducted_profit=318, deducted_profit_yoy=7.76, gross_margin=30.68, cash_flow=-770, net_profit=403),
@@ -88,8 +101,18 @@ class FundamentalReviewRadarTests(unittest.TestCase):
         ):
             documents = radar.collect_recent_official_evidence("000682.SZ")
         self.assertEqual(documents[0]["document_id"], "official_1")
+        self.assertEqual(documents[0]["source_role"], "official_current_evidence")
         self.assertEqual(documents[0]["purpose"], "只作为复核证据；不得修改主报告规则。")
         self.assertNotIn("rule", documents[0])
+
+    def test_official_pdf_selection_keeps_task_relevant_late_passages(self):
+        content = "\n".join(["目录"] * 80 + ["经营活动产生的现金流量净额为-7.70亿元"] + ["附注"] * 80)
+        selected = radar.select_relevant_evidence(
+            content,
+            [{"content": "复核经营现金流改善", "metrics": ["经营现金流"]}],
+            max_chars=5000,
+        )
+        self.assertIn("经营活动产生的现金流量净额为-7.70亿元", selected)
 
     def test_atomic_write_replaces_one_stock_without_partial_file(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -115,11 +138,17 @@ class FundamentalReviewRadarTests(unittest.TestCase):
             }]), patch.object(radar, "review_locked_tasks_with_local_model", return_value={
                 "status": "completed", "rule_update": "manual_only", "tasks": [], "model": "test"
             }):
-                counts = radar.run_full_local(Path.cwd(), Path(directory), workers=3)
+                counts = radar.run_full_local(Path.cwd(), Path(directory), workers=3, include_official=False)
             self.assertEqual(counts["total"], 93)
             self.assertEqual(counts["completed"], 93)
             self.assertEqual(len(list(Path(directory).glob("*.json"))), 93)
             self.assertFalse((Path(directory) / "all.json").exists())
+            sample = json.loads(next(Path(directory).glob("*.json")).read_text())
+            self.assertEqual(sample["review_layer"], "routine_deepseek")
+            self.assertEqual(
+                sample["workflow"]["rule_authority"],
+                "fixed_tasks_from_human_locked_main_report_resolution",
+            )
 
     def test_resume_does_not_skip_a_prior_error_result(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -134,6 +163,82 @@ class FundamentalReviewRadarTests(unittest.TestCase):
             }]), patch.object(radar, "review_locked_tasks_with_local_model", return_value={
                 "status": "completed", "rule_update": "manual_only", "tasks": [], "model": "test"
             }):
-                counts = radar.run_full_local(Path.cwd(), Path(directory), resume=True, workers=1)
+                counts = radar.run_full_local(
+                    Path.cwd(), Path(directory), resume=True, workers=1, include_official=False
+                )
             self.assertEqual(counts["completed"], 1)
             self.assertEqual(json.loads(target.read_text())["main_report"]["rule_update_mode"], "manual_only")
+
+    def test_non_gap_model_result_citing_only_main_report_is_forced_to_gap(self):
+        resolution = {
+            "judgment": {"review_tasks": [{"task_id": "holder", "content": "复核毛利率"}]}
+        }
+        documents = [{
+            "document_id": "local_1", "path": "reports/main.md",
+            "source_role": "main_report_reference", "content": "L1: 毛利率为30%",
+        }]
+        response = {"task_results": [{
+            "task_id": "holder", "status": "verified",
+            "evidence_document_ids": ["local_1"],
+            "evidence_lines": [{"document_id": "local_1", "line_ref": "L1", "exact_quote": "毛利率为30%"}],
+            "missing_codes": [],
+        }]}
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(response, None)):
+            result = radar.review_locked_tasks_with_local_model(resolution, documents)
+        task = result["tasks"][0]
+        self.assertEqual(task["status"], "data_insufficient")
+        self.assertIn("non_gap_without_current_exact_evidence", task["evidence_validation_errors"])
+
+    def test_non_gap_model_result_requires_a_verbatim_current_evidence_quote(self):
+        resolution = {
+            "judgment": {"review_tasks": [{"task_id": "holder", "content": "复核毛利率"}]}
+        }
+        documents = [{
+            "document_id": "official_1", "title": "半年报",
+            "source_role": "official_current_evidence", "content": "综合毛利率为30.68%",
+        }]
+        valid = {"task_results": [{
+            "task_id": "holder", "status": "verified",
+            "evidence_document_ids": ["official_1"],
+            "evidence_lines": [{"document_id": "official_1", "line_ref": "P12", "exact_quote": "综合毛利率为30.68%"}],
+            "missing_codes": [],
+        }]}
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(valid, None)):
+            result = radar.review_locked_tasks_with_local_model(resolution, documents)
+        self.assertEqual(result["tasks"][0]["status"], "verified")
+
+        invalid = json.loads(json.dumps(valid))
+        invalid["task_results"][0]["evidence_lines"][0]["exact_quote"] = "综合毛利率为32%"
+        with patch.object(
+            radar.opportunity_review,
+            "model_config",
+            return_value=SimpleNamespace(model="test-model"),
+        ), patch.object(radar.opportunity_review, "request_json", return_value=(invalid, None)):
+            result = radar.review_locked_tasks_with_local_model(resolution, documents)
+        self.assertEqual(result["tasks"][0]["status"], "data_insufficient")
+        self.assertIn("quote_not_found:official_1", result["tasks"][0]["evidence_validation_errors"])
+
+    def test_local_evidence_must_be_explicitly_newer_than_main_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            company_dir = root / "reports" / "示例公司"
+            company_dir.mkdir(parents=True)
+            (company_dir / "示例公司投资研究报告-20260707.md").write_text("主报告", encoding="utf-8")
+            (company_dir / "示例公司-thesis-tracker-20260630.md").write_text("旧证据", encoding="utf-8")
+            (company_dir / "示例公司-thesis-tracker-20260820.md").write_text("新证据", encoding="utf-8")
+            resolution = {
+                "report_path": "reports/示例公司/示例公司投资研究报告-20260707.md",
+                "judgment": {"review_tasks": [{"task_id": "holder", "content": "利润"}]},
+            }
+            documents = radar.collect_local_stock_evidence(root, resolution)
+        roles = {document["path"]: document["source_role"] for document in documents}
+        self.assertEqual(roles["reports/示例公司/示例公司-thesis-tracker-20260630.md"], "local_supporting_context")
+        self.assertEqual(roles["reports/示例公司/示例公司-thesis-tracker-20260820.md"], "local_current_evidence")

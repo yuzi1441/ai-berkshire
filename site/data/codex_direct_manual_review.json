@@ -1,0 +1,2507 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-30T15:51:16+08:00",
+  "source": "Codex direct manual reviews; not a DeepSeek model result and not a replacement for human-locked rules.",
+  "input_fingerprint": "68c78d82177687249fb8aaac895ecd1cd202ccb3bd8be92dc29d6b5889ebe37d",
+  "input_files": [
+    {
+      "path": "000333.SZ.json",
+      "sha256": "728340613778169239610cb7a7b150882bad200ee1ac026f91eadc1100b11776"
+    },
+    {
+      "path": "000400.SZ.json",
+      "sha256": "aaec56bb6bed78690c6ce13b2af93bf45855cdfcade986459a5ba85e0ecaae4c"
+    },
+    {
+      "path": "000408.SZ.json",
+      "sha256": "d8c15f73a498972df0792a08213e1563bf044da2641828060054411d421c29cc"
+    },
+    {
+      "path": "000568.SZ.json",
+      "sha256": "5312df6f9fc1e6f27738943623f3bec8c2f53d9b41968fb1146a213202f7aa99"
+    },
+    {
+      "path": "000651.SZ.json",
+      "sha256": "f6d495b58d6bcb2e0857136e6a811ac0a3835e892c25bd97ac897a34bc0c3fc1"
+    },
+    {
+      "path": "000657.SZ.json",
+      "sha256": "4c1b92f260b52a36970b76f33aad0eddeee2816012f154a45c5960457317e83b"
+    },
+    {
+      "path": "000682.SZ.json",
+      "sha256": "57814b8d5d90dad8d66c8df84ddb0889356db4c3f379caef93792e1a59af0175"
+    },
+    {
+      "path": "000858.SZ.json",
+      "sha256": "c28f65c6d5393f47e6822970c2351376ba9e69927d2010d79fe99cc229c2c837"
+    },
+    {
+      "path": "000933.SZ.json",
+      "sha256": "5d29ce82d4f8699370d0274951f59cd14c59385a90239d2fc2a267b79e87d160"
+    },
+    {
+      "path": "000988.SZ.json",
+      "sha256": "6517e43c385ce0eb0e797f979749091c0111596ad6207e177a1d24cbaf132f9b"
+    },
+    {
+      "path": "002027.SZ.json",
+      "sha256": "21447ec9c2a0c91652416fd74049e31bb6904fa468ed4f21af2a90aee6b143a3"
+    },
+    {
+      "path": "002028.SZ.json",
+      "sha256": "4cc5fbf8dbae4b3340a7d83abf795365b860a5f01a4ad65dddb01efdd0625e7d"
+    },
+    {
+      "path": "002049.SZ.json",
+      "sha256": "192302975b204a01d91213535b19075bf2aa9e5828ef4380793b4698ccf9ea82"
+    },
+    {
+      "path": "002050.SZ.json",
+      "sha256": "e46ce0b670dbdfaad817e71cef01728d7f77669564193b9b57ca363820bd4992"
+    },
+    {
+      "path": "002142.SZ.json",
+      "sha256": "664f92555be5c906caa82754d849f9c070f55aae6b49d894378d338200b1d1d3"
+    },
+    {
+      "path": "002155.SZ.json",
+      "sha256": "b64ec703788e4db9dbee665452d61a62f311c0b3e43cd534e4b1376a203fc57c"
+    },
+    {
+      "path": "002179.SZ.json",
+      "sha256": "f49f6bb59e2dd3a4640ae85b76bfb473b8e6c91e6c76cc3f11006773f27184e9"
+    },
+    {
+      "path": "002202.SZ.json",
+      "sha256": "441c7a401e2d399478d13f54e41cb3de6419c022d03b851dc9df3a6d5a1964e7"
+    },
+    {
+      "path": "002226.SZ.json",
+      "sha256": "a829746bebf465d183af411622bf1af6cff319e0ea60536f80edd3624bfc95fd"
+    },
+    {
+      "path": "002246.SZ.json",
+      "sha256": "009a63e8cbf6805e041eae9c3d821f6cfd788ddb9548537be660c634923e4809"
+    },
+    {
+      "path": "002270.SZ.json",
+      "sha256": "6d74844990a3b4d529b69399e8ce2cd1fda6b873cd7bc49eb80071429f0a76b9"
+    },
+    {
+      "path": "002272.SZ.json",
+      "sha256": "ccd0ea9c97e25c77b9d724d887dccbcbd31742394d35bef35ddd2f87e491476b"
+    },
+    {
+      "path": "002352.SZ.json",
+      "sha256": "e2e0c5ab3908792b52fe48825c6c5070d29c996087b031d7522171cac17f9d97"
+    },
+    {
+      "path": "002353.SZ.json",
+      "sha256": "74d6fbdc9ab022b6d2168104ae29f8d8402b2d5b5a9c60e5864546ab031bcc9e"
+    },
+    {
+      "path": "002415.SZ.json",
+      "sha256": "e156b2d7952e0b7372f8e66b84c86295e0fc0c9804545d2beef2b139b74100cd"
+    },
+    {
+      "path": "002463.SZ.json",
+      "sha256": "78acc9bda5616cf63a6b3c7f8cd586145eb19ae17c75ffe99c9a2a9f76f97ba4"
+    },
+    {
+      "path": "002594.SZ.json",
+      "sha256": "9304b578c7afb0808f309d45bbb8c82cc419f1f8caa70b38e45990954bb09f37"
+    },
+    {
+      "path": "002597.SZ.json",
+      "sha256": "ff9d2f396d37fefa78c209d907aba5fad73021cd416f123ea669093a7458de31"
+    },
+    {
+      "path": "002600.SZ.json",
+      "sha256": "ec3d6b118517c9b6f3a3ea51cebbeb3140a0fda0123553ddea3b7271fcbe1b87"
+    },
+    {
+      "path": "002683.SZ.json",
+      "sha256": "8204e8480f0bbd1e227eaf8dfc69aaae15a9b8dc14dd38f2baa4bebea7cf9573"
+    },
+    {
+      "path": "002837.SZ.json",
+      "sha256": "d8631d3ab9272212e6ada32b7798e9367f4d683cdf0a4e08a7cb241c1e0e0690"
+    },
+    {
+      "path": "002916.SZ.json",
+      "sha256": "3b0ac9cafaa915268ac17dabadb0c4e3ace43cb4210c57a647772bda44a33302"
+    },
+    {
+      "path": "003816.SZ.json",
+      "sha256": "b8fb536a4c40f4b65441b5fb8bda8baabaef164efa6ec04497cf30c1318a6f48"
+    },
+    {
+      "path": "300124.SZ.json",
+      "sha256": "51a44556e5daf0317bcca229d11abb2223dbe10ab4b51a465fe23603b132e3bc"
+    },
+    {
+      "path": "300274.SZ.json",
+      "sha256": "b2a4ae7e9f63a711bdf00e915df6bc6cb672a9a2f050cd237d4d058e05213acf"
+    },
+    {
+      "path": "300760.SZ.json",
+      "sha256": "fb0688b59c8f5be18c6a10c56538a2506b5d33ac10f3abe60c6afee14e21ca1f"
+    },
+    {
+      "path": "301308.SZ.json",
+      "sha256": "9ca4f608cd114458778495d96bd868f67229663031c072ff2415176ef5974ee1"
+    },
+    {
+      "path": "301666.SZ.json",
+      "sha256": "2047c05c3713093ab21f16addb79da9079cba906135a30e3d31670dfa5d63eb6"
+    },
+    {
+      "path": "600000.SH.json",
+      "sha256": "8536185766ec4373b0eeb6a189b7ec7f8a2f947fa79052e511f627cabb7e7e85"
+    },
+    {
+      "path": "600031.SH.json",
+      "sha256": "ffb57bb58dd2c49e933826e21798fa5c943004d04b0b7b585e8a8212989a086a"
+    },
+    {
+      "path": "600036.SH.json",
+      "sha256": "36fe94ca81f944b9d85a06de1d940b50efd68e429154829adef2b61d82b59396"
+    },
+    {
+      "path": "600089.SH.json",
+      "sha256": "5d8c9be0ed45eff0db5be233ce6e113680007dbdfd2235eeaa1ab3760e6cc9a6"
+    },
+    {
+      "path": "600141.SH.json",
+      "sha256": "c81c5a948ec51cd5be160fc04b4b44d8b1f27e159c4b67d55cbcc52622c60764"
+    },
+    {
+      "path": "600161.SH.json",
+      "sha256": "fa319ed1c5740b5cf896f88f22ce6d60a3be19826cc8512fba1d95ac60151f73"
+    },
+    {
+      "path": "600167.SH.json",
+      "sha256": "b3343cbb78fcc7720dfaaa6873c75f8b7e9d9c1b4bd3f17ad4d593530fa94a2e"
+    },
+    {
+      "path": "600176.SH.json",
+      "sha256": "961fd5a06f757e68c1aacf1d7e9f6c7937393aa42ac8faf71639482bf93088e0"
+    },
+    {
+      "path": "600183.SH.json",
+      "sha256": "0363170cc8bb36523ab34902d2ce206e2bf074f062e13158f182914e56285be0"
+    },
+    {
+      "path": "600276.SH.json",
+      "sha256": "222a450ce29ef1907391ce1608390c01043a538837ca082efb7c02d17cbab573"
+    },
+    {
+      "path": "600309.SH.json",
+      "sha256": "2d808f80ade0a1e61ff6702b700d121a9084fc37dbdea04cc95a3d662c954001"
+    },
+    {
+      "path": "600312.SH.json",
+      "sha256": "c4364378326264a45713460cda78d23681910eba0caf156f416faf010d7ad58c"
+    },
+    {
+      "path": "600372.SH.json",
+      "sha256": "dc10127252ce6ab97bdd885a305bb56cc0c35002233da65b63002ddacf86efcd"
+    },
+    {
+      "path": "600406.SH.json",
+      "sha256": "bbaf8c41e895ae1382343fbf66c28b13a01c06097db781ce6eb3870cbc5281f4"
+    },
+    {
+      "path": "600420.SH.json",
+      "sha256": "94741448d4763730ed03811576bc0c3d9a868240d310078c70fab514874c0074"
+    },
+    {
+      "path": "600426.SH.json",
+      "sha256": "a70e3030c556c1b4f27f96d8089d234a02db3ea28d5c6b0165bedc8fbd82992f"
+    },
+    {
+      "path": "600519.SH.json",
+      "sha256": "506e04f8b5c2033f147aaf7ecfb35945791dd52c453bc9d975085c4904fe6096"
+    },
+    {
+      "path": "600549.SH.json",
+      "sha256": "8ceda00418a08aabb58bc84482ef08e6f4bd81679a5c97348ef9fd7640ecfd7d"
+    },
+    {
+      "path": "600795.SH.json",
+      "sha256": "83e9c4b8ad46835e5d86cfc18082640123aad592faa3416242a1b570e26f1202"
+    },
+    {
+      "path": "600809.SH.json",
+      "sha256": "3c7c9e4d215fcb20d56bf4a211193a2f4818edc0a9b5d36855ef03c9a68ad0ae"
+    },
+    {
+      "path": "600887.SH.json",
+      "sha256": "4da8ec1c39a6f7a689cc2572f70dbde8a25f737713e5570b7fc511f653ec3bb5"
+    },
+    {
+      "path": "600900.SH.json",
+      "sha256": "bee26dfc067c856498bdbab525114f4db7fca7de2f5f013319bc406cf1a3f734"
+    },
+    {
+      "path": "600941.SH.json",
+      "sha256": "264e81a24f1198ee797b9ef9cbe1b0ea213596399a32fa3a38846232ac0ed841"
+    },
+    {
+      "path": "601020.SH.json",
+      "sha256": "a90dee19097c4c26d5bc288837a76ff3c4b6365303bc922748df2c6f9430203b"
+    },
+    {
+      "path": "601038.SH.json",
+      "sha256": "8a20c2e491c05ed94c6d337180362d8651ca8bb7c99673110ff53beacfa36a2d"
+    },
+    {
+      "path": "601088.SH.json",
+      "sha256": "86e7378bdcd8a39cd72422e22af10c92d7dfc1d0e9bf1d04d6f38858d0a1e587"
+    },
+    {
+      "path": "601126.SH.json",
+      "sha256": "abbc4b0a0e47718019ed5e5ea8474856d037d858cc94515fbf71e10a32165bd2"
+    },
+    {
+      "path": "601127.SH.json",
+      "sha256": "b60f8c2c2a2ca94971e4972bf26da0d7eac7af3b056c32a7e90c9f8ec88316d3"
+    },
+    {
+      "path": "601138.SH.json",
+      "sha256": "4332c8a4800b8c519a2bffd990a3344bdda934f2fc9cde896d14bc9b341af4a0"
+    },
+    {
+      "path": "601156.SH.json",
+      "sha256": "8f8119852b98dcb536548c931ee48c0322ab456b9c81e9608d31f8120f2dadea"
+    },
+    {
+      "path": "601179.SH.json",
+      "sha256": "6770e34b98a94ab18990cb4c53a080fff384ef5f32f98ead47311f296db92a0a"
+    },
+    {
+      "path": "601318.SH.json",
+      "sha256": "1c4e9e6849f38e58633a62d5cc76e7224b80619bb2f957d65f77a5a8f51e6e6e"
+    },
+    {
+      "path": "601398.SH.json",
+      "sha256": "9b6b4d530a88e926f82d88581177d13f427be13fcb97c7344cd510215b273d88"
+    },
+    {
+      "path": "601717.SH.json",
+      "sha256": "0c6d955fcce684fbc8664230a97983df470f6d5f2642141310c40987cebd3df4"
+    },
+    {
+      "path": "601727.SH.json",
+      "sha256": "6ad7b50e9a1e242d7a26c2d42ea3707789479261bbf4f5e0ae6dccdf3bf9428c"
+    },
+    {
+      "path": "601899.SH.json",
+      "sha256": "7fdba2a548729afc699a92bf6cf5afaa0f21eeda59b19f36329722055b828f9d"
+    },
+    {
+      "path": "601919.SH.json",
+      "sha256": "a076f707c4c832f0560d94beb8b15b4f38d5c23048c9829fee39a683a6c04223"
+    },
+    {
+      "path": "601975.SH.json",
+      "sha256": "1512b9bb57c4b8a7441559557db63a140a42ef2cdb91c7380542f128a7a9b771"
+    },
+    {
+      "path": "603005.SH.json",
+      "sha256": "f4d74f3ed4e0f150b3aa03d39cfe3e7a112cf3a56f921ff773ae3b2c66cfa393"
+    },
+    {
+      "path": "603129.SH.json",
+      "sha256": "8f1ecc741c570cf4a5741f56201b59c3a8565a3d01cb31ae751e5e45da46f2ce"
+    },
+    {
+      "path": "603228.SH.json",
+      "sha256": "f93694bebc58e571bd56eb981ec524d9b4e46e9fc846f30acd10e10a8f10af7b"
+    },
+    {
+      "path": "603288.SH.json",
+      "sha256": "d2f71ce15ad98908d0055e865b4990cd24be1f597b862c284a3471aa860dd4ee"
+    },
+    {
+      "path": "603298.SH.json",
+      "sha256": "e060e67386994dc090636947dd52dc0a1850a40472bf2224513ba80162b7990b"
+    },
+    {
+      "path": "603606.SH.json",
+      "sha256": "340f8408936e130d3358763844eb93fb317801b12041e6a38689ed0567c01c2a"
+    },
+    {
+      "path": "603659.SH.json",
+      "sha256": "1e4f1246b19aeee5c4f5aa990b3b72876d5eda393d76ff1131dc2ef31ad11d8e"
+    },
+    {
+      "path": "603993.SH.json",
+      "sha256": "f7033b34a2b2e6207b2ffffbea0ca62bf34bd768bdecc8116d0d301cfe822522"
+    },
+    {
+      "path": "605117.SH.json",
+      "sha256": "9a6065dca1f07d92fc987d4bf3bb8d3472dad2624f280b1131d33530c2521d1f"
+    },
+    {
+      "path": "605499.SH.json",
+      "sha256": "6519f53652b5269d7a98b1317422754307bfd6e537c90c79bcb3dfa6a71a0538"
+    },
+    {
+      "path": "688008.SH.json",
+      "sha256": "68ec09ac8130348592efa1339b4edfe49189c3bac7009fcfe9e52e9cc578bbf7"
+    },
+    {
+      "path": "688017.SH.json",
+      "sha256": "45fb9ae1459aad0a1d29cd43e5ac7fe052c964108af5c28c572a114b26329e33"
+    },
+    {
+      "path": "688235.SH.json",
+      "sha256": "d549784c1a21bb0fd872e88e544b4e23f9e1c0d9a455b2a3e18e2944aa4c5c85"
+    },
+    {
+      "path": "688271.SH.json",
+      "sha256": "f08b6b51c1ae84e8c0d07f6e782202d261c90262b2cc1b83e52cd3ea20bbd03f"
+    },
+    {
+      "path": "688361.SH.json",
+      "sha256": "1ff96a9bee531621603986594629e07945e32ec81f479972175303e9e931dd4b"
+    },
+    {
+      "path": "688676.SH.json",
+      "sha256": "22305fc1a8ee51f3855e36d7615f4e845ea10da991f5e38151d437b83de8ff7a"
+    },
+    {
+      "path": "688825.SH.json",
+      "sha256": "9112c7cb4d9534690e09791d3de5bfb2f849735ee8db13c633a63fa2cedd2454"
+    }
+  ],
+  "stock_count": 93,
+  "status_counts": {
+    "warning": 74,
+    "waiting_official_disclosure": 1,
+    "attention": 2,
+    "data_insufficient": 14,
+    "rule_stale": 1,
+    "redline": 1
+  },
+  "reviews": [
+    {
+      "ticker": "000333.SZ",
+      "company": "美的集团",
+      "reviewed_at": "2026-08-30T10:37:45+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营证据混合：楼宇科技改善，扣非待关注",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 1,
+      "data_gaps": [
+        "主报告所指完整ToB回报口径及后续持续性"
+      ],
+      "next_evidence": "下一期正式财报中继续核对扣非利润、经营现金流与楼宇科技分部回报。",
+      "evidence_count": 3,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取本地资料与一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000400.SZ",
+      "company": "许继电气",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "半年报未见修复证据",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "直流/配网订单的可比新增金额",
+        "订单回款金额及账龄"
+      ],
+      "next_evidence": "三季报继续核对利润率、应收、现金流和直流/配网订单。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000408.SZ",
+      "company": "藏格矿业",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "waiting_official_disclosure",
+      "label": "等待正式中报披露",
+      "redline_count": 0,
+      "warning_count": 0,
+      "positive_count": 0,
+      "data_gaps": [
+        "2026年半年度报告",
+        "巨龙扩产实际进度",
+        "麻米措投产进度与商品周期证据"
+      ],
+      "next_evidence": "取得正式中报、巨龙分红/扩产和麻米措投产的一手披露后再复核。",
+      "evidence_count": 2,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000568.SZ",
+      "company": "泸州老窖",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营确认条件未满足",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "连续两季合同负债",
+        "国窖批价的一手可审计来源"
+      ],
+      "next_evidence": "三季报复核合同负债是否连续回升、利润降幅是否收窄和可审计批价证据。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000651.SZ",
+      "company": "格力电器",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营走弱，但价格前提未在本层判定",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "市场份额的一手可比数据",
+        "分红纪律及管理层传承当前证据"
+      ],
+      "next_evidence": "下一期继续核对扣非、毛利率、份额、分红和管理层传承的一手材料。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000657.SZ",
+      "company": "中钨高新",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "利润增长但现金流与周转未验证",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "现金流覆盖利润的后续期证据",
+        "存货周转天数/减值",
+        "资产注入的正式条款公平性"
+      ],
+      "next_evidence": "下一期核对现金流覆盖利润、库存周转和资产注入条款。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-24",
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000682.SZ",
+      "company": "东方电子",
+      "reviewed_at": "2026-08-30T10:37:45+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营条件未改善，存在待补证据",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外订单金额",
+        "海外回款",
+        "虚拟电厂项目利润率"
+      ],
+      "next_evidence": "下一份季报或一手订单/回款公告；不得以旧主报告代替当前事实。",
+      "evidence_count": 3,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取本地资料与一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000858.SZ",
+      "company": "五粮液",
+      "reviewed_at": "2026-08-30T10:40:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "盈利改善但现金流与合同负债条件未满足",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "连续两季经营现金流",
+        "票据回落",
+        "无补贴批价的可审计证据",
+        "监管问询和治理闭环"
+      ],
+      "next_evidence": "后续季度复核连续经营现金流、票据、合同负债、批价和问询/治理闭环的一手资料。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取最新本地资料与一手公告，未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000933.SZ",
+      "company": "神火股份",
+      "reviewed_at": "2026-08-30T10:43:34+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "attention",
+      "label": "经营现金流改善，短债仍需跟踪",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "下半年利润与分红现金覆盖",
+        "铝价和氧化铝成本的正式可比数据"
+      ],
+      "next_evidence": "下一期继续核对铝价、氧化铝成本、短债和分红现金覆盖。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-07-28",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "000988.SZ",
+      "company": "hgtech",
+      "reviewed_at": "2026-08-30T10:43:34+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "重新评估条件未获证实，现金流走弱",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "1.6T正式批量订单",
+        "市场份额口径",
+        "CPO收入金额"
+      ],
+      "next_evidence": "正式披露1.6T批量订单、市场份额或CPO收入后再评估。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002027.SZ",
+      "company": "分众传媒",
+      "reviewed_at": "2026-08-30T10:44:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "现金流改善，但楼宇媒体与扣非未同步改善",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "客户集中度",
+        "并购后每股现金流",
+        "经济自由现金流的统一口径"
+      ],
+      "next_evidence": "下一期复核楼宇媒体收入、自由现金流、客户集中度及并购后每股现金流。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-19",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002028.SZ",
+      "company": "思源电气",
+      "reviewed_at": "2026-08-30T10:44:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "核心毛利与收入改善，现金转化和海外回款待确认",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外回款",
+        "H股条款最终结果",
+        "扩产项目回报"
+      ],
+      "next_evidence": "后续核对CFO/净利、海外回款、H股条款与扩产回报。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-15",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002049.SZ",
+      "company": "紫光国微",
+      "reviewed_at": "2026-08-30T10:44:52+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "attention",
+      "label": "现金流覆盖利润，特种IC毛利与治理仍待跟踪",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "LTM CFO/归母净利",
+        "瑞能半导治理专项披露",
+        "商誉减值测试"
+      ],
+      "next_evidence": "后续核对LTM现金流/归母、特种IC毛利和瑞能半导治理与商誉事项。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-15",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002050.SZ",
+      "company": "浙江三花智能控制股份有限公司",
+      "reviewed_at": "2026-08-30T10:43:34+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "现金流覆盖利润，但升级条件不完整",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "TTM扣非利润增速",
+        "液冷收入金额",
+        "机器人收入金额"
+      ],
+      "next_evidence": "后续财报核对TTM扣非增速，及液冷/机器人可审计收入。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "Codex直接读取一手公告与结构化交叉数据，未调用模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002142.SZ",
+      "company": "宁波银行",
+      "reviewed_at": "2026-08-30T14:04:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "息差守住阈值、资本回升，但个人贷款与重组贷款证据尚缺",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "个人贷款不良率",
+        "重组贷款趋势",
+        "风险加权资产增速是否收敛"
+      ],
+      "next_evidence": "下一期正式财报，重点核对个人资产质量、重组贷款和RWA增速。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地最新复核材料和一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002155.SZ",
+      "company": "湖南黄金",
+      "reviewed_at": "2026-08-30T14:40:49+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "利润"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002179.SZ",
+      "company": "中航光电科技股份有限公司",
+      "reviewed_at": "2026-08-30T14:45:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "利润、毛利率和现金流均未达到主报告改善条件",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "防务订单与关联销售",
+        "库存与应收增速",
+        "连续现金流转化"
+      ],
+      "next_evidence": "2026年三季报及订单披露，重点核对连接器毛利、CFO/净利润、应收和库存。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002202.SZ",
+      "company": "Goldwind",
+      "reviewed_at": "2026-08-30T15:00:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入利润增长且订单充足，但经营现金流为负、海外毛利与应收风险待核验",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外收入占比",
+        "海外毛利率",
+        "风机毛利率",
+        "应收坏账",
+        "分红提升"
+      ],
+      "next_evidence": "下一期正式财报及海外业务披露，重点核对OCF、海外占比/毛利、应收与风机毛利。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002226.SZ",
+      "company": "江南化工",
+      "reviewed_at": "2026-08-30T14:40:43+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，利润、毛利率、扣非利润仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "利润",
+        "毛利率",
+        "扣非利润"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002246.SZ",
+      "company": "北化股份",
+      "reviewed_at": "2026-08-30T15:00:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "利润和现金流较强，但硝化棉、海外订单、扩产回报与控制权条件待核验",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "硝化棉毛利率",
+        "国外业务",
+        "防护订单",
+        "扩产回报",
+        "实控人变更影响"
+      ],
+      "next_evidence": "2026年三季报及公司订单/扩产/控制权公告，重点核对硝化棉、海外订单和现金流。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-10",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002270.SZ",
+      "company": "华明装备",
+      "reviewed_at": "2026-08-30T13:43:48+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "海外增长强，但核心盈利质量未同步修复",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外毛利率",
+        "特高压项目单独回报",
+        "服务业务回报",
+        "Q3核心业务数据"
+      ],
+      "next_evidence": "2026年三季报及正式订单/项目披露，继续核对扣非、毛利率、现金流与应收变化。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告后的一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002272.SZ",
+      "company": "chuanrun",
+      "reviewed_at": "2026-08-30T14:38:05+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，订单仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "订单"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002352.SZ",
+      "company": "顺丰控股股份有限公司",
+      "reviewed_at": "2026-08-30T15:07:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "毛利率守住门槛，但利润和经营现金流下降，自由现金流与整合待核验",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "单票收入",
+        "自由现金流连续趋势",
+        "并购整合效果"
+      ],
+      "next_evidence": "下一期正式财报及并购整合公告，重点核对单票收入、FCF和毛利率。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002353.SZ",
+      "company": "Jereh",
+      "reviewed_at": "2026-08-30T15:07:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入增长但利润回落、经营现金流为负，毛利率未达到主报告升级线",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "北美订单趋势",
+        "自研燃机商业化",
+        "自由现金流"
+      ],
+      "next_evidence": "下一期正式财报及区域订单公告，重点核对北美订单、油气毛利和FCF。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-14",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002415.SZ",
+      "company": "海康威视",
+      "reviewed_at": "2026-08-30T14:40:47+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "利润",
+        "经营现金流",
+        "回款",
+        "库存",
+        "毛利率",
+        "收入"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002463.SZ",
+      "company": "沪电股份",
+      "reviewed_at": "2026-08-30T14:45:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "AI相关收入和利润高增，但经营现金流转化低于主报告升级线",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "mSAP稳定量产",
+        "2027云厂商资本开支",
+        "自由现金流",
+        "客户分部纪律"
+      ],
+      "next_evidence": "下一期正式财报及公司量产披露，重点核对OCF/净利、mSAP与云厂商资本开支。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002594.SZ",
+      "company": "BYD",
+      "reviewed_at": "2026-08-30T14:38:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营现金流改善，但收入和利润下滑，海外毛利率与关税条件待核验",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外毛利率",
+        "储能放量数据",
+        "欧盟关税政策进展",
+        "自由现金流"
+      ],
+      "next_evidence": "2026年三季报及公司正式海外业务/关税公告，重点核对利润、海外毛利率、储能与现金流。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002597.SZ",
+      "company": "金禾实业",
+      "reviewed_at": "2026-08-30T15:07:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入增长但利润下滑、食品添加剂毛利大幅回落，库存与FCF待核验",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "库存同比",
+        "年度自由现金流",
+        "电子化学品收入占比与毛利"
+      ],
+      "next_evidence": "下一期正式财报，重点核对食品添加剂毛利、库存、FCF和电子化学品。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002600.SZ",
+      "company": "领益智造",
+      "reviewed_at": "2026-08-30T15:16:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "扣非利润显著低于归母，新赛道分部利润与订单/商誉待核验",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "扣非连续趋势",
+        "毛利率",
+        "苹果订单",
+        "大股东减持",
+        "商誉",
+        "新赛道分部利润"
+      ],
+      "next_evidence": "下一期正式财报及公司公告，重点核对扣非、毛利率、订单、商誉和分部利润。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002683.SZ",
+      "company": "guangdong-hongda",
+      "reviewed_at": "2026-08-30T14:35:33+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营现金流为负；应收/合同资产、防务订单、并购商誉和安全生产没有完整当前证据。",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流",
+        "应收/合同资产",
+        "防务订单",
+        "商誉",
+        "安全生产"
+      ],
+      "next_evidence": "下一期正式财报及公司公告，重点复核现金流、应收/合同资产、防务订单、商誉和安全事项。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002837.SZ",
+      "company": "英维克",
+      "reviewed_at": "2026-08-30T15:16:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营现金流转化偏弱，海外订单、收入占比与毛利改善缺正式证据",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外大客户订单",
+        "海外收入占比",
+        "净现比",
+        "毛利率连续趋势"
+      ],
+      "next_evidence": "下一期正式财报及公司海外订单公告，重点核对现金流、海外收入与毛利率。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "002916.SZ",
+      "company": "深南电路",
+      "reviewed_at": "2026-08-30T14:45:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入利润与PCB毛利改善，但高阶产品、泰国良率和营运资本仍待验证",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "FC-BGA稳定量产盈利",
+        "泰国良率与境外毛利",
+        "再融资稀释",
+        "应收与存货周转"
+      ],
+      "next_evidence": "下一期财报及项目公告，重点核对FC-BGA、泰国工厂、现金流和营运资本。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "003816.SZ",
+      "company": "中国广核",
+      "reviewed_at": "2026-08-30T14:52:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "现金流稳定但收入下滑，机组投产、电价、杠杆与分红条件待核验",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "新机组投产兑现",
+        "市场化电价",
+        "杠杆趋势",
+        "分红稳定性"
+      ],
+      "next_evidence": "下一期正式财报和机组/电价公告，重点核对投产、电价、净利润和杠杆。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "300124.SZ",
+      "company": "汇川技术",
+      "reviewed_at": "2026-08-30T14:38:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入增长但归母利润和经营现金流走弱，汽车毛利率与客户集中度待核验",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "自动化分部增长",
+        "汽车业务毛利率",
+        "客户集中度",
+        "现金流恢复"
+      ],
+      "next_evidence": "2026年三季报及分部经营披露，重点核对自动化、汽车毛利率、客户集中度和现金流。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "300274.SZ",
+      "company": "阳光电源",
+      "reviewed_at": "2026-08-30T15:20:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "整体利润与现金流存在，但储能/境外毛利、出货与FCC条件尚未完整核验",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "储能毛利率",
+        "境外毛利率",
+        "储能出货增速",
+        "FCC规则范围",
+        "TTM利润趋势"
+      ],
+      "next_evidence": "下一期正式财报及监管/分部业务披露，重点核对储能、境外毛利与出货。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "300760.SZ",
+      "company": "迈瑞医疗",
+      "reviewed_at": "2026-08-30T13:43:48+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "海外与新兴业务增长，国内与利润条件仍未满足",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "IVD毛利率",
+        "海外高端客户横向采购",
+        "商誉减值测试",
+        "控股股东质押",
+        "新兴业务剔除并表后的有机增速"
+      ],
+      "next_evidence": "下一期正式财报和公司公告，优先核对国内收入转正、利润/现金流同步改善及IVD毛利率。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告后的一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "301308.SZ",
+      "company": "江波龙",
+      "reviewed_at": "2026-08-30T14:40:45+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "利润"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "301666.SZ",
+      "company": "DapuStor",
+      "reviewed_at": "2026-08-30T14:38:04+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600000.SH",
+      "company": "浦发银行",
+      "reviewed_at": "2026-08-30T14:32:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "净息差止跌、资产质量稳定，但ROE仍明显低于主报告改善线",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "分红率30%维持",
+        "连续两季息差",
+        "ROE回升至8%以上"
+      ],
+      "next_evidence": "下一期正式财报及分红公告，重点核对ROE、净息差与分红率。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-28",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600031.SH",
+      "company": "三一重工",
+      "reviewed_at": "2026-08-30T14:38:58+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600036.SH",
+      "company": "招商银行",
+      "reviewed_at": "2026-08-30T14:40:30+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，revenue巨潮文本精确值、net_profit巨潮文本精确值、deducted_profit巨潮文本精确值、operating_cash_flow巨潮文本精确值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "revenue巨潮文本精确值",
+        "net_profit巨潮文本精确值",
+        "deducted_profit巨潮文本精确值",
+        "operating_cash_flow巨潮文本精确值",
+        "分红"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600089.SH",
+      "company": "特变电工",
+      "reviewed_at": "2026-08-30T13:43:48+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "设备毛利与经营现金流改善，但海外毛利和减值需关注",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "滚动OCF/归母",
+        "Capex/OCF",
+        "硅料单独毛利",
+        "海外回款",
+        "新增减值的完整分类"
+      ],
+      "next_evidence": "下一期正式财报，重点核对境外毛利与回款、硅料利润、减值、资本开支和滚动现金转换。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-22",
+      "source_statement": "由 Codex 直接读取主报告后的一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600141.SH",
+      "company": "兴发集团",
+      "reviewed_at": "2026-08-30T14:35:39+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "上半年经营现金流为负；磷矿价格、兴福电子利润、五硫化二磷订单和磷石膏治理未获完整当前证据。",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流",
+        "磷矿价格",
+        "兴福电子业绩",
+        "五硫化二磷订单",
+        "磷石膏治理"
+      ],
+      "next_evidence": "下一期正式财报及公司公告，重点复核现金流、磷矿价差、兴福电子业绩、订单和治理进展。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600161.SH",
+      "company": "天坛生物",
+      "reviewed_at": "2026-08-30T14:40:17+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、收入、回款、库存仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "收入",
+        "回款",
+        "库存",
+        "利润",
+        "产能/销量"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600167.SH",
+      "company": "联美量子股份有限公司",
+      "reviewed_at": "2026-08-30T14:41:31+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600176.SH",
+      "company": "中国巨石股份有限公司",
+      "reviewed_at": "2026-08-30T14:36:50+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入、扣非利润和经营现金流均增长，但高端认证/批量订单、新线良率与普通电子布价格库存拐点未获完整当前证据。",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "高端认证",
+        "批量订单",
+        "新线良率",
+        "普通电子布价格",
+        "库存"
+      ],
+      "next_evidence": "下一期正式财报及公司公告，重点复核高端产品认证与批量收入、新线回报及行业价格库存。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-21",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600183.SH",
+      "company": "生益科技",
+      "reviewed_at": "2026-08-30T14:40:58+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、估值、经营现金流、利润仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "估值",
+        "经营现金流",
+        "利润",
+        "收入",
+        "订单",
+        "产能/销量",
+        "产品/客户",
+        "回款",
+        "库存"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-15",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "reviewed_at": "2026-08-30T14:04:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "创新药仍增长但放缓，现金流转化显著走弱，CRL整改仍待证实",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "卡瑞利珠单抗CRL整改/复检/重报进展",
+        "下半年现金流修复",
+        "海外监管完整核对"
+      ],
+      "next_evidence": "2026年三季报及FDA/公司正式监管进展，重点核对创新药增速、OCF转化和CRL。",
+      "evidence_count": 2,
+      "latest_evidence_date": "2026-08-21",
+      "source_statement": "由 Codex 直接读取主报告之后的本地最新复核材料和一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600309.SH",
+      "company": "万华化学",
+      "reviewed_at": "2026-08-30T14:27:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "利润和经营现金流增长，但FCF、债务与聚氨酯毛利率红线缺少同口径证据",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "自由现金流",
+        "净债务/EBITDA",
+        "聚氨酯毛利率连续口径",
+        "新材料项目资本回报"
+      ],
+      "next_evidence": "下一期正式财报及分部经营披露，重点核对FCF、债务、聚氨酯毛利和新项目回报。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600312.SH",
+      "company": "平高电气",
+      "reviewed_at": "2026-08-30T14:43:01+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "stale",
+      "status": "rule_stale",
+      "label": "主报告已更新，原锁定规则已失效，等待人工重新确认红线与条件",
+      "redline_count": 0,
+      "warning_count": 0,
+      "positive_count": 0,
+      "data_gaps": [
+        "人工重新锁定主报告规则"
+      ],
+      "next_evidence": "先由人工/Codex依据更新后的主报告重新确认规则；在此之前不对旧规则给出当前满足、警戒或红线结论。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区；旧规则仅作只读历史。"
+    },
+    {
+      "ticker": "600372.SH",
+      "company": "中航机载",
+      "reviewed_at": "2026-08-30T14:40:09+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，ROE、毛利率、经营现金流、回款仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "ROE",
+        "毛利率",
+        "经营现金流",
+        "回款",
+        "库存",
+        "利润",
+        "订单",
+        "估值"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600406.SH",
+      "company": "国电南瑞",
+      "reviewed_at": "2026-08-30T13:43:48+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "订单与应收改善，但现金流、毛利率和利润增速未达升级条件",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "海外毛利率",
+        "注销式回购用途",
+        "Q3经营现金流持续性"
+      ],
+      "next_evidence": "2026年三季报及回购后续公告，重点核对现金流、主营毛利率、利润增速、海外毛利和回购用途。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告后的一手公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600420.SH",
+      "company": "国药现代",
+      "reviewed_at": "2026-08-30T14:23:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "redline",
+      "label": "利润、现金流和原料药毛利率显著恶化，已触发主报告重审红线",
+      "redline_count": 1,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "API毛利率绝对值及连续趋势",
+        "新品收入与毛利",
+        "周转指标",
+        "治理合规变化"
+      ],
+      "next_evidence": "立即重读主报告并在下一期财报核对API毛利、现金流、制剂收入与治理合规。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600426.SH",
+      "company": "山东华鲁恒升化工股份有限公司",
+      "reviewed_at": "2026-08-30T14:36:54+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "毛利率为24.10%，单期高于20%改善门槛；但连续两季、自由现金流/净利与荆州装置ROIC未完整核验。",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "连续两季毛利率",
+        "自由现金流/净利",
+        "荆州装置ROIC",
+        "净债务"
+      ],
+      "next_evidence": "下一期正式财报及公司公告，重点复核连续毛利率、现金转化、荆州装置爬坡和ROIC。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600519.SH",
+      "company": "茅台",
+      "reviewed_at": "2026-08-30T14:14:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "H1利润小幅负增长，现金流强，但连续负增长与批价/治理红线仍待Q3验证",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "Q3利润",
+        "飞天市场批价与出厂价关系",
+        "治理事项的持续公告核对"
+      ],
+      "next_evidence": "2026年三季报及公司正式公告，重点核对利润增速、批价和治理。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-15",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600549.SH",
+      "company": "厦门钨业",
+      "reviewed_at": "2026-08-30T13:58:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "利润受高钨价拉动，但经营现金流转负，现金流与存货/短债条件待核验",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "存货余额及减值可比口径",
+        "短期借款变动",
+        "Q3利润",
+        "现金流持续性"
+      ],
+      "next_evidence": "2026年三季报，重点核对经营现金流、存货减值、短债和钨价。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-21",
+      "source_statement": "由 Codex 直接读取主报告之后的一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600795.SH",
+      "company": "guodian-power",
+      "reviewed_at": "2026-08-30T14:38:20+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，主报告条件仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 0,
+      "positive_count": 0,
+      "data_gaps": [],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-18",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600809.SH",
+      "company": "汾酒",
+      "reviewed_at": "2026-08-30T14:40:46+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600887.SH",
+      "company": "伊利股份",
+      "reviewed_at": "2026-08-30T14:27:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "经营现金流强劲恢复，但利润下滑、短借上升与合同负债下降需持续核验",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "液体乳与奶粉/冷饮分部增速",
+        "渠道库存",
+        "分红兑现",
+        "食品安全专项公告",
+        "连续现金流趋势"
+      ],
+      "next_evidence": "2026年三季报及经营公告，重点核对分部收入、短债、合同负债和渠道库存。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600900.SH",
+      "company": "长江电力",
+      "reviewed_at": "2026-08-30T14:41:41+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据",
+        "分红",
+        "估值"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "600941.SH",
+      "company": "中国移动有限公司",
+      "reviewed_at": "2026-08-30T14:52:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "EBITDA率和自由现金流较强，ARPU略高于红线，但主营与算力回报仍需连续验证",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "主营恢复增长拆分",
+        "算力服务增速",
+        "客户数变化",
+        "连续FCF/股利覆盖"
+      ],
+      "next_evidence": "下一期正式财报，重点核对主营、算力收入、ARPU、客户数与FCF/股利覆盖。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-14",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601020.SH",
+      "company": "华钰矿业",
+      "reviewed_at": "2026-08-30T14:40:13+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，利润、库存仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "利润",
+        "库存"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-28",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601038.SH",
+      "company": "一拖股份",
+      "reviewed_at": "2026-08-30T14:38:50+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，利润、毛利率、回款、产品/客户仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "利润",
+        "毛利率",
+        "回款",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601088.SH",
+      "company": "中国神华",
+      "reviewed_at": "2026-08-30T13:58:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "现金流与扣非利润增长，但完整经营验证仍缺分部利润、ROIC和短债证据",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "ROIC同口径",
+        "分部利润拆分",
+        "短期借款去化",
+        "最新分红方案"
+      ],
+      "next_evidence": "下一期正式财报及分红公告，重点核对ROIC、煤炭/发电分部利润和短借。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601126.SH",
+      "company": "四方股份",
+      "reviewed_at": "2026-08-30T13:58:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "毛利率局部改善，但经营现金流仍为负，升级条件未完成",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流转正及其与净利润比值",
+        "订单与回款节奏",
+        "SST/AIDC项目盈利性"
+      ],
+      "next_evidence": "2026年三季报及订单/回款公告，重点核对现金流/净利润比值和项目利润率。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601127.SH",
+      "company": "赛力斯",
+      "reviewed_at": "2026-08-30T14:41:34+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "利润",
+        "扣非利润",
+        "经营现金流"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601138.SH",
+      "company": "工业富联",
+      "reviewed_at": "2026-08-30T14:14:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "收入、利润和经营现金流强劲，短债下降，但FCF、云计算毛利额与平台份额未完整披露",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "自由现金流",
+        "云计算毛利额",
+        "Rubin平台交付与份额"
+      ],
+      "next_evidence": "下一期正式财报及公司正式业务公告，重点核对FCF、云计算毛利额、存货和平台份额。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-12",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601156.SH",
+      "company": "东方航空物流股份有限公司",
+      "reviewed_at": "2026-08-30T14:39:54+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 1,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601179.SH",
+      "company": "中国西电",
+      "reviewed_at": "2026-08-30T14:40:03+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，revenue巨潮文本精确值、deducted_profit巨潮文本精确值、operating_cash_flow巨潮文本精确值、ROE仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "revenue巨潮文本精确值",
+        "deducted_profit巨潮文本精确值",
+        "operating_cash_flow巨潮文本精确值",
+        "ROE",
+        "订单",
+        "毛利率"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601318.SH",
+      "company": "中国平安",
+      "reviewed_at": "2026-08-30T14:39:58+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601398.SH",
+      "company": "工商银行",
+      "reviewed_at": "2026-08-30T13:58:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "息差出现止跌迹象、资产质量改善，但ROE和核心资本仍走弱",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "季度ROE趋势",
+        "核心资本补充与RWA变化",
+        "最新分红政策"
+      ],
+      "next_evidence": "下一期正式财报及资本管理/分红公告，重点核对ROE、净息差、资产质量和核心资本。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的一手正式公告；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601717.SH",
+      "company": "中创智领",
+      "reviewed_at": "2026-08-30T14:39:57+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据",
+        "订单",
+        "回款",
+        "分红"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601727.SH",
+      "company": "上海电气",
+      "reviewed_at": "2026-08-30T14:39:48+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "主报告之后的正式财务证据",
+        "订单",
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "ROE",
+        "分红",
+        "收入",
+        "回款",
+        "库存"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 0,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601899.SH",
+      "company": "紫金矿业",
+      "reviewed_at": "2026-08-30T14:41:18+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，revenue巨潮文本精确值、operating_cash_flow巨潮文本精确值、利润、毛利率仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "revenue巨潮文本精确值",
+        "operating_cash_flow巨潮文本精确值",
+        "利润",
+        "毛利率",
+        "债务",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-22",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601919.SH",
+      "company": "中远海控",
+      "reviewed_at": "2026-08-30T14:32:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "中期派息率49%仍高于参考线，但利润与现金流下滑，运价和租赁负债须持续核验",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "SCFI持续趋势",
+        "租赁调整后净现金",
+        "红海复航进展",
+        "拆船/减产数据"
+      ],
+      "next_evidence": "下一期正式财报、运价数据及公司公告，重点核对派息率、租赁负债和行业供给。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "601975.SH",
+      "company": "招商局南京油运股份有限公司",
+      "reviewed_at": "2026-08-30T14:40:27+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，经营现金流、扣非利润、利润、收入仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流",
+        "扣非利润",
+        "利润",
+        "收入",
+        "ROIC",
+        "债务"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-28",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603005.SH",
+      "company": "jingfang-keji",
+      "reviewed_at": "2026-08-30T14:38:27+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，利润、自由现金流、收入、估值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "利润",
+        "自由现金流",
+        "收入",
+        "估值",
+        "毛利率",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-25",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603129.SH",
+      "company": "chunfeng-dongli",
+      "reviewed_at": "2026-08-30T14:38:10+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，政策、毛利率、利润、估值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "政策",
+        "毛利率",
+        "利润",
+        "估值"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-18",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603228.SH",
+      "company": "景旺电子",
+      "reviewed_at": "2026-08-30T14:40:36+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、自由现金流、扣非利润、产能/销量仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "自由现金流",
+        "扣非利润",
+        "产能/销量",
+        "库存",
+        "债务",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-22",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603288.SH",
+      "company": "海天味业",
+      "reviewed_at": "2026-08-30T14:14:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "毛利率保持高位，但经营现金流下降且转化偏低，渠道/份额/食品安全须持续核验",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "酱油相对行业增速",
+        "渠道与份额",
+        "连续现金流/利润转化",
+        "分红承诺履行"
+      ],
+      "next_evidence": "2026年三季报及公司正式经营公告，重点核对经营现金流、酱油增速、份额和食品安全。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的巨潮正式半年报，并与东方财富F10交叉核对；未调用 DeepSeek、OpenCode、ZCode 或其他模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603298.SH",
+      "company": "杭叉集团",
+      "reviewed_at": "2026-08-30T14:40:36+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "回款",
+        "库存",
+        "毛利率",
+        "估值",
+        "政策"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "reviewed_at": "2026-08-30T14:39:53+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，订单、估值、毛利率、收入仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 6,
+      "positive_count": 0,
+      "data_gaps": [
+        "订单",
+        "估值",
+        "毛利率",
+        "收入",
+        "回款"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-05",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603659.SH",
+      "company": "璞泰来",
+      "reviewed_at": "2026-08-30T14:40:53+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，产能/销量、订单、产品/客户仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "产能/销量",
+        "订单",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "603993.SH",
+      "company": "CMOC",
+      "reviewed_at": "2026-08-30T14:38:00+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，政策、产能/销量、利润仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "政策",
+        "产能/销量",
+        "利润"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "605117.SH",
+      "company": "deye",
+      "reviewed_at": "2026-08-30T14:38:15+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、回款、政策、收入仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "回款",
+        "政策",
+        "收入",
+        "产能/销量"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "605499.SH",
+      "company": "东鹏饮料（集团）股份有限公司",
+      "reviewed_at": "2026-08-30T14:39:55+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "data_insufficient",
+      "label": "未取得可交叉核验的主报告后正式财务证据，等待披露或来源恢复",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "巨潮正式披露",
+        "收入"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": null,
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688008.SH",
+      "company": "montage-tech",
+      "reviewed_at": "2026-08-30T14:38:41+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，收入、产品/客户仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 3,
+      "positive_count": 0,
+      "data_gaps": [
+        "收入",
+        "产品/客户"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688017.SH",
+      "company": "leaderdrive",
+      "reviewed_at": "2026-08-30T14:38:33+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、订单、债务仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "订单",
+        "债务"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688235.SH",
+      "company": "百济神州",
+      "reviewed_at": "2026-08-30T14:41:09+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，自由现金流、利润、收入、估值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 4,
+      "positive_count": 0,
+      "data_gaps": [
+        "自由现金流",
+        "利润",
+        "收入",
+        "估值",
+        "毛利率"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-27",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688271.SH",
+      "company": "联影医疗",
+      "reviewed_at": "2026-08-30T14:41:26+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，毛利率、估值、经营现金流、ROE仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 5,
+      "positive_count": 0,
+      "data_gaps": [
+        "毛利率",
+        "估值",
+        "经营现金流",
+        "ROE",
+        "回款",
+        "收入",
+        "库存"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-20",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688361.SH",
+      "company": "skyverse-tech",
+      "reviewed_at": "2026-08-30T14:38:45+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，经营现金流、产品/客户、估值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流",
+        "产品/客户",
+        "估值"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-26",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688676.SH",
+      "company": "金盘科技",
+      "reviewed_at": "2026-08-30T14:41:41+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，经营现金流、利润、订单、估值仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 6,
+      "positive_count": 0,
+      "data_gaps": [
+        "经营现金流",
+        "利润",
+        "订单",
+        "估值",
+        "毛利率",
+        "回款",
+        "收入"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-21",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    },
+    {
+      "ticker": "688825.SH",
+      "company": "长鑫存储",
+      "reviewed_at": "2026-08-30T14:41:47+08:00",
+      "reviewer": "Codex 直接复核（未调用模型）",
+      "rule_state": "active",
+      "status": "warning",
+      "label": "已核对最新正式财报核心数据，估值、毛利率仍需按主报告继续复核",
+      "redline_count": 0,
+      "warning_count": 2,
+      "positive_count": 0,
+      "data_gaps": [
+        "估值",
+        "毛利率"
+      ],
+      "next_evidence": "下一期正式财报及公司公告；仅对主报告明确要求的指标、连续期或事件进行复核。",
+      "evidence_count": 1,
+      "latest_evidence_date": "2026-08-29",
+      "source_statement": "由 Codex 直接读取主报告之后的本地/巨潮正式材料并与东方财富F10交叉；未调用任何模型。",
+      "decision_boundary": "不改变主报告判断、现有执行分区或人工价格分区。"
+    }
+  ]
+}

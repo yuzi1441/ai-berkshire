@@ -36,19 +36,35 @@ from source_hash import canonical_file_sha256, canonical_sha256_text
 
 
 SCHEMA_VERSION = 2
-PROTOCOL_VERSION = "main-report-review-v2.2"
+PROTOCOL_VERSION = "main-report-review-v2.3"
 RULE_GROUPS = {"entry", "holder", "improvement", "redline"}
 RULE_POLARITIES = {"positive", "negative", "monitoring"}
 RULE_STATES = {"active", "stale", "pending_manual_confirmation", "archived"}
 SCHEDULE_TYPES = {"price", "filing", "recurring_filing", "event"}
 TRUTH_STATES = {"met", "not_met", "unknown", "not_due"}
 REVIEW_EFFECTS = {"positive", "neutral", "warning", "redline"}
+EVENT_DISCLOSURE_STATES = {
+    "not_applicable",
+    "disclosed",
+    "not_disclosed",
+    "not_due",
+    "search_incomplete",
+}
 MISSING_CODES = {
     "no_current_value",
     "no_comparison",
     "no_threshold",
     "no_official_source",
     "no_event_confirmation",
+}
+MAX_OFFICIAL_EVIDENCE_DOCUMENTS = 12
+MAX_OFFICIAL_EVIDENCE_CHARS = 24000
+PROTOCOL_FINDING_CATEGORIES = {
+    "evidence_gap_pattern",
+    "source_access_issue",
+    "measurement_mapping_issue",
+    "rule_semantic_ambiguity",
+    "output_schema_issue",
 }
 TEXT_EVIDENCE_SUFFIXES = {".md", ".txt"}
 OFFICIAL_TITLE_TOKENS = (
@@ -65,6 +81,7 @@ OFFICIAL_TITLE_TOKENS = (
     "回购",
     "监管",
 )
+FORMAL_FINANCIAL_REPORT_TOKENS = ("年度报告", "半年度报告", "季度报告")
 METRIC_PATTERNS: tuple[tuple[str, str], ...] = (
     ("毛利率", r"毛利率|毛利"),
     ("经营现金流", r"经营现金流|经营活动现金流|CFO"),
@@ -89,6 +106,24 @@ NEGATIVE_MARKERS = re.compile(
     r"不改善|未改善|无法|违约|减值|事故|处罚|造假|爆雷|暂停|推迟|低迷|亏损",
     re.I,
 )
+# A rule can mention a negative word while still being a *positive* gate, for
+# example "经营现金流不继续恶化后才可买入".  Treating every occurrence of
+# "恶化" or "下降" as a sell-side red line was the source of false alerts in
+# the original coarse `risk` task.  A red line needs an explicit adverse
+# outcome; everything else remains a confirmation/monitoring condition.
+ADVERSE_OUTCOME_MARKERS = re.compile(
+    r"(?:红线|失效|清仓|减仓|卖出|回避|暂停(?:买入|加仓)?|退出|重审|"
+    r"维持(?:回避|减仓|卖出)|(?:为|是).*?(?:减仓|回避|卖出)信号)",
+    re.I,
+)
+RISK_MONITORING_MARKERS = re.compile(
+    r"(?:核对|跟踪|监测|关注).{0,24}(?:风险|治理|商誉|问询|合规|处罚)",
+    re.I,
+)
+NEGATED_REDLINE_MARKERS = re.compile(
+    r"(?:所有|既有|相关)?(?:卖出|风险)?红线(?:均)?未触发",
+    re.I,
+)
 EVENT_MARKERS = re.compile(
     r"公告|订单|中标|客户|认证|政策|监管|投产|量产|项目|回款|整改|获批|落地|事件",
     re.I,
@@ -102,6 +137,62 @@ PRICE_MARKERS = re.compile(r"股价|价格|价位|估值|PE|PB|PS|市值|\d+(?:\
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def read_price_context(repo_root: Path, ticker: str, *, now: datetime | None = None) -> dict[str, Any]:
+    """Return the existing quote snapshot as read-only context for a review.
+
+    A quote never becomes fundamental evidence and is deliberately excluded
+    from the review input fingerprint: a price change must not cause a model
+    rerun.  The dashboard's price partition remains the authority for price
+    bands and execution state.
+    """
+    checked_at = (now or datetime.now().astimezone()).astimezone()
+    for path in (
+        repo_root / "data" / "investment-dashboard" / "quotes" / "latest.json",
+        repo_root / "site" / "data" / "quotes" / "latest.json",
+    ):
+        payload = load_json(path, {})
+        if not isinstance(payload, dict):
+            continue
+        quote = next(
+            (
+                row
+                for row in (payload.get("quotes") or [])
+                if isinstance(row, dict) and str(row.get("ticker") or "") == ticker
+            ),
+            None,
+        )
+        if not isinstance(quote, dict):
+            continue
+        generated_at = str(payload.get("generated_at") or "")
+        try:
+            age_seconds = max(0, int((checked_at - datetime.fromisoformat(generated_at)).total_seconds()))
+        except ValueError:
+            age_seconds = None
+        freshness = "fresh" if age_seconds is not None and age_seconds <= 600 else "stale"
+        return {
+            "status": freshness,
+            "price": quote.get("price"),
+            "currency": quote.get("currency"),
+            "change_pct": quote.get("change_pct"),
+            "provider_timestamp": quote.get("provider_timestamp"),
+            "snapshot_generated_at": generated_at or None,
+            "age_seconds": age_seconds,
+            "source": quote.get("source") or "quote snapshot",
+            "statement": "只读行情上下文；不属于经营复核证据，不得改变规则、真值状态或价格分区。",
+        }
+    return {
+        "status": "missing",
+        "price": None,
+        "currency": None,
+        "change_pct": None,
+        "provider_timestamp": None,
+        "snapshot_generated_at": None,
+        "age_seconds": None,
+        "source": None,
+        "statement": "未找到行情快照；不得以搜索摘要或推测补充价格。",
+    }
 
 
 def canonical_json_sha256(payload: Any) -> str:
@@ -209,7 +300,14 @@ def split_rule_clauses(text: str) -> list[str]:
 
 
 def relation_for(text: str) -> str:
-    if re.search(r"任一|任意|之一|或者|或", text):
+    has_disjunction = bool(re.search(r"任一|任意|之一|或者|或", text))
+    has_conjunction = bool(re.search(r"且|同时|并且|并需|并至少|必须|以及", text))
+    # A flat all_of/any_of field cannot faithfully encode a nested expression
+    # such as "价格满足且基本面确认，或另一项条件".  `any_of` would let one
+    # fragment pass the entire rule.  Use all_of for the mixed case until the
+    # locked rule is manually split into truly atomic clauses: it fails closed
+    # and never fabricates a positive review result.
+    if has_disjunction and not has_conjunction:
         return "any_of"
     return "all_of"
 
@@ -282,6 +380,29 @@ def locked_group(task: dict[str, Any], clause: str) -> tuple[str, str]:
     if NEGATIVE_MARKERS.search(clause):
         return "redline", "negative"
     return "improvement", "positive"
+
+
+def semantic_group_for_rule(rule: dict[str, Any]) -> str:
+    """Return the display/evaluation group without rewriting the locked rule.
+
+    ``group`` is retained verbatim for auditability and stable rule IDs.  Some
+    legacy ``risk`` tasks, however, mixed an adverse red line with the positive
+    conditions needed before buying or upgrading.  Only a condition with an
+    explicit adverse outcome is a red line.  A risk item that merely asks for
+    continued monitoring is shown as a holding verification; all other such
+    clauses are operating confirmation conditions.
+    """
+    group = str(rule.get("group") or "")
+    if group != "redline":
+        return group if group in RULE_GROUPS else "holder"
+    condition = compact_text(rule.get("condition"))
+    if NEGATED_REDLINE_MARKERS.search(condition):
+        return "improvement"
+    if ADVERSE_OUTCOME_MARKERS.search(condition):
+        return "redline"
+    if RISK_MONITORING_MARKERS.search(condition):
+        return "holder"
+    return "improvement"
 
 
 def rule_from_clause(
@@ -433,8 +554,8 @@ def build_rule_package(
             "active_rule_count": len(active_rules),
             "reviewable_rule_count": sum(rule.get("reviewable") is True for rule in active_rules),
             "price_rule_count": sum(rule.get("schedule_type") == "price" for rule in active_rules),
-            "redline_count": sum(rule.get("group") == "redline" for rule in active_rules),
-            "improvement_count": sum(rule.get("group") == "improvement" for rule in active_rules),
+            "redline_count": sum(semantic_group_for_rule(rule) == "redline" for rule in active_rules),
+            "improvement_count": sum(semantic_group_for_rule(rule) == "improvement" for rule in active_rules),
             "pending_redline_candidate_count": len(audit_candidates),
         },
     }
@@ -506,6 +627,11 @@ def report_baseline_date(package: dict[str, Any]) -> str | None:
     return extract_document_date(path, "") or str((package.get("main_report") or {}).get("reviewed_at") or "")[:10] or None
 
 
+def is_post_baseline_evidence(document_date: str | None, baseline: str | None) -> bool:
+    """Only evidence strictly newer than the locked main report is current."""
+    return bool(document_date and baseline and document_date > baseline)
+
+
 def evidence_candidate_paths(repo_root: Path, package: dict[str, Any]) -> list[Path]:
     report = repo_root / str((package.get("main_report") or {}).get("path") or "")
     if not report.is_file():
@@ -559,6 +685,7 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
     can be passed to the new verifier without being extracted a second time.
     """
     ticker = str(package.get("ticker") or "")
+    baseline = report_baseline_date(package)
     zcode = load_zcode_package(repo_root, ticker)
     if not isinstance(zcode, dict) or (zcode.get("model_review") or {}).get("status") != "completed":
         return []
@@ -575,9 +702,12 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
         raw_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
         canonical_hash = canonical_file_sha256(source_path)
         raw = source_path.read_text(encoding="utf-8", errors="replace")
+        document_date = extract_document_date(source_path, raw)
+        if not is_post_baseline_evidence(document_date, baseline):
+            continue
         source_catalog[str(row.get("document_id") or "")] = {
             "path": relative,
-            "document_date": extract_document_date(source_path, raw),
+            "document_date": document_date,
             "canonical_sha256": canonical_hash,
             "recorded_hash_match": not recorded_hash or recorded_hash in {raw_hash, canonical_hash},
             "content": raw,
@@ -673,13 +803,25 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
         is_main = relative == str((package.get("main_report") or {}).get("path") or "")
         document_date = extract_document_date(path, raw)
         if relative in manifest_roles:
-            role = manifest_roles[relative]
+            # The historical ZCode manifest predates the versioned-rule
+            # protocol, so its `local_current_evidence` label is only a hint.
+            # A file from before the locked report must never time-travel into
+            # a current verdict.
+            manifest_role = manifest_roles[relative]
+            if manifest_role == "local_current_evidence":
+                role = (
+                    "local_current_evidence"
+                    if is_post_baseline_evidence(document_date, baseline)
+                    else "local_supporting_evidence"
+                )
+            else:
+                role = manifest_role
         elif is_main:
             role = "main_report_reference"
         else:
             role = (
                 "local_current_evidence"
-                if document_date and baseline and document_date > baseline
+                if is_post_baseline_evidence(document_date, baseline)
                 else "local_supporting_evidence"
             )
         if role == "main_report_reference":
@@ -706,7 +848,8 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
     return documents
 
 
-def _download_official_pdf(url: str) -> tuple[str, str, int]:
+def _download_official_pdf(url: str) -> tuple[list[str], str, int]:
+    """Download an official PDF without deciding which pages matter yet."""
     if PdfReader is None:
         raise RuntimeError("official PDF review requires the optional pypdf package")
     completed = subprocess.run(
@@ -719,8 +862,86 @@ def _download_official_pdf(url: str) -> tuple[str, str, int]:
         path = Path(directory) / "official.pdf"
         path.write_bytes(completed.stdout)
         reader = PdfReader(str(path))
-        text = "\n".join(page.extract_text() or "" for page in reader.pages)
-    return _targeted_official_text(text), hashlib.sha256(completed.stdout).hexdigest(), len(reader.pages)
+        pages = [page.extract_text() or "" for page in reader.pages]
+    return pages, hashlib.sha256(completed.stdout).hexdigest(), len(pages)
+
+
+def evidence_keywords(package: dict[str, Any]) -> list[str]:
+    """Build a compact, rule-led retrieval vocabulary for official filings."""
+    values: list[str] = []
+    for rule in package.get("active_rules") or []:
+        if rule.get("state") != "active" or rule.get("reviewable") is not True:
+            continue
+        values.extend(str(metric) for metric in (rule.get("metrics") or []) if metric)
+        values.extend(re.findall(r"[\u4e00-\u9fffA-Za-z0-9%./+-]{2,16}", str(rule.get("condition") or "")))
+    values.extend(("营业收入", "毛利率", "经营现金流", "净利润", "订单", "中标", "回款", "项目", "政策", "监管"))
+    return sorted({value for value in values if len(value) >= 2}, key=lambda value: (-len(value), value))
+
+
+def select_relevant_pdf_evidence(
+    pages: list[str],
+    package: dict[str, Any],
+    *,
+    max_chars: int = MAX_OFFICIAL_EVIDENCE_CHARS,
+) -> tuple[str, list[int]]:
+    """Select rule-relevant PDF passages with page references, not PDF prefixes."""
+    keywords = evidence_keywords(package)
+    ranked: list[tuple[int, int]] = []
+    for page_number, page in enumerate(pages, start=1):
+        score = sum(page.count(keyword) * max(2, min(len(keyword), 8)) for keyword in keywords)
+        if score:
+            ranked.append((score, page_number))
+    # A filing's title page is useful only as a fallback.  The normal path is
+    # driven by the locked rule vocabulary, so an appendix table can be chosen
+    # over the first 18k characters of a long annual report.
+    selected_pages: set[int] = set()
+    for _, page_number in sorted(ranked, key=lambda row: (-row[0], row[1]))[:12]:
+        selected_pages.add(page_number)
+        if page_number > 1:
+            selected_pages.add(page_number - 1)
+        if page_number < len(pages):
+            selected_pages.add(page_number + 1)
+    if not selected_pages:
+        selected_pages.update(range(1, min(len(pages), 3) + 1))
+
+    blocks: list[str] = []
+    used_chars = 0
+    kept_pages: list[int] = []
+    for page_number in sorted(selected_pages):
+        page = pages[page_number - 1]
+        lines = page.splitlines()
+        hit_indexes = [
+            index
+            for index, line in enumerate(lines)
+            if any(keyword in line for keyword in keywords)
+        ]
+        indexes: set[int] = set()
+        for index in hit_indexes:
+            indexes.update(range(max(0, index - 3), min(len(lines), index + 4)))
+        if not indexes:
+            indexes.update(range(min(len(lines), 80)))
+        passage = "\n".join(f"P{page_number} L{index + 1}: {lines[index]}" for index in sorted(indexes))
+        block = f"[PDF page {page_number}]\n{passage}".strip()
+        remaining = max_chars - used_chars
+        if remaining <= 0:
+            break
+        if len(block) > remaining:
+            block = block[:remaining]
+        blocks.append(block)
+        kept_pages.append(page_number)
+        used_chars += len(block) + 2
+    return "\n\n".join(blocks), kept_pages
+
+
+def official_candidate_score(row: dict[str, Any], package: dict[str, Any]) -> int:
+    title = str(row.get("title") or "")
+    score = 0
+    if any(token in title for token in FORMAL_FINANCIAL_REPORT_TOKENS) and "摘要" not in title:
+        score += 100
+    for keyword in evidence_keywords(package):
+        if keyword in title:
+            score += max(2, min(len(keyword), 10))
+    return score
 
 
 OFFICIAL_SECTION_PATTERNS: tuple[str, ...] = (
@@ -789,6 +1010,7 @@ def collect_official_evidence(
     supporting color.  ``official_limit`` caps downloads per stock (default 6)."""
     ticker = str(package.get("ticker") or "")
     company = str(package.get("company") or "")
+    baseline = report_baseline_date(package)
     rows = sentiment_snapshot.fetch_cninfo_company_news(
         {"company": company, "ticker": ticker, "market": "A股"},
         display_name=company,
@@ -802,50 +1024,24 @@ def collect_official_evidence(
         for row in rows
         if any(token in str(row.get("title") or "") for token in OFFICIAL_TITLE_TOKENS)
     ]
-
-    def title_of(row: dict[str, Any]) -> str:
-        return str(row.get("title") or "")
-
-    def latest(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        return sorted(items, key=lambda row: str(row.get("published_at") or ""), reverse=True)
-
-    periodic_full = [
-        row for row in candidates
-        if any(token in title_of(row) for token in OFFICIAL_PERIODIC_TOKENS) and "摘要" not in title_of(row)
-    ]
-    periodic_summary = [row for row in candidates if "摘要" in title_of(row)]
-    events = [
-        row for row in candidates
-        if any(token in title_of(row) for token in OFFICIAL_EVENT_TOKENS)
-        and row not in periodic_full
-    ]
-    ir = [
-        row for row in candidates
-        if any(token in title_of(row) for token in OFFICIAL_IR_TOKENS)
-        and row not in periodic_full and row not in events
-    ]
-    selected: list[dict[str, Any]] = []
-
-    def take(pool: list[dict[str, Any]], count: int) -> None:
-        for row in latest(pool):
-            if len(selected) >= official_limit:
-                return
-            if row not in selected:
-                selected.append(row)
-
-    take(periodic_full, 2)
-    take(events, 2)
-    take(ir, 1)
-    take(periodic_summary, 1)
-    take(candidates, official_limit)
-    selected = selected[:official_limit]
+    # Select according to active-rule coverage rather than a mechanical
+    # "first three PDFs" limit.  The safety ceiling controls network/runtime
+    # cost, while the page extractor below keeps only rule-relevant passages.
+    maximum = min(MAX_OFFICIAL_EVIDENCE_DOCUMENTS, max(4, len([rule for rule in package.get("active_rules") or [] if rule.get("reviewable") is True]) + 2))
+    selected = sorted(
+        candidates,
+        key=lambda row: (-official_candidate_score(row, package), str(row.get("published_at") or "")),
+    )[:maximum]
     documents: list[dict[str, Any]] = []
     for row in selected:
+        published = str(row.get("published_at") or "")
+        if not is_post_baseline_evidence(published[:10] or None, baseline):
+            continue
         try:
-            content, sha256, page_count = _download_official_pdf(str(row.get("url") or ""))
+            pages, sha256, page_count = _download_official_pdf(str(row.get("url") or ""))
         except Exception:
             continue
-        published = str(row.get("published_at") or "")
+        content, selected_pages = select_relevant_pdf_evidence(pages, package)
         documents.append(
             {
                 "document_id": f"official_{len(documents) + 1}",
@@ -855,7 +1051,20 @@ def collect_official_evidence(
                 "document_date": published[:10] or None,
                 "canonical_sha256": sha256,
                 "page_count": page_count,
+                "selected_pages": selected_pages,
+                "selection_method": "locked_rule_keyword_passages",
                 "content": content,
+            }
+        )
+    if not documents:
+        documents.append(
+            {
+                "document_id": "official_search_1",
+                "path": "cninfo announcement search",
+                "source_role": "official_search_record",
+                "document_date": now_iso()[:10],
+                "search_coverage": f"巨潮资讯近 {lookback_days} 日，检索标题含规则相关财报/订单/项目/政策/监管关键词",
+                "content": "本次官方公告检索未取得主报告基线之后、可供规则核验的正式披露。该记录只能说明本次检索范围，不证明事件未发生。",
             }
         )
     return documents
@@ -886,7 +1095,7 @@ def input_fingerprint(package: dict[str, Any], documents: list[dict[str, Any]]) 
 
 
 def effect_for_rule(rule: dict[str, Any], truth_state: str) -> str:
-    group = rule.get("group")
+    group = semantic_group_for_rule(rule)
     if truth_state in {"unknown", "not_due"}:
         return "neutral"
     if group == "redline":
@@ -898,9 +1107,15 @@ def effect_for_rule(rule: dict[str, Any], truth_state: str) -> str:
     return "positive" if truth_state == "met" else "neutral"
 
 
+def semantic_relation_for_rule(rule: dict[str, Any]) -> str:
+    """Re-evaluate legacy relation metadata from the locked condition text."""
+    return relation_for(compact_text(rule.get("condition")))
+
+
 def review_rules_with_model(
     package: dict[str, Any],
     documents: list[dict[str, Any]],
+    price_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     active_rules = [
         rule
@@ -914,16 +1129,20 @@ def review_rules_with_model(
                 "group",
                 "polarity",
                 "condition",
-                "relation",
                 "metrics",
                 "operator",
                 "threshold",
                 "periods",
+                "schedule_type",
                 "evidence_requirement",
             )
         }
         for rule in active_rules
     }
+    for rule_id, task in task_catalog.items():
+        task["relation"] = semantic_relation_for_rule(
+            next(rule for rule in active_rules if rule["rule_id"] == rule_id)
+        )
     document_catalog = {
         document["document_id"]: {
             "path": document.get("path"),
@@ -940,6 +1159,9 @@ def review_rules_with_model(
         "只有 local_current_evidence、zcode_current_evidence_extract 或 official_current_evidence 可用于 met/not_met；"
         "zcode_current_evidence_extract 只复用旧任务抽取的当前值与原文证据，旧任务的状态结论无效；"
         "local_supporting_evidence 也不能单独证明当前状态。缺少当前值、对比期或事件确认必须 unknown。"
+        "price_context 只是看板行情快照，绝不是经营证据；不得用它判断任何规则真值、修改价格带或触发投资动作。"
+        "事件规则：只有正式官方披露及原文定位才能写 disclosed 并判 met/not_met；已检索但未披露必须写 not_disclosed + unknown，"
+        "不能把未披露当作未发生。not_due 仅适用于规则明确给出且尚未到达的未来事件窗口。"
         "只返回事实核验，不给投资、仓位或交易建议。严格输出 JSON。"
     )
     user = json.dumps(
@@ -951,15 +1173,26 @@ def review_rules_with_model(
                         "truth_state": "only met/not_met/unknown/not_due",
                         "current_value": "当前值或空字符串",
                         "comparison": "与阈值/对比期的简短比较或空字符串",
+                        "disclosure_state": "event only: disclosed/not_disclosed/not_due/search_incomplete; otherwise not_applicable",
                         "evidence_document_ids": "最多3个 document_catalog id",
                         "evidence_lines": "最多3项：document_id,line_ref,exact_quote",
                         "missing_codes": "only no_current_value/no_comparison/no_threshold/no_official_source/no_event_confirmation",
                     }
                 ],
                 "rule_update": "must be manual_only",
+                "protocol_findings": [
+                    {
+                        "category": "only evidence_gap_pattern/source_access_issue/measurement_mapping_issue/rule_semantic_ambiguity/output_schema_issue",
+                        "observation": "仅记录本次已观察到的流程问题，不提出规则、阈值或投资动作修改",
+                        "rule_ids": "仅 task_catalog 内的 id，最多3个",
+                        "evidence_document_ids": "仅 document_catalog 内的 id，最多3个",
+                        "review_question": "交给后续规范汇总人工审阅的问题，最多180字",
+                    }
+                ],
             },
             "task_catalog": task_catalog,
             "document_catalog": document_catalog,
+            "price_context": price_context or {"status": "missing", "statement": "没有可用行情快照"},
             "verification_policy": {
                 "main_report_reference": "baseline_only",
                 "local_supporting_evidence": "context_only",
@@ -1033,6 +1266,24 @@ def review_rules_with_model(
             for value in evidence_ids
             if document_catalog[value].get("source_role") in allowed_current_roles
         ]
+        rule = next(rule for rule in active_rules if rule["rule_id"] == rule_id)
+        schedule_type = str(rule.get("schedule_type") or "event")
+        disclosure_state = str(raw.get("disclosure_state") or "not_applicable")
+        if disclosure_state not in EVENT_DISCLOSURE_STATES:
+            disclosure_state = "search_incomplete" if schedule_type == "event" else "not_applicable"
+        if schedule_type != "event":
+            disclosure_state = "not_applicable"
+        elif truth_state == "not_due":
+            # Existing locked rules do not carry an explicit future event date.
+            # Do not allow the model to hide an unverified event behind not_due.
+            truth_state = "unknown"
+            disclosure_state = "search_incomplete"
+            if "no_event_confirmation" not in missing_codes:
+                missing_codes.append("no_event_confirmation")
+        elif disclosure_state == "not_disclosed":
+            truth_state = "unknown"
+            if "no_event_confirmation" not in missing_codes:
+                missing_codes.append("no_event_confirmation")
         if truth_state in {"met", "not_met"} and (not current_ids or not evidence_lines):
             truth_state = "unknown"
             evidence_ids = current_ids
@@ -1045,12 +1296,21 @@ def review_rules_with_model(
             inferred_missing.append("no_current_value")
         if "comparison" in requirements and not compact_text(raw.get("comparison")):
             inferred_missing.append("no_comparison")
-        if "official_source" in requirements and not any(
+        has_official_current = any(
             document_catalog[value].get("source_role") == "official_current_evidence"
             for value in current_ids
+        )
+        has_search_record = any(
+            document.get("source_role") == "official_search_record"
+            for document in document_catalog.values()
+        )
+        if "official_source" in requirements and not has_official_current and not (
+            schedule_type == "event" and disclosure_state == "not_disclosed" and has_search_record
         ):
             inferred_missing.append("no_official_source")
-        if "event_confirmation" in requirements and not evidence_lines:
+        if "event_confirmation" in requirements and (
+            disclosure_state != "disclosed" or not has_official_current or not evidence_lines
+        ):
             inferred_missing.append("no_event_confirmation")
         for code in inferred_missing:
             if code not in missing_codes:
@@ -1059,13 +1319,13 @@ def review_rules_with_model(
         # This intentionally fails closed for both met and not_met.
         if truth_state in {"met", "not_met"} and missing_codes:
             truth_state = "unknown"
-        rule = next(rule for rule in active_rules if rule["rule_id"] == rule_id)
         by_id[rule_id] = {
             "rule_id": rule_id,
             "truth_state": truth_state,
             "review_effect": effect_for_rule(rule, truth_state),
             "current_value": compact_text(raw.get("current_value")),
             "comparison": compact_text(raw.get("comparison")),
+            "disclosure_state": disclosure_state,
             "evidence_document_ids": evidence_ids,
             "evidence_lines": evidence_lines,
             "missing_codes": missing_codes,
@@ -1081,11 +1341,38 @@ def review_rules_with_model(
                     "review_effect": "neutral",
                     "current_value": "",
                     "comparison": "",
+                    "disclosure_state": "search_incomplete" if rule.get("schedule_type") == "event" else "not_applicable",
                     "evidence_document_ids": [],
                     "evidence_lines": [],
                     "missing_codes": ["no_current_value"],
                 },
             )
+        )
+    protocol_findings = []
+    for raw in (response.get("protocol_findings") or [])[:3]:
+        if not isinstance(raw, dict):
+            continue
+        category = str(raw.get("category") or "")
+        observation = compact_text(raw.get("observation"))[:280]
+        question = compact_text(raw.get("review_question"))[:180]
+        rule_ids = [str(value) for value in (raw.get("rule_ids") or [])[:3]]
+        evidence_ids = [str(value) for value in (raw.get("evidence_document_ids") or [])[:3]]
+        if (
+            category not in PROTOCOL_FINDING_CATEGORIES
+            or not observation
+            or not question
+            or any(value not in task_catalog for value in rule_ids)
+            or any(value not in document_catalog for value in evidence_ids)
+        ):
+            continue
+        protocol_findings.append(
+            {
+                "category": category,
+                "observation": observation,
+                "rule_ids": rule_ids,
+                "evidence_document_ids": evidence_ids,
+                "review_question": question,
+            }
         )
     return {
         "status": "completed",
@@ -1093,6 +1380,7 @@ def review_rules_with_model(
         "model": config.model,
         "reasoning": reasoning,
         "rules": results,
+        "protocol_findings": protocol_findings,
     }
 
 
@@ -1142,6 +1430,7 @@ def result_payload(
     *,
     status: str | None = None,
     message: str | None = None,
+    price_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     fingerprint = input_fingerprint(package, documents)
     current_documents = [
@@ -1187,6 +1476,7 @@ def result_payload(
         "rule_state": package.get("rule_state"),
         "message": message,
         "main_report": package.get("main_report"),
+        "price_context": price_context or {"status": "missing", "statement": "本次未读取行情快照。"},
         "evidence_documents": [
             {key: value for key, value in document.items() if key != "content"}
             for document in documents
@@ -1197,6 +1487,7 @@ def result_payload(
             default=None,
         ) or None,
         "model_review": model_review,
+        "protocol_findings": (model_review or {}).get("protocol_findings") or [],
         "summary": summary,
     }
 
@@ -1220,6 +1511,7 @@ def process_package(
     official_limit: int = 6,
 ) -> tuple[str, str, dict[str, Any] | None]:
     ticker = str(package.get("ticker") or "")
+    price_context = read_price_context(repo_root, ticker)
     documents = collect_local_evidence(repo_root, package)
     if include_official and not any(
         document.get("source_role") in {"local_current_evidence", "zcode_current_evidence_extract"}
@@ -1232,13 +1524,13 @@ def process_package(
     if existing.get("input_fingerprint") == fingerprint and existing.get("summary", {}).get("status") != "error":
         return ticker, "skipped", existing
     if package.get("rule_state") != "active":
-        payload = result_payload(package, documents, None, status="stale_rules", message="主报告内容已变化，旧规则只读留档，等待人工重建")
+        payload = result_payload(package, documents, None, status="stale_rules", message="主报告内容已变化，旧规则只读留档，等待人工重建", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "stale", payload
     reviewable = [rule for rule in package.get("active_rules") or [] if rule.get("reviewable") is True]
     if not reviewable:
-        payload = result_payload(package, documents, None, status="no_rules", message="当前只有价格规则，由人工复核价格分区处理")
+        payload = result_payload(package, documents, None, status="no_rules", message="当前只有价格规则，由人工复核价格分区处理", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "no_rules", payload
@@ -1249,17 +1541,17 @@ def process_package(
         in {"local_current_evidence", "zcode_current_evidence_extract", "official_current_evidence"}
     ]
     if not current_documents:
-        payload = result_payload(package, documents, None, status="waiting_evidence", message="没有主报告基线之后的新证据，本次不调用模型")
+        payload = result_payload(package, documents, None, status="waiting_evidence", message="没有主报告基线之后的新证据，本次不调用模型", price_context=price_context)
         if not dry_run:
             atomic_write_json(output_path, payload)
         return ticker, "waiting", payload
     if dry_run:
         return ticker, "due", None
     try:
-        model_review = review_rules_with_model(package, documents)
-        payload = result_payload(package, documents, model_review)
+        model_review = review_rules_with_model(package, documents, price_context=price_context)
+        payload = result_payload(package, documents, model_review, price_context=price_context)
     except Exception as exc:
-        payload = result_payload(package, documents, None, status="error", message=str(exc))
+        payload = result_payload(package, documents, None, status="error", message=str(exc), price_context=price_context)
         atomic_write_json(output_path, payload)
         return ticker, "error", payload
     atomic_write_json(output_path, payload)
@@ -1314,6 +1606,110 @@ def run_incremental(
                     atomic_write_json(output_dir / f"{ticker}.json", error_payload)
                 print(f"{ticker}: error: {exc}", flush=True)
     return {"generated_at": now_iso(), "counts": counts, "errors": errors}
+
+
+def protocol_findings_snapshot(output_dir: Path) -> dict[str, Any]:
+    """Aggregate observed process issues without changing the active protocol."""
+    findings: list[dict[str, Any]] = []
+    inputs: list[dict[str, str]] = []
+    for path in sorted(output_dir.glob("*.json")):
+        payload = load_json(path, {})
+        if not isinstance(payload, dict) or not payload.get("ticker"):
+            continue
+        inputs.append({"path": path.name, "sha256": canonical_file_sha256(path)})
+        ticker = str(payload.get("ticker"))
+        summary = payload.get("summary") or {}
+        rule_state = str(payload.get("rule_state") or (payload.get("main_report") or {}).get("rule_state") or "")
+        if rule_state == "stale" or summary.get("status") in {"stale_rules", "rule_stale"}:
+            findings.append({"category": "rule_version_stale", "ticker": ticker, "observation": "主报告版本已变化，旧规则已停止参与当前复核。", "review_question": "新版主报告锁定流程是否完整保留了哈希、行号和旧规则只读历史？"})
+        if summary.get("status") in {"waiting_evidence", "data_insufficient", "waiting_official_disclosure"}:
+            findings.append({"category": "evidence_gap_pattern", "ticker": ticker, "observation": "本轮没有主报告基线之后的当前证据，模型未运行。", "review_question": "该类公司应补充哪一种正式披露或本地跟踪资料，才能在下次复核？"})
+        for finding in payload.get("protocol_findings") or []:
+            if not isinstance(finding, dict):
+                continue
+            category = str(finding.get("category") or "")
+            if category not in PROTOCOL_FINDING_CATEGORIES:
+                continue
+            findings.append({"category": category, "ticker": ticker, **finding})
+    by_category: dict[str, dict[str, Any]] = {}
+    for finding in findings:
+        category = str(finding["category"])
+        row = by_category.setdefault(category, {"category": category, "count": 0, "tickers": [], "examples": []})
+        row["count"] += 1
+        if finding["ticker"] not in row["tickers"]:
+            row["tickers"].append(finding["ticker"])
+        if len(row["examples"]) < 5:
+            row["examples"].append({key: finding.get(key) for key in ("ticker", "observation", "review_question", "rule_ids", "evidence_document_ids") if finding.get(key) not in (None, [], "")})
+    return {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "status": "candidate_review_only",
+        "policy": "本文件只汇总规范改进候选；不会自动修改主报告规则、红线、阈值、价格分区或执行中的规范。",
+        "input_fingerprint": canonical_json_sha256(inputs),
+        "input_files": inputs,
+        "finding_count": len(findings),
+        "categories": sorted(by_category.values(), key=lambda row: (-row["count"], row["category"])),
+    }
+
+
+def codex_direct_manual_snapshot(source_dir: Path) -> dict[str, Any]:
+    """Publish a compact, explicitly labelled archive of Codex direct reviews.
+
+    This is a human/Codex evidence layer.  It is deliberately not converted to
+    a DeepSeek result and never replaces the manually locked report rules.
+    """
+    reviews = []
+    inputs = []
+    status_counts: dict[str, int] = {}
+    for path in sorted(source_dir.glob("*.json")):
+        if path.name == "protocol-findings-current.json":
+            continue
+        payload = load_json(path, {})
+        reviewer = payload.get("reviewer") if isinstance(payload, dict) else {}
+        if not isinstance(reviewer, dict) or reviewer.get("type") != "codex_direct_manual":
+            continue
+        ticker = str(payload.get("ticker") or "")
+        summary = payload.get("summary") if isinstance(payload.get("summary"), dict) else {}
+        if not ticker or not summary:
+            continue
+        evidence = [row for row in (payload.get("evidence") or []) if isinstance(row, dict)]
+        dated_evidence = sorted(
+            (str(row.get("published_at") or row.get("document_date") or "") for row in evidence if row.get("published_at") or row.get("document_date")),
+            reverse=True,
+        )
+        status = str(summary.get("status") or "data_insufficient")
+        status_counts[status] = status_counts.get(status, 0) + 1
+        inputs.append({"path": path.name, "sha256": canonical_file_sha256(path)})
+        reviews.append(
+            {
+                "ticker": ticker,
+                "company": payload.get("company"),
+                "reviewed_at": payload.get("reviewed_at"),
+                "reviewer": "Codex 直接复核（未调用模型）",
+                "rule_state": (payload.get("main_report") or {}).get("rule_state"),
+                "status": status,
+                "label": summary.get("label") or status,
+                "redline_count": len(summary.get("redline_rule_ids") or []),
+                "warning_count": len(summary.get("warning_rule_ids") or []),
+                "positive_count": len(summary.get("positive_rule_ids") or []),
+                "data_gaps": summary.get("data_gaps") or [],
+                "next_evidence": summary.get("next_evidence"),
+                "evidence_count": len(evidence),
+                "latest_evidence_date": dated_evidence[0] if dated_evidence else None,
+                "source_statement": reviewer.get("statement"),
+                "decision_boundary": summary.get("decision_boundary"),
+            }
+        )
+    return {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "source": "Codex direct manual reviews; not a DeepSeek model result and not a replacement for human-locked rules.",
+        "input_fingerprint": canonical_json_sha256(inputs),
+        "input_files": inputs,
+        "stock_count": len(reviews),
+        "status_counts": status_counts,
+        "reviews": reviews,
+    }
 
 
 def comparison_snapshot(repo_root: Path) -> dict[str, Any]:
@@ -1480,6 +1876,8 @@ def compact_model_review_task(
     task: dict[str, Any],
     rule: dict[str, Any] | None,
     documents: dict[str, dict[str, Any]],
+    *,
+    baseline_date: str | None = None,
 ) -> dict[str, Any]:
     """Expose one saved model task while proving whether its evidence is current.
 
@@ -1487,12 +1885,19 @@ def compact_model_review_task(
     verification.  This deliberately does not reinterpret either model's rule.
     """
     evidence_ids = [str(value) for value in task.get("evidence_document_ids") or [] if value]
-    roles = sorted(
-        {
-            str((documents.get(document_id) or {}).get("source_role") or "unknown")
-            for document_id in evidence_ids
-        }
-    )
+    def effective_source_role(document: dict[str, Any]) -> str:
+        role = str(document.get("source_role") or "unknown")
+        if role != "local_current_evidence" or not baseline_date:
+            return role
+        document_date = str(document.get("document_date") or "")[:10] or None
+        if not document_date:
+            document_date = extract_document_date(Path(str(document.get("path") or "")), "")
+        # The legacy review files can label an older local note as current.
+        # Keep it as historical context in the comparison until it is proven
+        # newer than the locked main report.
+        return role if is_post_baseline_evidence(document_date, baseline_date) else "local_supporting_evidence"
+
+    roles = sorted({effective_source_role(documents.get(document_id) or {}) for document_id in evidence_ids})
     evidence_quality = "current" if any(role in CURRENT_EVIDENCE_ROLES for role in roles) else (
         "historical" if evidence_ids else "missing"
     )
@@ -1516,6 +1921,15 @@ def compact_model_review_task(
         "evidence_quality": evidence_quality,
         "evidence_document_ids": evidence_ids,
         "evidence_roles": roles,
+        "evidence_dates": sorted(
+            {
+                str((documents.get(document_id) or {}).get("document_date") or "")[:10]
+                or extract_document_date(Path(str((documents.get(document_id) or {}).get("path") or "")), "")
+                or ""
+                for document_id in evidence_ids
+            }
+            - {""}
+        ),
         "evidence_lines": evidence_lines[:4],
         "missing_codes": task.get("missing_codes") or [],
     }
@@ -1541,7 +1955,13 @@ def model_review_comparison_partition(zcode_tasks: list[dict[str, Any]], deepsee
     return "both_insufficient"
 
 
-def _model_review_packet(payload: dict[str, Any], *, model_name: str, rule_key: str) -> dict[str, Any]:
+def _model_review_packet(
+    payload: dict[str, Any],
+    *,
+    model_name: str,
+    rule_key: str,
+    baseline_date: str | None = None,
+) -> dict[str, Any]:
     review = payload.get("model_review") if isinstance(payload, dict) else {}
     review = review if isinstance(review, dict) else {}
     documents = {
@@ -1560,7 +1980,12 @@ def _model_review_packet(payload: dict[str, Any], *, model_name: str, rule_key: 
         "scope": payload.get("scope") or "",
         "run_status": review.get("status") or "missing",
         "tasks": [
-            compact_model_review_task(task, rules.get(str(task.get("task_id"))), documents)
+            compact_model_review_task(
+                task,
+                rules.get(str(task.get("task_id"))),
+                documents,
+                baseline_date=baseline_date,
+            )
             for task in review.get("tasks") or []
             if isinstance(task, dict)
         ],
@@ -1596,6 +2021,11 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
     reviews = []
     inputs = []
     counts: dict[str, int] = {}
+    rules_dir = repo_root / "data" / "investment-dashboard" / "main-report-review-rules"
+    baselines = {
+        package.get("ticker"): report_baseline_date(package)
+        for package in load_rule_packages(rules_dir)
+    } if rules_dir.is_dir() else {}
     for ticker in tickers:
         deepseek_path = deepseek_paths.get(ticker)
         zcode_path = zcode_paths.get(ticker)
@@ -1604,8 +2034,19 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
         for path in (deepseek_path, zcode_path):
             if path:
                 inputs.append({"path": str(path.relative_to(repo_root)), "sha256": canonical_file_sha256(path)})
-        zcode = _model_review_packet(zcode_payload, model_name="ZCode", rule_key="zcode_tasks")
-        deepseek = _model_review_packet(deepseek_payload, model_name="DeepSeek", rule_key="fixed_tasks")
+        baseline_date = baselines.get(ticker)
+        zcode = _model_review_packet(
+            zcode_payload,
+            model_name="ZCode",
+            rule_key="zcode_tasks",
+            baseline_date=baseline_date,
+        )
+        deepseek = _model_review_packet(
+            deepseek_payload,
+            model_name="DeepSeek",
+            rule_key="fixed_tasks",
+            baseline_date=baseline_date,
+        )
         partition = model_review_comparison_partition(zcode["tasks"], deepseek["tasks"])
         counts[partition] = counts.get(partition, 0) + 1
         reviews.append(
@@ -1637,12 +2078,22 @@ def public_review_snapshot(
     legacy_dir: Path | None = None,
 ) -> dict[str, Any]:
     generated_at = now_iso()
+    repo_root = rules_dir.resolve().parents[2]
     next_check_at = (datetime.now().astimezone() + timedelta(days=3)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
+    codex_archive = load_json(rules_dir.parent / "codex_direct_manual_review.json", {})
+    codex_by_ticker = {
+        str(row.get("ticker")): row
+        for row in (codex_archive.get("reviews") or [])
+        if isinstance(row, dict) and row.get("ticker")
+    }
     rows = []
     status_counts: dict[str, int] = {}
     for ticker, package in sorted(rules_by_ticker.items()):
         result = load_json(output_dir / f"{ticker}.json", {})
+        price_context = result.get("price_context") if isinstance(result, dict) else None
+        if not isinstance(price_context, dict):
+            price_context = read_price_context(repo_root, ticker)
         legacy_payload = load_json(legacy_dir / f"{ticker}.json", {}) if legacy_dir else {}
         legacy_daily = compact_legacy_daily_review(legacy_payload)
         result_is_current = (
@@ -1664,23 +2115,6 @@ def public_review_snapshot(
             "no_rules": "暂无可复核经营规则",
             "waiting_evidence": "等待新证据",
         }[default_status]
-        summary = result.get("summary") or {
-            "status": default_status,
-            "label": default_label,
-            "redline_count": 0,
-            "warning_count": 0,
-            "positive_count": 0,
-            "unknown_count": reviewable_rule_count,
-            "missing_requirements": sorted(
-                {
-                    requirement
-                    for rule in package.get("active_rules") or []
-                    if rule.get("reviewable") is True
-                    for requirement in rule.get("evidence_requirement") or []
-                }
-            ),
-        }
-        status = str(summary.get("status") or "waiting_evidence")
         results_by_id = {
             row.get("rule_id"): row
             for row in ((result.get("model_review") or {}).get("rules") or [])
@@ -1688,12 +2122,49 @@ def public_review_snapshot(
         }
         public_rules = []
         for rule in package.get("active_rules") or []:
+            saved_result = results_by_id.get(rule.get("rule_id"))
+            # Older saved results used the coarse raw group.  Recalculate only
+            # their display effect so a positive confirmation cannot remain a
+            # false "redline hit" after this semantic fix.
+            if isinstance(saved_result, dict):
+                saved_result = {
+                    **saved_result,
+                    "review_effect": effect_for_rule(
+                        rule,
+                        str(saved_result.get("truth_state") or "unknown"),
+                    ),
+                }
             public_rules.append(
                 {
                     **rule,
-                    "result": results_by_id.get(rule.get("rule_id")),
+                    "semantic_group": semantic_group_for_rule(rule),
+                    "semantic_relation": semantic_relation_for_rule(rule),
+                    "result": saved_result,
                 }
             )
+        current_results = [rule["result"] for rule in public_rules if isinstance(rule.get("result"), dict)]
+        if current_results and isinstance((result.get("model_review") or {}), dict) and (
+            result.get("model_review") or {}
+        ).get("status") == "completed":
+            summary = aggregate_review_status(package, current_results)
+        else:
+            summary = result.get("summary") or {
+                "status": default_status,
+                "label": default_label,
+                "redline_count": 0,
+                "warning_count": 0,
+                "positive_count": 0,
+                "unknown_count": reviewable_rule_count,
+                "missing_requirements": sorted(
+                    {
+                        requirement
+                        for rule in package.get("active_rules") or []
+                        if rule.get("reviewable") is True
+                        for requirement in rule.get("evidence_requirement") or []
+                    }
+                ),
+            }
+        status = str(summary.get("status") or "waiting_evidence")
         manual_status = (
             "stale"
             if package.get("rule_state") == "stale"
@@ -1745,6 +2216,7 @@ def public_review_snapshot(
                 "message": result.get("message"),
                 "latest_evidence_date": result.get("latest_evidence_date"),
                 "current_evidence_count": result.get("current_evidence_count", 0),
+                "price_context": price_context,
                 "evidence_documents": result.get("evidence_documents") or [],
                 "last_probe_at": generated_at,
                 "next_check_at": next_check_at,
@@ -1759,6 +2231,7 @@ def public_review_snapshot(
                     "reviewable_rule_count": reviewable_rule_count,
                     "audit_candidate_count": len(package.get("audit_candidates") or []),
                     "source": "人工主报告裁决与锁定规则",
+                    "codex_direct": codex_by_ticker.get(ticker),
                 },
                 "routine": {
                     "status": routine_status,
@@ -1777,6 +2250,7 @@ def public_review_snapshot(
                         "generated_at": result.get("generated_at"),
                         "current_evidence_count": result.get("current_evidence_count", 0),
                         "latest_evidence_date": result.get("latest_evidence_date"),
+                        "price_context": price_context,
                         "message": result.get("message"),
                     },
                 },
@@ -1786,7 +2260,7 @@ def public_review_snapshot(
         "schema_version": 4,
         "generated_at": generated_at,
         "next_check_at": next_check_at,
-        "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
+        "source": "human_locked_rules + Codex_direct_manual_review + saved_deepseek_daily_review + strict_incremental_evidence",
         "status_counts": status_counts,
         "stock_count": len(rows),
         "comparison": comparison.get("summary") if isinstance(comparison, dict) else None,
@@ -1809,6 +2283,7 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--write-comparison", action="store_true")
     parser.add_argument("--write-model-comparison-snapshot", action="store_true")
+    parser.add_argument("--write-protocol-findings", action="store_true")
     parser.add_argument("--write-public-snapshot", action="store_true")
     parser.add_argument("--snapshot-only", action="store_true")
     args = parser.parse_args()
@@ -1857,6 +2332,8 @@ def main() -> int:
         model_snapshot = model_review_comparison_snapshot(repo_root)
         atomic_write_json(repo_root / "data" / "investment-dashboard" / "model_review_comparison.json", model_snapshot)
         atomic_write_json(repo_root / "site" / "data" / "model_review_comparison.json", model_snapshot)
+    if args.write_protocol_findings and not args.dry_run:
+        atomic_write_json(output_dir / "protocol-findings-current.json", protocol_findings_snapshot(output_dir))
     print(json.dumps(run_status, ensure_ascii=False, indent=2))
     return 1 if run_status["counts"]["error"] else 0
 

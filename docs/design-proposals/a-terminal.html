@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方案A · 决策终端 | 设计预览</title>
+<script src="./shared-data.js"></script>
+<style>
+:root {
+  --bg: #0c1016; --panel: #121821; --panel2: #0f141c; --line: #1f2937;
+  --text: #e6edf3; --muted: #8b98a9; --dim: #5c6a7d;
+  --green: #2fbf71; --blue: #7cc4ff; --amber: #f0b429; --red: #ff6b6b; --violet: #c792ea;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { color-scheme: dark; }
+body { background: var(--bg); color: var(--text); font: 13px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding-bottom: 60px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ===== 预览标识 ===== */
+.ribbon { position: fixed; right: 14px; bottom: 14px; z-index: 99; background: #f0b429; color: #1a1a1a; font-weight: 700; font-size: 12px; padding: 6px 12px; border-radius: 999px; box-shadow: 0 4px 16px rgba(0,0,0,.4); }
+
+/* ===== 顶部状态条（sticky）===== */
+.topbar { position: sticky; top: 0; z-index: 50; background: rgba(12,16,22,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); padding: 0 20px; }
+.topbar-row { display: flex; align-items: center; gap: 16px; height: 46px; }
+.brand { font-weight: 800; letter-spacing: .06em; font-size: 13px; white-space: nowrap; }
+.brand em { color: var(--amber); font-style: normal; }
+.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.dot.ok { background: var(--green); }
+.topbar-spacer { flex: 1; }
+.topstats { display: flex; gap: 14px; align-items: center; }
+.tstat { text-align: center; }
+.tstat b { display: block; font-size: 15px; font-family: var(--mono); }
+.tstat span { font-size: 10px; color: var(--dim); letter-spacing: .05em; }
+.tstat.buy b { color: var(--green); } .tstat.trial b { color: var(--blue); }
+.tstat.val b { color: var(--amber); } .tstat.warn b { color: var(--red); }
+.search-top { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; color: var(--text); padding: 5px 10px; width: 200px; font-size: 12px; outline: none; }
+.search-top:focus { border-color: #3b82a0; }
+
+/* ===== 布局 ===== */
+.layout { display: grid; grid-template-columns: 208px 1fr; gap: 0; min-height: calc(100vh - 46px); }
+.rail { border-right: 1px solid var(--line); padding: 14px 12px; background: var(--panel2); position: sticky; top: 46px; height: calc(100vh - 46px); overflow-y: auto; }
+.rail h4 { font-size: 10px; letter-spacing: .12em; color: var(--dim); margin: 16px 0 6px; font-weight: 600; }
+.rail h4:first-child { margin-top: 0; }
+.fitem { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 6px; cursor: pointer; color: var(--muted); font-size: 12.5px; }
+.fitem:hover { background: #1a2230; }
+.fitem.active { background: #1c2836; color: var(--text); }
+.fitem b { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.fitem.active b { color: var(--amber); }
+.rail .note { font-size: 11px; color: var(--dim); margin-top: 18px; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 12px; }
+
+.main { padding: 14px 18px; min-width: 0; }
+.toolrow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.toolrow .hint { color: var(--dim); font-size: 11.5px; }
+.toolrow .spacer { flex: 1; }
+button.seg { background: var(--panel); border: 1px solid var(--line); color: var(--muted); padding: 4px 12px; border-radius: 7px; font-size: 12px; cursor: pointer; }
+button.seg.active { background: #1c2836; color: var(--text); border-color: #31415a; }
+
+/* ===== 表头 ===== */
+.thead { display: grid; grid-template-columns: 168px 118px 96px 1fr 128px 108px 96px 24px; gap: 10px; padding: 6px 10px; color: var(--dim); font-size: 10.5px; letter-spacing: .08em; border-bottom: 1px solid var(--line); position: sticky; top: 46px; background: var(--bg); z-index: 10; }
+
+/* ===== 行 ===== */
+.row { border-bottom: 1px solid #151c26; cursor: pointer; }
+.rowline { display: grid; grid-template-columns: 168px 118px 96px 1fr 128px 108px 96px 24px; gap: 10px; align-items: center; padding: 9px 10px; }
+.row:hover .rowline { background: #111823; }
+.row.open .rowline { background: #121b28; }
+.c-name { min-width: 0; }
+.c-name .nm { font-weight: 700; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.c-name .cd { font-size: 10.5px; color: var(--dim); font-family: var(--mono); }
+.c-name .flag { font-size: 9.5px; padding: 1px 5px; border-radius: 4px; margin-left: 5px; vertical-align: 1px; }
+.badge { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+.c-price .px { font-family: var(--mono); font-size: 14px; font-weight: 600; }
+.c-price .ch { font-size: 11px; font-family: var(--mono); }
+.up { color: #ff7b72; } .down { color: #3fb950; } /* A股红涨绿跌 */
+
+/* 价格档位条（核心组件） */
+.zbar-wrap { min-width: 0; }
+.zbar-top { display: flex; justify-content: space-between; font-size: 10px; color: var(--dim); margin-bottom: 3px; }
+.zbar-top .pos { color: var(--amber); font-weight: 700; }
+.zbar { position: relative; height: 14px; border-radius: 4px; background: #1a212c; overflow: visible; }
+.zseg { position: absolute; top: 0; height: 100%; opacity: .85; border-right: 1px solid rgba(0,0,0,.35); display: flex; align-items: center; overflow: hidden; }
+.zseg span { font-size: 9px; color: rgba(0,0,0,.75); font-weight: 700; padding-left: 4px; white-space: nowrap; }
+.zseg.kind-buy { background: #1f6f47; } .zseg.kind-buy span { color: #b8f5d4; }
+.zseg.kind-trial { background: #2b5d82; } .zseg.kind-trial span { color: #cfe9ff; }
+.zseg.kind-watch { background: #3a4353; } .zseg.kind-watch span { color: #c3ccd8; }
+.zseg.kind-reduce { background: #6e3a3a; } .zseg.kind-reduce span { color: #ffd4d4; }
+.marker { position: absolute; top: -4px; width: 2px; height: 22px; background: #fff; box-shadow: 0 0 6px rgba(255,255,255,.8); z-index: 2; }
+.marker::after { content: attr(data-v); position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 9px; color: #fff; background: #000; padding: 0 4px; border-radius: 3px; white-space: nowrap; font-family: var(--mono); }
+.zbar.nodata { display: flex; align-items: center; color: var(--dim); font-size: 11px; padding-left: 2px; }
+
+.c-manual { font-size: 11.5px; }
+.c-manual .lb { display: inline-block; padding: 3px 8px; border-radius: 6px; font-weight: 600; white-space: nowrap; }
+.c-manual .due { display: block; font-size: 10px; color: var(--dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.c-dual { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.c-dual i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* 情绪三点 */
+.c-senti { display: flex; flex-direction: column; gap: 3px; font-size: 10px; color: var(--dim); }
+.senti-dot-row { display: flex; align-items: center; gap: 4px; }
+.senti-dot-row i { width: 16px; height: 5px; border-radius: 3px; background: #333c49; }
+.senti-dot-row em { font-style: normal; width: 26px; }
+.c-chev { color: var(--dim); text-align: center; transition: transform .15s; }
+.row.open .c-chev { transform: rotate(90deg); }
+
+/* ===== 展开详情 ===== */
+.detail { display: none; background: var(--panel2); border-left: 2px solid #2c3a4f; margin: 0 0 2px; }
+.row.open + .detail { display: block; }
+.detail-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; padding: 14px 16px; }
+.dg h5 { font-size: 10px; color: var(--dim); letter-spacing: .1em; margin-bottom: 6px; }
+.dg p { font-size: 12.5px; color: #c7d1dc; margin-bottom: 8px; }
+.dg .kv { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.dg .kv b { color: var(--text); font-weight: 600; }
+.dg .warnbox { border: 1px solid #5a3a3a; background: #241618; color: #ffb3b3; padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-bottom: 8px; }
+.dg .actions { display: flex; gap: 8px; margin-top: 10px; }
+.dg .actions button { background: #1a2433; border: 1px solid var(--line); color: var(--text); font-size: 11.5px; padding: 5px 12px; border-radius: 7px; cursor: pointer; }
+.dg .actions button.pri { background: #17342a; border-color: #245a42; color: #7dedb3; }
+
+/* ===== 移动端 ===== */
+.m-search { display: none; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: 1fr; }
+  .rail { display: none; }
+  .topbar-row { height: 44px; gap: 8px; }
+  .topstats { display: none; }
+  .search-top { width: auto; flex: 1; }
+  .m-chips { display: flex; gap: 6px; padding: 8px 12px; overflow-x: auto; border-bottom: 1px solid var(--line); background: var(--panel2); position: sticky; top: 44px; z-index: 40; }
+  .m-chips button { flex: 0 0 auto; background: var(--panel); border: 1px solid var(--line); color: var(--muted); font-size: 12px; padding: 5px 12px; border-radius: 999px; }
+  .m-chips button.active { background: #1c2836; color: var(--text); border-color: #31415a; }
+  .thead { display: none; }
+  .main { padding: 10px 10px 80px; }
+  /* 移动端行卡片化：两行结构 */
+  .rowline { grid-template-columns: minmax(0,1fr) auto auto; grid-template-areas: "name verdict price" "zone zone zone"; gap: 6px 10px; padding: 10px 12px; }
+  .c-name { grid-area: name; align-self: center; }
+  .c-verdict { grid-area: verdict; align-self: center; }
+  .c-price { grid-area: price; text-align: right; }
+  .zbar-wrap { grid-area: zone; }
+  .c-manual, .c-dual, .c-senti, .c-chev { display: none; }
+  .rowline .m-meta { display: flex; gap: 6px; grid-area: zone; margin-top: 2px; }
+  .detail-grid { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
+}
+@media (min-width: 961px) { .m-chips { display: none; } .m-meta { display: none; } }
+</style>
+</head>
+<body>
+<div class="ribbon">设计稿 A · 决策终端 · 仅供预览</div>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <span class="brand">AI<em>BERKSHIRE</em></span>
+    <span class="pill"><span class="dot"></span>非交易时段 · 行情陈旧 9 天</span>
+    <div class="topbar-spacer"></div>
+    <div class="topstats">
+      <div class="tstat buy"><b>0</b><span>可分批</span></div>
+      <div class="tstat trial"><b>2</b><span>可小仓</span></div>
+      <div class="tstat val"><b>3</b><span>待验证</span></div>
+      <div class="tstat warn"><b>2</b><span>分歧/否决</span></div>
+      <div class="tstat"><b>64</b><span>等待价格</span></div>
+    </div>
+    <input class="search-top" placeholder="搜索 ⌕  /" />
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="rail">
+    <h4>执行状态</h4>
+    <div class="fitem active"><span>全部标的</span><b>229</b></div>
+    <div class="fitem"><span style="color:var(--green)">● 当前可分批</span><b>0</b></div>
+    <div class="fitem"><span style="color:var(--blue)">● 当前可小仓</span><b>2</b></div>
+    <div class="fitem"><span style="color:var(--amber)">● 价格已到待验证</span><b>3</b></div>
+    <div class="fitem"><span>● 等待价格</span><b>64</b></div>
+    <div class="fitem"><span style="color:var(--red)">● 回避 / 不买</span><b>12</b></div>
+    <div class="fitem"><span style="color:var(--violet)">● 待人工复核</span><b>6</b></div>
+    <h4>风险信号</h4>
+    <div class="fitem"><span style="color:var(--red)">▲ 双模型分歧</span><b>2</b></div>
+    <div class="fitem"><span style="color:var(--red)">▲ 红线触发</span><b>1</b></div>
+    <div class="fitem"><span>○ CheckList 否决</span><b>1</b></div>
+    <h4>市场</h4>
+    <div class="fitem"><span>A股</span><b>93</b></div>
+    <div class="fitem"><span>港股 / 美股</span><b>136</b></div>
+    <p class="note">左栏常驻：筛选不随滚动丢失。<br>数字 = 点击即筛选。<br>顶部 5 个关键计数永远可见。</p>
+  </aside>
+
+  <main class="main">
+    <div class="toolrow">
+      <button class="seg active">按执行状态</button>
+      <button class="seg">按当日涨跌</button>
+      <button class="seg">按研报截止日</button>
+      <span class="spacer"></span>
+      <span class="hint num">显示 13 / 229 · 行情快照 8/20 16:31（陈旧）</span>
+    </div>
+    <div class="m-chips">
+      <button class="active">全部 229</button><button>可分批 0</button><button>可小仓 2</button><button>待验证 3</button><button>等待价格 64</button><button>分歧 2</button><button>回避 12</button>
+    </div>
+
+    <div class="thead">
+      <span>公司</span><span>主报告判断</span><span>现价</span><span>报告价格档位 × 现价位置</span><span>人工复核</span><span>双模型复核</span><span>情绪</span><span></span>
+    </div>
+    <div id="list"></div>
+    <div class="toolrow" style="margin-top:12px">
+      <button class="seg">加载更多（50 / 页）</button>
+      <span class="hint">j / k 切换 · Enter 展开详情 · / 搜索 · Esc 关闭</span>
+    </div>
+  </main>
+</div>
+
+<script>
+const list = document.getElementById("list");
+function zoneBarHTML(s) {
+  if (!s.zones.length) return `<div class="zbar nodata">— ${s.verdict.includes("回避") ? "报告未给出买入档位" : (s.market==="港股" ? "港股研究浏览" : "无价格档")} —</div>`;
+  const min = Math.min(...s.zones.map(z => z.min));
+  const max = Math.max(...s.zones.map(z => z.max));
+  const span = max - min;
+  let html = "";
+  for (const z of s.zones) {
+    const l = ((z.min - min) / span) * 100, w = ((z.max - min) / span) * 100;
+    html += `<div class="zseg kind-${z.kind}" style="left:${l}%;width:${w}%"><span>${z.label}</span></div>`;
+  }
+  if (s.price) {
+    const p = Math.max(min, Math.min(max, s.price));
+    const pos = ((p - min) / span) * 100;
+    let inZone = s.zones.find(z => s.price >= z.min && s.price <= z.max);
+    html += `<div class="marker" data-v="${s.price}" style="left:${pos}%"></div>`;
+  }
+  return `<div class="zbar-wrap">
+    <div class="zbar-top"><span>${s.zones.map(z=>z.range).join(" · ")}</span><span class="pos">${s.price ? "现价 " + s.price : ""}</span></div>
+    <div class="zbar">${html}</div>
+  </div>`;
+}
+function sentiHTML(s) {
+  const L = s.senti;
+  const col = v => v === null ? "#333c49" : v >= 60 ? "#2fbf71" : v >= 40 ? "#f0b429" : "#ff6b6b";
+  return `<div class="c-senti">
+    <div class="senti-dot-row"><em>个股</em><i style="background:${col(L.c)}"></i><b class="num" style="color:${col(L.c)}">${L.c === null ? "—" : L.c.toFixed(0)}</b></div>
+    <div class="senti-dot-row"><em>行业</em><i style="background:${col(L.i)}"></i><b class="num" style="color:${col(L.i)}">${L.i === null ? "—" : L.i.toFixed(0)}</b></div>
+    <div class="senti-dot-row"><em>综合</em><i style="background:${col(L.score)}"></i><b class="num">${L.score === null ? "—" : L.score.toFixed(0)}</b></div>
+  </div>`;
+}
+function rowsHTML() {
+  return DATA.stocks.map((s, i) => {
+    const vcol = VKIND_COLOR[s.vkind] || "#9aa7b4";
+    const mcol = s.mkind ? (MKIND_COLOR[s.mkind] || "#9aa7b4") : null;
+    const d = s.dkind ? DLABEL[s.dkind] : null;
+    const chgCls = s.chg === null ? "" : (s.chg >= 0 ? "up" : "down");
+    const conflictNote = s.dkind === "conflict" || s.mkind === "veto"
+      ? `<div class="warnbox">⚠ ${s.mkind === "veto" ? "主报告允许分批，但 Checklist 治理硬性否决 —— 暂停买入" : "ZCode 与 DeepSeek 复核结论不一致 —— 需人工裁决"}</div>` : "";
+    return `
+    <div class="row" data-i="${i}">
+      <div class="rowline">
+        <div class="c-name">
+          <div><span class="nm">${s.name}</span><span class="flag" style="background:#1c2836;color:var(--dim)">${s.market}</span></div>
+          <div class="cd">${s.code} · ${s.industry}</div>
+        </div>
+        <div class="c-verdict"><span class="badge" style="color:${vcol};background:${vcol}1c;border:1px solid ${vcol}55">${s.verdict}</span></div>
+        <div class="c-price num"><div class="px">${s.price ?? "—"}</div><div class="ch ${chgCls}">${s.chg === null ? "" : fmtPct(s.chg)}</div></div>
+        <div class="zbar-wrap">${zoneBarHTML(s)}</div>
+        <div class="c-manual">${mcol ? `<span class="lb" style="color:${mcol};background:${mcol}14">${s.manual}</span><span class="due">${s.due}</span>` : `<span class="lb" style="color:var(--dim)">研究浏览</span>`}</div>
+        <div class="c-dual">${d ? `<i style="background:${d[1]}"></i>${d[0]}` : "—"}</div>
+        <div class="c-senti-w">${sentiHTML(s)}</div>
+        <div class="c-chev">›</div>
+      </div>
+    </div>
+    <div class="detail"><div class="detail-grid">
+      <div class="dg">
+        <h5>主报告判断 · 一句话</h5>
+        <p>${s.line}</p>
+        ${conflictNote}
+        <h5>触发 / 失效条件</h5>
+        <p style="font-size:11.5px;color:var(--muted)">${s.trigger}</p>
+        <div class="actions"><button class="pri">打开主报告</button><button>研报原文</button><button>深度复核</button></div>
+      </div>
+      <div class="dg">
+        <h5>复核与验证</h5>
+        <div class="kv">人工复核：<b>${s.manual ?? "—"}</b></div>
+        <div class="kv">双模型对照：<b>${s.dual ?? "—"}</b></div>
+        <div class="kv">待办：<b>${s.due}</b></div>
+        <div class="kv">报告数据截止：<b>${s.cutoff}</b></div>
+      </div>
+      <div class="dg">
+        <h5>技术与情绪（辅助）</h5>
+        <div class="kv">日线技术：<b>${s.tech.daily}</b>（${s.tech.conf}）</div>
+        <div class="kv">盘中30分钟：<b>${s.tech.intra}</b></div>
+        <div class="kv">情绪：个股 <b>${s.senti.c ?? "—"}</b> · 行业 <b>${s.senti.i ?? "—"}</b> · 市场 <b>${s.senti.m ?? "—"}</b></div>
+        <div class="kv">综合：<b>${s.senti.score ?? "—"}（${s.senti.state}）</b></div>
+      </div>
+    </div></div>`;
+  }).join("");
+}
+list.innerHTML = rowsHTML();
+list.addEventListener("click", e => {
+  const row = e.target.closest(".row");
+  if (!row) return;
+  const wasOpen = row.classList.contains("open");
+  list.querySelectorAll(".row.open").forEach(r => r.classList.remove("open"));
+  if (!wasOpen) row.classList.add("open");
+});
+</script>
+</body>
+</html>

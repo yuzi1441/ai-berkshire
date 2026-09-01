@@ -1019,6 +1019,13 @@ tbody tr.detail-inline-row .detail-panel {
 .report-review-layer-strip { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
 .report-review-alert-label { display: block; color: var(--ink); font-size: 11px; line-height: 1.35; }
 .report-review-alert-cell p { margin: 4px 0 0; color: var(--ink-soft); font-size: 10.5px; line-height: 1.42; }
+.report-review-direct-label { display: block; color: var(--ink); font-size: 11px; line-height: 1.35; }
+.report-review-direct-detail { margin-bottom: 7px !important; }
+.report-review-direct-warning { color: var(--watch); }
+.report-review-direct-redline { color: #ff8585; }
+.report-review-direct-positive { color: var(--buy); }
+.report-review-direct-unknown,
+.report-review-direct-data_insufficient { color: var(--ink-soft); }
 .report-review-alert-cell.report-review-alert-compact p {
   display: -webkit-box;
   overflow: hidden;

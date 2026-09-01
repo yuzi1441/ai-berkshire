@@ -107,6 +107,41 @@ class MainReportRuleTests(unittest.TestCase):
         self.assertEqual(operator, "lt")
         self.assertEqual(threshold, "30%")
 
+    def test_mixed_and_or_condition_fails_closed(self):
+        self.assertEqual(
+            review.relation_for("价格进入区间且利润修复，或现金流转正并满足毛利率要求"),
+            "all_of",
+        )
+        self.assertEqual(review.relation_for("毛利率回升或经营现金流转正"), "any_of")
+
+    def test_positive_confirmation_is_not_misclassified_as_a_redline(self):
+        confirmation = {
+            "group": "redline",
+            "condition": "价格进入对应区间且扣非利润、经营现金流不继续恶化",
+        }
+        self.assertEqual(review.semantic_group_for_rule(confirmation), "improvement")
+        self.assertEqual(review.effect_for_rule(confirmation, "met"), "positive")
+        self.assertEqual(review.effect_for_rule(confirmation, "not_met"), "neutral")
+
+        actual_redline = {
+            "group": "redline",
+            "condition": "毛利率低于 30% 即重审",
+        }
+        self.assertEqual(review.semantic_group_for_rule(actual_redline), "redline")
+        self.assertEqual(review.effect_for_rule(actual_redline, "met"), "redline")
+
+        negated_redline = {
+            "group": "redline",
+            "condition": "所有卖出红线未触发，并至少满足利润增速不低于 12%",
+        }
+        self.assertEqual(review.semantic_group_for_rule(negated_redline), "improvement")
+
+        monitoring = {
+            "group": "redline",
+            "condition": "并继续核对瑞能半导治理与商誉风险",
+        }
+        self.assertEqual(review.semantic_group_for_rule(monitoring), "holder")
+
     def test_main_report_baseline_cannot_verify_current_state(self):
         package = {
             "active_rules": [
@@ -159,11 +194,67 @@ class MainReportRuleTests(unittest.TestCase):
         self.assertEqual(result["rules"][0]["truth_state"], "unknown")
         self.assertEqual(result["rules"][0]["review_effect"], "neutral")
 
+    def test_protocol_findings_are_saved_as_candidates_not_rule_updates(self):
+        package = {
+            "active_rules": [
+                {
+                    "rule_id": "human_locked.holder.holder.1",
+                    "state": "active",
+                    "reviewable": True,
+                    "group": "holder",
+                    "polarity": "monitoring",
+                    "condition": "核对回款",
+                    "relation": "all_of",
+                    "metrics": ["回款"],
+                    "operator": None,
+                    "threshold": None,
+                    "periods": [],
+                    "evidence_requirement": ["current_value", "official_source"],
+                }
+            ]
+        }
+        documents = [{"document_id": "official_1", "path": "filing.pdf", "source_role": "official_current_evidence", "document_date": "2026-08-30", "content": "L1: 应收账款增加。"}]
+        response = {
+            "rule_results": [{"rule_id": "human_locked.holder.holder.1", "truth_state": "unknown", "current_value": "", "comparison": "", "evidence_document_ids": ["official_1"], "evidence_lines": [{"document_id": "official_1", "line_ref": "L1", "exact_quote": "应收账款增加。"}], "missing_codes": ["no_current_value"]}],
+            "protocol_findings": [{"category": "measurement_mapping_issue", "observation": "报告没有统一列示应收周转口径。", "rule_ids": ["human_locked.holder.holder.1"], "evidence_document_ids": ["official_1"], "review_question": "是否在规范中补充应收周转的来源优先级？"}],
+        }
+        with patch.object(review.opportunity_review, "model_config", return_value=SimpleNamespace(model="test")), patch.object(review.opportunity_review, "request_json", return_value=(response, "")):
+            result = review.review_rules_with_model(package, documents)
+        self.assertEqual(result["rule_update"], "manual_only")
+        self.assertEqual(len(result["protocol_findings"]), 1)
+        self.assertEqual(result["protocol_findings"][0]["category"], "measurement_mapping_issue")
+
+    def test_protocol_findings_snapshot_groups_candidates_without_editing_rules(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            review.atomic_write_json(output / "600001.SH.json", {"ticker": "600001.SH", "rule_state": "active", "summary": {"status": "waiting_evidence"}, "protocol_findings": [{"category": "source_access_issue", "observation": "正式披露接口超时。", "review_question": "是否增加备用官方入口？", "rule_ids": [], "evidence_document_ids": []}]})
+            snapshot = review.protocol_findings_snapshot(output)
+        self.assertEqual(snapshot["status"], "candidate_review_only")
+        self.assertEqual(snapshot["finding_count"], 2)
+        self.assertEqual({row["category"] for row in snapshot["categories"]}, {"evidence_gap_pattern", "source_access_issue"})
+
+    def test_codex_direct_manual_snapshot_is_not_labelled_as_deepseek(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            review.atomic_write_json(source / "600001.SH.json", {
+                "ticker": "600001.SH", "company": "样例公司", "reviewed_at": "2026-08-30T12:00:00+08:00",
+                "reviewer": {"type": "codex_direct_manual", "models_used": [], "statement": "未调用模型"},
+                "main_report": {"rule_state": "active"},
+                "evidence": [{"published_at": "2026-08-30"}],
+                "summary": {"status": "warning", "label": "需补回款证据", "warning_rule_ids": ["r1"], "data_gaps": ["回款"]},
+            })
+            snapshot = review.codex_direct_manual_snapshot(source)
+        self.assertEqual(snapshot["stock_count"], 1)
+        self.assertEqual(snapshot["reviews"][0]["reviewer"], "Codex 直接复核（未调用模型）")
+        self.assertIn("not a DeepSeek model result", snapshot["source"])
+
     def test_zcode_current_extract_is_reused_but_old_verdict_is_not_authority(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            report_path = root / "reports" / "样例" / "样例报告-20260801.md"
+            report_path.parent.mkdir(parents=True)
+            report_path.write_text("# 主报告\n", encoding="utf-8")
             evidence_path = root / "reports" / "样例" / "样例-thesis-tracker-20260819.md"
-            evidence_path.parent.mkdir(parents=True)
             evidence_path.write_text("# 2026H1 复核\n综合毛利率 30.68%。\n", encoding="utf-8")
             zcode_path = root / "local" / "fundamental-review-zcode" / "full-zcode-rules" / "600001.SH.json"
             zcode_path.parent.mkdir(parents=True)
@@ -201,12 +292,122 @@ class MainReportRuleTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            extracts = review.collect_zcode_evidence_extracts(root, {"ticker": "600001.SH"})
+            extracts = review.collect_zcode_evidence_extracts(
+                root,
+                {
+                    "ticker": "600001.SH",
+                    "main_report": {"path": str(report_path.relative_to(root))},
+                },
+            )
             self.assertEqual(len(extracts), 1)
             self.assertEqual(extracts[0]["source_role"], "zcode_current_evidence_extract")
             self.assertIn("综合毛利率 30.68%", extracts[0]["content"])
             self.assertIn("不继承旧状态结论", extracts[0]["content"])
             self.assertEqual(extracts[0]["provenance"][0]["path"], str(evidence_path.relative_to(root)))
+
+    def test_pre_report_manifest_evidence_cannot_time_travel_into_current_review(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report = root / "reports" / "样例" / "样例报告-20260810.md"
+            report.parent.mkdir(parents=True)
+            report.write_text("# 主报告\n毛利率条件\n", encoding="utf-8")
+            old_evidence = root / "reports" / "样例" / "样例-thesis-20260805.md"
+            old_evidence.write_text("# 较早材料\n毛利率 31%\n", encoding="utf-8")
+            manifest = root / "logs" / "zcode_review_manifest.json"
+            manifest.parent.mkdir(parents=True)
+            manifest.write_text(
+                json.dumps(
+                    [{
+                        "ticker": "600001.SH",
+                        "docs": [{
+                            "path": str(old_evidence.relative_to(root)),
+                            "role": "local_current_evidence",
+                        }],
+                    }],
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            documents = review.collect_local_evidence(
+                root,
+                {
+                    "ticker": "600001.SH",
+                    "main_report": {"path": str(report.relative_to(root))},
+                    "active_rules": [{"condition": "毛利率", "metrics": ["毛利率"]}],
+                },
+            )
+            old_document = next(item for item in documents if item["path"] == str(old_evidence.relative_to(root)))
+            self.assertEqual(old_document["source_role"], "local_supporting_evidence")
+
+    def test_official_collection_prioritizes_full_financial_report_over_same_day_notice(self):
+        package = {
+            "ticker": "600001.SH",
+            "company": "样例公司",
+            "main_report": {"path": "reports/x-20260801.md"},
+            "active_rules": [{"state": "active", "reviewable": True, "condition": "核对毛利率", "metrics": ["毛利率"]}],
+        }
+        rows = [
+            {"title": "样例公司关于项目进展的公告", "published_at": "2026-08-29", "url": "project"},
+            {"title": "样例公司2026年半年度报告摘要", "published_at": "2026-08-29", "url": "summary"},
+            {"title": "样例公司2026年半年度报告", "published_at": "2026-08-29", "url": "report"},
+        ]
+        with patch.object(review.sentiment_snapshot, "fetch_cninfo_company_news", return_value=rows), patch.object(
+            review, "_download_official_pdf", return_value=(["正式报告内容\n毛利率 31%"], "sha", 1)
+        ) as download:
+            documents = review.collect_official_evidence(package)
+        self.assertEqual(download.call_args_list[0].args[0], "report")
+        self.assertEqual(documents[0]["title"], "样例公司2026年半年度报告")
+        self.assertEqual(documents[0]["selection_method"], "locked_rule_keyword_passages")
+
+    def test_pdf_selection_uses_rule_matching_pages_not_pdf_prefix(self):
+        package = {
+            "active_rules": [{"state": "active", "reviewable": True, "condition": "海外订单回款", "metrics": ["订单", "回款"]}],
+        }
+        pages = ["封面和目录", "普通说明", "其它内容", "海外订单 12 亿元\n项目回款 8 亿元"]
+        content, selected_pages = review.select_relevant_pdf_evidence(pages, package)
+        self.assertIn(4, selected_pages)
+        self.assertIn("P4 L1: 海外订单 12 亿元", content)
+
+    def test_event_not_disclosed_stays_unknown_after_official_search(self):
+        package = {
+            "active_rules": [{
+                "rule_id": "human_locked.redline.event.1", "state": "active", "reviewable": True,
+                "group": "redline", "polarity": "negative", "condition": "海外订单取消即重审",
+                "relation": "all_of", "metrics": ["订单"], "operator": None, "threshold": None,
+                "periods": [], "schedule_type": "event",
+                "evidence_requirement": ["official_source", "event_confirmation"],
+            }]
+        }
+        documents = [{
+            "document_id": "official_search_1", "path": "cninfo search", "source_role": "official_search_record",
+            "document_date": "2026-08-30", "content": "本次官方检索未见订单取消披露。",
+        }]
+        response = {"rule_results": [{
+            "rule_id": "human_locked.redline.event.1", "truth_state": "not_met", "current_value": "",
+            "comparison": "", "disclosure_state": "not_disclosed", "evidence_document_ids": ["official_search_1"],
+            "evidence_lines": [{"document_id": "official_search_1", "line_ref": "L1", "exact_quote": "未见订单取消披露"}],
+            "missing_codes": [],
+        }]}
+        with patch.object(review.opportunity_review, "model_config", return_value=SimpleNamespace(model="test")), patch.object(review.opportunity_review, "request_json", return_value=(response, "")):
+            result = review.review_rules_with_model(package, documents)
+        rule = result["rules"][0]
+        self.assertEqual(rule["truth_state"], "unknown")
+        self.assertEqual(rule["disclosure_state"], "not_disclosed")
+        self.assertIn("no_event_confirmation", rule["missing_codes"])
+
+    def test_price_context_is_read_only_and_marks_stale_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "data" / "investment-dashboard" / "quotes" / "latest.json"
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({
+                "generated_at": "2026-08-20T16:31:43+08:00",
+                "quotes": [{"ticker": "600001.SH", "price": 12.34, "currency": "CNY", "source": "Tencent quote"}],
+            }), encoding="utf-8")
+            context = review.read_price_context(root, "600001.SH")
+        self.assertEqual(context["price"], 12.34)
+        self.assertEqual(context["status"], "stale")
+        self.assertIn("不得改变规则", context["statement"])
 
     def test_model_error_keeps_reused_extract_in_atomic_result(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -355,8 +556,11 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertIn("fundamentalReviewPartitionKey", app)
         self.assertIn("reportReviewAlert", app)
         self.assertIn("model_review_comparison.json", app)
+        self.assertIn("Codex 直接复核", app)
+        self.assertIn("Codex 直接复核（当前证据）", app)
         self.assertIn("ZCode 独立复核", app)
         self.assertIn("DeepSeek 复核", app)
+        self.assertIn("复核行情上下文", app)
         self.assertIn("双方证据不足 / 历史", app)
         self.assertIn(".fundamental-review-table", css)
 
@@ -377,6 +581,27 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
             review.model_review_comparison_partition([], [result]),
             "both_insufficient",
         )
+
+    def test_model_comparison_downgrades_pre_report_current_label(self):
+        task = {
+            "task_id": "holder",
+            "status": "verified",
+            "evidence_document_ids": ["old_note"],
+            "evidence_lines": [],
+        }
+        result = review.compact_model_review_task(
+            task,
+            {"task_id": "holder", "scope_label": "持仓验证", "content": "毛利率"},
+            {
+                "old_note": {
+                    "source_role": "local_current_evidence",
+                    "document_date": "2026-07-08",
+                }
+            },
+            baseline_date="2026-07-13",
+        )
+        self.assertEqual(result["evidence_quality"], "historical")
+        self.assertEqual(result["evidence_roles"], ["local_supporting_evidence"])
 
     def test_model_comparison_uses_current_evidence_and_keeps_conflicts_visible(self):
         zcode = {"task_id": "risk", "status": "triggered", "evidence_quality": "current"}
@@ -412,17 +637,32 @@ class ProductionReviewSnapshotTests(unittest.TestCase):
         self.assertEqual(dongfang["routine"]["reviewer"], "deepseek-v4-flash")
         self.assertEqual(len(dongfang["routine"]["legacy_daily"]["tasks"]), 3)
         self.assertEqual(dongfang["routine"]["strict_incremental"]["status"], dongfang["summary"]["status"])
-        self.assertEqual(dongfang["current_evidence_count"], 2)
-        self.assertEqual(
-            sum(
-                document.get("source_role") == "zcode_current_evidence_extract"
-                for document in dongfang["evidence_documents"]
-            ),
-            3,
+        # The saved DeepSeek result is retained as historical context only.
+        # Its pre-v2.3 evidence cannot become current evidence by implication.
+        self.assertEqual(dongfang["current_evidence_count"], 0)
+        self.assertEqual(dongfang["evidence_documents"], [])
+        self.assertEqual(dongfang["routine"]["strict_incremental"]["status"], "waiting_evidence")
+        self.assertEqual(dongfang["routine"]["legacy_daily"]["local_evidence_count"], 3)
+        midea = next(row for row in snapshot["reviews"] if row["ticker"] == "000333.SZ")
+        confirmation = next(
+            rule
+            for rule in midea["rules"]
+            if "经营现金流不继续恶化" in rule.get("condition", "")
         )
+        self.assertEqual(confirmation["group"], "redline")
+        self.assertEqual(confirmation["semantic_group"], "improvement")
+        nari = next(row for row in snapshot["reviews"] if row["ticker"] == "600406.SH")
+        nari_confirmation = next(
+            rule
+            for rule in nari["rules"]
+            if "所有卖出红线未触发" in rule.get("condition", "")
+        )
+        self.assertEqual(nari_confirmation["semantic_group"], "improvement")
+        self.assertEqual(nari_confirmation["semantic_relation"], "all_of")
         app = (self.ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
         self.assertIn("currentExecutionState", app)
         self.assertIn("humanReviewExecutionState", app)
+        self.assertIn("semantic_group", app)
 
 
 if __name__ == "__main__":

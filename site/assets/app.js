@@ -1860,7 +1860,7 @@ function renderFundamentalReviewPartitions() {
 }
 
 function fundamentalReviewRules(review, group = null) {
-  return (review?.rules || []).filter((rule) => !group || rule.group === group);
+  return (review?.rules || []).filter((rule) => !group || (rule.semantic_group || rule.group) === group);
 }
 
 function activeReviewResultRules(review, effect) {
@@ -3672,6 +3672,13 @@ function renderManualReviewCell(review) {
   audit.className = "fundamental-review-meta muted";
   audit.textContent = `${manual.audit_candidate_count ?? review.audit_candidates?.length ?? 0} 条 ZCode 审计候选未启用`;
   cell.append(source, count, reviewed, audit);
+  const direct = manual.codex_direct;
+  if (direct) {
+    const current = document.createElement("p");
+    current.className = "fundamental-review-meta routine-review-warning";
+    current.textContent = `今日 Codex 直接复核：${direct.label || direct.status} · ${direct.evidence_count ?? 0} 份证据`;
+    cell.append(current);
+  }
   return cell;
 }
 
@@ -3749,14 +3756,24 @@ function reportReviewAlert(review) {
   return { label: meta?.[1] || "复核待核对", detail, tone: meta?.[3] || "gap" };
 }
 
-function renderReportReviewAlertCell(review, { compact = false } = {}) {
+function renderReportReviewAlertCell(review, { compact = false, fundamentalReview = null } = {}) {
   const cell = document.createElement("td");
   cell.className = `report-review-alert-cell ${compact ? "report-review-alert-compact" : ""}`;
-  cell.dataset.label = compact ? "双模型复核" : "对照分区";
+  cell.dataset.label = compact ? "报告复核摘要" : "对照分区";
+  const direct = fundamentalReview?.manual?.codex_direct || review?.manual?.codex_direct;
+  if (compact && direct) {
+    const directLabel = document.createElement("strong");
+    directLabel.className = `report-review-direct-label report-review-direct-${direct.status || "unknown"}`;
+    directLabel.textContent = `Codex 直接复核 · 红线 ${direct.redline_count ?? 0} · 关注 ${direct.warning_count ?? 0}`;
+    const directDetail = document.createElement("p");
+    directDetail.className = "report-review-direct-detail";
+    directDetail.textContent = direct.label || direct.status || "尚未保存结论";
+    cell.append(directLabel, directDetail);
+  }
   const alert = reportReviewAlert(review);
   const label = document.createElement("strong");
   label.className = `report-review-alert-label report-review-alert-${alert.tone}`;
-  label.textContent = alert.label;
+  label.textContent = compact ? `ZCode × DeepSeek · ${alert.label}` : alert.label;
   const detail = document.createElement("p");
   detail.textContent = alert.detail;
   cell.append(label, detail);
@@ -3792,8 +3809,29 @@ function renderModelReviewCell(packet, label) {
   return cell;
 }
 
+function renderCodexDirectReviewCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell codex-direct-review-cell";
+  cell.dataset.label = "Codex 直接复核";
+  const direct = review?.manual?.codex_direct;
+  if (!direct) {
+    cell.textContent = "未归档 Codex 直接复核";
+    return cell;
+  }
+  const source = document.createElement("strong");
+  source.textContent = `Codex 直接复核 · ${shortReviewDate(direct.reviewed_at)}`;
+  const verdict = document.createElement("p");
+  verdict.className = "fundamental-review-meta";
+  verdict.textContent = direct.label || direct.status || "未保存结论";
+  const evidence = document.createElement("p");
+  evidence.className = "fundamental-review-meta muted";
+  evidence.textContent = `${direct.evidence_count ?? 0} 份当前证据 · 红线 ${direct.redline_count ?? 0} · 关注 ${direct.warning_count ?? 0}`;
+  cell.append(source, verdict, evidence);
+  return cell;
+}
+
 function renderFundamentalReviewRows(visible) {
-  setTableHeader(["公司 / 代码", "对照分区", "ZCode 独立复核", "DeepSeek 复核", "对照说明"]);
+  setTableHeader(["公司 / 代码", "Codex 直接复核", "对照分区", "ZCode 独立复核", "DeepSeek 复核", "对照说明"]);
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
   rendered.forEach((item, index) => {
     const review = modelReviewForItem(item);
@@ -3806,6 +3844,7 @@ function renderFundamentalReviewRows(visible) {
     tr.append(renderIdentityCell(item));
 
     tr.append(
+      renderCodexDirectReviewCell(fundamentalReviewForItem(item)),
       renderReviewQueueStatusCell(review),
       renderModelReviewCell(review?.zcode, "ZCode 独立复核"),
       renderModelReviewCell(review?.deepseek, "DeepSeek 复核"),
@@ -3825,7 +3864,7 @@ function renderFundamentalReviewRows(visible) {
     els.loadMoreRows.hidden = remaining === 0;
     els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
   }
-  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 按双模型分歧与当前证据排序`;
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · Codex 当前结论与 ZCode / DeepSeek 交叉对照`;
   if (els.emptyState) els.emptyState.hidden = visible.length > 0;
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
@@ -3882,7 +3921,10 @@ function renderRows() {
     humanReviewTd.append(renderHumanReviewMainCell(item, quote));
     tr.append(humanReviewTd);
 
-    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), { compact: true });
+    const reportReviewTd = renderReportReviewAlertCell(modelReviewForItem(item), {
+      compact: true,
+      fundamentalReview: fundamentalReviewForItem(item),
+    });
     tr.append(reportReviewTd);
 
     const change = formatChange(quote);
@@ -4089,7 +4131,7 @@ const fundamentalReviewGroupMeta = {
 
 function renderFundamentalReviewRule(rule) {
   const article = document.createElement("article");
-  const groupMeta = fundamentalReviewGroupMeta[rule.group] || fundamentalReviewGroupMeta.holder;
+  const groupMeta = fundamentalReviewGroupMeta[rule.semantic_group || rule.group] || fundamentalReviewGroupMeta.holder;
   article.className = `fundamental-review-rule-card fundamental-review-rule-card-${groupMeta.tone}`;
   const head = document.createElement("div");
   head.className = "fundamental-review-rule-head";
@@ -4107,7 +4149,7 @@ function renderFundamentalReviewRule(rule) {
   meta.className = "fundamental-review-rule-meta";
   const rows = [
     ["指标", (rule.metrics || []).join("、") || "事件 / 定性条件"],
-    ["关系", rule.relation === "any_of" ? "任一满足" : "全部满足"],
+    ["关系", (rule.semantic_relation || rule.relation) === "any_of" ? "任一满足" : "全部满足（保守核验）"],
     ["阈值", [rule.operator, rule.threshold].filter(Boolean).join(" ") || "按主报告原文"],
     ["复核时间", reviewScheduleLabel(rule)],
   ];
@@ -4204,21 +4246,63 @@ function renderFundamentalReviewDetail(item) {
     els.detailBody.append(empty);
     return;
   }
+  const strictReview = fundamentalReviewForItem(item);
+  const codexDirect = strictReview?.manual?.codex_direct;
+  if (codexDirect) {
+    const directCard = document.createElement("section");
+    directCard.className = "card fundamental-review-overview-card codex-direct-review-card";
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "eyebrow";
+    eyebrow.textContent = "CODEX DIRECT EVIDENCE REVIEW";
+    const title = document.createElement("h3");
+    title.textContent = "Codex 直接复核（当前证据）";
+    const verdict = document.createElement("p");
+    verdict.className = "fundamental-review-policy";
+    verdict.textContent = codexDirect.label || codexDirect.status || "未保存结论";
+    directCard.append(eyebrow, title, verdict);
+    appendReviewFacts(directCard, [
+      ["复核时间", shortReviewDate(codexDirect.reviewed_at)],
+      ["当前证据", `${codexDirect.evidence_count ?? 0} 份`],
+      ["红线 / 关注", `${codexDirect.redline_count ?? 0} / ${codexDirect.warning_count ?? 0}`],
+      ["下一证据", codexDirect.next_evidence || "未记录"],
+    ]);
+    if (codexDirect.data_gaps?.length) {
+      const gaps = document.createElement("p");
+      gaps.className = "source-note";
+      gaps.textContent = `数据缺口：${codexDirect.data_gaps.join("；")}`;
+      directCard.append(gaps);
+    }
+    const boundary = document.createElement("p");
+    boundary.className = "fundamental-review-policy";
+    boundary.textContent = codexDirect.source_statement || codexDirect.decision_boundary || "只核对主报告之后的证据；不改写人工锁定规则。";
+    directCard.append(boundary);
+    els.detailBody.append(directCard);
+  }
   const comparisonCard = document.createElement("section");
   comparisonCard.className = "card fundamental-review-overview-card";
   const comparisonEyebrow = document.createElement("p");
   comparisonEyebrow.className = "eyebrow";
   comparisonEyebrow.textContent = "SAVED MODEL REVIEW COMPARISON";
   const comparisonTitle = document.createElement("h3");
-  comparisonTitle.textContent = "ZCode 与 DeepSeek 双层复核";
+  comparisonTitle.textContent = "ZCode 与 DeepSeek 模型交叉对照";
   const comparisonNote = document.createElement("p");
   comparisonNote.className = "fundamental-review-policy";
   comparisonNote.textContent = "两边都保留各自的规则文本和结果。只有引用主报告之后的本地或官方材料，才标为当前证据；这不会自动改变主报告判断或人工价格分区。";
+  const priceContext = strictReview?.price_context || strictReview?.routine?.strict_incremental?.price_context;
+  const priceNote = document.createElement("p");
+  priceNote.className = "source-note";
+  if (priceContext?.price !== null && priceContext?.price !== undefined) {
+    const timing = priceContext.snapshot_generated_at ? shortReviewDate(priceContext.snapshot_generated_at) : "时间未记录";
+    const freshness = priceContext.status === "fresh" ? "新鲜" : "已过期";
+    priceNote.textContent = `复核行情上下文：${priceContext.price} ${priceContext.currency || ""} · ${timing} · ${freshness}。仅作价格背景，不参与经营结论。`;
+  } else {
+    priceNote.textContent = "复核行情上下文：快照缺失；不会以搜索摘要或推测补充价格。";
+  }
   const comparisonAlert = reportReviewAlert(comparison);
   const comparisonStatus = document.createElement("p");
   comparisonStatus.className = `report-review-alert-label report-review-alert-${comparisonAlert.tone}`;
   comparisonStatus.textContent = `${comparisonAlert.label}：${comparisonAlert.detail}`;
-  comparisonCard.append(comparisonEyebrow, comparisonTitle, comparisonStatus, comparisonNote);
+  comparisonCard.append(comparisonEyebrow, comparisonTitle, comparisonStatus, comparisonNote, priceNote);
   els.detailBody.append(comparisonCard);
 
   const statusClass = (task) => task?.evidence_quality === "current" ? "model-review-current" : "model-review-historical";
@@ -4288,6 +4372,7 @@ function renderFundamentalReviewDetail(item) {
   layers.className = "fundamental-review-layer-grid";
 
   const manual = review.manual || {};
+  const direct = manual.codex_direct || null;
   const manualCard = document.createElement("article");
   manualCard.className = "fundamental-review-layer-card manual-review-card";
   const manualTop = document.createElement("div");
@@ -4301,10 +4386,13 @@ function renderFundamentalReviewDetail(item) {
     ["人工确认", shortReviewDate(manual.reviewed_at || review.main_report?.reviewed_at)],
     ["锁定规则", `${manual.rule_count ?? review.rules?.length ?? 0} 条`],
     ["审计候选", `${manual.audit_candidate_count ?? review.audit_candidates?.length ?? 0} 条未启用`],
+    ["今日 Codex 直接复核", direct ? `${direct.label || direct.status} · ${direct.evidence_count ?? 0} 份证据` : "尚未归档"],
   ]);
   const manualNote = document.createElement("p");
   manualNote.className = "fundamental-review-policy";
-  manualNote.textContent = "只有人工确认的主报告规则在这里生效；价格条件仍由买入前页面的人工价格分区处理。";
+  manualNote.textContent = direct
+    ? `Codex 只核对主报告之后的证据：${direct.source_statement || "未调用模型"}。它不改写人工锁定规则，价格条件仍由买入前页面的人工价格分区处理。`
+    : "只有人工确认的主报告规则在这里生效；价格条件仍由买入前页面的人工价格分区处理。";
   manualCard.prepend(manualTop);
   manualCard.append(manualNote);
 
@@ -4406,7 +4494,9 @@ function renderFundamentalReviewDetail(item) {
   }
 
   const redlines = fundamentalReviewRules(review, "redline").filter((rule) => rule.schedule_type !== "price");
-  const due = fundamentalReviewRules(review).filter((rule) => rule.reviewable && ["holder", "entry"].includes(rule.group));
+  const due = fundamentalReviewRules(review).filter(
+    (rule) => rule.reviewable && ["holder", "entry"].includes(rule.semantic_group || rule.group),
+  );
   const improvements = fundamentalReviewRules(review, "improvement").filter((rule) => rule.schedule_type !== "price");
   appendFundamentalReviewSection("日常红线 / 风险预警", "人工规则给出条件；只有日常层的当前证据满足负向条件时才显示为红线触发。", redlines);
   appendFundamentalReviewSection("日常待核验事项", "按人工锁定的财报、经营或事件条件核验；价格条件仍由人工价格分区处理。", due);

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>看板前端设计方案 · 导览</title>
+<style>
+:root { --bg:#10151d; --panel:#161d28; --line:#253042; --text:#eaf0f6; --muted:#93a1b3; --dim:#5f6d80; --amber:#ffb02e; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 40px 20px 80px; }
+h1 { font-size: 24px; margin-bottom: 6px; }
+.sub { color: var(--muted); font-size: 13.5px; margin-bottom: 30px; }
+h2 { font-size: 16px; margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+.card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; text-decoration:none; color:var(--text); transition:border-color .15s, transform .15s; }
+.card:hover { border-color:#3d5478; transform: translateY(-2px); }
+.card .tag { font-size:11px; font-weight:800; letter-spacing:.08em; padding:3px 10px; border-radius:999px; }
+.card h3 { font-size:17px; margin:10px 0 8px; }
+.card p { font-size:13px; color:var(--muted); }
+.card .fit { margin-top:10px; font-size:12px; color:var(--dim); }
+.card .fit b { color: var(--amber); font-weight:600; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th,td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { color:var(--dim); font-size:11.5px; letter-spacing:.06em; }
+td b.y { color:var(--amber); }
+ul.opt { padding-left: 20px; }
+ul.opt li { margin-bottom:9px; }
+ul.opt b { color:#7cc4ff; }
+.note { background:#1a2230; border:1px solid var(--line); border-radius:10px; padding:12px 16px; font-size:13px; color:var(--muted); margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>看板前端设计方案</h1>
+  <p class="sub">3 套方向 · 全部基于 2026-08-29 真实看板数据 · 每个页面均可直接缩放窗口体验移动端布局 · 点击卡片进入预览</p>
+
+  <div class="cards">
+    <a class="card" href="./a-terminal.html">
+      <span class="tag" style="background:#1c2836;color:#ffb02e">方案 A</span>
+      <h3>决策终端</h3>
+      <p>桌面优先的高密度专业终端。一屏 15+ 只股票，价格档位条放在正中间，现价在报告区间里的位置一眼可见。左侧常驻筛选栏。</p>
+      <p class="fit">适合：<b>每天在电脑前快速扫描全部 229 只</b></p>
+    </a>
+    <a class="card" href="./b-cockpit.html">
+      <span class="tag" style="background:#241d0f;color:#ffb02e">方案 B</span>
+      <h3>行动驾驶舱</h3>
+      <p>打开第一眼只有「今天需要你处理的 8 只」：可执行、分歧/否决、接近机会，按行动分组。其余 200+ 只收进第二层。工具面板全部收纳。</p>
+      <p class="fit">适合：<b>每天只想知道「现在有没有事」</b></p>
+    </a>
+    <a class="card" href="./c-cards.html">
+      <span class="tag" style="background:#123527;color:#3ddc91">方案 C</span>
+      <h3>清晰卡片（移动优先）</h3>
+      <p>浅色主题、大字号、大触控目标。每股一张 96px 紧凑卡，按「可执行 / 待裁决 / 待验证 / 等待价格 / 回避」分组，点卡片弹底部详情。</p>
+      <p class="fit">适合：<b>主要在手机上刷，通勤/碎片时间看</b></p>
+    </a>
+    <a class="card" href="./d-provenance.html" style="border-color:#4a3a66">
+      <span class="tag" style="background:#241a33;color:#d9c4ff">方案 D · 推荐 ★</span>
+      <h3>溯源中间态（完整多分区）</h3>
+      <p>保留全部工作模块与分区：买入前决策（含三套分区筛选、每日机会）、双模型复核（五类对照分区、Z/DS 任务矩阵）、买入后跟踪（论文健康度+指标）、市场工具抽屉。<b>每个数字都带来源+时间戳</b>，顶栏是数据管线时间线。</p>
+      <p class="fit">定位：<b>简洁与多数据的中间态 · 防误判优先</b></p>
+    </a>
+  </div>
+
+  <h2>核心差异对比</h2>
+  <table>
+    <tr><th></th><th>A 决策终端</th><th>B 行动驾驶舱</th><th>C 清晰卡片</th></tr>
+    <tr><td>首屏策略</td><td>全量列表 + 常驻筛选</td><td><b class="y">只显示需行动的股票</b></td><td>分组卡片流</td></tr>
+    <tr><td>信息密度</td><td><b class="y">最高（一屏 15+ 只）</b></td><td>中（首屏约 8 只行动卡）</td><td>低-中（一屏 6-8 张卡）</td></tr>
+    <tr><td>主题</td><td>深色</td><td>深色</td><td><b class="y">浅色为主</b></td></tr>
+    <tr><td>移动端</td><td>行卡片化 + 顶部筛选</td><td><b class="y">底部 Tab 导航</b></td><td><b class="y">原生 App 体验（底部弹层）</b></td></tr>
+    <tr><td>主判断入口</td><td>表格行</td><td>行动卡片</td><td>股票卡片</td></tr>
+    <tr><td>键盘操作</td><td><b class="y">j/k/Enter//</b></td><td>点按为主</td><td>触控为主</td></tr>
+  </table>
+
+  <h2>三套方案共同修复的交互问题（不管选哪个都会改）</h2>
+  <ul class="opt">
+    <li><b>关键信息前置</b>：交易时段、行情新鲜度、可分批/可小仓/待验证/分歧 计数，做成吸顶状态条——滚动到哪里都能看到，替代现在要滚 5 屏才能到股票列表的问题。</li>
+    <li><b>价格档位可视化</b>：新增「报告价格档 × 现价位置」条，替代现在纯文字的「现价高于报告可执行价格区间」。现价落在哪个档、离下一档差多少，一眼可见。</li>
+    <li><b>冲突显性化</b>：主报告说可买但 Checklist 否决（分众）、双模型分歧（恒瑞）这类状态，用醒目警示徽章直接标在列表行，不再埋进详情。</li>
+    <li><b>筛选瘦身</b>：现在 10 个「当前可执行」chips + 8 个「参考分区」+ 8 个「人工复核」共 26 个筛选钮压在列表上方。改为按行动分组的 4-6 个主筛选，参考分区/人工复核收进高级抽屉。</li>
+    <li><b>指数/年报日历/自动化状态收纳</b>：从首屏主体位置移到「市场工具」抽屉，需要时再打开。</li>
+    <li><b>详情交互统一</b>：桌面 = 行内展开（保留现有习惯）；手机 = 底部弹层（符合拇指操作），支持下滑关闭。</li>
+    <li><b>行情陈旧显性化</b>：行情超过 10 分钟，顶栏 + 行内价格都带「陈旧」标记，避免误把旧价当实时价。</li>
+    <li><b>保留的能力</b>：50 行懒加载、详情按需加载、双模型复核页、买入后跟踪、j/k 键盘导航、报告原文链接。</li>
+  </ul>
+
+  <div class="note">预览数据说明：13 只示例股票全部取自真实看板快照（东鹏、洛钼、茅台、恒瑞、分众等的判断、价格档、复核状态均为真实值），情绪分与行情日期为 8/20-8/29 快照。确定方案后，我会把它实现到正式看板 site/ 中，接上全部真实数据与功能。</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>方案D · 溯源中间态（完整多分区） | 设计预览</title>
+<script src="./shared-data.js"></script>
+<style>
+:root {
+  --bg: #eef0f4; --panel: #ffffff; --panel2: #fafbfc; --line: #e2e6ed; --line2: #edf0f4;
+  --text: #17202b; --muted: #4f5b68; --dim: #8d97a3;
+  --green: #1f8a54; --blue: #2f6fae; --amber: #a3720e; --red: #c04b42; --violet: #5f49c7; --orange: #bf5a2e;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --shadow-1: 0 1px 3px rgba(16,24,40,.06); --shadow-2: 0 4px 14px rgba(16,24,40,.07);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { color-scheme: light; }
+body { background: var(--bg); color: var(--text); font: 14px/1.55 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding-bottom: 40px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+button { font-family: inherit; }
+.ribbon { position: fixed; right: 14px; bottom: 14px; z-index: 99; background: #ffffff; color: var(--muted); border: 1px solid var(--line); font-weight: 600; font-size: 12px; padding: 6px 12px; border-radius: 999px; box-shadow: var(--shadow-2); }
+
+/* ===== 顶栏 + 管线时间线 ===== */
+.top { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.97); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); box-shadow: 0 2px 12px rgba(16,24,40,.05); padding: 6px 16px 0; }
+.top-row { display: flex; align-items: center; gap: 14px; height: 32px; }
+.brand { font-weight: 800; letter-spacing: .06em; font-size: 14px; }
+.brand em { color: var(--violet); font-style: normal; }
+.pill { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 12px; color: var(--muted); background: #fff; white-space: nowrap; }
+.pill.warn { color: var(--amber); border-color: #ecd9b8; background: #faf3e3; }
+.top-row .warn-global { margin-left: auto; }
+.pipeline { display: flex; gap: 4px; padding: 5px 0 7px; overflow-x: auto; scrollbar-width: none; }
+.pipeline::-webkit-scrollbar { display: none; }
+.pl { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 8px; padding: 3px 9px; font-size: 12px; color: var(--muted); background: #fff; }
+.pl b { font-weight: 700; color: var(--text); }
+.pl .t { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.pl.fresh b::before { content: "●"; color: var(--green); font-size: 8px; margin-right: 5px; vertical-align: 1px; }
+.pl.stale b::before { content: "●"; color: var(--amber); font-size: 8px; margin-right: 5px; vertical-align: 1px; }
+.pl .stale-tag { color: var(--amber); font-weight: 700; }
+
+/* ===== 工作模块 Tab ===== */
+.viewtabs { display: flex; gap: 2px; align-items: flex-end; }
+.viewtabs button { background: none; border: none; color: var(--muted); font-size: 14.5px; font-weight: 700; padding: 7px 12px 8px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+.viewtabs button.active { color: var(--violet); border-bottom-color: var(--violet); font-weight: 800; }
+.viewtabs button b { font-family: var(--mono); font-size: 11.5px; background: #e8ebf0; padding: 1px 7px; border-radius: 999px; margin-left: 5px; font-weight: 600; color: var(--muted); }
+.viewtabs button.active b { background: #e9e4fb; color: var(--violet); }
+.tools-btn { margin-left: auto; background: #fff; border: 1px solid var(--line); color: var(--muted); font-size: 12.5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-1); }
+
+.wrap { max-width: 1420px; margin: 0 auto; padding: 10px 16px 40px; }
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===== 工具条 ===== */
+.toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.toolbar .grp { display: flex; gap: 2px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 2px; box-shadow: var(--shadow-1); }
+.toolbar .grp button { background: none; border: none; color: var(--muted); font-size: 13px; font-weight: 600; padding: 4px 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.toolbar .grp button.active { background: var(--violet); color: #fff; box-shadow: 0 1px 4px rgba(95,73,199,.4); }
+.toolbar .grp button.active b { color: #dcd4ff; }
+.toolbar .grp button b { font-family: var(--mono); font-size: 11.5px; margin-left: 3px; opacity: .8; }
+.toolbar .grp button b.warn { color: var(--amber); opacity: 1; }
+.toolbar .grp button b.red { color: var(--red); opacity: 1; }
+.toolbar .spacer { flex: 1; }
+.toolbar .meta { color: var(--dim); font-size: 12px; }
+.search { background: var(--panel); border: 1px solid var(--line); border-radius: 9px; color: var(--text); padding: 6px 12px; width: 190px; font-size: 13px; outline: none; box-shadow: var(--shadow-1); }
+.search:focus { border-color: #b9aef2; box-shadow: 0 0 0 3px rgba(95,73,199,.13); }
+
+/* 高级分区（三套分区筛选收进抽屉，可常开） */
+details.adv { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); margin-bottom: 10px; box-shadow: var(--shadow-1); }
+details.adv summary { cursor: pointer; padding: 8px 12px; font-size: 12.5px; color: var(--muted); display: flex; gap: 10px; align-items: center; list-style: none; }
+details.adv summary::-webkit-details-marker { display: none; }
+details.adv summary .chev { margin-left: auto; transition: transform .15s; color: var(--dim); }
+details.adv[open] summary .chev { transform: rotate(90deg); }
+.adv-body { padding: 2px 12px 10px; display: grid; gap: 7px; }
+.adv-row { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.adv-row .lab { font-size: 11.5px; color: var(--dim); width: 172px; flex-shrink: 0; }
+.adv-row button { background: #f1f3f7; border: 1px solid var(--line); color: var(--muted); font-size: 12px; padding: 4px 11px; border-radius: 999px; cursor: pointer; }
+.adv-row button.active { background: var(--violet); color: #fff; border-color: var(--violet); }
+
+/* ===== 机会面板（折叠） ===== */
+details.opp { border: 1px solid var(--line); border-left: 3px solid var(--violet); border-radius: 10px; background: var(--panel); margin-bottom: 10px; box-shadow: var(--shadow-1); }
+details.opp summary { cursor: pointer; padding: 10px 14px; display: flex; align-items: center; gap: 10px; list-style: none; }
+details.opp summary::-webkit-details-marker { display: none; }
+details.opp summary .tt { font-size: 12.5px; font-weight: 800; color: var(--text); white-space: nowrap; }
+details.opp summary .meta { color: var(--dim); font-size: 11.5px; font-family: var(--mono); margin-left: auto; }
+.opp-body { padding: 2px 14px 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: 8px; }
+.opp-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12px; }
+.opp-card .h { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.opp-card .h b { font-size: 13px; }
+.opp-card .h .px { margin-left: auto; font-family: var(--mono); font-weight: 700; }
+.opp-card p { color: var(--muted); font-size: 11.5px; }
+.opp-card .tag { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 999px; margin-top: 6px; }
+
+/* ===== 表格（买入前决策） ===== */
+.thead { display: grid; grid-template-columns: 168px 122px 120px 1fr 142px 130px 116px; gap: 10px; padding: 4px 12px; color: var(--dim); font-size: 11px; letter-spacing: .06em; border-bottom: 1px solid var(--line); }
+.row { border-bottom: 1px solid var(--line2); cursor: pointer; position: relative; overflow: hidden; }
+.row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent; }
+.row:hover { background: #f7f5ff; }
+.row.open { background: #fff; box-shadow: inset 0 0 0 1px var(--line), var(--shadow-2); border-radius: 10px; }
+.rowline { display: grid; grid-template-columns: 168px 122px 120px 1fr 142px 130px 116px; gap: 10px; align-items: start; padding: 9px 12px; }
+.c-name .nm { font-weight: 800; font-size: 15.5px; display: flex; gap: 6px; align-items: baseline; letter-spacing: -.01em; }
+.c-name .mk { font-size: 10px; color: var(--dim); border: 1px solid var(--line); padding: 0 4px; border-radius: 4px; background: #fff; }
+.c-name .cd { font-size: 11.5px; color: var(--dim); font-family: var(--mono); margin-top: 1px; }
+.cell .badge { display: inline-block; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 7px; white-space: normal; line-height: 1.3; word-break: keep-all; }
+.cell.v-col, .cell.m-col, .cell.d-col { min-width: 0; }
+.cell .ts { display: block; margin-top: 3px; font-size: 10.5px; color: var(--dim); font-family: var(--mono); white-space: nowrap; }
+.cell .ts .w { color: var(--amber); font-weight: 700; }
+/* 双模型对照时间戳较长：允许在自身列内换行，避免溢出撞进相邻列 */
+.d-col .ts { white-space: normal; line-height: 1.45; }
+.c-price .px { font-family: var(--mono); font-size: 18px; font-weight: 800; letter-spacing: -.01em; display: block; }
+.c-price .ch { display: inline-block; font-size: 12px; font-weight: 700; font-family: var(--mono); margin: 3px 0 0; padding: 1px 7px; border-radius: 5px; }
+.c-price .ch.up { background: #fdecea; color: #c0392f; }
+.c-price .ch.down { background: #e4f5ec; color: #0f7d4d; }
+.up { color: #c0392f; } .down { color: #0f7d4d; }
+.zbar-top { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--dim); margin-bottom: 4px; }
+.zbar-top > span:first-child { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zbar-top .pos { flex-shrink: 0; white-space: nowrap; }
+.zbar-top .pos b { color: var(--amber); font-size: 12px; }
+.zbar { position: relative; height: 16px; border-radius: 8px; background: #e7eaef; box-shadow: inset 0 0 0 1px rgba(20,30,45,.05); }
+.zseg { position: absolute; top: 0; height: 100%; border-right: 1px solid rgba(255,255,255,.85); display: flex; align-items: center; overflow: hidden; transition: filter .15s; }
+.zseg.zs-first { border-radius: 8px 0 0 8px; }
+.zseg.zs-last { border-radius: 0 8px 8px 0; }
+.zseg span { font-size: 10.5px; font-weight: 700; padding-left: 6px; white-space: nowrap; }
+.zseg.k-buy { background: #c9e4d4; } .zseg.k-buy span { color: #175a3a; }
+.zseg.k-trial { background: #dcead2; } .zseg.k-trial span { color: #44631f; }
+.zseg.k-watch { background: #e2e6ec; } .zseg.k-watch span { color: #46505c; }
+.zseg.k-reduce { background: #f1d9d7; } .zseg.k-reduce span { color: #8c352e; }
+.zseg.cur { box-shadow: inset 0 0 0 2px rgba(23,32,43,.55); filter: saturate(1.15); }
+.marker { position: absolute; top: -4px; width: 3px; height: 24px; background: #17202b; border-radius: 2px; box-shadow: 0 0 0 2px rgba(255,255,255,.7); z-index: 2; }
+.marker::after { content: attr(data-v); position: absolute; top: 22px; left: 50%; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: #fff; background: #17202b; padding: 1px 6px; border-radius: 4px; white-space: nowrap; font-family: var(--mono); box-shadow: var(--shadow-1); }
+.zbar.none { display: flex; align-items: center; color: var(--dim); font-size: 11px; }
+.senti .sv { font-family: var(--mono); font-weight: 800; font-size: 15px; }
+.senti .bar { display: flex; gap: 2px; margin-top: 3px; }
+.senti .bar i { flex: 1; height: 5px; border-radius: 3px; background: #e2e6ec; position: relative; overflow: hidden; }
+.senti .bar i::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--w); background: #8a97a5; border-radius: 3px; }
+.senti .lab { display: flex; gap: 2px; font-size: 10px; color: var(--dim); margin-top: 2px; white-space: nowrap; }
+.senti .lab span { flex: 1; }
+.senti.aux .sv { color: var(--dim); }
+.aux-tag { display: inline-block; font-size: 10px; color: var(--dim); border: 1px dashed #c3ccd6; padding: 0 4px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; }
+.row[data-vkind="buy"]::before { background: var(--green); }
+.row[data-vkind="trial"]::before { background: var(--green); opacity: .7; }
+.row[data-vkind="validation"]::before { background: var(--amber); }
+.row[data-vkind="conflict"]::before { background: var(--red); }
+.row[data-vkind="no"]::before { background: var(--red); }
+
+/* 详情 */
+.detail { display: none; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-2); margin: 0 12px 12px; }
+.row.open + .detail { display: block; }
+.dgrid { display: grid; grid-template-columns: 1.3fr 1fr 1.1fr; gap: 16px; padding: 14px 16px 16px; }
+.dg h5 { font-size: 11px; color: var(--dim); letter-spacing: .08em; margin: 10px 0 6px; }
+.dg h5:first-child { margin-top: 0; }
+.dg p { font-size: 13.5px; color: #39434f; }
+.warnbox { border: 1px solid #f0d2cf; background: #fdf1f0; color: #a03530; padding: 8px 10px; border-radius: 8px; font-size: 13px; margin: 8px 0; }
+.src-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.src-table td { padding: 4px 6px; border-bottom: 1px solid var(--line2); color: var(--muted); }
+.src-table td:first-child { color: var(--dim); width: 76px; }
+.src-table td b { color: var(--text); font-weight: 600; }
+.src-table .w { color: var(--amber); }
+.actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.actions button { background: #fff; border: 1px solid var(--line); color: var(--text); font-size: 12.5px; padding: 6px 13px; border-radius: 7px; cursor: pointer; }
+.actions button.pri { background: #efecfd; border-color: #d5cffa; color: #4a3aa8; }
+
+/* ===== 双模型复核视图 ===== */
+.partition-head { display: flex; align-items: baseline; gap: 10px; margin: 4px 0 10px; }
+.partition-head h3 { font-size: 15px; font-weight: 800; }
+.partition-head h3 i { font-style: normal; display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 7px; }
+.partition-head span { color: var(--dim); font-size: 12.5px; }
+.partition-head .cnt { margin-left: auto; font-family: var(--mono); color: var(--muted); font-size: 12.5px; }
+.rv-group { margin-bottom: 22px; }
+/* 对照卡 */
+.rv-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow-1); }
+.rv-card.conflict { border-color: #ecd2ce; background: linear-gradient(180deg, #fdf6f5, #ffffff); }
+.rv-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.rv-head b.nm { font-size: 16px; font-weight: 800; }
+.rv-head .cd { color: var(--dim); font-size: 12px; font-family: var(--mono); }
+.rv-head .pill2 { font-size: 12px; padding: 3px 10px; border-radius: 999px; font-weight: 700; }
+.matrix { width: 100%; border-collapse: collapse; font-size: 13px; }
+.matrix th { text-align: left; color: var(--dim); font-size: 11px; letter-spacing: .05em; padding: 4px 8px; border-bottom: 1px solid var(--line); font-weight: 600; }
+.matrix td { padding: 7px 8px; border-bottom: 1px solid var(--line2); color: var(--muted); }
+.matrix td.scope { color: var(--text); font-weight: 600; width: 110px; }
+.matrix td .rule { display: block; font-size: 11.5px; color: var(--dim); margin-top: 2px; max-width: 340px; white-space: normal; }
+.st { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+.st.verified { color: #1b6b47; background: #e2f1e9; }
+.st.not_triggered { color: #5a6672; background: #eef1f4; }
+.st.triggered { color: #a03530; background: #fae6e4; }
+.st.data_insufficient { color: var(--dim); background: #f3f5f8; border: 1px dashed #c9d1da; }
+.matrix td.diff { background: rgba(192,75,66,.05); }
+.rv-note { font-size: 12.5px; color: var(--amber); margin-top: 8px; }
+.rv-foot { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.rv-foot span { font-size: 11px; color: var(--dim); font-family: var(--mono); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; background: #fff; }
+
+/* ===== 买入后跟踪 ===== */
+.pos-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; box-shadow: var(--shadow-1); }
+.pos-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.pos-head b.nm { font-size: 17px; font-weight: 800; }
+.pos-head .cd { color: var(--dim); font-size: 12px; font-family: var(--mono); }
+.pos-head .px2 { margin-left: auto; text-align: right; }
+.pos-head .px2 b { font-family: var(--mono); font-size: 17px; }
+.pos-kv { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.pos-kv .kv { background: var(--panel2); border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; font-size: 11.5px; color: var(--dim); }
+.pos-kv .kv b { display: block; font-size: 14px; color: var(--text); font-family: var(--mono); margin-top: 2px; }
+.metrics { width: 100%; border-collapse: collapse; font-size: 13px; }
+.metrics td { padding: 6px 8px; border-bottom: 1px solid var(--line2); color: var(--muted); }
+.metrics td:first-child { color: var(--text); font-weight: 600; width: 190px; }
+.pos-note { font-size: 11.5px; color: var(--dim); margin-top: 8px; }
+
+/* 市场工具抽屉 */
+.tools-drawer { position: fixed; top: 0; right: -420px; width: 400px; max-width: 92vw; bottom: 0; background: #ffffff; border-left: 1px solid var(--line); z-index: 90; transition: right .22s ease; padding: 14px; overflow-y: auto; }
+.tools-drawer.show { right: 0; }
+.tools-mask { position: fixed; inset: 0; background: rgba(15,20,28,.35); z-index: 89; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.tools-mask.show { opacity: 1; pointer-events: auto; }
+.tools-drawer h3 { font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; }
+.tools-drawer h3 button { margin-left: auto; background: none; border: none; color: var(--dim); font-size: 18px; cursor: pointer; }
+.idx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.idx { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+.idx b { font-size: 15px; font-family: var(--mono); display: block; }
+.idx span { font-size: 11.5px; color: var(--dim); }
+.idx em { font-style: normal; font-size: 12px; font-family: var(--mono); }
+.tools-sec { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; font-size: 12.5px; color: var(--muted); }
+.tools-sec h4 { font-size: 11.5px; color: var(--dim); letter-spacing: .08em; margin-bottom: 8px; }
+.tools-sec p { font-size: 12.5px; margin-bottom: 6px; }
+
+/* ===== 移动端 ===== */
+@media (max-width: 960px) {
+  .top { padding: 6px 12px 0; }
+  .top-row .warn-global { display: none; }
+  .viewtabs { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+  .viewtabs::-webkit-scrollbar { display: none; }
+  .tools-btn { flex: 0 0 auto; }
+  .wrap { padding: 10px 10px 60px; }
+  .toolbar .meta { display: none; }
+  .toolbar .grp { overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; max-width: 100%; }
+  .toolbar .grp::-webkit-scrollbar { display: none; }
+  .toolbar .grp button { flex: 0 0 auto; }
+  .search { width: 130px; }
+  .thead { display: none; }
+  .thead + * { border-top: none; }
+  .rowline { grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "name price" "verdict verdict" "zone zone" "src src"; gap: 5px 10px; padding: 10px 12px 12px; }
+  .c-name { grid-area: name; min-width: 0; }
+  .c-name .nm { white-space: nowrap; }
+  .c-name .cd { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-price { grid-area: price; text-align: right; }
+  .c-price .ts { display: none; }
+  .cell.v-col { grid-area: verdict; display: block !important; }
+  .cell.v-col .ts { display: inline; margin-left: 8px; }
+  .zcol { grid-area: zone; }
+  .zbar-top span:first-child { display: none; }
+  .zbar-wrap { padding-bottom: 22px; }
+  .cell.m-col, .cell.d-col, .c-senti-col { display: none; }
+  .src-line { display: flex; gap: 8px; font-size: 10px; color: var(--dim); font-family: var(--mono); overflow-x: auto; white-space: nowrap; padding-top: 2px; grid-area: src; }
+  .src-line i { font-style: normal; }
+  .dgrid { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
+  .detail { margin: 0 6px 10px; }
+  .opp-body { grid-template-columns: 1fr; }
+  .adv-row .lab { width: 100%; }
+  .matrix .rule { display: none !important; }
+  .tools-drawer { width: 100vw; max-width: 100vw; }
+}
+@media (min-width: 961px) { .src-line { display: none; } }
+</style>
+</head>
+<body>
+<div class="ribbon">设计稿 D · 溯源中间态 · 仅供预览</div>
+
+<header class="top">
+  <div class="top-row">
+    <span class="brand">AI<em>BERKSHIRE</em></span>
+    <span class="pill warn">非交易时段</span>
+    <span class="pill warn warn-global">⚠ 行情快照已陈旧 · 显示 8/20 收盘价</span>
+  </div>
+  <div class="pipeline">
+    <span class="pl stale"><b>行情</b><span class="t">腾讯同源 · 8/20 16:31</span><span class="stale-tag">陈旧</span></span>
+    <span class="pl stale"><b>情绪</b><span class="t">93只 · 8/19 20:56 · 双模型</span></span>
+    <span class="pl stale"><b>市场温度</b><span class="t">2.99 显著负面 · 8/19</span></span>
+    <span class="pl stale"><b>机会扫描</b><span class="t">8/20 18:44 · partial</span></span>
+    <span class="pl stale"><b>技术面</b><span class="t">日线 8/20</span></span>
+    <span class="pl fresh"><b>人工复核</b><span class="t">93只 · 8/23 22:30</span></span>
+    <span class="pl fresh"><b>模型对照</b><span class="t">8/30 13:41 · 93只</span></span>
+  </div>
+  <div class="viewtabs">
+    <button class="active" data-view="decision">买入前决策 <b>229</b></button>
+    <button data-view="review">双模型复核 <b>93</b></button>
+    <button data-view="tracking">买入后跟踪 <b>2</b></button>
+    <button class="tools-btn" id="tools-open">⚙ 市场工具（指数·日历·自动化）</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- ============ 视图1：买入前决策 ============ -->
+  <section class="view active" id="view-decision">
+    <div class="toolbar">
+      <div class="grp" id="exec-grp">
+        <button class="active" data-exec="all">全部 <b>229</b></button>
+        <button data-exec="buy">可分批 <b>0</b></button>
+        <button data-exec="trial">可小仓 <b>2</b></button>
+        <button data-exec="validation">待验证 <b>3</b></button>
+        <button data-exec="wait">等待价格 <b>64</b></button>
+        <button data-exec="conflict">分歧/否决 <b class="red">2</b></button>
+        <button data-exec="no">回避 <b>12</b></button>
+      </div>
+      <div class="grp" id="market-grp">
+        <button class="active" data-market="all">全部市场</button>
+        <button data-market="A股">A股 <b>93</b></button>
+        <button data-market="港美">港股/美股</button>
+      </div>
+      <span class="spacer"></span>
+      <input class="search" id="search-input" placeholder="搜索 ⌕ /" />
+      <span class="meta num" id="result-meta">13 / 229</span>
+    </div>
+
+    <details class="adv">
+      <summary><span>三套分区筛选</span><span style="color:var(--dim)">当前可执行 · 最近行情参考 · 人工复核</span><span class="chev">›</span></summary>
+      <div class="adv-body">
+        <div class="adv-row" id="ref-row">
+          <span class="lab">最近行情参考分区（非实时）</span>
+          <button class="active" data-ref="all">全部</button><button data-ref="ref_buy">参考可分批</button><button data-ref="ref_trial">参考小仓</button><button data-ref="ref_validation">参考待验证</button><button data-ref="ref_wait">参考等待价格</button><button data-ref="ref_hold">参考持有</button><button data-ref="ref_no">参考回避</button>
+        </div>
+        <div class="adv-row" id="human-row">
+          <span class="lab">人工复核分区（主报告+行情）</span>
+          <button class="active" data-human="all">全部</button><button data-human="human_buy">分批价格区</button><button data-human="human_trial">小仓价格区</button><button data-human="human_wait_price">等待价格</button><button data-human="human_wait_event">等待条件</button><button data-human="human_hold">持有不新买</button><button data-human="human_no">回避/不买</button><button data-human="human_review">等待人工判断</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="opp">
+      <summary>
+        <span class="tt">每日机会筛选</span>
+        <span style="color:var(--dim);font-size:11.5px">收盘后扫描 · 当前机会 2 · 临近 5</span>
+        <span class="meta">扫描 8/20 18:44 · partial ›</span>
+      </summary>
+      <div class="opp-body">
+        <div class="opp-card"><div class="h"><b>东鹏饮料</b><span class="px">123.07</span></div><p>处于 114–127 元稳健分批区，验证核心单品增速与新品效率</p><span class="tag" style="border:1px solid #bcd8c9;color:#1b6b47">当前机会</span> <span class="tag" style="color:var(--dim)">Flash 8/20</span></div>
+        <div class="opp-card"><div class="h"><b>洛阳钼业</b><span class="px">18.27</span></div><p>可做 3–5% 小仓验证；价格高于 15–17 元加仓区</p><span class="tag" style="border:1px solid #bcd8c9;color:#1b6b47">当前机会</span> <span class="tag" style="color:var(--dim)">Flash 8/20</span></div>
+        <div class="opp-card"><div class="h"><b>贵州茅台</b><span class="px">1291.50</span></div><p>价格进入区间但情绪显著负面（24.4）、技术面防守、报告偏旧</p><span class="tag" style="border:1px solid #e3d3ac;color:#8a6410">临近机会</span></div>
+        <div class="opp-card"><div class="h"><b>紫金矿业</b><span class="px">34.25</span></div><p>等待 26–30 元区间且半年报确认 Kamoa 修复</p><span class="tag" style="border:1px solid #e3d3ac;color:#8a6410">临近机会</span></div>
+        <div class="opp-card"><div class="h"><b>山西汾酒</b><span class="px">120.52</span></div><p>接近 116 元观察仓触发价</p><span class="tag" style="border:1px solid #e3d3ac;color:#8a6410">临近机会</span></div>
+      </div>
+    </details>
+
+    <div class="thead">
+      <span>公司</span><span>主报告判断</span><span>现价</span><span>报告价格档 × 现价位置</span><span>人工复核</span><span>双模型对照</span><span>情绪（截 8/19）</span>
+    </div>
+    <div id="list"></div>
+    <div class="empty-state" id="empty-state" hidden>
+      <p style="text-align:center;color:var(--dim);padding:40px 0;font-size:13px">没有匹配的标的 —— 试试清除某个筛选维度</p>
+    </div>
+  </section>
+
+  <!-- ============ 视图2：双模型复核 ============ -->
+  <section class="view" id="view-review">
+    <div class="toolbar">
+      <div class="grp" id="rv-grp">
+        <button class="active" data-rv="all">全部分区 <b>93</b></button>
+        <button data-rv="conflict">结果分歧 <b class="red">2</b></button>
+        <button data-rv="consensus">双方一致 <b>1</b></button>
+        <button data-rv="zcode_current">仅 ZCode 新证 <b>0</b></button>
+        <button data-rv="deepseek_current">仅 DeepSeek 新证 <b>0</b></button>
+        <button data-rv="both_insufficient">证据不足/历史 <b>90</b></button>
+      </div>
+      <span class="spacer"></span>
+      <span class="meta">对照口径：只把主报告之后的新材料视为当前证据 · 生成 8/30 13:41</span>
+    </div>
+
+    <div class="rv-group" data-partition="conflict">
+      <div class="partition-head"><h3><i style="background:var(--red)"></i>结果分歧</h3><span>两个模型对同一任务给出不同结论 —— 需要你人工裁决</span><span class="cnt">2 只</span></div>
+      <div id="rv-conflict"></div>
+    </div>
+
+    <div class="rv-group" data-partition="consensus">
+      <div class="partition-head"><h3><i style="background:var(--green)"></i>双方当前证据一致</h3><span>两模型基于主报告后的新证据得出相同结论</span><span class="cnt">1 只</span></div>
+      <div id="rv-consensus"></div>
+    </div>
+
+    <div class="rv-group" data-partition="both_insufficient">
+      <div class="partition-head"><h3><i style="background:#39434f"></i>双方证据不足 / 历史</h3><span>两份复核都只引用了主报告基线 —— 不是风险，是等待新财报/公告</span><span class="cnt">90 只</span></div>
+      <div class="rv-card" style="cursor:default">
+        <p style="font-size:12px;color:var(--muted)">这 90 只的 ZCode 与 DeepSeek 复核引用的都是主报告本身，暂无主报告后的新证据，因此不构成"当前复核结论"。下一份财报或重大公告披露后，会自动进入增量复核队列。</p>
+        <p class="num" style="font-size:11px;color:var(--dim);margin-top:8px">示例：比亚迪 · 美的集团 · 一拖股份 · 长江电力 · 大普微 · 紫金矿业 …（展开查看全部 90 只）</p>
+      </div>
+    </div>
+    <div class="rv-card" id="rv-empty" hidden style="cursor:default;text-align:center;color:var(--dim);font-size:13px">该分区当前没有标的 —— 等下一份财报或公告产生新证据后会自动进入</div>
+  </section>
+
+  <!-- ============ 视图3：买入后跟踪 ============ -->
+  <section class="view" id="view-tracking">
+    <div class="toolbar">
+      <div class="grp" id="pos-grp">
+        <button class="active" data-pos="all">全部持仓 <b>2</b></button>
+        <button data-pos="alert">有预警 <b>0</b></button>
+        <button data-pos="review">待复核 <b>1</b></button>
+      </div>
+      <span class="spacer"></span>
+      <span class="meta">仅收录显式登记的持仓 · 论文状态与指标来自 thesis-tracker</span>
+    </div>
+    <div id="pos-list"></div>
+  </section>
+</div>
+
+<!-- 市场工具抽屉 -->
+<div class="tools-mask" id="tools-mask"></div>
+<aside class="tools-drawer" id="tools-drawer">
+  <h3>市场工具 <button id="tools-close">×</button></h3>
+  <div class="idx-grid" id="idx-grid"></div>
+  <div class="tools-sec">
+    <h4>A股年报披露日历</h4>
+    <p>93 家 · 数据截止 2026-08-28 · 来源：东方财富 + 巨潮双源</p>
+    <p>最近到期：联影医疗 中报 8/20 已披露（待确认）· 下一个披露窗口见日历</p>
+  </div>
+  <div class="tools-sec">
+    <h4>统一自动化状态</h4>
+    <p>行情快照：8/20 16:31（93/93 完整）</p>
+    <p>情绪任务：8/19 20:56 完成 ok · 双模型 deepseek-v4-flash + mimo-v2.5</p>
+    <p>机会扫描：8/20 18:44 partial（Flash）</p>
+    <p>技术面：日线 8/20 · 盘中30分钟 交易时段每 30 分钟</p>
+    <p>复核定时器：人工复核 8/23 · 双模型对照 8/30 13:41</p>
+  </div>
+  <div class="tools-sec">
+    <h4>口径说明</h4>
+    <p>实时执行状态 = 主报告动作 × 价格档 × 经营前提 × 交易时段 × 10 分钟内同源行情；盘前/午休/盘后仅显示参考分区。港股美股仅研究浏览。情绪、技术面、Checklist 均为辅助层，不覆盖主报告。</p>
+  </div>
+</aside>
+
+<script>
+/* ===== 数据溯源（真实快照） ===== */
+const PROV = {
+  "605499.SH": { rep: "报告 8/10", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 69, scored: 9, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "603993.SH": { rep: "报告 8/18", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 68, scored: 8, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "600519.SH": { rep: "报告 6/27", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 71, scored: 11, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29 · 对照 8/30", repOld: true },
+  "000682.SZ": { rep: "报告 7/07", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 7, scored: 0, dual: false, aux: "来源仅供辅助·未计分" }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "600276.SH": { rep: "报告 7/13", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 68, scored: 8, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "002594.SZ": { rep: "报告 6/24", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 65, scored: 5, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29 · 对照 8/30", repOld: true },
+  "601038.SH": { rep: "报告 8/10", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 59, scored: 2, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "000333.SZ": { rep: "报告 7/13", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 47, scored: 4, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "601899.SH": { rep: "报告 8/03", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 67, scored: 7, dual: true }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "600900.SH": { rep: "报告 7/07", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 61, scored: 1, dual: false, aux: "样本不足·辅助" }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "002027.SZ": { rep: "报告 8/07", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 30, scored: 2, dual: false, aux: "来源辅助·未计分" }, tech: "8/20", manual: "8/23 · 有效至 9/05", dualTs: "Z 8/29 · D 8/29 · 对照 8/30", veto: true },
+  "301666.SZ": { rep: "报告 8/12", q: "8/20 16:31", qstale: true, s: { cutoff: "8/19", arts: 61, scored: 1, dual: false, aux: "样本不足·辅助" }, tech: "8/20", manual: "8/23 · 有效至 9/22", dualTs: "Z 8/29 · D 8/29<br>对照 8/30" },
+  "00700.HK":  { rep: "报告 7/20", q: null, qstale: false, s: { cutoff: "8/19", arts: null, scored: null, dual: false }, tech: "8/20", manual: null, dualTs: null }
+};
+
+/* ===== 收敛配色：仅 4 个语义色 + 1 个强调色（浅色版：加深保证对比度） =====
+   绿=可执行  琥珀=等待/验证  红=风险/分歧  灰=中性  紫=交互强调（唯一） */
+const C = { ok: "#1f8a54", wait: "#a3720e", risk: "#bf4a42", mid: "#68747f" };
+const D_VKIND = { buy: C.ok, trial: C.ok, validation: C.wait, watch: C.mid, hold: C.mid, no: C.risk, conflict: C.risk, reduce: C.risk };
+const D_MKIND = { actionable: C.ok, trial: C.ok, validation: C.wait, wait_price: C.mid, wait_event: C.mid, hold: C.mid, no: C.risk, veto: C.risk, review: C.wait };
+const D_DLABEL = { consensus: ["双方一致", C.ok], conflict: ["结果分歧", C.risk], both_insufficient: ["证据不足/历史", C.mid], zcode_current: ["仅ZCode新证", C.mid], deepseek_current: ["仅DeepSeek新证", C.mid] };
+
+/* ===== 筛选维度（mockup 样例分配；正式版由 action-classifier 实时计算） ===== */
+/* 长判断标签在窄列内显式换行，避免溢出 */
+DATA.stocks.find(s => s.code === "600519.SH").verdict = "价格已到·待验证";
+DATA.stocks.find(s => s.code === "002027.SZ").verdict = "报告可分批<br>已否决 ⚠";
+DATA.stocks.find(s => s.code === "601899.SH").verdict = "等待价格·待半年报";
+const FILTERS = {
+  "605499.SH": { exec: "buy",        ref: "ref_buy",  human: "human_buy" },
+  "603993.SH": { exec: "trial",      ref: "ref_trial", human: "human_wait_price" },
+  "600519.SH": { exec: "validation", ref: "ref_buy",  human: "human_trial" },
+  "000682.SZ": { exec: "trial",      ref: "ref_trial", human: "human_trial" },
+  "600276.SH": { exec: "conflict",   ref: "ref_wait", human: "human_review" },
+  "002594.SZ": { exec: "wait",       ref: "ref_hold", human: "human_wait_price" },
+  "601038.SH": { exec: "wait",       ref: "ref_wait", human: "human_wait_price" },
+  "000333.SZ": { exec: "wait",       ref: "ref_wait", human: "human_wait_price" },
+  "601899.SH": { exec: "wait",       ref: "ref_wait", human: "human_wait_price" },
+  "600900.SH": { exec: "wait",       ref: "ref_wait", human: "human_wait_event" },
+  "002027.SZ": { exec: "conflict",   ref: "ref_trial", human: "human_no" },
+  "301666.SZ": { exec: "no",         ref: "ref_no",   human: "human_no" },
+  "00700.HK":  { exec: "research",   ref: "none",     human: "none" }
+};
+
+/* ===== 视图1：决策列表 ===== */
+const list = document.getElementById("list");
+function zoneBarHTML(s) {
+  if (!s.zones.length) return `<div class="zbar none">— 报告未给出可执行价格档 —</div>`;
+  const min = Math.min(...s.zones.map(z => z.min)), max = Math.max(...s.zones.map(z => z.max));
+  const span = max - min;
+  let h = "";
+  s.zones.forEach((z, zi) => {
+    const cur = s.price && s.price >= z.min && s.price <= z.max ? " cur" : "";
+    const edge = (zi === 0 ? " zs-first" : "") + (zi === s.zones.length - 1 ? " zs-last" : "");
+    h += `<div class="zseg k-${z.kind}${cur}${edge}" style="left:${(z.min-min)/span*100}%;width:${(z.max-z.min)/span*100}%"><span>${z.label}</span></div>`;
+  });
+  if (s.price) h += `<div class="marker" data-v="${s.price}" style="left:${(Math.max(min,Math.min(max,s.price))-min)/span*100}%"></div>`;
+  return `<div class="zbar-top"><span>${s.zones.map(z=>z.label+" "+z.range).join(" · ")}</span><span class="pos">${s.price ? "现价 <b>"+s.price+"</b>" : ""}</span></div><div class="zbar">${h}</div>`;
+}
+function sentiHTML(s, p) {
+  const L = s.senti;
+  const col = v => v === null ? "#39434f" : v >= 60 ? C.ok : v >= 40 ? C.wait : C.risk;
+  return `<div class="senti ${p.s.aux ? "aux" : ""}">
+    <span class="sv" style="color:${col(L.score)}">${L.score ?? "—"}</span>${p.s.aux ? `<span class="aux-tag">辅助</span>` : ""}
+    <div class="bar"><i style="--w:${L.c??0}%"></i><i style="--w:${L.i??0}%"></i><i style="--w:${L.score??0}%"></i></div>
+    <div class="lab"><span>个 ${L.c === null || L.c === undefined ? "—" : Math.round(L.c)}</span><span>行 ${L.i === null || L.i === undefined ? "—" : Math.round(L.i)}</span><span>市 3</span></div>
+  </div>`;
+}
+list.innerHTML = DATA.stocks.map(s => {
+  const p = PROV[s.code] || { s: {} };
+  const vcol = D_VKIND[s.vkind] || C.mid;
+  const vSolid = s.vkind === "buy" || s.vkind === "no" || s.vkind === "conflict"; /* 实心=强语义，空心=弱一档 */
+  const mcol = s.mkind ? (D_MKIND[s.mkind] || C.mid) : null;
+  const d = s.dkind ? D_DLABEL[s.dkind] : null;
+  const chgCls = s.chg === null ? "" : (s.chg >= 0 ? "up" : "down");
+  const conflictNote = s.dkind === "conflict" || s.mkind === "veto"
+    ? `<div class="warnbox">⚠ ${s.mkind === "veto" ? "主报告允许分批，但 8/05 Checklist 治理硬性否决 —— 暂停买入，人工确认治理问题是否消除" : "ZCode 与 DeepSeek 复核结论不一致 —— 待人工裁决，详见「双模型复核」页"}</div>` : "";
+  const fl = FILTERS[s.code] || {};
+  return `
+  <div class="row" data-vkind="${s.vkind}" data-code="${s.code}" data-exec="${fl.exec || ""}" data-ref="${fl.ref || ""}" data-human="${fl.human || ""}" data-market="${s.market === "A股" ? "A股" : "港美"}" data-search="${s.name}|${s.code}|${s.industry}">
+    <div class="rowline">
+      <div class="c-name">
+        <div class="nm">${s.name}<span class="mk">${s.market}</span></div>
+        <div class="cd">${s.code} · ${s.industry}</div>
+      </div>
+      <div class="cell v-col">
+        <span class="badge" style="${
+          s.vkind === "buy" ? `background:linear-gradient(180deg,#2aa06a,#1f8a54);color:#fff;box-shadow:0 1px 4px rgba(31,138,84,.35)` :
+          s.vkind === "validation" ? `background:linear-gradient(180deg,#b9820f,#a3720e);color:#fff;box-shadow:0 1px 4px rgba(163,114,14,.35)` :
+          (s.vkind === "no" || s.vkind === "conflict") ? `background:linear-gradient(180deg,#ca544b,#bf4a42);color:#fff;box-shadow:0 1px 4px rgba(191,74,66,.35)` :
+          s.vkind === "trial" ? `background:#e3f3ea;color:#17714a;border:1px solid #b9ddc8` :
+          `background:#eceff3;color:#4d5865;border:1px solid #dfe4ea`
+        }">${s.verdict}</span>
+        <span class="ts">${p.rep || ""}${p.repOld ? ' <span class="w">·较旧</span>' : ""}</span>
+      </div>
+      <div class="c-price">
+        <span class="px num">${s.price ?? "—"}</span><span class="ch num ${chgCls}">${s.chg === null ? "" : fmtPct(s.chg)}</span>
+        <span class="ts">${p.q ? `${p.q}${p.qstale ? ' <span class="w">⚠陈旧</span>' : ""}` : "无行情"}</span>
+      </div>
+      <div class="zcol">${zoneBarHTML(s)}</div>
+      <div class="cell m-col">
+        ${mcol ? `<span class="badge" style="color:${mcol};background:transparent;border:none;padding-left:0;font-size:11.5px"><i style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${mcol};margin-right:6px"></i>${s.manual}</span><span class="ts">${p.manual || ""}</span>` : `<span class="badge" style="color:var(--dim)">研究浏览</span>`}
+      </div>
+      <div class="cell d-col">
+        ${d ? `<span class="badge" style="color:var(--muted);background:transparent;border:none;padding-left:0;font-size:11.5px"><i style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${d[1]};margin-right:6px"></i>${d[0]}</span><span class="ts">${p.dualTs || ""}</span>` : `<span class="ts">—</span>`}
+      </div>
+      <div class="c-senti-col">${sentiHTML(s, p)}</div>
+    </div>
+    ${p.q ? `<div class="src-line"><i>行情 ${p.q}${p.qstale ? "⚠" : ""}</i><i>情绪 ${p.s.cutoff} · ${p.s.arts}条/${p.s.scored}评${p.s.dual ? "·双模型" : ""}</i><i>技术 ${p.tech}</i></div>` : ""}
+  </div>
+  <div class="detail"><div class="dgrid">
+    <div class="dg">
+      <h5>主报告判断</h5>
+      <p>${s.line}</p>
+      ${conflictNote}
+      <h5>触发 / 失效条件</h5>
+      <p style="font-size:11.5px;color:var(--muted)">${s.trigger}</p>
+      <div class="actions"><button class="pri">打开主报告（${p.rep || ""}）</button><button>深度复核</button><button>情绪新闻</button><button>买入前检查</button></div>
+    </div>
+    <div class="dg">
+      <h5>数据来源与时间</h5>
+      <table class="src-table">
+        <tr><td>行情</td><td><b>腾讯同源快照</b> ${p.q || "—"}${p.qstale ? ' <span class="w">已陈旧</span>' : ''}</td></tr>
+        <tr><td>主报告</td><td><b>${p.rep || "—"}</b> · 数据截止 ${s.cutoff}</td></tr>
+        <tr><td>情绪</td><td><b>${p.s.cutoff || "—"} 快照</b> · 抓取 ${p.s.arts ?? "—"} 条 / 评分 ${p.s.scored ?? "—"} 条${p.s.dual ? " · DeepSeek+MiMo 双模型" : ""}${p.s.aux ? ` · <span class="w">${p.s.aux}</span>` : ""}</td></tr>
+        <tr><td>技术面</td><td><b>日线 ${p.tech}</b>（${s.tech.daily}）· 盘中 ${s.tech.intra}</td></tr>
+        <tr><td>人工复核</td><td><b>${p.manual || "—"}</b></td></tr>
+        <tr><td>双模型</td><td><b>${s.dual || "—"}</b> · ${p.dualTs || ""}</td></tr>
+      </table>
+    </div>
+    <div class="dg">
+      <h5>复核与验证</h5>
+      <p style="font-size:11.5px;color:var(--muted)">待办：${s.due}</p>
+      <h5>市场温度（8/19）</h5>
+      <p style="font-size:13px;color:#a03530">2.99 显著负面 · 涨428/跌4885 · 涨停37/跌停128</p>
+      <p style="font-size:11px;color:var(--dim);margin-top:4px">市场层计入综合情绪 15%；个股情绪弱时注意区分错杀与系统性风险。</p>
+    </div>
+  </div></div>`;
+}).join("");
+list.addEventListener("click", e => {
+  const row = e.target.closest(".row");
+  if (!row) return;
+  const was = row.classList.contains("open");
+  list.querySelectorAll(".row.open").forEach(r => r.classList.remove("open"));
+  if (!was) row.classList.add("open");
+});
+
+/* ===== 视图2：双模型复核 ===== */
+const STN = { verified: ["已验证", "verified"], not_triggered: ["未触发", "not_triggered"], triggered: ["已触发", "triggered"], data_insufficient: ["数据不足", "data_insufficient"] };
+function matrixHTML(tasks, zTasks, dTasks) {
+  const zMap = Object.fromEntries(zTasks.map(t => [t.scope_label, t]));
+  const dMap = Object.fromEntries(dTasks.map(t => [t.scope_label, t]));
+  const scopes = ["买入前提", "持仓验证", "风险/失效条件"];
+  return `<table class="matrix"><tr><th style="width:110px">任务</th><th>ZCode（8/29）</th><th>DeepSeek（8/29）</th></tr>` +
+    scopes.map(sc => {
+      const z = zMap[sc], d = dMap[sc];
+      const diff = z && d && z.status !== d.status;
+      const rule = (z ? z.rule_content : (d ? d.rule_content : "")) || "";
+      return `<tr>
+        <td class="scope">${sc}</td>
+        <td class="${diff ? "diff" : ""}">${z ? `<span class="st ${z.status}">${STN[z.status][0]}</span>` : "—"}<span class="rule">${rule.slice(0, 90)}${rule.length > 90 ? "…" : ""}</span></td>
+        <td class="${diff ? "diff" : ""}">${d ? `<span class="st ${d.status}">${STN[d.status][0]}</span>` : "—"}</td>
+      </tr>`;
+    }).join("") + `</table>`;
+}
+const REVIEW = [
+  { partition: "conflict", ticker: "600276.SH", company: "恒瑞医药", note: "风险/失效条件：ZCode 判「已触发」、DeepSeek 判「未触发」—— 需人工裁决",
+    z: [["买入前提","not_triggered"],["持仓验证","verified"],["风险/失效条件","triggered"]],
+    d: [["买入前提","not_triggered"],["持仓验证","data_insufficient"],["风险/失效条件","not_triggered"]],
+    rule: "重大临床、安全性或连续海外质量问题即重审；CRL 整改路径与半年报创新药增速为核心观察项。" },
+  { partition: "conflict", ticker: "601088.SH", company: "中国神华", note: "买入前提：ZCode 判「未触发」、DeepSeek 判「已验证」；风险条件一方证据不足 —— 需人工裁决",
+    z: [["买入前提","not_triggered"],["持仓验证","triggered"],["风险/失效条件","not_triggered"]],
+    d: [["买入前提","verified"],["持仓验证","triggered"],["风险/失效条件","data_insufficient"]],
+    rule: "价格进入报告区间且盈利/分红假设未变方可分批；煤价中枢与分红率连续性为验证项。" },
+  { partition: "consensus", ticker: "000682.SZ", company: "东方电子", note: "两模型基于 8 月本地复核资料得出相同结论：买入前提与持仓验证均通过，红线未触发",
+    z: [["买入前提","verified"],["持仓验证","verified"],["风险/失效条件","not_triggered"]],
+    d: [["买入前提","verified"],["持仓验证","verified"],["风险/失效条件","not_triggered"]],
+    rule: "毛利率 ≥32% 且连续 2–3 季扣非增速 >15% 为改善条件；毛利率 <30% 为红线（当前 30.68% 未触发）。" }
+];
+function rvCardHTML(r) {
+  return `<div class="rv-card ${r.partition}">
+    <div class="rv-head">
+      <b class="nm">${r.company}</b><span class="cd">${r.ticker}</span>
+      ${r.partition === "conflict" ? `<span class="pill2" style="color:#a03530;background:#fae6e4">需人工裁决</span>` : `<span class="pill2" style="color:#1b6b47;background:#e2f1e9">双方一致</span>`}
+    </div>
+    ${matrixHTML(null, r.z.map(x => ({ scope_label: x[0], status: x[1] })), r.d.map(x => ({ scope_label: x[0], status: x[1] })))}
+    ${r.partition === "conflict" ? `<p class="rv-note">⚠ ${r.note}</p>` : `<p class="rv-note" style="color:var(--green)">✓ ${r.note}</p>`}
+    <div class="rv-foot"><span>证据：本地复核资料 + 巨潮官方披露</span><span>规则锁定 8/27 · 人工</span><span>对照生成 8/30 13:41</span></div>
+  </div>`;
+}
+document.getElementById("rv-conflict").innerHTML = REVIEW.filter(r => r.partition === "conflict").map(rvCardHTML).join("");
+document.getElementById("rv-consensus").innerHTML = REVIEW.filter(r => r.partition === "consensus").map(rvCardHTML).join("");
+
+/* ===== 视图3：买入后跟踪 ===== */
+const POS = [
+  { name: "璞泰来", code: "603659.SH", price: 23.73, chg: -1.33, cost: 23.8, weight: 10.0, since: "8/01 建仓", health: ["healthy", "论文健康 8/10", "#1b6b47", "#e2f1e9"], next: "2026-08-31（明天）", action: "持有",
+    metrics: [["涂覆隔膜份额与盈利质量", "待半年报验证"], ["收入增长", "2026Q1 +35.32%"], ["扣非利润与经营现金流", "2026Q1 扣非 +38.23%，现金流为正"], ["负极业务修复", "待观察"], ["技术路线与海外项目", "马来项目已开工"]] },
+  { name: "东方电子", code: "000682.SZ", price: 11.63, chg: 0.43, cost: 11.765, weight: 10.0, since: "已持仓", health: ["borderline", "论文边界 6/10", "#8a6410", "#faf3e3"], next: "2026-10-31", action: "持有，不加仓",
+    metrics: [["营收与扣非增长", "2026H1 营收 +15.98%、扣非 +7.76%，未达标"], ["综合毛利率", "H1 30.68%；Q1/Q2 均高于 30% 红线"], ["经营现金流质量", "H1 -7.70 亿，存货 +17.82%，待全年修复"], ["海外与新业务质量", "海外毛利 38.25%、储能 28.34%，明显改善"], ["产业园资本纪律", "24.7 亿新项目待验证融资与回报"]] }
+];
+document.getElementById("pos-list").innerHTML = POS.map(p => {
+  const pl = (p.price - p.cost) / p.cost * 100;
+  const plCls = pl >= 0 ? "up" : "down";
+  const [hKey, hLabel, hColor, hBg] = p.health;
+  return `<div class="pos-card" data-flag="${p.next.includes("明天") ? "review" : ""}">
+    <div class="pos-head">
+      <b class="nm">${p.name}</b><span class="cd">${p.code} · A股 · ${p.since}</span>
+      <span class="pill2 st" style="color:${hColor};background:${hBg};font-size:11px">${hLabel}</span>
+      <span class="px2"><b class="num">${p.price.toFixed(2)}</b><br><span class="num ${p.chg >= 0 ? "up" : "down"}" style="font-size:11px">${fmtPct(p.chg)} 当日</span></span>
+    </div>
+    <div class="pos-kv">
+      <div class="kv">成本价<b>${p.cost}</b></div>
+      <div class="kv">浮动盈亏<b class="num ${plCls}">${pl >= 0 ? "+" : ""}${pl.toFixed(1)}%</b></div>
+      <div class="kv">仓位权重<b>${p.weight}%</b></div>
+      <div class="kv">复核动作<b>${p.action}</b></div>
+      <div class="kv">下次复核<b class="${p.next.includes("明天") ? "" : ""}" style="color:${p.next.includes("明天") ? "var(--amber)" : "inherit"}">${p.next}</b></div>
+    </div>
+    <table class="metrics">
+      <tr><td style="color:var(--dim);font-size:10px;letter-spacing:.08em;border-bottom:1px solid var(--line)">跟踪指标</td><td style="color:var(--dim);font-size:10px;letter-spacing:.08em;border-bottom:1px solid var(--line)">最新状态（含时间戳）</td></tr>
+      ${p.metrics.map(m => `<tr><td>${m[0]}</td><td>${m[1]}</td></tr>`).join("")}
+    </table>
+    <p class="pos-note">指标来源：thesis-tracker + 定期报告 · 下次复核到期后自动进入「待复核」队列</p>
+  </div>`;
+}).join("");
+
+/* ===== 指数与抽屉 ===== */
+document.getElementById("idx-grid").innerHTML = DATA.indices.map(i =>
+  `<div class="idx"><span>${i.n}</span><b>${i.v}</b><em class="${i.c >= 0 ? "up" : "down"}">${fmtPct(i.c)}</em></div>`).join("");
+const drawer = document.getElementById("tools-drawer"), mask = document.getElementById("tools-mask");
+document.getElementById("tools-open").onclick = () => { drawer.classList.add("show"); mask.classList.add("show"); };
+document.getElementById("tools-close").onclick = closeDrawer;
+mask.onclick = closeDrawer;
+function closeDrawer() { drawer.classList.remove("show"); mask.classList.remove("show"); }
+
+/* ===== 视图切换 ===== */
+document.querySelectorAll(".viewtabs button[data-view]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".viewtabs button[data-view]").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById("view-" + b.dataset.view).classList.add("active");
+}));
+/* ===== 筛选引擎：所有分区筛选真实生效 ===== */
+const state = { exec: "all", market: "all", ref: "all", human: "all", q: "" };
+const rowsAll = [...list.querySelectorAll(".row")];
+function applyDecisionFilters() {
+  let shown = 0;
+  const q = state.q.trim().toLowerCase();
+  rowsAll.forEach(r => {
+    const ok = (state.exec === "all" || r.dataset.exec === state.exec)
+      && (state.market === "all" || r.dataset.market === state.market)
+      && (state.ref === "all" || r.dataset.ref === state.ref)
+      && (state.human === "all" || r.dataset.human === state.human)
+      && (!q || (r.dataset.search || "").toLowerCase().includes(q));
+    r.style.display = ok ? "" : "none";
+    if (ok) shown++;
+    /* 隐藏行时收起其详情 */
+    if (!ok) r.classList.remove("open");
+  });
+  /* 隐藏行后面跟着的 detail 面板也要藏 */
+  list.querySelectorAll(".detail").forEach(d => { d.style.display = ""; });
+  rowsAll.forEach(r => { if (r.style.display === "none") { const nx = r.nextElementSibling; if (nx && nx.classList.contains("detail")) nx.style.display = "none"; } });
+  document.getElementById("empty-state").hidden = shown > 0;
+  document.getElementById("result-meta").textContent = `${shown} / 229`;
+}
+function bindGrp(grpId, key) {
+  const grp = document.getElementById(grpId);
+  if (!grp) return;
+  grp.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    grp.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    state[key] = b.dataset[key];
+    applyDecisionFilters();
+  }));
+}
+bindGrp("exec-grp", "exec");
+bindGrp("market-grp", "market");
+document.getElementById("ref-row").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+  document.getElementById("ref-row").querySelectorAll("button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  state.ref = b.dataset.ref;
+  applyDecisionFilters();
+}));
+document.getElementById("human-row").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+  document.getElementById("human-row").querySelectorAll("button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  state.human = b.dataset.human;
+  applyDecisionFilters();
+}));
+document.getElementById("search-input").addEventListener("input", e => { state.q = e.target.value; applyDecisionFilters(); });
+
+/* 双模型复核分区筛选 */
+document.querySelectorAll("#rv-grp button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#rv-grp button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  const v = b.dataset.rv;
+  let visible = 0;
+  document.querySelectorAll("#view-review .rv-group").forEach(g => {
+    const show = v === "all" || g.dataset.partition === v;
+    g.style.display = show ? "" : "none";
+    if (show) visible++;
+  });
+  document.getElementById("rv-empty").hidden = visible > 0;
+}));
+
+/* 跟踪筛选 */
+document.querySelectorAll("#pos-grp button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("#pos-grp button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  const v = b.dataset.pos;
+  document.querySelectorAll("#pos-list .pos-card").forEach(c => {
+    c.style.display = (v === "all" || (v === "review" && c.dataset.flag === "review") || (v === "alert" && c.dataset.flag === "alert")) ? "" : "none";
+  });
+}));
+</script>
+</body>
+</html>
