@@ -2079,6 +2079,325 @@ function reviewLayerSupplementalTasks(run, primaryTask) {
     .slice(0, 2);
 }
 
+function reviewDataRun(review) {
+  const candidates = [
+    review?.deep?.current,
+    review?.daily?.current,
+  ].filter(Boolean);
+  if (!candidates.length) return null;
+  const currentCandidates = candidates.filter((run) => (
+    run.evidence_state === "current"
+    || reviewLayerTasks(run).some(reviewTaskHasCurrentEvidence)
+  ));
+  const pool = currentCandidates.length ? currentCandidates : candidates;
+  return [...pool].sort((left, right) => {
+    const score = (run) => {
+      const tasks = reviewLayerTasks(run);
+      const structured = tasks.filter(reviewTaskHasStructuredData).length;
+      const current = tasks.filter(reviewTaskHasCurrentEvidence).length;
+      const summaries = tasks.filter((task) => reviewTaskDataMode(task) === "summary").length;
+      const freshness = run.evidence_state === "current" ? 50 : 0;
+      const priority = run.layer === "deep" ? 2 : 1;
+      return structured * 100 + current * 20 + summaries * 5 + freshness + priority;
+    };
+    return score(right) - score(left);
+  })[0] || null;
+}
+
+function reviewChineseNumber(value) {
+  const text = String(value || "").trim();
+  const map = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
+  if (/^\d+$/.test(text)) return Number(text);
+  if (text === "十") return 10;
+  if (text.startsWith("十")) return 10 + (map[text.slice(1)] || 0);
+  if (text.endsWith("十")) return (map[text.slice(0, -1)] || 1) * 10;
+  if (text.includes("十")) {
+    const [tens, ones] = text.split("十");
+    return (map[tens] || 1) * 10 + (map[ones] || 0);
+  }
+  return map[text];
+}
+
+function reviewMetricResultLabel(value) {
+  const text = String(value || "").trim();
+  if (!text) return "未明确";
+  if (["met", "verified", "positive", "pass", "passed"].includes(text)) return "已达标";
+  if (["not_disclosed", "missing", "data_insufficient", "unknown"].includes(text)) return "未获取";
+  if (["triggered", "redline"].includes(text)) return "转负";
+  if (["not_met", "negative", "fail", "failed"].includes(text)) return "未达标";
+  return text;
+}
+
+function reviewMetricRowsForTasks(tasks, run) {
+  const rows = [];
+  const addRow = (row) => {
+    const name = String(row?.name || "").trim();
+    if (!name) return;
+    const normalized = {
+      name,
+      requirement: row.requirement || "未记录主报告要求",
+      actual: row.actual || "未获取",
+      comparison: row.comparison || "",
+      result: reviewMetricResultLabel(row.result),
+    };
+    const existing = rows.find((item) => item.name === name);
+    if (!existing) {
+      rows.push(normalized);
+      return;
+    }
+    const existingMissing = existing.actual === "未获取" || existing.result === "未获取";
+    const replacementHasValue = normalized.actual !== "未获取" || normalized.result !== "未获取";
+    const strongerNegative = existing.result === "未达标" && normalized.result === "转负";
+    const clearerResult = existing.result === "未明确" && normalized.result !== "未明确";
+    if ((existingMissing && replacementHasValue) || strongerNegative || clearerResult) Object.assign(existing, normalized);
+  };
+
+  for (const task of tasks) {
+    const structured = task?.metric_results || task?.metric_rows || task?.data_points || task?.observations;
+    if (!Array.isArray(structured)) continue;
+    for (const point of structured) {
+      if (!point || typeof point !== "object") continue;
+      addRow({
+        name: point.name || point.metric || point.label,
+        requirement: point.requirement || point.threshold || point.rule,
+        actual: point.actual ?? point.current_value ?? point.value,
+        comparison: point.comparison || point.baseline || point.compare,
+        result: point.result || point.state || point.status,
+      });
+    }
+  }
+
+  const gapText = [run?.data_gaps || [], ...tasks.map((task) => reviewTaskMissingFields(task))]
+    .flat()
+    .filter(Boolean)
+    .join("；");
+  const allText = tasks.flatMap((task) => [task?.current_value, task?.comparison, task?.conclusion])
+    .filter(Boolean)
+    .join("；");
+  const explicitNegativeNames = new Set();
+  if (/现金流(?:未转正|为负|转负)/.test(allText)) explicitNegativeNames.add("经营现金流");
+  if (/海缆毛利率(?:低于|转负)|海缆毛利率.*不满足/.test(allText)) explicitNegativeNames.add("海缆毛利率");
+  if (/海缆(?:收入)?(?:相对)?增速(?:低于整体|低于|转负)|海缆收入相对增速.*不满足/.test(allText)) {
+    explicitNegativeNames.add("海缆收入增速");
+  }
+  if (/应收(?:账款)?增速(?:高于收入|高于|转负)|应收增速.*不满足/.test(allText)) {
+    explicitNegativeNames.add("应收账款增速");
+  }
+  for (const task of tasks) {
+    const text = [task?.current_value, task?.comparison, task?.conclusion].filter(Boolean).join("；");
+    if (!text) continue;
+    const negativeHint = /明确负向|转负|未转正|为负|不满足/.test(text);
+    let match = text.match(/(?:经营)?现金流\s*(?:为|：|:)?\s*([+-]?\d+(?:\.\d+)?\s*(?:亿元|万元|元)?)/);
+    if (match) addRow({
+      name: "经营现金流",
+      actual: match[1].trim(),
+      requirement: "> 0（转正）",
+      result: explicitNegativeNames.has("经营现金流") || /-|为负|未转正|明确负向|转负/.test(text)
+        ? "转负"
+        : (/\+?\d/.test(match[1]) && !negativeHint ? "已达标" : "未明确"),
+    });
+
+    match = text.match(/(海缆[^；。]*?毛利率|[^；。]*?毛利率)\s*约?\s*([+-]?\d+(?:\.\d+)?%)\s*[，,]\s*低于\s*([+-]?\d+(?:\.\d+)?%)/);
+    if (match) addRow({
+      name: match[1].trim(),
+      actual: match[2],
+      requirement: `≥ ${match[3]}`,
+      result: explicitNegativeNames.has(match[1].trim()) || negativeHint ? "转负" : "未达标",
+    });
+
+    match = text.match(/(海缆[^；。]*?收入增速|[^；。]*?收入增速)\s*([+-]?\d+(?:\.\d+)?%)\s*[，,]\s*低于整体\s*([+-]?\d+(?:\.\d+)?%)/);
+    if (match) addRow({
+      name: match[1].trim(),
+      actual: match[2],
+      requirement: `> 整体 ${match[3]}`,
+      comparison: `整体收入增速 ${match[3]}`,
+      result: explicitNegativeNames.has(match[1].trim()) || negativeHint ? "转负" : "未达标",
+    });
+
+    match = text.match(/应收账款较年末增长\s*([+-]?\d+(?:\.\d+)?%)\s*[，,]\s*高于收入增速/);
+    if (match) addRow({
+      name: "应收账款增速",
+      actual: match[1],
+      requirement: "< 收入增速",
+      comparison: (text.match(/低于整体\s*([+-]?\d+(?:\.\d+)?%)/) || text.match(/收入\s*(?:增速)?\s*([+-]?\d+(?:\.\d+)?%)/) || [])[1]
+        ? `收入增速 ${(text.match(/低于整体\s*([+-]?\d+(?:\.\d+)?%)/) || text.match(/收入\s*(?:增速)?\s*([+-]?\d+(?:\.\d+)?%)/) || [])[1]}`
+        : "收入增速未获取",
+      result: explicitNegativeNames.has("应收账款增速") || negativeHint ? "转负" : "未达标",
+    });
+
+    match = text.match(/应收(?:账款)?增速\s*([+-]?\d+(?:\.\d+)?%)\s*(?:>|高于)\s*(?:收入(?:增速)?\s*)?([+-]?\d+(?:\.\d+)?%)/);
+    if (match) addRow({
+      name: "应收账款增速",
+      actual: match[1],
+      requirement: "< 收入增速",
+      comparison: `收入增速 ${match[2]}`,
+      result: explicitNegativeNames.has("应收账款增速") ? "转负" : "未达标",
+    });
+
+    match = text.match(/(海缆(?:收入)?增速)\s*([+-]?\d+(?:\.\d+)?)%\s*(?:<|低于)\s*(?:整体\s*)?([+-]?\d+(?:\.\d+)?%)/);
+    if (match) addRow({
+      name: "海缆收入增速",
+      actual: `${match[2]}%`,
+      requirement: `> 整体 ${match[3]}`,
+      comparison: `整体收入增速 ${match[3]}`,
+      result: explicitNegativeNames.has("海缆收入增速") ? "转负" : "未达标",
+    });
+
+    match = text.match(/海缆订单\s*([+-]?\d+(?:\.\d+)?)\s*亿元[^。；]*?(?:未守住|100\s*亿元)/);
+    if (match) addRow({
+      name: "海缆订单",
+      actual: `${match[1]} 亿元`,
+      requirement: "≥ 100 亿元",
+      result: "未达标",
+    });
+  }
+
+  if (/套期.*毛利率.*未单独披露/.test(gapText)) {
+    addRow({ name: "扣套期后毛利率", actual: "未单独披露", requirement: "≥ 22%", result: "未获取" });
+  }
+  return rows;
+}
+
+function reviewDataSnapshot(review) {
+  const run = reviewDataRun(review);
+  const tasks = reviewLayerTasks(run);
+  const rows = reviewMetricRowsForTasks(tasks, run);
+  const sourceText = tasks.flatMap((task) => [task?.current_value, task?.comparison, task?.conclusion])
+    .filter(Boolean)
+    .join("；");
+  const countMatch = sourceText.match(/([一二三四五六七八九十\d]+)\s*项(?:中|判决|指标)/);
+  const total = countMatch ? reviewChineseNumber(countMatch[1]) : (rows.length || null);
+  const negativeMatch = sourceText.match(/([一二三四五六七八九十\d]+)\s*项(?:明确)?转负|明确负向项(?:至少)?\s*([一二三四五六七八九十\d]+)\s*项/);
+  const negative = negativeMatch
+    ? reviewChineseNumber(negativeMatch[1] || negativeMatch[2])
+    : null;
+  const positiveMatch = sourceText.match(/(?:明确|已|达到|满足)\s*(\d+)\s*项\s*(?:已)?(?:达标|转正|满足)/);
+  const rowPositive = rows.length > 0 && rows.every((row) => row.result !== "已达标" && row.result !== "未明确")
+    ? 0
+    : null;
+  const positive = positiveMatch ? Number(positiveMatch[1]) : rowPositive;
+  const missing = rows.filter((row) => row.result === "未获取").length;
+  const notMet = rows.filter((row) => row.result === "未达标").length;
+  return { run, tasks, rows, total, positive, negative, notMet, missing };
+}
+
+function reviewDataResultClass(result) {
+  if (result === "已达标") return "review-data-result-positive";
+  if (result === "转负") return "review-data-result-negative";
+  if (result === "未获取") return "review-data-result-missing";
+  if (result === "未达标") return "review-data-result-warning";
+  return "review-data-result-neutral";
+}
+
+function renderReviewDataCounts(snapshot) {
+  const counts = document.createElement("div");
+  counts.className = "review-data-counts";
+  const values = [
+    ["数据项目", snapshot.total == null ? "未明确" : `${snapshot.total} 项`, ""],
+    ["已达标", snapshot.positive == null ? "未明确" : `${snapshot.positive} 项`, "positive"],
+    ["转负", snapshot.negative == null ? "未明确" : `${snapshot.negative} 项`, "negative"],
+    ["未达标", `${snapshot.notMet} 项`, "warning"],
+    ["未获取", `${snapshot.missing} 项`, "missing"],
+  ];
+  for (const [label, value, tone] of values) {
+    const item = document.createElement("div");
+    item.className = `review-data-count${tone ? ` review-data-count-${tone}` : ""}`;
+    const name = document.createElement("span");
+    name.textContent = label;
+    const number = document.createElement("strong");
+    number.textContent = value;
+    item.append(name, number);
+    counts.append(item);
+  }
+  return counts;
+}
+
+function renderReviewMetricTable(rows, { compact = false } = {}) {
+  const table = document.createElement("table");
+  table.className = `review-data-table${compact ? " review-data-table-compact" : ""}`;
+  const head = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  for (const label of ["指标", "主报告要求", "本次抓取", "对照", "结果"]) {
+    const cell = document.createElement("th");
+    cell.textContent = label;
+    headerRow.append(cell);
+  }
+  head.append(headerRow);
+  const body = document.createElement("tbody");
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    const values = [row.name, row.requirement, row.actual, row.comparison || "—", row.result];
+    values.forEach((value, index) => {
+      const cell = document.createElement(index === 0 ? "th" : "td");
+      cell.textContent = value;
+      if (index === 2) cell.className = "review-data-actual";
+      if (index === 4) cell.className = reviewDataResultClass(row.result);
+      tr.append(cell);
+    });
+    body.append(tr);
+  }
+  table.append(head, body);
+  return table;
+}
+
+function reviewDataFallbackRows(review, snapshot) {
+  return snapshot.tasks
+    .filter((task) => reviewTaskHasStructuredData(task) && !reviewMetricRowsForTasks([task], snapshot.run).length)
+    .map((task) => ({
+      name: task.scope_label || task.group || "条件汇总",
+      requirement: reviewTaskRuleCondition(review, task) || "未记录主报告要求",
+      actual: task.current_value || "未获取",
+      comparison: task.comparison || "",
+      result: reviewMetricResultLabel(task.truth_state || task.status),
+    }));
+}
+
+function renderReviewDataCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell fundamental-review-data-cell";
+  cell.dataset.label = "数据对照";
+  const snapshot = reviewDataSnapshot(review);
+  if (!snapshot.run) {
+    cell.textContent = "未保存可对照数据";
+    cell.classList.add("muted");
+    return cell;
+  }
+  cell.append(renderReviewDataCounts(snapshot));
+  const rows = [...snapshot.rows, ...reviewDataFallbackRows(review, snapshot)];
+  if (rows.length) cell.append(renderReviewMetricTable(rows, { compact: true }));
+  else {
+    const empty = document.createElement("p");
+    empty.className = "review-data-empty";
+    empty.textContent = "未拆分当前数据；下方详情只保留已保存原始摘要。";
+    cell.append(empty);
+  }
+  if (snapshot.run.evidence_state !== "current") {
+    const history = document.createElement("p");
+    history.className = "review-data-history-note";
+    history.textContent = "当前数据未保存；已列内容为历史参考，不作为当前值。";
+    cell.append(history);
+  }
+  return cell;
+}
+
+function renderReviewEvidenceMetaCell(review) {
+  const cell = document.createElement("td");
+  cell.className = "fundamental-review-queue-cell fundamental-review-evidence-meta-cell";
+  cell.dataset.label = "证据时间";
+  const snapshot = reviewDataSnapshot(review);
+  const dates = [...new Set(snapshot.tasks.flatMap((task) => task?.evidence_dates || []).filter(Boolean))];
+  const date = dates[0] || snapshot.run?.latest_evidence_date || snapshot.run?.generated_at;
+  const latest = document.createElement("strong");
+  latest.textContent = `最新证据：${date ? shortReviewDate(date) : "未记录"}`;
+  cell.append(latest);
+  const documents = [...new Set(snapshot.tasks.flatMap((task) => task?.evidence_document_ids || []).filter(Boolean))];
+  const source = document.createElement("p");
+  source.className = "fundamental-review-meta muted";
+  source.textContent = documents.length ? `来源：${documents.join("、")}` : "来源未记录";
+  cell.append(source);
+  return cell;
+}
+
 function appendReviewQueueCompareRow(parent, labelText, valueText, tone = "") {
   if (!reviewFieldHasValue(valueText)) return;
   const row = document.createElement("div");
@@ -4128,7 +4447,7 @@ function renderCodexDirectReviewCell(review) {
 }
 
 function renderFundamentalReviewRows(visible) {
-  setTableHeader(["公司 / 代码", "当前状态", "日常复核", "深度复核", "下次到期"]);
+  setTableHeader(["公司 / 代码", "当前状态", "数据对照", "证据时间"]);
   const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
   rendered.forEach((item, index) => {
     const review = modelReviewForItem(item);
@@ -4142,9 +4461,8 @@ function renderFundamentalReviewRows(visible) {
 
     tr.append(
       renderReviewQueueStatusCell(review),
-      renderReviewLayerCell(review, "daily", "日常复核"),
-      renderReviewLayerCell(review, "deep", "深度复核"),
-      renderReviewScheduleCell(review),
+      renderReviewDataCell(review),
+      renderReviewEvidenceMetaCell(review),
     );
 
     tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
@@ -4160,7 +4478,7 @@ function renderFundamentalReviewRows(visible) {
     els.loadMoreRows.hidden = remaining === 0;
     els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
   }
-  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 日常与深度复核分层展示`;
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · 主报告条件与当前数据对照`;
   if (els.emptyState) els.emptyState.hidden = visible.length > 0;
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
@@ -4478,8 +4796,7 @@ function renderFundamentalReviewRule(rule, review = null) {
     source.append(summary);
     for (const row of sourceLines.slice(0, 3)) {
       const quote = document.createElement("p");
-      const range = row.line_start ? `L${row.line_start}${row.line_end && row.line_end !== row.line_start ? `–L${row.line_end}` : ""} · ` : "";
-      quote.textContent = `${range}${row.quote || row.supports || "已记录原文位置"}`;
+      quote.textContent = row.quote || row.supports || "已记录原文位置";
       source.append(quote);
     }
     article.append(source);
@@ -4570,7 +4887,9 @@ function renderReportExcerpt(sourceLine) {
   body.className = "report-review-excerpt-body";
   const lines = String(rawText).replace(/\r\n?/g, "\n").split("\n");
   for (const rawLine of lines) {
-    const line = rawLine.replace(/\s+$/, "");
+    const line = rawLine
+      .replace(/^\s*L\d+(?:\s*[-–]\s*L?\d+)?\s*[:：·|]\s*/i, "")
+      .replace(/\s+$/, "");
     if (!line.trim()) {
       const spacer = document.createElement("div");
       spacer.className = "report-review-excerpt-spacer";
@@ -4618,9 +4937,7 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   head.className = "report-review-evidence-task-head";
   const title = document.createElement("strong");
   title.textContent = task?.scope_label || task?.group || "复核事项";
-  const status = document.createElement("span");
-  status.textContent = `${modelReviewTaskStatus(task)} · ${modelReviewEvidenceLabel(task)}`;
-  head.append(title, status);
+  head.append(title);
   article.append(head);
 
   const rule = reviewRuleForTask(review, task);
@@ -4634,7 +4951,7 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
 
   const ruleText = document.createElement("p");
   ruleText.className = "report-review-evidence-task-rule";
-  ruleText.textContent = `对应主报告条件：${rule?.condition || task?.rule_content || "主报告未保存可对照规则"}`;
+  ruleText.textContent = `主报告要求：${rule?.condition || task?.rule_content || "主报告未保存可对照规则"}`;
   article.append(ruleText);
 
   const dataBox = document.createElement("div");
@@ -4642,9 +4959,9 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   const dataLabel = document.createElement("span");
   dataLabel.className = "report-review-evidence-label";
   dataLabel.textContent = ({
-    structured: "本次实际抓取数据 / 对比",
-    summary: "已保存核验摘要（当前值未结构化）",
-    current_evidence: "已保存当前原文依据（当前值未拆分）",
+    structured: "本次抓取 / 对照摘要",
+    summary: "已保存摘要（当前值未结构化）",
+    current_evidence: "已保存当前依据（当前值未拆分）",
     historical: "主报告历史参考（不作为当前值）",
     missing: "本次当前数据",
   })[dataMode];
@@ -4721,7 +5038,7 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
     conclusion.className = "report-review-evidence-block";
     const conclusionLabel = document.createElement("span");
     conclusionLabel.className = "report-review-evidence-label";
-    conclusionLabel.textContent = "复核结论";
+    conclusionLabel.textContent = "已保存摘要";
     const conclusionText = document.createElement("p");
     conclusionText.textContent = task.conclusion;
     conclusion.append(conclusionLabel, conclusionText);
@@ -4730,34 +5047,25 @@ function renderReviewEvidenceTask(review, task, layerLabel) {
   return article;
 }
 
-function renderReviewLayerCoverage(review, run) {
+function renderReviewDataCoverage(review, snapshot) {
   const box = document.createElement("div");
-  box.className = "report-review-layer-coverage";
-  const tasks = reviewLayerTasks(run);
-  const structured = tasks.filter(reviewTaskHasStructuredData);
-  const summaries = tasks.filter((task) => reviewTaskDataMode(task) === "summary");
-  const currentEvidence = tasks.filter((task) => reviewTaskDataMode(task) === "current_evidence");
-  const historical = tasks.filter((task) => reviewTaskDataMode(task) === "historical");
+  box.className = "report-review-data-coverage";
 
   const available = document.createElement("p");
-  available.className = "report-review-layer-coverage-available";
-  if (structured.length) {
-    available.textContent = `已获取：${structured.length} 项有当前值或对比值，详见下方逐项数据。`;
-  } else if (summaries.length) {
-    available.textContent = `已保存：${summaries.length} 项核验摘要；当前值未结构化保存。`;
-  } else if (currentEvidence.length || (run?.evidence_state === "current" && (run?.current_evidence_count || 0) > 0)) {
-    available.textContent = `已保存：${run?.current_evidence_count || currentEvidence.length} 份当前依据；当前值未拆分。`;
-  } else if (historical.length) {
-    available.textContent = `已保存：${historical.length} 项主报告历史参考，不作为本次当前数据。`;
+  available.className = "report-review-data-coverage-available";
+  if (snapshot.rows.length) {
+    available.textContent = `已列出 ${snapshot.rows.length} 项可对照数据；每项均单独显示要求、抓取值和结果。`;
+  } else if (snapshot.tasks.some((task) => reviewTaskDataMode(task) === "summary")) {
+    available.textContent = "已保存条件摘要，但没有可拆分的结构化数值。";
   } else {
-    available.textContent = "已获取：没有可展示的当前数值。";
+    available.textContent = "没有可展示的当前数值。";
   }
   box.append(available);
 
-  const missing = reviewRunMissingFields(review, run, tasks);
+  const missing = reviewRunMissingFields(review, snapshot.run, snapshot.tasks);
   if (missing.length) {
     const missingText = document.createElement("p");
-    missingText.className = "report-review-layer-coverage-missing";
+    missingText.className = "report-review-data-coverage-missing";
     missingText.textContent = `未获取：${missing.join("、")}`;
     box.append(missingText);
   }
@@ -4770,9 +5078,9 @@ function renderSharedReportSource(review) {
   const head = document.createElement("div");
   head.className = "report-review-evidence-shared-head";
   const label = document.createElement("strong");
-  label.textContent = "主报告原文证据（两层共用）";
+  label.textContent = "主报告原文证据（共用）";
   const hint = document.createElement("span");
-  hint.textContent = "正文只显示一次；下方分别对照日常与深度实际数据";
+  hint.textContent = "正文只显示一次；下方统一对照实际数据";
   head.append(label, hint);
   shared.append(head);
 
@@ -4808,55 +5116,34 @@ function renderFundamentalReviewEvidenceComparison(review) {
   const card = document.createElement("section");
   card.className = "card report-review-evidence-card";
   const title = document.createElement("h3");
-  title.textContent = "原文与实际数据对照";
+  title.textContent = "主报告要求与当前数据";
   const note = document.createElement("p");
   note.className = "source-note";
-  note.textContent = "主报告原文证据共用一次；下面只看两层各自抓取的实际数据、对比值和结论。模型、状态和证据数量只作辅助提示。";
+  note.textContent = "主报告原文证据共用一次；下方逐项列出主报告要求、实际抓取值、对比值和结果。没有数据的项目明确标为未获取。";
   card.append(title, note, renderSharedReportSource(review));
-  const grid = document.createElement("div");
-  grid.className = "report-review-evidence-layer-grid";
-  for (const [layer, label] of [["daily", "日常复核"], ["deep", "深度复核"]]) {
-    const run = review?.[layer]?.current;
-    const layerColumn = document.createElement("section");
-    layerColumn.className = `report-review-evidence-layer report-review-evidence-layer-${layer}`;
-    const layerHead = document.createElement("div");
-    layerHead.className = "report-review-evidence-layer-head";
-    const layerTitle = document.createElement("h4");
-    layerTitle.textContent = label;
-    layerHead.append(layerTitle);
-    if (run) {
-      const layerMeta = document.createElement("span");
-      layerMeta.textContent = `${layerReviewLabel(run)} · ${run.current_evidence_count ?? 0} 份证据`;
-      layerMeta.className = "report-review-evidence-layer-meta";
-      layerHead.append(layerMeta);
-    }
-    layerColumn.append(layerHead);
-    if (run) layerColumn.append(renderReviewLayerCoverage(review, run));
-    const taskGrid = document.createElement("div");
-    taskGrid.className = "report-review-evidence-layer-tasks";
-    if (!run) {
-      const empty = document.createElement("p");
-      empty.className = "source-note";
-      empty.textContent = "尚未保存复核记录。";
-      taskGrid.append(empty);
-    }
-    if (!run) {
-      layerColumn.append(taskGrid);
-      grid.append(layerColumn);
-      continue;
-    }
-    const tasks = (run.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
-    for (const task of tasks) taskGrid.append(renderReviewEvidenceTask(review, task, label));
-    if (!taskGrid.childElementCount) {
-      const empty = document.createElement("p");
-      empty.className = "source-note";
-      empty.textContent = "当前没有可展示的复核数据。";
-      taskGrid.append(empty);
-    }
-    layerColumn.append(taskGrid);
-    grid.append(layerColumn);
+  const snapshot = reviewDataSnapshot(review);
+  const dataGrid = document.createElement("div");
+  dataGrid.className = "report-review-data-grid";
+  const dataHead = document.createElement("div");
+  dataHead.className = "report-review-data-head";
+  const dataTitle = document.createElement("h4");
+  dataTitle.textContent = "数据对照";
+  dataHead.append(dataTitle);
+  dataGrid.append(dataHead, renderReviewDataCounts(snapshot), renderReviewDataCoverage(review, snapshot));
+  const metricRows = [...snapshot.rows, ...reviewDataFallbackRows(review, snapshot)];
+  if (metricRows.length) dataGrid.append(renderReviewMetricTable(metricRows));
+  else {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "当前没有可逐项列出的数据。";
+    dataGrid.append(empty);
   }
-  card.append(grid);
+  card.append(dataGrid);
+
+  const taskGrid = document.createElement("div");
+  taskGrid.className = "report-review-evidence-task-grid report-review-data-task-grid";
+  for (const task of snapshot.tasks) taskGrid.append(renderReviewEvidenceTask(review, task, "数据"));
+  if (taskGrid.childElementCount) card.append(taskGrid);
   els.detailBody.append(card);
 }
 
@@ -4887,13 +5174,14 @@ function renderFundamentalReviewDetail(item) {
 
   const deep = review.deep?.current || null;
   const direct = review.manual?.codex_direct || null;
-  const tasks = deep?.tasks || [];
+  const dataSnapshot = reviewDataSnapshot(review);
+  const tasks = dataSnapshot.tasks;
   const redlines = tasks.filter((task) => task.review_effect === "redline" && ["met", "triggered"].includes(task.truth_state || task.status));
   const attention = tasks.filter((task) => ["not_met", "unknown", "data_insufficient"].includes(task.truth_state || task.status));
   const gapValues = [
     ...(review.summary?.missing_requirements || []),
     ...(review.summary?.data_gaps || []),
-    ...(deep?.data_gaps || []),
+    ...(dataSnapshot.run?.data_gaps || []),
     ...(direct?.data_gaps || []),
   ].filter(Boolean);
   const gaps = [...new Set(gapValues)];
@@ -4923,9 +5211,11 @@ function renderFundamentalReviewDetail(item) {
   facts.className = "report-review-priority-facts";
   const factRows = [
     ["当前价格", currentPrice?.price == null ? "未取得" : `${currentPrice.price} ${currentPrice.currency || "CNY"}`],
-    ["深度复核", deep ? `${shortReviewDate(deep.generated_at)} · ${deep.model || deep.reviewer || "已保存"}` : "未保存"],
-    ["当前证据", deep ? `${deep.current_evidence_count ?? 0} 份 · ${deep.evidence_state === "current" ? "当前" : "历史/不足"}` : "无"],
-    ["下次检查", shortReviewDate(review.deep?.due_at || review.next_check_at)],
+    ["数据项目", dataSnapshot.total == null ? "未明确" : `${dataSnapshot.total} 项`],
+    ["已达标", dataSnapshot.positive == null ? "未明确" : `${dataSnapshot.positive} 项`],
+    ["转负", dataSnapshot.negative == null ? "未明确" : `${dataSnapshot.negative} 项`],
+    ["未达标", `${dataSnapshot.notMet} 项`],
+    ["未获取", `${dataSnapshot.missing} 项`],
   ];
   for (const [label, value] of factRows) {
     const fact = document.createElement("div");
@@ -4966,53 +5256,6 @@ function renderFundamentalReviewDetail(item) {
   summary.append(keyPoints);
   els.detailBody.append(summary);
 
-  const layers = document.createElement("div");
-  layers.className = "report-review-layer-summary-grid";
-  const renderLayerSummary = (layer, label, policy) => {
-    const info = review[layer] || {};
-    const run = info.current;
-    const card = document.createElement("section");
-    card.className = "card report-review-layer-summary";
-    const title = document.createElement("h3");
-    title.textContent = label;
-    const note = document.createElement("p");
-    note.className = "source-note";
-    note.textContent = policy;
-    card.append(title, note);
-    if (!run) {
-      const empty = document.createElement("p");
-      empty.textContent = "尚未保存结果";
-      card.append(empty);
-      return card;
-    }
-    const runStatus = document.createElement("strong");
-    runStatus.className = "report-review-layer-status";
-    runStatus.textContent = layerReviewLabel(run);
-    const meta = document.createElement("p");
-    meta.className = "fundamental-review-meta";
-    const evidenceState = run.evidence_state === "current" ? "当前证据" : "历史/不足";
-    meta.textContent = `${run.model || run.reviewer || "复核者未记录"} · ${shortReviewDate(run.generated_at)} · ${run.current_evidence_count ?? 0} 份${evidenceState}`;
-    card.append(runStatus, meta, renderReviewLayerCoverage(review, run));
-    const layerTasks = (run.tasks || []).filter((task) => (task.truth_state || task.status) !== "not_due");
-    for (const task of layerTasks.slice(0, 2)) {
-      const item = document.createElement("p");
-      item.className = "report-review-layer-point";
-      item.textContent = `${task.scope_label || task.group || "复核事项"} · ${modelReviewTaskStatus(task)}：${task.conclusion || task.rule_content || "未保存说明"}`;
-      card.append(item);
-    }
-    if (layerTasks.length > 2) {
-      const more = document.createElement("p");
-      more.className = "source-note";
-      more.textContent = `还有 ${layerTasks.length - 2} 项，见下方详细依据`;
-      card.append(more);
-    }
-    return card;
-  };
-  layers.append(
-    renderLayerSummary("daily", "日常复核", "DeepSeek 手动运行，每三天检查一次；只核验新证据。"),
-    renderLayerSummary("deep", "深度复核", "每次由你指定模型与推理档位；不固定模型，不改写主报告。"),
-  );
-  els.detailBody.append(layers);
   renderFundamentalReviewEvidenceComparison(review);
 
   const details = document.createElement("details");
@@ -5046,7 +5289,7 @@ function renderFundamentalReviewDetail(item) {
   }
   const comparison = document.createElement("p");
   comparison.className = "source-note";
-  comparison.textContent = `两层一致性：${review.layer_comparison?.label || "尚无可比较结果"}；锁定规则 ${review.manual?.rule_count ?? review.rules?.length ?? 0} 条。`;
+  comparison.textContent = `当前数据来源：${dataSnapshot.run?.source || "未记录"}；锁定规则 ${review.manual?.rule_count ?? review.rules?.length ?? 0} 条。`;
   details.append(comparison);
   els.detailBody.append(details);
 }
@@ -5506,7 +5749,9 @@ function renderDetail() {
   if (state.detailTab === "report-review") {
     const review = fundamentalReviewForItem(item);
     const partition = fundamentalReviewStatusMeta[fundamentalReviewPartitionKey(review)]?.label || "等待复核";
-    els.detailSub.textContent = `${partition} · 日常 ${shortReviewDate(review?.daily?.current?.generated_at)} · 深度 ${shortReviewDate(review?.deep?.current?.generated_at)}`;
+    const snapshot = reviewDataSnapshot(review);
+    const latest = snapshot.run?.latest_evidence_date || snapshot.run?.generated_at;
+    els.detailSub.textContent = `${partition} · 数据 ${snapshot.total == null ? "未明确" : `${snapshot.total} 项`} · 最新证据 ${latest ? shortReviewDate(latest) : "未记录"}`;
     renderFundamentalReviewDetail(item);
     return;
   }
