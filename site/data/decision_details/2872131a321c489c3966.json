@@ -538,7 +538,7 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-09-01T23:33:04+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
@@ -754,7 +754,7 @@
     "market": "A股",
     "report_path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
     "report_link": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
-    "report_sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234",
+    "report_sha256": "91a8d7dabf25927ae65cbb62d70bb54a48cda8152cf0b7fbeec006bb40c757e5",
     "title": "巴菲特Checklist-恒瑞医药-20260706",
     "source_type": "standalone",
     "decision_contract": null,
@@ -818,9 +818,9 @@
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -828,7 +828,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "C",
-    "execution_key": "validation",
+    "execution_key": "review",
     "label": "人工复核：价格已到，等待验证",
     "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
     "opportunity_tier": null,
@@ -842,7 +842,7 @@
       },
       "checklist": {
         "path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
-        "sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234"
+        "sha256": "91a8d7dabf25927ae65cbb62d70bb54a48cda8152cf0b7fbeec006bb40c757e5"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -850,10 +850,10 @@
       }
     },
     "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
-    "current_source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e"
+    "current_source_fingerprint_sha256": "ac7aa145c621d6a2af46c2b1ce77103ad3d89d8806397c62d6bd4c6819a2d44b"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
   "market_session_state": "runtime_required",
@@ -903,7 +903,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "44bc7bce55502b286431",
   "detail_id": "2872131a321c489c3966",
   "detail_path": "./data/decision_details/2872131a321c489c3966.json"
 }

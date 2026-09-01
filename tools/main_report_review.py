@@ -127,11 +127,15 @@ def atomic_write_json(path: Path, payload: dict[str, Any]) -> None:
             temporary.flush()
             os.fsync(temporary.fileno())
         os.replace(temporary_path, path)
-        directory_fd = os.open(path.parent, os.O_RDONLY)
         try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+            directory_fd = os.open(path.parent, os.O_RDONLY)
+        except OSError:
+            directory_fd = None  # Windows cannot open directory handles; the file-level fsync above already durably replaced the target.
+        if directory_fd is not None:
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     finally:
         if temporary_path.exists():
             temporary_path.unlink()
@@ -154,11 +158,15 @@ def atomic_write_text(path: Path, text: str) -> None:
             temporary.flush()
             os.fsync(temporary.fileno())
         os.replace(temporary_path, path)
-        directory_fd = os.open(path.parent, os.O_RDONLY)
         try:
-            os.fsync(directory_fd)
-        finally:
-            os.close(directory_fd)
+            directory_fd = os.open(path.parent, os.O_RDONLY)
+        except OSError:
+            directory_fd = None  # Windows cannot open directory handles; the file-level fsync above already durably replaced the target.
+        if directory_fd is not None:
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     finally:
         if temporary_path.exists():
             temporary_path.unlink()
@@ -712,10 +720,73 @@ def _download_official_pdf(url: str) -> tuple[str, str, int]:
         path.write_bytes(completed.stdout)
         reader = PdfReader(str(path))
         text = "\n".join(page.extract_text() or "" for page in reader.pages)
-    return text[:18000], hashlib.sha256(completed.stdout).hexdigest(), len(reader.pages)
+    return _targeted_official_text(text), hashlib.sha256(completed.stdout).hexdigest(), len(reader.pages)
 
 
-def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 120) -> list[dict[str, Any]]:
+OFFICIAL_SECTION_PATTERNS: tuple[str, ...] = (
+    r"主营业务分(行业|产品|地区)|分(产品|行业|地区)经营|分(产品|行业)营业收入",
+    r"占公司营业收入或营业利润.?10%以上的(?:行业|产品|地区)",
+    r"营业收入构成|收入构成|产品构成",
+    r"经营情况的讨论与分析|经营情况讨论|管理层讨论与分析",
+    r"资产及负债状况|资产负债项目?重大变动|主要资产重大变化",
+    r"现金流",
+    r"在手订单|订单|中标|重大合同",
+    r"毛利率",
+)
+
+
+def _targeted_official_text(text: str) -> str:
+    """Budget-aware excerpt: document head plus windows over decision-relevant
+    sections.  Periodic reports put segment margins, balance-sheet movements and
+    order disclosure far beyond the first pages, so a head-only excerpt was the
+    main source of data gaps in incremental review.  PDF table extraction often
+    inserts whitespace inside CJK words, so whitespace between CJK characters is
+    normalised before section matching; ASCII numbers keep their spacing.
+    Windows are built greedily in text order; a match is only skipped when its
+    position is already covered by an earlier window, never because two windows
+    merely overlap — otherwise a table sitting between two windows gets lost."""
+    head_chars = 7000
+    section_window = 2200
+    budget = 18000
+    text = re.sub(r"(?<=[\u4e00-\u9fff])\s+(?=[\u4e00-\u9fff])", "", text)
+    positions: set[int] = set()
+    for pattern in OFFICIAL_SECTION_PATTERNS:
+        match = re.search(pattern, text)
+        if match:
+            positions.add(match.start())
+    sections: list[str] = []
+    used: list[tuple[int, int]] = []
+    for pos in sorted(positions):
+        if any(w_start <= pos < w_end for w_start, w_end in used):
+            continue
+        start = max(0, pos - 200)
+        end = min(len(text), pos + section_window)
+        used.append((start, end))
+        sections.append(text[start:end])
+    head = text[:head_chars]
+    tail = text[-1500:] if len(text) > head_chars + 1500 else ""
+    composed = "\n".join(
+        ["【文档开头】" + head, *(["【章节摘录】" + s for s in sections]), "【文档末尾】" + tail]
+    )
+    return composed[:budget]
+
+
+OFFICIAL_PERIODIC_TOKENS = ("年度报告", "半年度报告", "季度报告")
+OFFICIAL_EVENT_TOKENS = ("订单", "中标", "项目", "产能", "回购", "监管")
+OFFICIAL_IR_TOKENS = ("业绩说明", "投资者关系", "调研")
+
+
+def collect_official_evidence(
+    package: dict[str, Any],
+    *,
+    lookback_days: int = 120,
+    official_limit: int = 6,
+) -> list[dict[str, Any]]:
+    """Pick official disclosures by category, not by raw recency alone.
+
+    The newest periodic report full text carries segment/quarterly data; event
+    announcements (orders, buybacks) carry event confirmation; IR records are
+    supporting color.  ``official_limit`` caps downloads per stock (default 6)."""
     ticker = str(package.get("ticker") or "")
     company = str(package.get("company") or "")
     rows = sentiment_snapshot.fetch_cninfo_company_news(
@@ -726,11 +797,48 @@ def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 1
         news_limit=100,
         retrieval_window_type="main_report_incremental_review",
     )
-    selected = [
+    candidates = [
         row
         for row in rows
         if any(token in str(row.get("title") or "") for token in OFFICIAL_TITLE_TOKENS)
-    ][:3]
+    ]
+
+    def title_of(row: dict[str, Any]) -> str:
+        return str(row.get("title") or "")
+
+    def latest(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        return sorted(items, key=lambda row: str(row.get("published_at") or ""), reverse=True)
+
+    periodic_full = [
+        row for row in candidates
+        if any(token in title_of(row) for token in OFFICIAL_PERIODIC_TOKENS) and "摘要" not in title_of(row)
+    ]
+    periodic_summary = [row for row in candidates if "摘要" in title_of(row)]
+    events = [
+        row for row in candidates
+        if any(token in title_of(row) for token in OFFICIAL_EVENT_TOKENS)
+        and row not in periodic_full
+    ]
+    ir = [
+        row for row in candidates
+        if any(token in title_of(row) for token in OFFICIAL_IR_TOKENS)
+        and row not in periodic_full and row not in events
+    ]
+    selected: list[dict[str, Any]] = []
+
+    def take(pool: list[dict[str, Any]], count: int) -> None:
+        for row in latest(pool):
+            if len(selected) >= official_limit:
+                return
+            if row not in selected:
+                selected.append(row)
+
+    take(periodic_full, 2)
+    take(events, 2)
+    take(ir, 1)
+    take(periodic_summary, 1)
+    take(candidates, official_limit)
+    selected = selected[:official_limit]
     documents: list[dict[str, Any]] = []
     for row in selected:
         try:
@@ -1109,6 +1217,7 @@ def process_package(
     *,
     include_official: bool,
     dry_run: bool,
+    official_limit: int = 6,
 ) -> tuple[str, str, dict[str, Any] | None]:
     ticker = str(package.get("ticker") or "")
     documents = collect_local_evidence(repo_root, package)
@@ -1116,7 +1225,7 @@ def process_package(
         document.get("source_role") in {"local_current_evidence", "zcode_current_evidence_extract"}
         for document in documents
     ):
-        documents.extend(collect_official_evidence(package))
+        documents.extend(collect_official_evidence(package, official_limit=official_limit))
     fingerprint = input_fingerprint(package, documents)
     output_path = output_dir / f"{ticker}.json"
     existing = load_json(output_path, {})
@@ -1166,6 +1275,7 @@ def run_incremental(
     include_official: bool = False,
     dry_run: bool = False,
     workers: int = 4,
+    official_limit: int = 6,
 ) -> dict[str, Any]:
     packages = [
         package
@@ -1183,6 +1293,7 @@ def run_incremental(
             output_dir,
             include_official=include_official,
             dry_run=dry_run,
+            official_limit=official_limit,
         )
 
     worker_count = max(1, min(workers, len(packages) or 1))
@@ -1693,6 +1804,7 @@ def main() -> int:
     parser.add_argument("--migrate-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--include-official", action="store_true")
+    parser.add_argument("--official-limit", type=int, default=6)
     parser.add_argument("--ticker", action="append", default=[])
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--write-comparison", action="store_true")
@@ -1731,6 +1843,7 @@ def main() -> int:
         include_official=args.include_official,
         dry_run=args.dry_run,
         workers=args.workers,
+        official_limit=args.official_limit,
     )
     comparison = comparison_snapshot(repo_root)
     if args.write_comparison and not args.dry_run:

@@ -290,7 +290,7 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-09-01T23:33:04+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
@@ -440,15 +440,78 @@
     "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
   },
   "checklist": {
-    "status": "missing",
+    "company": "海天味业",
+    "ticker": "603288.SH",
+    "market": "A股",
+    "report_path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+    "report_link": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+    "report_sha256": "7b274bdf0632792ed496a4e85c06ce65d4a87d3447986b6965a119f1aac30045",
+    "title": "巴菲特价值投资买入前 Checklist：海天味业（603288.SH）",
+    "source_type": "standalone",
+    "decision_contract": {
+      "version": "1",
+      "report_type": "company-checklist",
+      "company": "佛山市海天调味食品股份有限公司",
+      "ticker": "603288.SH",
+      "market": "A股",
+      "report_completed_at": "2026-08-27",
+      "data_cutoff": "2026-08-27",
+      "action": "观察",
+      "summary": "灰色地带，4/6关通过；核心品类增长偏慢且经营现金流承压，当前安全边际一般。",
+      "investor_stances": [
+        {
+          "stance": "激进型",
+          "action": "观察，等待现金流修复",
+          "price_range": "30-33元"
+        },
+        {
+          "stance": "稳健型",
+          "action": "分批观察",
+          "price_range": "27-30元"
+        },
+        {
+          "stance": "保守型",
+          "action": "继续等待",
+          "price_range": "24-27元"
+        }
+      ],
+      "invalidation_triggers": "核心品类持续低增长且经营现金流连续弱于净利润，或品牌/渠道优势明显收窄",
+      "next_review_date": "2026-10-30",
+      "confidence": "中",
+      "hard_veto_state": "unknown"
+    },
+    "status": "灰色地带",
+    "passed_count": 4,
+    "total_gates": 6,
     "gates": [],
-    "history": []
+    "hard_veto": false,
+    "hard_veto_state": "clear",
+    "hard_veto_label": "未触发/未发现",
+    "mirror_test": "通过",
+    "action": "观察",
+    "summary": "灰色地带，4/6关通过；核心品类增长偏慢且经营现金流承压，当前安全边际一般。",
+    "data_cutoff": "2026-08-27",
+    "report_date": "2026-08-27",
+    "next_review_date": "2026-10-30",
+    "confidence": "中",
+    "invalidation_triggers": "核心品类持续低增长且经营现金流连续弱于净利润，或品牌/渠道优势明显收窄",
+    "history": [
+      {
+        "status": "灰色地带",
+        "action": "观察",
+        "data_cutoff": "2026-08-27",
+        "report_date": "2026-08-27",
+        "report_path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+        "report_link": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+        "source_type": "standalone"
+      }
+    ]
   },
   "manual_execution_review": {
     "schema_version": 2,
-    "status": "ready",
-    "validity_state": "ready",
-    "invalidation_reason": null,
+    "status": "stale",
+    "validity_state": "stale",
+    "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-27）",
     "source": "human_review",
     "reviewer": "Codex 人工复核",
     "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -456,7 +519,7 @@
     "price_as_of": "2026-08-21",
     "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
     "category": "F",
-    "execution_key": "wait_price",
+    "execution_key": "review",
     "label": "人工复核：等待更低价格或下一期财报",
     "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
     "opportunity_tier": null,
@@ -469,8 +532,8 @@
         "sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b"
       },
       "checklist": {
-        "path": null,
-        "sha256": null
+        "path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+        "sha256": "7b274bdf0632792ed496a4e85c06ce65d4a87d3447986b6965a119f1aac30045"
       },
       "review_report": {
         "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -478,10 +541,10 @@
       }
     },
     "source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e",
-    "current_source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e"
+    "current_source_fingerprint_sha256": "d8c0928b4e2b083870a06c7c30ea80a8b62d87bd07375d97b903b520d107cc19"
   },
-  "validity_state": "ready",
-  "invalidation_reason": null,
+  "validity_state": "stale",
+  "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-27）",
   "valid_until": "2026-09-22",
   "source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e",
   "market_session_state": "runtime_required",
@@ -531,7 +594,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "44bc7bce55502b286431",
   "detail_id": "1f7cf9b60fc528d989e1",
   "detail_path": "./data/decision_details/1f7cf9b60fc528d989e1.json"
 }

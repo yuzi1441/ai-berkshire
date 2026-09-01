@@ -1,0 +1,408 @@
+======================================================================
+报告数据抽检清单
+文件：reports/顺丰控股/顺丰控股-investment-research-20260831.md
+总提取数据点：385  |  抽样比例：15%  |  抽检数量：30
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+ 27     46  2023H1 · 简化FCF                              83.71  
+ 32     47  2024H1 · 净利率                                 3.54  %
+ 37     48  2025H1 · 营业收入                             1468.58  
+ 57     59  营业收入（亿元） · 2026H1                         1555.06  
+ 60     60  收入同比 · 2026H1                                5.89  %
+ 81     76  同城即时配送 · 对外交易收入                             67.96  
+109    106  全国快递票均收入（元） · 2025H1                         7.51  
+120    119  资产负债率 · 2025-12-31                          49.03  %
+141    138  2026H1 扣非归母 49.75亿元 · 来源一                 2026.00  
+148    144  2025全年归母 111.17亿元 · 来源一                   2025.00  
+153    166  扣非归母净利率 · 2025H1                             3.10  %
+174    207  转换成本 · 评分（5分）                                3.00  
+190    244  新一轮价格战重启 · 当前状态                              5.00  
+194    267  2025-09 至 2026-07 · 对股东的含义                   3.04  %
+199    278  顺丰向极兔发行 · 数据                         225877669.00  
+212    298  HKSCC NOMINEES · 持股比例                        4.56  %
+221    328  供应链及国际分部净利润 · 数值                             0.30  亿元
+248    384  FCF 收益率 · H股 30.98港元（折 26.56元）              10.59  %
+264    398  顺丰控股 · 代码                                 6936.00  
+272    399  中通快递-W · 市值                               1269.00  亿港元
+286    402  韵达股份 · PB                                    0.93  
+289    403  京东物流 · 价格                                   11.02  
+294    419  乐观 · 退出 PE                                  16.00  倍
+306    421  悲观 · 目标价                                    20.10  
+314    429  悲观 · 目标价（人民币）                               20.10  
+322    443  保守型 · A股（人民币）                               23.00  
+336    562  TTM EPS · 结果                                 2.13  
+339    564  TTM 自由现金流 · 命令                       27555275000.00  
+342    565  每股净资产 · 结果                                  20.16  
+350    569  H股估值 · 结果                                   12.44  
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 27,
+    "label": "2023H1 · 简化FCF",
+    "reported_value": 83.71,
+    "unit": "",
+    "line_number": 46,
+    "raw_text": "| 2023H1 | 1,243.66 | -4.38% | 41.76 | +66.23% | 37.05 | +72.51% | 13.52% | 3.13% | 4.72% | 138.25 | 54.54 | 83.71 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 32,
+    "label": "2024H1 · 净利率",
+    "reported_value": 3.54,
+    "unit": "%",
+    "line_number": 47,
+    "raw_text": "| 2024H1 | 1,344.10 | +8.08% | 48.07 | +15.10% | 41.48 | +11.95% | 13.86% | 3.54% | 5.23% | 137.22 | 50.75 | 86.47 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 37,
+    "label": "2025H1 · 营业收入",
+    "reported_value": 1468.58,
+    "unit": "",
+    "line_number": 48,
+    "raw_text": "| 2025H1 | 1,468.58 | +9.26% | 57.38 | +19.37% | 45.51 | +9.72% | 13.22% | 4.09% | 6.07% | 129.37 | 41.38 | 87.99 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 57,
+    "label": "营业收入（亿元） · 2026H1",
+    "reported_value": 1555.06,
+    "unit": "",
+    "line_number": 59,
+    "raw_text": "| 营业收入（亿元） | 741.42 | 813.64 | 1,555.06 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 60,
+    "label": "收入同比 · 2026H1",
+    "reported_value": 5.89,
+    "unit": "%",
+    "line_number": 60,
+    "raw_text": "| 收入同比 | +6.14% | +5.70% | +5.89% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 81,
+    "label": "同城即时配送 · 对外交易收入",
+    "reported_value": 67.96,
+    "unit": "",
+    "line_number": 76,
+    "raw_text": "| 同城即时配送 | 67.96 | +21.72% | 3.49 | **+154.91%** | 5.14% | 56.24 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 109,
+    "label": "全国快递票均收入（元） · 2025H1",
+    "reported_value": 7.51,
+    "unit": "",
+    "line_number": 106,
+    "raw_text": "| 全国快递票均收入（元） | 7.68 | 7.51 | +2.3% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 120,
+    "label": "资产负债率 · 2025-12-31",
+    "reported_value": 49.03,
+    "unit": "%",
+    "line_number": 119,
+    "raw_text": "| 资产负债率 | 50.08% | 49.03% | +1.05pct |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 141,
+    "label": "2026H1 扣非归母 49.75亿元 · 来源一",
+    "reported_value": 2026.0,
+    "unit": "",
+    "line_number": 138,
+    "raw_text": "| 2026H1 扣非归母 49.75亿元 | 2026年半年报（巨潮PDF） | 东方财富中报财务数据 | 0.00% | PASS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 148,
+    "label": "2025全年归母 111.17亿元 · 来源一",
+    "reported_value": 2025.0,
+    "unit": "",
+    "line_number": 144,
+    "raw_text": "| 2025全年归母 111.17亿元 | 2025年年度报告 | 东方财富年报财务数据 | 0.00% | PASS |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 153,
+    "label": "扣非归母净利率 · 2025H1",
+    "reported_value": 3.1,
+    "unit": "%",
+    "line_number": 166,
+    "raw_text": "| 扣非归母净利率 | 3.10% | 3.20% | +0.10pct |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 174,
+    "label": "转换成本 · 评分（5分）",
+    "reported_value": 3.0,
+    "unit": "",
+    "line_number": 207,
+    "raw_text": "| 转换成本 | 3.0 | 国际供应链收入 +155%、智能装备/机械设备/电力设备行业供应链收入 +70%（出海业务 +180%） | **复杂场景变宽**，电商件不变 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 190,
+    "label": "新一轮价格战重启 · 当前状态",
+    "reported_value": 5.0,
+    "unit": "",
+    "line_number": 244,
+    "raw_text": "| 新一轮价格战重启 | 中低 | 高 | 单票收入同比转负；毛利率跌破 13% | 目前单票收入连续 5 个月回升，**暂未发生** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 194,
+    "label": "2025-09 至 2026-07 · 对股东的含义",
+    "reported_value": 3.04,
+    "unit": "%",
+    "line_number": 267,
+    "raw_text": "| 2025-09 至 2026-07 | A股回购 160,160,000 股（3.04%），均价 37.46元，59.99亿元，**用于注销** | 注销后每股权益提升 3.04% | **正面且实质性**。这是本报告最认可的一项资本配",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 199,
+    "label": "顺丰向极兔发行 · 数据",
+    "reported_value": 225877669.0,
+    "unit": "",
+    "line_number": 278,
+    "raw_text": "| 顺丰向极兔发行 | 225,877,669 股 H 股 @ 36.74 港元 = 82.99亿港元（净额 82.89亿港元 ≈ 人民币 72.08亿元） |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 212,
+    "label": "HKSCC NOMINEES · 持股比例",
+    "reported_value": 4.56,
+    "unit": "%",
+    "line_number": 298,
+    "raw_text": "| HKSCC NOMINEES | 4.56% | 239,977,345 | — |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 221,
+    "label": "供应链及国际分部净利润 · 数值",
+    "reported_value": 0.3,
+    "unit": "亿元",
+    "line_number": 328,
+    "raw_text": "| 供应链及国际分部净利润 | **0.30亿元** | 几乎不赚钱 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 248,
+    "label": "FCF 收益率 · H股 30.98港元（折 26.56元）",
+    "reported_value": 10.59,
+    "unit": "%",
+    "line_number": 384,
+    "raw_text": "| FCF 收益率 | 8.85% | **10.59%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 264,
+    "label": "顺丰控股 · 代码",
+    "reported_value": 6936.0,
+    "unit": "",
+    "line_number": 398,
+    "raw_text": "| 顺丰控股 | 06936.HK | 30.98港元 | 13.23 | — | 1,629亿港元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 272,
+    "label": "中通快递-W · 市值",
+    "reported_value": 1269.0,
+    "unit": "亿港元",
+    "line_number": 399,
+    "raw_text": "| 中通快递-W | 02057.HK | 167.20港元 | 12.62 | 1.74 | 1,269亿港元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 286,
+    "label": "韵达股份 · PB",
+    "reported_value": 0.93,
+    "unit": "",
+    "line_number": 402,
+    "raw_text": "| 韵达股份 | 002120.SZ | 6.78元 | 11.98 | 0.93 | 197亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 289,
+    "label": "京东物流 · 价格",
+    "reported_value": 11.02,
+    "unit": "",
+    "line_number": 403,
+    "raw_text": "| 京东物流 | 02618.HK | 11.02港元 | 9.92 | 1.12 | 730亿港元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 294,
+    "label": "乐观 · 退出 PE",
+    "reported_value": 16.0,
+    "unit": "倍",
+    "line_number": 419,
+    "raw_text": "| 乐观 | +12% | 16倍 | 3.00元 | **48.0元** | **+50.9%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 306,
+    "label": "悲观 · 目标价",
+    "reported_value": 20.1,
+    "unit": "",
+    "line_number": 421,
+    "raw_text": "| 悲观 | -2% | 10倍 | 2.01元 | **20.1元** | **-36.8%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 314,
+    "label": "悲观 · 目标价（人民币）",
+    "reported_value": 20.1,
+    "unit": "",
+    "line_number": 429,
+    "raw_text": "| 悲观 | -2% | 10倍 | 20.1元 | 23.4港元 | **-24.4%** |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 322,
+    "label": "保守型 · A股（人民币）",
+    "reported_value": 23.0,
+    "unit": "",
+    "line_number": 443,
+    "raw_text": "| 保守型 | 23.0 — 27.0元 | 22.4 — 26.3港元 | 接近悲观情景与更高的现金流回报要求 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 336,
+    "label": "TTM EPS · 结果",
+    "reported_value": 2.1345,
+    "unit": "",
+    "line_number": 562,
+    "raw_text": "| TTM EPS | `calc '(11117216000 - 5737699000 + 5501905000) / 5097984478'` | 2.1345元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 339,
+    "label": "TTM 自由现金流 · 命令",
+    "reported_value": 27555275000.0,
+    "unit": "",
+    "line_number": 564,
+    "raw_text": "| TTM 自由现金流 | `calc '(27555275000 - 12936690000 + 11171404000) - (9505520000 - 4138165000 + 6083116000)'` | 143.395亿元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 342,
+    "label": "每股净资产 · 结果",
+    "reported_value": 20.1621,
+    "unit": "",
+    "line_number": 565,
+    "raw_text": "| 每股净资产 | `calc '102786235000 / 5097984478'` | 20.1621元 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 350,
+    "label": "H股估值 · 结果",
+    "reported_value": 12.44,
+    "unit": "",
+    "line_number": 569,
+    "raw_text": "| H股估值 | `verify-valuation --price 26.5599 ...` | PE 12.44 / PB 1.32 / P·FCF 9.44 / 股息率 3.62% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

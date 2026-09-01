@@ -429,70 +429,10 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-09-01T23:33:04+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
-      {
-        "task_id": "holder",
-        "scope": "holder",
-        "scope_label": "持仓验证",
-        "title": "复核持仓验证",
-        "content": "长期逻辑未被破坏时继续持有；若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险。",
-        "metrics": [
-          "自由现金流",
-          "利润"
-        ],
-        "periods": [],
-        "schedule_type": "recurring_filing",
-        "source_field": "holder_action",
-        "evidence": [
-          {
-            "line_start": 391,
-            "line_end": 408,
-            "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
-            "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
-          }
-        ],
-        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-        "date_status": "due",
-        "status_label": "已到期待确认",
-        "next_review_date": "2026-04-29",
-        "calendar_dates": [
-          "2026-04-29",
-          "2026-08-29"
-        ],
-        "calendar_date_details": [
-          {
-            "period_key": "2026Q1",
-            "period_label": "2026年一季报",
-            "actual_date": "2026-04-29",
-            "scheduled_date": "2026-04-29",
-            "effective_date": "2026-04-29",
-            "effective_type": "actual",
-            "actual_verification": "cross_checked",
-            "scheduled_verification": "cross_checked",
-            "actual_eastmoney": "2026-04-29",
-            "actual_cninfo": "2026-04-29",
-            "scheduled_eastmoney": "2026-04-29",
-            "scheduled_cninfo": "2026-04-29"
-          },
-          {
-            "period_key": "2026H1",
-            "period_label": "2026年中报",
-            "actual_date": "2026-08-29",
-            "scheduled_date": "2026-08-29",
-            "effective_date": "2026-08-29",
-            "effective_type": "actual",
-            "actual_verification": "single_source",
-            "scheduled_verification": "cross_checked",
-            "actual_eastmoney": "2026-08-29",
-            "actual_cninfo": null,
-            "scheduled_eastmoney": "2026-08-29",
-            "scheduled_cninfo": "2026-08-29"
-          }
-        ]
-      },
       {
         "task_id": "entry",
         "scope": "entry",
@@ -518,13 +458,73 @@
           }
         ],
         "schedule_label": "2026年中报、2026年三季报",
-        "date_status": "pending",
-        "status_label": "待披露",
+        "date_status": "due",
+        "status_label": "已到期待确认",
         "next_review_date": "2026-08-29",
         "calendar_dates": [
           "2026-08-29"
         ],
         "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "single_source",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": null,
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "长期逻辑未被破坏时继续持有；若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险。",
+        "metrics": [
+          "自由现金流",
+          "利润"
+        ],
+        "periods": [],
+        "schedule_type": "recurring_filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 391,
+            "line_end": 408,
+            "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+            "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+          }
+        ],
+        "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-29",
+        "calendar_dates": [
+          "2026-04-29",
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026Q1",
+            "period_label": "2026年一季报",
+            "actual_date": "2026-04-29",
+            "scheduled_date": "2026-04-29",
+            "effective_date": "2026-04-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-04-29",
+            "actual_cninfo": "2026-04-29",
+            "scheduled_eastmoney": "2026-04-29",
+            "scheduled_cninfo": "2026-04-29"
+          },
           {
             "period_key": "2026H1",
             "period_label": "2026年中报",
@@ -567,8 +567,8 @@
           }
         ],
         "schedule_label": "2026年中报、2026年三季报",
-        "date_status": "pending",
-        "status_label": "待披露",
+        "date_status": "due",
+        "status_label": "已到期待确认",
         "next_review_date": "2026-08-29",
         "calendar_dates": [
           "2026-08-29"
@@ -592,8 +592,8 @@
       }
     ],
     "task_count": 3,
-    "due_count": 1,
-    "next_review_date": "2026-04-29"
+    "due_count": 3,
+    "next_review_date": "2026-08-29"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -737,7 +737,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "44bc7bce55502b286431",
   "detail_id": "f5510d676a3eb76ee9b6",
   "detail_path": "./data/decision_details/f5510d676a3eb76ee9b6.json"
 }

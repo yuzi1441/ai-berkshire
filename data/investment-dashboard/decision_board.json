@@ -1,7 +1,7 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-28T22:21:48+08:00",
-  "generation_id": "5cf6105a432bb168df88",
+  "generated_at": "2026-09-01T23:33:05+08:00",
+  "generation_id": "44bc7bce55502b286431",
   "scope": "individual-stocks-only",
   "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
   "decision_count": 229,
@@ -11,11 +11,23 @@
     "current_executable_requires_runtime_quote": true,
     "next_trading_day_candidate_count": 1
   },
-  "checklist_count": 32,
+  "checklist_count": 33,
   "post_buy_tracking": {
     "registered_count": 2,
     "active_count": 2,
     "alert_count": 0
+  },
+  "main_report_review": {
+    "stock_count": 93,
+    "status_counts": {
+      "data_gap": 79,
+      "clear": 5,
+      "redline": 4,
+      "historical_review": 4,
+      "attention": 1
+    },
+    "generated_at": "2026-09-01T23:33:05+08:00",
+    "next_check_at": "2026-09-04T23:33:05+08:00"
   },
   "decisions": [
     {
@@ -449,70 +461,10 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
-          {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "长期逻辑未被破坏时继续持有；若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险。",
-            "metrics": [
-              "自由现金流",
-              "利润"
-            ],
-            "periods": [],
-            "schedule_type": "recurring_filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 391,
-                "line_end": 408,
-                "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
-                "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
-              }
-            ],
-            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-            "date_status": "due",
-            "status_label": "已到期待确认",
-            "next_review_date": "2026-04-29",
-            "calendar_dates": [
-              "2026-04-29",
-              "2026-08-29"
-            ],
-            "calendar_date_details": [
-              {
-                "period_key": "2026Q1",
-                "period_label": "2026年一季报",
-                "actual_date": "2026-04-29",
-                "scheduled_date": "2026-04-29",
-                "effective_date": "2026-04-29",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-04-29",
-                "actual_cninfo": "2026-04-29",
-                "scheduled_eastmoney": "2026-04-29",
-                "scheduled_cninfo": "2026-04-29"
-              },
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-29",
-                "scheduled_date": "2026-08-29",
-                "effective_date": "2026-08-29",
-                "effective_type": "actual",
-                "actual_verification": "single_source",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-29",
-                "actual_cninfo": null,
-                "scheduled_eastmoney": "2026-08-29",
-                "scheduled_cninfo": "2026-08-29"
-              }
-            ]
-          },
           {
             "task_id": "entry",
             "scope": "entry",
@@ -538,13 +490,73 @@
               }
             ],
             "schedule_label": "2026年中报、2026年三季报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
             ],
             "calendar_date_details": [
+              {
+                "period_key": "2026H1",
+                "period_label": "2026年中报",
+                "actual_date": "2026-08-29",
+                "scheduled_date": "2026-08-29",
+                "effective_date": "2026-08-29",
+                "effective_type": "actual",
+                "actual_verification": "single_source",
+                "scheduled_verification": "cross_checked",
+                "actual_eastmoney": "2026-08-29",
+                "actual_cninfo": null,
+                "scheduled_eastmoney": "2026-08-29",
+                "scheduled_cninfo": "2026-08-29"
+              }
+            ]
+          },
+          {
+            "task_id": "holder",
+            "scope": "holder",
+            "scope_label": "持仓验证",
+            "title": "复核持仓验证",
+            "content": "长期逻辑未被破坏时继续持有；若仓位过高则控制集中度，不能忽略利润、自由现金流和海外执行风险。",
+            "metrics": [
+              "自由现金流",
+              "利润"
+            ],
+            "periods": [],
+            "schedule_type": "recurring_filing",
+            "source_field": "holder_action",
+            "evidence": [
+              {
+                "line_start": 391,
+                "line_end": 408,
+                "quote": "### 最终决策表 | 策略 | 建议 | |------|------|",
+                "supports": "L391-L408、L455-L476。报告同时覆盖 A/H 股，本 ticker 只采用 A 股动作；当前价虽在“70-85 元合理偏低”边界，正文仍明确要求价格、业绩或政策信号，因此归为等待验证。"
+              }
+            ],
+            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+            "date_status": "due",
+            "status_label": "已到期待确认",
+            "next_review_date": "2026-08-29",
+            "calendar_dates": [
+              "2026-04-29",
+              "2026-08-29"
+            ],
+            "calendar_date_details": [
+              {
+                "period_key": "2026Q1",
+                "period_label": "2026年一季报",
+                "actual_date": "2026-04-29",
+                "scheduled_date": "2026-04-29",
+                "effective_date": "2026-04-29",
+                "effective_type": "actual",
+                "actual_verification": "cross_checked",
+                "scheduled_verification": "cross_checked",
+                "actual_eastmoney": "2026-04-29",
+                "actual_cninfo": "2026-04-29",
+                "scheduled_eastmoney": "2026-04-29",
+                "scheduled_cninfo": "2026-04-29"
+              },
               {
                 "period_key": "2026H1",
                 "period_label": "2026年中报",
@@ -587,8 +599,8 @@
               }
             ],
             "schedule_label": "2026年中报、2026年三季报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -612,8 +624,8 @@
           }
         ],
         "task_count": 3,
-        "due_count": 1,
-        "next_review_date": "2026-04-29"
+        "due_count": 3,
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -994,7 +1006,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -1456,7 +1468,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -1988,7 +2000,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -2493,7 +2505,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -2969,7 +2981,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -3494,7 +3506,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -4071,7 +4083,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -4708,7 +4720,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -5342,7 +5354,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -5820,7 +5832,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -6304,7 +6316,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -6829,7 +6841,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -7305,7 +7317,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -7335,7 +7347,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-28",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-28",
               "2026-08-29"
@@ -7426,7 +7438,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-28"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -7787,7 +7799,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -8358,7 +8370,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -8965,7 +8977,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -9508,7 +9520,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -9537,7 +9549,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -9600,7 +9612,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -9664,7 +9676,7 @@
         ],
         "task_count": 3,
         "due_count": 2,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -10073,7 +10085,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -10106,7 +10118,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -10199,7 +10211,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -10707,7 +10719,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -11545,7 +11557,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -12334,7 +12346,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -12360,8 +12372,8 @@
               }
             ],
             "schedule_label": "2026年中报、2026年年报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-08-31"
@@ -12439,7 +12451,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-31"
       },
       "execution_policy": {
@@ -12905,7 +12917,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -13488,7 +13500,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -13517,8 +13529,8 @@
               }
             ],
             "schedule_label": "2026年中报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-08-31"
@@ -13594,7 +13606,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-31"
       },
       "execution_policy": {
@@ -14029,7 +14041,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -14903,7 +14915,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -15757,7 +15769,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -16753,7 +16765,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -16783,8 +16795,8 @@
               }
             ],
             "schedule_label": "2026年中报、2026年年报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -16858,7 +16870,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-29"
       },
       "execution_policy": {
@@ -17358,7 +17370,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -17944,7 +17956,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -18530,7 +18542,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -19154,7 +19166,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -19726,7 +19738,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -20249,7 +20261,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -21054,7 +21066,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -21082,7 +21094,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -21173,7 +21185,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -21612,7 +21624,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -22162,7 +22174,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -22854,7 +22866,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -23547,7 +23559,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -24682,7 +24694,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -24712,8 +24724,8 @@
               }
             ],
             "schedule_label": "2026年中报、2026年三季报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -24789,7 +24801,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-29"
       },
       "execution_policy": {
@@ -25409,7 +25421,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -26109,7 +26121,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -26824,7 +26836,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -28139,7 +28151,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -28830,7 +28842,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -29344,7 +29356,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -29374,72 +29386,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
-            "calendar_dates": [
-              "2026-04-30",
-              "2026-08-29"
-            ],
-            "calendar_date_details": [
-              {
-                "period_key": "2026Q1",
-                "period_label": "2026年一季报",
-                "actual_date": "2026-04-30",
-                "scheduled_date": "2026-04-30",
-                "effective_date": "2026-04-30",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-04-30",
-                "actual_cninfo": "2026-04-30",
-                "scheduled_eastmoney": "2026-04-30",
-                "scheduled_cninfo": "2026-04-30"
-              },
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-29",
-                "scheduled_date": "2026-08-29",
-                "effective_date": "2026-08-29",
-                "effective_type": "actual",
-                "actual_verification": "single_source",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-29",
-                "actual_cninfo": null,
-                "scheduled_eastmoney": "2026-08-29",
-                "scheduled_cninfo": "2026-08-29"
-              }
-            ]
-          },
-          {
-            "task_id": "risk",
-            "scope": "risk",
-            "scope_label": "风险/失效条件",
-            "title": "复核风险/失效条件",
-            "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
-            "metrics": [
-              "毛利率",
-              "利润",
-              "收入",
-              "库存",
-              "产能/销量"
-            ],
-            "periods": [
-              "quarterly"
-            ],
-            "schedule_type": "recurring_filing",
-            "source_field": "trigger_condition",
-            "evidence": [
-              {
-                "line_start": 306,
-                "line_end": 431,
-                "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
-                "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
-              }
-            ],
-            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-            "date_status": "due",
-            "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -29499,8 +29446,8 @@
               }
             ],
             "schedule_label": "2026年中报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -29521,11 +29468,76 @@
                 "scheduled_cninfo": "2026-08-29"
               }
             ]
+          },
+          {
+            "task_id": "risk",
+            "scope": "risk",
+            "scope_label": "风险/失效条件",
+            "title": "复核风险/失效条件",
+            "content": "毛利率连续两个季度企稳，滚动 OCF/净利润回到 70%-80% 以上，成品库存/销量下降，高价值新品形成披露收入，单站采浆恢复行业领先。",
+            "metrics": [
+              "毛利率",
+              "利润",
+              "收入",
+              "库存",
+              "产能/销量"
+            ],
+            "periods": [
+              "quarterly"
+            ],
+            "schedule_type": "recurring_filing",
+            "source_field": "trigger_condition",
+            "evidence": [
+              {
+                "line_start": 306,
+                "line_end": 431,
+                "quote": "## 第七步：估值与安全边际 ### 先把“当前 PE”拆开 | 盈利口径 | 归母净利 / EPS | 当前 PE | 含义 |",
+                "supports": "L306-L431、L462-L485。契约摘要误抓 Checklist 且缺少稳健、保守价格档，采用正文并标记字段不完整。"
+              }
+            ],
+            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
+            "date_status": "due",
+            "status_label": "已到期待确认",
+            "next_review_date": "2026-08-29",
+            "calendar_dates": [
+              "2026-04-30",
+              "2026-08-29"
+            ],
+            "calendar_date_details": [
+              {
+                "period_key": "2026Q1",
+                "period_label": "2026年一季报",
+                "actual_date": "2026-04-30",
+                "scheduled_date": "2026-04-30",
+                "effective_date": "2026-04-30",
+                "effective_type": "actual",
+                "actual_verification": "cross_checked",
+                "scheduled_verification": "cross_checked",
+                "actual_eastmoney": "2026-04-30",
+                "actual_cninfo": "2026-04-30",
+                "scheduled_eastmoney": "2026-04-30",
+                "scheduled_cninfo": "2026-04-30"
+              },
+              {
+                "period_key": "2026H1",
+                "period_label": "2026年中报",
+                "actual_date": "2026-08-29",
+                "scheduled_date": "2026-08-29",
+                "effective_date": "2026-08-29",
+                "effective_type": "actual",
+                "actual_verification": "single_source",
+                "scheduled_verification": "cross_checked",
+                "actual_eastmoney": "2026-08-29",
+                "actual_cninfo": null,
+                "scheduled_eastmoney": "2026-08-29",
+                "scheduled_cninfo": "2026-08-29"
+              }
+            ]
           }
         ],
         "task_count": 3,
-        "due_count": 2,
-        "next_review_date": "2026-04-30"
+        "due_count": 3,
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -29971,7 +29983,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -30549,7 +30561,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -31394,7 +31406,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -32030,7 +32042,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -32057,7 +32069,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -32150,7 +32162,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -32602,105 +32614,44 @@
       ],
       "report_history_count": 2,
       "primary_judgment": {
-        "label": "等待价格",
-        "action_kind": "watch",
-        "empty_position_action": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
-        "holder_action": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
-        "trigger_condition": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
-        "summary": "契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。",
+        "label": "待人工复核",
+        "action_kind": "unknown",
+        "empty_position_action": "模型结果不可用，暂停自动归类",
+        "holder_action": "若成本低于14元可继续持有，关注2026半年报现金流和高压板块毛利率；若仓位过重可在22-25元区间逐步降低预期收益率",
+        "trigger_condition": "重新解析当前主报告并完成人工复核",
+        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
         "confidence": "high",
-        "report_field_conflict": true,
-        "conflict_note": "主报告正文的空仓者结论优先于被截断、混入口径或与正文不一致的看板契约字段。",
-        "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
-        "currency": "CNY",
-        "price_source": "主报告第258至298行；人工审阅日志：logs/main-report-human-review-20260827.md",
+        "report_field_conflict": false,
+        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
         "evidence": [
           {
-            "line_start": 258,
-            "line_end": 298,
-            "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-            "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-          }
-        ],
-        "review_tasks": [
-          {
-            "task_id": "entry",
-            "scope": "entry",
-            "scope_label": "买入前提",
-            "title": "复核买入前提",
-            "content": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
-            "metrics": [
-              "利润"
-            ],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "empty_position_action",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ]
+            "line_start": 287,
+            "line_end": 287,
+            "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**",
+            "supports": "最终结论明确空仓者不应追高，需等待更低价格区间"
           },
           {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
-            "metrics": [
-              "毛利率"
-            ],
-            "periods": [
-              "H1",
-              "FY"
-            ],
-            "schedule_type": "filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ]
-          },
-          {
-            "task_id": "risk",
-            "scope": "risk",
-            "scope_label": "风险/失效条件",
-            "title": "复核风险/失效条件",
-            "content": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
-            "metrics": [
-              "毛利率",
-              "利润",
-              "订单",
-              "回款"
-            ],
-            "periods": [],
-            "schedule_type": "recurring_filing",
-            "source_field": "trigger_condition",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ]
+            "line_start": 295,
+            "line_end": 295,
+            "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |",
+            "supports": "空仓者当前动作是等待价格触发（14元以下）再建仓，而非立即行动"
           }
         ],
         "enabled": true,
-        "human_reviewed": true,
-        "human_reviewed_at": "2026-08-27T00:00:00+08:00",
+        "source_basis": "报告判断缓存状态检查",
         "model_consensus": false,
-        "screening_consensus": false,
-        "artifact_status": "human_reviewed",
-        "source_matches": true,
-        "generated_at": "2026-08-27T00:00:00+08:00",
+        "label_detail_consensus": true,
+        "conflict_flag_consensus": true,
+        "currency": "CNY",
+        "entry_ceiling": 17.0,
+        "price_source": "本地程序从主报告价格行动表确定性提取",
+        "trial_range": {
+          "min": 14.0,
+          "max": 17.0
+        },
+        "artifact_status": "ready",
+        "source_matches": false,
+        "generated_at": "2026-08-14T10:14:26+00:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -32708,201 +32659,24 @@
       },
       "human_review_plan": {
         "schema_version": 1,
-        "status": "ready",
-        "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
-        "calendar_generated_at": "2026-08-28T22:16:13+08:00",
-        "reviewed_at": "2026-08-27T00:00:00+08:00",
-        "tasks": [
-          {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "成本低于 14 元可继续持有并核对半年报现金流和高压板块毛利率；若价格到 22-25 元而盈利预测没有上修，可降低仓位。",
-            "metrics": [
-              "毛利率"
-            ],
-            "periods": [
-              "H1",
-              "FY"
-            ],
-            "schedule_type": "filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ],
-            "schedule_label": "2026年中报、2026年年报",
-            "date_status": "due",
-            "status_label": "已到期待确认",
-            "next_review_date": "2026-08-20",
-            "calendar_dates": [
-              "2026-08-20"
-            ],
-            "calendar_date_details": [
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-20",
-                "scheduled_date": "2026-08-20",
-                "effective_date": "2026-08-20",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-20",
-                "actual_cninfo": "2026-08-20",
-                "scheduled_eastmoney": "2026-08-20",
-                "scheduled_cninfo": "2026-08-20"
-              }
-            ]
-          },
-          {
-            "task_id": "risk",
-            "scope": "risk",
-            "scope_label": "风险/失效条件",
-            "title": "复核风险/失效条件",
-            "content": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审。",
-            "metrics": [
-              "毛利率",
-              "利润",
-              "订单",
-              "回款"
-            ],
-            "periods": [],
-            "schedule_type": "recurring_filing",
-            "source_field": "trigger_condition",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ],
-            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-            "date_status": "due",
-            "status_label": "已到期待确认",
-            "next_review_date": "2026-08-20",
-            "calendar_dates": [
-              "2026-04-22",
-              "2026-08-20"
-            ],
-            "calendar_date_details": [
-              {
-                "period_key": "2026Q1",
-                "period_label": "2026年一季报",
-                "actual_date": "2026-04-22",
-                "scheduled_date": "2026-04-22",
-                "effective_date": "2026-04-22",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-04-22",
-                "actual_cninfo": "2026-04-22",
-                "scheduled_eastmoney": "2026-04-22",
-                "scheduled_cninfo": "2026-04-22"
-              },
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-20",
-                "scheduled_date": "2026-08-20",
-                "effective_date": "2026-08-20",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-20",
-                "actual_cninfo": "2026-08-20",
-                "scheduled_eastmoney": "2026-08-20",
-                "scheduled_cninfo": "2026-08-20"
-              }
-            ]
-          },
-          {
-            "task_id": "entry",
-            "scope": "entry",
-            "scope_label": "买入前提",
-            "title": "复核买入前提",
-            "content": "17.64 元不追；14-17 元仅观察或小仓，12-14 元分批建仓，12 元以下且利润未结构性下滑时才进入积极买入区。",
-            "metrics": [
-              "利润"
-            ],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "empty_position_action",
-            "evidence": [
-              {
-                "line_start": 258,
-                "line_end": 298,
-                "quote": "### 7.4 安全边际与操作价格带 | 价格区间 | 对应含义 | 建议 | |---|---|---|",
-                "supports": "L258-L298、L348-L369。契约只保留粗结论，遗漏正文价格档和失效条件，裁决按正文补全。"
-              }
-            ],
-            "schedule_label": "随行情判断",
-            "date_status": "price_only",
-            "status_label": "随行情判断",
-            "next_review_date": null,
-            "calendar_dates": [],
-            "calendar_date_details": []
-          }
-        ],
-        "task_count": 3,
-        "due_count": 2,
-        "next_review_date": "2026-08-20"
+        "status": "review",
+        "source": "human_main_report",
+        "tasks": [],
+        "task_count": 0,
+        "message": "人工主报告裁决当前不可用，暂不生成复核计划",
+        "calendar_generated_at": "2026-08-28T22:16:13+08:00"
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "watch",
-        "main_label": "等待价格",
-        "condition_mode": "price_or_event",
-        "event_condition": "高压板块恢复中高个位数增长、OCF/归母净利润修复到约 1 倍、海外板块毛利率转正且价格进入 12-14 元；高压毛利率跌破 25%、应收和合同资产继续膨胀或订单份额下降即重审",
+        "main_action_kind": "unknown",
+        "main_label": "待人工复核",
+        "condition_mode": "review",
+        "event_condition": null,
         "guard_condition": null,
-        "price_rules": [
-          {
-            "action_kind": "buy",
-            "action": "可以列为积极买入区，但需确认利润未结构性下滑。",
-            "price_range": "≤ 12 元",
-            "min": null,
-            "ceiling": 12.0,
-            "mode": "ceiling",
-            "currency": "CNY",
-            "requires_validation": true,
-            "validation_condition": "可以列为积极买入区，但需确认利润未结构性下滑。",
-            "source": "report_price_plan"
-          },
-          {
-            "action_kind": "buy",
-            "action": "分批建仓区，适合愿意承受项目周期波动的投资者。",
-            "price_range": "12-14 元",
-            "min": 12.0,
-            "ceiling": 14.0,
-            "mode": "range",
-            "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
-            "source": "report_price_plan"
-          },
-          {
-            "action_kind": "trial",
-            "action": "观察/小仓位，等待订单或现金流验证。",
-            "price_range": "14-17 元",
-            "min": 14.0,
-            "ceiling": 17.0,
-            "mode": "range",
-            "currency": "CNY",
-            "requires_validation": true,
-            "validation_condition": "观察/小仓位，等待订单或现金流验证。",
-            "source": "report_price_plan"
-          }
-        ],
+        "price_rules": [],
         "current_action": null,
         "report_rule_count": 3,
-        "reliability": "high",
+        "reliability": "review",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -32984,9 +32758,9 @@
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-11）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -32994,7 +32768,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "F",
-        "execution_key": "wait_price",
+        "execution_key": "review",
         "label": "人工复核：等待更低价格或下一期财报",
         "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
         "opportunity_tier": null,
@@ -33004,7 +32778,7 @@
           "ticker": "600312.SH",
           "main_report": {
             "path": "reports/平高电气/平高电气研究报告-20260707.md",
-            "sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7"
+            "sha256": "61796ad9aa5e94744c717be13a75b7aee988cc87507f260f783f1eaf81143876"
           },
           "checklist": {
             "path": "reports/平高电气/平高电气-investment-checklist-20260811.md",
@@ -33016,10 +32790,10 @@
           }
         },
         "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
-        "current_source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a"
+        "current_source_fingerprint_sha256": "53667ed946b3442f34b0690e640e7dd2054b30801b2638caec2e70bd8b85deb1"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-11）",
       "valid_until": "2026-09-22",
       "source_fingerprint_sha256": "624227d41080af2c97381de63adabaa910a909b9ccd6c20c4a06faccba69c84a",
       "market_session_state": "runtime_required",
@@ -33681,7 +33455,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -34561,7 +34335,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -34777,7 +34551,7 @@
         "market": "A股",
         "report_path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
         "report_link": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
-        "report_sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234",
+        "report_sha256": "91a8d7dabf25927ae65cbb62d70bb54a48cda8152cf0b7fbeec006bb40c757e5",
         "title": "巴菲特Checklist-恒瑞医药-20260706",
         "source_type": "standalone",
         "decision_contract": null,
@@ -34841,9 +34615,9 @@
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -34851,7 +34625,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "C",
-        "execution_key": "validation",
+        "execution_key": "review",
         "label": "人工复核：价格已到，等待验证",
         "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
         "opportunity_tier": null,
@@ -34865,7 +34639,7 @@
           },
           "checklist": {
             "path": "reports/恒瑞医疗/巴菲特Checklist-恒瑞医药-20260706.md",
-            "sha256": "f3b75f0afeded94c0f028637664da8e78391d005c65250d857d43af4e2349234"
+            "sha256": "91a8d7dabf25927ae65cbb62d70bb54a48cda8152cf0b7fbeec006bb40c757e5"
           },
           "review_report": {
             "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -34873,10 +34647,10 @@
           }
         },
         "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
-        "current_source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e"
+        "current_source_fingerprint_sha256": "ac7aa145c621d6a2af46c2b1ce77103ad3d89d8806397c62d6bd4c6819a2d44b"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
       "valid_until": "2026-09-22",
       "source_fingerprint_sha256": "b3e227eade37d0750c059e59c35b2ff36704cf4d0990d0915128e6f458067f1e",
       "market_session_state": "runtime_required",
@@ -35218,7 +34992,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -35985,7 +35759,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -36462,7 +36236,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -37154,7 +36928,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -37735,7 +37509,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -38302,7 +38076,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -38329,7 +38103,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-28",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-28",
               "2026-08-29"
@@ -38390,7 +38164,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-28",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-28",
               "2026-08-29"
@@ -38454,7 +38228,7 @@
         ],
         "task_count": 3,
         "due_count": 2,
-        "next_review_date": "2026-04-28"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -38816,7 +38590,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -39387,7 +39161,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -39876,7 +39650,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -39901,7 +39675,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -39993,7 +39767,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -40854,7 +40628,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -41654,7 +41428,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -42219,7 +41993,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -42739,7 +42513,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -43276,7 +43050,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -43426,15 +43200,78 @@
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
-        "status": "missing",
+        "company": "海天味业",
+        "ticker": "603288.SH",
+        "market": "A股",
+        "report_path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+        "report_link": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+        "report_sha256": "7b274bdf0632792ed496a4e85c06ce65d4a87d3447986b6965a119f1aac30045",
+        "title": "巴菲特价值投资买入前 Checklist：海天味业（603288.SH）",
+        "source_type": "standalone",
+        "decision_contract": {
+          "version": "1",
+          "report_type": "company-checklist",
+          "company": "佛山市海天调味食品股份有限公司",
+          "ticker": "603288.SH",
+          "market": "A股",
+          "report_completed_at": "2026-08-27",
+          "data_cutoff": "2026-08-27",
+          "action": "观察",
+          "summary": "灰色地带，4/6关通过；核心品类增长偏慢且经营现金流承压，当前安全边际一般。",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "观察，等待现金流修复",
+              "price_range": "30-33元"
+            },
+            {
+              "stance": "稳健型",
+              "action": "分批观察",
+              "price_range": "27-30元"
+            },
+            {
+              "stance": "保守型",
+              "action": "继续等待",
+              "price_range": "24-27元"
+            }
+          ],
+          "invalidation_triggers": "核心品类持续低增长且经营现金流连续弱于净利润，或品牌/渠道优势明显收窄",
+          "next_review_date": "2026-10-30",
+          "confidence": "中",
+          "hard_veto_state": "unknown"
+        },
+        "status": "灰色地带",
+        "passed_count": 4,
+        "total_gates": 6,
         "gates": [],
-        "history": []
+        "hard_veto": false,
+        "hard_veto_state": "clear",
+        "hard_veto_label": "未触发/未发现",
+        "mirror_test": "通过",
+        "action": "观察",
+        "summary": "灰色地带，4/6关通过；核心品类增长偏慢且经营现金流承压，当前安全边际一般。",
+        "data_cutoff": "2026-08-27",
+        "report_date": "2026-08-27",
+        "next_review_date": "2026-10-30",
+        "confidence": "中",
+        "invalidation_triggers": "核心品类持续低增长且经营现金流连续弱于净利润，或品牌/渠道优势明显收窄",
+        "history": [
+          {
+            "status": "灰色地带",
+            "action": "观察",
+            "data_cutoff": "2026-08-27",
+            "report_date": "2026-08-27",
+            "report_path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+            "report_link": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+            "source_type": "standalone"
+          }
+        ]
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-27）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -43442,7 +43279,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "F",
-        "execution_key": "wait_price",
+        "execution_key": "review",
         "label": "人工复核：等待更低价格或下一期财报",
         "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
         "opportunity_tier": null,
@@ -43455,8 +43292,8 @@
             "sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b"
           },
           "checklist": {
-            "path": null,
-            "sha256": null
+            "path": "reports/海天味业/巴菲特Checklist-海天味业-20260827.md",
+            "sha256": "7b274bdf0632792ed496a4e85c06ce65d4a87d3447986b6965a119f1aac30045"
           },
           "review_report": {
             "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -43464,10 +43301,10 @@
           }
         },
         "source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e",
-        "current_source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e"
+        "current_source_fingerprint_sha256": "d8c0928b4e2b083870a06c7c30ea80a8b62d87bd07375d97b903b520d107cc19"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-27）",
       "valid_until": "2026-09-22",
       "source_fingerprint_sha256": "ae7681649774b77eeb111d834c08f89b4506f38dda98d40b0cadd103f4c07e9e",
       "market_session_state": "runtime_required",
@@ -43853,7 +43690,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -44473,7 +44310,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -44966,7 +44803,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -45787,7 +45624,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -46420,7 +46257,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -47064,7 +46901,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -47579,7 +47416,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -48361,7 +48198,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -48945,7 +48782,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -49729,7 +49566,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -50447,7 +50284,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -50474,7 +50311,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -50534,7 +50371,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -50598,7 +50435,7 @@
         ],
         "task_count": 3,
         "due_count": 2,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -51149,7 +50986,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -51366,7 +51203,7 @@
         "market": "A股",
         "report_path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
         "report_link": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
-        "report_sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db",
+        "report_sha256": "ff8d5d3da1d5fe2158b6b1302953d952386f0d3cdafaa55ff774f3e86eab2479",
         "title": "巴菲特Checklist-联影医疗",
         "source_type": "standalone",
         "decision_contract": null,
@@ -51424,9 +51261,9 @@
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -51434,7 +51271,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "C",
-        "execution_key": "validation",
+        "execution_key": "review",
         "label": "人工复核：价格已到，等待验证",
         "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
         "opportunity_tier": null,
@@ -51448,7 +51285,7 @@
           },
           "checklist": {
             "path": "reports/联影医疗/巴菲特Checklist-联影医疗.md",
-            "sha256": "adc2c891a32824ad8bb5f61dfd6da36e7817085b85e080e2bd3e4fe937e759db"
+            "sha256": "ff8d5d3da1d5fe2158b6b1302953d952386f0d3cdafaa55ff774f3e86eab2479"
           },
           "review_report": {
             "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -51456,10 +51293,10 @@
           }
         },
         "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
-        "current_source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8"
+        "current_source_fingerprint_sha256": "e561afd6819aa83b50d1edd7c534adde21e4f7dec7ddd0dca7165e9ab08cfc90"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-06）",
       "valid_until": "2026-09-22",
       "source_fingerprint_sha256": "9968b0be04437d8b7f6f0e3e9bbed53610d5099805996aba926976fc6ad6e8b8",
       "market_session_state": "runtime_required",
@@ -51843,7 +51680,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -51870,8 +51707,8 @@
               }
             ],
             "schedule_label": "2026年中报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -51948,7 +51785,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-29"
       },
       "execution_policy": {
@@ -52364,7 +52201,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -53150,7 +52987,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -53648,7 +53485,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -54254,7 +54091,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -54892,7 +54729,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -55731,7 +55568,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -55758,7 +55595,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-29",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-29",
               "2026-08-29"
@@ -55821,7 +55658,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-29",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-29",
               "2026-08-29"
@@ -55886,7 +55723,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-29",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-29",
               "2026-08-29"
@@ -55925,7 +55762,7 @@
         ],
         "task_count": 3,
         "due_count": 3,
-        "next_review_date": "2026-04-29"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -56547,7 +56384,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -57167,7 +57004,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -57195,7 +57032,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -57254,7 +57091,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -57318,7 +57155,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -57357,7 +57194,7 @@
         ],
         "task_count": 3,
         "due_count": 3,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -58855,7 +58692,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -58880,7 +58717,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-31",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-31"
@@ -58972,7 +58809,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-31"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -59018,7 +58855,7 @@
         "market": "A股",
         "report_path": "reports/长江电力/巴菲特Checklist-长江电力.md",
         "report_link": "reports/长江电力/巴菲特Checklist-长江电力.md",
-        "report_sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe",
+        "report_sha256": "7faf13a0221de618cf89371842b803be767d2986e242c971633b17539c4af526",
         "title": "巴菲特Checklist-长江电力",
         "source_type": "standalone",
         "decision_contract": null,
@@ -59088,9 +58925,9 @@
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -59098,7 +58935,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "F",
-        "execution_key": "wait_price",
+        "execution_key": "review",
         "label": "人工复核：等待更低价格或下一期财报",
         "detail": "当前没有形成可立即执行的赔率，应等待更低价格、关键经营信号或下一期正式财报。",
         "opportunity_tier": null,
@@ -59112,7 +58949,7 @@
           },
           "checklist": {
             "path": "reports/长江电力/巴菲特Checklist-长江电力.md",
-            "sha256": "6884f2fb8d78e9260b712f3b817dcba8a9015ca113bb5db882d54bf9eb0a5fbe"
+            "sha256": "7faf13a0221de618cf89371842b803be767d2986e242c971633b17539c4af526"
           },
           "review_report": {
             "path": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
@@ -59120,10 +58957,10 @@
           }
         },
         "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
-        "current_source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d"
+        "current_source_fingerprint_sha256": "7a80b0d0318c677c0f9e17da85ccb8a0e76cdcf2e6a510eaf4fbce0bcc3b9836"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-07-07）",
       "valid_until": "2026-09-22",
       "source_fingerprint_sha256": "334d6d27bdb75e339c73ad07f5535a299818f27c116f035269345a1d5171682d",
       "market_session_state": "runtime_required",
@@ -59394,7 +59231,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -59420,8 +59257,8 @@
               }
             ],
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-            "date_status": "pending",
-            "status_label": "待披露",
+            "date_status": "due",
+            "status_label": "已到期待确认",
             "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-08-29"
@@ -59499,7 +59336,7 @@
           }
         ],
         "task_count": 3,
-        "due_count": 0,
+        "due_count": 1,
         "next_review_date": "2026-08-29"
       },
       "execution_policy": {
@@ -59993,10 +59830,55 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
+          {
+            "task_id": "holder",
+            "scope": "holder",
+            "scope_label": "持仓验证",
+            "title": "复核持仓验证",
+            "content": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
+            "metrics": [],
+            "periods": [
+              "H1",
+              "FY"
+            ],
+            "schedule_type": "filing",
+            "source_field": "holder_action",
+            "evidence": [
+              {
+                "line_start": 529,
+                "line_end": 608,
+                "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+                "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+              }
+            ],
+            "schedule_label": "2026年中报、2026年年报",
+            "date_status": "due",
+            "status_label": "已到期待确认",
+            "next_review_date": "2026-08-29",
+            "calendar_dates": [
+              "2026-08-29"
+            ],
+            "calendar_date_details": [
+              {
+                "period_key": "2026H1",
+                "period_label": "2026年中报",
+                "actual_date": "2026-08-29",
+                "scheduled_date": "2026-08-29",
+                "effective_date": "2026-08-29",
+                "effective_type": "actual",
+                "actual_verification": "cross_checked",
+                "scheduled_verification": "cross_checked",
+                "actual_eastmoney": "2026-08-29",
+                "actual_cninfo": "2026-08-29",
+                "scheduled_eastmoney": "2026-08-29",
+                "scheduled_cninfo": "2026-08-29"
+              }
+            ]
+          },
           {
             "task_id": "risk",
             "scope": "risk",
@@ -60022,7 +59904,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-28",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-28",
               "2026-08-29"
@@ -60042,51 +59924,6 @@
                 "scheduled_eastmoney": "2026-04-28",
                 "scheduled_cninfo": "2026-04-28"
               },
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-29",
-                "scheduled_date": "2026-08-29",
-                "effective_date": "2026-08-29",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-29",
-                "actual_cninfo": "2026-08-29",
-                "scheduled_eastmoney": "2026-08-29",
-                "scheduled_cninfo": "2026-08-29"
-              }
-            ]
-          },
-          {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
-            "metrics": [],
-            "periods": [
-              "H1",
-              "FY"
-            ],
-            "schedule_type": "filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 529,
-                "line_end": 608,
-                "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
-                "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
-              }
-            ],
-            "schedule_label": "2026年中报、2026年年报",
-            "date_status": "pending",
-            "status_label": "待披露",
-            "next_review_date": "2026-08-29",
-            "calendar_dates": [
-              "2026-08-29"
-            ],
-            "calendar_date_details": [
               {
                 "period_key": "2026H1",
                 "period_label": "2026年中报",
@@ -60130,8 +59967,8 @@
           }
         ],
         "task_count": 3,
-        "due_count": 1,
-        "next_review_date": "2026-04-28"
+        "due_count": 2,
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,
@@ -60277,113 +60114,113 @@
       }
     },
     {
-      "company": "顺丰控股股份有限公司",
+      "company": "顺丰控股",
       "entity_kind": "company",
       "entity_directory": "顺丰控股",
       "ticker": "002352.SZ",
       "market": "A股",
-      "data_cutoff": "2026-08-10",
+      "data_cutoff": "2026-08-31",
       "report_reference_price": {
-        "price": 33.8,
+        "price": 31.8,
         "currency": "CNY",
         "line": 5,
         "source": "主报告明确标注的分析基准价"
       },
-      "report_completed_at": "2026-08-10",
+      "report_completed_at": "2026-08-31",
       "action": "观察",
       "investor_stances": [
         {
           "stance": "激进型",
-          "action": "A股30-34元小额试探",
-          "price_range": "30-34元"
+          "action": "A股30.0—32.5元小额试探",
+          "price_range": "30.0—32.5元"
         },
         {
           "stance": "稳健型",
-          "action": "A股27-30元分批买入",
-          "price_range": "27-30元"
+          "action": "A股27.0—30.0元分批买入",
+          "price_range": "27.0—30.0元"
         },
         {
           "stance": "保守型",
-          "action": "A股23-26元重点研究买入",
-          "price_range": "23-26元"
+          "action": "A股23.0—27.0元重点研究买入",
+          "price_range": "23.0—27.0元"
         }
       ],
-      "conclusion_summary": "A股接近合理价，H股折价后可分批研究",
-      "buy_price": "27-30元",
+      "conclusion_summary": "扣非与毛利率改善真实，但件量失速与自由现金流下滑42%同时亮黄灯；A股接近合理价，H股折价16.5%更值得分批",
+      "buy_price": "27.0—30.0元",
       "price_plan": [
         {
           "stance": "激进型",
-          "action": "A股30-34元小额试探",
-          "price_range": "30-34元"
+          "action": "A股30.0—32.5元小额试探",
+          "price_range": "30.0—32.5元"
         },
         {
           "stance": "稳健型",
-          "action": "A股27-30元分批买入",
-          "price_range": "27-30元"
+          "action": "A股27.0—30.0元分批买入",
+          "price_range": "27.0—30.0元"
         },
         {
           "stance": "保守型",
-          "action": "A股23-26元重点研究买入",
-          "price_range": "23-26元"
+          "action": "A股23.0—27.0元重点研究买入",
+          "price_range": "23.0—27.0元"
         }
       ],
       "scenario_valuation": [
         {
           "scenario": "乐观",
-          "target_price": "49.0元",
+          "target_price": "48.0元",
           "eps_growth": "+12%"
         },
         {
           "scenario": "中性",
-          "target_price": "37.4元",
+          "target_price": "34.0元",
           "eps_growth": "+7%"
         },
         {
           "scenario": "悲观",
-          "target_price": "20.5元",
+          "target_price": "20.1元",
           "eps_growth": "-2%"
         }
       ],
       "valuation_section": {
-        "heading": "第七步：估值与安全边际",
-        "start_line": 175,
-        "end_line": 252,
-        "markdown": "## 第七步：估值与安全边际\n\n### A/H估值口径\n\n2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。\n\n| 指标 | A股33.80元 | H股33.26港元折人民币28.60元 |\n|---|---:|---:|\n| 调整后PE | 15.50倍 | 13.12倍 |\n| PB（2025年报每股净资产19.70元） | 1.72倍 | 1.45倍 |\n| P/FCF | 9.61倍 | 8.13倍 |\n| FCF收益率 | 10.41% | 12.30% |\n| 预计2025现金分红收益率 | 2.59% | 3.06% |\n\nH股相对A股的人民币价格折价约15.38%。这不是无风险套利：H股流动性、汇率、跨市场投资者结构和海外业务风险都不同，但它确实提供更好的现金流和分红起点。\n\n### 反向估值直觉\n\n若以调整后EPS 2.1807元和14倍正常化PE计算，当前A股价格隐含未来三年约7%的年化EPS增长，正好接近中性情景。换言之，A股并未要求极高增长，但也没有为利润率下行和现金流波动提供很厚的保护垫。\n\n### 三情景估值（A股人民币）\n\n| 情景 | 三年年化EPS增速 | 退出PE | 三年目标价 | 相对33.80元 |\n|---|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | **49.0元** | +45.0% |\n| 中性 | +7% | 14倍 | **37.4元** | +10.7% |\n| 悲观 | -2% | 10倍 | **20.5元** | -39.3% |\n\n中性情景的预期价差只有约10.7%，三年年化回报还要扣除估值波动和机会成本；因此A股结论是接近合理价而非强买。悲观情景显示，低于20倍PE并不意味着风险小，物流利润率和资本开支可以让每股价值快速下修。\n\n### 价格带与行动阈值\n\n| 市场 | 激进型 | 稳健型 | 保守型 |\n|---|---|---|---|\n| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |\n| H股 | 34.9-39.5港元，小额试探 | 31.4-34.9港元，分批买入 | 26.7-30.2港元，重点研究买入 |\n\n价格带是基本面安全边际，不是技术面支撑位。H股当前33.26港元已落在稳健型区间内，但仍需用半年报验证；A股33.80元仅位于激进型区间上沿，适合观察或极小仓位，而非一次性重仓。\n\n> 巴菲特式追问：如果股市明天关闭五年，愿意33.80元持有顺丰吗？愿意持有其网络质量，但不会在当前A股价格上牺牲现金流安全边际；H股折价使答案更接近“可以分批”。\n\n---\n\n## 第八步：最终决策与行动清单\n\n### 综合判断\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量 | 综合物流网络和高时效服务质量强，但利润率不高 | 中高 |\n| 护城河 | 密度、航空、鄂州和品牌形成中等偏宽护城河 | 中高 |\n| 管理层 | 长期投入、分红和回购并存；极兔交易提高资本配置复杂度 | 中 |\n| 最大风险 | 价格战与固定成本使扣非利润、FCF脱钩 | 高 |\n| 行业趋势 | 制造出海和复杂供应链长期有利，价值捕获仍需验证 | 中高 |\n| 估值 | A股接近合理价，H股折价提供更好安全边际 | 中高 |\n\n### 明确结论\n\n**基本面建议：A股观察，H股可分批研究买入。** 顺丰是值得长期跟踪的高质量物流系统，但不是高毛利复利股。33.80元A股对应中性情景的上行空间有限；33.26港元H股因人民币折价约15.38%，风险收益比更好，但不能忽略汇率、海外和交叉持股风险。\n\n| 投资者 | 建议 |\n|---|---|\n| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |\n| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |\n| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |\n| 减仓信号 | 股价进入情景上沿但利润和FCF不跟随，或国际业务收入增速明显高于利润增速 |\n| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |\n\n### 四位大师式点评\n\n> **巴菲特：** 你买的是难复制的物流网络，但要确认新增飞机和枢纽提高的是每股价值，而不是企业规模。\n\n> **芒格：** 不要被低于20倍的PE催眠，先看价格、装载率、成本和现金流是否同时恶化。\n\n> **段永平：** 生意基本对，A股价格还不够对；H股折价让等待变得更有耐心价值。\n\n> **李录：** 制造出海是长期趋势，投资回报取决于顺丰能否把稀缺节点转化为高回报现金流。"
+        "heading": "第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"",
+        "start_line": 351,
+        "end_line": 499,
+        "markdown": "## 第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 7.1 当前定价\n\n**股本口径说明**（关键，直接影响所有估值）：\n\n| 口径 | 股数 | 说明 |\n|---|---:|---|\n| 注册总股本 | 5,265,308,078 | 腾讯 A/H 行情一致 |\n| 减：H 股库存股 | -7,163,600 | H 股回购所得，作为库存股 |\n| 减：A 股待注销回购 | -160,160,000 | 2026-07-21 完成，均价 37.46元，将注销 |\n| **经济股本** | **5,097,984,478** | 本报告全部估值使用此口径 |\n\n**TTM 数据**（2025H2 + 2026H1，工具精确计算）：\n\n| 项目 | 数值 |\n|---|---:|\n| TTM 归母净利润 | 108.81亿元 |\n| TTM 扣非归母 | 96.88亿元 |\n| TTM 经营现金流 | 257.90亿元 |\n| TTM 资本开支 | 114.50亿元 |\n| **TTM 简化自由现金流** | **143.40亿元** |\n| TTM EPS（经济股本） | **2.1345元** |\n| TTM 扣非 EPS | 1.9003元 |\n| 每股净资产（归母权益 1,027.86亿 / 经济股本） | **20.1621元** |\n| 每股自由现金流 | 2.8128元 |\n\n**A/H 估值对照**（工具 `verify-valuation` 精确输出）：\n\n| 指标 | A股 31.80元 | H股 30.98港元（折 26.56元） |\n|---|---:|---:|\n| PE（TTM） | **14.90倍** | **12.44倍** |\n| 盈利收益率 | 6.71% | 8.04% |\n| PB | 1.58倍 | 1.32倍 |\n| P/FCF | 11.31倍 | 9.44倍 |\n| FCF 收益率 | 8.85% | **10.59%** |\n| 股息率（2026 中期已宣 0.49元） | 1.54% | 1.84% |\n| 股息率（按 45% 派息率、TTM 归母测算，0.9606元） | **3.02%** | **3.62%** |\n| ROE（TTM / 期末净资产） | 10.59% | 10.59% |\n| 经济股本市值 | 1,621.16亿元 | 1,354亿元（人民币等值） |\n| 52 周区间 | 30.13 — 43.70元 | 28.30 — 39.544港元 |\n\n**H 股相对 A 股折价：16.48%**（工具验算）。这不是套利，但它是同一份资产、同一份现金流的两档报价。\n\n### 7.2 同业对照（2026-08-31 收盘）\n\n| 公司 | 代码 | 价格 | PE（动） | PB | 市值 |\n|---|---|---:|---:|---:|---:|\n| 顺丰控股 | 002352.SZ | 31.80元 | 15.39 | 1.63 | 1,674亿元 |\n| 顺丰控股 | 06936.HK | 30.98港元 | 13.23 | — | 1,629亿港元 |\n| 中通快递-W | 02057.HK | 167.20港元 | 12.62 | 1.74 | 1,269亿港元 |\n| 圆通速递 | 600233.SH | 16.94元 | 10.24 | 1.56 | 580亿元 |\n| 申通快递 | 002468.SZ | 13.97元 | 10.97 | 1.82 | 214亿元 |\n| 韵达股份 | 002120.SZ | 6.78元 | 11.98 | 0.93 | 197亿元 |\n| 京东物流 | 02618.HK | 11.02港元 | 9.92 | 1.12 | 730亿港元 |\n\n顺丰 A 股 PE 显著高于同业（14.90 倍 vs 通达系 10—12 倍、京东物流 9.92 倍），溢价来自网络质量、国际业务与分红确定性。**顺丰 H 股 12.44 倍则落在中通（12.62 倍）之下，只比通达系略高。**\n\n### 7.3 反向 DCF：当前股价隐含了什么？\n\n以 TTM EPS 2.1345元、13 倍正常化 PE 反推，A 股 31.80元隐含的三年年化 EPS 增速约 **+6.0%**，与中性情景的 +7% 基本一致。换句话说：\n\n**A 股当前价格没有要求高增长，但也没有为\"件量继续下滑\"\"自由现金流继续恶化\"留出保护垫。** H 股 12.44 倍隐含的三年年化增速仅约 **+1.5%**，已经把相当多的坏消息计入了价格。\n\n### 7.4 三情景估值（工具 `three-scenario` 精确计算）\n\n**A股（基准价 31.80元，EPS 2.1345元，3年）**\n\n| 情景 | 年化 EPS 增速 | 退出 PE | 三年后 EPS | 目标价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | 3.00元 | **48.0元** | **+50.9%** |\n| 中性 | +7% | 13倍 | 2.61元 | **34.0元** | **+6.9%** |\n| 悲观 | -2% | 10倍 | 2.01元 | **20.1元** | **-36.8%** |\n\n**H股（基准价 26.5599元人民币等值，EPS 相同）**\n\n| 情景 | 年化 EPS 增速 | 退出 PE | 目标价（人民币） | 折港元 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | 48.0元 | 56.0港元 | **+80.7%** |\n| 中性 | +7% | 13倍 | 34.0元 | 39.7港元 | **+28.0%** |\n| 悲观 | -2% | 10倍 | 20.1元 | 23.4港元 | **-24.4%** |\n\n**三点必须说明**：\n\n1. 情景价差极大（-36.8% 到 +50.9%），这不是模型不稳定，而是**重资产、低净利率生意的真实特征**：利润率 1 个百分点的变动就能改写全部结论。\n2. 情景不含股息。按 3.0%—3.6% 的股息率，三年额外贡献约 9%—11% 的总回报。\n3. 本次中性情景的退出 PE 从上次的 14 倍下调至 **13 倍**，理由是同业估值整体下移（通达系 10—12 倍、京东物流 9.92 倍）且顺丰件量增速已降至行业水平以下。若维持 14 倍，中性目标价为 **36.6元（+15.1%）**——本报告选择更保守的口径。\n\n### 7.5 价格带与行动阈值\n\n| 类型 | A股（人民币） | H股（港元） | 依据 |\n|---|---|---|---|\n| 激进型 | 30.0 — 32.5元 | 29.2 — 31.7港元 | 现价附近，仅小额试探，需 Q3 数据验证 |\n| 稳健型 | 27.0 — 30.0元 | 26.3 — 29.2港元 | 对应中性情景 15%—26% 上行空间 |\n| 保守型 | 23.0 — 27.0元 | 22.4 — 26.3港元 | 接近悲观情景与更高的现金流回报要求 |\n\n（H股价格带按当前汇率与 16.5% 折价换算，折价率变化时需同步调整。）\n\n**当前定位**：A股 31.80元处于激进型区间中部；H股 30.98港元处于激进型区间上沿与稳健型区间交界。H股的风险收益比明显优于A股。\n\n> 段永平式追问：如果股市明天关闭五年，我愿意以这个价格持有吗？**A股 31.80元：愿意但要小仓位**——14.9 倍 PE、3.0% 股息、10.6% ROE、网络难复制，但件量与自由现金流两个负面趋势尚未证伪。**H股 30.98港元（26.56元人民币）：愿意分批**——12.44 倍 PE、3.6% 股息、10.59% FCF 收益率，已经把不少坏消息计入价格。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 8.1 六维汇总\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 网络稀缺、现金流转化优秀（FCF 是净利润 1.32倍），但 ROE 仅 10.59%、五年均值 9.20%，低毛利重资产，不是高回报复利股 | 高 |\n| 护城河（巴菲特） | 网络密度、航空与鄂州枢纽、时效品牌构成中等偏宽护城河；未变窄，但也未在利润端变宽（同期通达系利润 +70%~+128%） | 高 |\n| 管理层（段永平+巴菲特） | 60亿元注销式回购与分红率上调（45%→50%）是实质性正面；极兔互持、控股股东质押 14.47%、丰巢关联交易构成扣分项 | 中高 |\n| 最大风险（芒格） | **件量在行业 +5.0% 的背景下 -0.1%（7月 -3.78%）+ 自由现金流 -42.2%**，两条同时亮黄灯 | 高 |\n| 文明趋势（李录） | 中国企业出海与全球供应链重构为真，顺丰卡位完整；但供应链及国际分部净利率仅 0.07%，价值捕获未验证 | 中高 |\n| 估值（巴菲特+段永平） | A股 14.90 倍 PE 接近合理价，安全边际一般；H股 12.44 倍 PE、16.48% 折价、3.62% 股息率，安全边际更清晰 | 高 |\n\n### 8.2 明确结论\n\n**基本面建议：A股观察至小额分批；H股可在现价附近分批买入。**\n\n顺丰在 2026 年上半年同时做了两件方向相反的事：一边用提价和结构优化把毛利率、扣非利润率和每股股息推上去（对），一边用加速的资本开支和一笔跨境互持把自由现金流和净现金拉下来（值得商榷）。**扣非 +9.32% 是真的，自由现金流 -42.2% 也是真的，两者不矛盾——这正是重资产转型期的典型形态。**\n\n因此本报告的立场比上一份略有调整：上一份是\"A股观察、H股分批研究\"；这一份是\"**A股仍是观察为主但已可小额分批，H股是更明确的买入标的**\"。调整的依据不是股价跌了 5.9%，而是三件新事实：①分红率承诺明确上行至 45%→50%，股息率提高到 3.0%—3.6%，为估值提供了过去不存在的托底；②A股 3.04% 的注销式回购确定落地，经济股本下降；③H股折价扩大到 16.48%，而 H 股隐含增速已降至约 +1.5%/年。\n\n**但这个立场有一个明确的证伪条件：如果 2026 年三季度件量继续在行业正增长背景下负增长，同时供应链及国际分部净利率仍低于 0.5%，则应把结论从\"分批买入\"下调为\"继续观察\"。**\n\n### 8.3 分投资者建议\n\n| 投资者 | 建议 |\n|---|---|\n| 空仓者 | **H股**：30—31 港元可开始分批建仓，26.3—29.2 港元为主要建仓区；**A股**：31.80元可小额试探（不超过计划仓位的 1/4），27—30元为主要建仓区 |\n| 持仓者 | 继续持有。A股 31.80元不追高；H股持有理由比 A股更充分。以 2026 年三季报与月度经营简报为复核节点 |\n| 加仓信号 | ①单月件量同比转正且不低于行业增速；②单季经营现金流同比不再下滑、资本开支增速回落至收入增速以下；③供应链及国际分部净利率升至 1% 以上；④A股回到 30元以下或 H股回到 29.2 港元以下 |\n| 减仓信号 | 股价进入 40元以上但扣非利润与自由现金流不同步改善；或国际业务收入增速持续大幅快于利润增速 |\n| 卖出 / 论文失效 | ①连续两个报告期扣非归母同比负增长；②连续两个报告期经营现金流低于资本开支；③单票收入同比转负且毛利率跌破 13%；④极兔出现重大监管处罚或明德控股质押触发平仓 |\n\n### 8.4 四位大师模拟点评\n\n> **巴菲特：** 你买的是一张难复制的物流网络和一群愿意把利润分给你的管理层——分红率从 40% 提到 50%、回购了 3% 的股份并注销，这些都是真的。但请记住，我买一家公司是为了它未来的每股自由现金流，而不是它未来的收入排名。2026 年上半年，这家公司的收入增长了 5.9%，自由现金流却减少了 42%。在你能解释清楚这个差额之前，别用\"护城河\"这个词安慰自己。\n\n> **芒格：** 我最不舒服的是那个对照：全行业件量涨 5%，顺丰跌 0.1%，7 月跌 3.78%。管理层说这是主动选择，我愿意相信一半。但一个简单的问题就能分辨真假——如果他们真的在砍掉亏钱的业务，毛利率和扣非利润率应该在接下来的两个季度继续改善；如果改善停了，那就是生意在输，不是战略在赢。另外，用 82.99 亿港元买一家刚被立案调查的公司的同时，又让这家公司用同样的钱买你 4.29% 的股份——这个结构聪明，但它让两家公司的命运绑在了一起，而顺丰的股东并没有被问过是否愿意承担这个风险。\n\n> **段永平：** 生意基本上是对的：别人做不到的时效，它能做到，而且客户愿意为此多付钱——单票收入连续五个月回升就是证据。价格方面，A股 31.80 元对应 14.9 倍 PE、3.0% 股息，说不上便宜，也说不上贵，属于\"可以买一点但睡不着也别后悔\"的位置。H股 12.44 倍、3.6% 股息、折价 16.5%，这个价格我更愿意动手。真正的问题是：这家公司每年要把赚来的钱重新投进去多少才能维持增长？只要这个问题的答案是\"很多\"，它就永远不配享受高估值。\n\n> **李录：** 中国企业从\"卖货出海\"走向\"建链出海\"，这是未来十年最确定的结构性变化之一，顺丰在鄂州枢纽、全货机和东南亚末端上的布局让它成为少数有能力承接这条链的公司——国际供应链收入增长 155%、出海业务创收增长 180%，这些数字说明它站在了正确的位置上。但请注意：这个分部上半年的净利润是 3000 万元，净利率 0.07%。站在二十年后回看，这要么是一个伟大节点的起点，要么是一次昂贵的全球化试错。区别不在于收入翻倍多少次，而在于那条曲线的斜率什么时候能从收入传到利润。\n\n---"
       },
-      "recommendation": "空仓者 A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善",
-      "title": "顺丰控股（002352.SZ）研究报告",
-      "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
-      "report_link": "顺丰控股/顺丰控股研究报告-20260810.md",
+      "recommendation": "空仓者 H股：30—31 港元可开始分批建仓，26.3—29.2 港元为主要建仓区；A股：31.80元可小额试探（不超过计划仓位的 1/4），27—30元为主要建仓区",
+      "title": "顺丰控股（002352.SZ / 06936.HK）投资研究报告",
+      "report_path": "reports/顺丰控股/顺丰控股-investment-research-20260831.md",
+      "report_link": "顺丰控股/顺丰控股-investment-research-20260831.md",
       "decision_source": "看板决策契约",
       "decision_contract": {
         "version": "1",
         "report_type": "company-fundamental",
-        "company": "顺丰控股股份有限公司",
+        "company": "顺丰控股",
         "ticker": "002352.SZ",
         "market": "A股",
-        "report_completed_at": "2026-08-10",
-        "data_cutoff": "2026-08-10",
+        "report_completed_at": "2026-08-31",
+        "data_cutoff": "2026-08-31",
         "action": "观察",
-        "summary": "A股接近合理价，H股折价后可分批研究",
+        "summary": "扣非与毛利率改善真实，但件量失速与自由现金流下滑42%同时亮黄灯；A股接近合理价，H股折价16.5%更值得分批",
         "investor_stances": [
           {
             "stance": "激进型",
-            "action": "A股30-34元小额试探",
-            "price_range": "30-34元"
+            "action": "A股30.0—32.5元小额试探",
+            "price_range": "30.0—32.5元"
           },
           {
             "stance": "稳健型",
-            "action": "A股27-30元分批买入",
-            "price_range": "27-30元"
+            "action": "A股27.0—30.0元分批买入",
+            "price_range": "27.0—30.0元"
           },
           {
             "stance": "保守型",
-            "action": "A股23-26元重点研究买入",
-            "price_range": "23-26元"
+            "action": "A股23.0—27.0元重点研究买入",
+            "price_range": "23.0—27.0元"
           }
         ],
-        "invalidation_triggers": "连续两个报告期毛利率低于12.5%且扣非利润同比转负、经营现金流低于资本支出",
-        "next_review_date": "2026-08-31",
+        "invalidation_triggers": "连续两个报告期扣非归母同比负增长，或连续两个报告期经营现金流低于资本开支，或单票收入同比转负且毛利率跌破13%",
+        "next_review_date": "2026-10-31",
         "confidence": "中",
         "hard_veto_state": "unknown"
       },
@@ -60391,6 +60228,106 @@
       "data_status": "已标注",
       "selection_basis": "报告数据截止日",
       "report_history": [
+        {
+          "data_cutoff": "2026-08-31",
+          "action": "观察",
+          "investor_stances": [
+            {
+              "stance": "激进型",
+              "action": "A股30.0—32.5元小额试探",
+              "price_range": "30.0—32.5元"
+            },
+            {
+              "stance": "稳健型",
+              "action": "A股27.0—30.0元分批买入",
+              "price_range": "27.0—30.0元"
+            },
+            {
+              "stance": "保守型",
+              "action": "A股23.0—27.0元重点研究买入",
+              "price_range": "23.0—27.0元"
+            }
+          ],
+          "conclusion_summary": "扣非与毛利率改善真实，但件量失速与自由现金流下滑42%同时亮黄灯；A股接近合理价，H股折价16.5%更值得分批",
+          "buy_price": "27.0—30.0元",
+          "price_plan": [
+            {
+              "stance": "激进型",
+              "action": "A股30.0—32.5元小额试探",
+              "price_range": "30.0—32.5元"
+            },
+            {
+              "stance": "稳健型",
+              "action": "A股27.0—30.0元分批买入",
+              "price_range": "27.0—30.0元"
+            },
+            {
+              "stance": "保守型",
+              "action": "A股23.0—27.0元重点研究买入",
+              "price_range": "23.0—27.0元"
+            }
+          ],
+          "scenario_valuation": [
+            {
+              "scenario": "乐观",
+              "target_price": "48.0元",
+              "eps_growth": "+12%"
+            },
+            {
+              "scenario": "中性",
+              "target_price": "34.0元",
+              "eps_growth": "+7%"
+            },
+            {
+              "scenario": "悲观",
+              "target_price": "20.1元",
+              "eps_growth": "-2%"
+            }
+          ],
+          "valuation_section": {
+            "heading": "第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"",
+            "start_line": 351,
+            "end_line": 499,
+            "markdown": "## 第七步：估值与安全边际 — 巴菲特\"内在价值\" + 段永平\"对的价格\"\n\n### 7.1 当前定价\n\n**股本口径说明**（关键，直接影响所有估值）：\n\n| 口径 | 股数 | 说明 |\n|---|---:|---|\n| 注册总股本 | 5,265,308,078 | 腾讯 A/H 行情一致 |\n| 减：H 股库存股 | -7,163,600 | H 股回购所得，作为库存股 |\n| 减：A 股待注销回购 | -160,160,000 | 2026-07-21 完成，均价 37.46元，将注销 |\n| **经济股本** | **5,097,984,478** | 本报告全部估值使用此口径 |\n\n**TTM 数据**（2025H2 + 2026H1，工具精确计算）：\n\n| 项目 | 数值 |\n|---|---:|\n| TTM 归母净利润 | 108.81亿元 |\n| TTM 扣非归母 | 96.88亿元 |\n| TTM 经营现金流 | 257.90亿元 |\n| TTM 资本开支 | 114.50亿元 |\n| **TTM 简化自由现金流** | **143.40亿元** |\n| TTM EPS（经济股本） | **2.1345元** |\n| TTM 扣非 EPS | 1.9003元 |\n| 每股净资产（归母权益 1,027.86亿 / 经济股本） | **20.1621元** |\n| 每股自由现金流 | 2.8128元 |\n\n**A/H 估值对照**（工具 `verify-valuation` 精确输出）：\n\n| 指标 | A股 31.80元 | H股 30.98港元（折 26.56元） |\n|---|---:|---:|\n| PE（TTM） | **14.90倍** | **12.44倍** |\n| 盈利收益率 | 6.71% | 8.04% |\n| PB | 1.58倍 | 1.32倍 |\n| P/FCF | 11.31倍 | 9.44倍 |\n| FCF 收益率 | 8.85% | **10.59%** |\n| 股息率（2026 中期已宣 0.49元） | 1.54% | 1.84% |\n| 股息率（按 45% 派息率、TTM 归母测算，0.9606元） | **3.02%** | **3.62%** |\n| ROE（TTM / 期末净资产） | 10.59% | 10.59% |\n| 经济股本市值 | 1,621.16亿元 | 1,354亿元（人民币等值） |\n| 52 周区间 | 30.13 — 43.70元 | 28.30 — 39.544港元 |\n\n**H 股相对 A 股折价：16.48%**（工具验算）。这不是套利，但它是同一份资产、同一份现金流的两档报价。\n\n### 7.2 同业对照（2026-08-31 收盘）\n\n| 公司 | 代码 | 价格 | PE（动） | PB | 市值 |\n|---|---|---:|---:|---:|---:|\n| 顺丰控股 | 002352.SZ | 31.80元 | 15.39 | 1.63 | 1,674亿元 |\n| 顺丰控股 | 06936.HK | 30.98港元 | 13.23 | — | 1,629亿港元 |\n| 中通快递-W | 02057.HK | 167.20港元 | 12.62 | 1.74 | 1,269亿港元 |\n| 圆通速递 | 600233.SH | 16.94元 | 10.24 | 1.56 | 580亿元 |\n| 申通快递 | 002468.SZ | 13.97元 | 10.97 | 1.82 | 214亿元 |\n| 韵达股份 | 002120.SZ | 6.78元 | 11.98 | 0.93 | 197亿元 |\n| 京东物流 | 02618.HK | 11.02港元 | 9.92 | 1.12 | 730亿港元 |\n\n顺丰 A 股 PE 显著高于同业（14.90 倍 vs 通达系 10—12 倍、京东物流 9.92 倍），溢价来自网络质量、国际业务与分红确定性。**顺丰 H 股 12.44 倍则落在中通（12.62 倍）之下，只比通达系略高。**\n\n### 7.3 反向 DCF：当前股价隐含了什么？\n\n以 TTM EPS 2.1345元、13 倍正常化 PE 反推，A 股 31.80元隐含的三年年化 EPS 增速约 **+6.0%**，与中性情景的 +7% 基本一致。换句话说：\n\n**A 股当前价格没有要求高增长，但也没有为\"件量继续下滑\"\"自由现金流继续恶化\"留出保护垫。** H 股 12.44 倍隐含的三年年化增速仅约 **+1.5%**，已经把相当多的坏消息计入了价格。\n\n### 7.4 三情景估值（工具 `three-scenario` 精确计算）\n\n**A股（基准价 31.80元，EPS 2.1345元，3年）**\n\n| 情景 | 年化 EPS 增速 | 退出 PE | 三年后 EPS | 目标价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | 3.00元 | **48.0元** | **+50.9%** |\n| 中性 | +7% | 13倍 | 2.61元 | **34.0元** | **+6.9%** |\n| 悲观 | -2% | 10倍 | 2.01元 | **20.1元** | **-36.8%** |\n\n**H股（基准价 26.5599元人民币等值，EPS 相同）**\n\n| 情景 | 年化 EPS 增速 | 退出 PE | 目标价（人民币） | 折港元 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | 48.0元 | 56.0港元 | **+80.7%** |\n| 中性 | +7% | 13倍 | 34.0元 | 39.7港元 | **+28.0%** |\n| 悲观 | -2% | 10倍 | 20.1元 | 23.4港元 | **-24.4%** |\n\n**三点必须说明**：\n\n1. 情景价差极大（-36.8% 到 +50.9%），这不是模型不稳定，而是**重资产、低净利率生意的真实特征**：利润率 1 个百分点的变动就能改写全部结论。\n2. 情景不含股息。按 3.0%—3.6% 的股息率，三年额外贡献约 9%—11% 的总回报。\n3. 本次中性情景的退出 PE 从上次的 14 倍下调至 **13 倍**，理由是同业估值整体下移（通达系 10—12 倍、京东物流 9.92 倍）且顺丰件量增速已降至行业水平以下。若维持 14 倍，中性目标价为 **36.6元（+15.1%）**——本报告选择更保守的口径。\n\n### 7.5 价格带与行动阈值\n\n| 类型 | A股（人民币） | H股（港元） | 依据 |\n|---|---|---|---|\n| 激进型 | 30.0 — 32.5元 | 29.2 — 31.7港元 | 现价附近，仅小额试探，需 Q3 数据验证 |\n| 稳健型 | 27.0 — 30.0元 | 26.3 — 29.2港元 | 对应中性情景 15%—26% 上行空间 |\n| 保守型 | 23.0 — 27.0元 | 22.4 — 26.3港元 | 接近悲观情景与更高的现金流回报要求 |\n\n（H股价格带按当前汇率与 16.5% 折价换算，折价率变化时需同步调整。）\n\n**当前定位**：A股 31.80元处于激进型区间中部；H股 30.98港元处于激进型区间上沿与稳健型区间交界。H股的风险收益比明显优于A股。\n\n> 段永平式追问：如果股市明天关闭五年，我愿意以这个价格持有吗？**A股 31.80元：愿意但要小仓位**——14.9 倍 PE、3.0% 股息、10.6% ROE、网络难复制，但件量与自由现金流两个负面趋势尚未证伪。**H股 30.98港元（26.56元人民币）：愿意分批**——12.44 倍 PE、3.6% 股息、10.59% FCF 收益率，已经把不少坏消息计入价格。\n\n---\n\n## 第八步：综合决策备忘录\n\n### 8.1 六维汇总\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 网络稀缺、现金流转化优秀（FCF 是净利润 1.32倍），但 ROE 仅 10.59%、五年均值 9.20%，低毛利重资产，不是高回报复利股 | 高 |\n| 护城河（巴菲特） | 网络密度、航空与鄂州枢纽、时效品牌构成中等偏宽护城河；未变窄，但也未在利润端变宽（同期通达系利润 +70%~+128%） | 高 |\n| 管理层（段永平+巴菲特） | 60亿元注销式回购与分红率上调（45%→50%）是实质性正面；极兔互持、控股股东质押 14.47%、丰巢关联交易构成扣分项 | 中高 |\n| 最大风险（芒格） | **件量在行业 +5.0% 的背景下 -0.1%（7月 -3.78%）+ 自由现金流 -42.2%**，两条同时亮黄灯 | 高 |\n| 文明趋势（李录） | 中国企业出海与全球供应链重构为真，顺丰卡位完整；但供应链及国际分部净利率仅 0.07%，价值捕获未验证 | 中高 |\n| 估值（巴菲特+段永平） | A股 14.90 倍 PE 接近合理价，安全边际一般；H股 12.44 倍 PE、16.48% 折价、3.62% 股息率，安全边际更清晰 | 高 |\n\n### 8.2 明确结论\n\n**基本面建议：A股观察至小额分批；H股可在现价附近分批买入。**\n\n顺丰在 2026 年上半年同时做了两件方向相反的事：一边用提价和结构优化把毛利率、扣非利润率和每股股息推上去（对），一边用加速的资本开支和一笔跨境互持把自由现金流和净现金拉下来（值得商榷）。**扣非 +9.32% 是真的，自由现金流 -42.2% 也是真的，两者不矛盾——这正是重资产转型期的典型形态。**\n\n因此本报告的立场比上一份略有调整：上一份是\"A股观察、H股分批研究\"；这一份是\"**A股仍是观察为主但已可小额分批，H股是更明确的买入标的**\"。调整的依据不是股价跌了 5.9%，而是三件新事实：①分红率承诺明确上行至 45%→50%，股息率提高到 3.0%—3.6%，为估值提供了过去不存在的托底；②A股 3.04% 的注销式回购确定落地，经济股本下降；③H股折价扩大到 16.48%，而 H 股隐含增速已降至约 +1.5%/年。\n\n**但这个立场有一个明确的证伪条件：如果 2026 年三季度件量继续在行业正增长背景下负增长，同时供应链及国际分部净利率仍低于 0.5%，则应把结论从\"分批买入\"下调为\"继续观察\"。**\n\n### 8.3 分投资者建议\n\n| 投资者 | 建议 |\n|---|---|\n| 空仓者 | **H股**：30—31 港元可开始分批建仓，26.3—29.2 港元为主要建仓区；**A股**：31.80元可小额试探（不超过计划仓位的 1/4），27—30元为主要建仓区 |\n| 持仓者 | 继续持有。A股 31.80元不追高；H股持有理由比 A股更充分。以 2026 年三季报与月度经营简报为复核节点 |\n| 加仓信号 | ①单月件量同比转正且不低于行业增速；②单季经营现金流同比不再下滑、资本开支增速回落至收入增速以下；③供应链及国际分部净利率升至 1% 以上；④A股回到 30元以下或 H股回到 29.2 港元以下 |\n| 减仓信号 | 股价进入 40元以上但扣非利润与自由现金流不同步改善；或国际业务收入增速持续大幅快于利润增速 |\n| 卖出 / 论文失效 | ①连续两个报告期扣非归母同比负增长；②连续两个报告期经营现金流低于资本开支；③单票收入同比转负且毛利率跌破 13%；④极兔出现重大监管处罚或明德控股质押触发平仓 |\n\n### 8.4 四位大师模拟点评\n\n> **巴菲特：** 你买的是一张难复制的物流网络和一群愿意把利润分给你的管理层——分红率从 40% 提到 50%、回购了 3% 的股份并注销，这些都是真的。但请记住，我买一家公司是为了它未来的每股自由现金流，而不是它未来的收入排名。2026 年上半年，这家公司的收入增长了 5.9%，自由现金流却减少了 42%。在你能解释清楚这个差额之前，别用\"护城河\"这个词安慰自己。\n\n> **芒格：** 我最不舒服的是那个对照：全行业件量涨 5%，顺丰跌 0.1%，7 月跌 3.78%。管理层说这是主动选择，我愿意相信一半。但一个简单的问题就能分辨真假——如果他们真的在砍掉亏钱的业务，毛利率和扣非利润率应该在接下来的两个季度继续改善；如果改善停了，那就是生意在输，不是战略在赢。另外，用 82.99 亿港元买一家刚被立案调查的公司的同时，又让这家公司用同样的钱买你 4.29% 的股份——这个结构聪明，但它让两家公司的命运绑在了一起，而顺丰的股东并没有被问过是否愿意承担这个风险。\n\n> **段永平：** 生意基本上是对的：别人做不到的时效，它能做到，而且客户愿意为此多付钱——单票收入连续五个月回升就是证据。价格方面，A股 31.80 元对应 14.9 倍 PE、3.0% 股息，说不上便宜，也说不上贵，属于\"可以买一点但睡不着也别后悔\"的位置。H股 12.44 倍、3.6% 股息、折价 16.5%，这个价格我更愿意动手。真正的问题是：这家公司每年要把赚来的钱重新投进去多少才能维持增长？只要这个问题的答案是\"很多\"，它就永远不配享受高估值。\n\n> **李录：** 中国企业从\"卖货出海\"走向\"建链出海\"，这是未来十年最确定的结构性变化之一，顺丰在鄂州枢纽、全货机和东南亚末端上的布局让它成为少数有能力承接这条链的公司——国际供应链收入增长 155%、出海业务创收增长 180%，这些数字说明它站在了正确的位置上。但请注意：这个分部上半年的净利润是 3000 万元，净利率 0.07%。站在二十年后回看，这要么是一个伟大节点的起点，要么是一次昂贵的全球化试错。区别不在于收入翻倍多少次，而在于那条曲线的斜率什么时候能从收入传到利润。\n\n---"
+          },
+          "price_status": "已提取价格计划",
+          "title": "顺丰控股（002352.SZ / 06936.HK）投资研究报告",
+          "report_path": "reports/顺丰控股/顺丰控股-investment-research-20260831.md",
+          "report_link": "顺丰控股/顺丰控股-investment-research-20260831.md",
+          "decision_source": "看板决策契约",
+          "decision_contract": {
+            "version": "1",
+            "report_type": "company-fundamental",
+            "company": "顺丰控股",
+            "ticker": "002352.SZ",
+            "market": "A股",
+            "report_completed_at": "2026-08-31",
+            "data_cutoff": "2026-08-31",
+            "action": "观察",
+            "summary": "扣非与毛利率改善真实，但件量失速与自由现金流下滑42%同时亮黄灯；A股接近合理价，H股折价16.5%更值得分批",
+            "investor_stances": [
+              {
+                "stance": "激进型",
+                "action": "A股30.0—32.5元小额试探",
+                "price_range": "30.0—32.5元"
+              },
+              {
+                "stance": "稳健型",
+                "action": "A股27.0—30.0元分批买入",
+                "price_range": "27.0—30.0元"
+              },
+              {
+                "stance": "保守型",
+                "action": "A股23.0—27.0元重点研究买入",
+                "price_range": "23.0—27.0元"
+              }
+            ],
+            "invalidation_triggers": "连续两个报告期扣非归母同比负增长，或连续两个报告期经营现金流低于资本开支，或单票收入同比转负且毛利率跌破13%",
+            "next_review_date": "2026-10-31",
+            "confidence": "中",
+            "hard_veto_state": "unknown"
+          }
+        },
         {
           "data_cutoff": "2026-08-10",
           "action": "观察",
@@ -60492,103 +60429,24 @@
           }
         }
       ],
-      "report_history_count": 1,
+      "report_history_count": 2,
       "primary_judgment": {
-        "label": "小仓验证",
-        "action_kind": "trial",
-        "empty_position_action": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
-        "holder_action": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
-        "trigger_condition": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
-        "summary": "最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。",
-        "confidence": "high",
-        "report_field_conflict": false,
-        "conflict_note": "主报告正文与看板契约方向一致，仍以正文完整行动条件为准。",
-        "source_basis": "2026-08-27 Codex 人工阅读全文并复核空仓者、持仓者、触发条件与最终结论；未调用已部署模型。",
-        "currency": "CNY",
-        "price_source": "主报告第175至241行；人工审阅日志：logs/main-report-human-review-20260827.md",
-        "evidence": [
-          {
-            "line_start": 175,
-            "line_end": 241,
-            "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-            "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-          }
-        ],
-        "review_tasks": [
-          {
-            "task_id": "entry",
-            "scope": "entry",
-            "scope_label": "买入前提",
-            "title": "复核买入前提",
-            "content": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
-            "metrics": [],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "empty_position_action",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ]
-          },
-          {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
-            "metrics": [
-              "毛利率",
-              "自由现金流",
-              "收入"
-            ],
-            "periods": [],
-            "schedule_type": "recurring_filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ]
-          },
-          {
-            "task_id": "risk",
-            "scope": "risk",
-            "scope_label": "风险/失效条件",
-            "title": "复核风险/失效条件",
-            "content": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
-            "metrics": [
-              "毛利率",
-              "自由现金流",
-              "收入"
-            ],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "trigger_condition",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ]
-          }
-        ],
         "enabled": true,
-        "human_reviewed": true,
-        "human_reviewed_at": "2026-08-27T00:00:00+08:00",
+        "label": "待人工复核",
+        "action_kind": "unknown",
+        "empty_position_action": "模型结果不可用，暂停自动归类",
+        "holder_action": "打开主报告人工核对",
+        "trigger_condition": "重新解析当前主报告并完成人工复核",
+        "summary": "模型分歧、失败或报告已更新，不能进入可买筛选。",
+        "confidence": "low",
+        "report_field_conflict": false,
+        "conflict_note": "模型结果未通过双模型共识或报告哈希校验。",
+        "evidence": [],
+        "source_basis": "报告判断缓存状态检查",
         "model_consensus": false,
-        "screening_consensus": false,
-        "artifact_status": "human_reviewed",
-        "source_matches": true,
-        "generated_at": "2026-08-27T00:00:00+08:00",
+        "artifact_status": "error",
+        "source_matches": false,
+        "generated_at": "2026-08-14T10:58:30+00:00",
         "models": {
           "primary": "deepseek-v4-flash",
           "review": "mimo-v2.5-pro"
@@ -60596,187 +60454,24 @@
       },
       "human_review_plan": {
         "schema_version": 1,
-        "status": "ready",
-        "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
-        "calendar_generated_at": "2026-08-28T22:16:13+08:00",
-        "reviewed_at": "2026-08-27T00:00:00+08:00",
-        "tasks": [
-          {
-            "task_id": "holder",
-            "scope": "holder",
-            "scope_label": "持仓验证",
-            "title": "复核持仓验证",
-            "content": "可以持有验证，不在 33.80 元附近追价；继续核对单票收入、毛利率、自由现金流及并购整合。",
-            "metrics": [
-              "毛利率",
-              "自由现金流",
-              "收入"
-            ],
-            "periods": [],
-            "schedule_type": "recurring_filing",
-            "source_field": "holder_action",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ],
-            "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
-            "date_status": "due",
-            "status_label": "已到期待确认",
-            "next_review_date": "2026-04-29",
-            "calendar_dates": [
-              "2026-04-29",
-              "2026-08-29"
-            ],
-            "calendar_date_details": [
-              {
-                "period_key": "2026Q1",
-                "period_label": "2026年一季报",
-                "actual_date": "2026-04-29",
-                "scheduled_date": "2026-04-29",
-                "effective_date": "2026-04-29",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-04-29",
-                "actual_cninfo": "2026-04-29",
-                "scheduled_eastmoney": "2026-04-29",
-                "scheduled_cninfo": "2026-04-29"
-              },
-              {
-                "period_key": "2026H1",
-                "period_label": "2026年中报",
-                "actual_date": "2026-08-29",
-                "scheduled_date": "2026-08-29",
-                "effective_date": "2026-08-29",
-                "effective_type": "actual",
-                "actual_verification": "cross_checked",
-                "scheduled_verification": "cross_checked",
-                "actual_eastmoney": "2026-08-29",
-                "actual_cninfo": "2026-08-29",
-                "scheduled_eastmoney": "2026-08-29",
-                "scheduled_cninfo": "2026-08-29"
-              }
-            ]
-          },
-          {
-            "task_id": "entry",
-            "scope": "entry",
-            "scope_label": "买入前提",
-            "title": "复核买入前提",
-            "content": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
-            "metrics": [],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "empty_position_action",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ],
-            "schedule_label": "随行情判断",
-            "date_status": "price_only",
-            "status_label": "随行情判断",
-            "next_review_date": null,
-            "calendar_dates": [],
-            "calendar_date_details": []
-          },
-          {
-            "task_id": "risk",
-            "scope": "risk",
-            "scope_label": "风险/失效条件",
-            "title": "复核风险/失效条件",
-            "content": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降。",
-            "metrics": [
-              "毛利率",
-              "自由现金流",
-              "收入"
-            ],
-            "periods": [],
-            "schedule_type": "price",
-            "source_field": "trigger_condition",
-            "evidence": [
-              {
-                "line_start": 175,
-                "line_end": 241,
-                "quote": "## 第七步：估值与安全边际 ### A/H估值口径 2026年6月9日完成向极兔发行225,877,669股新H股后，注册总股本为5,265,308,078股。2026年7月末另有160,160,000股A股待注销和7,163,600股H股库存股，因此本文把5,097,984,478股作为经济股本。2025年报EPS 2.23元是历史加权平均口径；按经济股本重算为2.1807元，用于当前PE。",
-                "supports": "L175-L241、L266-L287。最终空仓表写 A 股观察，价格分层又允许激进型极小试探；保留这一投资者分层，并明确 H 股动作不适用于本 ticker。"
-              }
-            ],
-            "schedule_label": "随行情判断",
-            "date_status": "price_only",
-            "status_label": "随行情判断",
-            "next_review_date": null,
-            "calendar_dates": [],
-            "calendar_date_details": []
-          }
-        ],
-        "task_count": 3,
-        "due_count": 1,
-        "next_review_date": "2026-04-29"
+        "status": "review",
+        "source": "human_main_report",
+        "tasks": [],
+        "task_count": 0,
+        "message": "人工主报告裁决当前不可用，暂不生成复核计划",
+        "calendar_generated_at": "2026-08-28T22:16:13+08:00"
       },
       "execution_policy": {
         "schema_version": 1,
-        "main_action_kind": "trial",
-        "main_label": "小仓验证",
-        "condition_mode": "current_action",
-        "event_condition": "A 股回到 30 元以下，或处于报告价格带且单票收入稳定、毛利率不低于 13%、自由现金流不再连续下降",
+        "main_action_kind": "unknown",
+        "main_label": "待人工复核",
+        "condition_mode": "review",
+        "event_condition": null,
         "guard_condition": null,
-        "price_rules": [
-          {
-            "action_kind": "buy",
-            "action": "A股23-26元重点研究买入",
-            "price_range": "23-26元",
-            "min": 23.0,
-            "ceiling": 26.0,
-            "mode": "range",
-            "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
-            "source": "report_price_plan"
-          },
-          {
-            "action_kind": "buy",
-            "action": "A股27-30元分批买入",
-            "price_range": "27-30元",
-            "min": 27.0,
-            "ceiling": 30.0,
-            "mode": "range",
-            "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
-            "source": "report_price_plan"
-          },
-          {
-            "action_kind": "trial",
-            "action": "A股30-34元小额试探",
-            "price_range": "30-34元",
-            "min": 30.0,
-            "ceiling": 34.0,
-            "mode": "range",
-            "currency": "CNY",
-            "requires_validation": false,
-            "validation_condition": null,
-            "source": "report_price_plan"
-          }
-        ],
-        "current_action": {
-          "action_kind": "trial",
-          "action": "本条只采用 A 股口径；报告基准价 33.80 元处于 30-34 元激进型极小试探区，一般空仓者仍以观察为主，不能套用 H 股分批许可。",
-          "currency": "CNY",
-          "reference_price": 33.8,
-          "reference_source": "主报告明确标注的分析基准价",
-          "requires_validation": false
-        },
+        "price_rules": [],
+        "current_action": null,
         "report_rule_count": 3,
-        "reliability": "high",
+        "reliability": "review",
         "normalization_rule": "保留报告原始层级；只统一动作许可、价格门槛、事件门槛及其关系，不强制换算投资者风格"
       },
       "checklist": {
@@ -60886,9 +60581,9 @@
       },
       "manual_execution_review": {
         "schema_version": 2,
-        "status": "ready",
-        "validity_state": "ready",
-        "invalidation_reason": null,
+        "status": "stale",
+        "validity_state": "stale",
+        "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-10）",
         "source": "human_review",
         "reviewer": "Codex 人工复核",
         "reviewed_at": "2026-08-23T22:30:00+08:00",
@@ -60896,7 +60591,7 @@
         "price_as_of": "2026-08-21",
         "source_report": "reports/A股93只主报告人工复核与机会筛选/A股93只主报告人工复核与机会筛选-20260823.md",
         "category": "C",
-        "execution_key": "validation",
+        "execution_key": "review",
         "label": "人工复核：价格已到，等待验证",
         "detail": "现价接近或进入报告价格带，但经营、治理、现金流或报告时效条件尚未全部通过，不允许直接买入。",
         "opportunity_tier": null,
@@ -60905,8 +60600,8 @@
         "source_snapshot": {
           "ticker": "002352.SZ",
           "main_report": {
-            "path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
-            "sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e"
+            "path": "reports/顺丰控股/顺丰控股-investment-research-20260831.md",
+            "sha256": "f7a6dacbbd49221d2c2aeda360ff7aa7c5edfb1b690506ae986c909449f095cd"
           },
           "checklist": {
             "path": "reports/顺丰控股股份有限公司/顺丰控股-巴菲特Checklist-20260811.md",
@@ -60918,10 +60613,10 @@
           }
         },
         "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
-        "current_source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e"
+        "current_source_fingerprint_sha256": "cb2f0f9804a7f0ae1122585925709262f51f209abbc2339f7ac007b0e5baed27"
       },
-      "validity_state": "ready",
-      "invalidation_reason": null,
+      "validity_state": "stale",
+      "invalidation_reason": "主报告、Checklist 或人工复核依据已经变化（当前 Checklist 数据截止：2026-08-10）",
       "valid_until": "2026-08-31",
       "source_fingerprint_sha256": "ac4dd2e46f6548c0aae9283ce9719dd9ef4ad324eeb6e201bc160609c618df1e",
       "market_session_state": "runtime_required",
@@ -61244,7 +60939,7 @@
         "schema_version": 1,
         "status": "ready",
         "source": "human_main_report + official_filing_calendar",
-        "generated_at": "2026-08-28T22:21:47+08:00",
+        "generated_at": "2026-09-01T23:33:04+08:00",
         "calendar_generated_at": "2026-08-28T22:16:13+08:00",
         "reviewed_at": "2026-08-27T00:00:00+08:00",
         "tasks": [
@@ -61273,7 +60968,7 @@
             "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
             "date_status": "due",
             "status_label": "已到期待确认",
-            "next_review_date": "2026-04-30",
+            "next_review_date": "2026-08-29",
             "calendar_dates": [
               "2026-04-30",
               "2026-08-29"
@@ -61368,7 +61063,7 @@
         ],
         "task_count": 3,
         "due_count": 1,
-        "next_review_date": "2026-04-30"
+        "next_review_date": "2026-08-29"
       },
       "execution_policy": {
         "schema_version": 1,

@@ -1,0 +1,136 @@
+======================================================================
+报告数据抽检清单
+文件：reports/国电南瑞/国电南瑞-thesis-drift-20260901.md
+总提取数据点：55  |  抽样比例：15%  |  抽检数量：9
+随机种子：42（可用于复现同一批样本）
+======================================================================
+
+ ID     行号  数据标签                                          报告值  单位
+───  ─────  ───────────────────────────────────  ────────────  ──────
+  2     18  旧快照 · 主要结论                                  10.00  %
+  7     41  竞争护城河 · 新判断                                  8.85  %
+  8     57  收入与订单 · 新证据                                276.99  亿元
+  9     58  核心电网业务 · 新证据                               133.06  亿元
+ 15     68  现金转化 · 新证据                                   5.91  亿元
+ 16     69  业务结构 · 新证据                                  46.98  %
+ 18     89  收盘价 · 数值                                    22.92  
+ 41    108  中性 · 相对22.92元                               -7.92  %
+ 48    121  ≤14.77 元 · 动作                               30.00  %
+
+↑ 请对上述每个数据点，从以下信源取数，填入 fetched_value：
+  美股：macrotrends.net（主）+ stockanalysis.com（副）
+  港股：aastocks.com（主）+ macrotrends ADR（副）
+  A股： eastmoney.com（主）+ cninfo.com.cn（副）
+
+抽检清单 JSON（填入 fetched_value 后，传给 verdict 命令）：
+
+[
+  {
+    "id": 2,
+    "label": "旧快照 · 主要结论",
+    "reported_value": 10.0,
+    "unit": "%",
+    "line_number": 18,
+    "raw_text": "| 旧快照 | 2026-07-23/26 | 估值中低位但按 10% 要求回报无安全边际；中性现值约 21.84 元；Hold/Watch。 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 7,
+    "label": "竞争护城河 · 新判断",
+    "reported_value": 8.85,
+    "unit": "%",
+    "line_number": 41,
+    "raw_text": "| 竞争护城河 | 核心电网控制、调度、继保和工程交付壁垒稳定 | 核心电网智能收入仍增长 8.85%，电网行业收入增长 6.42%；未见同口径份额流失，但外围增长质量下降 | **Unchanged** | 没有国电南瑞与竞对同批次份额、",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 8,
+    "label": "收入与订单 · 新证据",
+    "reported_value": 276.99,
+    "unit": "亿元",
+    "line_number": 57,
+    "raw_text": "| 收入与订单 | 上半年主营收入 276.99 亿元，同比增长 14.41%；新签合同 456.33 亿元，同比增长 28.79% | 电网投资、储能及国际市场需求仍在，规模增长假设得到强化 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 9,
+    "label": "核心电网业务 · 新证据",
+    "reported_value": 133.06,
+    "unit": "亿元",
+    "line_number": 58,
+    "raw_text": "| 核心电网业务 | 电网智能收入 133.06 亿元，同比增长 8.85%，毛利率 29.90%，同比下降 0.44pp；电网行业收入 138.83 亿元，同比增长 6.42% | 核心业务没有衰退，但利润率并未同步改善 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 15,
+    "label": "现金转化 · 新证据",
+    "reported_value": 5.91,
+    "unit": "亿元",
+    "line_number": 68,
+    "raw_text": "| 现金转化 | OCF 5.91 亿元，同比下降 78.95%；OCF/归母净利仅 19.24%；资本开支 7.54 亿元，H1 FCF 为 -1.63 亿元 | 采购付款增加是公司披露的原因，但仍需后续验证是否为暂时性时点因素 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 16,
+    "label": "业务结构 · 新证据",
+    "reported_value": 46.98,
+    "unit": "%",
+    "line_number": 69,
+    "raw_text": "| 业务结构 | 能源低碳收入 +46.98%，毛利率 18.64%且下降 2.95pp；海外收入 +196.61%，毛利率 12.68%且下降 7.15pp；海外收入占主营收入升至 21.28% | 高增长来自低毛利、履约和海外经营风险更",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 18,
+    "label": "收盘价 · 数值",
+    "reported_value": 22.92,
+    "unit": "",
+    "line_number": 89,
+    "raw_text": "| 收盘价 | 22.92 元 | 腾讯行情与新浪行情，2026-09-01，偏差 0.00% |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 41,
+    "label": "中性 · 相对22.92元",
+    "reported_value": -7.92,
+    "unit": "%",
+    "line_number": 108,
+    "raw_text": "| 中性 | 7% | 20x | 21.10 元 | -7.92% | 收入维持中个位数至低双位数，利润率大体稳定但不快速修复 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  },
+  {
+    "id": 48,
+    "label": "≤14.77 元 · 动作",
+    "reported_value": 30.0,
+    "unit": "%",
+    "line_number": 121,
+    "raw_text": "| ≤14.77 元 | 30%安全边际候选 | 21.10 × 70%，接近悲观估值区域，需反向核查基本面 |",
+    "fetched_value": null,
+    "fetched_source": "",
+    "fetched_value2": null,
+    "fetched_source2": ""
+  }
+]

@@ -419,10 +419,55 @@
     "schema_version": 1,
     "status": "ready",
     "source": "human_main_report + official_filing_calendar",
-    "generated_at": "2026-08-28T22:21:47+08:00",
+    "generated_at": "2026-09-01T23:33:04+08:00",
     "calendar_generated_at": "2026-08-28T22:16:13+08:00",
     "reviewed_at": "2026-08-27T00:00:00+08:00",
     "tasks": [
+      {
+        "task_id": "holder",
+        "scope": "holder",
+        "scope_label": "持仓验证",
+        "title": "复核持仓验证",
+        "content": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
+        "metrics": [],
+        "periods": [
+          "H1",
+          "FY"
+        ],
+        "schedule_type": "filing",
+        "source_field": "holder_action",
+        "evidence": [
+          {
+            "line_start": 529,
+            "line_end": 608,
+            "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
+            "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
+          }
+        ],
+        "schedule_label": "2026年中报、2026年年报",
+        "date_status": "due",
+        "status_label": "已到期待确认",
+        "next_review_date": "2026-08-29",
+        "calendar_dates": [
+          "2026-08-29"
+        ],
+        "calendar_date_details": [
+          {
+            "period_key": "2026H1",
+            "period_label": "2026年中报",
+            "actual_date": "2026-08-29",
+            "scheduled_date": "2026-08-29",
+            "effective_date": "2026-08-29",
+            "effective_type": "actual",
+            "actual_verification": "cross_checked",
+            "scheduled_verification": "cross_checked",
+            "actual_eastmoney": "2026-08-29",
+            "actual_cninfo": "2026-08-29",
+            "scheduled_eastmoney": "2026-08-29",
+            "scheduled_cninfo": "2026-08-29"
+          }
+        ]
+      },
       {
         "task_id": "risk",
         "scope": "risk",
@@ -448,7 +493,7 @@
         "schedule_label": "2026年一季报、2026年中报、2026年三季报、2026年年报",
         "date_status": "due",
         "status_label": "已到期待确认",
-        "next_review_date": "2026-04-28",
+        "next_review_date": "2026-08-29",
         "calendar_dates": [
           "2026-04-28",
           "2026-08-29"
@@ -468,51 +513,6 @@
             "scheduled_eastmoney": "2026-04-28",
             "scheduled_cninfo": "2026-04-28"
           },
-          {
-            "period_key": "2026H1",
-            "period_label": "2026年中报",
-            "actual_date": "2026-08-29",
-            "scheduled_date": "2026-08-29",
-            "effective_date": "2026-08-29",
-            "effective_type": "actual",
-            "actual_verification": "cross_checked",
-            "scheduled_verification": "cross_checked",
-            "actual_eastmoney": "2026-08-29",
-            "actual_cninfo": "2026-08-29",
-            "scheduled_eastmoney": "2026-08-29",
-            "scheduled_cninfo": "2026-08-29"
-          }
-        ]
-      },
-      {
-        "task_id": "holder",
-        "scope": "holder",
-        "scope_label": "持仓验证",
-        "title": "复核持仓验证",
-        "content": "103.55-115.05 元可持有并等待半年报验证，不因低于员工持股均价而机械加仓；盈利未上修而价格超过 138.06 元时考虑减仓。",
-        "metrics": [],
-        "periods": [
-          "H1",
-          "FY"
-        ],
-        "schedule_type": "filing",
-        "source_field": "holder_action",
-        "evidence": [
-          {
-            "line_start": 529,
-            "line_end": 608,
-            "quote": "| 宁德时代 | 300750 | 17,720.55 | 20.85 | 4.67 | | 上能电气 | 300827 | 133.77 | 28.29 | 3.16 | | 德业股份 | 605117 | 1,126.17 | 30.83 | 11.34 |",
-            "supports": "L529-L608、L807-L822。正文与契约一致；美国政策、电芯成本和海外毛利是当前价格纪律必须覆盖的前提。"
-          }
-        ],
-        "schedule_label": "2026年中报、2026年年报",
-        "date_status": "pending",
-        "status_label": "待披露",
-        "next_review_date": "2026-08-29",
-        "calendar_dates": [
-          "2026-08-29"
-        ],
-        "calendar_date_details": [
           {
             "period_key": "2026H1",
             "period_label": "2026年中报",
@@ -556,8 +556,8 @@
       }
     ],
     "task_count": 3,
-    "due_count": 1,
-    "next_review_date": "2026-04-28"
+    "due_count": 2,
+    "next_review_date": "2026-08-29"
   },
   "execution_policy": {
     "schema_version": 1,
@@ -701,7 +701,7 @@
     "status": "not_tracked",
     "alerts": []
   },
-  "generation_id": "5cf6105a432bb168df88",
+  "generation_id": "44bc7bce55502b286431",
   "detail_id": "f8115b9c6a85bc663f6a",
   "detail_path": "./data/decision_details/f8115b9c6a85bc663f6a.json"
 }
