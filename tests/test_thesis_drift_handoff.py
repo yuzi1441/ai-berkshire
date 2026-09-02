@@ -29,7 +29,7 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         (data / "company_state.json").write_text(json.dumps({"companies": [{
             "ticker": "600000.SH", "company": "示例公司", "lifecycle": lifecycle,
         }]}), encoding="utf-8")
-        (data / "post_buy_tracking.json").write_text(json.dumps({"positions": {
+        (data / "post_buy_tracking.json").write_text(json.dumps({"schema_version": 1, "positions": {
             "600000.SH": {"company": "示例公司", "ticker": "600000.SH", "market": "A股",
                           "status": "holding", "buy_date": "2026-08-01",
                           "position_id": "600000.SH:2026-08-01",
@@ -176,6 +176,88 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         self.assertEqual(handoff["original_buy_thesis"]["position_id"], "600000.SH:2026-09-02")
         current = json.loads((data / "original_buy_theses.json").read_text(encoding="utf-8"))
         self.assertEqual(current["cycles"]["600000.SH:2026-09-02"]["source_hash"], baseline_b["cycles"]["600000.SH:2026-09-02"]["source_hash"])
+
+    def test_invalid_reentry_does_not_mutate_either_source_of_truth(self):
+        root, report, _ = self._repo("WATCH")
+        data = root / "data" / "investment-dashboard"
+        post_buy_tracking.save_json(data / "post_buy_tracking.json", {"schema_version": 1, "positions": {}})
+        post_buy_tracking.command_register(
+            type("Args", (), {
+                "ticker": "600000.SH", "company": "示例公司", "market": "A股",
+                "buy_date": "2026-06-24", "cost_basis": 10.0, "position_weight": 5.0,
+                "next_review": "2026-10-01", "thesis_report": "reports/示例公司/thesis.md",
+                "metrics": None, "force": False,
+            })(),
+            root,
+        )
+        tracking_path = data / "post_buy_tracking.json"
+        thesis_path = data / "original_buy_theses.json"
+        tracking_before = tracking_path.read_bytes()
+        thesis_before = thesis_path.read_bytes()
+
+        with self.assertRaises(ValueError):
+            post_buy_tracking.command_register(
+                type("Args", (), {
+                    "ticker": "600000.SH", "company": "示例公司", "market": "A股",
+                    "buy_date": "2026-09-02", "cost_basis": 11.0, "position_weight": 5.0,
+                    "next_review": "2026-11-01", "thesis_report": "reports/示例公司/missing.md",
+                    "metrics": None, "force": True,
+                })(),
+                root,
+            )
+
+        self.assertEqual(tracking_path.read_bytes(), tracking_before)
+        self.assertEqual(thesis_path.read_bytes(), thesis_before)
+        tracking_payload = json.loads(tracking_before)
+        thesis_payload = json.loads(thesis_before)
+        self.assertEqual(tracking_payload["positions"]["600000.SH"]["status"], "holding")
+        self.assertEqual(thesis_payload["active_position_ids"]["600000.SH"], "600000.SH:2026-06-24")
+        self.assertEqual(thesis_payload["cycles"]["600000.SH:2026-06-24"]["position_status"], "holding")
+
+    def test_reentry_rolls_back_both_sources_when_second_write_fails(self):
+        root, report, _ = self._repo("WATCH")
+        data = root / "data" / "investment-dashboard"
+        post_buy_tracking.save_json(data / "post_buy_tracking.json", {"schema_version": 1, "positions": {}})
+
+        def register(buy_date: str, force: bool) -> None:
+            post_buy_tracking.command_register(
+                type("Args", (), {
+                    "ticker": "600000.SH", "company": "示例公司", "market": "A股",
+                    "buy_date": buy_date, "cost_basis": 10.0, "position_weight": 5.0,
+                    "next_review": "2026-10-01", "thesis_report": "reports/示例公司/thesis.md",
+                    "metrics": None, "force": force,
+                })(),
+                root,
+            )
+
+        register("2026-06-24", False)
+        report.write_text("# Purchase Thesis B\n\n第二次买入论文。\n", encoding="utf-8")
+        tracking_path = data / "post_buy_tracking.json"
+        thesis_path = data / "original_buy_theses.json"
+        tracking_before = tracking_path.read_bytes()
+        thesis_before = thesis_path.read_bytes()
+        real_save_json = post_buy_tracking.save_json
+        calls: list[Path] = []
+
+        def fail_second_write(path: Path, payload: dict) -> None:
+            calls.append(path)
+            if len(calls) == 2:
+                raise OSError("simulated second Source of Truth write failure")
+            real_save_json(path, payload)
+
+        with patch.object(post_buy_tracking, "save_json", side_effect=fail_second_write):
+            with self.assertRaises(OSError):
+                register("2026-09-02", True)
+
+        self.assertEqual(calls, [tracking_path, thesis_path])
+        self.assertEqual(tracking_path.read_bytes(), tracking_before)
+        self.assertEqual(thesis_path.read_bytes(), thesis_before)
+        tracking_payload = json.loads(tracking_before)
+        thesis_payload = json.loads(thesis_before)
+        self.assertEqual(tracking_payload["positions"]["600000.SH"]["position_id"], "600000.SH:2026-06-24")
+        self.assertNotIn("position_history", tracking_payload)
+        self.assertEqual(thesis_payload["active_position_ids"]["600000.SH"], "600000.SH:2026-06-24")
+        self.assertNotIn("600000.SH:2026-09-02", thesis_payload["cycles"])
 
 
 if __name__ == "__main__":

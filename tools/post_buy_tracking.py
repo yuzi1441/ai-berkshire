@@ -183,6 +183,23 @@ def _empty_original_thesis_payload() -> dict[str, Any]:
     }
 
 
+def load_original_thesis(path: Path) -> dict[str, Any]:
+    """Load and validate either the legacy or cycle-bound thesis schema."""
+    payload = load_json(path, _empty_original_thesis_payload())
+    version = payload.get("schema_version", 1)
+    if version == 1:
+        if not isinstance(payload.get("positions"), dict):
+            raise ValueError("original_buy_theses.positions must be an object")
+        return payload
+    if version == ORIGINAL_THESIS_SCHEMA_VERSION:
+        if not isinstance(payload.get("cycles"), dict):
+            raise ValueError("original_buy_theses.cycles must be an object")
+        if not isinstance(payload.get("active_position_ids"), dict):
+            raise ValueError("original_buy_theses.active_position_ids must be an object")
+        return payload
+    raise ValueError(f"Unsupported original thesis schema: {version}")
+
+
 def _original_thesis_cycles(payload: dict[str, Any]) -> tuple[dict[str, Any], dict[str, str]]:
     cycles = payload.get("cycles")
     if not isinstance(cycles, dict):
@@ -212,16 +229,36 @@ def archive_original_buy_thesis(
 ) -> dict[str, Any]:
     """Close the current thesis cycle before a ticker is registered again."""
     root = repo_root.resolve()
-    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
     snapshot_path = root / ORIGINAL_THESIS_RELATIVE
-    payload = load_json(snapshot_path, _empty_original_thesis_payload())
-    cycles, active = _original_thesis_cycles(payload)
+    payload = load_original_thesis(snapshot_path)
     stamp = timestamp or iso_now()
+    result = _archive_original_buy_thesis_payload(
+        payload,
+        position_record,
+        timestamp=stamp,
+        reason=reason,
+    )
+    if result["status"] != "no_baseline" and write:
+        save_json(snapshot_path, payload)
+    result["written"] = bool(result["status"] != "no_baseline" and write)
+    return result
+
+
+def _archive_original_buy_thesis_payload(
+    payload: dict[str, Any],
+    position_record: dict[str, Any],
+    *,
+    timestamp: str,
+    reason: str,
+) -> dict[str, Any]:
+    """Archive a cycle in memory without changing the filesystem."""
+    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    cycles, active = _original_thesis_cycles(payload)
     cycle_id = str(active.get(ticker) or position_id_for(position_record))
     changed = False
     existing = cycles.get(cycle_id)
     if isinstance(existing, dict):
-        _close_thesis_cycle(existing, timestamp=stamp, reason=reason)
+        _close_thesis_cycle(existing, timestamp=timestamp, reason=reason)
         changed = True
     legacy_positions = payload.get("positions")
     if isinstance(legacy_positions, dict):
@@ -229,7 +266,7 @@ def archive_original_buy_thesis(
         if isinstance(legacy, dict):
             legacy = copy.deepcopy(legacy)
             legacy["position_id"] = cycle_id
-            _close_thesis_cycle(legacy, timestamp=stamp, reason=reason)
+            _close_thesis_cycle(legacy, timestamp=timestamp, reason=reason)
             cycles[cycle_id] = legacy
             changed = True
         if not legacy_positions:
@@ -237,14 +274,116 @@ def archive_original_buy_thesis(
     if active.get(ticker) == cycle_id:
         active.pop(ticker, None)
         changed = True
-    if changed and write:
-        save_json(snapshot_path, payload)
     return {
         "status": "archived" if changed else "no_baseline",
         "ticker": ticker,
         "position_id": cycle_id,
-        "written": bool(changed and write),
     }
+
+
+def _thesis_summary(
+    status: str,
+    ticker: str,
+    position_id: str,
+    record: dict[str, Any],
+    current_hash: str,
+) -> dict[str, Any]:
+    return {
+        "status": status,
+        "ticker": ticker,
+        "position_id": position_id,
+        "source_report": record.get("source_report"),
+        "source_hash": record.get("source_hash"),
+        "current_source_hash": current_hash,
+        "source_changed_since_capture": record.get("source_hash") != current_hash,
+        "captured_at": record.get("captured_at"),
+        "provenance": record.get("provenance") or "unknown",
+        "backfilled": bool(record.get("backfilled", False)),
+    }
+
+
+def _freeze_original_buy_thesis_payload(
+    payload: dict[str, Any],
+    position_record: dict[str, Any],
+    *,
+    report_path: Path,
+    repo_root: Path,
+    current_hash: str,
+    current_text: str,
+    timestamp: str,
+    provenance: str,
+    backfilled: bool,
+    persisted: bool,
+) -> dict[str, Any]:
+    """Construct one thesis cycle in memory; the caller controls persistence."""
+    root = repo_root.resolve()
+    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    position_id = str(position_record.get("position_id") or position_id_for(position_record))
+    cycles, active = _original_thesis_cycles(payload)
+
+    existing = cycles.get(position_id)
+    if isinstance(existing, dict):
+        if active.get(ticker) != position_id:
+            active[ticker] = position_id
+        return _thesis_summary("frozen", ticker, position_id, existing, current_hash)
+
+    stamp = timestamp
+    previous_id = str(active.get(ticker) or "")
+    if previous_id and previous_id != position_id:
+        previous = cycles.get(previous_id)
+        if isinstance(previous, dict):
+            _close_thesis_cycle(previous, timestamp=stamp, reason="new_purchase_cycle")
+        active.pop(ticker, None)
+
+    # Migrate the pre-cycle schema without overwriting its evidence.  When the
+    # legacy baseline has no known prior cycle, it is the current cycle's
+    # historical baseline; an existing active cycle is instead archived.
+    legacy_positions = payload.get("positions")
+    legacy = legacy_positions.get(ticker) if isinstance(legacy_positions, dict) else None
+    if isinstance(legacy, dict):
+        legacy = copy.deepcopy(legacy)
+        legacy_id = str(legacy.get("position_id") or previous_id or position_id)
+        if legacy_id == position_id and not previous_id:
+            legacy["position_id"] = position_id
+            legacy["ticker"] = ticker
+            legacy["buy_date"] = position_record.get("buy_date")
+            legacy["position_status"] = position_record.get("status") or "holding"
+            cycles[position_id] = legacy
+            active[ticker] = position_id
+            legacy_positions.pop(ticker, None)
+            if not legacy_positions:
+                payload.pop("positions", None)
+            return _thesis_summary("frozen", ticker, position_id, legacy, current_hash)
+        _close_thesis_cycle(legacy, timestamp=stamp, reason="new_purchase_cycle")
+        legacy["position_id"] = legacy_id
+        cycles[legacy_id] = legacy
+        legacy_positions.pop(ticker, None)
+        if not legacy_positions:
+            payload.pop("positions", None)
+
+    record = {
+        "company": position_record.get("company"),
+        "ticker": ticker,
+        "position_id": position_id,
+        "buy_date": position_record.get("buy_date"),
+        "position_status": position_record.get("status") or "holding",
+        "market": position_record.get("market"),
+        "source_report": report_path.relative_to(root).as_posix(),
+        "source_hash": current_hash,
+        "source_text": current_text,
+        "captured_at": stamp,
+        "provenance": provenance,
+        "backfilled": bool(backfilled),
+    }
+    cycles[position_id] = record
+    active[ticker] = position_id
+    return _thesis_summary(
+        "backfilled" if backfilled and persisted else "would_backfill" if backfilled else "captured" if persisted else "would_capture",
+        ticker,
+        position_id,
+        record,
+        current_hash,
+    )
 
 
 def freeze_original_buy_thesis(
@@ -280,105 +419,82 @@ def freeze_original_buy_thesis(
     current_hash = canonical_file_sha256(report_path)
     current_text = report_path.read_text(encoding="utf-8", errors="replace")
     snapshot_path = root / ORIGINAL_THESIS_RELATIVE
-    payload = load_json(snapshot_path, _empty_original_thesis_payload())
-    cycles, active = _original_thesis_cycles(payload)
-    stamp = timestamp or iso_now()
-
-    existing = cycles.get(position_id)
-    if isinstance(existing, dict):
-        active[ticker] = position_id
-        if write and payload != load_json(snapshot_path, _empty_original_thesis_payload()):
-            save_json(snapshot_path, payload)
-        return {
-            "status": "frozen",
-            "ticker": ticker,
-            "position_id": position_id,
-            "source_report": existing.get("source_report"),
-            "source_hash": existing.get("source_hash"),
-            "current_source_hash": current_hash,
-            "source_changed_since_capture": existing.get("source_hash") != current_hash,
-            "captured_at": existing.get("captured_at"),
-            "provenance": existing.get("provenance") or "unknown",
-            "backfilled": bool(existing.get("backfilled", False)),
-        }
-
-    previous_id = str(active.get(ticker) or "")
-    if previous_id and previous_id != position_id:
-        previous = cycles.get(previous_id)
-        if isinstance(previous, dict):
-            _close_thesis_cycle(previous, timestamp=stamp, reason="new_purchase_cycle")
-        active.pop(ticker, None)
-
-    # Migrate the pre-cycle schema without overwriting its evidence.  When the
-    # legacy baseline has no known prior cycle, it is the current cycle's
-    # historical baseline; an existing active cycle is instead archived.
-    legacy_positions = payload.get("positions")
-    legacy = legacy_positions.get(ticker) if isinstance(legacy_positions, dict) else None
-    if isinstance(legacy, dict):
-        legacy = copy.deepcopy(legacy)
-        legacy_id = str(legacy.get("position_id") or previous_id or position_id)
-        if legacy_id == position_id and not previous_id:
-            legacy["position_id"] = position_id
-            legacy["ticker"] = ticker
-            legacy["buy_date"] = position_record.get("buy_date")
-            legacy["position_status"] = position_record.get("status") or "holding"
-            cycles[position_id] = legacy
-            active[ticker] = position_id
-            legacy_positions.pop(ticker, None)
-            if not legacy_positions:
-                payload.pop("positions", None)
-            if write:
-                save_json(snapshot_path, payload)
-            return {
-                "status": "frozen",
-                "ticker": ticker,
-                "position_id": position_id,
-                "source_report": legacy.get("source_report"),
-                "source_hash": legacy.get("source_hash"),
-                "current_source_hash": current_hash,
-                "source_changed_since_capture": legacy.get("source_hash") != current_hash,
-                "captured_at": legacy.get("captured_at"),
-                "provenance": legacy.get("provenance") or "unknown",
-                "backfilled": bool(legacy.get("backfilled", False)),
-            }
-        _close_thesis_cycle(legacy, timestamp=stamp, reason="new_purchase_cycle")
-        legacy["position_id"] = legacy_id
-        cycles[legacy_id] = legacy
-        legacy_positions.pop(ticker, None)
-        if not legacy_positions:
-            payload.pop("positions", None)
-
-    record = {
-        "company": position_record.get("company"),
-        "ticker": ticker,
-        "position_id": position_id,
-        "buy_date": position_record.get("buy_date"),
-        "position_status": position_record.get("status") or "holding",
-        "market": position_record.get("market"),
-        "source_report": report_path.relative_to(root).as_posix(),
-        "source_hash": current_hash,
-        "source_text": current_text,
-        "captured_at": stamp,
-        "provenance": provenance,
-        "backfilled": bool(backfilled),
-    }
-    cycles[position_id] = record
-    active[ticker] = position_id
-    if write:
+    payload = load_original_thesis(snapshot_path)
+    before = copy.deepcopy(payload)
+    result = _freeze_original_buy_thesis_payload(
+        payload,
+        position_record,
+        report_path=report_path,
+        repo_root=root,
+        current_hash=current_hash,
+        current_text=current_text,
+        timestamp=timestamp or iso_now(),
+        provenance=provenance,
+        backfilled=backfilled,
+        persisted=write,
+    )
+    if write and payload != before:
         save_json(snapshot_path, payload)
-        status = "backfilled" if backfilled else "captured"
-    else:
-        status = "would_backfill" if backfilled else "would_capture"
-    return {
-        "status": status,
-        "ticker": ticker,
-        "position_id": position_id,
-        "source_report": record["source_report"],
-        "source_hash": record["source_hash"],
-        "captured_at": record["captured_at"],
-        "provenance": record["provenance"],
-        "backfilled": record["backfilled"],
+    return result
+
+
+def _read_thesis_source(repo_root: Path, position_record: dict[str, Any]) -> tuple[Path, str, str]:
+    """Read and hash a thesis before any registration payload is changed."""
+    raw_report = position_record.get("thesis_report_path")
+    if not raw_report:
+        raise ValueError("register requires --thesis-report so the purchase-time Original Buy Thesis can be frozen")
+    report_path = (repo_root.resolve() / str(raw_report)).resolve()
+    if not report_path.is_file() or repo_root.resolve() not in report_path.parents:
+        raise ValueError(f"cannot read thesis report: {raw_report}")
+    text = report_path.read_text(encoding="utf-8", errors="replace")
+    return report_path, canonical_file_sha256(report_path), text
+
+
+def _snapshot_bytes(path: Path) -> bytes | None:
+    return path.read_bytes() if path.exists() else None
+
+
+def _restore_bytes(path: Path, content: bytes | None) -> None:
+    """Restore one file atomically, including the originally-absent case."""
+    if content is None:
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.rollback.tmp")
+    try:
+        temporary.write_bytes(content)
+        os.replace(temporary, path)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def _commit_registration_payloads(
+    tracking_path: Path,
+    tracking_payload: dict[str, Any],
+    thesis_path: Path,
+    thesis_payload: dict[str, Any],
+) -> None:
+    """Write the two registration sources together and rollback on failure."""
+    originals = {
+        tracking_path: _snapshot_bytes(tracking_path),
+        thesis_path: _snapshot_bytes(thesis_path),
     }
+    try:
+        save_json(tracking_path, tracking_payload)
+        save_json(thesis_path, thesis_payload)
+    except Exception as error:
+        try:
+            for path, content in originals.items():
+                _restore_bytes(path, content)
+        except Exception as rollback_error:
+            raise OSError(f"re-entry registration failed and rollback failed: {rollback_error}") from error
+        raise OSError(f"re-entry registration rolled back: {error}") from error
 
 
 def command_register(args: argparse.Namespace, repo_root: Path) -> None:
@@ -388,28 +504,45 @@ def command_register(args: argparse.Namespace, repo_root: Path) -> None:
     if key in payload["positions"] and not args.force:
         raise ValueError(f"Position already exists: {key}; use --force to replace it")
     registered = default_position(args)
-    if not registered.get("thesis_report_path"):
-        raise ValueError("register requires --thesis-report so the purchase-time Original Buy Thesis can be frozen")
     existing = payload["positions"].get(key)
+    report_path, current_hash, current_text = _read_thesis_source(repo_root, registered)
+    thesis_path = repo_root / ORIGINAL_THESIS_RELATIVE
+    original_payload = load_original_thesis(thesis_path)
+    original_cycles, _ = _original_thesis_cycles(original_payload)
+    registered_id = str(registered.get("position_id") or "")
+    if registered_id != position_id_for(registered):
+        raise ValueError(f"invalid position_id for {key}: {registered_id}")
+    if registered_id in original_cycles:
+        raise ValueError(f"Position cycle already exists: {registered_id}")
     if existing and args.force:
         existing_id = str(existing.get("position_id") or position_id_for(existing))
-        if existing_id == registered["position_id"]:
+        if existing_id == registered_id:
             raise ValueError("--force must use a new --buy-date to create a new holding cycle")
-        archive_position(payload, key, reason="replaced_by_new_purchase_cycle")
-        archive_original_buy_thesis(
-            repo_root,
+    staged_tracking = copy.deepcopy(payload)
+    staged_original = copy.deepcopy(original_payload)
+    if existing and args.force:
+        archive_position(staged_tracking, key, reason="replaced_by_new_purchase_cycle")
+        _archive_original_buy_thesis_payload(
+            staged_original,
             existing,
             timestamp=registered["updated_at"],
-            write=True,
             reason="replaced_by_new_purchase_cycle",
         )
-    baseline = freeze_original_buy_thesis(repo_root, registered, timestamp=registered["updated_at"], write=False)
-    if baseline.get("status") not in {"would_capture", "frozen", "backfilled"}:
-        raise ValueError(f"cannot register without a readable thesis report: {baseline.get('status')}")
-    payload["positions"][key] = registered
-    payload["updated_at"] = iso_now()
-    save_json(path, payload)
-    captured = freeze_original_buy_thesis(repo_root, registered, timestamp=registered["updated_at"], write=True)
+    captured = _freeze_original_buy_thesis_payload(
+        staged_original,
+        registered,
+        report_path=report_path,
+        repo_root=repo_root,
+        current_hash=current_hash,
+        current_text=current_text,
+        timestamp=registered["updated_at"],
+        provenance="purchase_registration",
+        backfilled=False,
+        persisted=True,
+    )
+    staged_tracking["positions"][key] = registered
+    staged_tracking["updated_at"] = iso_now()
+    _commit_registration_payloads(path, staged_tracking, thesis_path, staged_original)
     print(f"Registered post-buy tracking: {key}; Original Buy Thesis {captured.get('status')}")
 
 
