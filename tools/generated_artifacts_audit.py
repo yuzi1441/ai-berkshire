@@ -100,7 +100,6 @@ def _policy(root: Path) -> dict[str, Any]:
         "must_commit_source_of_truth": [
             "reports/** (canonical research; no mass rewrite or deletion)",
             "data/investment-dashboard/decision_rules.json",
-            "data/investment-dashboard/company_state.json",
             "data/investment-dashboard/drift_states.json",
             "data/investment-dashboard/post_buy_tracking.json",
             "data/investment-dashboard/original_buy_theses.json",
@@ -108,6 +107,7 @@ def _policy(root: Path) -> dict[str, Any]:
             "data/investment-dashboard/rule_change_log.json",
         ],
         "rebuildable_deploy_artifacts": [
+            "data/investment-dashboard/company_state.json",
             "site/data/**",
             "data/investment-dashboard/decision_board.json",
             "data/investment-dashboard/decision_details/**",
@@ -127,7 +127,7 @@ def _policy(root: Path) -> dict[str, Any]:
             "data/investment-dashboard/rule_change_log.json",
             "data/investment-dashboard/report_history.json",
         ],
-        "note": "Current CI and VPS builds regenerate site/data; this audit does not delete or untrack existing files.",
+        "note": "Current CI and VPS builds regenerate Company State and site/data; this audit is read-only and does not change files.",
     }
 
 

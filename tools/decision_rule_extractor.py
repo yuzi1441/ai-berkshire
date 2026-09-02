@@ -1545,7 +1545,10 @@ def main() -> int:
     previous = decision_state.load_json(root / "data/investment-dashboard/decision_rules.json", {})
     payload = build_payload(board.get("decisions", []), root, previous_payload=previous)
     if args.write:
-        decision_state.write_json(root / "data/investment-dashboard/decision_rules.json", payload)
+        decision_state.write_json(
+            root / "data/investment-dashboard/decision_rules.json",
+            decision_state.rule_definition_payload(payload),
+        )
     print(json.dumps({"mode": "write" if args.write else "dry-run", **payload["zero_rule_audit"], "rule_count": payload["rule_count"]}, ensure_ascii=False, indent=2))
     return 0
 

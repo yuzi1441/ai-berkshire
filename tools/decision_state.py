@@ -27,6 +27,8 @@ LIFECYCLES = ("WATCH", "PRE_BUY", "HOLDING", "EXITED")
 DRIFT_DIRECTIONS = ("improved", "unchanged", "weakened", "unknown")
 DRIFT_SEVERITIES = ("none", "minor", "major", "unknown")
 RULE_STATUSES = ("triggered", "near_trigger", "not_triggered", "unknown", "needs_review")
+RULE_RUNTIME_FIELDS = frozenset({"status", "last_checked"})
+PRE_BUY_ACTIONS = frozenset({"run_checklist", "confirm_purchase"})
 
 STATE_RELATIVE = Path("data/investment-dashboard/company_state.json")
 RULES_RELATIVE = Path("data/investment-dashboard/decision_rules.json")
@@ -56,6 +58,29 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def rule_definition_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return the persisted Rule definition without volatile runtime fields.
+
+    Rule extraction and lifecycle synchronization may write this projection.
+    A normal dashboard build must only evaluate a copy into Company State and
+    site output; quote/event timestamps never belong in this source of truth.
+    """
+    result = copy.deepcopy(payload)
+    for company in result.get("companies", []) if isinstance(result, dict) else []:
+        if not isinstance(company, dict):
+            continue
+        for rule in company.get("rules", []) or []:
+            if not isinstance(rule, dict):
+                continue
+            for field in RULE_RUNTIME_FIELDS:
+                rule.pop(field, None)
+            for child in rule.get("children", []) or []:
+                if isinstance(child, dict):
+                    for field in RULE_RUNTIME_FIELDS:
+                        child.pop(field, None)
+    return result
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -236,7 +261,58 @@ def _quote_price(quote: dict[str, Any] | None) -> float | None:
     return None
 
 
-def evaluate_rule(rule: dict[str, Any], quote: dict[str, Any] | None = None, event_relevant: bool = False) -> str:
+def _event_text(event: dict[str, Any]) -> str:
+    return compact(" ".join(
+        str(event.get(key) or "")
+        for key in ("headline", "summary", "event_type", "title")
+    ))
+
+
+def _normalise_event_match_text(value: Any) -> str:
+    text = compact(value).lower()
+    return re.sub(
+        r"若|如果|只有|除非|一旦|当|发生|出现|则|需要|启动|运行|重新评估|重新审视|确认|验证|事件|重大",
+        "",
+        text,
+    )
+
+
+def _event_matches_rule(rule: dict[str, Any], event: dict[str, Any] | None) -> bool:
+    """Match a formal event to one Rule, never to the company flag alone."""
+    if not isinstance(event, dict):
+        return False
+    rule_id = rule.get("rule_id")
+    for candidate in list(event.get("events") or []) + [event]:
+        if not isinstance(candidate, dict):
+            continue
+        if not bool(candidate.get("thesis_relevant", event.get("thesis_relevant", False))):
+            continue
+        matched_ids = set()
+        for key in ("rule_ids", "matched_rule_ids", "applies_to_rule_ids"):
+            values = candidate.get(key) or []
+            if isinstance(values, str):
+                values = [values]
+            if isinstance(values, list):
+                matched_ids.update(str(value) for value in values)
+        if rule_id and str(rule_id) in matched_ids:
+            return True
+        condition = _normalise_event_match_text(rule.get("condition"))
+        source = _normalise_event_match_text(_event_text(candidate))
+        if condition and source and (condition in source or source in condition):
+            return True
+        condition_tokens = set(re.findall(r"[a-z][a-z0-9+.-]*|[\u4e00-\u9fff]{2,}", condition))
+        source_tokens = set(re.findall(r"[a-z][a-z0-9+.-]*|[\u4e00-\u9fff]{2,}", source))
+        if condition_tokens and len(condition_tokens) >= 2 and condition_tokens <= source_tokens:
+            return True
+    return False
+
+
+def evaluate_rule(
+    rule: dict[str, Any],
+    quote: dict[str, Any] | None = None,
+    event_relevant: bool = False,
+    event_context: dict[str, Any] | None = None,
+) -> str:
     rule_type = rule.get("type")
     if rule_type in {"PRICE", "PRICE_RANGE"}:
         price = _quote_price(quote)
@@ -260,16 +336,18 @@ def evaluate_rule(rule: dict[str, Any], quote: dict[str, Any] | None = None, eve
         distance = abs(price - boundary) / max(abs(boundary), 0.01)
         return "triggered" if triggered else "near_trigger" if distance <= 0.10 else "not_triggered"
     if rule_type == "EVENT":
+        if event_context is not None:
+            return "triggered" if _event_matches_rule(rule, event_context) else "unknown"
         return "triggered" if event_relevant else "unknown"
     if rule_type == "ALL_OF":
-        statuses = [evaluate_rule(child, quote, event_relevant) for child in rule.get("children", [])]
+        statuses = [evaluate_rule(child, quote, event_relevant, event_context) for child in rule.get("children", [])]
         if statuses and all(item == "triggered" for item in statuses):
             return "triggered"
         if any(item == "unknown" for item in statuses):
             return "unknown"
         return "not_triggered"
     if rule_type == "ANY_OF":
-        statuses = [evaluate_rule(child, quote, event_relevant) for child in rule.get("children", [])]
+        statuses = [evaluate_rule(child, quote, event_relevant, event_context) for child in rule.get("children", [])]
         if any(item == "triggered" for item in statuses):
             return "triggered"
         if any(item in {"unknown", "needs_review"} for item in statuses):
@@ -506,6 +584,32 @@ def _drift_value(value: Any, default: str) -> str:
     return text if text in DRIFT_DIRECTIONS or text in DRIFT_SEVERITIES else default
 
 
+def rule_can_promote_pre_buy(rule: dict[str, Any]) -> bool:
+    """Return whether one explicit buy-gate Rule may enter PRE_BUY."""
+    if rule.get("status") != "triggered" or rule.get("active", True) is False or rule.get("needs_review"):
+        return False
+    scope = compact(rule.get("rule_scope")).lower()
+    action = compact(rule.get("action")).lower()
+    if scope == "entry":
+        # Entry is already an explicit buy-progress meaning.  Existing legacy
+        # entry records use review_decision; they still require Checklist and
+        # never execute a purchase automatically.
+        return action in {"review_decision", *PRE_BUY_ACTIONS}
+    # A Validation Rule is a gate only when its stored action explicitly says
+    # to proceed to the Checklist/purchase confirmation. run_drift and generic
+    # review actions must not promote a company.
+    return scope == "validation" and (action in PRE_BUY_ACTIONS or rule.get("buy_gate") is True)
+
+
+def _triggered_redlines(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        rule for rule in rules
+        if rule.get("status") == "triggered"
+        and rule.get("rule_scope") == "redline"
+        and rule.get("active", True) is not False
+    ]
+
+
 def _lifecycle(override: Any, tracking: dict[str, Any] | None, rules: list[dict[str, Any]], checklist: dict[str, Any]) -> tuple[str, str | None]:
     tracking_status = compact((tracking or {}).get("status")).lower()
     if tracking_status in {"holding", "paused"}:
@@ -515,17 +619,24 @@ def _lifecycle(override: Any, tracking: dict[str, Any] | None, rules: list[dict[
     requested = compact(override).upper()
     if checklist["status"] == "FAIL":
         return "WATCH", "Checklist FAIL; no automatic purchase or holding transition"
+    if _triggered_redlines(rules):
+        return "WATCH", "Redline triggered; no PRE_BUY transition"
     if requested in {"WATCH", "PRE_BUY", "EXITED"}:
         return requested, None
     if requested == "HOLDING":
         return "WATCH", "HOLDING requires a registered post-buy position"
-    if any(rule.get("status") == "triggered" for rule in rules):
+    if any(rule_can_promote_pre_buy(rule) for rule in rules):
         return "PRE_BUY", None
     return "WATCH", None
 
 
 def _next_action(lifecycle: str, rules: list[dict[str, Any]], checklist: dict[str, Any], drift: dict[str, Any], event: dict[str, Any], tracking: dict[str, Any] | None) -> str:
     event_state = compact(event.get("state")).lower()
+    redlines = _triggered_redlines(rules)
+    if any(compact(rule.get("action")).lower() == "run_drift" for rule in redlines):
+        return "run_drift"
+    if redlines:
+        return "drop_or_recheck"
     if lifecycle == "HOLDING":
         if drift.get("direction") == "weakened" and drift.get("severity") == "major":
             return "reduce_review"
@@ -546,7 +657,12 @@ def _next_action(lifecycle: str, rules: list[dict[str, Any]], checklist: dict[st
         return "confirm_purchase"
     if lifecycle == "PRE_BUY":
         return "run_checklist"
-    if any(rule.get("status") == "triggered" for rule in rules):
+    if any(
+        rule.get("status") == "triggered"
+        and rule.get("active", True) is not False
+        and compact(rule.get("action")).lower() in {"run_checklist", "review_decision", "confirm_purchase"}
+        for rule in rules
+    ):
         return "run_checklist"
     if any(rule.get("status") == "near_trigger" for rule in rules if rule.get("type") in {"PRICE", "PRICE_RANGE"}):
         return "price_near_trigger"
@@ -642,7 +758,7 @@ def build_state_layers(
         quote = quotes.get(ticker)
         for rule in rules:
             event_triggered = bool(event.get("thesis_relevant")) and event.get("state") in {"important", "critical"}
-            rule["status"] = evaluate_rule(rule, quote, event_triggered)
+            rule["status"] = evaluate_rule(rule, quote, event_triggered, event)
             rule["last_checked"] = generated_at
         checklist = _checklist_state(decision)
         drift_raw = drift_values.get(ticker) or drift_values.get(cid) or {}
@@ -781,7 +897,8 @@ def build_state_layers(
     checklist_payload = {"schema_version": SCHEMA_VERSION, "generated_at": generated_at, "companies": checklist_states}
     result = {"rules": rules_payload, "state": state_payload, "technical": technical_payload, "checklist": checklist_payload}
     if write:
-        write_json(data_directory / RULES_RELATIVE.name, rules_payload)
+        # Rule definitions are written only by extraction/lifecycle commands.
+        # This build-time projection contains volatile statuses and timestamps.
         write_json(data_directory / STATE_RELATIVE.name, state_payload)
         write_json(data_directory / TECHNICAL_RELATIVE.name, technical_payload)
         write_json(data_directory / CHECKLIST_RELATIVE.name, checklist_payload)

@@ -41,6 +41,58 @@ class EventRadarTests(unittest.TestCase):
             self.assertEqual(company["state"], "critical")
             self.assertTrue(company["thesis_relevant"])
 
+    def test_c_d_reposts_cannot_promote_formal_thesis_event(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sentiment = root / "data" / "sentiment"
+            sentiment.mkdir(parents=True)
+            (sentiment / "latest.json").write_text(
+                """{
+                  "schema_version": 1,
+                  "status": "ok",
+                  "data_cutoff": "2026-09-01",
+                  "companies": [{
+                    "company": "示例公司",
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "news_sentiment": {"items": [
+                      {"title": "示例公司重大事故传闻", "summary": "社区负面讨论", "publisher": "社区", "source_tier": "D", "event_type": "市场观点", "impact": 5, "url": "https://d1.example"},
+                      {"title": "示例公司重大事故传闻再转发", "summary": "社区负面讨论", "publisher": "社区", "source_tier": "D", "event_type": "市场观点", "impact": 5, "url": "https://d2.example"}
+                    ]}
+                  }]
+                }""",
+                encoding="utf-8",
+            )
+            company = event_radar.build_event_radar(root, write=False)["companies"][0]
+            self.assertEqual(company["state"], "watch")
+            self.assertFalse(company["thesis_relevant"])
+            self.assertEqual(company["recommended_action"], "monitor")
+
+    def test_a_or_b_evidence_can_promote_formal_thesis_event(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sentiment = root / "data" / "sentiment"
+            sentiment.mkdir(parents=True)
+            (sentiment / "latest.json").write_text(
+                """{
+                  "schema_version": 1,
+                  "status": "ok",
+                  "data_cutoff": "2026-09-01",
+                  "companies": [{
+                    "company": "示例公司",
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "news_sentiment": {"items": [
+                      {"title": "示例公司收到监管处罚公告", "summary": "正式公告", "publisher": "交易所", "source_tier": "A", "event_type": "监管处罚", "impact": 5, "url": "https://a.example"}
+                    ]}
+                  }]
+                }""",
+                encoding="utf-8",
+            )
+            company = event_radar.build_event_radar(root, write=False)["companies"][0]
+            self.assertTrue(company["thesis_relevant"])
+            self.assertEqual(company["recommended_action"], "run_drift")
+
 
 if __name__ == "__main__":
     unittest.main()

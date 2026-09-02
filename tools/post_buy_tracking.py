@@ -31,9 +31,12 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from source_hash import canonical_file_sha256
+
 
 ROOT = Path(__file__).resolve().parents[1]
 TRACKING_RELATIVE = Path("data/investment-dashboard/post_buy_tracking.json")
+ORIGINAL_THESIS_RELATIVE = Path("data/investment-dashboard/original_buy_theses.json")
 ALERTS_RELATIVE = Path("data/investment-dashboard/post_buy_alerts.json")
 SITE_ALERTS_RELATIVE = Path("site/data/post_buy_alerts.json")
 SHANGHAI = ZoneInfo("Asia/Shanghai")
@@ -137,16 +140,83 @@ def default_position(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+def freeze_original_buy_thesis(
+    repo_root: Path,
+    position_record: dict[str, Any],
+    *,
+    timestamp: str | None = None,
+    write: bool = True,
+    provenance: str = "purchase_registration",
+    backfilled: bool = False,
+) -> dict[str, Any]:
+    """Freeze the thesis as part of registering a real position.
+
+    Existing baselines are immutable.  ``backfilled`` is explicit so a
+    historical Holding repaired later cannot be mistaken for a purchase-time
+    snapshot.
+    """
+    root = repo_root.resolve()
+    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    raw_report = position_record.get("thesis_report_path")
+    if not raw_report:
+        return {"status": "missing_thesis_report_path", "ticker": ticker}
+    report_path = (root / str(raw_report)).resolve()
+    if not report_path.is_file() or root not in report_path.parents:
+        return {"status": "missing_thesis_report", "ticker": ticker, "source_report": str(raw_report)}
+    current_hash = canonical_file_sha256(report_path)
+    current_text = report_path.read_text(encoding="utf-8", errors="replace")
+    snapshot_path = root / ORIGINAL_THESIS_RELATIVE
+    payload = load_json(snapshot_path, {"schema_version": SCHEMA_VERSION, "positions": {}})
+    payload.setdefault("schema_version", SCHEMA_VERSION)
+    payload.setdefault("positions", {})
+    existing = payload["positions"].get(ticker)
+    if isinstance(existing, dict):
+        return {
+            "status": "frozen",
+            "ticker": ticker,
+            "source_report": existing.get("source_report"),
+            "source_hash": existing.get("source_hash"),
+            "current_source_hash": current_hash,
+            "source_changed_since_capture": existing.get("source_hash") != current_hash,
+            "captured_at": existing.get("captured_at"),
+            "provenance": existing.get("provenance") or "unknown",
+            "backfilled": bool(existing.get("backfilled", False)),
+        }
+    record = {
+        "company": position_record.get("company"),
+        "ticker": ticker,
+        "market": position_record.get("market"),
+        "source_report": report_path.relative_to(root).as_posix(),
+        "source_hash": current_hash,
+        "source_text": current_text,
+        "captured_at": timestamp or iso_now(),
+        "provenance": provenance,
+        "backfilled": bool(backfilled),
+    }
+    if write:
+        payload["positions"][ticker] = record
+        save_json(snapshot_path, payload)
+        return {"status": "backfilled" if backfilled else "captured", **{key: record[key] for key in ("ticker", "source_report", "source_hash", "captured_at", "provenance", "backfilled")}}
+    return {"status": "would_backfill" if backfilled else "would_capture", **{key: record[key] for key in ("ticker", "source_report", "source_hash", "captured_at", "provenance", "backfilled")}}
+
+
 def command_register(args: argparse.Namespace, repo_root: Path) -> None:
     path = repo_root / TRACKING_RELATIVE
     payload = load_tracking(path)
     key = key_for_ticker(args.ticker)
     if key in payload["positions"] and not args.force:
         raise ValueError(f"Position already exists: {key}; use --force to replace it")
-    payload["positions"][key] = default_position(args)
+    registered = default_position(args)
+    if not registered.get("thesis_report_path"):
+        raise ValueError("register requires --thesis-report so the purchase-time Original Buy Thesis can be frozen")
+    baseline = freeze_original_buy_thesis(repo_root, registered, timestamp=registered["updated_at"], write=False)
+    if baseline.get("status") not in {"would_capture", "frozen"}:
+        raise ValueError(f"cannot register without a readable thesis report: {baseline.get('status')}")
+    payload["positions"][key] = registered
     payload["updated_at"] = iso_now()
     save_json(path, payload)
-    print(f"Registered post-buy tracking: {key}")
+    captured = freeze_original_buy_thesis(repo_root, registered, timestamp=registered["updated_at"], write=True)
+    print(f"Registered post-buy tracking: {key}; Original Buy Thesis {captured.get('status')}")
 
 
 def command_update(args: argparse.Namespace, repo_root: Path) -> None:

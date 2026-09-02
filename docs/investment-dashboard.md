@@ -9,8 +9,8 @@
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
 - `data/investment-dashboard/opportunity_scans.json`：Flash 的全量机会扫描、当前机会与临近机会分层
-- `data/investment-dashboard/company_state.json`：每家公司唯一的生命周期、下一动作、机会类型和 Needs Attention 状态
-- `data/investment-dashboard/decision_rules.json`：从主报告迁移出的可审计 Decision Rules
+- `data/investment-dashboard/company_state.json`：由行情、事件和其他运行事实生成的 Company State read model；属于运行时产物，不是 Rule Definition Source of Truth
+- `data/investment-dashboard/decision_rules.json`：从主报告迁移出的可审计 Decision Rule Definition；仅由 Extractor / Lifecycle 同步更新，当前触发状态进入 Company State 和站点输出
 - `data/investment-dashboard/checklist_states.json`：PRE_BUY 阶段的结构化 Checklist 状态
 - `data/investment-dashboard/event_radar.json`：由情绪文章去重聚类形成的事件证据层
 - `data/investment-dashboard/technical_latest.json`：每日结构化技术快照；30 分钟数据仅作最后一公里执行辅助

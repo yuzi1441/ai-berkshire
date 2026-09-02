@@ -13,6 +13,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import thesis_drift_handoff
+import post_buy_tracking
 
 
 class ThesisDriftHandoffTests(unittest.TestCase):
@@ -68,6 +69,42 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         drift = json.loads((root / "data/investment-dashboard/drift_states.json").read_text())
         self.assertEqual(len(drift["companies"]["600000.SH"]["review_history"]), 2)
         self.last_sync.assert_called_once()
+
+    def test_register_freezes_before_first_holding_drift(self):
+        root = Path(tempfile.mkdtemp())
+        data = root / "data" / "investment-dashboard"
+        data.mkdir(parents=True)
+        report = root / "reports" / "示例公司" / "thesis.md"
+        report.parent.mkdir(parents=True)
+        report.write_text("# Purchase Thesis\n\n买入时论文版本。\n", encoding="utf-8")
+        facts = root / "facts.md"
+        facts.write_text("最新事实。\n", encoding="utf-8")
+        (data / "company_state.json").write_text(json.dumps({"companies": [{
+            "ticker": "600000.SH", "company": "示例公司", "lifecycle": "WATCH",
+        }]}), encoding="utf-8")
+        post_buy_tracking.save_json(data / "post_buy_tracking.json", {"schema_version": 1, "positions": {}})
+        post_buy_tracking.command_register(
+            type("Args", (), {
+                "ticker": "600000.SH", "company": "示例公司", "market": "A股",
+                "buy_date": "2026-09-01", "cost_basis": 10.0, "position_weight": 5.0,
+                "next_review": "2026-10-01", "thesis_report": "reports/示例公司/thesis.md",
+                "metrics": None, "force": False,
+            })(),
+            root,
+        )
+        baseline = json.loads((data / "original_buy_theses.json").read_text(encoding="utf-8"))
+        frozen_hash = baseline["positions"]["600000.SH"]["source_hash"]
+        self.assertEqual(baseline["positions"]["600000.SH"]["provenance"], "purchase_registration")
+        self.assertFalse(baseline["positions"]["600000.SH"]["backfilled"])
+
+        report.write_text("# Purchase Thesis\n\n第一次 Drift 前论文已被修改。\n", encoding="utf-8")
+        (data / "company_state.json").write_text(json.dumps({"companies": [{
+            "ticker": "600000.SH", "company": "示例公司", "lifecycle": "HOLDING",
+        }]}), encoding="utf-8")
+        self._run(root, facts, "unchanged", "holding")
+        current = json.loads((data / "original_buy_theses.json").read_text(encoding="utf-8"))
+        self.assertEqual(current["positions"]["600000.SH"]["source_hash"], frozen_hash)
+        self.assertEqual(current["positions"]["600000.SH"]["provenance"], "purchase_registration")
 
 
 if __name__ == "__main__":

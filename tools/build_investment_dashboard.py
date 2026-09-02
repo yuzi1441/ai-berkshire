@@ -5663,7 +5663,6 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(data_directory / "main_report_review.json", main_report_review_snapshot)
     write_json(data_directory / "model_review_comparison.json", model_review_comparison_snapshot)
-    decision_state.write_json(data_directory / "decision_rules.json", state_layers["rules"])
     decision_state.write_json(data_directory / "company_state.json", state_layers["state"])
     decision_state.write_json(data_directory / "technical_latest.json", state_layers["technical"])
     decision_state.write_json(data_directory / "checklist_states.json", state_layers["checklist"])

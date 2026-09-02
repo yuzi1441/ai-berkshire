@@ -224,6 +224,79 @@ class DecisionStateTests(unittest.TestCase):
         self.assertEqual(state["event_radar"]["realtime_scope"], "research_only")
         self.assertEqual(state["sentiment"]["realtime_scope"], "research_only")
 
+    def test_redline_event_trigger_stays_watch_and_requests_drift(self):
+        root = Path(tempfile.mkdtemp())
+        decision = {"company": "示例公司", "ticker": "600000.SH", "market": "A股", "report_path": "reports/x.md"}
+        rule = {
+            "rule_id": "redline-event",
+            "type": "EVENT",
+            "rule_scope": "redline",
+            "condition": "重大安全事故",
+            "action": "run_drift",
+            "active": True,
+        }
+        result = decision_state.build_state_layers(
+            [decision],
+            root,
+            event_payload={"companies": [{
+                "ticker": "600000.SH",
+                "state": "critical",
+                "thesis_relevant": True,
+                "events": [{"headline": "公司发生重大安全事故", "thesis_relevant": True}],
+            }]},
+            rule_payload={"companies": [{"ticker": "600000.SH", "rules": [rule]}]},
+            write=False,
+        )
+        state = result["state"]["companies"][0]
+        self.assertEqual(state["decision_rules"]["rules"][0]["status"], "triggered")
+        self.assertEqual(state["lifecycle"], "WATCH")
+        self.assertEqual(state["next_action"], "run_drift")
+
+    def test_redline_price_or_metric_trigger_cannot_promote_pre_buy(self):
+        rules = [
+            {"rule_scope": "redline", "status": "triggered", "action": "drop_or_recheck", "type": "PRICE"},
+            {"rule_scope": "redline", "status": "triggered", "action": "drop_or_recheck", "type": "METRIC"},
+        ]
+        lifecycle, warning = decision_state._lifecycle(None, None, rules, {"status": "UNKNOWN"})
+        self.assertEqual(lifecycle, "WATCH")
+        self.assertIn("Redline", warning)
+        self.assertEqual(
+            decision_state._next_action("HOLDING", rules, {"status": "UNKNOWN"}, {}, {}, None),
+            "drop_or_recheck",
+        )
+
+    def test_validation_requires_explicit_buy_action(self):
+        self.assertFalse(decision_state.rule_can_promote_pre_buy({
+            "rule_scope": "validation", "status": "triggered", "action": "run_drift",
+        }))
+        self.assertTrue(decision_state.rule_can_promote_pre_buy({
+            "rule_scope": "validation", "status": "triggered", "action": "run_checklist",
+        }))
+
+    def test_entry_price_trigger_promotes_pre_buy(self):
+        self.assertTrue(decision_state.rule_can_promote_pre_buy({
+            "rule_scope": "entry", "status": "triggered", "action": "review_decision", "type": "PRICE",
+        }))
+
+    def test_unrelated_important_event_does_not_trigger_all_event_rules(self):
+        root = Path(tempfile.mkdtemp())
+        decision = {"company": "示例公司", "ticker": "600000.SH", "market": "A股", "report_path": "reports/x.md"}
+        rules = [
+            {"rule_id": "matched", "type": "EVENT", "rule_scope": "redline", "condition": "重大安全事故", "action": "run_drift", "active": True},
+            {"rule_id": "unrelated", "type": "EVENT", "rule_scope": "redline", "condition": "核心客户流失", "action": "run_drift", "active": True},
+        ]
+        result = decision_state.build_state_layers(
+            [decision], root,
+            event_payload={"companies": [{
+                "ticker": "600000.SH", "state": "critical", "thesis_relevant": True,
+                "events": [{"headline": "公司发生重大安全事故", "thesis_relevant": True}],
+            }]},
+            rule_payload={"companies": [{"ticker": "600000.SH", "rules": rules}]},
+            write=False,
+        )
+        statuses = {rule["rule_id"]: rule["status"] for rule in result["state"]["companies"][0]["decision_rules"]["rules"]}
+        self.assertEqual(statuses, {"matched": "triggered", "unrelated": "unknown"})
+
 
 if __name__ == "__main__":
     unittest.main()

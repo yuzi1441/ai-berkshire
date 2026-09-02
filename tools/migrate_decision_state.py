@@ -50,6 +50,11 @@ def main() -> int:
         rule_payload=extracted_rules,
         write=args.write,
     )
+    if args.write:
+        decision_state.write_json(
+            repo_root / decision_state.RULES_RELATIVE,
+            decision_state.rule_definition_payload(result["rules"]),
+        )
     errors = decision_state.validate_payloads(result)
     states = result["state"].get("companies", [])
     rules = result["rules"].get("companies", [])

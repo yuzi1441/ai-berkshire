@@ -3172,6 +3172,11 @@ function renderTechnicalCell(item, { includeCross = false } = {}) {
       : intraday.status === "failed" ? "盘中30m：抓取失败"
         : intraday.status === "review" ? "盘中30m：待复核" : "盘中30m：未生成";
     cell.append(intradayFreshness);
+  } else if (item.market === "港股") {
+    const intradayFreshness = document.createElement("span");
+    intradayFreshness.className = "technical-intraday-freshness not-applicable";
+    intradayFreshness.textContent = "盘中30m：不适用（当前仅支持A股）";
+    cell.append(intradayFreshness);
   }
   if (includeCross) {
     const hasFundamentalPlan = !/未提取|无法核验/.test(String(technical.fundamental_entry_plan || ""));
@@ -3332,6 +3337,19 @@ function renderTechnicalDetail(item) {
 }
 
 function renderIntradayTechnicalDetail(item) {
+  if (item?.market === "港股") {
+    const card = document.createElement("section");
+    card.className = "card technical-detail intraday-technical-detail";
+    const title = document.createElement("h3");
+    title.textContent = "盘中30分钟辅助观察";
+    card.append(title);
+    const empty = document.createElement("p");
+    empty.className = "technical-empty";
+    empty.textContent = "港股盘中30分钟技术面暂不适用；当前仅支持A股，日线技术面不受影响。";
+    card.append(empty);
+    els.detailBody.append(card);
+    return;
+  }
   if (item?.market !== "A股") return;
   const intraday = intradayTechnicalForItem(item);
   const card = document.createElement("section");

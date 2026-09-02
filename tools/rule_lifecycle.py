@@ -195,6 +195,30 @@ def _candidate_is_affected(rule: dict[str, Any], changed_hashes: set[str]) -> bo
     return not section_hash or section_hash in changed_hashes or "__whole_report__" in changed_hashes
 
 
+def _explicit_retirement_candidate(
+    old: dict[str, Any],
+    candidates: list[dict[str, Any]],
+    extracted: dict[str, Any],
+) -> tuple[str | None, str | None]:
+    """Return an explicit superseding Rule or manual retirement confirmation."""
+    old_id = str(old.get("rule_id") or "")
+    confirmed = {
+        str(value)
+        for value in (extracted.get("retirement_confirmed_rule_ids") or [])
+        if value
+    }
+    if old_id and (old_id in confirmed or old.get("retirement_confirmed") is True):
+        return None, "retirement explicitly confirmed"
+    for candidate in candidates:
+        references: list[Any] = []
+        for key in ("supersedes_rule_id", "superseded_rule_id", "supersedes"):
+            value = candidate.get(key)
+            references.extend(value if isinstance(value, list) else [value] if value else [])
+        if old_id and old_id in {str(value) for value in references}:
+            return str(candidate.get("rule_id") or ""), "replaced by an explicit superseding Rule"
+    return None, None
+
+
 def _change_entry(
     ticker: str,
     action: str,
@@ -256,7 +280,15 @@ def _sync_changed_company(
         not extracted.get("rules") and bool(extracted.get("semantic_review_candidates"))
     )
     if unresolved:
-        kept = [_annotate_rule(rule, report_path, lines, timestamp) for rule in old_rules]
+        kept = []
+        for rule in old_rules:
+            retained = _annotate_rule(rule, report_path, lines, timestamp)
+            if retained.get("active", True) is not False:
+                retained["active"] = True
+                retained["needs_review"] = True
+                retained["retirement_status"] = "pending_retire"
+                retained["retirement_reason"] = "semantic extraction unresolved after a report change"
+            kept.append(retained)
         company["rules"] = kept
         company["summary"] = _summary(company)
         return company, Counter({"KEEP": sum(rule.get("active", True) is not False for rule in kept)}), [], True
@@ -265,6 +297,7 @@ def _sync_changed_company(
     changes: list[dict[str, Any]] = []
     used: set[int] = set()
     output: list[dict[str, Any]] = []
+    pending_retire = False
     for old in old_rules:
         if old.get("active", True) is False:
             output.append(old)
@@ -295,15 +328,33 @@ def _sync_changed_company(
             if action == "UPDATE":
                 changes.append(_change_entry(company.get("ticker", ""), "UPDATE", old_original.get("rule_id", ""), "canonical report changed in the bound section", old_original, merged, timestamp))
             continue
-        retired = copy.deepcopy(old)
-        retired["active"] = False
-        retired["retired_at"] = timestamp
-        retired["retired_reason"] = "canonical report no longer contains the matched decision condition"
-        retired["superseded_by"] = None
-        retired["updated_at"] = timestamp
-        output.append(retired)
-        actions["RETIRE"] += 1
-        changes.append(_change_entry(company.get("ticker", ""), "RETIRE", old.get("rule_id", ""), retired["retired_reason"], old, retired, timestamp))
+        superseded_by, explicit_reason = _explicit_retirement_candidate(old_original, candidates, extracted)
+        if explicit_reason:
+            retired = copy.deepcopy(old_original)
+            retired["active"] = False
+            retired["retired_at"] = timestamp
+            retired["retired_reason"] = explicit_reason
+            retired["superseded_by"] = superseded_by
+            retired["updated_at"] = timestamp
+            output.append(retired)
+            actions["RETIRE"] += 1
+            changes.append(_change_entry(company.get("ticker", ""), "RETIRE", old.get("rule_id", ""), retired["retired_reason"], old, retired, timestamp))
+            continue
+
+        # Extractor miss is not evidence that the investment logic expired.
+        # Keep every unmatched Rule active, especially redlines, and put it in
+        # an explicit pending-retirement review queue until a person or an
+        # explicit superseding Rule confirms retirement.
+        pending = copy.deepcopy(old_original)
+        pending["active"] = True
+        pending["needs_review"] = True
+        pending["retirement_status"] = "pending_retire"
+        pending["retirement_reason"] = "extractor did not match the old Rule after a report change"
+        pending["updated_at"] = timestamp
+        pending["last_verified_at"] = timestamp
+        output.append(pending)
+        actions["KEEP"] += 1
+        pending_retire = True
 
     for index, candidate in enumerate(candidates):
         if index in used:
@@ -324,7 +375,7 @@ def _sync_changed_company(
     company["monitoring_metrics"] = extracted.get("monitoring_metrics") or company.get("monitoring_metrics") or []
     company["semantic_review_candidates"] = extracted.get("semantic_review_candidates") or company.get("semantic_review_candidates") or []
     company["summary"] = _summary(company)
-    return company, actions, changes, False
+    return company, actions, changes, pending_retire
 
 
 def sync_decision_rules(
@@ -475,7 +526,7 @@ def sync_decision_rules(
     if write:
         change_log["changes"].extend(changes)
         change_log["sync_runs"].append(run)
-        _write(data / decision_state.RULES_RELATIVE.name, payload)
+        _write(data / decision_state.RULES_RELATIVE.name, decision_state.rule_definition_payload(payload))
         _write(lifecycle_path, lifecycle)
         _write(data / CHANGE_LOG_RELATIVE.name, change_log)
         if rebuild_dashboard:

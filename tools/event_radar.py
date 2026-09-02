@@ -122,13 +122,17 @@ def _cluster_record(ticker: str, cluster: list[dict[str, Any]], index: int) -> d
     material = bool(_MATERIAL.search(" ".join(titles)))
     generic = all(_GENERIC.search(title) for title in titles)
     max_impact = max((_number(item, "impact") for item in cluster), default=0)
-    thesis_relevant = material and not generic and (highest in {"A", "B"} or max_impact >= 3 or len(cluster) >= 2)
+    # Only A/B evidence can enter the formal thesis-drift channel.  C/D may
+    # still raise a visible watch signal, but impact and repost count alone do
+    # not promote discussion into a thesis-relevant event.
+    formal_evidence = any(str(item.get("source_tier") or "").upper() in {"A", "B"} for item in cluster)
+    thesis_relevant = material and not generic and formal_evidence
     critical_terms = re.compile(r"处罚|立案|调查|财务造假|退市|重大事故|控制权|核心客户流失|重大诉讼")
     independently_verified = "A" in tiers and "B" in tiers
     if highest == "A" and critical_terms.search(" ".join(titles)):
         state = "critical"
     elif independently_verified or max_impact >= 4 or (highest == "A" and material):
-        state = "important"
+        state = "important" if formal_evidence else "watch"
     elif material and not generic:
         state = "watch"
     else:

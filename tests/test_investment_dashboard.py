@@ -573,10 +573,17 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n可开始分批买入，12-14 元。\n"
             )
             report.write_text(original, encoding="utf-8")
+            rule_definition = root / "data" / "investment-dashboard" / "decision_rules.json"
+            rule_definition.write_text(
+                json.dumps({"schema_version": 1, "rule_types": [], "companies": [], "rule_count": 0}),
+                encoding="utf-8",
+            )
+            before_rules = rule_definition.read_bytes()
 
             board = dashboard.build_dashboard(root)
             self.assertEqual(board["decision_count"], 1)
             self.assertEqual(report.read_text(encoding="utf-8"), original)
+            self.assertEqual(rule_definition.read_bytes(), before_rules)
             self.assertTrue((root / "reports" / "00-index" / "投资决策总表.md").is_file())
             self.assertTrue((root / "site" / "data" / "decision_board.json").is_file())
 

@@ -21,11 +21,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import build_investment_dashboard  # noqa: E402
 import decision_state  # noqa: E402
+import post_buy_tracking  # noqa: E402
 import rule_lifecycle  # noqa: E402
-from source_hash import canonical_file_sha256  # noqa: E402
-
-
-ORIGINAL_THESIS_RELATIVE = Path("data/investment-dashboard/original_buy_theses.json")
 
 
 def _load(path: Path) -> dict:
@@ -59,43 +56,15 @@ def _original_thesis_snapshot(
     position = (tracking.get("positions") or {}).get(ticker)
     if not isinstance(position, dict):
         return {"status": "missing_position", "ticker": ticker}
-    raw_report = position.get("thesis_report_path")
-    if not raw_report:
-        return {"status": "missing_thesis_report_path", "ticker": ticker}
-    report_path = (root / str(raw_report)).resolve()
-    if not report_path.is_file() or root not in report_path.parents:
-        return {"status": "missing_thesis_report", "ticker": ticker, "source_report": str(raw_report)}
-    current_hash = canonical_file_sha256(report_path)
-    current_text = report_path.read_text(encoding="utf-8", errors="replace")
-    snapshot_path = data / ORIGINAL_THESIS_RELATIVE.name
-    payload = _load(snapshot_path) if snapshot_path.is_file() else {"schema_version": 1, "positions": {}}
-    payload.setdefault("schema_version", 1)
-    payload.setdefault("positions", {})
-    existing = payload["positions"].get(ticker)
-    if isinstance(existing, dict):
-        return {
-            "status": "frozen",
-            "ticker": ticker,
-            "source_report": existing.get("source_report"),
-            "source_hash": existing.get("source_hash"),
-            "current_source_hash": current_hash,
-            "source_changed_since_capture": existing.get("source_hash") != current_hash,
-            "captured_at": existing.get("captured_at"),
-        }
-    record = {
-        "company": position.get("company"),
-        "ticker": ticker,
-        "market": position.get("market"),
-        "source_report": report_path.relative_to(root).as_posix(),
-        "source_hash": current_hash,
-        "source_text": current_text,
-        "captured_at": timestamp,
-    }
-    if write:
-        payload["positions"][ticker] = record
-        _save(snapshot_path, payload)
-        return {"status": "captured", "ticker": ticker, "source_report": record["source_report"], "source_hash": current_hash, "captured_at": timestamp}
-    return {"status": "would_capture", "ticker": ticker, "source_report": record["source_report"], "source_hash": current_hash}
+    result = post_buy_tracking.freeze_original_buy_thesis(
+        root,
+        position,
+        timestamp=timestamp,
+        write=write,
+        provenance="holding_drift_backfill",
+        backfilled=True,
+    )
+    return result
 
 
 def _parse_args() -> argparse.Namespace:

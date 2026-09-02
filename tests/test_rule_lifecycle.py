@@ -118,7 +118,7 @@ class RuleLifecycleTests(unittest.TestCase):
         self.assertEqual(current["companies"][0]["rules"][0]["rule_id"], "600000.SH:entry:old")
         self.assertEqual(current["companies"][0]["rules"][0]["condition"], "股价低于 12 元")
 
-    def test_removed_condition_is_retired_and_not_active(self):
+    def test_extractor_miss_keeps_old_rule_active_pending_retirement(self):
         old_text = "# Risk\n\n若发生重大事故则运行 Drift。\n"
         root, report, decision, data = self._fixture(
             old_text,
@@ -137,9 +137,15 @@ class RuleLifecycleTests(unittest.TestCase):
             "rule_extraction_status": "no_explicit_decision_rule",
             "rules": [], "monitoring_metrics": [], "semantic_review_candidates": [],
         }):
-            result = rule_lifecycle.sync_decision_rules(root, write=False)
-        self.assertEqual(result["actions"]["RETIRE"], 1)
-        self.assertEqual(result["rule_count"], 0)
+            result = rule_lifecycle.sync_decision_rules(root, write=True)
+        self.assertEqual(result["actions"]["RETIRE"], 0)
+        self.assertEqual(result["actions"]["KEEP"], 1)
+        self.assertEqual(result["rule_count"], 1)
+        current = json.loads((data / "decision_rules.json").read_text(encoding="utf-8"))
+        retained = current["companies"][0]["rules"][0]
+        self.assertTrue(retained["active"])
+        self.assertTrue(retained["needs_review"])
+        self.assertEqual(retained["retirement_status"], "pending_retire")
 
     def test_new_risk_adds_independent_redline_rule(self):
         old_text = "# Thesis\n\n股价低于 10 元时进入买入复核。\n"
@@ -202,6 +208,39 @@ class RuleLifecycleTests(unittest.TestCase):
         self.assertEqual([rule["rule_id"] for rule in result["rules"]["companies"][0]["retired_rules"]], ["retired"])
         self.assertEqual(result["rules"]["rule_count"], 1)
         self.assertEqual(result["rules"]["retired_rule_count"], 1)
+
+    def test_explicit_superseding_rule_allows_retirement(self):
+        old_text = "# Risk\n\n若发生重大安全事故则运行 Drift。\n"
+        root, report, decision, data = self._fixture(
+            old_text,
+            {
+                "rule_id": "600000.SH:redline:old",
+                "type": "EVENT", "rule_scope": "redline",
+                "condition": "发生重大安全事故", "action": "run_drift", "status": "unknown",
+            },
+        )
+        (data / "rule_lifecycle.json").write_text(json.dumps({"schema_version": 1, "companies": {"600000.SH": {
+            "canonical_report_hash": canonical_file_sha256(report),
+            "section_hashes": {key: value["hash"] for key, value in markdown_sections(old_text.splitlines()).items()},
+        }}}), encoding="utf-8")
+        report.write_text("# Risk\n\n若发生重大合规处罚则运行 Drift。\n", encoding="utf-8")
+        with patch.object(rule_lifecycle.decision_rule_extractor, "extract_company", return_value={
+            "rule_extraction_status": "structured_extracted",
+            "rules": [{
+                "rule_id": "600000.SH:redline:new",
+                "type": "EVENT", "rule_scope": "redline",
+                "condition": "发生重大合规处罚", "action": "run_drift",
+                "supersedes_rule_id": "600000.SH:redline:old",
+                "source_excerpt": {"text": "若发生重大合规处罚则运行 Drift。", "line_start": 2, "line_end": 2},
+            }],
+            "monitoring_metrics": [], "semantic_review_candidates": [],
+        }):
+            result = rule_lifecycle.sync_decision_rules(root, write=True)
+        self.assertEqual(result["actions"]["RETIRE"], 1)
+        current = json.loads((data / "decision_rules.json").read_text(encoding="utf-8"))
+        old = next(rule for rule in current["companies"][0]["rules"] if rule["rule_id"] == "600000.SH:redline:old")
+        self.assertFalse(old["active"])
+        self.assertEqual(old["superseded_by"], "600000.SH:redline:new")
 
 
 if __name__ == "__main__":
