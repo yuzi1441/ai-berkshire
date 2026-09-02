@@ -141,10 +141,12 @@ run_morning() {
 }
 
 run_market() {
-    "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股
+    "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股
 }
 
 run_intraday() {
+    # 30m data is last-mile execution context; batch_intraday_technical.py
+    # filters to PRE_BUY + intraday_eligible when the state layer is present.
     "${PYTHON}" tools/batch_intraday_technical.py \
         --repo-root "${REPO_ROOT}" \
         --markets A股 \
@@ -161,14 +163,17 @@ run_close() {
 }
 
 run_daily() {
+    # Daily technical output is the structured latest snapshot consumed by
+    # Company State. Dated Markdown remains opt-in for research snapshots.
     "${PYTHON}" tools/batch_technical_analysis.py \
         --repo-root "${REPO_ROOT}" \
-        --market A股 \
+        --markets A股 港股 \
         --as-of "${AS_OF}" \
         --attempts 4 \
         --force \
-        --manifest "${REPO_ROOT}/logs/technical-analysis-batch-a-share-${AS_OF//-/}.json"
-    "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股 --force
+        --output "${REPO_ROOT}/data/investment-dashboard/technical_latest.json" \
+        --manifest "${REPO_ROOT}/logs/technical-analysis-batch-ah-${AS_OF//-/}.json"
+    "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股 --force
     post_buy_check
     build_dashboard
 }
@@ -192,12 +197,12 @@ run_heavy() {
         --fallback-lookback-days 30 \
         --news-limit 8 \
         --workers 3 \
-        --markets A股 || sentiment_rc=$?
+        --markets A股 港股 || sentiment_rc=$?
     publish_sentiment_runtime
     "${PYTHON}" scripts/run_after_close_ai_review.py \
         --repo-root "${REPO_ROOT}" \
         --skip-git-sync \
-        --markets A股 || scan_rc=$?
+        --markets A股 港股 || scan_rc=$?
     build_dashboard
     if (( scan_rc != 0 )); then
         return "${scan_rc}"

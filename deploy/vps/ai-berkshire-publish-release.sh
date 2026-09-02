@@ -5,12 +5,15 @@ IFS=$'\n\t'
 SOURCE_DIR="${SOURCE_DIR:-/opt/ai-berkshire-source}"
 RELEASE_ROOT="${RELEASE_ROOT:-/srv/ai-berkshire/releases}"
 CURRENT_LINK="${CURRENT_LINK:-/srv/ai-berkshire/current}"
+BASE_DIR="${BASE_DIR:-$(dirname "${CURRENT_LINK}")}"
 LEGACY_DIR="${LEGACY_DIR:-/opt/ai-berkshire}"
 RUNTIME_DIR="${RUNTIME_DIR:-/var/lib/ai-berkshire}"
 RUNTIME_SENTIMENT_STATUS="${RUNTIME_SENTIMENT_STATUS:-${RUNTIME_DIR}/sentiment-status.json}"
 ORIGIN_URL="${ORIGIN_URL:-https://github.com/yuzi1441/ai-berkshire.git}"
 SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
 PYTHON="${PYTHON:-/opt/ai-berkshire-venv/bin/python}"
+VENV_DIR="${VENV_DIR:-/opt/ai-berkshire-venv}"
+REFRESH_SERVICES="${REFRESH_SERVICES:-/usr/local/sbin/ai-berkshire-refresh-services}"
 
 mkdir -p "${RELEASE_ROOT}" "${RUNTIME_DIR}"
 if [[ ! -d "${SOURCE_DIR}/.git" ]]; then
@@ -44,7 +47,7 @@ cleanup_staging() {
 trap cleanup_staging EXIT
 mkdir -p "${STAGING_RELEASE}"
 rsync -a --exclude='.git' --exclude='.venv' "${SOURCE_DIR}/" "${STAGING_RELEASE}/"
-ln -s "/opt/ai-berkshire-venv" "${STAGING_RELEASE}/.venv"
+ln -s "${VENV_DIR}" "${STAGING_RELEASE}/.venv"
 printf '%s\n' "${SOURCE_SHA}" > "${STAGING_RELEASE}/.source-sha"
 
 PREVIOUS=""
@@ -54,10 +57,18 @@ elif [[ -d "${LEGACY_DIR}" ]]; then
     PREVIOUS="${LEGACY_DIR}"
 fi
 
+# Authority boundary:
+# - Git-authoritative: source code, canonical reports and deploy/config files.
+# - Runtime-authoritative after first deploy: user-operated state and its
+#   audit history below.  The source checkout seeds these files only when no
+#   previous release has them; a later release always preserves the previous
+#   runtime copy instead of restoring the Git snapshot.
+# - Rebuildable site output is not a source of truth and is regenerated below.
 copy_runtime_file() {
     local relative="$1"
     if [[ -n "${PREVIOUS}" && -f "${PREVIOUS}/${relative}" ]]; then
-        install -D -m 0644 "${PREVIOUS}/${relative}" "${STAGING_RELEASE}/${relative}"
+        mkdir -p "$(dirname "${STAGING_RELEASE}/${relative}")"
+        install -m 0644 "${PREVIOUS}/${relative}" "${STAGING_RELEASE}/${relative}"
     fi
 }
 
@@ -70,6 +81,11 @@ for relative in \
     data/investment-dashboard/opportunity_scan_status.json \
     data/investment-dashboard/post_buy_alerts.json \
     data/investment-dashboard/post_buy_tracking.json \
+    data/investment-dashboard/original_buy_theses.json \
+    data/investment-dashboard/drift_states.json \
+    data/investment-dashboard/rule_lifecycle.json \
+    data/investment-dashboard/rule_change_log.json \
+    data/investment-dashboard/company_state.json \
     data/investment-dashboard/quotes/latest.json \
     data/sentiment/latest.json \
     site/data/annual_report_dates.json \
@@ -99,15 +115,27 @@ if [[ -n "${PREVIOUS}" && -d "${PREVIOUS}/reports" ]]; then
         "${PREVIOUS}/reports/" "${STAGING_RELEASE}/reports/"
 fi
 if [[ -f "${RUNTIME_DIR}/sentiment-last-success.json" ]]; then
-    install -D -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
+    mkdir -p "${STAGING_RELEASE}/data/sentiment" "${STAGING_RELEASE}/site/data"
+    install -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
         "${STAGING_RELEASE}/data/sentiment/latest.json"
-    install -D -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
+    install -m 0644 "${RUNTIME_DIR}/sentiment-last-success.json" \
         "${STAGING_RELEASE}/site/data/sentiment.json"
 fi
 if [[ -f "${RUNTIME_SENTIMENT_STATUS}" ]]; then
-    install -D -m 0644 "${RUNTIME_SENTIMENT_STATUS}" \
+    mkdir -p "${STAGING_RELEASE}/site/data"
+    install -m 0644 "${RUNTIME_SENTIMENT_STATUS}" \
         "${STAGING_RELEASE}/site/data/sentiment_status.json"
 fi
+
+# Generate the rebuildable board before the fail-closed Rule Lifecycle command.
+# Decision Rules remain persistent reconciled state: Git supplies the current
+# definition, while the lifecycle command reconciles it against this fresh
+# board and preserves the runtime audit history copied above.  A final build
+# then evaluates the reconciled Rules into Company State and site output.
+"${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
+    --repo-root "${STAGING_RELEASE}"
+"${PYTHON}" "${STAGING_RELEASE}/tools/rule_lifecycle.py" \
+    --repo-root "${STAGING_RELEASE}" --write
 
 "${PYTHON}" "${STAGING_RELEASE}/tools/migrate_manual_execution_reviews.py" \
     --repo-root "${STAGING_RELEASE}"
@@ -127,16 +155,16 @@ OLD_RELEASE=""
 if [[ -e "${CURRENT_LINK}" ]]; then
     OLD_RELEASE="$(readlink -f "${CURRENT_LINK}")"
 fi
-TEMP_LINK="/srv/ai-berkshire/.current-${SOURCE_SHA:0:12}-$$"
+TEMP_LINK="${BASE_DIR}/.current-${SOURCE_SHA:0:12}-$$"
 ln -s "${FINAL_RELEASE}" "${TEMP_LINK}"
 mv -Tf "${TEMP_LINK}" "${CURRENT_LINK}"
 
-if ! /usr/local/sbin/ai-berkshire-refresh-services; then
+if ! "${REFRESH_SERVICES}"; then
     if [[ -n "${OLD_RELEASE}" ]]; then
-        ROLLBACK_LINK="/srv/ai-berkshire/.rollback-${SOURCE_SHA:0:12}-$$"
+        ROLLBACK_LINK="${BASE_DIR}/.rollback-${SOURCE_SHA:0:12}-$$"
         ln -s "${OLD_RELEASE}" "${ROLLBACK_LINK}"
         mv -Tf "${ROLLBACK_LINK}" "${CURRENT_LINK}"
-        /usr/local/sbin/ai-berkshire-refresh-services || true
+        "${REFRESH_SERVICES}" || true
     fi
     echo "release activation failed; current was restored" >&2
     exit 1

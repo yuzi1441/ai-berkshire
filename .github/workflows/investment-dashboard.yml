@@ -15,6 +15,8 @@ on:
       - "tools/automation_status.py"
       - "site/**"
       - ".github/workflows/investment-dashboard.yml"
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -25,7 +27,84 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  pr-validation:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: python -m pip install pypdf -r requirements-technical.txt
+      - name: Clean dashboard build
+        run: python tools/build_investment_dashboard.py
+      - name: Run unit tests
+        env:
+          TMPDIR: ${{ runner.temp }}/python-tmp
+        run: |
+          mkdir -p "$TMPDIR"
+          python -m unittest discover -s tests -p 'test*.py' -q
+      - name: Check Skill sync
+        run: python scripts/sync-codex-skills.py --check
+      - name: Check Python syntax
+        run: python -m compileall -q tools
+      - name: Check Node syntax
+        run: |
+          node --check site/assets/action-classifier.mjs
+          node --check site/assets/app.js
+      - name: Check Bash syntax
+        run: bash -n deploy/vps/*.sh
+      - name: Validate structured state
+        run: python tools/validate_decision_state.py
+      - name: Verify clean generated-state boundary
+        run: |
+          git diff --exit-code -- data/investment-dashboard/decision_rules.json
+          git diff --exit-code -- data/investment-dashboard/drift_states.json
+          git diff --exit-code -- data/investment-dashboard/original_buy_theses.json
+          git diff --exit-code -- data/investment-dashboard/rule_lifecycle.json
+          git diff --exit-code -- data/investment-dashboard/rule_change_log.json
+          git diff --exit-code -- data/investment-dashboard/post_buy_tracking.json
+          python - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          legacy_eol_files = {
+              "research/sources/defense-energetic-materials/global-market-cap-pages/bae-systems.html",
+              "research/sources/defense-energetic-materials/global-market-cap-pages/lockheed-martin.html",
+              "research/sources/defense-energetic-materials/global-market-cap-pages/rheinmetall.html",
+              "research/sources/oriental_elec_2025_annual_sina.txt",
+              "research/sources/sec_beone/sina_a_page.html",
+              "research/sources/uih_annual_sina.html",
+              "research/sources/联影医疗/2025年报_sina.html",
+              "research/sources/联影医疗/2025年报_sina_text.txt",
+              "research/sources/联影医疗/2026Q1_sina.html",
+              "research/sources/联影医疗/2026Q1_sina_text.txt",
+          }
+
+          def normalize_line_endings(value: bytes) -> bytes:
+              return re.sub(rb"\r+\n", b"\n", value).replace(b"\r", b"\n")
+
+          for path in legacy_eol_files:
+              expected = subprocess.check_output(["git", "show", f"HEAD:{path}"])
+              actual = Path(path).read_bytes()
+              if normalize_line_endings(expected) != normalize_line_endings(actual):
+                  raise SystemExit(f"Unexpected tracked content change: {path}")
+
+          changed = subprocess.check_output(["git", "diff", "--name-only", "-z"])
+          changed_paths = {
+              item.decode("utf-8")
+              for item in changed.split(b"\0")
+              if item
+          }
+          unexpected = sorted(changed_paths - legacy_eol_files)
+          if unexpected:
+              raise SystemExit("Unexpected tracked changes: " + ", ".join(unexpected))
+          print("tracked clean build boundary=PASS")
+          PY
   build:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

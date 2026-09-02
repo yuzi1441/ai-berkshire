@@ -9,6 +9,11 @@
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
 - `data/investment-dashboard/opportunity_scans.json`：Flash 的全量机会扫描、当前机会与临近机会分层
+- `data/investment-dashboard/company_state.json`：由行情、事件和其他运行事实生成的 Company State read model；属于运行时产物，不是 Rule Definition Source of Truth
+- `data/investment-dashboard/decision_rules.json`：从主报告迁移出的可审计 Decision Rule Definition；仅由 Extractor / Lifecycle 同步更新，当前触发状态进入 Company State 和站点输出
+- `data/investment-dashboard/checklist_states.json`：PRE_BUY 阶段的结构化 Checklist 状态
+- `data/investment-dashboard/event_radar.json`：由情绪文章去重聚类形成的事件证据层
+- `data/investment-dashboard/technical_latest.json`：每日结构化技术快照；30 分钟数据仅作最后一公里执行辅助
 - `site/`：静态网页看板
 
 ## 范围
@@ -108,6 +113,32 @@ py -3 tools\market_snapshot.py
 VPS 自动生成的行情、情绪、机会和看板文件则只推送到 `vps-generated`，不会和你的 `main` 抢提交。
 
 ## 买入后跟踪与预警
+
+### Company State 与决策规则
+
+看板的主入口是 Company State，而不是把报告动作直接当成持仓。生命周期只有：
+`WATCH`、`PRE_BUY`、`HOLDING`、`EXITED`。主报告提供事实，Decision Rules 只定义何时重看，
+Checklist 只在 `PRE_BUY` 生效；只有用户确认实际成交并通过 `post_buy_tracking.py register`，
+公司才会进入 `HOLDING`。
+
+先进行历史报告迁移预演，再写入结构化状态：
+
+```bash
+python3 tools/migrate_decision_state.py --dry-run
+python3 tools/migrate_decision_state.py --write
+python3 tools/validate_decision_state.py
+```
+
+需要人工指定生命周期或补充 Drift 结论时，使用显式覆盖文件，不直接改生成 JSON：
+
+```bash
+python3 tools/company_state.py set-lifecycle 000682.SZ PRE_BUY --reason "等待确认买入前检查"
+python3 tools/company_state.py set-drift 000682.SZ unchanged --severity minor --summary "已复核，未改变核心假设"
+python3 tools/build_investment_dashboard.py
+```
+
+价格机会与条件机会在看板中分开筛选；条件机会不要求当前价格已经到位。
+`Needs Attention` 只生成复核队列，重大事件可建议运行 Drift，但不会自动买入、卖出或调仓。
 
 “买入前决策”和“买入后跟踪”在网页中分开显示。主报告里的`买入`或`分批买入`不会自动创建持仓，也不会因技术面、股价异动或论文健康度而被自动改写。
 

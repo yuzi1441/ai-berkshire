@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "companies": {
+    "301666.SZ": {
+      "direction": "unchanged",
+      "severity": "none",
+      "summary": "最新可核验事实未证明连续四季度盈利与自研主控规模商业化，保留 Watch；社区讨论不作为论文漂移证据。",
+      "last_checked": "2026-09-02T09:22:46+08:00",
+      "next_review": null,
+      "source": "thesis-drift-handoff",
+      "facts_sources": [
+        "reports/DapuStor/DapuStor-research-20260623.md",
+        "data/investment-dashboard/decision_rules.json",
+        "data/investment-dashboard/event_radar.json"
+      ],
+      "mode": "watch"
+    },
+    "603659.SH": {
+      "direction": "unchanged",
+      "severity": "none",
+      "summary": "验收：持仓论文未发现新漂移",
+      "last_checked": "2026-09-02T14:37:12+08:00",
+      "next_review": "2026-09-09",
+      "source": "thesis-drift-handoff",
+      "facts_sources": [
+        "reports/璞泰来/璞泰来-thesis.md",
+        "data/investment-dashboard/post_buy_tracking.json"
+      ],
+      "mode": "holding",
+      "review_history": [
+        {
+          "direction": "unchanged",
+          "severity": "none",
+          "summary": "验收：持仓论文未发现新漂移",
+          "last_checked": "2026-09-02T14:36:48+08:00",
+          "next_review": "2026-09-09",
+          "source": "thesis-drift-handoff",
+          "facts_sources": [
+            "reports/璞泰来/璞泰来-thesis.md",
+            "data/investment-dashboard/post_buy_tracking.json"
+          ],
+          "mode": "holding"
+        },
+        {
+          "direction": "unchanged",
+          "severity": "none",
+          "summary": "验收：持仓论文未发现新漂移",
+          "last_checked": "2026-09-02T14:37:12+08:00",
+          "next_review": "2026-09-09",
+          "source": "thesis-drift-handoff",
+          "facts_sources": [
+            "reports/璞泰来/璞泰来-thesis.md",
+            "data/investment-dashboard/post_buy_tracking.json"
+          ],
+          "mode": "holding"
+        }
+      ]
+    },
+    "601088.SH": {
+      "direction": "unchanged",
+      "severity": "none",
+      "summary": "验收：无实质论文漂移，仅更新复核元数据",
+      "last_checked": "2026-09-02T14:36:29+08:00",
+      "next_review": "2026-09-09",
+      "source": "thesis-drift-handoff",
+      "facts_sources": [
+        "data/investment-dashboard/company_state.json",
+        "data/investment-dashboard/decision_rules.json"
+      ],
+      "mode": "watch",
+      "review_history": [
+        {
+          "direction": "unchanged",
+          "severity": "none",
+          "summary": "验收：无实质论文漂移，仅更新复核元数据",
+          "last_checked": "2026-09-02T14:36:29+08:00",
+          "next_review": "2026-09-09",
+          "source": "thesis-drift-handoff",
+          "facts_sources": [
+            "data/investment-dashboard/company_state.json",
+            "data/investment-dashboard/decision_rules.json"
+          ],
+          "mode": "watch"
+        }
+      ]
+    }
+  }
+}

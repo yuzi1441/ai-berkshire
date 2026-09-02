@@ -336,8 +336,45 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn("已经变化", result["staleReview"]["manualReviewCaveat"])
         self.assertEqual(result["hardVeto"]["key"], "actionable")
         self.assertNotIn("硬性否决", result["hardVeto"]["detail"])
-        self.assertEqual(result["hongKong"]["label"], "仅供研究")
-        self.assertEqual(result["hongKong"]["key"], "research")
+        self.assertEqual(result["hongKong"]["key"], "paused")
+        self.assertEqual(result["hongKong"]["quoteFreshness"], "missing")
+
+    def test_hong_kong_uses_realtime_policy_and_session_rules(self):
+        result = self.run_classifier(
+            """[
+              classifier.marketSessionState("港股", new Date("2026-08-24T01:40:00Z")),
+              classifier.currentExecutionState({market: "港股", execution_policy: {
+                main_action_kind: "watch", condition_mode: "price_only", reliability: "high",
+                price_rules: [{action_kind: "trial", action: "分批买入", price_range: "20-22 港元",
+                  min: 20, ceiling: 22, currency: "HKD", requires_validation: false}]
+              }}, {price: 21, currency: "HKD", provider_timestamp: "20260824094000",
+                snapshot_generated_at: "2026-08-24T01:40:00Z"}, "watch", {now: new Date("2026-08-24T01:45:00Z")})
+            ]"""
+        )
+        self.assertEqual(result[0], "open")
+        self.assertEqual(result[1]["key"], "trial")
+        self.assertEqual(result[1]["quoteFreshness"], "fresh")
+
+    def test_technical_state_does_not_override_fundamental_price_permission(self):
+        result = self.run_classifier(
+            """[
+              classifier.currentExecutionState({market: "A股", technical: {execution: "UNFAVORABLE"}, execution_policy: {
+                main_action_kind: "watch", condition_mode: "price_only", reliability: "high",
+                price_rules: [{action_kind: "trial", action: "分批买入", price_range: "9-10元",
+                  min: 9, ceiling: 10, currency: "CNY", requires_validation: false}]
+              }}, {price: 9.8, currency: "CNY", provider_timestamp: "20260824100000",
+                snapshot_generated_at: "2026-08-24T02:00:00Z"}, "watch", {now: new Date("2026-08-24T02:00:00Z")}),
+              classifier.currentExecutionState({market: "A股", technical: {execution: "FAVORABLE"}, execution_policy: {
+                main_action_kind: "watch", condition_mode: "price_only", reliability: "high",
+                price_rules: [{action_kind: "trial", action: "分批买入", price_range: "9-10元",
+                  min: 9, ceiling: 10, currency: "CNY", requires_validation: false}]
+              }}, {price: 12, currency: "CNY", provider_timestamp: "20260824100000",
+                snapshot_generated_at: "2026-08-24T02:00:00Z"}, "watch", {now: new Date("2026-08-24T02:00:00Z")})
+            ]"""
+        )
+        self.assertTrue(result[0]["actionable"])
+        self.assertEqual(result[0]["key"], "trial")
+        self.assertEqual(result[1]["key"], "wait_price")
 
     def test_reference_partition_remains_visible_when_real_time_execution_is_paused(self):
         result = self.run_classifier(
@@ -371,7 +408,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result["noQuoteReference"]["key"], "trial")
         self.assertIn("referenceCaveat", result["noQuoteReference"])
         self.assertEqual(result["staleReview"]["key"], "actionable")
-        self.assertEqual(result["hongKong"]["key"], "research")
+        self.assertEqual(result["hongKong"]["key"], "actionable")
 
     def test_dashboard_controls_filter_current_executability(self):
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")

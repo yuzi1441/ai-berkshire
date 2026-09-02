@@ -26,9 +26,12 @@ from typing import Any
 
 from source_hash import canonical_file_sha256, canonical_sha256_text
 import main_report_review
+import decision_state
+import event_radar
 
 
 ROOT = Path(__file__).resolve().parents[1]
+REALTIME_MARKETS = {"A股", "港股"}
 REPORTS_DIRECTORY = ROOT / "reports"
 DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"
 SITE_DIRECTORY = ROOT / "site"
@@ -668,11 +671,11 @@ def attach_manual_execution_reviews(
     records = records if isinstance(records, dict) else {}
     current_date = as_of or datetime.now().astimezone().date()
     for decision in decisions:
-        if decision.get("market") != "A股":
+        if decision.get("market") not in REALTIME_MARKETS:
             decision.update(
                 {
                     "validity_state": "research_only",
-                    "invalidation_reason": "非A股仅保留研究浏览，不参与实时执行",
+                    "invalidation_reason": "当前市场不在 A 股 + 港股实时支持范围，仅保留研究浏览",
                     "valid_until": None,
                     "source_fingerprint_sha256": None,
                     "market_session_state": "research_only",
@@ -4146,6 +4149,23 @@ def report_price_execution_rules(decision: dict[str, Any]) -> list[dict[str, Any
         rule = _execution_rule_from_row(row, decision.get("market"), source="report_price_plan")
         if rule:
             rules.append(rule)
+    # Some older A/H reports expose one explicit, unit-bearing buy price but
+    # no normalized price table. Reuse that already parsed field only when the
+    # action is explicitly actionable and the currency matches the listing;
+    # never infer a price from a bare number or a valuation multiple.
+    if not rules and decision.get("buy_price"):
+        fallback = {
+            "action": clean_markdown(str(decision.get("action") or decision.get("conclusion_summary") or "")),
+            "price_range": clean_markdown(str(decision.get("buy_price") or "")),
+        }
+        if _price_plan_matches_market(fallback, decision.get("market")):
+            rule = _execution_rule_from_row(
+                fallback,
+                decision.get("market"),
+                source="report_explicit_buy_price",
+            )
+            if rule:
+                rules.append(rule)
     unique: dict[tuple[Any, ...], dict[str, Any]] = {}
     for rule in rules:
         key = (rule["ceiling"], rule["action_kind"], rule["action"], rule["price_range"])
@@ -4276,6 +4296,25 @@ def execution_condition_contract(
     }
 
 
+def remove_condition_clauses(text: str | None, excluded: str | None) -> str | None:
+    """Remove already-structured redline clauses from a mixed trigger sentence."""
+    if not text or not excluded:
+        return text or None
+
+    def key(value: str) -> str:
+        return re.sub(r"[\s，,、；;。]", "", clean_markdown(value))
+
+    excluded_keys = [key(item) for item in re.split(r"[；;。]", excluded) if key(item)]
+    kept: list[str] = []
+    for clause in re.split(r"[；;。]", text):
+        cleaned = clean_markdown(clause)
+        clause_key = key(cleaned)
+        if not clause_key or any(item in clause_key or clause_key in item for item in excluded_keys):
+            continue
+        kept.append(cleaned)
+    return "；".join(kept) or None
+
+
 def conservative_screening_judgment(
     artifact: dict[str, Any], market: str | None
 ) -> dict[str, Any] | None:
@@ -4356,10 +4395,35 @@ def conservative_screening_judgment(
 
 
 def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
-    """Build the universal current-executability contract observed across A reports."""
-    judgment = decision.get("primary_judgment") if isinstance(decision.get("primary_judgment"), dict) else {}
+    """Build the current-executability contract for supported A/H decisions."""
+    primary = decision.get("primary_judgment") if isinstance(decision.get("primary_judgment"), dict) else {}
+    contract = decision.get("decision_contract") if isinstance(decision.get("decision_contract"), dict) else {}
+    contract_only = not primary and bool(contract)
+    if primary:
+        judgment = primary
+    elif contract:
+        contract_action = clean_markdown(str(contract.get("action") or ""))
+        contract_kind = execution_action_kind(contract_action, str(contract.get("summary") or ""))
+        if contract_kind not in EXECUTION_ACTIONABLE_KINDS | EXECUTION_NON_ACTIONABLE_KINDS:
+            contract_kind = "watch"
+        judgment = {
+            "enabled": True,
+            "label": contract_action or "待复核",
+            "action_kind": contract_kind,
+            "empty_position_action": contract.get("summary") or contract_action,
+            "trigger_condition": None,
+            "summary": contract.get("summary") or "",
+            "confidence": contract.get("confidence"),
+            "source_matches": True,
+            "currency": "HKD" if decision.get("market") == "港股" else "CNY",
+        }
+    else:
+        judgment = {}
     main_kind = str(judgment.get("action_kind") or "unknown")
-    report_rules = report_price_execution_rules(decision)
+    policy_input = decision
+    if not decision.get("price_plan") and contract.get("investor_stances"):
+        policy_input = {**decision, "price_plan": contract.get("investor_stances")}
+    report_rules = report_price_execution_rules(policy_input)
     trigger_rules = trigger_price_execution_rules(judgment, decision.get("market"))
     human_reviewed = judgment.get("human_reviewed") is True
     conflict_note = clean_markdown(str(judgment.get("conflict_note") or ""))
@@ -4409,6 +4473,26 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
     else:
         price_rules = report_rules or trigger_rules
     conditions = execution_condition_contract(judgment, price_rules)
+    if contract_only:
+        invalidation = clean_markdown(str(contract.get("invalidation_triggers") or ""))
+        conditions["event_condition"] = None
+        conditions["guard_condition"] = invalidation or None
+        conditions["mode"] = "price_only" if price_rules else "event_only" if invalidation else "review"
+    else:
+        # A human-reviewed primary judgment can still coexist with a durable
+        # contract carrying the report's explicit invalidation field.  Keep
+        # that redline independent from the validation trigger and remove any
+        # duplicated clauses from the mixed trigger sentence.
+        invalidation = clean_markdown(str(contract.get("invalidation_triggers") or ""))
+        if invalidation and invalidation not in {"未给出", "无", "待复核"}:
+            conditions["event_condition"] = remove_condition_clauses(
+                conditions.get("event_condition"), invalidation
+            )
+            existing_guard = conditions.get("guard_condition")
+            guards = [item for item in (existing_guard, invalidation) if item]
+            conditions["guard_condition"] = "；".join(dict.fromkeys(guards)) or None
+            if not conditions["event_condition"] and price_rules:
+                conditions["mode"] = "price_only"
     if conditions["mode"] in {"price_and_event", "compound"}:
         for rule in price_rules:
             rule["requires_validation"] = True
@@ -4436,9 +4520,28 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
             or judgment.get("screening_consensus") is True
         )
     )
+    if contract_only:
+        trusted = (
+            contract.get("confidence") in {"高", "中", "high", "medium"}
+            and main_kind in EXECUTION_ACTIONABLE_KINDS | EXECUTION_NON_ACTIONABLE_KINDS
+        )
     if not trusted:
         conditions["mode"] = "review"
-        price_rules = []
+        if decision.get("market") == "港股" and report_rules:
+            # Explicit H-share price bands remain auditable, but without a
+            # trusted judgment they require review and never become a direct
+            # purchase permission.
+            price_rules = [
+                {
+                    **rule,
+                    "requires_validation": True,
+                    "validation_condition": rule.get("validation_condition") or "等待人工复核主报告买入前提",
+                    "source": rule.get("source") or "report_price_plan",
+                }
+                for rule in report_rules
+            ]
+        else:
+            price_rules = []
         current_action = None
     return {
         "schema_version": 1,
@@ -4462,9 +4565,9 @@ def build_execution_policy(decision: dict[str, Any]) -> dict[str, Any]:
 
 
 def attach_execution_policies(decisions: list[dict[str, Any]]) -> None:
-    """Attach executable-condition contracts only to A shares."""
+    """Attach executable-condition contracts to the supported A/H markets."""
     for decision in decisions:
-        if decision.get("market") == "A股":
+        if decision.get("market") in REALTIME_MARKETS:
             decision["execution_policy"] = build_execution_policy(decision)
 
 
@@ -5303,16 +5406,20 @@ def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     return split_dashboard_files(board, site_directory, data_directory)
 
 
-def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+def load_post_buy_layer(
+    data_directory: Path, *, strict: bool = True
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Load optional post-buy tracking and generated alert state.
 
     The layer is deliberately separate from report-derived decisions. Missing
     files mean that no user-confirmed positions exist; malformed files fail the
     build rather than silently attaching stale tracking state to another stock.
     """
-    tracking = load_json(
-        data_directory / "post_buy_tracking.json",
-        {"schema_version": 1, "positions": {}},
+    tracking_path = data_directory / "post_buy_tracking.json"
+    tracking = (
+        decision_state.load_strict_json(tracking_path, label="post_buy_tracking")
+        if strict
+        else load_json(tracking_path, {"schema_version": 1, "positions": {}})
     )
     alerts = load_json(
         data_directory / "post_buy_alerts.json",
@@ -5320,6 +5427,8 @@ def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str,
     )
     if tracking.get("schema_version") != 1 or not isinstance(tracking.get("positions"), dict):
         raise ValueError("Unsupported post-buy tracking schema")
+    if not isinstance(tracking.get("position_history", []), list):
+        raise ValueError("post_buy_tracking.position_history must be a list")
     if alerts.get("schema_version") != 1 or not isinstance(alerts.get("alerts"), list):
         raise ValueError("Unsupported post-buy alerts schema")
     return tracking, alerts
@@ -5407,12 +5516,14 @@ def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
     return main_report_review.model_review_comparison_snapshot(repo_root)
 
 
-def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
+def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
-    post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
+    post_buy_tracking, post_buy_alerts = load_post_buy_layer(
+        data_directory, strict=not legacy_mode
+    )
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
     manual_execution_reviews = load_manual_execution_reviews(data_directory)
@@ -5458,9 +5569,53 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
+    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    # Structured state is the new source consumed by the dashboard.  The
+    # legacy fields above remain in the board for compatibility with existing
+    # consumers and historical reports.
+    event_radar_snapshot = event_radar.build_event_radar(repo_root, write=False, generated_at=generated_at)
+    # Decision Rule extraction is an explicit migration-stage operation.  A
+    # normal dashboard build loads the saved rules and only evaluates/merges
+    # them; it must not semantically reread every Markdown report.
+    persisted_rule_payload = decision_state.load_rule_definitions(
+        data_directory / decision_state.RULES_RELATIVE.name,
+        strict=not legacy_mode,
+    )
+    decision_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in decisions
+        if item.get("ticker")
+    }
+    persisted_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in persisted_rule_payload.get("companies", [])
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    if not legacy_mode and persisted_tickers != decision_tickers:
+        missing = sorted(decision_tickers - persisted_tickers)
+        extra = sorted(persisted_tickers - decision_tickers)
+        raise ValueError(
+            "decision_rules company set does not match decision board"
+            f" (missing={missing[:5]}, extra={extra[:5]})"
+        )
+    state_layers = decision_state.build_state_layers(
+        decisions,
+        repo_root,
+        event_payload=event_radar_snapshot,
+        rule_payload=persisted_rule_payload if persisted_rule_payload.get("companies") else None,
+        write=False,
+        legacy_mode=legacy_mode,
+    )
+    state_errors = decision_state.validate_payloads(state_layers)
+    if state_errors:
+        raise ValueError("Invalid structured state: " + "; ".join(state_errors))
+    decision_state.attach_company_states(decisions, state_layers["state"])
+    for decision in decisions:
+        decision["realtime_scope"] = (
+            "supported" if decision.get("market") in REALTIME_MARKETS else "research_only"
+        )
     main_report_review_snapshot = build_main_report_review_snapshot(repo_root)
     model_review_comparison_snapshot = build_model_review_comparison_snapshot(repo_root)
-    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     generation_id = hashlib.sha256(
         (
             f"{datetime.now().astimezone().isoformat()}|{len(decisions)}|"
@@ -5479,9 +5634,22 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         "generated_at": generated_at,
         "generation_id": generation_id,
         "scope": "individual-stocks-only",
+        "state_layer": {
+            "schema_version": decision_state.SCHEMA_VERSION,
+            "company_state": "data/investment-dashboard/company_state.json",
+            "decision_rules": "data/investment-dashboard/decision_rules.json",
+            "event_radar": "data/investment-dashboard/event_radar.json",
+            "technical_latest": "data/investment-dashboard/technical_latest.json",
+            "checklist_states": "data/investment-dashboard/checklist_states.json",
+        },
         "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
-        "real_time_execution_scope": "A股",
+        "real_time_execution_scope": "A股 + 港股",
+        "real_time_market_counts": {
+            "A股": sum(1 for item in decisions if item.get("market") == "A股"),
+            "港股": sum(1 for item in decisions if item.get("market") == "港股"),
+            "research_only": sum(1 for item in decisions if item.get("market") not in REALTIME_MARKETS),
+        },
         "a_share_execution_summary": {
             "current_executable_count": 0,
             "current_executable_requires_runtime_quote": True,
@@ -5521,6 +5689,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     write_json(data_directory / "opportunity_scans.json", opportunity_scans)
     write_json(data_directory / "main_report_review.json", main_report_review_snapshot)
     write_json(data_directory / "model_review_comparison.json", model_review_comparison_snapshot)
+    decision_state.write_json(data_directory / "company_state.json", state_layers["state"])
+    decision_state.write_json(data_directory / "technical_latest.json", state_layers["technical"])
+    decision_state.write_json(data_directory / "checklist_states.json", state_layers["checklist"])
+    event_radar.build_event_radar(repo_root, write=True, generated_at=event_radar_snapshot.get("generated_at"))
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
     split_dashboard_files(board, site_directory, data_directory)
@@ -5534,6 +5706,10 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
         public_opportunity_scans(opportunity_scans),
     )
     write_json(site_directory / "data" / "main_report_review.json", main_report_review_snapshot)
+    write_json(site_directory / "data" / "decision_rules.json", state_layers["rules"])
+    write_json(site_directory / "data" / "company_state.json", state_layers["state"])
+    write_json(site_directory / "data" / "technical_latest.json", state_layers["technical"])
+    write_json(site_directory / "data" / "checklist_states.json", state_layers["checklist"])
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)
@@ -5550,9 +5726,18 @@ def main() -> int:
         action="store_true",
         help="Split the existing static decision board without rebuilding reports or indexes.",
     )
+    parser.add_argument(
+        "--legacy-mode",
+        action="store_true",
+        help="Allow explicit migration/test compatibility fallbacks; never use for production builds.",
+    )
     arguments = parser.parse_args()
     try:
-        board = split_existing_dashboard(arguments.repo_root.resolve()) if arguments.split_only else build_dashboard(arguments.repo_root.resolve())
+        board = (
+            split_existing_dashboard(arguments.repo_root.resolve())
+            if arguments.split_only
+            else build_dashboard(arguments.repo_root.resolve(), legacy_mode=arguments.legacy_mode)
+        )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2

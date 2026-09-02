@@ -5,6 +5,12 @@ function quoteCurrencyForMarket(market) {
   return null;
 }
 
+const REALTIME_MARKETS = new Set(["A股", "港股"]);
+
+function isRealtimeMarket(market) {
+  return REALTIME_MARKETS.has(market);
+}
+
 export function parseReportPriceBand(row, market) {
   const text = String(row?.price_range || "").replace(/,/g, "").trim();
   if (!text || /(?:PE|PB|PS|倍|x\b|%)/i.test(text)) return null;
@@ -164,11 +170,11 @@ function executionResult(key, label, detail, extra = {}) {
 
 function legacyExecutionState(fallbackKind) {
   return {
-    buy: executionResult("actionable", "当前可分批", "非 A 股沿用主报告动作"),
-    trial: executionResult("trial", "当前可小仓", "非 A 股沿用主报告动作"),
-    hold: executionResult("hold", "持有但不新买", "非 A 股沿用主报告动作"),
-    watch: executionResult("wait_event", "等待报告条件", "非 A 股沿用主报告动作"),
-    no: executionResult("no", "回避/不买", "非 A 股沿用主报告动作"),
+    buy: executionResult("actionable", "当前可分批", "沿用主报告动作"),
+    trial: executionResult("trial", "当前可小仓", "沿用主报告动作"),
+    hold: executionResult("hold", "持有但不新买", "沿用主报告动作"),
+    watch: executionResult("wait_event", "等待报告条件", "沿用主报告动作"),
+    no: executionResult("no", "回避/不买", "沿用主报告动作"),
     unknown: executionResult("review", "待人工复核", "主报告尚未形成可执行判断"),
   }[fallbackKind] || executionResult("review", "待人工复核", "主报告尚未形成可执行判断");
 }
@@ -195,14 +201,26 @@ function shanghaiDateTimeParts(value = new Date()) {
   };
 }
 
-export function aShareMarketSessionState(now = new Date()) {
+export function marketSessionState(market, now = new Date()) {
   const parts = shanghaiDateTimeParts(now);
   if (!parts) return "closed";
   if (["Sat", "Sun"].includes(parts.weekday)) return "closed";
-  if (parts.minutes >= 570 && parts.minutes <= 690) return "open";
-  if (parts.minutes > 690 && parts.minutes < 780) return "lunch";
-  if (parts.minutes >= 780 && parts.minutes <= 900) return "open";
+  if (market === "港股") {
+    if (parts.minutes >= 570 && parts.minutes <= 720) return "open";
+    if (parts.minutes > 720 && parts.minutes < 780) return "lunch";
+    if (parts.minutes >= 780 && parts.minutes <= 960) return "open";
+    return "closed";
+  }
+  if (market === "A股") {
+    if (parts.minutes >= 570 && parts.minutes <= 690) return "open";
+    if (parts.minutes > 690 && parts.minutes < 780) return "lunch";
+    if (parts.minutes >= 780 && parts.minutes <= 900) return "open";
+  }
   return "closed";
+}
+
+export function aShareMarketSessionState(now = new Date()) {
+  return marketSessionState("A股", now);
 }
 
 export function quoteFreshnessState(quote, now = new Date()) {
@@ -386,7 +404,7 @@ function conditionWaitState(policy, price, rules) {
 function policyExecutionState(item, quote, fallbackKind = "unknown") {
   const manual = item?.manual_execution_review;
   const policy = item?.execution_policy;
-  if (!policy || item?.market !== "A股") return legacyExecutionState(fallbackKind);
+  if (!policy || !isRealtimeMarket(item?.market)) return legacyExecutionState(fallbackKind);
   const mode = String(policy.condition_mode || "review");
   if (mode === "review" || policy.main_action_kind === "unknown") {
     return executionResult(
@@ -517,11 +535,11 @@ function asReferenceResult(result, extra = {}) {
 }
 
 export function referenceExecutionState(item, quote, fallbackKind = "unknown") {
-  if (item?.market !== "A股") {
+  if (!isRealtimeMarket(item?.market)) {
     return executionResult(
       "research",
       "仅供研究",
-      `${item?.market || "该市场"}不进入 A 股最近行情参考分区`,
+      `${item?.market || "该市场"}不进入 A/H 最近行情参考分区`,
       { referenceMode: "research_only" },
     );
   }
@@ -576,8 +594,8 @@ function humanReviewPriceRows(priceRows, market, quote) {
 }
 
 export function humanReviewExecutionState(item, quote, priceRows = [], now = new Date()) {
-  if (item?.market !== "A股") {
-    return humanReviewResult("research", "仅供研究", "人工复核分区只适用于 A 股", {
+  if (!isRealtimeMarket(item?.market)) {
+    return humanReviewResult("research", "仅供研究", "人工复核分区只适用于 A/H", {
       freshness: "not_applicable",
       source: "human_main_report",
     });
@@ -651,7 +669,7 @@ export function humanReviewExecutionState(item, quote, priceRows = [], now = new
 }
 
 export function currentExecutionState(item, quote, fallbackKind = "unknown", context = {}) {
-  if (item?.market !== "A股") {
+  if (!isRealtimeMarket(item?.market)) {
     return executionResult(
       "research",
       "仅供研究",
@@ -665,7 +683,7 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
 
   const referenceExecution = referenceExecutionState(item, quote, fallbackKind);
   const now = context.now || new Date();
-  const sessionState = aShareMarketSessionState(now);
+  const sessionState = marketSessionState(item.market, now);
   const freshness = quoteFreshnessState(quote, now);
   const policyResult = policyExecutionState(item, quote, fallbackKind);
   if (sessionState !== "open") {
@@ -674,8 +692,8 @@ export function currentExecutionState(item, quote, fallbackKind = "unknown", con
       "paused",
       nextCandidate ? "下个交易日候选" : "非交易时段",
       sessionState === "lunch"
-        ? "A股午间休市，当前可执行数量归零；开市后用最新行情重新守门"
-        : "A股当前未开市，当前可执行数量归零；下个交易日重新核对行情",
+        ? `${item.market}午间休市，当前可执行数量归零；开市后用最新行情重新守门`
+        : `${item.market}当前未开市，当前可执行数量归零；下个交易日重新核对行情`,
       {
         policy,
         manualReview: manual,

@@ -52,6 +52,10 @@ $technical-analysis 国电南瑞
 - 基本面决定是否值得买，技术面只辅助首笔与分批节奏。
 - 指标只能由 `tools/technical_analysis.py` 通过 TA-Lib 0.7.1 计算，不得心算或凭图判断。
 - 不宣称预测准确率；时点规则未经全市场、多周期可复现回测，不给出胜率、准确率或超额收益承诺。不修改原报告，不运行或修改投资看板。
+
+## Company State 执行接口
+
+Dashboard 只读取结构化 `technical_latest.json`，主表只显示三个字段：`trend`（UP / NEUTRAL / DOWN / UNKNOWN）、`position`（NEAR_MEAN / NORMAL / EXTENDED / BROKEN / UNKNOWN）、`execution`（FAVORABLE / NEUTRAL / UNFAVORABLE / UNKNOWN）。底层指标仍可保留在详情中。30 分钟数据只在 Rule Triggered、Drift 完成且 Checklist PASS 或接近 PASS 时生成；日常批处理更新 latest state，不默认新增日期版 Markdown。
 - 用户指定日期、代码、基本面报告或 OHLCV CSV 时，以其明确输入覆盖自动解析。
 
 最终回复分别给出技术分析请求截止日、技术指标行情截止日、基本面主报告日期，并给出报告路径、关联文件数量、技术状态、数据置信度、数据警告，确认看板未修改。

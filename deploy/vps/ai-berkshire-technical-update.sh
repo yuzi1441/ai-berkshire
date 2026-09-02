@@ -38,6 +38,15 @@ run_market() {
         --manifest "${REPO_ROOT}/logs/technical-analysis-batch-${label}-${as_of//-/}.json"
 }
 
+run_markets_ah() {
+    "${PYTHON}" tools/batch_technical_analysis.py \
+        --markets A股 港股 \
+        --as-of "${as_of}" \
+        --attempts 4 \
+        --force \
+        --manifest "${REPO_ROOT}/logs/technical-analysis-batch-ah-${as_of//-/}.json"
+}
+
 run_intraday_ah() {
     "${PYTHON}" tools/batch_intraday_technical.py \
         --markets "A股" \
@@ -50,8 +59,7 @@ run_daily_ah_if_closed() {
     local clock
     clock="$(date +%H%M)"
     if [[ "${clock}" -ge 1630 ]]; then
-        run_market "A股" "a-share"
-        run_market "港股" "hk"
+        run_markets_ah
     fi
 }
 
@@ -65,8 +73,7 @@ case "$1" in
         ;;
     all)
         run_intraday_ah
-        run_market "A股" "a-share"
-        run_market "港股" "hk"
+        run_markets_ah
         run_market "美股" "us"
         ;;
 esac
