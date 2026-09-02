@@ -2164,10 +2164,36 @@ def score_articles(
     articles use only the MiMo review model and remain contextual evidence;
     they are never silently promoted to formal source quality.
     """
-    if primary_config is None:
-        raise SentimentError("primary model configuration is required")
     if not articles:
         return [], [], []
+    if primary_config is None:
+        # Retrieval and evidence preservation do not depend on a remote model.
+        # A/B headlines get a clearly provisional lexical classification for
+        # Event Radar/context only; they are never promoted to formal
+        # sentiment without the configured model review chain.
+        provisional: list[dict[str, Any]] = []
+        for article in articles:
+            if not article.get("score_eligible", True):
+                item = mark_auxiliary_article(article)
+                item["llm_status"] = "needs_review"
+                provisional.append(item)
+                continue
+            item = {
+                **article,
+                **lexical_score(article),
+                "score_eligible": False,
+                "context_score_eligible": True,
+                "llm_status": "needs_review",
+                "scoring_method": "lexicon-v1:needs_review",
+                "score_exclusion_reason": "LLM 未配置；仅作临时上下文/Event Radar，未计入正式情绪分",
+            }
+            apply_company_relevance_guard(item, item)
+            provisional.append(item)
+        return (
+            provisional,
+            ["主模型未配置；已完成新闻抓取和保守临时分类，A/B 正式情绪分标记 needs_review"],
+            [],
+        )
     scoreable_articles = [
         article for article in articles if article.get("score_eligible", True)
     ]
@@ -2420,6 +2446,32 @@ def score_articles(
     review_to_score = [
         article for article in review_articles if article["id"] not in preloaded_review_map
     ]
+    if review_config is None and review_articles:
+        # A/B dual-scored evidence cannot be called formal when the
+        # independent review model is absent. Keep the primary result as
+        # contextual evidence and expose the missing review explicitly.
+        degraded: list[dict[str, Any]] = []
+        for article in primary_success_articles:
+            route = routes[article["id"]]
+            primary = dict(primary_scores[article["id"]])
+            if route == "primary_only":
+                degraded.append({**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"})
+                continue
+            item = {
+                **article,
+                **primary,
+                "score_eligible": False,
+                "context_score_eligible": True,
+                "llm_status": "needs_review",
+                "scoring_method": f"llm:primary_only:needs_review:{primary_config.model}",
+                "score_exclusion_reason": "独立复核模型未配置；仅作上下文，未计入正式情绪分",
+                "model_review": {"review_missing": True},
+            }
+            apply_company_relevance_guard(item, item)
+            degraded.append(item)
+        degraded.extend(mark_auxiliary_article(article) for article in review_only_articles)
+        degraded.extend(mark_auxiliary_article(article) for article in untouched_auxiliary_articles)
+        return degraded, ["复核模型未配置；A/B 仅保留主模型上下文结果，正式情绪分标记 needs_review"], []
 
     def review_checkpoint_callback(
         collected_scores: dict[str, dict[str, Any]],
@@ -3494,7 +3546,7 @@ def build_snapshot(
         if llm_config and review_llm_config
         else f"remote-primary-llm:{llm_config.model}"
         if llm_config
-        else "invalid-primary-model-configuration"
+        else "retrieval+lexicon-provisional:needs_review"
     )
     cutoff = datetime.combine(as_of + timedelta(days=1), clock_time.min, SHANGHAI_TIMEZONE)
     cache_parameters = {
@@ -4132,6 +4184,8 @@ def build_snapshot(
         "data_cutoff": as_of.isoformat(),
         "scope": sorted({item["market"] for item in universe}),
         "status": "ok" if not warnings and not skipped_articles else "partial",
+        "llm_status": "ready" if llm_config else "needs_review",
+        "retrieval_complete": len(company_news_counts) == len(universe),
         "dashboard_integration": True,
         "universe_source": str(board_path.relative_to(ROOT)) if board_path.is_relative_to(ROOT) else str(board_path),
         "company_count": len(companies),
@@ -4183,7 +4237,7 @@ def build_snapshot(
         },
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股和行业新闻由主模型与复核模型共同评分；C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
+            "A股和行业新闻在模型配置完整时由主模型与复核模型共同评分；模型缺失时仍完成抓取并保留保守临时分类，但正式情绪分标记 needs_review。C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "跨运行新闻目录按股票/行业、市场和规范化标题去重；相同模型配置已有评分直接复用，模型或规则变化时才重新评分。",
             "个股情绪保留正式来源分，同时展示含辅助AI分析的上下文分；A/B进入正式分，C/D只按降权上下文进入。",
@@ -4340,8 +4394,12 @@ def main(argv: list[str] | None = None) -> int:
         primary_config = LLMConfig.from_environment("SENTIMENT_LLM_")
         review_config = LLMConfig.from_environment("SENTIMENT_REVIEW_")
         if primary_config is None:
-            raise SentimentError(
-                "主模型配置不完整：请填写 SENTIMENT_LLM_* 的 API_KEY、MODEL、ENDPOINT"
+            # Do not strand official A/H retrieval just because optional
+            # classification credentials are absent. build_snapshot marks
+            # the result partial/needs_review and keeps formal scores empty.
+            print(
+                "warning: SENTIMENT_LLM_* 未配置；继续抓取 A/H 新闻并发布 needs_review 快照",
+                file=sys.stderr,
             )
         snapshot = build_snapshot(
             board_path=args.board.resolve(),
@@ -4378,6 +4436,28 @@ def main(argv: list[str] | None = None) -> int:
         # flaky auxiliary source cannot strand the dashboard on an old date.
         # A run with no usable company result still fails closed.
         if usable_count <= 0:
+            if snapshot.get("retrieval_complete"):
+                # A complete raw-evidence snapshot with no classified company
+                # is still useful to Event Radar and manual review.
+                write_json(args.output.resolve(), snapshot)
+                write_json(args.site_output.resolve(), snapshot)
+                write_json(args.working_output.resolve(), {**snapshot, "run_state": "promoted"})
+                status = snapshot_status_payload(
+                    snapshot,
+                    "新闻抓取已完成，但没有可发布的正式/上下文情绪分；保留原始证据并标记 needs_review。",
+                )
+                status.update(
+                    {
+                        "schema_version": 2,
+                        "run_id": run_id,
+                        "usable_company_count": usable_count,
+                        "last_success_at": snapshot.get("generated_at"),
+                        "last_success_data_cutoff": snapshot.get("data_cutoff"),
+                    }
+                )
+                write_json(args.status_output.resolve(), status)
+                print(json.dumps({**status, "output": str(args.output.resolve())}, ensure_ascii=False))
+                return 0
             write_json(args.working_output.resolve(), snapshot)
             write_run_status(
                 "error",

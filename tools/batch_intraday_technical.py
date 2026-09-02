@@ -135,6 +135,25 @@ def main() -> int:
         decisions.extend(load_decisions(repo_root, market))
     exclusions = load_exclusions(repo_root)
     selected = [item for item in decisions if str(item["company"]) not in exclusions]
+    state_path = repo_root / "data" / "investment-dashboard" / "company_state.json"
+    if state_path.is_file():
+        try:
+            state_payload = json.loads(state_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            state_payload = {}
+        state_by_ticker = {
+            str(item.get("ticker") or "").upper(): item
+            for item in state_payload.get("companies", [])
+            if isinstance(item, dict) and item.get("ticker")
+        }
+        selected = [
+            item
+            for item in selected
+            if (
+                state_by_ticker.get(str(item.get("ticker") or "").upper(), {}).get("lifecycle") == "PRE_BUY"
+                and state_by_ticker.get(str(item.get("ticker") or "").upper(), {}).get("technical", {}).get("intraday_eligible") is True
+            )
+        ]
     if arguments.limit is not None:
         selected = selected[: max(arguments.limit, 0)]
 

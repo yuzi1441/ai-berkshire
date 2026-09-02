@@ -3283,3 +3283,42 @@ tbody tr.active .valuation-chip.ready {
     animation-duration: 0.01ms !important;
   }
 }
+
+/* Company State console: compact first-glance fields with full detail on click. */
+.state-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 2px 4px 2px 0;
+  padding: 3px 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  background: var(--surface-muted, #f5f6f8);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .02em;
+}
+.state-watch { color: #5c6573; }
+.state-pre-buy { color: #8b5a00; background: #fff7df; border-color: #e9c979; }
+.state-holding { color: #1c6b4d; background: #eaf8f0; border-color: #9ed5b9; }
+.state-exited { color: #7d5362; background: #faf0f3; border-color: #e5becb; }
+.state-event-critical, .state-drift-weakened { color: #9f2e2e; background: #fff0f0; border-color: #e2a3a3; }
+.state-event-important, .state-drift-improved { color: #8b5a00; background: #fff7df; border-color: #e9c979; }
+.state-event-normal, .state-event-watch, .state-drift-unchanged { color: #5c6573; }
+.state-technical { background: transparent; }
+.state-execution-favorable { color: #1c6b4d; background: #eaf8f0; }
+.state-execution-unfavorable { color: #9f2e2e; background: #fff0f0; }
+.state-event-drift-cell small, .state-opportunity-cell small, .state-next-action-cell small,
+.state-technical-cell small, .company-state-summary + small { display: block; margin-top: 4px; color: var(--ink-faint); line-height: 1.45; }
+.state-event-drift-cell, .state-opportunity-cell, .state-technical-cell { min-width: 150px; }
+.state-next-action-cell { min-width: 120px; font-weight: 700; }
+.state-rule-row { padding: 9px 0; border-top: 1px solid var(--line); }
+.state-rule-row:first-child { border-top: 0; }
+.state-rule-row p { margin: 4px 0; color: var(--ink-soft); line-height: 1.5; }
+.state-rule-row small { color: var(--ink-faint); }
+.state-attention-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.state-attention-item { display: grid; gap: 3px; padding: 10px 12px; text-align: left; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: inherit; cursor: pointer; }
+.state-attention-item:hover { border-color: var(--accent); transform: translateY(-1px); }
+.state-attention-item span, .state-attention-item small { color: var(--ink-faint); }
+.company-state-detail-card .kv-grid dd { font-weight: 650; }

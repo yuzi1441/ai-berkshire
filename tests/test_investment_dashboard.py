@@ -2048,6 +2048,28 @@ valid_buy_candidate: "是（候选）"
         self.assertTrue(all(rule["requires_validation"] for rule in policy["price_rules"]))
         self.assertNotIn("profiles", policy)
 
+    def test_execution_policy_keeps_contract_invalidation_as_separate_redline(self):
+        policy = dashboard.build_execution_policy({
+            "market": "A股",
+            "price_plan": [{"action": "分批买入", "price_range": "10-12 元"}],
+            "primary_judgment": {
+                "enabled": True,
+                "label": "等待验证",
+                "action_kind": "watch",
+                "trigger_condition": "中报确认现金流改善；毛利率连续两期低于20%即重审",
+                "human_reviewed": True,
+                "source_matches": True,
+                "confidence": "high",
+                "currency": "CNY",
+            },
+            "decision_contract": {
+                "invalidation_triggers": "毛利率连续两期低于20%",
+                "confidence": "高",
+            },
+        })
+        self.assertEqual(policy["event_condition"], "中报确认现金流改善")
+        self.assertEqual(policy["guard_condition"], "毛利率连续两期低于20%")
+
     def test_price_rule_uses_direction_from_adjacent_action_text(self):
         rule = dashboard._execution_rule_from_row(
             {

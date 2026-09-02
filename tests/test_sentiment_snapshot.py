@@ -46,6 +46,30 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(config.retry_backoff_seconds, 7.0)
         self.assertEqual(config.missing_result_retries, 4)
 
+    def test_missing_primary_model_preserves_evidence_as_needs_review_context(self):
+        article = {
+            "id": "a-1",
+            "scope": "company",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "title": "示例公司订单增长",
+            "summary": "公司公告披露订单增长",
+            "publisher": "巨潮资讯",
+            "url": "https://example.com/a-1",
+            "published_at": "2026-09-01T10:00:00+08:00",
+            "source_tier": "A",
+            "score_eligible": True,
+        }
+        scored, warnings, skipped = sentiment_snapshot.score_articles([article], None, None)
+        self.assertEqual(skipped, [])
+        self.assertIn("needs_review", warnings[0])
+        self.assertFalse(scored[0]["score_eligible"])
+        self.assertTrue(scored[0]["context_score_eligible"])
+        self.assertEqual(scored[0]["llm_status"], "needs_review")
+        self.assertEqual(scored[0]["scoring_method"], "lexicon-v1:needs_review")
+
     def test_review_model_config_uses_separate_environment_prefix(self):
         environment = {
             "SENTIMENT_REVIEW_API_KEY": "review-key",
@@ -629,17 +653,46 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(skipped, [])
         self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
 
-    def test_main_writes_error_status_when_dual_model_configuration_is_missing(self):
+    def test_main_publishes_needs_review_snapshot_when_model_configuration_is_missing(self):
         with tempfile.TemporaryDirectory() as directory:
-            status_path = Path(directory) / "sentiment_status.json"
-            with patch.dict(os.environ, {}, clear=True):
+            root = Path(directory)
+            output = root / "latest.json"
+            site = root / "site.json"
+            working = root / "working.json"
+            status_path = root / "sentiment_status.json"
+            partial = {
+                "schema_version": 1,
+                "status": "partial",
+                "generated_at": "2026-08-23T18:00:00+08:00",
+                "data_cutoff": "2026-08-22",
+                "company_count": 1,
+                "companies": [
+                    {
+                        "ticker": "600000.SH",
+                        "combined_sentiment": {"status": "context_only"},
+                    }
+                ],
+                "retrieval_complete": True,
+                "warnings": ["主模型未配置；正式情绪分 needs_review"],
+                "skipped_count": 0,
+            }
+            with patch.dict(os.environ, {}, clear=True), patch.object(
+                sentiment_snapshot, "build_snapshot", return_value=partial
+            ):
                 result = sentiment_snapshot.main(
-                    ["--status-output", str(status_path), "--no-archive"]
+                    [
+                        "--output", str(output),
+                        "--site-output", str(site),
+                        "--working-output", str(working),
+                        "--status-output", str(status_path),
+                        "--no-archive",
+                    ]
                 )
-            self.assertEqual(result, 1)
+            self.assertEqual(result, 0)
+            self.assertEqual(json.loads(output.read_text(encoding="utf-8"))["status"], "partial")
             status = json.loads(status_path.read_text(encoding="utf-8"))
-            self.assertEqual(status["status"], "error")
-            self.assertIn("主模型配置不完整", status["error"])
+            self.assertEqual(status["status"], "partial")
+            self.assertEqual(status["last_success_data_cutoff"], "2026-08-22")
 
     def test_partial_run_publishes_usable_results_and_writes_partial_status(self):
         config = sentiment_snapshot.LLMConfig(

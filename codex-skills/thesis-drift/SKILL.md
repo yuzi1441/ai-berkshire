@@ -37,6 +37,15 @@ This skill is generated from `skills/thesis-drift.md` so Claude Code and Codex u
 
 本 Skill 依赖 `/thesis-tracker` 输出的结构化维度：核心假设清单、红线清单、估值锚点、追踪记录表。没有这些结构时，先补齐基线，再做漂移检测。
 
+## Dashboard 双模式契约
+
+本 Skill 仍然只有一个 `thesis-drift` 入口，但必须根据 Company State 自动选择模式：
+
+- `WATCH MODE`：比较 Main Report、Decision Rules 与最新事实；结论为 Improved / Unchanged / Weakened，动作只允许 KEEP WATCH / RUN CHECKLIST / DROP。
+- `HOLDING MODE`：比较 Original Buy Thesis 与最新事实；结论为 Improved / Unchanged / Weakened，动作只允许 ADD REVIEW / HOLD / REDUCE REVIEW / EXIT REVIEW。
+
+输出同步写入 `data/investment-dashboard/drift_states.json` 的对应公司记录。没有足够证据时使用 `unknown` 或 `needs_review`，不得把价格波动直接判定为论文漂移，也不得自动交易。主报告只在 Minor Fundamental Drift 或 Major Drift 经人工复核后 patch 对应章节；No Drift 与 Price Only 不生成完整新报告。
+
 ## 执行流程
 
 ### 第一步：判断操作模式

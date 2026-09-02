@@ -74,9 +74,9 @@
       <details class="attention-panel" id="attention-panel" hidden>
         <summary class="attention-toggle">
           <span class="attention-toggle-copy">
-            <span class="eyebrow">A-SHARE OPPORTUNITY</span>
-            <span class="attention-toggle-title">每日机会筛选</span>
-            <span class="attention-toggle-note">每日收盘后扫描 A 股机会；只展示仍值得你决策的当前与临近机会</span>
+            <span class="eyebrow">NEEDS ATTENTION</span>
+            <span class="attention-toggle-title">今天需要处理什么</span>
+            <span class="attention-toggle-note">优先显示重大事件、负向 Drift、已触发规则和买入前检查</span>
           </span>
           <span class="attention-toggle-side">
             <span class="attention-toggle-meta" id="attention-toggle-meta">尚未加载</span>
@@ -86,7 +86,7 @@
         </summary>
         <div class="attention-panel-body">
           <div class="attention-panel-head">
-            <p class="attention-panel-note">每日收盘后用最新行情扫描 A 股机会，当前机会进入主列表，仍缺安全边际或决定性条件的临近机会折叠展示；它不等于实时可执行，仍须通过交易时段与行情新鲜度守门。周末可再进行人工复核确认。</p>
+            <p class="attention-panel-note">队列来自 Company State：重大 Event、负向 Drift、规则触发、Checklist、价格机会和条件机会。它只告诉你现在该复核什么，不自动交易或改变基本面结论。历史“每日收盘后扫描 A 股机会 / 每日机会筛选”仍作为兼容输入保留。</p>
             <p class="attention-panel-meta" id="attention-meta"></p>
           </div>
           <div class="attention-list" id="attention-list"></div>
@@ -95,9 +95,24 @@
 
       <section class="control-band" aria-label="筛选与检索">
         <div class="chip-row view-mode-row" id="view-tabs" role="tablist" aria-label="工作模块">
-          <button type="button" class="chip active" data-view="decision">买入前决策</button>
+          <button type="button" class="chip active" data-view="decision">状态控制台</button>
           <button type="button" class="chip" data-view="review">报告复核 <span class="chip-count" id="fundamental-review-count">0</span></button>
           <button type="button" class="chip" data-view="tracking">买入后跟踪 <span class="chip-count" id="tracking-count">0</span></button>
+        </div>
+        <div class="chip-row lifecycle-filter-row" id="lifecycle-filter-row" role="tablist" aria-label="生命周期">
+          <span class="filter-label">生命周期</span>
+          <button type="button" class="chip active" data-lifecycle="all">全部</button>
+          <button type="button" class="chip" data-lifecycle="WATCH">WATCH</button>
+          <button type="button" class="chip" data-lifecycle="PRE_BUY">PRE_BUY</button>
+          <button type="button" class="chip" data-lifecycle="HOLDING">HOLDING</button>
+          <button type="button" class="chip" data-lifecycle="EXITED">EXITED</button>
+        </div>
+        <div class="chip-row opportunity-filter-row" id="opportunity-filter-row" role="tablist" aria-label="机会类型">
+          <span class="filter-label">机会类型</span>
+          <button type="button" class="chip active" data-opportunity="all">全部</button>
+          <button type="button" class="chip" data-opportunity="price">Price Opportunities</button>
+          <button type="button" class="chip" data-opportunity="condition">Condition Opportunities</button>
+          <button type="button" class="chip" data-opportunity="attention">Needs Attention</button>
         </div>
         <div class="search-box">
           <label class="sr-only" for="company-filter">检索公司或代码</label>
@@ -234,7 +249,8 @@
             <button type="button" class="btn icon" id="detail-close" aria-label="关闭详情">×</button>
           </div>
           <div class="detail-tabs" role="tablist">
-            <button type="button" class="tab active" data-tab="technical">技术面</button>
+            <button type="button" class="tab active" data-tab="state">Company State</button>
+            <button type="button" class="tab" data-tab="technical">技术面</button>
             <button type="button" class="tab report-review-tab" data-tab="report-review">报告复核</button>
             <button type="button" class="tab" data-tab="overview">摘要</button>
             <button type="button" class="tab deep-review-tab" data-tab="deep-review" hidden>深度复核</button>
@@ -252,13 +268,13 @@
       </div>
 
       <footer class="app-footer">
-        仅收录个股研究；A股实时执行状态由主报告动作、价格档、经营前提、交易时段和 10 分钟内同源行情动态生成，人工复核仅作行动提示，Checklist 由你自行查看，技术面只辅助观察节奏，不构成投资建议。
+        仅收录个股研究；主列表优先读取 Company State，主报告仍是基本面事实，Decision Rules 决定何时重看，Drift 判断是否变化，Checklist 只服务 PRE_BUY，技术面只辅助执行，不构成投资建议。
         盘前、午休和盘后保留“最近行情参考分区”，仅用于研究与准备，不代表当时可以下单。
         港股与美股仅供研究浏览，不计入“当前可执行”。
       </footer>
     </div>
 
     <div class="toast" id="toast" hidden></div>
-    <script type="module" src="./assets/app.js?v=review-layers-v8"></script>
+    <script type="module" src="./assets/app.js?v=state-console-v1"></script>
   </body>
 </html>

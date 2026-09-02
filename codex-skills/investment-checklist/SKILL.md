@@ -284,6 +284,8 @@ python3 tools/financial_rigor.py three-scenario \
 
 对单一上市公司，保留以上 Checklist 正文不变，并在报告**最后**追加以下「看板决策契约」表。它只让系统稳定识别该 Checklist 的基本面状态，不能把“通过 Checklist”写成买入建议，也**不能覆盖看板中的完整基本面研报结论**：通过或灰色地带通常填`观察`，否决/重大红线填`减仓/卖出`或`观察`，以正文为准。多公司对比报告不要附该表。
 
+Checklist 是 `PRE_BUY` 生命周期的资金投入前检查，不负责创建 `HOLDING`。触发来源可以是 Watch Drift 的 `RUN CHECKLIST`，也可以是用户主动复核；无论结果是 PASS、CONDITIONAL_PASS 还是 FAIL，都必须保留 `lifecycle` 与实际持仓事实分离。PASS 只表示检查通过，仍需用户确认真实成交后才能调用 `thesis-tracker` 建立 Buy Thesis。
+
 - `数据截止日`写本次判断实际使用数据的截止日，不等同于报告撰写日。
 - `硬性否决`必须填`已触发`、`未触发`或`待复核`，不得只靠含糊自然语言让看板猜测。
 - 三档价格只能填本报告已经验证的基本面安全边际价格；没有可靠估值时填`未给出`。
@@ -312,6 +314,8 @@ python3 tools/financial_rigor.py three-scenario \
 | 买入失效条件 | {核心前提被证伪的可观察条件；不适用填未给出} |
 | 下次复核日期 | {YYYY-MM-DD；未安排填未给出} |
 | 研究置信度 | {高/中/低/待复核} |
+
+看板结构化状态至少同步保存：`status`（PASS / CONDITIONAL_PASS / FAIL / UNKNOWN）、`hard_veto`、`checked_at`、`summary`、`report_path`。无法抽取时写 `UNKNOWN` 和 `needs_review`，不得用缺失数据推断失败。
 
 将完整报告写入 `~/巴菲特Checklist-[公司名或"多公司对比"].md`
 

@@ -28,6 +28,36 @@ assets/公司品牌图/
 
 # Sentiment news pools are runtime caches, not source data.
 /data/sentiment/cache/
+# Runtime snapshots/cache are reproducible from their source jobs and should
+# not become a second committed Source of Truth.
+/data/sentiment/snapshots/
+/data/sentiment/work-in-progress.json
+/data/technical-backtest/cache/
+
+# Dashboard build artifacts are recreated from canonical reports and
+# structured Source of Truth during CI/VPS release builds.
+/data/investment-dashboard/decision_board.json
+/data/investment-dashboard/decision_board_summary.json
+/data/investment-dashboard/decision_details/
+/data/investment-dashboard/checklist_states.json
+/data/investment-dashboard/event_radar.json
+/data/investment-dashboard/main_report_review.json
+/data/investment-dashboard/model_review_comparison.json
+/data/investment-dashboard/intraday_technical.json
+/data/investment-dashboard/decision_reviews.json
+/data/investment-dashboard/opportunity_scans.json
+/data/investment-dashboard/post_buy_alerts.json
+/data/investment-dashboard/quotes/
+/data/investment-dashboard/reports_catalog.json
+/data/investment-dashboard/report_history.json
+/data/investment-dashboard/technical_latest.json
+/logs/technical-analysis-batch-*.json
+/data/sentiment/latest.json
+/site/data/
+
+# Builder-generated Obsidian indexes; source reports remain tracked.
+/reports/00-index/投资决策总表.md
+/reports/00-index/报告库-MOC.md
 
 # ===== 密钥/凭证类文件，任何位置一律不入库 =====
 .env

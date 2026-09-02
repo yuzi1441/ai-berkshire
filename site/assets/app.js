@@ -24,6 +24,8 @@ const A_SHARE_INDEX_WATCH = [
 
 const state = {
   decisions: [],
+  companyStates: new Map(),
+  stateSnapshot: null,
   details: new Map(),
   detailRequests: new Map(),
   detailErrors: new Map(),
@@ -53,9 +55,11 @@ const state = {
   humanReviewAction: "all",
   fundamentalReviewFilter: "all",
   trackingFilter: "all",
+  lifecycleFilter: "all",
+  opportunityFilter: "all",
   hiddenTrackingKeys: new Set(),
   sort: "execution",
-  detailTab: "technical",
+  detailTab: "state",
   quoteMode: "idle", // snapshot | idle | error
   quoteUpdatedAt: null,
   quoteSnapshotMeta: null,
@@ -89,6 +93,8 @@ const els = {
   referenceActionChips: document.querySelector("#reference-action-chips"),
   humanReviewChips: document.querySelector("#human-review-chips"),
   viewTabs: document.querySelector("#view-tabs"),
+  lifecycleFilterRow: document.querySelector("#lifecycle-filter-row"),
+  opportunityFilterRow: document.querySelector("#opportunity-filter-row"),
   fundamentalReviewFilterRow: document.querySelector("#fundamental-review-filter-row"),
   fundamentalReviewPartitions: document.querySelector("#fundamental-review-partitions"),
   fundamentalReviewCount: document.querySelector("#fundamental-review-count"),
@@ -126,6 +132,36 @@ function trackingForItem(item) {
   if (!tracking || tracking.status === "not_tracked") return null;
   if (state.hiddenTrackingKeys.has(itemKey(item))) return null;
   return tracking;
+}
+
+function companyStateForItem(item) {
+  return state.companyStates.get(item?.ticker) || item?.company_state || null;
+}
+
+function lifecycleForItem(item) {
+  return companyStateForItem(item)?.lifecycle || "WATCH";
+}
+
+function lifecycleLabel(value) {
+  return {
+    WATCH: "WATCH · 观察",
+    PRE_BUY: "PRE_BUY · 买入前",
+    HOLDING: "HOLDING · 持仓",
+    EXITED: "EXITED · 已退出",
+  }[value] || "UNKNOWN · 待复核";
+}
+
+function lifecycleClass(value) {
+  return {
+    WATCH: "state-watch",
+    PRE_BUY: "state-pre-buy",
+    HOLDING: "state-holding",
+    EXITED: "state-exited",
+  }[value] || "state-unknown";
+}
+
+function stateOpportunityForItem(item) {
+  return companyStateForItem(item)?.opportunity_type || "none";
 }
 
 function loadHiddenTrackingKeys() {
@@ -2456,6 +2492,14 @@ function filteredDecisions() {
       ? item.market === "A股"
       : (state.market === "all" || item.market === state.market);
     const tracking = trackingForItem(item);
+    const companyState = companyStateForItem(item);
+    const lifecycleMatch = state.lifecycleFilter === "all"
+      || lifecycleForItem(item) === state.lifecycleFilter;
+    const opportunityType = stateOpportunityForItem(item);
+    const opportunityMatch = state.opportunityFilter === "all"
+      || (state.opportunityFilter === "price" && ["price", "both"].includes(opportunityType))
+      || (state.opportunityFilter === "condition" && ["condition", "both"].includes(opportunityType))
+      || (state.opportunityFilter === "attention" && companyState?.needs_attention);
     const advice = adviceFor(item);
     const adviceMatch = state.action === "all"
       || executionFor(item).key === state.action;
@@ -2479,6 +2523,8 @@ function filteredDecisions() {
       && (state.view === "decision" ? humanReviewMatch : true)
       && fundamentalReviewMatch
       && trackingMatch
+      && lifecycleMatch
+      && opportunityMatch
       && (!phrase || searchable.includes(phrase));
   });
 
@@ -3633,7 +3679,7 @@ function renderSentimentDetail(item) {
   card.append(summary);
   const note = document.createElement("p");
   note.className = "source-note";
-  note.textContent = "综合情绪由个股60% + 行业25% + A股市场15%组成；C/D新闻仅按降权上下文进入，缺失层不会放大其他层权重。行业权威来源可为A级，但仍按行业传导系数处理。";
+  note.textContent = `综合情绪由个股60% + 行业25% + ${item.market || "本市场"}市场15%组成；C/D新闻仅按降权上下文进入，缺失层不会放大其他层权重。行业权威来源可为A级，但仍按行业传导系数处理。`;
   card.append(note);
   els.detailBody.append(card);
 
@@ -3824,9 +3870,70 @@ function renderOpportunityGroup(candidates, title, note) {
   return group;
 }
 
+function stateAttentionItem(item) {
+  const companyState = companyStateForItem(item);
+  if (!companyState?.needs_attention) return null;
+  const actions = {
+    run_drift: "重大事件或规则变化，运行 Drift",
+    reduce_review: "负向 Drift，进行减仓/退出复核",
+    review_holding: "持仓跟踪需要复核",
+    run_checklist: "运行买入前 Checklist",
+    confirm_purchase: "Checklist 已通过，等待确认成交",
+    price_near_trigger: "价格接近规则",
+    condition_near_trigger: "条件接近规则",
+    drop_or_recheck: "负向变化，重新判断是否继续观察",
+  };
+  return {
+    item,
+    state: companyState,
+    priority: companyState.event_radar?.state === "critical" ? 100
+      : companyState.drift?.severity === "major" ? 90
+        : companyState.lifecycle === "HOLDING" ? 80
+          : companyState.decision_rules?.triggered ? 70 : 50,
+    label: actions[companyState.next_action] || companyState.next_action || "待处理",
+  };
+}
+
+function renderStateAttentionPanel() {
+  const items = state.decisions
+    .map(stateAttentionItem)
+    .filter(Boolean)
+    .sort((a, b) => b.priority - a.priority || a.item.company.localeCompare(b.item.company, "zh"));
+  els.attentionPanel.hidden = false;
+  const counts = state.stateSnapshot?.summary || {};
+  els.attentionMeta.textContent = `待处理 ${items.length} · WATCH ${counts.WATCH || 0} · PRE_BUY ${counts.PRE_BUY || 0} · HOLDING ${counts.HOLDING || 0}`;
+  els.attentionMeta.dataset.status = "ready";
+  if (els.attentionToggleMeta) els.attentionToggleMeta.textContent = `Needs Attention · ${items.length} 项`;
+  if (els.attentionToggleState) els.attentionToggleState.textContent = els.attentionPanel.open ? "收起" : "展开";
+  els.attentionList.replaceChildren();
+  if (!items.length) {
+    const empty = document.createElement("p");
+    empty.className = "attention-empty";
+    empty.textContent = "今天没有需要处理的生命周期、规则或事件。";
+    els.attentionList.append(empty);
+    return;
+  }
+  const list = document.createElement("div");
+  list.className = "state-attention-list";
+  items.slice(0, 24).forEach(({item, state: companyState, label}) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "state-attention-item";
+    button.innerHTML = `<strong>${item.company}</strong><span>${lifecycleLabel(companyState.lifecycle)}</span><small>${label}</small>`;
+    button.addEventListener("click", () => openDetail(item));
+    list.append(button);
+  });
+  els.attentionList.append(list);
+}
+
 function renderAttentionPanel() {
   if (!els.attentionPanel || !els.attentionList || state.view !== "decision") {
     if (els.attentionPanel) els.attentionPanel.hidden = true;
+    return;
+  }
+
+  if (state.companyStates.size) {
+    renderStateAttentionPanel();
     return;
   }
 
@@ -3954,6 +4061,41 @@ function renderSummary(visible) {
       ["股价异动", moveCount],
       ["论文受损", damagedCount],
       ["当前持仓", tracked.length],
+    ];
+    els.summary.replaceChildren();
+    for (const [label, value] of metrics) {
+      const card = document.createElement("div");
+      card.className = "metric";
+      card.innerHTML = `<span class="metric-label">${label}</span><strong class="metric-value">${value}</strong>`;
+      els.summary.append(card);
+    }
+    return;
+  }
+  if (state.companyStates.size) {
+    const items = visible.map((item) => companyStateForItem(item)).filter(Boolean);
+    const attention = items.filter((item) => item.needs_attention).length;
+    const price = items.filter((item) => ["price", "both"].includes(item.opportunity_type)).length;
+    const nearPrice = items.filter((item) => (item.price_opportunities || []).some((rule) => rule.status === "near_trigger")).length;
+    const condition = items.filter((item) => ["condition", "both"].includes(item.opportunity_type)).length;
+    const checklistDue = items.filter((item) => item.lifecycle === "PRE_BUY" && item.next_action === "run_checklist").length;
+    const driftDue = items.filter((item) => item.next_action === "run_drift").length;
+    const majorEvents = items.filter((item) => ["important", "critical"].includes(item.event_radar?.state) && item.event_radar?.thesis_relevant).length;
+    const negativeDrift = items.filter((item) => item.drift?.direction === "weakened").length;
+    const triggered = items.filter((item) => Number(item.decision_rules?.triggered || 0) > 0).length;
+    const metrics = [
+      ["WATCH", items.filter((item) => item.lifecycle === "WATCH").length],
+      ["PRE_BUY", items.filter((item) => item.lifecycle === "PRE_BUY").length],
+      ["HOLDING", items.filter((item) => item.lifecycle === "HOLDING").length],
+      ["EXITED", items.filter((item) => item.lifecycle === "EXITED").length],
+      ["价格机会", price],
+      ["接近价格条件", nearPrice],
+      ["条件机会", condition],
+      ["待 Checklist", checklistDue],
+      ["待 Drift", driftDue],
+      ["重大 Event", majorEvents],
+      ["负向 Drift", negativeDrift],
+      ["规则已触发", triggered],
+      ["待处理", attention],
     ];
     els.summary.replaceChildren();
     for (const [label, value] of metrics) {
@@ -4483,12 +4625,119 @@ function renderFundamentalReviewRows(visible) {
   if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
 }
 
+function appendStateBadge(parent, value, className = "") {
+  const badge = document.createElement("span");
+  badge.className = `state-badge ${className}`.trim();
+  badge.textContent = value;
+  parent.append(badge);
+  return badge;
+}
+
+function renderStateOpportunityCell(companyState) {
+  const cell = document.createElement("td");
+  cell.className = "state-opportunity-cell";
+  const price = companyState.price_opportunities || [];
+  const condition = companyState.condition_opportunities || [];
+  if (price.length) {
+    appendStateBadge(cell, `Price · ${price.filter((item) => ["triggered", "near_trigger"].includes(item.status)).length}/${price.length}`, "state-price");
+    const detail = document.createElement("small");
+    detail.textContent = price.slice(0, 2).map((item) => `${item.condition} · ${item.status}`).join("；");
+    cell.append(detail);
+  }
+  if (condition.length) {
+    appendStateBadge(cell, `Condition · ${condition.length}`, "state-condition");
+    const detail = document.createElement("small");
+    detail.textContent = condition.slice(0, 2).map((item) => item.condition).join("；");
+    cell.append(detail);
+  }
+  if (!price.length && !condition.length) cell.textContent = "无明确规则 · 需人工判断";
+  return cell;
+}
+
+function renderStateEventDriftCell(companyState) {
+  const cell = document.createElement("td");
+  cell.className = "state-event-drift-cell";
+  const drift = companyState.drift || {};
+  appendStateBadge(cell, `Drift · ${drift.direction || "unknown"}`, `state-drift-${drift.direction || "unknown"}`);
+  const event = companyState.event_radar || {};
+  appendStateBadge(cell, `Event · ${event.state || "unknown"}`, `state-event-${event.state || "unknown"}`);
+  const note = document.createElement("small");
+  note.textContent = event.thesis_relevant ? "事件与论文相关 · 建议运行 Drift" : (drift.summary || "无新的结构化变化");
+  cell.append(note);
+  return cell;
+}
+
+function renderStateTechnicalCell(companyState) {
+  const cell = document.createElement("td");
+  cell.className = "state-technical-cell";
+  const technical = companyState.technical || {};
+  appendStateBadge(cell, `Trend ${technical.trend || "UNKNOWN"}`, "state-technical");
+  appendStateBadge(cell, `Position ${technical.position || "UNKNOWN"}`, "state-technical");
+  appendStateBadge(cell, `Execution ${technical.execution || "UNKNOWN"}`, `state-execution-${String(technical.execution || "unknown").toLowerCase()}`);
+  const freshness = document.createElement("small");
+  freshness.className = "state-technical-freshness";
+  freshness.textContent = technical.freshness === "not_applicable"
+    ? "研究专用"
+    : `Technical ${technical.freshness || "unknown"}${technical.data_cutoff ? ` · ${technical.data_cutoff}` : ""}`;
+  cell.append(freshness);
+  return cell;
+}
+
+function renderStateRows(visible) {
+  setTableHeader(["公司 / 代码", "生命周期", "机会", "Drift / Event", "技术执行", "下一步"]);
+  const rendered = visible.slice(0, state.page * ROW_PAGE_SIZE);
+  rendered.forEach((item, index) => {
+    const companyState = companyStateForItem(item);
+    const tr = document.createElement("tr");
+    const key = itemKey(item);
+    if (key === state.selectedKey) tr.classList.add("active");
+    tr.dataset.key = key;
+    tr.dataset.index = String(index);
+    tr.tabIndex = 0;
+    tr.append(renderIdentityCell(item));
+    const lifecycle = document.createElement("td");
+    appendStateBadge(lifecycle, lifecycleLabel(companyState?.lifecycle || "UNKNOWN"), lifecycleClass(companyState?.lifecycle));
+    const quote = state.quotes.get(item.ticker);
+    const price = document.createElement("small");
+    price.textContent = `现价 ${formatPrice(quote)}`;
+    lifecycle.append(price);
+    tr.append(lifecycle, renderStateOpportunityCell(companyState || {}), renderStateEventDriftCell(companyState || {}), renderStateTechnicalCell(companyState || {}));
+    const next = document.createElement("td");
+    next.className = "state-next-action-cell";
+    next.textContent = companyState?.next_action || "needs_review";
+    if (companyState?.warning) {
+      const warning = document.createElement("small");
+      warning.textContent = companyState.warning;
+      next.append(warning);
+    }
+    tr.append(next);
+    tr.addEventListener("click", () => openDetail(item, { scrollRow: false }));
+    tr.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") openDetail(item, { scrollRow: false });
+    });
+    els.rows.append(tr);
+  });
+  mountInlineDetail(selectedItem());
+  const remaining = Math.max(0, visible.length - rendered.length);
+  if (els.loadMoreRows) {
+    els.loadMoreRows.hidden = remaining === 0;
+    els.loadMoreRows.textContent = remaining ? `加载更多（剩余 ${remaining} 条）` : "已显示全部";
+  }
+  els.status.textContent = `显示 ${rendered.length} / ${visible.length} · Company State 控制台`;
+  if (els.emptyState) els.emptyState.hidden = visible.length > 0;
+  if (state.focusIndex >= visible.length) state.focusIndex = visible.length - 1;
+}
+
 function renderRows() {
   const visible = filteredDecisions();
   renderSummary(visible);
   els.rows.replaceChildren();
   if (state.view === "review") {
     renderFundamentalReviewRows(visible);
+    return;
+  }
+  if (state.companyStates.size) {
+    renderStateRows(visible);
     return;
   }
   if (state.view === "tracking") {
@@ -5687,6 +5936,115 @@ function renderFundamentalReviewDetailLegacy(item) {
   }
 }
 
+function stateNextActionLabel(value) {
+  return {
+    keep_watch: "继续观察",
+    price_near_trigger: "等待价格条件",
+    condition_near_trigger: "等待条件确认",
+    run_checklist: "运行 Checklist",
+    confirm_purchase: "确认是否真实成交",
+    run_drift: "运行 Thesis Drift",
+    drop_or_recheck: "重新判断是否继续观察",
+    review_holding: "复核持仓",
+    reduce_review: "减仓/退出复核",
+    hold: "继续持有",
+    none: "无需处理",
+  }[value] || value || "needs_review";
+}
+
+function renderStateDetail(item, companyState) {
+  const stateCard = document.createElement("section");
+  stateCard.className = "card company-state-detail-card";
+  const heading = document.createElement("h3");
+  heading.textContent = "Company State";
+  stateCard.append(heading);
+  const summary = document.createElement("dl");
+  summary.className = "kv-grid company-state-summary";
+  const rows = [
+    ["实时范围", companyState.realtime_scope === "supported" ? "A/H 实时支持" : "research_only · 仅研究"],
+    ["生命周期", lifecycleLabel(companyState.lifecycle)],
+    ["下一步", stateNextActionLabel(companyState.next_action)],
+    ["Canonical Main Report", companyState.canonical_report || "unknown"],
+    ["规则", `${companyState.decision_rules?.triggered || 0} 已触发 · ${companyState.decision_rules?.near_trigger || 0} 接近 · ${companyState.decision_rules?.needs_review || 0} 待复核`],
+    ["Drift", `${companyState.drift?.direction || "unknown"} · ${companyState.drift?.severity || "none"}`],
+    ["Event Radar", `${companyState.event_radar?.state || "unknown"} · ${companyState.event_radar?.thesis_relevant ? "论文相关" : "未标记相关"}`],
+    ["Sentiment", `${companyState.sentiment?.state || "unknown"} · ${companyState.sentiment?.confidence || "unknown"} · ${companyState.sentiment?.status || "unknown"}`],
+    ["Technical", `${companyState.technical?.trend || "UNKNOWN"} / ${companyState.technical?.position || "UNKNOWN"} / ${companyState.technical?.execution || "UNKNOWN"} · ${companyState.technical?.freshness || "unknown"}`],
+    ["Checklist", companyState.lifecycle === "PRE_BUY" ? (companyState.checklist?.status || "UNKNOWN") : "N/A · 仅 PRE_BUY"],
+  ];
+  rows.forEach(([label, value]) => {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;
+    summary.append(dt, dd);
+  });
+  stateCard.append(summary);
+  if (companyState.warning) {
+    const warning = document.createElement("p");
+    warning.className = "source-note warning-note";
+    warning.textContent = companyState.warning;
+    stateCard.append(warning);
+  }
+  els.detailBody.append(stateCard);
+
+  const rulesCard = document.createElement("section");
+  rulesCard.className = "card state-rules-detail-card";
+  rulesCard.innerHTML = "<h3>Decision Rules</h3>";
+  const rules = companyState.decision_rules?.rules || [];
+  if (!rules.length) {
+    const empty = document.createElement("p");
+    empty.className = "source-note";
+    empty.textContent = "没有可靠提取的规则；保持 needs_review，不猜测。";
+    rulesCard.append(empty);
+  } else {
+    const list = document.createElement("div");
+    list.className = "state-rule-list";
+    rules.forEach((rule) => {
+      const row = document.createElement("article");
+      row.className = "state-rule-row";
+      const title = document.createElement("strong");
+      title.textContent = `${rule.type || "UNKNOWN"} · ${rule.status || "unknown"}`;
+      const condition = document.createElement("p");
+      condition.textContent = rule.condition || "unknown";
+      const meta = document.createElement("small");
+      meta.textContent = `${rule.automation || "MANUAL"} · ${rule.confidence || "unknown"} · ${rule.source_section || "source unknown"}`;
+      row.append(title, condition, meta);
+      list.append(row);
+    });
+    rulesCard.append(list);
+  }
+  els.detailBody.append(rulesCard);
+
+  const eventCard = document.createElement("section");
+  eventCard.className = "card state-event-detail-card";
+  eventCard.innerHTML = "<h3>Event Radar</h3>";
+  const eventText = document.createElement("p");
+  eventText.textContent = companyState.event_radar?.thesis_relevant
+    ? "事件被标记为与论文相关；建议运行 Drift，不直接改变买卖动作。"
+    : "没有被标记为论文相关的重大事件。";
+  eventCard.append(eventText);
+  const events = companyState.event_radar?.events || [];
+  events.slice(0, 8).forEach((event) => {
+    const eventRow = document.createElement("article");
+    eventRow.className = "state-rule-row";
+    const title = document.createElement("strong");
+    title.textContent = `${event.state || "unknown"} · ${event.event_type || "事件"} · ${event.headline || "未命名事件"}`;
+    const detail = document.createElement("p");
+    detail.textContent = `${event.summary || ""} · 证据 ${event.evidence_count || 0} · 最高来源 ${event.highest_source_tier || "unknown"}`;
+    eventRow.append(title, detail);
+    eventCard.append(eventRow);
+  });
+  els.detailBody.append(eventCard);
+
+  if (companyState.lifecycle === "HOLDING") {
+    // Reuse the established post-buy renderer so the Company State detail
+    // keeps thesis health, metrics, alerts, review dates and source links in
+    // the same place as the dedicated tracking view.
+    renderTrackingDetail(item, companyState.post_buy_tracking || null);
+  }
+}
+
 function renderDetail() {
   const item = selectedItem();
   if (!item) {
@@ -5717,6 +6075,7 @@ function renderDetail() {
   els.detailReport.href = `${repositoryUrl}${item.report_path}`;
 
   els.detailBody.replaceChildren();
+  const companyState = companyStateForItem(item);
   const detailTabs = document.querySelector(".detail-tabs");
   if (detailTabs) detailTabs.hidden = false;
   const tracking = trackingForItem(item);
@@ -5737,7 +6096,8 @@ function renderDetail() {
     deepReviewTab.hidden = !isAShare || !isAdminOrigin();
     if ((!isAShare || !isAdminOrigin()) && state.detailTab === "deep-review") state.detailTab = "overview";
   }
-  const hasChecklist = Boolean(checklistForItem(item));
+  const hasChecklist = Boolean(checklistForItem(item))
+    && (!companyState || companyState.lifecycle === "PRE_BUY");
   if (checklistTab) {
     checklistTab.hidden = !hasChecklist;
     if (!hasChecklist && state.detailTab === "checklist") state.detailTab = "overview";
@@ -5745,6 +6105,11 @@ function renderDetail() {
   document.querySelectorAll(".detail-tabs .tab").forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === state.detailTab);
   });
+
+  if (state.detailTab === "state" && companyState) {
+    renderStateDetail(item, companyState);
+    return;
+  }
 
   if (state.detailTab === "report-review") {
     const review = fundamentalReviewForItem(item);
@@ -5800,7 +6165,7 @@ function renderDetail() {
 
       const auxiliaryCard = document.createElement("div");
       auxiliaryCard.className = "card primary-judgment-aux-card";
-      auxiliaryCard.innerHTML = "<h3>当前状态 / 非实时参考</h3>";
+      auxiliaryCard.innerHTML = "<h3>当前状态 / 实时辅助参考</h3>";
       auxiliaryCard.append(renderExecutionState(item, quote, { compact: false }));
       els.detailBody.append(auxiliaryCard);
 
@@ -5877,7 +6242,7 @@ function renderDetail() {
     tip.className = "card";
     tip.innerHTML = primaryJudgment
       ? `<h3>筛选依据</h3><p class="source-note">主报告判断始终保留原文；当前执行分区按报告价格档、经营前提和最新同源行情动态计算。人工复核只作为行动提示，不再覆盖价格状态；Checklist 由你自行查看，不参与自动分区，技术面和情绪面保持独立辅助展示。</p>`
-      : `<h3>筛选依据</h3><p class="source-note">尚无双模型主报告判断的非 A 股，暂按旧报告结论兼容归类；完整基本面上下文请打开主报告。</p>`;
+      : `<h3>筛选依据</h3><p class="source-note">尚无人工主报告裁决时，A/H 按现有结构化价格/事件契约和实时行情保守归类；完整基本面上下文请打开主报告。</p>`;
     els.detailBody.append(tip);
     return;
   }
@@ -6045,13 +6410,15 @@ function setView(view) {
   } else if (state.view === "review") {
     state.detailTab = "report-review";
   } else if (["tracking", "report-review"].includes(state.detailTab)) {
-    state.detailTab = "technical";
+    state.detailTab = state.companyStates.size ? "state" : "technical";
   }
   els.viewTabs?.querySelectorAll(".chip").forEach((chip) => {
     chip.classList.toggle("active", chip.dataset.view === state.view);
   });
   if (els.marketChips) els.marketChips.hidden = state.view === "review";
   if (els.actionChips) els.actionChips.hidden = state.view !== "decision";
+  if (els.lifecycleFilterRow) els.lifecycleFilterRow.hidden = state.view !== "decision";
+  if (els.opportunityFilterRow) els.opportunityFilterRow.hidden = state.view !== "decision";
   if (els.advancedFilters) {
     els.advancedFilters.hidden = state.view !== "decision";
     if (state.view !== "decision") els.advancedFilters.open = false;
@@ -6101,6 +6468,8 @@ function bindEvents() {
     state.humanReviewAction = "all";
     state.fundamentalReviewFilter = "all";
     state.trackingFilter = "all";
+    state.lifecycleFilter = "all";
+    state.opportunityFilter = "all";
     state.sort = "execution";
     resetRowPage();
     els.companyFilter.value = "";
@@ -6123,6 +6492,12 @@ function bindEvents() {
     });
     els.fundamentalReviewFilterRow?.querySelectorAll(".chip").forEach((chip) => {
       chip.classList.toggle("active", chip.dataset.fundamentalReviewFilter === "all");
+    });
+    els.lifecycleFilterRow?.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.lifecycle === "all");
+    });
+    els.opportunityFilterRow?.querySelectorAll(".chip").forEach((chip) => {
+      chip.classList.toggle("active", chip.dataset.opportunity === "all");
     });
     setView("decision");
   });
@@ -6182,6 +6557,26 @@ function bindEvents() {
     state.trackingFilter = chip.dataset.trackingFilter || "all";
     resetRowPage();
     els.trackingFilterRow.querySelectorAll(".chip").forEach((node) => {
+      node.classList.toggle("active", node === chip);
+    });
+    renderRows();
+  });
+  els.lifecycleFilterRow?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    state.lifecycleFilter = chip.dataset.lifecycle || "all";
+    resetRowPage();
+    els.lifecycleFilterRow.querySelectorAll(".chip").forEach((node) => {
+      node.classList.toggle("active", node === chip);
+    });
+    renderRows();
+  });
+  els.opportunityFilterRow?.addEventListener("click", (event) => {
+    const chip = event.target.closest(".chip");
+    if (!chip) return;
+    state.opportunityFilter = chip.dataset.opportunity || "all";
+    resetRowPage();
+    els.opportunityFilterRow.querySelectorAll(".chip").forEach((node) => {
       node.classList.toggle("active", node === chip);
     });
     renderRows();
@@ -6247,7 +6642,7 @@ function bindEvents() {
     } else if (event.key === "Enter" && state.focusIndex >= 0 && !event.target.closest?.("tr[data-key]")) {
       // Rows handle their own Enter activation; avoid double-handling here.
       openDetail(visible[state.focusIndex]);
-      state.detailTab = "technical";
+      state.detailTab = state.companyStates.size ? "state" : "technical";
       renderDetail();
     } else if (event.key === "o" && selectedItem()) {
       els.detailReport.click();
@@ -6273,6 +6668,21 @@ async function loadSentimentSnapshot() {
       }]),
   );
   updateSentimentAlert();
+}
+
+async function loadCompanyStateSnapshot() {
+  const response = await fetch("./data/company_state.json", { cache: "no-store" });
+  if (!response.ok) throw new Error("无法加载 company_state.json");
+  const snapshot = await response.json();
+  if (snapshot.schema_version !== 1 || !Array.isArray(snapshot.companies)) {
+    throw new Error("company_state.json schema invalid");
+  }
+  state.stateSnapshot = snapshot;
+  state.companyStates = new Map(
+    snapshot.companies
+      .filter((item) => item?.ticker)
+      .map((item) => [item.ticker, item]),
+  );
 }
 
 async function loadIntradayTechnicalSnapshot() {
@@ -6358,8 +6768,9 @@ async function loadDashboard() {
   setLiveStatus("idle", "列表已载入，补充行情和辅助数据…");
   renderAll();
 
-  const [intradayResult, scansResult, scanStatusResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult, fundamentalReviewResult] =
+  const [companyStateResult, intradayResult, scansResult, scanStatusResult, sentimentResult, deepReviewsResult, snapshotQuotesResult, annualDatesResult, automationStatusResult, fundamentalReviewResult] =
     await Promise.allSettled([
+      loadCompanyStateSnapshot(),
       loadIntradayTechnicalSnapshot(),
       loadOpportunityScansSnapshot(),
       loadOpportunityScanStatus(),
@@ -6370,6 +6781,29 @@ async function loadDashboard() {
       loadAutomationStatus(),
       loadFundamentalReviewSnapshot(),
     ]);
+
+  if (companyStateResult.status === "rejected") {
+    console.warn("company state snapshot failed; using legacy board fields", companyStateResult.reason);
+    state.companyStates = new Map(
+      state.decisions
+        .filter((item) => item?.ticker)
+        .map((item) => [item.ticker, item.company_state || {
+          company: item.company,
+          ticker: item.ticker,
+          market: item.market,
+          lifecycle: item.lifecycle || "WATCH",
+          next_action: item.next_action || "keep_watch",
+          opportunity_type: "none",
+          needs_attention: false,
+          decision_rules: {total: 0, triggered: 0, near_trigger: 0, needs_review: 0, rules: []},
+          drift: {direction: "unknown", severity: "none"},
+          event_radar: {state: "unknown", thesis_relevant: false, events: []},
+          sentiment: {state: "unknown"},
+          technical: {trend: "UNKNOWN", position: "UNKNOWN", execution: "UNKNOWN"},
+          checklist: {status: "UNKNOWN"},
+        }]),
+    );
+  }
 
   if (intradayResult.status === "rejected") {
     console.warn("intraday technical snapshot failed", intradayResult.reason);

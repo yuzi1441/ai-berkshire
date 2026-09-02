@@ -26,18 +26,19 @@ def parse_iso_date(value: str) -> date:
         raise argparse.ArgumentTypeError(f"invalid date: {value}") from error
 
 
-def load_decisions(repo_root: Path, market: str) -> list[dict[str, Any]]:
+def load_decisions(repo_root: Path, market: str | list[str] | tuple[str, ...]) -> list[dict[str, Any]]:
     board_path = repo_root / "data" / "investment-dashboard" / "decision_board.json"
     with board_path.open(encoding="utf-8") as handle:
         board = json.load(handle)
     decisions = board.get("decisions")
     if not isinstance(decisions, list):
         raise ValueError(f"invalid dashboard decisions in {board_path}")
+    markets = {market} if isinstance(market, str) else set(market)
     selected = [
         item
         for item in decisions
         if isinstance(item, dict)
-        and item.get("market") == market
+        and item.get("market") in markets
         and item.get("company")
         and item.get("ticker")
         and item.get("report_path")
@@ -106,6 +107,7 @@ def generate_one(
     as_of: date,
     attempts: int,
     force: bool,
+    write_report: bool = True,
 ) -> dict[str, Any]:
     started = time.perf_counter()
     company = str(decision["company"])
@@ -137,21 +139,22 @@ def generate_one(
         source=source,
     )
     result["analysis_mode"] = "daily_close"
-    content = technical.render_markdown(
-        result,
-        base_report=base_report.relative_to(repo_root).as_posix(),
-        base_report_cutoff=base_cutoff.isoformat() if base_cutoff else decision.get("data_cutoff"),
-        base_report_date=base_report_date.isoformat() if base_report_date else None,
-        related_files=related_files,
-        fundamental_bands=fundamental_bands,
-    )
-    technical.write_output(destination, content, force=force)
+    if write_report:
+        content = technical.render_markdown(
+            result,
+            base_report=base_report.relative_to(repo_root).as_posix(),
+            base_report_cutoff=base_cutoff.isoformat() if base_cutoff else decision.get("data_cutoff"),
+            base_report_date=base_report_date.isoformat() if base_report_date else None,
+            related_files=related_files,
+            fundamental_bands=fundamental_bands,
+        )
+        technical.write_output(destination, content, force=force)
     quality = result["data_quality"]
     return {
         "company": company,
         "ticker": ticker,
-        "status": "generated",
-        "report_path": destination.relative_to(repo_root).as_posix(),
+        "status": "generated" if write_report else "ready",
+        "report_path": destination.relative_to(repo_root).as_posix() if write_report else None,
         "base_report": base_report.relative_to(repo_root).as_posix(),
         "base_report_cutoff": base_cutoff.isoformat() if base_cutoff else decision.get("data_cutoff"),
         "related_file_count": len(related_files),
@@ -174,10 +177,28 @@ def write_manifest(path: Path, payload: dict[str, Any]) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
-    parser.add_argument("--market", default="A股")
+    market_group = parser.add_mutually_exclusive_group()
+    market_group.add_argument("--market", help="one market; kept for scheduler compatibility")
+    market_group.add_argument(
+        "--markets",
+        nargs="+",
+        choices=("A股", "港股", "美股"),
+        help="one or more markets sharing one structured latest output",
+    )
     parser.add_argument("--as-of", type=parse_iso_date, default=date.today())
     parser.add_argument("--attempts", type=int, default=3)
     parser.add_argument("--force", action="store_true")
+    parser.add_argument(
+        "--write-reports",
+        action="store_true",
+        help="opt in to writing a dated Markdown report; default is structured latest state",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "data" / "investment-dashboard" / "technical_latest.json",
+        help="structured daily output path",
+    )
     parser.add_argument("--limit", type=int)
     parser.add_argument("--manifest", type=Path)
     return parser
@@ -189,7 +210,8 @@ def main() -> int:
     if arguments.attempts < 1:
         print("error: --attempts must be at least 1", file=sys.stderr)
         return 2
-    all_decisions = load_decisions(repo_root, arguments.market)
+    requested_markets = arguments.markets or [arguments.market or "A股"]
+    all_decisions = load_decisions(repo_root, requested_markets)
     exclusion_reasons = load_exclusions(repo_root)
     excluded = [
         {
@@ -226,6 +248,7 @@ def main() -> int:
                 as_of=arguments.as_of,
                 attempts=arguments.attempts,
                 force=arguments.force,
+                write_report=arguments.write_reports,
             )
             results.append(result)
             marker = "可发布" if result["publishable"] else "待复核"
@@ -246,7 +269,8 @@ def main() -> int:
     payload = {
         "schema_version": 1,
         "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "market": arguments.market,
+        "market": requested_markets[0] if len(requested_markets) == 1 else "+".join(requested_markets),
+        "markets": requested_markets,
         "requested_cutoff": arguments.as_of.isoformat(),
         "source_decision_count": len(all_decisions),
         "selected_count": len(decisions),
@@ -260,6 +284,11 @@ def main() -> int:
         "excluded": excluded,
         "failures": failures,
     }
+    if not arguments.write_reports:
+        payload["companies"] = results
+        payload["output_mode"] = "structured_latest"
+        output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
+        write_manifest(output, payload)
     write_manifest(manifest_path, payload)
     print(
         f"Completed {len(results)}/{len(decisions)} reports; "
