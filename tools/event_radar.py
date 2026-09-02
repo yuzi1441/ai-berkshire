@@ -25,11 +25,11 @@ def _now() -> str:
 
 def _load(path: Path, default: Any) -> Any:
     if not path.is_file():
-        return default
+        return {"_load_status": "unavailable"} if isinstance(default, dict) else default
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return default
+        return {"_load_status": "unavailable"} if isinstance(default, dict) else default
 
 
 def _write(path: Path, payload: dict[str, Any]) -> None:
@@ -158,6 +158,11 @@ def build_event_radar(repo_root: Path, *, write: bool = True, generated_at: str 
     sentiment_path = repo_root / "data" / "sentiment" / "latest.json"
     sentiment = _load(sentiment_path, {})
     generated_at = generated_at or _now()
+    source_status = (
+        sentiment.get("status") or sentiment.get("_load_status") or "unknown"
+        if isinstance(sentiment, dict)
+        else "unknown"
+    )
     companies: list[dict[str, Any]] = []
     for company in sentiment.get("companies", []) if isinstance(sentiment, dict) else []:
         if not isinstance(company, dict) or not company.get("ticker"):
@@ -176,6 +181,7 @@ def build_event_radar(repo_root: Path, *, write: bool = True, generated_at: str 
             "recommended_action": "run_drift" if relevant and highest_state in {"important", "critical"} else "monitor" if highest_state == "watch" else "none",
             "event_count": len(events),
             "events": events,
+            "source_status": source_status,
             "last_checked": generated_at,
             "data_cutoff": sentiment.get("data_cutoff"),
         })
@@ -183,7 +189,7 @@ def build_event_radar(repo_root: Path, *, write: bool = True, generated_at: str 
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at,
         "source": "data/sentiment/latest.json",
-        "source_status": sentiment.get("status", "unknown") if isinstance(sentiment, dict) else "unknown",
+        "source_status": source_status,
         "data_cutoff": sentiment.get("data_cutoff") if isinstance(sentiment, dict) else None,
         "event_states": list(EVENT_STATES),
         "company_count": len(companies),

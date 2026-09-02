@@ -12,6 +12,12 @@ import event_radar
 
 
 class EventRadarTests(unittest.TestCase):
+    def test_missing_sentiment_source_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload = event_radar.build_event_radar(Path(directory), write=False)
+            self.assertEqual(payload["source_status"], "unavailable")
+            self.assertEqual(payload["company_count"], 0)
+
     def test_reprints_are_one_event_with_multiple_evidence(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -33,6 +33,37 @@ class InvestmentDashboardTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def test_production_build_blocks_on_corrupt_post_buy_tracking(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            data = root / "data" / "investment-dashboard"
+            (data / "post_buy_tracking.json").write_text("{not-json", encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                dashboard.build_dashboard(root)
+            self.assertFalse((data / "company_state.json").exists())
+
+    def test_production_build_blocks_on_corrupt_decision_rules(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "main.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-08-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            data = root / "data" / "investment-dashboard"
+            (data / "post_buy_tracking.json").write_text(
+                json.dumps({"schema_version": 1, "positions": {}}), encoding="utf-8"
+            )
+            (data / "decision_rules.json").write_text("{not-json", encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                dashboard.build_dashboard(root)
+            self.assertFalse((data / "company_state.json").exists())
+
     def test_public_opportunity_scan_omits_full_input_snapshot(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -64,7 +95,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            dashboard.build_dashboard(root)
+            dashboard.build_dashboard(root, legacy_mode=True)
 
             full = json.loads(source.read_text(encoding="utf-8"))
             public = json.loads(
@@ -317,7 +348,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             os.utime(older, (2_000_000_000, 2_000_000_000))
             os.utime(newer, (1_000_000_000, 1_000_000_000))
 
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/newer.md")
             self.assertEqual(selected["data_cutoff"], "2026-07-01")
@@ -539,7 +570,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "**Checklist结论：当前价格未通过。**\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
             self.assertEqual(selected["checklist"]["status"], "missing")
@@ -560,7 +591,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n价格未通过，等待10元。\n",
                 encoding="utf-8",
             )
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
 
     def test_writes_obsidian_table_and_static_data_without_report_rewrites(self):
@@ -580,7 +611,7 @@ class InvestmentDashboardTests(unittest.TestCase):
             )
             before_rules = rule_definition.read_bytes()
 
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             self.assertEqual(board["decision_count"], 1)
             self.assertEqual(report.read_text(encoding="utf-8"), original)
             self.assertEqual(rule_definition.read_bytes(), before_rules)
@@ -637,7 +668,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected["action"], "观察")
             self.assertEqual(selected["post_buy_tracking"]["status"], "holding")
             self.assertEqual(selected["post_buy_tracking"]["thesis_status"], "healthy")
@@ -667,7 +698,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             self.assertEqual(selected["buy_price"], "32-35 元")
             self.assertEqual(selected["price_status"], "已提取价格计划")
@@ -714,7 +745,7 @@ class InvestmentDashboardTests(unittest.TestCase):
 """,
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             self.assertEqual(len(selected["scenario_valuation"]), 3)
             self.assertEqual(
@@ -747,7 +778,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "# 行业研究\n\n数据截止：2026-07-02\n\n## 最终建议\n\n看好赛道。\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             self.assertEqual(board["decision_count"], 1)
             selected = board["decisions"][0]
             self.assertEqual(selected["company"], "示例公司")
@@ -783,7 +814,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
 
             self.assertEqual(selected["report_path"], "reports/示例公司/newer.md")
@@ -814,7 +845,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
 
             self.assertEqual(selected["report_path"], "reports/示例公司/newer.md")
             self.assertEqual(selected["price_plan"], [])
@@ -844,7 +875,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
 
             self.assertEqual(selected["price_status"], "价格未给出")
             self.assertNotIn("historical_price_reference", selected)
@@ -875,7 +906,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n继续观察，不追价。\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             self.assertEqual(selected["report_path"], "reports/示例公司/full-research.md")
             self.assertEqual(selected["data_cutoff"], "2026-07-10")
@@ -908,7 +939,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "# 示例公司\n\n数据截止：2026-07-10\n股票代码：600000.SH\n\n## 最终建议\n\n分批买入，12-14 元。\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             companies = {item["company"] for item in board["decisions"]}
             self.assertEqual(companies, {"示例公司"})
 
@@ -924,7 +955,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n观察。\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             self.assertEqual(board["decision_count"], 1)
             self.assertEqual(board["decisions"][0]["company"], "示例公司")
             self.assertIn("估值与安全边际", board["decisions"][0]["valuation_section"]["heading"])
@@ -968,7 +999,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "| 保守型 | 继续等待 | 低于 30 元 | 需要更大折价 |\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             stances = {item["stance"]: item for item in selected["investor_stances"]}
             self.assertEqual(set(stances), {"激进型", "稳健型", "保守型"})
@@ -1086,7 +1117,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected["company"], "正式示例公司")
             self.assertEqual(selected["data_cutoff"], "2026-07-30")
             self.assertEqual(selected["action"], "分批买入")
@@ -1103,7 +1134,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 .replace("| 基本面建议动作 | 分批买入 |", "| 基本面建议动作 | 观察 |"),
                 encoding="utf-8",
             )
-            selected_after_checklist = dashboard.build_dashboard(root)["decisions"][0]
+            selected_after_checklist = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected_after_checklist["report_path"], "reports/示例公司/contract.md")
 
     def test_primary_judgment_preview_is_opt_in_and_company_scoped(self):
@@ -1154,7 +1185,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            decisions = dashboard.build_dashboard(root)["decisions"]
+            decisions = dashboard.build_dashboard(root, legacy_mode=True)["decisions"]
             previewed = next(item for item in decisions if item["company"] == "示例公司")
             untouched = next(item for item in decisions if item["company"] == "对照公司")
             self.assertEqual(previewed["action"], "观察")
@@ -1203,13 +1234,13 @@ class InvestmentDashboardTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected["primary_judgment"]["label"], "等待价格")
             self.assertTrue(selected["primary_judgment"]["source_matches"])
             self.assertEqual(selected["primary_judgment"]["models"], {"primary": "a", "review": "b"})
 
             report.write_text(report.read_text(encoding="utf-8") + "\n更新。\n", encoding="utf-8")
-            stale = dashboard.build_dashboard(root)["decisions"][0]
+            stale = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(stale["primary_judgment"]["label"], "待人工复核")
             self.assertFalse(stale["primary_judgment"]["source_matches"])
 
@@ -1262,14 +1293,14 @@ class InvestmentDashboardTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertTrue(selected["primary_judgment"]["human_reviewed"])
             self.assertEqual(selected["primary_judgment"]["action_kind"], "trial")
             self.assertEqual(selected["execution_policy"]["condition_mode"], "current_action")
             self.assertEqual(selected["execution_policy"]["reliability"], "high")
 
             report.write_text(report.read_text(encoding="utf-8") + "\n报告更新。\n", encoding="utf-8")
-            stale = dashboard.build_dashboard(root)["decisions"][0]
+            stale = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertFalse(stale["primary_judgment"].get("human_reviewed", False))
             self.assertEqual(stale["execution_policy"]["condition_mode"], "review")
 
@@ -1282,7 +1313,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n继续观察。\n",
                 encoding="utf-8",
             )
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(selected["market"], "A股")
             self.assertEqual(selected["primary_judgment"]["label"], "待人工复核")
             self.assertEqual(selected["primary_judgment"]["artifact_status"], "missing")
@@ -1548,7 +1579,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n当前继续观察，不追价。\n",
                 encoding="utf-8",
             )
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             self.assertEqual(len(selected["investor_stances"]), 3)
             self.assertEqual(selected["action"], "观察")
 
@@ -1569,7 +1600,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "## 最终建议\n\n当前继续观察，等待中报验证。\n",
                 encoding="utf-8",
             )
-            selected = dashboard.build_dashboard(root)["decisions"][0]
+            selected = dashboard.build_dashboard(root, legacy_mode=True)["decisions"][0]
             by = {
                 item["stance"]: item
                 for item in selected["investor_stances"]
@@ -1967,7 +1998,7 @@ valid_buy_candidate: "是（候选）"
                     encoding="utf-8",
                 )
 
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             selected = board["decisions"][0]
             technical = selected["technical_analysis"]
             self.assertEqual(selected["report_path"], "reports/示例公司/main.md")
@@ -2016,7 +2047,7 @@ valid_buy_candidate: "是（候选）"
                 "# 主报告\n\n数据截止：2026-07-20\n股票代码：600000.SH\n\n## 最终建议\n\n持有。\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             self.assertEqual(board["decisions"][0]["technical_analysis"]["status"], "missing")
 
             (company / "invalid-technical.md").write_text(
@@ -2026,7 +2057,7 @@ valid_buy_candidate: "是（候选）"
                 "| 短期（20日） | 黄 | 等待确认。 |\n",
                 encoding="utf-8",
             )
-            board = dashboard.build_dashboard(root)
+            board = dashboard.build_dashboard(root, legacy_mode=True)
             self.assertEqual(board["decisions"][0]["technical_analysis"]["status"], "review")
             table = (root / "reports" / "00-index" / "投资决策总表.md").read_text(encoding="utf-8")
             self.assertIn("待复核技术报告", table)

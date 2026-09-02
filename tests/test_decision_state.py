@@ -65,7 +65,7 @@ class DecisionStateTests(unittest.TestCase):
                 },
                 "checklist": {"status": "missing"},
             }
-            result = decision_state.build_state_layers([decision], root, write=False)
+            result = decision_state.build_state_layers([decision], root, write=False, legacy_mode=True)
             state = result["state"]["companies"][0]
             self.assertEqual(state["lifecycle"], "PRE_BUY")
             self.assertEqual(state["next_action"], "run_checklist")
@@ -88,7 +88,7 @@ class DecisionStateTests(unittest.TestCase):
                 "report_path": "reports/示例公司/main.md",
                 "checklist": {"status": "missing"},
             }
-            result = decision_state.build_state_layers([decision], root, write=False)
+            result = decision_state.build_state_layers([decision], root, write=False, legacy_mode=True)
             self.assertEqual(result["state"]["companies"][0]["lifecycle"], "HOLDING")
 
     def test_checklist_fail_blocks_pre_buy_transition(self):
@@ -104,7 +104,7 @@ class DecisionStateTests(unittest.TestCase):
                 "primary_judgment": {"trigger_condition": "等待利润改善"},
                 "checklist": {"status": "FAIL"},
             }
-            result = decision_state.build_state_layers([decision], root, write=False)
+            result = decision_state.build_state_layers([decision], root, write=False, legacy_mode=True)
             state = result["state"]["companies"][0]
             self.assertEqual(state["lifecycle"], "WATCH")
             self.assertIn("Checklist FAIL", state["warning"])
@@ -124,7 +124,7 @@ class DecisionStateTests(unittest.TestCase):
                 "market": "A股",
                 "report_path": "reports/示例公司/main.md",
             }
-            result = decision_state.build_state_layers([decision], root, write=False)
+            result = decision_state.build_state_layers([decision], root, write=False, legacy_mode=True)
             state = result["state"]["companies"][0]
             self.assertEqual(state["lifecycle"], "WATCH")
             self.assertIn("registered post-buy", state["warning"])
@@ -150,12 +150,33 @@ class DecisionStateTests(unittest.TestCase):
                 }],
             }
             result = decision_state.build_state_layers(
-                [decision], root, event_payload=event_payload, write=False
+                [decision], root, event_payload=event_payload, write=False, legacy_mode=True
             )
             state = result["state"]["companies"][0]
             self.assertEqual(state["lifecycle"], "WATCH")
             self.assertEqual(state["next_action"], "run_drift")
             self.assertEqual(state["event_radar"]["state"], "critical")
+
+    def test_unavailable_event_source_is_unknown_not_normal(self):
+        root = Path(tempfile.mkdtemp())
+        decision = {
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "report_path": "reports/示例公司/main.md",
+        }
+        result = decision_state.build_state_layers(
+            [decision],
+            root,
+            event_payload={"source_status": "partial", "companies": []},
+            write=False,
+            legacy_mode=True,
+        )
+        state = result["state"]["companies"][0]
+        self.assertEqual(state["event_radar"]["state"], "unknown")
+        self.assertEqual(state["event_radar"]["source_status"], "partial")
+        self.assertEqual(state["lifecycle"], "WATCH")
+        self.assertEqual(state["next_action"], "keep_watch")
 
     def test_major_holding_drift_recommends_reduce_review(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -178,7 +199,7 @@ class DecisionStateTests(unittest.TestCase):
                 "market": "A股",
                 "report_path": "reports/示例公司/main.md",
             }
-            result = decision_state.build_state_layers([decision], root, write=False)
+            result = decision_state.build_state_layers([decision], root, write=False, legacy_mode=True)
             state = result["state"]["companies"][0]
             self.assertEqual(state["lifecycle"], "HOLDING")
             self.assertEqual(state["next_action"], "reduce_review")
@@ -203,7 +224,7 @@ class DecisionStateTests(unittest.TestCase):
                 "guard_condition": "经营现金流连续两年低于净利润",
             },
         }
-        result = decision_state.build_state_layers([decision], Path(tempfile.mkdtemp()), write=False)
+        result = decision_state.build_state_layers([decision], Path(tempfile.mkdtemp()), write=False, legacy_mode=True)
         rules = result["rules"]["companies"][0]["rules"]
         self.assertEqual({rule["rule_scope"] for rule in rules}, {"entry", "validation", "redline"})
         self.assertEqual(sum(rule["rule_scope"] == "redline" for rule in rules), 1)
@@ -218,6 +239,7 @@ class DecisionStateTests(unittest.TestCase):
             }],
             Path(tempfile.mkdtemp()),
             write=False,
+            legacy_mode=True,
         )
         state = result["state"]["companies"][0]
         self.assertEqual(state["realtime_scope"], "research_only")

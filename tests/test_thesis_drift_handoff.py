@@ -259,6 +259,50 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         self.assertEqual(thesis_payload["active_position_ids"]["600000.SH"], "600000.SH:2026-06-24")
         self.assertNotIn("600000.SH:2026-09-02", thesis_payload["cycles"])
 
+    def test_close_rolls_back_both_sources_when_thesis_write_fails(self):
+        root, report, _ = self._repo("HOLDING")
+        data = root / "data" / "investment-dashboard"
+        tracking_path = data / "post_buy_tracking.json"
+        thesis_path = data / "original_buy_theses.json"
+        position_record = post_buy_tracking.position(
+            post_buy_tracking.load_tracking(tracking_path), "600000.SH"
+        )
+        post_buy_tracking.freeze_original_buy_thesis(root, position_record, write=True)
+        tracking_before = tracking_path.read_bytes()
+        thesis_before = thesis_path.read_bytes()
+        real_save_json = post_buy_tracking.save_json
+        calls: list[Path] = []
+
+        def fail_second_write(path: Path, payload: dict) -> None:
+            calls.append(path)
+            if len(calls) == 2:
+                raise OSError("simulated thesis Source of Truth write failure")
+            real_save_json(path, payload)
+
+        with patch.object(post_buy_tracking, "save_json", side_effect=fail_second_write):
+            with self.assertRaises(OSError):
+                post_buy_tracking.command_update(
+                    type("Args", (), {
+                        "ticker": "600000.SH", "status": "closed", "thesis_status": None,
+                        "health_score": None, "last_review": None, "next_review": None,
+                        "review_action": None, "thesis_report": None, "metrics": None,
+                    })(),
+                    root,
+                )
+
+        self.assertEqual(calls, [tracking_path, thesis_path])
+        self.assertEqual(tracking_path.read_bytes(), tracking_before)
+        self.assertEqual(thesis_path.read_bytes(), thesis_before)
+        tracking_after = json.loads(tracking_before)
+        thesis_after = json.loads(thesis_before)
+        self.assertEqual(tracking_after["positions"]["600000.SH"]["status"], "holding")
+        self.assertNotIn("position_history", tracking_after)
+        self.assertEqual(thesis_after["active_position_ids"]["600000.SH"], "600000.SH:2026-08-01")
+        self.assertEqual(
+            thesis_after["cycles"]["600000.SH:2026-08-01"]["position_status"],
+            "holding",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

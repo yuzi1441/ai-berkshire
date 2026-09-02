@@ -5406,16 +5406,20 @@ def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     return split_dashboard_files(board, site_directory, data_directory)
 
 
-def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+def load_post_buy_layer(
+    data_directory: Path, *, strict: bool = True
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Load optional post-buy tracking and generated alert state.
 
     The layer is deliberately separate from report-derived decisions. Missing
     files mean that no user-confirmed positions exist; malformed files fail the
     build rather than silently attaching stale tracking state to another stock.
     """
-    tracking = load_json(
-        data_directory / "post_buy_tracking.json",
-        {"schema_version": 1, "positions": {}},
+    tracking_path = data_directory / "post_buy_tracking.json"
+    tracking = (
+        decision_state.load_strict_json(tracking_path, label="post_buy_tracking")
+        if strict
+        else load_json(tracking_path, {"schema_version": 1, "positions": {}})
     )
     alerts = load_json(
         data_directory / "post_buy_alerts.json",
@@ -5423,6 +5427,8 @@ def load_post_buy_layer(data_directory: Path) -> tuple[dict[str, Any], dict[str,
     )
     if tracking.get("schema_version") != 1 or not isinstance(tracking.get("positions"), dict):
         raise ValueError("Unsupported post-buy tracking schema")
+    if not isinstance(tracking.get("position_history", []), list):
+        raise ValueError("post_buy_tracking.position_history must be a list")
     if alerts.get("schema_version") != 1 or not isinstance(alerts.get("alerts"), list):
         raise ValueError("Unsupported post-buy alerts schema")
     return tracking, alerts
@@ -5510,12 +5516,14 @@ def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
     return main_report_review.model_review_comparison_snapshot(repo_root)
 
 
-def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
+def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     reports_directory = repo_root / "reports"
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
-    post_buy_tracking, post_buy_alerts = load_post_buy_layer(data_directory)
+    post_buy_tracking, post_buy_alerts = load_post_buy_layer(
+        data_directory, strict=not legacy_mode
+    )
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
     manual_execution_reviews = load_manual_execution_reviews(data_directory)
@@ -5569,16 +5577,34 @@ def build_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     # Decision Rule extraction is an explicit migration-stage operation.  A
     # normal dashboard build loads the saved rules and only evaluates/merges
     # them; it must not semantically reread every Markdown report.
-    persisted_rule_payload = decision_state.load_json(
+    persisted_rule_payload = decision_state.load_rule_definitions(
         data_directory / decision_state.RULES_RELATIVE.name,
-        {},
+        strict=not legacy_mode,
     )
+    decision_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in decisions
+        if item.get("ticker")
+    }
+    persisted_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in persisted_rule_payload.get("companies", [])
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    if not legacy_mode and persisted_tickers != decision_tickers:
+        missing = sorted(decision_tickers - persisted_tickers)
+        extra = sorted(persisted_tickers - decision_tickers)
+        raise ValueError(
+            "decision_rules company set does not match decision board"
+            f" (missing={missing[:5]}, extra={extra[:5]})"
+        )
     state_layers = decision_state.build_state_layers(
         decisions,
         repo_root,
         event_payload=event_radar_snapshot,
         rule_payload=persisted_rule_payload if persisted_rule_payload.get("companies") else None,
         write=False,
+        legacy_mode=legacy_mode,
     )
     state_errors = decision_state.validate_payloads(state_layers)
     if state_errors:
@@ -5700,9 +5726,18 @@ def main() -> int:
         action="store_true",
         help="Split the existing static decision board without rebuilding reports or indexes.",
     )
+    parser.add_argument(
+        "--legacy-mode",
+        action="store_true",
+        help="Allow explicit migration/test compatibility fallbacks; never use for production builds.",
+    )
     arguments = parser.parse_args()
     try:
-        board = split_existing_dashboard(arguments.repo_root.resolve()) if arguments.split_only else build_dashboard(arguments.repo_root.resolve())
+        board = (
+            split_existing_dashboard(arguments.repo_root.resolve())
+            if arguments.split_only
+            else build_dashboard(arguments.repo_root.resolve(), legacy_mode=arguments.legacy_mode)
+        )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2

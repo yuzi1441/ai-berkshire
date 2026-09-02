@@ -46,6 +46,42 @@ def _load(path: Path, default: Any) -> Any:
     return decision_state.load_json(path, default)
 
 
+def _load_required_object(path: Path, *, label: str) -> dict[str, Any]:
+    """Load a synchronization input without allowing an empty fallback."""
+    return decision_state.load_strict_json(path, label=label)
+
+
+def _load_board_for_sync(path: Path) -> dict[str, Any]:
+    payload = _load_required_object(path, label="decision_board")
+    if payload.get("schema_version") != 7:
+        raise ValueError(f"Unsupported decision_board schema: {path}")
+    decisions = payload.get("decisions")
+    if not isinstance(decisions, list) or not decisions:
+        raise ValueError("decision_board must contain a non-empty decisions list")
+    if payload.get("decision_count") != len(decisions):
+        raise ValueError("decision_board decision_count does not match decisions")
+    tickers: set[str] = set()
+    for item in decisions:
+        if not isinstance(item, dict) or not decision_state.compact(item.get("ticker")):
+            raise ValueError("decision_board contains a company without a ticker")
+        ticker = decision_state.compact(item.get("ticker")).upper()
+        if ticker in tickers:
+            raise ValueError(f"decision_board contains duplicate ticker: {ticker}")
+        tickers.add(ticker)
+    return payload
+
+
+def _load_rules_for_sync(path: Path) -> dict[str, Any]:
+    payload = decision_state.load_rule_definitions(path, strict=True)
+    return payload
+
+
+def _load_optional_sync_object(path: Path, default: dict[str, Any], *, label: str) -> dict[str, Any]:
+    if not path.is_file():
+        return copy.deepcopy(default)
+    return _load_required_object(path, label=label)
+
+
 def _write(path: Path, payload: dict[str, Any]) -> None:
     decision_state.write_json(path, payload)
 
@@ -388,19 +424,40 @@ def sync_decision_rules(
     """Synchronize only selected companies whose canonical report changed."""
     root = repo_root.resolve()
     data = root / "data" / "investment-dashboard"
-    board = _load(data / "decision_board.json", {})
+    board = _load_board_for_sync(data / "decision_board.json")
     decisions = [item for item in board.get("decisions", []) if isinstance(item, dict)]
-    previous = _load(data / decision_state.RULES_RELATIVE.name, {})
+    previous = _load_rules_for_sync(data / decision_state.RULES_RELATIVE.name)
     previous_companies = {
         decision_state.compact(item.get("ticker")).upper(): copy.deepcopy(item)
         for item in previous.get("companies", [])
         if isinstance(item, dict) and decision_state.compact(item.get("ticker"))
     }
     lifecycle_path = data / LIFECYCLE_RELATIVE.name
-    lifecycle = _load(lifecycle_path, {"schema_version": 1, "companies": {}})
-    lifecycle.setdefault("schema_version", 1)
-    lifecycle.setdefault("companies", {})
+    lifecycle = _load_optional_sync_object(
+        lifecycle_path,
+        {"schema_version": 1, "companies": {}},
+        label="rule_lifecycle",
+    )
+    if lifecycle.get("schema_version") != 1 or not isinstance(lifecycle.get("companies"), dict):
+        raise ValueError("Invalid rule_lifecycle schema")
     requested = {decision_state.compact(ticker).upper() for ticker in (tickers or []) if decision_state.compact(ticker)}
+    board_tickers = {
+        decision_state.compact(item.get("ticker")).upper()
+        for item in decisions
+    }
+    missing_requested = requested - board_tickers
+    if missing_requested:
+        raise ValueError(
+            "requested ticker is absent from decision_board: "
+            + ", ".join(sorted(missing_requested))
+        )
+    # A full synchronization must not run against a truncated rebuildable
+    # board.  Targeted synchronization may intentionally use a smaller board,
+    # but the requested ticker still has to be present above.
+    if not requested and previous_companies and len(decisions) < len(previous_companies):
+        raise ValueError(
+            "decision_board company count is smaller than persisted decision_rules"
+        )
     timestamp = now_iso()
     action_counts: Counter = Counter()
     changes: list[dict[str, Any]] = []
@@ -492,8 +549,9 @@ def sync_decision_rules(
         }
         companies.append(company)
 
+    present_tickers = {item.get("ticker") for item in companies}
     for ticker, company in previous_companies.items():
-        if not requested and ticker not in {item.get("ticker") for item in companies}:
+        if ticker not in present_tickers:
             companies.append(company)
 
     companies.sort(key=lambda item: item.get("ticker") or "")
@@ -513,10 +571,17 @@ def sync_decision_rules(
         "event_policy": "Event Radar can request Drift but cannot mutate Rules directly",
     }
 
-    change_log = _load(data / CHANGE_LOG_RELATIVE.name, {"schema_version": 1, "changes": [], "sync_runs": []})
-    change_log.setdefault("schema_version", 1)
-    change_log.setdefault("changes", [])
-    change_log.setdefault("sync_runs", [])
+    change_log = _load_optional_sync_object(
+        data / CHANGE_LOG_RELATIVE.name,
+        {"schema_version": 1, "changes": [], "sync_runs": []},
+        label="rule_change_log",
+    )
+    if (
+        change_log.get("schema_version") != 1
+        or not isinstance(change_log.get("changes"), list)
+        or not isinstance(change_log.get("sync_runs"), list)
+    ):
+        raise ValueError("Invalid rule_change_log schema")
     run = {
         "date": timestamp,
         "tickers": touched,

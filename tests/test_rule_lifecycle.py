@@ -32,6 +32,8 @@ class RuleLifecycleTests(unittest.TestCase):
         data = root / "data" / "investment-dashboard"
         data.mkdir(parents=True)
         board = {
+            "schema_version": 7,
+            "decision_count": 1,
             "decisions": [{
                 "company": "示例公司",
                 "ticker": "600000.SH",
@@ -41,7 +43,9 @@ class RuleLifecycleTests(unittest.TestCase):
         }
         (data / "decision_board.json").write_text(json.dumps(board, ensure_ascii=False), encoding="utf-8")
         (data / "decision_rules.json").write_text(
-            json.dumps({"schema_version": 1, "companies": [{
+            json.dumps({"schema_version": 1, "rule_types": list(decision_state.RULE_TYPES),
+                        "automation_levels": list(decision_state.AUTOMATION_LEVELS),
+                        "companies": [{
                 "company": "示例公司", "ticker": "600000.SH", "market": "A股",
                 "canonical_report": "reports/示例公司/main.md", "rules": [rule],
                 "monitoring_metrics": [], "semantic_review_candidates": [],
@@ -53,6 +57,90 @@ class RuleLifecycleTests(unittest.TestCase):
         lines = report.read_text(encoding="utf-8").splitlines()
         excerpt = {"text": text, "line_start": 2, "line_end": 2}
         return source_metadata_for_excerpt(report, lines, excerpt, text)
+
+    def _assert_sync_blocked_without_writes(self, root: Path, data: Path, **kwargs) -> None:
+        paths = [
+            data / "decision_rules.json",
+            data / "rule_lifecycle.json",
+            data / "rule_change_log.json",
+        ]
+        before = {
+            path: (path.exists(), path.read_bytes() if path.exists() else None)
+            for path in paths
+        }
+        with self.assertRaises(ValueError):
+            rule_lifecycle.sync_decision_rules(root, write=True, **kwargs)
+        for path, (existed, content) in before.items():
+            self.assertEqual(path.exists(), existed, path.name)
+            if existed:
+                self.assertEqual(path.read_bytes(), content, path.name)
+
+    def test_missing_board_blocks_sync_without_mutating_sources(self):
+        root, _, _, data = self._fixture(
+            "# Entry\n\n股价低于 10 元时进入买入复核。\n",
+            {
+                "rule_id": "600000.SH:entry:old", "type": "PRICE", "rule_scope": "entry",
+                "condition": "股价低于 10 元", "action": "run_checklist", "status": "unknown",
+            },
+        )
+        (data / "rule_lifecycle.json").write_text(
+            json.dumps({"schema_version": 1, "companies": {}}), encoding="utf-8"
+        )
+        (data / "rule_change_log.json").write_text(
+            json.dumps({"schema_version": 1, "changes": [], "sync_runs": []}), encoding="utf-8"
+        )
+        (data / "decision_board.json").unlink()
+        self._assert_sync_blocked_without_writes(root, data)
+
+    def test_corrupt_board_blocks_sync_without_mutating_sources(self):
+        root, _, _, data = self._fixture(
+            "# Entry\n\n股价低于 10 元时进入买入复核。\n",
+            {
+                "rule_id": "600000.SH:entry:old", "type": "PRICE", "rule_scope": "entry",
+                "condition": "股价低于 10 元", "action": "run_checklist", "status": "unknown",
+            },
+        )
+        (data / "rule_lifecycle.json").write_text(
+            json.dumps({"schema_version": 1, "companies": {}}), encoding="utf-8"
+        )
+        (data / "rule_change_log.json").write_text(
+            json.dumps({"schema_version": 1, "changes": [], "sync_runs": []}), encoding="utf-8"
+        )
+        (data / "decision_board.json").write_text("{not-json", encoding="utf-8")
+        self._assert_sync_blocked_without_writes(root, data)
+
+    def test_requested_ticker_missing_blocks_sync_without_mutating_sources(self):
+        root, _, _, data = self._fixture(
+            "# Entry\n\n股价低于 10 元时进入买入复核。\n",
+            {
+                "rule_id": "600000.SH:entry:old", "type": "PRICE", "rule_scope": "entry",
+                "condition": "股价低于 10 元", "action": "run_checklist", "status": "unknown",
+            },
+        )
+        (data / "rule_lifecycle.json").write_text(
+            json.dumps({"schema_version": 1, "companies": {}}), encoding="utf-8"
+        )
+        (data / "rule_change_log.json").write_text(
+            json.dumps({"schema_version": 1, "changes": [], "sync_runs": []}), encoding="utf-8"
+        )
+        self._assert_sync_blocked_without_writes(root, data, tickers=["000001.SZ"])
+
+    def test_corrupt_persisted_rules_blocks_sync_without_mutating_sources(self):
+        root, _, _, data = self._fixture(
+            "# Entry\n\n股价低于 10 元时进入买入复核。\n",
+            {
+                "rule_id": "600000.SH:entry:old", "type": "PRICE", "rule_scope": "entry",
+                "condition": "股价低于 10 元", "action": "run_checklist", "status": "unknown",
+            },
+        )
+        (data / "rule_lifecycle.json").write_text(
+            json.dumps({"schema_version": 1, "companies": {}}), encoding="utf-8"
+        )
+        (data / "rule_change_log.json").write_text(
+            json.dumps({"schema_version": 1, "changes": [], "sync_runs": []}), encoding="utf-8"
+        )
+        (data / "decision_rules.json").write_text("{not-json", encoding="utf-8")
+        self._assert_sync_blocked_without_writes(root, data)
 
     def test_unchanged_report_keeps_rules_without_running_extractor(self):
         report_text = "# Entry\n\n股价低于 10 元时进入买入复核。\n"

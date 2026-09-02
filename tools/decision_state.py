@@ -92,6 +92,60 @@ def load_json(path: Path, default: Any) -> Any:
         return default
 
 
+def load_strict_json(path: Path, *, label: str) -> dict[str, Any]:
+    """Load a required state object without silently substituting defaults."""
+    if not path.is_file():
+        raise ValueError(f"Missing required {label}: {path}")
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"Invalid {label}: {path}: {error}") from error
+    if not isinstance(payload, dict):
+        raise ValueError(f"Invalid {label}: expected JSON object: {path}")
+    return payload
+
+
+def validate_rule_definition_payload(payload: dict[str, Any]) -> list[str]:
+    """Validate the persisted Rule Definition contract without runtime fields."""
+    errors: list[str] = []
+    if payload.get("schema_version") != SCHEMA_VERSION:
+        errors.append("decision_rules schema_version")
+    if payload.get("rule_types") != list(RULE_TYPES):
+        errors.append("decision_rules rule_types")
+    companies = payload.get("companies")
+    if not isinstance(companies, list) or not companies:
+        errors.append("decision_rules companies")
+        return errors
+    seen: set[str] = set()
+    for company in companies:
+        if not isinstance(company, dict) or not compact(company.get("ticker")):
+            errors.append("decision_rules company ticker")
+            continue
+        ticker = compact(company.get("ticker")).upper()
+        if ticker in seen:
+            errors.append(f"duplicate decision_rules company: {ticker}")
+        seen.add(ticker)
+        if not isinstance(company.get("rules"), list):
+            errors.append(f"decision_rules rules: {ticker}")
+            continue
+        for rule in company["rules"]:
+            if not isinstance(rule, dict) or rule.get("type") not in RULE_TYPES:
+                errors.append(f"invalid rule type: {ticker}")
+    return errors
+
+
+def load_rule_definitions(path: Path, *, strict: bool = True) -> dict[str, Any]:
+    """Load Decision Rule definitions; permissive fallback is opt-in only."""
+    if strict:
+        payload = load_strict_json(path, label="decision_rules")
+        errors = validate_rule_definition_payload(payload)
+        if errors:
+            raise ValueError("Invalid decision_rules: " + "; ".join(errors))
+        return payload
+    payload = load_json(path, {})
+    return payload if isinstance(payload, dict) else {}
+
+
 def compact(value: Any) -> str:
     return _WS_RE.sub(" ", str(value or "")).strip()
 
@@ -699,7 +753,9 @@ def build_state_layers(
     rule_payload: dict[str, Any] | None = None,
     write: bool = True,
     generated_at: str | None = None,
+    legacy_mode: bool = False,
 ) -> dict[str, Any]:
+    """Evaluate persisted rules; only an explicit legacy mode may infer them."""
     data_directory = repo_root / "data" / "investment-dashboard"
     generated_at = generated_at or now_iso()
     quotes = _quote_by_ticker(data_directory)
@@ -738,8 +794,9 @@ def build_state_layers(
             zero_rule_reason = persisted_company.get("zero_rule_reason")
             extraction_error = persisted_company.get("extraction_error")
         else:
-            # Compatibility fallback for tests, first-run checkouts, and old
-            # callers. Production builds use the persisted extraction payload.
+            if not legacy_mode:
+                raise ValueError(f"Missing persisted decision rules for {ticker}")
+            # Compatibility fallback for explicit migration/test/legacy calls.
             rules = _rules_for_decision(decision)
             monitoring_metrics = []
             semantic_review_candidates = []
@@ -747,14 +804,29 @@ def build_state_layers(
             zero_rule_reason = None if rules else None
             extraction_error = None
             retired_rules = []
+        realtime_supported = decision.get("market") in REALTIME_MARKETS
+        event_source_status = compact(
+            (event_payload or {}).get("source_status")
+            if isinstance(event_payload, dict)
+            else ""
+        ).lower() or "unavailable"
         event = events.get(
             ticker,
             {
-                "state": "normal" if decision.get("market") in REALTIME_MARKETS else "unknown",
+                "state": "unknown",
                 "thesis_relevant": False,
                 "events": [],
+                "source_status": event_source_status,
             },
         )
+        event = dict(event)
+        event_source_status = compact(event.get("source_status")).lower() or "unknown"
+        if (
+            realtime_supported
+            and event.get("state") == "normal"
+            and event_source_status not in {"ok", "complete", "success"}
+        ):
+            event["state"] = "unknown"
         quote = quotes.get(ticker)
         for rule in rules:
             event_triggered = bool(event.get("thesis_relevant")) and event.get("state") in {"important", "critical"}
@@ -773,7 +845,6 @@ def build_state_layers(
         }
         lifecycle, warning = _lifecycle((overrides.get(ticker) or {}).get("lifecycle"), tracking.get(ticker), rules, checklist)
         technical = _technical_state(decision, technical_values.get(ticker))
-        realtime_supported = decision.get("market") in REALTIME_MARKETS
         if not realtime_supported:
             sentiment_item = {
                 "state": "unknown",
@@ -818,13 +889,14 @@ def build_state_layers(
             },
             "drift": drift,
             "event_radar": {
-                "state": event.get("state", "normal" if realtime_supported else "unknown"),
+                "state": event.get("state", "unknown"),
                 "thesis_relevant": bool(event.get("thesis_relevant")),
                 "event_count": len(event.get("events") or []),
                 "recommended_action": event.get("recommended_action", "none"),
                 "last_checked": event.get("last_checked"),
                 "data_cutoff": event.get("data_cutoff"),
                 "events": event.get("events") or [],
+                "source_status": event_source_status,
                 "realtime_scope": event_realtime_scope,
             },
             "sentiment": sentiment_item,

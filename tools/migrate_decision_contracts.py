@@ -163,7 +163,7 @@ def replace_contract(path: Path, record: dict[str, Any]) -> bool:
 
 def load_board(repo_root: Path) -> dict[str, Any]:
     """Build fresh board data before selecting the migration targets."""
-    return dashboard.build_dashboard(repo_root)
+    return dashboard.build_dashboard(repo_root, legacy_mode=True)
 
 
 def is_primary_history_report(record: dict[str, Any], market: str | None) -> bool:

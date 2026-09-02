@@ -49,6 +49,7 @@ def main() -> int:
         event_payload=event_payload,
         rule_payload=extracted_rules,
         write=args.write,
+        legacy_mode=True,
     )
     if args.write:
         decision_state.write_json(

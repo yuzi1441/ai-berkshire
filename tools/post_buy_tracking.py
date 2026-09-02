@@ -512,6 +512,11 @@ def command_register(args: argparse.Namespace, repo_root: Path) -> None:
     registered_id = str(registered.get("position_id") or "")
     if registered_id != position_id_for(registered):
         raise ValueError(f"invalid position_id for {key}: {registered_id}")
+    if any(
+        isinstance(item, dict) and item.get("position_id") == registered_id
+        for item in payload.get("position_history", [])
+    ):
+        raise ValueError(f"Position cycle already exists in tracking history: {registered_id}")
     if registered_id in original_cycles:
         raise ValueError(f"Position cycle already exists: {registered_id}")
     if existing and args.force:
@@ -582,15 +587,24 @@ def command_update(args: argparse.Namespace, repo_root: Path) -> None:
     item.update(updates)
     item["updated_at"] = iso_now()
     payload["updated_at"] = iso_now()
-    save_json(path, payload)
     if updates.get("status") == "closed":
-        archive_original_buy_thesis(
-            repo_root,
+        # Closing a position changes two sources of truth.  Finish all
+        # validation and construct both payloads in memory before either file
+        # is replaced, then use the same rollback-safe commit as re-entry.
+        thesis_path = repo_root / ORIGINAL_THESIS_RELATIVE
+        staged_original = load_original_thesis(thesis_path)
+        archive_result = _archive_original_buy_thesis_payload(
+            staged_original,
             item,
             timestamp=item["updated_at"],
-            write=True,
             reason="position_closed",
         )
+        if archive_result["status"] == "no_baseline":
+            save_json(path, payload)
+        else:
+            _commit_registration_payloads(path, payload, thesis_path, staged_original)
+    else:
+        save_json(path, payload)
     print(f"Updated post-buy tracking: {key_for_ticker(args.ticker)}")
 
 
