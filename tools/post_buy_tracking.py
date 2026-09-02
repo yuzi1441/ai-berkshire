@@ -10,7 +10,8 @@ Examples::
 
     python3 tools/post_buy_tracking.py register \
       --ticker 600406.SH --company 国电南瑞 --market A股 \
-      --buy-date 2026-08-01 --next-review 2026-11-01
+      --buy-date 2026-08-01 --next-review 2026-11-01 \
+      --thesis-report reports/国电南瑞/国电南瑞-thesis.md
     python3 tools/post_buy_tracking.py update 600406.SH \
       --thesis-status healthy --health-score 8 --last-review 2026-08-01
     python3 tools/post_buy_tracking.py event 600406.SH \
@@ -23,6 +24,7 @@ Examples::
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import os
 import sys
@@ -46,6 +48,7 @@ POSITION_STATUSES = ("holding", "paused", "closed")
 THESIS_STATUSES = ("not_established", "healthy", "borderline", "damaged", "broken")
 EVENT_CATEGORIES = ("基本面", "行业", "情绪", "技术", "混合", "不明")
 DEFAULT_THRESHOLDS = {"daily_pct": 5.0, "review_days_before": 7}
+ORIGINAL_THESIS_SCHEMA_VERSION = 2
 
 
 def today() -> date:
@@ -82,6 +85,9 @@ def load_tracking(path: Path) -> dict[str, Any]:
     positions = payload.get("positions")
     if not isinstance(positions, dict):
         raise ValueError("post_buy_tracking.positions must be an object")
+    history = payload.get("position_history", [])
+    if not isinstance(history, list):
+        raise ValueError("post_buy_tracking.position_history must be a list")
     return payload
 
 
@@ -100,6 +106,13 @@ def key_for_ticker(ticker: str) -> str:
     if not normalized:
         raise ValueError("ticker cannot be empty")
     return normalized
+
+
+def position_id_for(position_record: dict[str, Any]) -> str:
+    """Return the stable identity for one buy-to-close position cycle."""
+    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    buy_date = str(position_record.get("buy_date") or "").strip()
+    return f"{ticker}:{buy_date}" if buy_date else f"{ticker}:legacy"
 
 
 def position(payload: dict[str, Any], ticker: str) -> dict[str, Any]:
@@ -121,6 +134,7 @@ def default_position(args: argparse.Namespace) -> dict[str, Any]:
     return {
         "company": args.company,
         "ticker": key_for_ticker(args.ticker),
+        "position_id": f"{key_for_ticker(args.ticker)}:{buy_date}",
         "market": args.market,
         "status": "holding",
         "buy_date": buy_date,
@@ -137,6 +151,99 @@ def default_position(args: argparse.Namespace) -> dict[str, Any]:
         "events": [],
         "latest_event": None,
         "updated_at": iso_now(),
+    }
+
+
+def archive_position(payload: dict[str, Any], ticker: str, *, reason: str) -> dict[str, Any] | None:
+    """Move the replaced current position into immutable cycle history."""
+    key = key_for_ticker(ticker)
+    existing = payload["positions"].get(key)
+    if not isinstance(existing, dict):
+        return None
+    archived = copy.deepcopy(existing)
+    archived["position_id"] = archived.get("position_id") or position_id_for(archived)
+    archived["status"] = "closed"
+    archived.setdefault("closed_at", iso_now())
+    archived.setdefault("close_reason", reason)
+    history = [
+        item
+        for item in payload.setdefault("position_history", [])
+        if not isinstance(item, dict) or item.get("position_id") != archived["position_id"]
+    ]
+    history.append(archived)
+    payload["position_history"] = history
+    return archived
+
+
+def _empty_original_thesis_payload() -> dict[str, Any]:
+    return {
+        "schema_version": ORIGINAL_THESIS_SCHEMA_VERSION,
+        "cycles": {},
+        "active_position_ids": {},
+    }
+
+
+def _original_thesis_cycles(payload: dict[str, Any]) -> tuple[dict[str, Any], dict[str, str]]:
+    cycles = payload.get("cycles")
+    if not isinstance(cycles, dict):
+        cycles = {}
+        payload["cycles"] = cycles
+    active = payload.get("active_position_ids")
+    if not isinstance(active, dict):
+        active = {}
+        payload["active_position_ids"] = active
+    payload["schema_version"] = ORIGINAL_THESIS_SCHEMA_VERSION
+    return cycles, active
+
+
+def _close_thesis_cycle(record: dict[str, Any], *, timestamp: str, reason: str) -> None:
+    record["position_status"] = "closed"
+    record.setdefault("closed_at", timestamp)
+    record.setdefault("close_reason", reason)
+
+
+def archive_original_buy_thesis(
+    repo_root: Path,
+    position_record: dict[str, Any],
+    *,
+    timestamp: str | None = None,
+    write: bool = True,
+    reason: str = "new_purchase_cycle",
+) -> dict[str, Any]:
+    """Close the current thesis cycle before a ticker is registered again."""
+    root = repo_root.resolve()
+    ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    snapshot_path = root / ORIGINAL_THESIS_RELATIVE
+    payload = load_json(snapshot_path, _empty_original_thesis_payload())
+    cycles, active = _original_thesis_cycles(payload)
+    stamp = timestamp or iso_now()
+    cycle_id = str(active.get(ticker) or position_id_for(position_record))
+    changed = False
+    existing = cycles.get(cycle_id)
+    if isinstance(existing, dict):
+        _close_thesis_cycle(existing, timestamp=stamp, reason=reason)
+        changed = True
+    legacy_positions = payload.get("positions")
+    if isinstance(legacy_positions, dict):
+        legacy = legacy_positions.pop(ticker, None)
+        if isinstance(legacy, dict):
+            legacy = copy.deepcopy(legacy)
+            legacy["position_id"] = cycle_id
+            _close_thesis_cycle(legacy, timestamp=stamp, reason=reason)
+            cycles[cycle_id] = legacy
+            changed = True
+        if not legacy_positions:
+            payload.pop("positions", None)
+    if active.get(ticker) == cycle_id:
+        active.pop(ticker, None)
+        changed = True
+    if changed and write:
+        save_json(snapshot_path, payload)
+    return {
+        "status": "archived" if changed else "no_baseline",
+        "ticker": ticker,
+        "position_id": cycle_id,
+        "written": bool(changed and write),
     }
 
 
@@ -157,23 +264,35 @@ def freeze_original_buy_thesis(
     """
     root = repo_root.resolve()
     ticker = key_for_ticker(str(position_record.get("ticker") or ""))
+    position_id = str(position_record.get("position_id") or position_id_for(position_record))
     raw_report = position_record.get("thesis_report_path")
     if not raw_report:
-        return {"status": "missing_thesis_report_path", "ticker": ticker}
+        return {"status": "missing_thesis_report_path", "ticker": ticker, "position_id": position_id}
     report_path = (root / str(raw_report)).resolve()
     if not report_path.is_file() or root not in report_path.parents:
-        return {"status": "missing_thesis_report", "ticker": ticker, "source_report": str(raw_report)}
+        return {
+            "status": "missing_thesis_report",
+            "ticker": ticker,
+            "position_id": position_id,
+            "source_report": str(raw_report),
+        }
+
     current_hash = canonical_file_sha256(report_path)
     current_text = report_path.read_text(encoding="utf-8", errors="replace")
     snapshot_path = root / ORIGINAL_THESIS_RELATIVE
-    payload = load_json(snapshot_path, {"schema_version": SCHEMA_VERSION, "positions": {}})
-    payload.setdefault("schema_version", SCHEMA_VERSION)
-    payload.setdefault("positions", {})
-    existing = payload["positions"].get(ticker)
+    payload = load_json(snapshot_path, _empty_original_thesis_payload())
+    cycles, active = _original_thesis_cycles(payload)
+    stamp = timestamp or iso_now()
+
+    existing = cycles.get(position_id)
     if isinstance(existing, dict):
+        active[ticker] = position_id
+        if write and payload != load_json(snapshot_path, _empty_original_thesis_payload()):
+            save_json(snapshot_path, payload)
         return {
             "status": "frozen",
             "ticker": ticker,
+            "position_id": position_id,
             "source_report": existing.get("source_report"),
             "source_hash": existing.get("source_hash"),
             "current_source_hash": current_hash,
@@ -182,22 +301,84 @@ def freeze_original_buy_thesis(
             "provenance": existing.get("provenance") or "unknown",
             "backfilled": bool(existing.get("backfilled", False)),
         }
+
+    previous_id = str(active.get(ticker) or "")
+    if previous_id and previous_id != position_id:
+        previous = cycles.get(previous_id)
+        if isinstance(previous, dict):
+            _close_thesis_cycle(previous, timestamp=stamp, reason="new_purchase_cycle")
+        active.pop(ticker, None)
+
+    # Migrate the pre-cycle schema without overwriting its evidence.  When the
+    # legacy baseline has no known prior cycle, it is the current cycle's
+    # historical baseline; an existing active cycle is instead archived.
+    legacy_positions = payload.get("positions")
+    legacy = legacy_positions.get(ticker) if isinstance(legacy_positions, dict) else None
+    if isinstance(legacy, dict):
+        legacy = copy.deepcopy(legacy)
+        legacy_id = str(legacy.get("position_id") or previous_id or position_id)
+        if legacy_id == position_id and not previous_id:
+            legacy["position_id"] = position_id
+            legacy["ticker"] = ticker
+            legacy["buy_date"] = position_record.get("buy_date")
+            legacy["position_status"] = position_record.get("status") or "holding"
+            cycles[position_id] = legacy
+            active[ticker] = position_id
+            legacy_positions.pop(ticker, None)
+            if not legacy_positions:
+                payload.pop("positions", None)
+            if write:
+                save_json(snapshot_path, payload)
+            return {
+                "status": "frozen",
+                "ticker": ticker,
+                "position_id": position_id,
+                "source_report": legacy.get("source_report"),
+                "source_hash": legacy.get("source_hash"),
+                "current_source_hash": current_hash,
+                "source_changed_since_capture": legacy.get("source_hash") != current_hash,
+                "captured_at": legacy.get("captured_at"),
+                "provenance": legacy.get("provenance") or "unknown",
+                "backfilled": bool(legacy.get("backfilled", False)),
+            }
+        _close_thesis_cycle(legacy, timestamp=stamp, reason="new_purchase_cycle")
+        legacy["position_id"] = legacy_id
+        cycles[legacy_id] = legacy
+        legacy_positions.pop(ticker, None)
+        if not legacy_positions:
+            payload.pop("positions", None)
+
     record = {
         "company": position_record.get("company"),
         "ticker": ticker,
+        "position_id": position_id,
+        "buy_date": position_record.get("buy_date"),
+        "position_status": position_record.get("status") or "holding",
         "market": position_record.get("market"),
         "source_report": report_path.relative_to(root).as_posix(),
         "source_hash": current_hash,
         "source_text": current_text,
-        "captured_at": timestamp or iso_now(),
+        "captured_at": stamp,
         "provenance": provenance,
         "backfilled": bool(backfilled),
     }
+    cycles[position_id] = record
+    active[ticker] = position_id
     if write:
-        payload["positions"][ticker] = record
         save_json(snapshot_path, payload)
-        return {"status": "backfilled" if backfilled else "captured", **{key: record[key] for key in ("ticker", "source_report", "source_hash", "captured_at", "provenance", "backfilled")}}
-    return {"status": "would_backfill" if backfilled else "would_capture", **{key: record[key] for key in ("ticker", "source_report", "source_hash", "captured_at", "provenance", "backfilled")}}
+        status = "backfilled" if backfilled else "captured"
+    else:
+        status = "would_backfill" if backfilled else "would_capture"
+    return {
+        "status": status,
+        "ticker": ticker,
+        "position_id": position_id,
+        "source_report": record["source_report"],
+        "source_hash": record["source_hash"],
+        "captured_at": record["captured_at"],
+        "provenance": record["provenance"],
+        "backfilled": record["backfilled"],
+    }
 
 
 def command_register(args: argparse.Namespace, repo_root: Path) -> None:
@@ -209,8 +390,21 @@ def command_register(args: argparse.Namespace, repo_root: Path) -> None:
     registered = default_position(args)
     if not registered.get("thesis_report_path"):
         raise ValueError("register requires --thesis-report so the purchase-time Original Buy Thesis can be frozen")
+    existing = payload["positions"].get(key)
+    if existing and args.force:
+        existing_id = str(existing.get("position_id") or position_id_for(existing))
+        if existing_id == registered["position_id"]:
+            raise ValueError("--force must use a new --buy-date to create a new holding cycle")
+        archive_position(payload, key, reason="replaced_by_new_purchase_cycle")
+        archive_original_buy_thesis(
+            repo_root,
+            existing,
+            timestamp=registered["updated_at"],
+            write=True,
+            reason="replaced_by_new_purchase_cycle",
+        )
     baseline = freeze_original_buy_thesis(repo_root, registered, timestamp=registered["updated_at"], write=False)
-    if baseline.get("status") not in {"would_capture", "frozen"}:
+    if baseline.get("status") not in {"would_capture", "frozen", "backfilled"}:
         raise ValueError(f"cannot register without a readable thesis report: {baseline.get('status')}")
     payload["positions"][key] = registered
     payload["updated_at"] = iso_now()
@@ -256,6 +450,14 @@ def command_update(args: argparse.Namespace, repo_root: Path) -> None:
     item["updated_at"] = iso_now()
     payload["updated_at"] = iso_now()
     save_json(path, payload)
+    if updates.get("status") == "closed":
+        archive_original_buy_thesis(
+            repo_root,
+            item,
+            timestamp=item["updated_at"],
+            write=True,
+            reason="position_closed",
+        )
     print(f"Updated post-buy tracking: {key_for_ticker(args.ticker)}")
 
 
