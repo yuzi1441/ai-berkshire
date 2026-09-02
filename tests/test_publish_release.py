@@ -211,35 +211,42 @@ class PublishReleaseTests(unittest.TestCase):
             self._run(["git", "init", "-b", "bigchange"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.email", "test@example.com"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=seed).check_returncode()
-            for name in ("rule_lifecycle.py", "decision_state.py", "decision_rule_extractor.py", "source_hash.py"):
+            for name in (
+                "automation_status.py",
+                "build_investment_dashboard.py",
+                "decision_consistency_review.py",
+                "decision_rule_extractor.py",
+                "decision_state.py",
+                "event_radar.py",
+                "main_report_review.py",
+                "migrate_manual_execution_reviews.py",
+                "opportunity_review.py",
+                "report_judgment.py",
+                "rule_lifecycle.py",
+                "sentiment_snapshot.py",
+                "source_hash.py",
+            ):
                 (seed / "tools").mkdir(exist_ok=True)
                 shutil.copy2(ROOT / "tools" / name, seed / "tools" / name)
 
             report = seed / "reports" / "示例公司" / "main.md"
             report.parent.mkdir(parents=True)
-            report_a = "# 示例公司\n\n数据截止：2026-08-01\n股票代码：600000.SH\n\n## 买入条件\n\n股价低于 10 元时进入买入复核。\n"
+            report_a = "# 示例公司\n\n数据截止：2026-08-01\n股票代码：600000.SH\n\n## 最终决策\n\n股价低于 10 元时进入买入复核。\n"
             report.write_text(report_a, encoding="utf-8")
             data = seed / "data" / "investment-dashboard"
             data.mkdir(parents=True)
-            decision_a = {
-                "company": "示例公司",
-                "ticker": "600000.SH",
-                "market": "A股",
-                "report_path": "reports/示例公司/main.md",
-                "execution_policy": {"price_rules": [{"price_range": "低于 10 元", "min": None, "ceiling": 10, "currency": "CNY"}]},
-            }
             rule_a = {
                 "rule_id": "600000.SH:entry:price-a",
                 "type": "PRICE",
                 "rule_scope": "entry",
                 "condition": "股价低于 10 元",
                 "action": "run_checklist",
+                "automation": "AUTO",
                 "min": None,
                 "max": 10,
                 "currency": "CNY",
                 "active": True,
             }
-            board = {"schema_version": 7, "decision_count": 1, "decisions": [decision_a]}
             rules = {
                 "schema_version": 1,
                 "rule_types": ["PRICE", "PRICE_RANGE", "METRIC", "EVENT", "ALL_OF", "ANY_OF"],
@@ -254,12 +261,27 @@ class PublishReleaseTests(unittest.TestCase):
                 "section_hashes": sections_a,
             }}}
             change_log = {"schema_version": 1, "changes": [{"marker": "old-history"}], "sync_runs": []}
-            (data / "decision_board.json").write_text(json.dumps(board, ensure_ascii=False), encoding="utf-8")
             (data / "decision_rules.json").write_text(json.dumps(rules, ensure_ascii=False), encoding="utf-8")
             (data / "rule_lifecycle.json").write_text(json.dumps(lifecycle, ensure_ascii=False), encoding="utf-8")
             (data / "rule_change_log.json").write_text(json.dumps(change_log, ensure_ascii=False), encoding="utf-8")
+            (data / "post_buy_tracking.json").write_text(
+                json.dumps({"schema_version": 1, "positions": {}, "position_history": []}),
+                encoding="utf-8",
+            )
+            (data / "manual_execution_reviews.json").write_text(
+                json.dumps({"schema_version": 1, "status": "missing", "categories": {}}),
+                encoding="utf-8",
+            )
+            (data / "automation_status.json").write_text(
+                json.dumps({"schema_version": 2, "updated_at": None, "schedules": [], "jobs": {}}),
+                encoding="utf-8",
+            )
+            decision_board_relative = "data/investment-dashboard/decision_board.json"
+            self.assertFalse((seed / decision_board_relative).exists())
             self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard", "tools"], cwd=seed).check_returncode()
             self._run(["git", "commit", "-m", "release-a"], cwd=seed).check_returncode()
+            tree_a = self._run(["git", "ls-tree", "-r", "--name-only", "HEAD"], cwd=seed).stdout.splitlines()
+            self.assertNotIn(decision_board_relative, tree_a)
             origin = root / "origin.git"
             self._run(["git", "clone", "--bare", str(seed), str(origin)], cwd=root).check_returncode()
 
@@ -277,7 +299,12 @@ class PublishReleaseTests(unittest.TestCase):
             fake_python = root / "fake-python"
             fake_python.write_text(
                 "#!/usr/bin/env bash\n"
-                "if [[ \"${1:-}\" == */rule_lifecycle.py ]]; then exec \"${REAL_PYTHON}\" \"$@\"; fi\n"
+                "printf '%s\\n' \"${1:-}\" >> \"${CALL_LOG}\"\n"
+                "case \"${1:-}\" in\n"
+                "  */build_investment_dashboard.py|*/rule_lifecycle.py|*/migrate_manual_execution_reviews.py)\n"
+                "    exec \"${REAL_PYTHON}\" \"$@\"\n"
+                "    ;;\n"
+                "esac\n"
                 "exit 0\n",
                 encoding="utf-8",
             )
@@ -300,6 +327,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "SOURCE_BRANCH": "bigchange",
                 "PYTHON": str(fake_python),
                 "REAL_PYTHON": sys.executable,
+                "CALL_LOG": str(root / "python-calls.log"),
                 "VENV_DIR": str(venv),
                 "REFRESH_SERVICES": str(refresh),
                 "PATH": portable_path,
@@ -307,24 +335,32 @@ class PublishReleaseTests(unittest.TestCase):
             first = subprocess.run(["bash", str(PUBLISHER)], env=env, text=True, capture_output=True, check=False)
             self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
             release_a = self._resolved(current_link)
+            decision_board_relative = "data/investment-dashboard/decision_board.json"
+            self.assertFalse((root / "source" / decision_board_relative).exists())
+            self.assertTrue((release_a / decision_board_relative).is_file())
+            calls = (root / "python-calls.log").read_text(encoding="utf-8").splitlines()
+            build_calls = [index for index, call in enumerate(calls) if call.endswith("/build_investment_dashboard.py")]
+            lifecycle_calls = [index for index, call in enumerate(calls) if call.endswith("/rule_lifecycle.py")]
+            self.assertEqual(len(build_calls), 2)
+            self.assertEqual(len(lifecycle_calls), 1)
+            self.assertLess(build_calls[0], lifecycle_calls[0])
+            self.assertLess(lifecycle_calls[0], build_calls[1])
 
             source = root / "source"
             self._run(["git", "config", "user.email", "test@example.com"], cwd=source).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=source).check_returncode()
-            report_b = "# 示例公司\n\n数据截止：2026-09-01\n股票代码：600000.SH\n\n## 买入条件\n\n股价低于 12 元时进入买入复核。\n"
+            report_b = "# 示例公司\n\n数据截止：2026-09-01\n股票代码：600000.SH\n\n## 最终决策\n\n股价低于 12 元时进入买入复核。\n"
             (source / "reports" / "示例公司" / "main.md").write_text(report_b, encoding="utf-8")
-            decision_b = dict(decision_a)
-            decision_b["execution_policy"] = {"price_rules": [{"price_range": "低于 12 元", "min": None, "ceiling": 12, "currency": "CNY"}]}
             rule_b = dict(rule_a)
             rule_b.update({"rule_id": "600000.SH:entry:price-b", "condition": "股价低于 12 元", "max": 12})
-            (source / "data" / "investment-dashboard" / "decision_board.json").write_text(
-                json.dumps({"schema_version": 7, "decision_count": 1, "decisions": [decision_b]}, ensure_ascii=False), encoding="utf-8"
-            )
             (source / "data" / "investment-dashboard" / "decision_rules.json").write_text(
                 json.dumps({**rules, "companies": [{**rules["companies"][0], "rules": [rule_b]}]}, ensure_ascii=False), encoding="utf-8"
             )
-            self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard/decision_board.json", "data/investment-dashboard/decision_rules.json"], cwd=source).check_returncode()
+            self.assertFalse((source / decision_board_relative).exists())
+            self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard/decision_rules.json"], cwd=source).check_returncode()
             self._run(["git", "commit", "-m", "release-b"], cwd=source).check_returncode()
+            tree_b = self._run(["git", "ls-tree", "-r", "--name-only", "HEAD"], cwd=source).stdout.splitlines()
+            self.assertNotIn(decision_board_relative, tree_b)
             pushed = self._run(["git", "push", "origin", "HEAD:bigchange"], cwd=source)
             self.assertEqual(pushed.returncode, 0, pushed.stdout + pushed.stderr)
 
@@ -333,6 +369,17 @@ class PublishReleaseTests(unittest.TestCase):
             release_b = self._resolved(current_link)
             self.assertNotEqual(release_b, release_a)
             self.assertNotEqual(release_b, self._resolved(old_release))
+            self.assertTrue((release_b / decision_board_relative).is_file())
+            calls = (root / "python-calls.log").read_text(encoding="utf-8").splitlines()
+            build_calls = [index for index, call in enumerate(calls) if call.endswith("/build_investment_dashboard.py")]
+            lifecycle_calls = [index for index, call in enumerate(calls) if call.endswith("/rule_lifecycle.py")]
+            self.assertEqual(len(build_calls), 4)
+            self.assertEqual(len(lifecycle_calls), 2)
+            self.assertLess(build_calls[0], lifecycle_calls[0])
+            self.assertLess(lifecycle_calls[0], build_calls[1])
+            self.assertLess(build_calls[1], build_calls[2])
+            self.assertLess(build_calls[2], lifecycle_calls[1])
+            self.assertLess(lifecycle_calls[1], build_calls[3])
             self.assertEqual((release_b / "reports" / "示例公司" / "main.md").read_text(encoding="utf-8"), report_b)
             source_sha_b = self._run(["git", "rev-parse", "HEAD"], cwd=source).stdout.strip()
             self.assertEqual((release_b / ".source-sha").read_text(encoding="utf-8").strip(), source_sha_b)

@@ -127,10 +127,13 @@ if [[ -f "${RUNTIME_SENTIMENT_STATUS}" ]]; then
         "${STAGING_RELEASE}/site/data/sentiment_status.json"
 fi
 
-# Decision Rules are persistent reconciled state: Git supplies the current
-# definition, while the lifecycle command reconciles it against the canonical
-# reports and preserves the runtime audit history copied above.  In particular,
-# a changed report must never be paired with a silently inherited old Rule.
+# Generate the rebuildable board before the fail-closed Rule Lifecycle command.
+# Decision Rules remain persistent reconciled state: Git supplies the current
+# definition, while the lifecycle command reconciles it against this fresh
+# board and preserves the runtime audit history copied above.  A final build
+# then evaluates the reconciled Rules into Company State and site output.
+"${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
+    --repo-root "${STAGING_RELEASE}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/rule_lifecycle.py" \
     --repo-root "${STAGING_RELEASE}" --write
 
