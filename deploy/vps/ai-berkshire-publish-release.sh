@@ -85,7 +85,6 @@ for relative in \
     data/investment-dashboard/drift_states.json \
     data/investment-dashboard/rule_lifecycle.json \
     data/investment-dashboard/rule_change_log.json \
-    data/investment-dashboard/decision_rules.json \
     data/investment-dashboard/company_state.json \
     data/investment-dashboard/quotes/latest.json \
     data/sentiment/latest.json \
@@ -128,6 +127,13 @@ if [[ -f "${RUNTIME_SENTIMENT_STATUS}" ]]; then
         "${STAGING_RELEASE}/site/data/sentiment_status.json"
 fi
 
+# Decision Rules are persistent reconciled state: Git supplies the current
+# definition, while the lifecycle command reconciles it against the canonical
+# reports and preserves the runtime audit history copied above.  In particular,
+# a changed report must never be paired with a silently inherited old Rule.
+"${PYTHON}" "${STAGING_RELEASE}/tools/rule_lifecycle.py" \
+    --repo-root "${STAGING_RELEASE}" --write
+
 "${PYTHON}" "${STAGING_RELEASE}/tools/migrate_manual_execution_reviews.py" \
     --repo-root "${STAGING_RELEASE}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
@@ -148,13 +154,13 @@ if [[ -e "${CURRENT_LINK}" ]]; then
 fi
 TEMP_LINK="${BASE_DIR}/.current-${SOURCE_SHA:0:12}-$$"
 ln -s "${FINAL_RELEASE}" "${TEMP_LINK}"
-mv -f "${TEMP_LINK}" "${CURRENT_LINK}"
+mv -Tf "${TEMP_LINK}" "${CURRENT_LINK}"
 
 if ! "${REFRESH_SERVICES}"; then
     if [[ -n "${OLD_RELEASE}" ]]; then
         ROLLBACK_LINK="${BASE_DIR}/.rollback-${SOURCE_SHA:0:12}-$$"
         ln -s "${OLD_RELEASE}" "${ROLLBACK_LINK}"
-        mv -f "${ROLLBACK_LINK}" "${CURRENT_LINK}"
+        mv -Tf "${ROLLBACK_LINK}" "${CURRENT_LINK}"
         "${REFRESH_SERVICES}" || true
     fi
     echo "release activation failed; current was restored" >&2
