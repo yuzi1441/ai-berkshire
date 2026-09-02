@@ -309,6 +309,8 @@ class PublishReleaseTests(unittest.TestCase):
             release_a = self._resolved(current_link)
 
             source = root / "source"
+            self._run(["git", "config", "user.email", "test@example.com"], cwd=source).check_returncode()
+            self._run(["git", "config", "user.name", "Release Test"], cwd=source).check_returncode()
             report_b = "# 示例公司\n\n数据截止：2026-09-01\n股票代码：600000.SH\n\n## 买入条件\n\n股价低于 12 元时进入买入复核。\n"
             (source / "reports" / "示例公司" / "main.md").write_text(report_b, encoding="utf-8")
             decision_b = dict(decision_a)
