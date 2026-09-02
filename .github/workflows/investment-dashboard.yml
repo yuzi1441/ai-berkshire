@@ -65,7 +65,44 @@ jobs:
           git diff --exit-code -- data/investment-dashboard/rule_lifecycle.json
           git diff --exit-code -- data/investment-dashboard/rule_change_log.json
           git diff --exit-code -- data/investment-dashboard/post_buy_tracking.json
-          test -z "$(git diff --name-only --ignore-cr-at-eol)"
+          python - <<'PY'
+          import re
+          import subprocess
+          from pathlib import Path
+
+          legacy_eol_files = {
+              "research/sources/defense-energetic-materials/global-market-cap-pages/bae-systems.html",
+              "research/sources/defense-energetic-materials/global-market-cap-pages/lockheed-martin.html",
+              "research/sources/defense-energetic-materials/global-market-cap-pages/rheinmetall.html",
+              "research/sources/oriental_elec_2025_annual_sina.txt",
+              "research/sources/sec_beone/sina_a_page.html",
+              "research/sources/uih_annual_sina.html",
+              "research/sources/联影医疗/2025年报_sina.html",
+              "research/sources/联影医疗/2025年报_sina_text.txt",
+              "research/sources/联影医疗/2026Q1_sina.html",
+              "research/sources/联影医疗/2026Q1_sina_text.txt",
+          }
+
+          def normalize_line_endings(value: bytes) -> bytes:
+              return re.sub(rb"\r+\n", b"\n", value).replace(b"\r", b"\n")
+
+          for path in legacy_eol_files:
+              expected = subprocess.check_output(["git", "show", f"HEAD:{path}"])
+              actual = Path(path).read_bytes()
+              if normalize_line_endings(expected) != normalize_line_endings(actual):
+                  raise SystemExit(f"Unexpected tracked content change: {path}")
+
+          changed = subprocess.check_output(["git", "diff", "--name-only", "-z"])
+          changed_paths = {
+              item.decode("utf-8")
+              for item in changed.split(b"\0")
+              if item
+          }
+          unexpected = sorted(changed_paths - legacy_eol_files)
+          if unexpected:
+              raise SystemExit("Unexpected tracked changes: " + ", ".join(unexpected))
+          print("tracked clean build boundary=PASS")
+          PY
   build:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
