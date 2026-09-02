@@ -40,7 +40,11 @@ jobs:
       - name: Clean dashboard build
         run: python tools/build_investment_dashboard.py
       - name: Run unit tests
-        run: python -m unittest discover -s tests -p 'test*.py' -q
+        env:
+          TMPDIR: ${{ runner.temp }}/python-tmp
+        run: |
+          mkdir -p "$TMPDIR"
+          python -m unittest discover -s tests -p 'test*.py' -q
       - name: Check Skill sync
         run: python scripts/sync-codex-skills.py --check
       - name: Check Python syntax
