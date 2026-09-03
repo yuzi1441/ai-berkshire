@@ -10,9 +10,68 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import decision_state
+from source_hash import canonical_file_sha256
 
 
 class DecisionStateTests(unittest.TestCase):
+    def test_company_state_separates_report_hash_from_manual_review_fingerprint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report = root / "reports" / "示例公司" / "main.md"
+            report.parent.mkdir(parents=True)
+            report.write_bytes(
+                b"\xef\xbb\xbf"
+                + "# 示例公司\r\n\r\n日期：2026年9月3日\r\n\r\n## 最终建议\r\n继续观察。\r\n".encode(
+                    "utf-8"
+                )
+            )
+            decision = {
+                "company": "示例公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "report_path": "reports/示例公司/main.md",
+                "source_fingerprint_sha256": "manual-review-composite-fingerprint",
+            }
+
+            result = decision_state.build_state_layers(
+                [decision], root, write=False, legacy_mode=True
+            )
+            state = result["state"]["companies"][0]
+
+            self.assertEqual(state["canonical_report_sha256"], canonical_file_sha256(report))
+            self.assertEqual(
+                state["manual_review_source_fingerprint_sha256"],
+                "manual-review-composite-fingerprint",
+            )
+            self.assertNotEqual(
+                state["canonical_report_sha256"],
+                state["manual_review_source_fingerprint_sha256"],
+            )
+
+    def test_missing_report_cutoff_does_not_remove_baseline_report_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report = root / "reports" / "示例公司" / "main.md"
+            report.parent.mkdir(parents=True)
+            report.write_text(
+                "# 示例公司\n\n日期：2026年9月3日\n\n## 最终建议\n继续观察。\n",
+                encoding="utf-8",
+            )
+            decision = {
+                "company": "示例公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "report_path": "reports/示例公司/main.md",
+            }
+
+            result = decision_state.build_state_layers(
+                [decision], root, write=False, legacy_mode=True
+            )
+            state = result["state"]["companies"][0]
+
+            self.assertEqual(state["canonical_report"], decision["report_path"])
+            self.assertEqual(state["canonical_report_sha256"], canonical_file_sha256(report))
+
     def test_price_rule_evaluation_and_nested_rules(self):
         quote = {"price": 12.0}
         self.assertEqual(

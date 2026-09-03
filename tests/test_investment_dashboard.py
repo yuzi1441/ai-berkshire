@@ -156,14 +156,10 @@ class InvestmentDashboardTests(unittest.TestCase):
                 stale_tickers.append(ticker)
             self.assertTrue(resolution["reviewed_at"], ticker)
             self.assertIn("人工", resolution["judgment"]["source_basis"], ticker)
-        self.assertEqual(stale_tickers, ["600312.SH"])
+        self.assertEqual(stale_tickers, [])
 
         for decision in a_shares:
             judgment = decision["primary_judgment"]
-            if decision["ticker"] == "600312.SH":
-                self.assertFalse(judgment["source_matches"], decision["ticker"])
-                self.assertEqual(judgment["label"], "待人工复核", decision["ticker"])
-                continue
             self.assertTrue(judgment["human_reviewed"], decision["ticker"])
             self.assertEqual(judgment["artifact_status"], "human_reviewed", decision["ticker"])
             self.assertTrue(judgment["source_matches"], decision["ticker"])
