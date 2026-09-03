@@ -58,12 +58,15 @@ elif [[ -d "${LEGACY_DIR}" ]]; then
 fi
 
 # Authority boundary:
-# - Git-authoritative: source code, canonical reports and deploy/config files.
-# - Runtime-authoritative after first deploy: user-operated state and its
-#   audit history below.  The source checkout seeds these files only when no
-#   previous release has them; a later release always preserves the previous
-#   runtime copy instead of restoring the Git snapshot.
-# - Rebuildable site output is not a source of truth and is regenerated below.
+# - Git-authoritative: source code, canonical reports, Decision Rule
+#   definitions, and reviewed persisted state changes.
+# - Runtime-authoritative after first deploy: live user-operated positions and
+#   Original Buy Thesis cycles below.  They seed from Git only on first deploy.
+# - Persistent reconciled state: Drift, Rule Lifecycle, and Change Log merge
+#   the new Git state with compatible runtime history in the helper below.
+# - Rebuildable output: decision_board, company_state, and prior site/data are
+#   never overlaid from a previous release; the build regenerates them.
+#   Explicit live sentiment runtime injection below is the exception.
 copy_runtime_file() {
     local relative="$1"
     if [[ -n "${PREVIOUS}" && -f "${PREVIOUS}/${relative}" ]]; then
@@ -82,24 +85,15 @@ for relative in \
     data/investment-dashboard/post_buy_alerts.json \
     data/investment-dashboard/post_buy_tracking.json \
     data/investment-dashboard/original_buy_theses.json \
-    data/investment-dashboard/drift_states.json \
-    data/investment-dashboard/rule_lifecycle.json \
-    data/investment-dashboard/rule_change_log.json \
-    data/investment-dashboard/company_state.json \
     data/investment-dashboard/quotes/latest.json \
-    data/sentiment/latest.json \
-    site/data/annual_report_dates.json \
-    site/data/automation_status.json \
-    site/data/intraday_technical.json \
-    site/data/main_report_review.json \
-    site/data/opportunity_scans.json \
-    site/data/opportunity_scan_status.json \
-    site/data/post_buy_alerts.json \
-    site/data/post_buy_tracking.json \
-    site/data/quotes/latest.json \
-    site/data/sentiment_status.json; do
+    data/sentiment/latest.json; do
     copy_runtime_file "${relative}"
 done
+
+if [[ -n "${PREVIOUS}" && -d "${PREVIOUS}" ]]; then
+    "${PYTHON}" "${STAGING_RELEASE}/tools/reconcile_release_state.py" \
+        --previous-root "${PREVIOUS}" --staging-root "${STAGING_RELEASE}"
+fi
 
 # Keep runtime timestamps/results, but always apply the source-controlled
 # schedule contract so retired jobs cannot remain stuck in the public status.
