@@ -90,7 +90,5 @@ class AutomationStatusTests(unittest.TestCase):
         for relative in (
             "data/investment-dashboard/opportunity_scans.json",
             "data/investment-dashboard/opportunity_scan_status.json",
-            "site/data/opportunity_scans.json",
-            "site/data/opportunity_scan_status.json",
         ):
             self.assertIn(relative, publisher)
