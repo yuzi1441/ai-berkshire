@@ -34,6 +34,14 @@ const LABELS = {
   dataStatus: { fresh: "新鲜", partial: "部分可用", stale: "数据过期", unknown: "未知", unavailable: "不可用", unsupported: "暂不支持", ready: "已准备" },
 };
 
+const WORKSPACES = {
+  attention: "今日处理",
+  holdings: "我的持仓",
+  opportunities: "买入候选",
+  "ai-research": "AI研究机会",
+  watchlist: "研究池",
+};
+
 // Legacy report-review names remain as non-rendering contract markers. The old
 // dense table is intentionally gone; report evidence now lives in the drawer.
 // renderFundamentalReviewRows / renderFundamentalReviewDetail / renderFundamentalReviewPartitions
@@ -109,6 +117,7 @@ const state = {
   sort: "attention",
   page: 1,
   selectedTicker: null,
+  workspace: "attention",
 };
 
 const els = {
@@ -150,6 +159,14 @@ const els = {
   drawerContent: document.querySelector("#drawer-content"),
   drawerClose: document.querySelector("#drawer-close"),
   toast: document.querySelector("#toast"),
+  workspaceNav: document.querySelector(".workspace-nav"),
+  workspacePanels: [...document.querySelectorAll("[data-workspace-panel]")],
+  activeWorkspaceTitle: document.querySelector("#active-workspace-title"),
+  navAttentionCount: document.querySelector("#nav-attention-count"),
+  navHoldingsCount: document.querySelector("#nav-holdings-count"),
+  navOpportunitiesCount: document.querySelector("#nav-opportunities-count"),
+  navAiCount: document.querySelector("#nav-ai-count"),
+  navWatchlistCount: document.querySelector("#nav-watchlist-count"),
 };
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
@@ -270,6 +287,86 @@ function stateRecords() {
 
 function stateCount(lifecycle) {
   return stateRecords().filter((record) => lifecycleOf(record) === lifecycle).length;
+}
+
+function decodeHashValue(value) {
+  try { return decodeURIComponent(value); } catch { return null; }
+}
+
+function routeFromLocation() {
+  const raw = location.hash.replace(/^#/, "");
+  const workspacePart = raw.split("/", 1)[0];
+  const workspace = WORKSPACES[workspacePart] ? workspacePart : "attention";
+  const companyPart = raw.match(/(?:^|\/)company=(.+)$/)?.[1];
+  return { workspace, ticker: companyPart ? decodeHashValue(companyPart) : null };
+}
+
+function aiNavigationCount() {
+  const status = state.opportunityScanMeta?.status;
+  const items = aiOpportunityItems();
+  if (["ok", "ready"].includes(status)) return String(items.length);
+  if (status === "partial" && items.length) return String(items.length);
+  return "—";
+}
+
+function renderWorkspaceNav() {
+  const attentionToday = attentionRecords().filter((record) => attentionTier(record) === "must").length;
+  const counts = {
+    attention: attentionToday,
+    holdings: stateCount("HOLDING"),
+    opportunities: stateCount("PRE_BUY"),
+    "ai-research": aiNavigationCount(),
+    watchlist: stateRecords().filter((record) => lifecycleOf(record) !== "HOLDING").length,
+  };
+  const elements = {
+    attention: els.navAttentionCount,
+    holdings: els.navHoldingsCount,
+    opportunities: els.navOpportunitiesCount,
+    "ai-research": els.navAiCount,
+    watchlist: els.navWatchlistCount,
+  };
+  for (const [workspace, element] of Object.entries(elements)) {
+    if (element) element.textContent = String(counts[workspace]);
+  }
+}
+
+function setWorkspace(workspace, { historyMode = "push" } = {}) {
+  const nextWorkspace = WORKSPACES[workspace] ? workspace : "attention";
+  state.workspace = nextWorkspace;
+  for (const panel of els.workspacePanels) {
+    const active = panel.dataset.workspacePanel === nextWorkspace;
+    panel.hidden = !active;
+    panel.setAttribute("aria-hidden", String(!active));
+  }
+  els.workspaceNav?.querySelectorAll("[data-workspace]").forEach((button) => {
+    const active = button.dataset.workspace === nextWorkspace;
+    button.classList.toggle("is-active", active);
+    if (active) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
+  if (els.activeWorkspaceTitle) els.activeWorkspaceTitle.textContent = WORKSPACES[nextWorkspace];
+  if (historyMode === "push" && location.hash !== `#${nextWorkspace}`) {
+    history.pushState(null, "", `#${nextWorkspace}`);
+  }
+}
+
+function hideDetailDrawer() {
+  state.selectedTicker = null;
+  els.backdrop.hidden = true;
+  els.drawer.hidden = true;
+  document.body.classList.remove("drawer-open");
+}
+
+function syncWorkspaceFromLocation() {
+  const route = routeFromLocation();
+  const raw = location.hash.replace(/^#/, "");
+  const hasCompanyRoute = raw.startsWith("company=") || raw.includes("/company=");
+  if (raw && !WORKSPACES[raw.split("/", 1)[0]] && !hasCompanyRoute) {
+    history.replaceState(null, "", "#attention");
+  }
+  setWorkspace(route.workspace, { historyMode: "none" });
+  if (route.ticker && state.companyState.has(route.ticker)) openDetail(route.ticker);
+  else if (!route.ticker && !els.drawer.hidden) hideDetailDrawer();
 }
 
 function attentionReason(record) {
@@ -822,15 +919,12 @@ function openDetail(ticker) {
   els.backdrop.hidden = false;
   els.drawer.hidden = false;
   document.body.classList.add("drawer-open");
-  history.replaceState(null, "", `#company=${encodeURIComponent(ticker)}`);
+  history.replaceState(null, "", `#${state.workspace}/company=${encodeURIComponent(ticker)}`);
 }
 
-function closeDetail() {
-  state.selectedTicker = null;
-  els.backdrop.hidden = true;
-  els.drawer.hidden = true;
-  document.body.classList.remove("drawer-open");
-  if (location.hash.startsWith("#company=")) history.replaceState(null, "", location.pathname + location.search);
+function closeDetail({ restoreRoute = true } = {}) {
+  hideDetailDrawer();
+  if (restoreRoute && location.hash.includes("/company=")) history.replaceState(null, "", `#${state.workspace}`);
 }
 
 function toast(message) {
@@ -893,8 +987,7 @@ async function loadData({ silent = false } = {}) {
   state.opportunityScans = indexByTicker(state.opportunityScanMeta.scans);
   state.loadedAt = new Date().toISOString();
   renderAll();
-  const hashTicker = location.hash.match(/^#company=(.+)$/)?.[1];
-  if (hashTicker && state.companyState.has(decodeURIComponent(hashTicker))) openDetail(decodeURIComponent(hashTicker));
+  syncWorkspaceFromLocation();
 }
 
 function renderAll() {
@@ -905,6 +998,7 @@ function renderAll() {
   renderAiOpportunities();
   renderHoldings();
   renderWatchlist();
+  renderWorkspaceNav();
 }
 
 function applyFilterFromJump({ lifecycle = "all", opportunity = "all" } = {}) {
@@ -913,11 +1007,21 @@ function applyFilterFromJump({ lifecycle = "all", opportunity = "all" } = {}) {
   state.page = 1;
   els.lifecycle.value = lifecycle;
   els.opportunity.value = opportunity;
-  renderWatchlist();
-  document.querySelector("#watchlist-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const targetWorkspace = lifecycle !== "all" ? "watchlist" : opportunity === "attention" ? "attention" : "watchlist";
+  setWorkspace(targetWorkspace);
+  if (targetWorkspace === "watchlist") {
+    renderWatchlist();
+    document.querySelector("#watchlist-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function bindEvents() {
+  els.workspaceNav?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-workspace]");
+    if (button) setWorkspace(button.dataset.workspace);
+  });
+  window.addEventListener("hashchange", syncWorkspaceFromLocation);
+  window.addEventListener("popstate", syncWorkspaceFromLocation);
   els.statusCards.addEventListener("click", (event) => {
     const lifecycleButton = event.target.closest("[data-lifecycle-jump]");
     const opportunityButton = event.target.closest("[data-opportunity-jump]");
