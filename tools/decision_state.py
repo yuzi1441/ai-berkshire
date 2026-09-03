@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from source_hash import canonical_file_sha256
+import drift_scan_state
 
 
 SCHEMA_VERSION = 1
@@ -38,6 +39,7 @@ TECHNICAL_RELATIVE = Path("data/investment-dashboard/technical_latest.json")
 CHECKLIST_RELATIVE = Path("data/investment-dashboard/checklist_states.json")
 OVERRIDES_RELATIVE = Path("data/investment-dashboard/company_state_overrides.json")
 DRIFT_RELATIVE = Path("data/investment-dashboard/drift_states.json")
+DRIFT_SCAN_RELATIVE = drift_scan_state.RELATIVE_PATH
 POST_BUY_RELATIVE = Path("data/investment-dashboard/post_buy_tracking.json")
 
 _PRICE_RE = re.compile(r"(?<!\d)(\d+(?:\.\d+)?)(?:\s*[—–-]\s*(\d+(?:\.\d+)?))?(?!\d)")
@@ -622,6 +624,13 @@ def _load_drift(data_directory: Path) -> dict[str, dict[str, Any]]:
     return values if isinstance(values, dict) else {}
 
 
+def _load_drift_scan(data_directory: Path, repo_root: Path) -> dict[str, dict[str, Any]]:
+    """Load optional scan checkpoints; a present invalid file fails closed."""
+    payload = drift_scan_state.load(data_directory / DRIFT_SCAN_RELATIVE.name, repo_root=repo_root)
+    values = payload.get("companies") if isinstance(payload, dict) else {}
+    return values if isinstance(values, dict) else {}
+
+
 def _load_technical_latest(data_directory: Path) -> dict[str, dict[str, Any]]:
     payload = load_json(data_directory / TECHNICAL_RELATIVE.name, {})
     values = (payload.get("companies") or []) if isinstance(payload, dict) else []
@@ -711,7 +720,15 @@ def _lifecycle(override: Any, tracking: dict[str, Any] | None, rules: list[dict[
     return "WATCH", None
 
 
-def _next_action(lifecycle: str, rules: list[dict[str, Any]], checklist: dict[str, Any], drift: dict[str, Any], event: dict[str, Any], tracking: dict[str, Any] | None) -> str:
+def _next_action(
+    lifecycle: str,
+    rules: list[dict[str, Any]],
+    checklist: dict[str, Any],
+    drift: dict[str, Any],
+    event: dict[str, Any],
+    tracking: dict[str, Any] | None,
+    drift_scan: dict[str, Any] | None = None,
+) -> str:
     event_state = compact(event.get("state")).lower()
     redlines = _triggered_redlines(rules)
     if any(compact(rule.get("action")).lower() == "run_drift" for rule in redlines):
@@ -732,8 +749,16 @@ def _next_action(lifecycle: str, rules: list[dict[str, Any]], checklist: dict[st
         return "run_checklist"
     if drift.get("direction") == "weakened":
         return "drop_or_recheck"
+    scan_status = compact((drift_scan or {}).get("status")).lower()
+    scan_result = compact((drift_scan or {}).get("result")).lower()
+    if lifecycle == "WATCH" and scan_status == "current" and scan_result == "unknown":
+        return "drift_recheck"
     if event_state in {"important", "critical"} and event.get("thesis_relevant"):
-        return "run_drift"
+        # A current unchanged checkpoint covers this exact semantic event and
+        # must not keep recreating generic Drift work.  A changed/stale event
+        # remains eligible for a new review.
+        if not (lifecycle == "WATCH" and scan_status == "current" and scan_result == "unchanged"):
+            return "run_drift"
     if checklist["status"] in {"PASS", "CONDITIONAL_PASS"} and lifecycle == "PRE_BUY":
         return "confirm_purchase"
     if lifecycle == "PRE_BUY":
@@ -792,6 +817,7 @@ def build_state_layers(
     technical_values = _load_technical_latest(data_directory)
     tracking = _tracking_by_ticker(data_directory)
     events = _event_by_ticker(event_payload)
+    drift_scan_values = _load_drift_scan(data_directory, repo_root)
     persisted_rules = {
         compact(item.get("ticker")).upper(): item
         for item in (rule_payload or {}).get("companies", [])
@@ -889,10 +915,37 @@ def build_state_layers(
             technical["freshness"] = "not_applicable"
         event_realtime_scope = "supported" if realtime_supported else "research_only"
         prices, conditions = _opportunities(rules)
-        next_action = _next_action(lifecycle, rules, checklist, drift, event, tracking.get(ticker))
         intraday_eligible = lifecycle == "PRE_BUY" and checklist["status"] in {"PASS", "CONDITIONAL_PASS"}
         technical["intraday_eligible"] = intraday_eligible
         report_hash = canonical_report_hash(decision, repo_root)
+        checkpoint = drift_scan_values.get(ticker)
+        checkpoint_evidence_sha = (
+            checkpoint.get("research_evidence_sha256")
+            if isinstance(checkpoint, dict)
+            else None
+        )
+        current_trigger_fingerprint = drift_scan_state.trigger_fingerprint(
+            ticker,
+            report_hash,
+            [*rules, *retired_rules],
+            event,
+            research_evidence_sha256=checkpoint_evidence_sha,
+        )
+        drift_scan = drift_scan_state.project_checkpoint(
+            checkpoint,
+            mode=(
+                "watch"
+                if lifecycle == "WATCH"
+                else "holding"
+                if drift["mode"] == "holding"
+                else "not_applicable"
+            ),
+            baseline_report_sha256=report_hash,
+            current_trigger_fingerprint=current_trigger_fingerprint,
+        )
+        next_action = _next_action(
+            lifecycle, rules, checklist, drift, event, tracking.get(ticker), drift_scan
+        )
         state = {
             "company_id": cid,
             "company": decision.get("company"),
@@ -917,6 +970,7 @@ def build_state_layers(
                 "retired_rules": retired_rules,
             },
             "drift": drift,
+            "drift_scan": drift_scan,
             "event_radar": {
                 "state": event.get("state", "unknown"),
                 "thesis_relevant": bool(event.get("thesis_relevant")),
@@ -1029,9 +1083,24 @@ def validate_payloads(payloads: dict[str, Any]) -> list[str]:
         errors.append("company_state schema_version")
     if rules.get("rule_types") != list(RULE_TYPES):
         errors.append("decision_rules rule_types")
+    scan = payloads.get("drift_scan")
+    if scan is not None:
+        errors.extend(f"{error}" for error in drift_scan_state.validate_payload(scan))
     for item in state.get("companies", []):
         if item.get("lifecycle") not in LIFECYCLES:
             errors.append(f"invalid lifecycle: {item.get('ticker')}")
+        scan = item.get("drift_scan")
+        if isinstance(scan, dict):
+            scan_status = compact(scan.get("status")).lower()
+            if scan_status not in drift_scan_state.SCAN_STATUSES:
+                errors.append(f"invalid drift scan status: {item.get('ticker')}")
+            scan_result = scan.get("result")
+            if scan_result is not None and compact(scan_result).lower() not in drift_scan_state.SCAN_RESULTS:
+                errors.append(f"invalid drift scan result: {item.get('ticker')}")
+            for field in ("baseline_report_sha256", "trigger_fingerprint", "current_trigger_fingerprint"):
+                value = scan.get(field)
+                if value and not drift_scan_state.is_sha256(value):
+                    errors.append(f"invalid drift scan {field}: {item.get('ticker')}")
         for rule in (item.get("decision_rules") or {}).get("rules", []):
             if rule.get("type") not in RULE_TYPES:
                 errors.append(f"invalid rule type: {rule.get('rule_id')}")

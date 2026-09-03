@@ -17,6 +17,7 @@ const LABELS = {
   action: {
     run_checklist: "进行买入前检查",
     run_drift: "进行论文漂移检查",
+    drift_recheck: "Drift 待复核 · 证据不足",
     keep_watch: "继续观察",
     review_decision: "重新评估",
     drop_or_recheck: "降级观察 / 重新检查",
@@ -264,7 +265,19 @@ function hasAttention(record) {
 }
 
 function actionLabel(record) {
+  const scan = record?.drift_scan || {};
+  if (record?.next_action === "run_drift" && scan.status === "stale") return "需要重新 Drift 检测";
+  if (record?.next_action === "drift_recheck") return "Drift 待复核 · 证据不足";
   return label("action", record?.next_action, "继续观察");
+}
+
+function driftScanLabel(record) {
+  const scan = record?.drift_scan || {};
+  if (scan.status === "current" && scan.result === "unchanged") return "Drift 已复核 · 无变化";
+  if (scan.status === "current" && scan.result === "unknown") return "Drift 待复核 · 证据不足";
+  if (scan.status === "stale") return "需要重新 Drift 检测";
+  if (scan.status === "missing") return "尚未进行 Drift 检测";
+  return label("drift", record?.drift?.direction);
 }
 
 function ruleActionLabel(rule) {
@@ -273,7 +286,7 @@ function ruleActionLabel(rule) {
 
 function actionTone(action) {
   if (["run_drift", "drop_or_recheck", "exit_review"].includes(action)) return "red";
-  if (["run_checklist", "review_decision", "confirm_purchase"].includes(action)) return "yellow";
+  if (["run_checklist", "review_decision", "confirm_purchase", "drift_recheck"].includes(action)) return "yellow";
   return "blue";
 }
 
@@ -434,6 +447,7 @@ function attentionReasonType(record) {
   if (hasFormalImportantEvent(record)) return "重大事件";
   if (lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist") return "买入前检查";
   if (lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length) return "持仓提醒";
+  if (record?.next_action === "drift_recheck") return "论文漂移待复核";
   if (attentionTier(record) === "soon") return "接近触发";
   return "普通变化";
 }
@@ -446,6 +460,7 @@ function attentionSummary(record) {
   if (type === "重大事件") return "正式来源事件需要核对其对论文的影响。";
   if (type === "买入前检查") return "已进入买入前阶段，买入前检查尚未完成。";
   if (type === "持仓提醒") return "持仓出现待处理提醒，优先检查当前周期。";
+  if (type === "论文漂移待复核") return "已有论文复核，但证据不足，需人工补充判断。";
   if (type === "接近触发") return "价格或经营条件接近触发，列入近期复核。";
   return "有新的变化，暂不直接改变投资动作。";
 }
@@ -767,7 +782,7 @@ function keyCondition(record) {
 }
 
 function compactDataSummary(record) {
-  const drift = label("drift", record?.drift?.direction);
+  const drift = driftScanLabel(record);
   const event = label("eventState", record?.event_radar?.state);
   const technical = dataLabel(record?.technical?.freshness || record?.technical?.status);
   const sentiment = sentimentLabel(record).stateText;
@@ -885,7 +900,7 @@ function renderThesisSection(record) {
   if (lifecycleOf(record) === "HOLDING" && tracking) {
     return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入论文</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">原始买入论文已绑定当前持仓周期，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">论文状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div><div class="source-line">当前持仓周期已绑定原始买入论文<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看原始买入论文 ↗</a></div>`;
   }
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前研究论文</h3><span class="mini-badge">${escapeHtml(label("drift", drift.direction))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；后续事实变化通过论文漂移检查复核。</p><div class="source-line">Canonical 主报告已关联<br />最近复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前研究论文</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；后续事实变化通过论文漂移检查复核。</p><div class="source-line">Canonical 主报告已关联<br />最近复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
 }
 
 function renderCurrentJudgment(record) {
