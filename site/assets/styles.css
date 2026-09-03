@@ -45,10 +45,49 @@ button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; }
 button { cursor: pointer; }
 
-.app-shell { min-height: 100vh; }
+.app-shell { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+
+.workspace-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: 232px;
+  height: 100vh;
+  padding: 28px 16px 22px;
+  border-right: 1px solid var(--line-soft);
+  background: rgba(13, 17, 23, .86);
+  backdrop-filter: blur(16px);
+}
+.workspace-brand { padding: 0 8px 28px; }
+.workspace-nav { display: grid; gap: 5px; }
+.workspace-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13px;
+  text-align: left;
+  transition: color .18s ease, background .18s ease, border-color .18s ease;
+}
+.workspace-nav-item:hover { color: var(--text-soft); background: rgba(255,255,255,.035); }
+.workspace-nav-item.is-active { border-color: rgba(127,178,216,.28); color: var(--text); background: var(--blue-soft); }
+.workspace-nav-item:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.workspace-nav-count { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.workspace-nav-item.is-active .workspace-nav-count { color: var(--blue); }
+.workspace-sidebar-note { margin: auto 8px 0; color: var(--muted); font-size: 11px; line-height: 1.65; }
+.workspace-main { min-width: 0; min-height: 100vh; }
 
 .topbar {
-  width: min(var(--max-width), calc(100% - 64px));
+  width: min(var(--max-width), calc(100% - 80px));
   margin: 0 auto;
   padding: 28px 0 24px;
   display: flex;
@@ -57,6 +96,9 @@ button { cursor: pointer; }
   gap: 24px;
   border-bottom: 1px solid var(--line-soft);
 }
+
+.workspace-context { display: grid; gap: 2px; min-width: 150px; }
+.workspace-context strong { font-size: 18px; font-weight: 620; letter-spacing: -.03em; }
 
 .brand {
   display: inline-flex;
@@ -126,7 +168,8 @@ button { cursor: pointer; }
 .button-outline { border-color: var(--line); color: var(--blue); background: transparent; }
 .button-primary { border-color: rgba(127,178,216,.4); color: #d8eafa; background: rgba(127,178,216,.16); }
 
-main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding: 26px 0 60px; }
+main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding: 26px 0 60px; }
+.workspace-panel > .section:first-child { margin-top: 0; }
 
 .status-grid {
   display: grid;
@@ -313,7 +356,7 @@ main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding:
 .empty-state, .loading-card { display: grid; place-items: center; min-height: 120px; gap: 3px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); font-size: 12px; }
 .empty-state strong { color: var(--text-soft); font-size: 14px; }
 
-.app-footer { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding: 20px 0 28px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 11px; }
+.app-footer { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding: 20px 0 28px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 11px; }
 
 .drawer-backdrop { position: fixed; z-index: 20; inset: 0; background: rgba(3, 7, 11, .7); backdrop-filter: blur(3px); }
 .detail-drawer { position: fixed; z-index: 21; inset: 0 0 0 auto; width: min(620px, 100%); overflow: auto; border-left: 1px solid var(--line); background: var(--bg-elevated); box-shadow: var(--shadow); animation: drawer-in .2s ease-out; }
@@ -375,6 +418,13 @@ main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding:
 }
 
 @media (max-width: 760px) {
+  .app-shell { display: block; }
+  .workspace-sidebar { position: sticky; width: 100%; height: auto; padding: 10px 16px 9px; border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .workspace-brand { display: none; }
+  .workspace-nav { display: flex; overflow-x: auto; gap: 5px; margin: 0 -4px; padding: 2px 4px 3px; scrollbar-width: none; }
+  .workspace-nav::-webkit-scrollbar { display: none; }
+  .workspace-nav-item { flex: 0 0 auto; width: auto; min-height: 38px; padding: 0 12px; white-space: nowrap; }
+  .workspace-sidebar-note { display: none; }
   .topbar, main, .app-footer { width: min(100% - 32px, var(--max-width)); }
   .topbar { align-items: start; padding-top: 19px; flex-direction: column; }
   .topbar-meta { width: 100%; justify-content: space-between; gap: 8px; }
