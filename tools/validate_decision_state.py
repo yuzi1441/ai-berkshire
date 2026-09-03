@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import decision_state  # noqa: E402
+import drift_scan_state  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -35,6 +36,23 @@ def main() -> int:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
     errors = decision_state.validate_payloads({"rules": rules, "state": state})
+    scan_path = data / drift_scan_state.RELATIVE_PATH.name
+    scan = None
+    scan_stale_baselines = []
+    if scan_path.exists():
+        try:
+            scan = drift_scan_state.load(scan_path, repo_root=args.repo_root.resolve())
+            for ticker, record in (scan.get("companies") or {}).items():
+                report = args.repo_root.resolve() / str(record.get("baseline_report") or "")
+                try:
+                    if report.is_file() and decision_state.canonical_report_hash(
+                        {"report_path": record.get("baseline_report")}, args.repo_root.resolve()
+                    ) != record.get("baseline_report_sha256"):
+                        scan_stale_baselines.append(ticker)
+                except OSError:
+                    scan_stale_baselines.append(ticker)
+        except ValueError as error:
+            errors.append(str(error))
     if technical.get("schema_version") != decision_state.SCHEMA_VERSION:
         errors.append("technical_latest schema_version")
     if checklist.get("schema_version") != decision_state.SCHEMA_VERSION:
@@ -53,6 +71,8 @@ def main() -> int:
         "company_count": state.get("company_count"),
         "rule_count": rules.get("rule_count"),
         "event_company_count": event.get("company_count"),
+        "drift_scan_record_count": len((scan or {}).get("companies", {})),
+        "drift_scan_stale_baseline_count": len(scan_stale_baselines),
     }, ensure_ascii=False, indent=2))
     return 0
 

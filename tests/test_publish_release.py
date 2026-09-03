@@ -76,9 +76,15 @@ class PublishReleaseTests(unittest.TestCase):
             (seed / "data" / "investment-dashboard" / "decision_rules.json").write_text(
                 json.dumps({"marker": "git-seed"}), encoding="utf-8"
             )
+            # Drift scan checkpoints are source-authoritative: a newer
+            # committed checkpoint must not be replaced by the old release's
+            # runtime copy during publication.
+            (seed / "data" / "investment-dashboard" / "drift_scan_state.json").write_text(
+                json.dumps({"schema_version": 1, "trigger_fingerprint_version": 2, "marker": "git-checkpoint"}), encoding="utf-8"
+            )
             (seed / "tools").mkdir()
             shutil.copy2(ROOT / "tools" / "reconcile_release_state.py", seed / "tools" / "reconcile_release_state.py")
-            self._run(["git", "add", "README.md", "data/investment-dashboard/decision_rules.json"], cwd=seed).check_returncode()
+            self._run(["git", "add", "README.md", "data/investment-dashboard/decision_rules.json", "data/investment-dashboard/drift_scan_state.json"], cwd=seed).check_returncode()
             self._run(["git", "add", "tools/reconcile_release_state.py"], cwd=seed).check_returncode()
             self._run(["git", "commit", "-m", "seed"], cwd=seed).check_returncode()
             origin = root / "origin.git"
@@ -98,6 +104,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "rule_lifecycle.json": {"schema_version": 1, "companies": {"T": {"marker": "old"}}},
                 "rule_change_log.json": {"schema_version": 1, "changes": [{"marker": "old"}], "sync_runs": []},
                 "decision_rules.json": {"schema_version": 1, "companies": [{"ticker": "T", "marker": "old"}]},
+                "drift_scan_state.json": {"schema_version": 1, "trigger_fingerprint_version": 1, "marker": "old-runtime-checkpoint"},
                 "company_state.json": {"schema_version": 1, "companies": [{"ticker": "T", "marker": "old"}]},
             }
             for name, payload in markers.items():
@@ -167,6 +174,22 @@ class PublishReleaseTests(unittest.TestCase):
                 )["marker"],
                 "git-seed",
             )
+            self.assertEqual(
+                json.loads(
+                    (first_release / "data" / "investment-dashboard" / "drift_scan_state.json").read_text(
+                        encoding="utf-8"
+                    )
+                )["trigger_fingerprint_version"],
+                2,
+            )
+            self.assertEqual(
+                json.loads(
+                    (first_release / "data" / "investment-dashboard" / "drift_scan_state.json").read_text(
+                        encoding="utf-8"
+                    )
+                )["marker"],
+                "git-checkpoint",
+            )
             self.assertFalse(
                 (first_release / "data" / "investment-dashboard" / "company_state.json").exists()
             )
@@ -228,6 +251,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "decision_consistency_review.py",
                 "decision_rule_extractor.py",
                 "decision_state.py",
+                "drift_scan_state.py",
                 "event_radar.py",
                 "main_report_review.py",
                 "migrate_manual_execution_reviews.py",

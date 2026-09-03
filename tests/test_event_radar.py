@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,6 +11,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import event_radar
+import drift_scan_state
 
 
 class EventRadarTests(unittest.TestCase):
@@ -98,6 +101,58 @@ class EventRadarTests(unittest.TestCase):
             company = event_radar.build_event_radar(root, write=False)["companies"][0]
             self.assertTrue(company["thesis_relevant"])
             self.assertEqual(company["recommended_action"], "run_drift")
+
+    def test_reordered_source_articles_have_same_drift_fingerprint(self):
+        source = {
+            "schema_version": 1,
+            "status": "partial",
+            "data_cutoff": "2026-09-03",
+            "companies": [{
+                "company": "示例公司",
+                "ticker": "600000.SH",
+                "market": "A股",
+                "news_sentiment": {"items": [
+                    {
+                        "title": "示例公司收到监管处罚公告",
+                        "summary": "处罚事实",
+                        "publisher": "交易所",
+                        "source_tier": "A",
+                        "event_type": "监管处罚",
+                        "impact": 5,
+                        "url": "https://a.example/notice?utm_source=feed",
+                        "published_at": "2026-09-03",
+                    },
+                    {
+                        "title": "示例公司收到监管处罚公告最新进展",
+                        "summary": "处罚事实转载",
+                        "publisher": "专业媒体",
+                        "source_tier": "B",
+                        "event_type": "公司新闻",
+                        "impact": 4,
+                        "url": "https://b.example/report#fragment",
+                        "published_at": "2026-09-03",
+                    },
+                ]},
+            }],
+        }
+        with tempfile.TemporaryDirectory() as left_dir, tempfile.TemporaryDirectory() as right_dir:
+            for directory, payload in (
+                (Path(left_dir), source),
+                (Path(right_dir), copy.deepcopy(source)),
+            ):
+                if directory == Path(right_dir):
+                    payload["companies"][0]["news_sentiment"]["items"].reverse()
+                sentiment = directory / "data" / "sentiment"
+                sentiment.mkdir(parents=True)
+                (sentiment / "latest.json").write_text(
+                    json.dumps(payload, ensure_ascii=False), encoding="utf-8"
+                )
+            left = event_radar.build_event_radar(Path(left_dir), write=False)["companies"][0]
+            right = event_radar.build_event_radar(Path(right_dir), write=False)["companies"][0]
+            self.assertEqual(
+                drift_scan_state.trigger_fingerprint("600000.SH", "a" * 64, [], left),
+                drift_scan_state.trigger_fingerprint("600000.SH", "a" * 64, [], right),
+            )
 
 
 if __name__ == "__main__":

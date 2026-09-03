@@ -80,7 +80,20 @@ def _articles(company: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _cluster(articles: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     clusters: list[list[dict[str, Any]]] = []
-    for article in articles:
+    # Retrieval order is not evidence.  Sort before greedy clustering so the
+    # same source set produces the same clusters and representative event
+    # regardless of provider/list ordering.
+    ordered = sorted(
+        articles,
+        key=lambda article: (
+            str(article.get("event_type") or ""),
+            str(article.get("title") or ""),
+            str(article.get("published_at") or ""),
+            str(article.get("url") or ""),
+            str(article.get("source_tier") or ""),
+        ),
+    )
+    for article in ordered:
         for cluster in clusters:
             if any(_similar(article, existing) for existing in cluster):
                 cluster.append(article)
