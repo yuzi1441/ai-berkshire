@@ -18,6 +18,8 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Iterable
 
+from source_hash import canonical_file_sha256
+
 
 SCHEMA_VERSION = 1
 REALTIME_MARKETS = ("A股", "港股")
@@ -157,6 +159,31 @@ def company_id(decision: dict[str, Any]) -> str:
     market = compact(decision.get("market")) or "UNKNOWN"
     name = compact(decision.get("company")) or "UNKNOWN"
     return f"{market}:{name}"
+
+
+def canonical_report_hash(decision: dict[str, Any], repo_root: Path) -> str | None:
+    """Return the canonical hash of the selected Main Report, if readable.
+
+    This is deliberately separate from the manual-review source fingerprint.
+    The latter covers the Main Report, Checklist, and review report together;
+    it is not a Main Report identity and must never populate the
+    ``canonical_report_sha256`` Company State field.
+    """
+    report_value = compact(decision.get("report_path"))
+    if not report_value:
+        return None
+    root = repo_root.resolve()
+    report_path = (root / report_value).resolve()
+    try:
+        report_path.relative_to(root)
+    except ValueError:
+        return None
+    if not report_path.is_file():
+        return None
+    try:
+        return canonical_file_sha256(report_path)
+    except OSError:
+        return None
 
 
 def confidence(value: Any) -> str:
@@ -865,6 +892,7 @@ def build_state_layers(
         next_action = _next_action(lifecycle, rules, checklist, drift, event, tracking.get(ticker))
         intraday_eligible = lifecycle == "PRE_BUY" and checklist["status"] in {"PASS", "CONDITIONAL_PASS"}
         technical["intraday_eligible"] = intraday_eligible
+        report_hash = canonical_report_hash(decision, repo_root)
         state = {
             "company_id": cid,
             "company": decision.get("company"),
@@ -873,7 +901,8 @@ def build_state_layers(
             "realtime_scope": "supported" if decision.get("market") in REALTIME_MARKETS else "research_only",
             "lifecycle": lifecycle,
             "canonical_report": decision.get("report_path") or None,
-            "canonical_report_sha256": decision.get("source_fingerprint_sha256") or None,
+            "canonical_report_sha256": report_hash,
+            "manual_review_source_fingerprint_sha256": decision.get("source_fingerprint_sha256") or None,
             "decision_rules": {
                 "total": len(rules),
                 "triggered": sum(rule.get("status") == "triggered" for rule in rules),
