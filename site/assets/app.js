@@ -71,6 +71,17 @@ const DATA_FILES = {
   tracking: "./data/post_buy_tracking.json",
   quotes: "./data/quotes/latest.json",
   intraday: "./data/intraday_technical.json",
+  opportunityScans: "./data/opportunity_scans.json",
+};
+
+const OPTIONAL_DATA_FALLBACKS = {
+  events: { companies: [] },
+  technical: { companies: [] },
+  sentiment: { companies: [], status: "unknown" },
+  sentimentStatus: { status: "unknown" },
+  quotes: { quotes: [] },
+  intraday: { companies: [] },
+  opportunityScans: { schema_version: 1, status: "unavailable", scans: [] },
 };
 
 const state = {
@@ -84,10 +95,13 @@ const state = {
   quotes: new Map(),
   quoteMeta: null,
   sentimentMeta: null,
+  opportunityScans: new Map(),
+  opportunityScanMeta: { status: "missing", scans: [] },
   loadedAt: null,
   opportunityView: "price",
   attentionExpanded: false,
   opportunityExpanded: false,
+  aiOpportunityExpanded: false,
   search: "",
   market: "all",
   lifecycle: "all",
@@ -112,6 +126,9 @@ const els = {
   checklistCount: document.querySelector("#checklist-count"),
   opportunityList: document.querySelector("#opportunity-list"),
   opportunityViewAll: document.querySelector("#opportunity-view-all"),
+  aiOpportunityList: document.querySelector("#ai-opportunity-list"),
+  aiOpportunityMeta: document.querySelector("#ai-opportunity-meta"),
+  aiOpportunityViewAll: document.querySelector("#ai-opportunity-view-all"),
   holdingList: document.querySelector("#holding-list"),
   holdingCount: document.querySelector("#holding-count"),
   watchlist: document.querySelector("#watchlist"),
@@ -486,6 +503,122 @@ function renderOpportunities() {
   });
 }
 
+function aiScanState(value) {
+  return {
+    "机会": "当前机会",
+    "条件机会": "临近机会",
+    "暂不构成机会": "暂不构成当前机会",
+  }[value] || value || "待复核";
+}
+
+function aiScanAssessments(scan) {
+  const assessments = [];
+  if (scan?.assessment && !["stale", "error"].includes(scan.status) && typeof scan.assessment === "object") {
+    assessments.push({ model: scan.model, assessment: scan.assessment });
+  }
+  for (const [model, result] of Object.entries(scan?.models || {})) {
+    if (result?.status !== "ready" || !result.assessment || typeof result.assessment !== "object") continue;
+    assessments.push({ model, assessment: result.assessment });
+  }
+  return assessments;
+}
+
+function aiScanClassification(scan) {
+  const states = aiScanAssessments(scan).map(({ assessment }) => aiScanState(assessment.opportunity_state));
+  if (states.includes("当前机会")) return "当前机会";
+  if (states.includes("临近机会")) return "临近机会";
+  return "待复核";
+}
+
+function aiScanText(scan, field) {
+  const assessmentText = aiScanAssessments(scan)
+    .map(({ assessment }) => assessment?.[field])
+    .find((value) => typeof value === "string" && value.trim());
+  if (assessmentText) return assessmentText.trim();
+  const unionText = scan?.union?.[field];
+  if (typeof unionText === "string" && unionText.trim()) return unionText.trim();
+  const directText = scan?.[field];
+  return typeof directText === "string" && directText.trim() ? directText.trim() : "";
+}
+
+function aiScanStatusText(status) {
+  return {
+    ok: "已完成",
+    ready: "已完成",
+    partial: "部分可用",
+    stale: "结果过期",
+    error: "读取失败",
+    missing: "暂无扫描",
+    unavailable: "不可用",
+  }[status] || "待复核";
+}
+
+function aiOpportunityItems() {
+  const items = [];
+  for (const scan of state.opportunityScans.values()) {
+    const record = currentRecord(scan?.ticker);
+    const classification = aiScanClassification(scan);
+    if (!record || !["当前机会", "临近机会"].includes(classification)) continue;
+    items.push({ record, scan, classification });
+  }
+  items.sort((a, b) => (
+    (a.classification === "当前机会" ? 0 : 1) - (b.classification === "当前机会" ? 0 : 1)
+      || String(a.record.company).localeCompare(String(b.record.company), "zh-CN")
+  ));
+  return items;
+}
+
+function renderAiOpportunityCard(item) {
+  const { record, scan, classification } = item;
+  const whyNow = aiScanText(scan, "why_now");
+  const summary = aiScanText(scan, "opportunity_summary");
+  const generatedAt = scan.generated_at || state.opportunityScanMeta.generated_at;
+  return `<article class="ai-opportunity-card" data-ticker="${escapeHtml(record.ticker)}" tabindex="0" role="button">
+    <div class="ai-opportunity-topline">${compactCompany(record)}<span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div>
+    <div class="ai-opportunity-facts"><span class="ai-opportunity-classification">${escapeHtml(classification)}</span><span>扫描 ${escapeHtml(formatDateTime(generatedAt))}</span></div>
+    ${whyNow ? `<p class="ai-opportunity-why"><span>为什么现在</span>${escapeHtml(whyNow)}</p>` : ""}
+    <p class="ai-opportunity-summary">${escapeHtml(summary || "摘要未提供")}</p>
+    <div class="ai-opportunity-action">查看公司详情<span aria-hidden="true">→</span></div>
+  </article>`;
+}
+
+function renderAiOpportunities() {
+  const items = aiOpportunityItems();
+  const meta = state.opportunityScanMeta || {};
+  const status = meta.status || "missing";
+  const coverage = Number.isFinite(Number(meta.scan_count)) && Number.isFinite(Number(meta.expected_scan_count))
+    ? ` · ${meta.scan_count}/${meta.expected_scan_count}`
+    : "";
+  els.aiOpportunityMeta.textContent = `${aiScanStatusText(status)}${coverage}${meta.generated_at ? ` · ${formatDateTime(meta.generated_at)}` : ""}`;
+  if (items.length) {
+    const visible = state.aiOpportunityExpanded ? items : items.slice(0, 6);
+    els.aiOpportunityList.innerHTML = visible.map(renderAiOpportunityCard).join("");
+    els.aiOpportunityViewAll.hidden = items.length <= 6;
+    els.aiOpportunityViewAll.textContent = state.aiOpportunityExpanded ? "收起" : `查看全部 AI 研究机会（${items.length}）`;
+    return;
+  }
+  els.aiOpportunityViewAll.hidden = true;
+  const message = status === "missing"
+    ? "本地暂无 AI 每日研究机会扫描结果。结果生成后会显示在这里，不影响其他看板模块。"
+    : ["error", "unavailable"].includes(status)
+      ? "AI 每日研究机会暂时不可用；未生成研究机会，也未改变买入候选。"
+      : status === "stale"
+        ? "最近一次 AI 研究机会结果已过期；未将过期结果当作当前机会。"
+        : "本次扫描没有筛出当前或临近研究机会。";
+  els.aiOpportunityList.innerHTML = `<div class="ai-opportunity-empty">${escapeHtml(message)}</div>`;
+}
+
+function renderAiOpportunitySection(record) {
+  const scan = state.opportunityScans.get(record?.ticker);
+  if (!scan) return "";
+  const classification = aiScanClassification(scan);
+  const whyNow = aiScanText(scan, "why_now");
+  const summary = aiScanText(scan, "opportunity_summary");
+  const satisfied = aiScanAssessments(scan).flatMap(({ assessment }) => Array.isArray(assessment.satisfied_conditions) ? assessment.satisfied_conditions : []).filter(Boolean);
+  const unmet = aiScanAssessments(scan).flatMap(({ assessment }) => Array.isArray(assessment.unmet_conditions) ? assessment.unmet_conditions : []).filter(Boolean);
+  return `<div class="detail-section ai-opportunity-detail"><div class="detail-section-head"><h3>AI 每日研究机会</h3><span class="data-badge" data-status="${escapeHtml(scan.status || "unknown")}">${escapeHtml(classification)}</span></div><p class="detail-copy">这是独立的研究发现，不改变当前生命周期、决策规则或买入候选。</p>${whyNow ? `<div class="detail-field"><div class="detail-field-label">为什么现在</div><div class="detail-field-value">${escapeHtml(whyNow)}</div></div>` : ""}${summary ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">机会摘要</div><div class="detail-field-value">${escapeHtml(summary)}</div></div>` : ""}${satisfied.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">已满足条件</div><div class="detail-field-value">${escapeHtml(satisfied.join("；"))}</div></div>` : ""}${unmet.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">仍待确认</div><div class="detail-field-value">${escapeHtml(unmet.join("；"))}</div></div>` : ""}</div>`;
+}
+
 function holdingReturn(record, tracking) {
   const quote = quoteFor(record);
   if (!quote || !Number.isFinite(Number(tracking?.cost_basis)) || !Number.isFinite(Number(quote.price))) return null;
@@ -672,6 +805,7 @@ function renderDetail(record) {
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
     renderCurrentJudgment(record),
+    renderAiOpportunitySection(record),
     `<div class="detail-section"><div class="detail-section-head"><h3>决策规则</h3><span class="section-count">${ruleCount} 条</span></div>${renderRules(record)}</div>`,
     renderThesisSection(record),
     renderEventSection(record),
@@ -712,6 +846,14 @@ async function loadJson(path) {
   return response.json();
 }
 
+async function loadOptionalJson(path, fallback) {
+  try {
+    return await loadJson(path);
+  } catch {
+    return fallback();
+  }
+}
+
 function indexByTicker(items) {
   return new Map((Array.isArray(items) ? items : []).filter((item) => item?.ticker).map((item) => [item.ticker, item]));
 }
@@ -727,7 +869,12 @@ async function loadData({ silent = false } = {}) {
     els.attentionList.innerHTML = `<div class="loading-card">正在读取看板数据…</div>`;
     els.holdingList.innerHTML = `<div class="loading-card">正在读取持仓数据…</div>`;
   }
-  const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([name, path]) => [name, await loadJson(path)]));
+  const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([name, path]) => [
+    name,
+    OPTIONAL_DATA_FALLBACKS[name]
+      ? await loadOptionalJson(path, () => ({ ...OPTIONAL_DATA_FALLBACKS[name] }))
+      : await loadJson(path),
+  ]));
   const payload = Object.fromEntries(entries);
   if (!payload.companyState || !Array.isArray(payload.companyState.companies)) throw new Error("公司状态数据不可用");
   state.board = payload.board;
@@ -740,6 +887,10 @@ async function loadData({ silent = false } = {}) {
   state.quotes = indexByTicker(payload.quotes?.quotes);
   state.quoteMeta = payload.quotes;
   state.sentimentMeta = payload.sentiment;
+  state.opportunityScanMeta = payload.opportunityScans && Array.isArray(payload.opportunityScans.scans)
+    ? payload.opportunityScans
+    : { schema_version: 1, status: "unavailable", scans: [] };
+  state.opportunityScans = indexByTicker(state.opportunityScanMeta.scans);
   state.loadedAt = new Date().toISOString();
   renderAll();
   const hashTicker = location.hash.match(/^#company=(.+)$/)?.[1];
@@ -751,6 +902,7 @@ function renderAll() {
   renderStatusCards();
   renderAttention();
   renderOpportunities();
+  renderAiOpportunities();
   renderHoldings();
   renderWatchlist();
 }
@@ -787,7 +939,11 @@ function bindEvents() {
     state.opportunityExpanded = !state.opportunityExpanded;
     renderOpportunities();
   });
-  for (const container of [els.attentionList, els.opportunityList, els.holdingList]) {
+  els.aiOpportunityViewAll.addEventListener("click", () => {
+    state.aiOpportunityExpanded = !state.aiOpportunityExpanded;
+    renderAiOpportunities();
+  });
+  for (const container of [els.attentionList, els.opportunityList, els.aiOpportunityList, els.holdingList]) {
     container.addEventListener("click", (event) => {
       if (event.target.closest("a[data-stop-card]")) return;
       const card = event.target.closest("[data-ticker]");

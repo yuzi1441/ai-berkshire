@@ -229,6 +229,30 @@ main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding:
 .opportunity-status[data-status="near_trigger"] { color: var(--yellow); background: var(--yellow-soft); }
 .opportunity-status[data-status="unknown"] { color: var(--muted); background: rgba(255,255,255,.04); }
 
+.ai-opportunity-disclaimer { margin: -4px 0 14px; color: var(--muted); font-size: 11px; }
+.ai-opportunity-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ai-opportunity-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--blue);
+  border-radius: var(--radius);
+  background: var(--panel);
+  text-align: left;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.ai-opportunity-card:hover { border-color: rgba(127,178,216,.5); transform: translateY(-2px); background: var(--panel-strong); }
+.ai-opportunity-topline { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.ai-opportunity-facts { display: flex; flex-wrap: wrap; gap: 5px 10px; margin-top: 17px; color: var(--muted); font-size: 10px; }
+.ai-opportunity-classification { color: var(--blue); }
+.ai-opportunity-why { display: grid; gap: 2px; margin: 13px 0 0; color: var(--text-soft); font-size: 12px; line-height: 1.5; }
+.ai-opportunity-why span { color: var(--muted); font-size: 10px; }
+.ai-opportunity-summary { display: -webkit-box; overflow: hidden; margin: 9px 0 15px; color: var(--text-soft); font-size: 12px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.ai-opportunity-action { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; color: var(--blue); font-size: 11px; }
+.ai-opportunity-empty { grid-column: 1 / -1; padding: 18px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); background: rgba(255,255,255,.018); font-size: 12px; }
+
 .holdings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .holding-card { padding: 20px; }
 .holding-card .company-name { font-size: 18px; }
@@ -346,6 +370,7 @@ main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding:
 @media (max-width: 1120px) {
   .attention-layer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .opportunity-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ai-opportunity-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .holding-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
@@ -360,7 +385,7 @@ main { width: min(var(--max-width), calc(100% - 64px)); margin: 0 auto; padding:
   .section { margin-top: 34px; }
   .section-heading { align-items: start; flex-direction: column; gap: 9px; }
   .section-heading-tight { align-items: start; flex-direction: row; }
-  .attention-layer-grid, .opportunity-list, .holdings-grid { grid-template-columns: 1fr; }
+  .attention-layer-grid, .opportunity-list, .ai-opportunity-list, .holdings-grid { grid-template-columns: 1fr; }
   .watchlist-controls { align-items: stretch; }
   .search-control, .select-control { min-width: 0; flex: 1 1 calc(50% - 6px); }
   .search-control { flex-basis: 100%; }
