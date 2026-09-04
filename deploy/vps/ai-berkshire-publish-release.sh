@@ -88,6 +88,8 @@ for relative in \
     data/investment-dashboard/post_buy_tracking.json \
     data/investment-dashboard/original_buy_theses.json \
     data/investment-dashboard/quotes/latest.json \
+    site/data/opportunity_scan_status.json \
+    site/data/quotes/latest.json \
     data/sentiment/latest.json; do
     copy_runtime_file "${relative}"
 done

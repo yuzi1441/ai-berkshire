@@ -202,7 +202,7 @@ run_heavy() {
     "${PYTHON}" scripts/run_after_close_ai_review.py \
         --repo-root "${REPO_ROOT}" \
         --skip-git-sync \
-        --markets A股 港股 || scan_rc=$?
+        --markets A股,港股 || scan_rc=$?
     build_dashboard
     if (( scan_rc != 0 )); then
         return "${scan_rc}"
@@ -218,7 +218,6 @@ run_reconcile() {
     build_dashboard
 }
 
-set +e
 case "${JOB}" in
     annual) run_annual ;;
     morning) run_morning ;;
@@ -230,7 +229,6 @@ case "${JOB}" in
     reconcile) run_reconcile ;;
 esac
 JOB_RC=$?
-set -e
 
 if (( JOB_RC == 0 && JOB_PARTIAL == 1 )); then
     status_finish partial "机会扫描完成；情绪快照失败，详见情绪状态"

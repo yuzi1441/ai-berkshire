@@ -117,6 +117,10 @@ def write_status(
         "last_success_at": previous.get("last_success_at"),
         "last_success_scan_generated_at": previous.get("last_success_scan_generated_at"),
         "last_success_ready_count": previous.get("last_success_ready_count"),
+        "last_success_scan_count": previous.get("last_success_scan_count"),
+        "last_success_expected_scan_count": previous.get("last_success_expected_scan_count"),
+        "last_success_current_opportunity_count": previous.get("last_success_current_opportunity_count"),
+        "last_success_near_opportunity_count": previous.get("last_success_near_opportunity_count"),
     }
     if status == "ok" and scan:
         payload.update(
@@ -124,8 +128,16 @@ def write_status(
                 "last_success_at": payload["attempted_at"],
                 "last_success_scan_generated_at": scan.get("generated_at"),
                 "last_success_ready_count": scan.get("ready_count"),
+                "last_success_scan_count": scan.get("scan_count"),
+                "last_success_expected_scan_count": scan.get("expected_scan_count"),
+                "last_success_current_opportunity_count": scan.get("current_opportunity_count", 0),
+                "last_success_near_opportunity_count": scan.get("near_opportunity_count", 0),
                 "scan_count": scan.get("scan_count"),
+                "expected_scan_count": scan.get("expected_scan_count"),
+                "model_result_count": scan.get("model_result_count"),
                 "ready_count": scan.get("ready_count"),
+                "current_opportunity_count": scan.get("current_opportunity_count", 0),
+                "near_opportunity_count": scan.get("near_opportunity_count", 0),
                 "stale_count": scan.get("stale_count", 0),
                 "error_count": scan.get("error_count", 0),
             }
@@ -133,6 +145,24 @@ def write_status(
     write_json(repo_root / STATUS_RELATIVE, payload)
     write_json(repo_root / SITE_STATUS_RELATIVE, payload)
     return payload
+
+
+def scan_is_successful(scan: dict[str, Any]) -> bool:
+    """Return whether a complete model scan is valid, even with zero opportunities."""
+    expected = scan.get("expected_scan_count")
+    completed = scan.get("scan_count")
+    model_results = scan.get("model_result_count")
+    return bool(
+        scan.get("status") == "ok"
+        and isinstance(expected, int)
+        and expected > 0
+        and completed == expected
+        and isinstance(model_results, int)
+        and model_results > 0
+        and scan.get("ready_count") == model_results
+        and not scan.get("stale_count")
+        and not scan.get("error_count")
+    )
 
 
 def stage_and_push(repo_root: Path, message: str) -> None:
@@ -225,9 +255,10 @@ def main() -> int:
                 [str(python), "tools/opportunity_review.py", "scan"],
             )
             scan = load_json(scan_path, {})
-            if not scan.get("scan_count") or not scan.get("ready_count"):
+            if not scan_is_successful(scan):
                 raise JobError(
                     f"AI机会扫描没有有效模型结果：status={scan.get('status')}, "
+                    f"scan={scan.get('scan_count')}/{scan.get('expected_scan_count')}, "
                     f"ready={scan.get('ready_count')}/{scan.get('model_result_count')}, "
                     f"errors={scan.get('error_count')}"
                 )

@@ -81,6 +81,7 @@ const DATA_FILES = {
   quotes: "./data/quotes/latest.json",
   intraday: "./data/intraday_technical.json",
   opportunityScans: "./data/opportunity_scans.json",
+  opportunityScanStatus: "./data/opportunity_scan_status.json",
 };
 
 const OPTIONAL_DATA_FALLBACKS = {
@@ -91,6 +92,7 @@ const OPTIONAL_DATA_FALLBACKS = {
   quotes: { quotes: [] },
   intraday: { companies: [] },
   opportunityScans: { schema_version: 1, status: "unavailable", scans: [] },
+  opportunityScanStatus: { schema_version: 1 },
 };
 
 const state = {
@@ -267,12 +269,19 @@ function hasAttention(record) {
 function actionLabel(record) {
   const scan = record?.drift_scan || {};
   if (record?.next_action === "run_drift" && scan.status === "stale") return "需要重新 Drift 检测";
-  if (record?.next_action === "drift_recheck") return "Drift 待复核 · 证据不足";
+  if (record?.next_action === "drift_recheck") return "需要补充论文漂移证据";
   return label("action", record?.next_action, "继续观察");
 }
 
 function driftScanLabel(record) {
+  const review = record?.drift_review || {};
   const scan = record?.drift_scan || {};
+  if (review.category === "true_current_drift") return "需要重新论文漂移复核";
+  if (review.category === "new_evidence_other_action") return "存在新材料，当前动作不是论文漂移";
+  if (review.category === "reviewed_not_recognized") return "论文复核状态异常";
+  if (review.category === "never_reviewed") return "从未完成论文漂移复核";
+  if (review.category === "reviewed_insufficient_evidence") return "论文已复核 · 证据不足";
+  if (review.category === "reviewed_current") return "论文已复核 · 当前有效";
   if (scan.status === "current" && scan.result === "unchanged") return "Drift 已复核 · 无变化";
   if (scan.status === "current" && scan.result === "unknown") return "Drift 待复核 · 证据不足";
   if (scan.status === "stale") return "需要重新 Drift 检测";
@@ -314,8 +323,21 @@ function routeFromLocation() {
   return { workspace, ticker: companyPart ? decodeHashValue(companyPart) : null };
 }
 
+function todayInShanghai() {
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Shanghai" }).format(new Date());
+}
+
+function opportunityScanDayStatus(meta) {
+  const status = meta?.status || "missing";
+  if (["ok", "ready", "partial"].includes(status)) {
+    const attemptedAt = meta?.attempted_at || meta?.generated_at;
+    if (attemptedAt && formatDate(attemptedAt) !== todayInShanghai()) return "not_run_today";
+  }
+  return status;
+}
+
 function aiNavigationCount() {
-  const status = state.opportunityScanMeta?.status;
+  const status = opportunityScanDayStatus(state.opportunityScanMeta);
   const items = aiOpportunityItems();
   if (["ok", "ready"].includes(status)) return String(items.length);
   if (status === "partial" && items.length) return String(items.length);
@@ -500,11 +522,26 @@ function renderTopMeta() {
   const total = stateRecords().length;
   const ruleCount = [...state.rulePackages.values()].reduce((sum, pack) => sum + (Array.isArray(pack?.rules) ? pack.rules.length : 0), 0);
   els.datasetSummary.textContent = `${total} 家公司 · ${ruleCount} 条规则`;
-  const quoteCount = state.quotes.size;
-  const quoteTime = state.quoteMeta?.generated_at || state.quoteMeta?.market_status?.generated_at;
-  const isPartial = quoteCount < total;
-  els.quoteStatus.dataset.tone = isPartial ? "stale" : "fresh";
-  els.quoteStatusText.textContent = `行情${isPartial ? "部分可用" : "已更新"} · ${quoteCount}/${total}${quoteTime ? ` · ${formatDateTime(quoteTime)}` : ""}`;
+  const quoteUniverse = stateRecords().filter((record) => ["A股", "港股"].includes(record.market));
+  const quoteCount = quoteUniverse.filter((record) => state.quotes.has(record.ticker)).length;
+  const quoteTotal = quoteUniverse.length;
+  const quoteMeta = state.quoteMeta || {};
+  const quoteDate = quoteMeta.data_cutoff || quoteMeta.generated_at;
+  const phase = quoteMeta.quote_phase;
+  const sourceStatus = quoteMeta.source_status || (quoteCount ? "partial" : "unavailable");
+  const isComplete = quoteCount === quoteTotal && sourceStatus === "ok";
+  els.quoteStatus.dataset.tone = isComplete ? "fresh" : "stale";
+  let quoteLabel = sourceStatus === "unavailable"
+    ? quoteCount ? "行情更新失败 · 保留上次数据" : "行情更新失败"
+    : quoteCount < quoteTotal
+      ? "行情部分可用"
+      : phase === "intraday"
+        ? "行情盘中"
+        : phase === "historical_close"
+          ? "行情历史收盘"
+          : "行情收盘";
+  const cutoffLabel = quoteDate && phase !== "intraday" ? ` · 截至 ${formatDate(quoteDate)} 收盘` : quoteDate ? ` · ${formatDateTime(quoteDate)}` : "";
+  els.quoteStatusText.textContent = `${quoteLabel} · ${quoteCount}/${quoteTotal}${cutoffLabel}`;
 }
 
 function cardCompany(record) {
@@ -659,6 +696,7 @@ function aiScanStatusText(status) {
     ready: "已完成",
     partial: "部分可用",
     stale: "结果过期",
+    not_run_today: "今日尚未扫描",
     error: "读取失败",
     missing: "暂无扫描",
     unavailable: "不可用",
@@ -666,6 +704,7 @@ function aiScanStatusText(status) {
 }
 
 function aiOpportunityItems() {
+  if (!["ok", "ready", "partial"].includes(opportunityScanDayStatus(state.opportunityScanMeta))) return [];
   const items = [];
   for (const scan of state.opportunityScans.values()) {
     const record = currentRecord(scan?.ticker);
@@ -697,11 +736,17 @@ function renderAiOpportunityCard(item) {
 function renderAiOpportunities() {
   const items = aiOpportunityItems();
   const meta = state.opportunityScanMeta || {};
-  const status = meta.status || "missing";
-  const coverage = Number.isFinite(Number(meta.scan_count)) && Number.isFinite(Number(meta.expected_scan_count))
+  const status = opportunityScanDayStatus(meta);
+  const hasCurrentScan = ["ok", "ready", "partial"].includes(status);
+  const coverage = hasCurrentScan && Number.isFinite(Number(meta.scan_count)) && Number.isFinite(Number(meta.expected_scan_count))
     ? ` · ${meta.scan_count}/${meta.expected_scan_count}`
     : "";
-  els.aiOpportunityMeta.textContent = `${aiScanStatusText(status)}${coverage}${meta.generated_at ? ` · ${formatDateTime(meta.generated_at)}` : ""}`;
+  const currentCount = hasCurrentScan && Number.isFinite(Number(meta.current_opportunity_count)) ? Number(meta.current_opportunity_count) : null;
+  const nearCount = hasCurrentScan && Number.isFinite(Number(meta.near_opportunity_count)) ? Number(meta.near_opportunity_count) : null;
+  const opportunitySummary = currentCount !== null
+    ? ` · 当前机会 ${currentCount}${nearCount !== null ? ` · 临近 ${nearCount}` : ""}`
+    : "";
+  els.aiOpportunityMeta.textContent = `${aiScanStatusText(status)}${coverage}${opportunitySummary}${meta.generated_at ? ` · ${formatDateTime(meta.generated_at)}` : ""}`;
   if (items.length) {
     const visible = state.aiOpportunityExpanded ? items : items.slice(0, 6);
     els.aiOpportunityList.innerHTML = visible.map(renderAiOpportunityCard).join("");
@@ -710,19 +755,27 @@ function renderAiOpportunities() {
     return;
   }
   els.aiOpportunityViewAll.hidden = true;
-  const message = status === "missing"
+  const message = status === "not_run_today"
+    ? `今日尚未完成 AI 研究机会扫描；最近一次结果为 ${formatDateTime(meta.last_success_at || meta.generated_at)}，未将旧结果当作今日结果。`
+    : status === "missing"
     ? "本地暂无 AI 每日研究机会扫描结果。结果生成后会显示在这里，不影响其他看板模块。"
-    : ["error", "unavailable"].includes(status)
-      ? "AI 每日研究机会暂时不可用；未生成研究机会，也未改变买入候选。"
+    : status === "error"
+      ? `今日 AI 研究机会扫描失败；未将旧结果当作今日结果。最近一次成功扫描：${formatDateTime(meta.last_success_at || meta.last_success_scan_generated_at)}`
+    : status === "unavailable"
+        ? "AI 每日研究机会暂时不可用；未生成研究机会，也未改变买入候选。"
+      : status === "partial"
+        ? "今日 AI 研究机会扫描仅部分完成；结果不代表完整覆盖，请以扫描状态为准。"
       : status === "stale"
         ? "最近一次 AI 研究机会结果已过期；未将过期结果当作当前机会。"
-        : "本次扫描没有筛出当前或临近研究机会。";
+        : currentCount === 0 && nearCount === 0
+          ? "今日扫描完成，当前没有筛出机会。"
+          : "本次扫描没有筛出当前或临近研究机会。";
   els.aiOpportunityList.innerHTML = `<div class="ai-opportunity-empty">${escapeHtml(message)}</div>`;
 }
 
 function renderAiOpportunitySection(record) {
   const scan = state.opportunityScans.get(record?.ticker);
-  if (!scan) return "";
+  if (!scan || !["ok", "ready", "partial"].includes(opportunityScanDayStatus(state.opportunityScanMeta))) return "";
   const classification = aiScanClassification(scan);
   const whyNow = aiScanText(scan, "why_now");
   const summary = aiScanText(scan, "opportunity_summary");
@@ -996,9 +1049,19 @@ async function loadData({ silent = false } = {}) {
   state.quotes = indexByTicker(payload.quotes?.quotes);
   state.quoteMeta = payload.quotes;
   state.sentimentMeta = payload.sentiment;
-  state.opportunityScanMeta = payload.opportunityScans && Array.isArray(payload.opportunityScans.scans)
+  const scanPayload = payload.opportunityScans && Array.isArray(payload.opportunityScans.scans)
     ? payload.opportunityScans
     : { schema_version: 1, status: "unavailable", scans: [] };
+  const scanStatus = payload.opportunityScanStatus || {};
+  state.opportunityScanMeta = {
+    ...scanPayload,
+    ...scanStatus,
+    generated_at: scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
+    scan_count: scanStatus.scan_count ?? scanPayload.scan_count,
+    expected_scan_count: scanStatus.expected_scan_count ?? scanPayload.expected_scan_count,
+    current_opportunity_count: scanStatus.current_opportunity_count ?? scanPayload.current_opportunity_count,
+    near_opportunity_count: scanStatus.near_opportunity_count ?? scanPayload.near_opportunity_count,
+  };
   state.opportunityScans = indexByTicker(state.opportunityScanMeta.scans);
   state.loadedAt = new Date().toISOString();
   renderAll();

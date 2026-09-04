@@ -32,6 +32,24 @@ DRIFT_SEVERITIES = ("none", "minor", "major", "unknown")
 RULE_STATUSES = ("triggered", "near_trigger", "not_triggered", "unknown", "needs_review")
 RULE_RUNTIME_FIELDS = frozenset({"status", "last_checked"})
 PRE_BUY_ACTIONS = frozenset({"run_checklist", "confirm_purchase"})
+DRIFT_REVIEW_CATEGORIES = (
+    "true_current_drift",
+    "new_evidence_other_action",
+    "reviewed_not_recognized",
+    "never_reviewed",
+    "reviewed_current",
+    "reviewed_insufficient_evidence",
+    "not_applicable",
+)
+DRIFT_REVIEW_LABELS = {
+    "true_current_drift": "需要重新论文漂移复核",
+    "new_evidence_other_action": "存在新材料，当前动作不是论文漂移",
+    "reviewed_not_recognized": "已复核，但系统未正确识别",
+    "never_reviewed": "从未完成论文漂移复核",
+    "reviewed_current": "论文已复核，当前有效",
+    "reviewed_insufficient_evidence": "论文已复核，但证据不足",
+    "not_applicable": "当前生命周期不适用",
+}
 
 STATE_RELATIVE = Path("data/investment-dashboard/company_state.json")
 RULES_RELATIVE = Path("data/investment-dashboard/decision_rules.json")
@@ -777,6 +795,98 @@ def _next_action(
     return "keep_watch"
 
 
+def classify_drift_review(
+    lifecycle: str,
+    drift_scan: dict[str, Any] | None,
+    drift: dict[str, Any],
+    next_action: str,
+) -> dict[str, Any]:
+    """Classify Drift freshness separately from the company's current action.
+
+    A stale checkpoint means that the evidence fingerprint moved; it does not
+    by itself mean that Drift is today's highest-priority action. The current
+    action and the existence of a formal review record are used to keep the
+    dashboard from turning every new document into a Drift task.
+    """
+    if lifecycle != "WATCH":
+        category = "not_applicable"
+    else:
+        scan = drift_scan if isinstance(drift_scan, dict) else {}
+        status = compact(scan.get("status")).lower() or "missing"
+        result = compact(scan.get("result")).lower()
+        if status == "stale" and next_action in {"run_drift", "drift_recheck"}:
+            category = "true_current_drift"
+        elif status == "stale":
+            category = "new_evidence_other_action"
+        elif status == "current" and result == "unknown":
+            category = "reviewed_insufficient_evidence"
+        elif status == "current":
+            category = "reviewed_current"
+        elif status == "missing" and drift.get("last_checked"):
+            category = "reviewed_not_recognized"
+        elif status == "missing":
+            category = "never_reviewed"
+        else:
+            category = "reviewed_not_recognized"
+    scan = drift_scan if isinstance(drift_scan, dict) else {}
+    return {
+        "category": category,
+        "label": DRIFT_REVIEW_LABELS[category],
+        "current_action": next_action,
+        "checkpoint_status": compact(scan.get("status")).lower() or "missing",
+        "checkpoint_result": compact(scan.get("result")).lower() or None,
+        "last_checked": drift.get("last_checked"),
+    }
+
+
+def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
+    """Build a machine-readable audit of the dashboard's Drift action mapping."""
+    companies = [
+        item
+        for item in state_payload.get("companies", [])
+        if isinstance(item, dict) and item.get("lifecycle") in {"WATCH", "PRE_BUY"}
+    ]
+    rows: list[dict[str, Any]] = []
+    counts = {category: 0 for category in DRIFT_REVIEW_CATEGORIES}
+    for item in companies:
+        review = item.get("drift_review") or classify_drift_review(
+            str(item.get("lifecycle") or ""),
+            item.get("drift_scan"),
+            item.get("drift") or {},
+            str(item.get("next_action") or "keep_watch"),
+        )
+        category = review.get("category")
+        if category not in counts:
+            category = "reviewed_not_recognized"
+        counts[category] += 1
+        rows.append(
+            {
+                "ticker": item.get("ticker"),
+                "company": item.get("company"),
+                "market": item.get("market"),
+                "lifecycle": item.get("lifecycle"),
+                "category": category,
+                "label": DRIFT_REVIEW_LABELS[category],
+                "current_action": item.get("next_action"),
+                "checkpoint_status": review.get("checkpoint_status"),
+                "checkpoint_result": review.get("checkpoint_result"),
+                "last_checked": review.get("last_checked"),
+            }
+        )
+    rows.sort(key=lambda item: str(item.get("ticker") or ""))
+    return {
+        "schema_version": 1,
+        "generated_at": state_payload.get("generated_at"),
+        "scope": {
+            "name": "research_pool",
+            "lifecycle": ["WATCH", "PRE_BUY"],
+            "company_count": len(rows),
+        },
+        "category_counts": counts,
+        "companies": rows,
+    }
+
+
 def _opportunities(rules: Iterable[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     prices: list[dict[str, Any]] = []
     conditions: list[dict[str, Any]] = []
@@ -946,6 +1056,7 @@ def build_state_layers(
         next_action = _next_action(
             lifecycle, rules, checklist, drift, event, tracking.get(ticker), drift_scan
         )
+        drift_review = classify_drift_review(lifecycle, drift_scan, drift, next_action)
         state = {
             "company_id": cid,
             "company": decision.get("company"),
@@ -971,6 +1082,7 @@ def build_state_layers(
             },
             "drift": drift,
             "drift_scan": drift_scan,
+            "drift_review": drift_review,
             "event_radar": {
                 "state": event.get("state", "unknown"),
                 "thesis_relevant": bool(event.get("thesis_relevant")),
@@ -1050,7 +1162,13 @@ def build_state_layers(
     }
     technical_payload = {"schema_version": SCHEMA_VERSION, "generated_at": generated_at, "companies": technical_latest}
     checklist_payload = {"schema_version": SCHEMA_VERSION, "generated_at": generated_at, "companies": checklist_states}
-    result = {"rules": rules_payload, "state": state_payload, "technical": technical_payload, "checklist": checklist_payload}
+    result = {
+        "rules": rules_payload,
+        "state": state_payload,
+        "technical": technical_payload,
+        "checklist": checklist_payload,
+        "drift_review_audit": build_drift_review_audit(state_payload),
+    }
     if write:
         # Rule definitions are written only by extraction/lifecycle commands.
         # This build-time projection contains volatile statuses and timestamps.

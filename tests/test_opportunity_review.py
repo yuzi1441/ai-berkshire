@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import opportunity_review as opportunity  # noqa: E402
+import scripts.run_after_close_ai_review as after_close  # noqa: E402
 from sentiment_snapshot import SentimentError  # noqa: E402
 
 
@@ -35,6 +36,32 @@ def ready(model: str, state: str) -> dict:
 
 
 class OpportunityReviewTests(unittest.TestCase):
+    def test_zero_opportunity_scan_is_still_a_successful_scan(self):
+        scan = {
+            "ticker": "600000.SH",
+            "union": {"classification": "暂不进入机会面板"},
+            "models": {"deepseek-v4-flash": ready("deepseek-v4-flash", "暂不构成当前机会")},
+        }
+        payload = opportunity.build_scan_payload(
+            [], [scan], workers=1, expected_scan_count=1, checkpoint=False
+        )
+        self.assertEqual(payload["status"], "ok")
+        self.assertEqual(payload["current_opportunity_count"], 0)
+        self.assertEqual(payload["near_opportunity_count"], 0)
+
+    def test_after_close_accepts_complete_scan_with_zero_opportunities(self):
+        self.assertTrue(after_close.scan_is_successful({
+            "status": "ok",
+            "scan_count": 1,
+            "expected_scan_count": 1,
+            "model_result_count": 1,
+            "ready_count": 1,
+            "current_opportunity_count": 0,
+            "near_opportunity_count": 0,
+            "stale_count": 0,
+            "error_count": 0,
+        }))
+
     def test_union_includes_a_current_opportunity(self):
         result = opportunity.union_result(
             {

@@ -15,6 +15,32 @@ from source_hash import canonical_file_sha256
 
 
 class DriftScanStateTests(unittest.TestCase):
+    def test_drift_review_categories_separate_stale_actions_and_history(self):
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "stale"}, {}, "run_drift")["category"],
+            "true_current_drift",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "stale"}, {}, "run_checklist")["category"],
+            "new_evidence_other_action",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "missing"}, {"last_checked": "2026-09-03"}, "keep_watch")["category"],
+            "reviewed_not_recognized",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "missing"}, {}, "keep_watch")["category"],
+            "never_reviewed",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "current", "result": "unknown"}, {}, "drift_recheck")["category"],
+            "reviewed_insufficient_evidence",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "current", "result": "unchanged"}, {}, "keep_watch")["category"],
+            "reviewed_current",
+        )
+
     def _root_with_report(self) -> tuple[Path, dict[str, str]]:
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

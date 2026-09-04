@@ -690,6 +690,16 @@ def build_scan_payload(
     stale = sum(1 for item in model_results if item.get("status") == "stale")
     errors = sum(1 for item in model_results if item.get("status") == "error")
     complete = bool(expected_scan_count) and len(completed_scans) >= expected_scan_count
+    current_opportunity_count = sum(
+        1
+        for item in completed_scans
+        if (item.get("union") or {}).get("classification") == "当前机会"
+    )
+    near_opportunity_count = sum(
+        1
+        for item in completed_scans
+        if (item.get("union") or {}).get("classification") == "临近机会"
+    )
     status = (
         "ok"
         if complete and not errors and not stale
@@ -723,6 +733,8 @@ def build_scan_payload(
         "company_concurrency": workers,
         "model_result_count": len(model_results),
         "ready_count": ready,
+        "current_opportunity_count": current_opportunity_count,
+        "near_opportunity_count": near_opportunity_count,
         "stale_count": stale,
         "error_count": errors,
         "inclusion_rule": "Flash 判为当前机会才进入主面板；临近机会单独折叠展示；最终买卖由投资者决定。",
@@ -949,10 +961,16 @@ def command_scan(arguments: argparse.Namespace) -> int:
         checkpoint_path=output,
     )
     print(
-        f"Wrote {output} · {payload['ready_count']} ready · {payload['stale_count']} stale · {payload['error_count']} error",
+        f"Wrote {output} · {payload['ready_count']} ready · "
+        f"{payload['current_opportunity_count']} current · "
+        f"{payload['near_opportunity_count']} near · "
+        f"{payload['stale_count']} stale · {payload['error_count']} error",
         flush=True,
     )
-    return 0 if payload["scan_count"] and payload["ready_count"] else 2
+    # ``ready_count`` counts valid model responses, not opportunities. A
+    # complete scan with zero current/near opportunities is a successful and
+    # important result, so it must not be reported as a failed job.
+    return 0 if payload["status"] == "ok" else 2
 
 
 def command_deep(arguments: argparse.Namespace) -> int:
