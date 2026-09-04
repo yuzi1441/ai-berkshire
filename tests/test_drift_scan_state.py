@@ -15,6 +15,27 @@ from source_hash import canonical_file_sha256
 
 
 class DriftScanStateTests(unittest.TestCase):
+    def test_drift_review_audit_is_independent_of_build_timestamp(self):
+        companies = [{
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "next_action": "keep_watch",
+            "drift": {},
+            "drift_scan": {"status": "current", "result": "unchanged"},
+        }]
+        first = decision_state.build_drift_review_audit({
+            "generated_at": "2026-09-04T01:00:00+08:00",
+            "companies": companies,
+        })
+        second = decision_state.build_drift_review_audit({
+            "generated_at": "2026-09-04T02:00:00+08:00",
+            "companies": companies,
+        })
+        self.assertEqual(first, second)
+        self.assertNotIn("generated_at", first)
+
     def test_drift_review_categories_separate_stale_actions_and_history(self):
         self.assertEqual(
             decision_state.classify_drift_review("WATCH", {"status": "stale"}, {}, "run_drift")["category"],

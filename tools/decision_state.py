@@ -876,7 +876,6 @@ def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
     rows.sort(key=lambda item: str(item.get("ticker") or ""))
     return {
         "schema_version": 1,
-        "generated_at": state_payload.get("generated_at"),
         "scope": {
             "name": "research_pool",
             "lifecycle": ["WATCH", "PRE_BUY"],
