@@ -10,29 +10,32 @@ import { currentExecutionState, humanReviewExecutionState } from "./action-class
  */
 const LABELS = {
   lifecycle: { WATCH: "观察中", PRE_BUY: "买入前", HOLDING: "持有中", EXITED: "已退出" },
-  lifecycleHint: { WATCH: "等待条件或价格", PRE_BUY: "可进入买入前检查", HOLDING: "优先管理已有仓位", EXITED: "历史持仓周期" },
+  lifecycleHint: { WATCH: "等待条件或价格", PRE_BUY: "买入前流程中的公司", HOLDING: "优先管理已有仓位", EXITED: "历史持仓周期" },
   scope: { entry: "买入条件", validation: "验证条件", redline: "失效条件", unknown: "其他条件" },
   ruleStatus: { triggered: "已触发", near_trigger: "接近触发", not_triggered: "未触发", unknown: "待判断", needs_review: "需要复核", stale: "数据过期" },
   ruleType: { PRICE_RANGE: "价格条件", METRIC: "经营条件", EVENT: "事件条件" },
   action: {
     run_checklist: "进行买入前检查",
     run_drift: "进行论文漂移检查",
-    drift_recheck: "Drift 待复核 · 证据不足",
+    drift_recheck: "补充论文复核证据",
     keep_watch: "继续观察",
     review_decision: "重新评估",
     drop_or_recheck: "降级观察 / 重新检查",
     exit_review: "退出复核",
     hold: "继续持有",
     add_reduce_review: "加仓 / 减仓复核",
+    reduce_review: "减仓复核",
     confirm_purchase: "确认买入条件",
     price_near_trigger: "接近价格条件",
+    condition_near_trigger: "接近经营条件",
+    review_holding: "持仓论文复核",
     none: "暂不处理",
   },
   drift: { improved: "论文增强", unchanged: "论文未变", weakened: "论文减弱", broken: "论文失效", unknown: "尚未复核" },
   eventState: { important: "重要事件", watch: "普通观察", normal: "暂无重大变化", unknown: "未知", partial: "部分可用" },
   technical: { UP: "上升", DOWN: "下降", SIDEWAYS: "震荡", UNKNOWN: "未知", BROKEN: "弱势区间", NEAR_MEAN: "接近均值", EXTENDED: "偏离均值", FAVORABLE: "有利", UNFAVORABLE: "不利", NEUTRAL: "一般" },
   sentiment: { positive: "偏正面", neutral: "中性", negative: "偏负面", mixed: "分化", unknown: "未知" },
-  dataStatus: { fresh: "新鲜", partial: "部分可用", stale: "数据过期", unknown: "未知", unavailable: "不可用", unsupported: "暂不支持", ready: "已准备" },
+  dataStatus: { fresh: "新鲜", partial: "部分可用", stale: "数据过期", unknown: "未知", unavailable: "不可用", unsupported: "暂不支持", not_applicable: "不适用", ready: "已准备" },
 };
 
 const WORKSPACES = {
@@ -109,7 +112,7 @@ const state = {
   opportunityScans: new Map(),
   opportunityScanMeta: { status: "missing", scans: [] },
   loadedAt: null,
-  opportunityView: "price",
+  opportunityView: "checklist",
   attentionExpanded: false,
   opportunityExpanded: false,
   aiOpportunityExpanded: false,
@@ -136,6 +139,9 @@ const els = {
   priceCount: document.querySelector("#price-count"),
   conditionCount: document.querySelector("#condition-count"),
   checklistCount: document.querySelector("#checklist-count"),
+  checklistTabCount: document.querySelector("#checklist-tab-count"),
+  opportunityPrimaryNote: document.querySelector("#opportunity-primary-note"),
+  opportunityPoolNote: document.querySelector("#opportunity-pool-note"),
   opportunityList: document.querySelector("#opportunity-list"),
   opportunityViewAll: document.querySelector("#opportunity-view-all"),
   aiOpportunityList: document.querySelector("#ai-opportunity-list"),
@@ -187,6 +193,12 @@ function escapeHtml(value) {
 function text(value, fallback = "—") {
   const normalized = String(value ?? "").trim();
   return normalized || fallback;
+}
+
+function shortText(value, limit = 72) {
+  const normalized = String(value ?? "").replace(/\s+/g, " ").trim();
+  if (!normalized) return "—";
+  return normalized.length > limit ? `${normalized.slice(0, Math.max(1, limit - 1))}…` : normalized;
 }
 
 function label(group, value, fallback = "待复核") {
@@ -268,15 +280,15 @@ function hasAttention(record) {
 
 function actionLabel(record) {
   const scan = record?.drift_scan || {};
-  if (record?.next_action === "run_drift" && scan.status === "stale") return "需要重新 Drift 检测";
-  if (record?.next_action === "drift_recheck") return "需要补充论文漂移证据";
+  if (record?.next_action === "run_drift" && ["stale", "missing"].includes(scan.status)) return "进行论文漂移复核";
+  if (record?.next_action === "drift_recheck") return "补充论文复核证据";
   return label("action", record?.next_action, "继续观察");
 }
 
 function driftScanLabel(record) {
   const review = record?.drift_review || {};
   const scan = record?.drift_scan || {};
-  if (review.category === "true_current_drift") return "需要重新论文漂移复核";
+  if (review.category === "true_current_drift") return "系统建议重新论文复核";
   if (review.category === "new_evidence_other_action") return "存在新材料，当前动作不是论文漂移";
   if (review.category === "reviewed_not_recognized") return "论文复核状态异常";
   if (review.category === "never_reviewed") return "从未完成论文漂移复核";
@@ -284,8 +296,8 @@ function driftScanLabel(record) {
   if (review.category === "reviewed_current") return "论文已复核 · 当前有效";
   if (scan.status === "current" && scan.result === "unchanged") return "Drift 已复核 · 无变化";
   if (scan.status === "current" && scan.result === "unknown") return "Drift 待复核 · 证据不足";
-  if (scan.status === "stale") return "需要重新 Drift 检测";
-  if (scan.status === "missing") return "尚未进行 Drift 检测";
+  if (scan.status === "stale") return "论文复核水位待更新";
+  if (scan.status === "missing") return "从未完成论文漂移复核";
   return label("drift", record?.drift?.direction);
 }
 
@@ -294,7 +306,7 @@ function ruleActionLabel(rule) {
 }
 
 function actionTone(action) {
-  if (["run_drift", "drop_or_recheck", "exit_review"].includes(action)) return "red";
+  if (["run_drift", "drop_or_recheck", "exit_review", "reduce_review"].includes(action)) return "red";
   if (["run_checklist", "review_decision", "confirm_purchase", "drift_recheck"].includes(action)) return "yellow";
   return "blue";
 }
@@ -330,7 +342,7 @@ function todayInShanghai() {
 function opportunityScanDayStatus(meta) {
   const status = meta?.status || "missing";
   if (["ok", "ready", "partial"].includes(status)) {
-    const attemptedAt = meta?.attempted_at || meta?.generated_at;
+    const attemptedAt = meta?.scan_generated_at || meta?.generated_at || meta?.attempted_at;
     if (attemptedAt && formatDate(attemptedAt) !== todayInShanghai()) return "not_run_today";
   }
   return status;
@@ -351,7 +363,7 @@ function renderWorkspaceNav() {
     holdings: stateCount("HOLDING"),
     opportunities: stateCount("PRE_BUY"),
     "ai-research": aiNavigationCount(),
-    watchlist: stateRecords().filter((record) => lifecycleOf(record) !== "HOLDING").length,
+    watchlist: stateRecords().filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record))).length,
   };
   const elements = {
     attention: els.navAttentionCount,
@@ -404,15 +416,24 @@ function syncWorkspaceFromLocation() {
   else if (!route.ticker && !els.drawer.hidden) hideDetailDrawer();
 }
 
+function formalImportantEvent(record) {
+  const radar = record?.event_radar || {};
+  const events = Array.isArray(radar.events) ? radar.events : [];
+  return events.find((event) => (
+    ["A", "B"].includes(event.highest_source_tier)
+      && (event.state === "important" || event.thesis_relevant)
+  )) || null;
+}
+
 function attentionReason(record) {
   const reasons = [];
   const event = record?.event_radar || {};
   const drift = record?.drift || {};
   const tracking = trackingFor(record);
   const triggered = triggeredRules(record);
-  if (event.thesis_relevant) {
-    const eventItem = (event.events || []).find((item) => item.thesis_relevant) || (event.events || [])[0];
-    reasons.push(`事件：${text(eventItem?.headline, "存在论文相关事件")}`);
+  const formalEvent = formalImportantEvent(record);
+  if (formalEvent) {
+    reasons.push(`事件：${text(formalEvent.headline, "存在论文相关事件")}`);
   }
   if (drift.direction && drift.direction !== "unknown" && drift.direction !== "unchanged") reasons.push(`论文：${label("drift", drift.direction)}`);
   if (triggered.length) reasons.push(`规则：${triggered.length} 条已触发`);
@@ -423,17 +444,13 @@ function attentionReason(record) {
 
 function hasFormalImportantEvent(record) {
   const radar = record?.event_radar || {};
-  const events = Array.isArray(radar.events) ? radar.events : [];
-  return Boolean(
-    radar.state === "important"
-      && events.some((event) => ["A", "B"].includes(event.highest_source_tier) && (event.state === "important" || event.thesis_relevant)),
-  );
+  return ["important", "critical"].includes(radar.state) && Boolean(formalImportantEvent(record));
 }
 
 function reviewDue(record) {
   const nextReview = trackingFor(record)?.next_review_date;
   if (!nextReview) return false;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayInShanghai();
   return String(nextReview).slice(0, 10) <= today;
 }
 
@@ -443,23 +460,23 @@ function attentionTier(record) {
   const holdingAlert = lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length > 0;
   const preBuyChecklist = lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist";
   if (
-    ["weakened", "broken"].includes(drift.direction)
-      || triggered.some((rule) => rule.rule_scope === "redline")
+    triggered.some((rule) => rule.rule_scope === "redline")
       || holdingAlert
       || hasFormalImportantEvent(record)
-      || preBuyChecklist
   ) return "must";
   if (
-    nearRules(record).length
-      || priceOpportunities(record).some((item) => item.status === "near_trigger")
-      || conditionOpportunities(record).some((item) => item.status === "near_trigger")
-      || reviewDue(record)
+    ["run_checklist", "run_drift", "drift_recheck", "drop_or_recheck", "confirm_purchase", "reduce_review", "review_holding", "exit_review"].includes(record?.next_action)
+      || preBuyChecklist
   ) return "soon";
+  // A near trigger is an observation signal, not automatically a weekly task.
+  // It may still become "soon" when an existing review date makes it timely;
+  // explicit next_action values are handled by the branch above.
+  if (reviewDue(record)) return "soon";
   return "changes";
 }
 
 function attentionTierLabel(tier) {
-  return { must: "今日必须处理", soon: "近期关注", changes: "普通变化" }[tier] || "普通变化";
+  return { must: "需要及时处置", soon: "本周值得研究", changes: "持续观察" }[tier] || "持续观察";
 }
 
 function attentionReasonType(record) {
@@ -470,6 +487,8 @@ function attentionReasonType(record) {
   if (lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist") return "买入前检查";
   if (lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length) return "持仓提醒";
   if (record?.next_action === "drift_recheck") return "论文漂移待复核";
+  if (record?.next_action === "run_checklist") return "研究推进";
+  if (record?.next_action === "review_holding") return "持仓论文复核";
   if (attentionTier(record) === "soon") return "接近触发";
   return "普通变化";
 }
@@ -477,20 +496,29 @@ function attentionReasonType(record) {
 function attentionSummary(record) {
   const drift = record?.drift || {};
   const type = attentionReasonType(record);
-  if (type === "失效条件") return "明确失效条件已触发，先复核论文。";
-  if (type === "论文漂移") return `论文状态${label("drift", drift.direction)}，需要核对最新事实。`;
-  if (type === "重大事件") return "正式来源事件需要核对其对论文的影响。";
+  if (type === "失效条件") {
+    const rule = triggeredRules(record).find((candidate) => candidate.rule_scope === "redline");
+    return `失效条件：${shortText(rule?.condition || "明确失效条件已触发")}`;
+  }
+  if (type === "论文漂移") return `论文${label("drift", drift.direction)}：核对最新事实`;
+  if (type === "重大事件") {
+    const event = formalImportantEvent(record);
+    return `正式事件：${shortText(event?.headline || event?.summary || "核对其对论文的影响")}`;
+  }
   if (type === "买入前检查") return "已进入买入前阶段，买入前检查尚未完成。";
-  if (type === "持仓提醒") return "持仓出现待处理提醒，优先检查当前周期。";
+  if (type === "研究推进") return "论文或买入条件出现推进线索，本周核对依据即可。";
+  if (type === "持仓提醒") return `持仓提醒：${shortText(trackingFor(record)?.alerts?.[0]?.detail || "优先检查当前周期")}`;
+  if (type === "持仓论文复核") return "持仓周期已有复核安排，核对原始买入论文与最新事实。";
   if (type === "论文漂移待复核") return "已有论文复核，但证据不足，需人工补充判断。";
-  if (type === "接近触发") return "价格或经营条件接近触发，列入近期复核。";
+  if (type === "接近触发") return `接近条件：${shortText(keyCondition(record))}`;
   return "有新的变化，暂不直接改变投资动作。";
 }
 
 function attentionTone(record) {
   const drift = record?.drift || {};
-  if (drift.direction === "broken" || drift.direction === "weakened" || triggeredRules(record).some((rule) => rule.rule_scope === "redline")) return "danger";
-  if (hasFormalImportantEvent(record) || record?.next_action === "run_drift" || lifecycleOf(record) === "PRE_BUY") return "warning";
+  const holdingAlert = lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length > 0;
+  if (holdingAlert || hasFormalImportantEvent(record) || triggeredRules(record).some((rule) => rule.rule_scope === "redline")) return "danger";
+  if (["broken", "weakened"].includes(drift.direction) || record?.next_action === "run_drift" || lifecycleOf(record) === "PRE_BUY") return "warning";
   return "info";
 }
 
@@ -503,15 +531,15 @@ function statusCard(lifecycle, value, hint, tone) {
 }
 
 function renderStatusCards() {
-  const attentionCount = Number(state.board?.attention_count) || stateRecords().filter(hasAttention).length;
+  const attentionCount = attentionRecords().length;
   els.statusCards.innerHTML = [
     statusCard("WATCH", stateCount("WATCH"), label("lifecycleHint", "WATCH"), "blue"),
     statusCard("PRE_BUY", stateCount("PRE_BUY"), label("lifecycleHint", "PRE_BUY"), "yellow"),
     statusCard("HOLDING", stateCount("HOLDING"), label("lifecycleHint", "HOLDING"), "green"),
     `<button class="status-card" type="button" data-opportunity-jump="attention" data-tone="red">
-      <span class="status-card-label">全部待处理</span>
+      <span class="status-card-label">行动线索</span>
       <strong class="status-card-value">${escapeHtml(attentionCount)}</strong>
-      <span class="status-card-hint">上方优先显示今日事项</span>
+      <span class="status-card-hint">按紧迫程度分层显示</span>
     </button>`,
   ].join("");
 }
@@ -563,22 +591,38 @@ function renderAttentionCard(record) {
 }
 
 function attentionRecords() {
-  return stateRecords().filter(hasAttention).sort((a, b) => {
+  return stateRecords().filter((record) => (
+    hasAttention(record)
+      || ["run_checklist", "run_drift", "drift_recheck", "drop_or_recheck", "confirm_purchase", "reduce_review", "review_holding", "exit_review", "price_near_trigger", "condition_near_trigger"].includes(record?.next_action)
+      || nearRules(record).length
+      || priceOpportunities(record).some((item) => item.status === "near_trigger")
+      || conditionOpportunities(record).some((item) => item.status === "near_trigger")
+      || reviewDue(record)
+  )).sort((a, b) => {
     const tierScore = { must: 3, soon: 2, changes: 1 };
-    const score = (record) => (record.lifecycle === "HOLDING" ? 30 : 0) + (hasFormalImportantEvent(record) ? 20 : 0) + triggeredRules(record).length * 5 + (record.drift?.direction === "broken" ? 40 : 0);
+    const actionScore = {
+      reduce_review: 40,
+      drop_or_recheck: 30,
+      run_drift: 25,
+      review_holding: 20,
+      run_checklist: 15,
+      confirm_purchase: 15,
+      drift_recheck: 10,
+    };
+    const score = (record) => (record.lifecycle === "HOLDING" ? 30 : 0) + (hasFormalImportantEvent(record) ? 20 : 0) + (triggeredRules(record).some((rule) => rule.rule_scope === "redline") ? 35 : 0) + (actionScore[record.next_action] || 0);
     return tierScore[attentionTier(b)] - tierScore[attentionTier(a)] || score(b) - score(a) || String(a.company).localeCompare(String(b.company), "zh-CN");
   });
 }
 
 function renderAttention() {
   const records = attentionRecords();
-  const count = Number(state.board?.attention_count) || records.length;
+  const count = records.length;
   const tierCounts = records.reduce((result, record) => {
     const tier = attentionTier(record);
     result[tier] += 1;
     return result;
   }, { must: 0, soon: 0, changes: 0 });
-  els.attentionCount.textContent = `${count} 项 · 今日 ${tierCounts.must}`;
+  els.attentionCount.textContent = `${count} 项 · 及时处置 ${tierCounts.must}`;
   const visible = state.attentionExpanded ? records : records.slice(0, 8);
   const grouped = ["must", "soon", "changes"].map((tier) => ({ tier, records: visible.filter((record) => attentionTier(record) === tier) })).filter((group) => group.records.length);
   els.attentionList.innerHTML = grouped.length
@@ -594,6 +638,15 @@ function opportunityStatus(item) {
 
 function opportunityPriority(item) {
   return { triggered: 3, near_trigger: 2, unknown: 1, not_triggered: 0 }[opportunityStatus(item)] || 0;
+}
+
+function currentOpportunityStatusCounts(items) {
+  return items.reduce((counts, item) => {
+    const status = opportunityStatus(item.opportunity);
+    if (Object.hasOwn(counts, status)) counts[status] += 1;
+    else counts.unknown += 1;
+    return counts;
+  }, { triggered: 0, near_trigger: 0, unknown: 0, not_triggered: 0 });
 }
 
 function opportunityRecords(kind) {
@@ -619,6 +672,28 @@ function opportunityRecords(kind) {
   return unique;
 }
 
+function checklistRecords() {
+  return stateRecords()
+    .filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record)) && record.next_action === "run_checklist")
+    .map((record) => {
+      const candidates = [...priceOpportunities(record), ...conditionOpportunities(record)]
+        .filter((opportunity) => {
+          const rule = rulesFor(record).find((candidate) => candidate.rule_id === opportunity.rule_id);
+          return rule?.rule_scope !== "redline";
+        })
+        .sort((a, b) => opportunityPriority(b) - opportunityPriority(a));
+      return {
+        record,
+        stage: lifecycleOf(record) === "PRE_BUY" ? "已进入买入前检查" : "研究推进候选",
+        opportunity: candidates[0] || {
+          type: "CHECKLIST",
+          status: "unknown",
+          condition: "当前动作已进入研究推进；请查看检查依据",
+        },
+      };
+    });
+}
+
 function opportunityTarget(opportunity, record) {
   if (opportunity.type === "PRICE_RANGE" || opportunity.min != null || opportunity.max != null) return opportunity.condition || "报告价格区间";
   return opportunity.condition || record?.conclusion_summary || "等待正文条件确认";
@@ -627,9 +702,13 @@ function opportunityTarget(opportunity, record) {
 function renderOpportunityCard(item, kind) {
   const { record, opportunity } = item;
   const status = opportunityStatus(opportunity);
+  const contextLabel = kind === "price" ? "价格条件" : kind === "condition" ? "待验证条件" : "当前阶段";
+  const contextValue = kind === "checklist"
+    ? item.stage
+    : opportunityTarget(opportunity, record);
   return `<article class="opportunity-card" data-ticker="${escapeHtml(record.ticker)}" tabindex="0" role="button">
     <div class="opportunity-topline">${cardCompany(record)}<span class="mini-badge opportunity-status" data-status="${escapeHtml(status)}">${escapeHtml(label("ruleStatus", status))}</span></div>
-    <div class="opportunity-context"><span class="opportunity-label">${kind === "price" ? "目标区间" : "等待确认"}</span><span class="opportunity-condition">${escapeHtml(opportunityTarget(opportunity, record))}</span></div>
+    <div class="opportunity-context"><span class="opportunity-label">${escapeHtml(contextLabel)}</span><span class="opportunity-condition">${escapeHtml(contextValue)}</span></div>
     <div class="opportunity-action" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}<span aria-hidden="true">→</span></div>
   </article>`;
 }
@@ -637,14 +716,29 @@ function renderOpportunityCard(item, kind) {
 function renderOpportunities() {
   const prices = opportunityRecords("price");
   const conditions = opportunityRecords("condition");
+  const checklists = checklistRecords();
+  const preBuyChecklists = checklists.filter(({ record }) => lifecycleOf(record) === "PRE_BUY");
   els.priceCount.textContent = String(prices.length);
   els.conditionCount.textContent = String(conditions.length);
-  els.checklistCount.textContent = String(stateCount("PRE_BUY"));
-  const current = state.opportunityView === "price" ? prices : conditions;
+  els.checklistCount.textContent = String(preBuyChecklists.length);
+  if (els.checklistTabCount) els.checklistTabCount.textContent = String(checklists.length);
+  if (els.opportunityPrimaryNote) {
+    els.opportunityPrimaryNote.textContent = `${preBuyChecklists.length} 家已进入买入前检查；${checklists.length - preBuyChecklists.length} 家仍是观察中的研究推进候选。价格和经营条件只作为二级条件池，不等于当前机会。`;
+  }
+  if (els.opportunityPoolNote) {
+    if (state.opportunityView === "checklist") {
+      els.opportunityPoolNote.textContent = "只展示当前已有推进动作的候选；观察中的公司不会被自动改成买入前生命周期。";
+    } else {
+      const statusCounts = currentOpportunityStatusCounts(state.opportunityView === "price" ? prices : conditions);
+      els.opportunityPoolNote.textContent = `这是条件池：已触发 ${statusCounts.triggered} · 接近 ${statusCounts.near_trigger} · 待判断 ${statusCounts.unknown} · 未触发 ${statusCounts.not_triggered}。只有已触发且通过资格校验的条件，才会进入买入前检查。`;
+    }
+  }
+  const current = state.opportunityView === "checklist" ? checklists : state.opportunityView === "price" ? prices : conditions;
   const visible = state.opportunityExpanded ? current : current.slice(0, 8);
   els.opportunityList.innerHTML = current.length ? visible.map((item) => renderOpportunityCard(item, state.opportunityView)).join("") : `<div class="loading-card">暂时没有可展示的机会。</div>`;
   els.opportunityViewAll.hidden = current.length <= 8;
-  els.opportunityViewAll.textContent = state.opportunityExpanded ? "收起机会池" : `查看全部机会（${current.length}）`;
+  const viewLabel = state.opportunityView === "checklist" ? "研究候选" : "条件池";
+  els.opportunityViewAll.textContent = state.opportunityExpanded ? `收起${viewLabel}` : `查看全部${viewLabel}（${current.length}）`;
   document.querySelectorAll("[data-opportunity-view]").forEach((button) => {
     const active = button.dataset.opportunityView === state.opportunityView;
     button.classList.toggle("is-active", active);
@@ -694,11 +788,11 @@ function aiScanStatusText(status) {
   return {
     ok: "已完成",
     ready: "已完成",
-    partial: "部分可用",
+    partial: "部分完成",
     stale: "结果过期",
     not_run_today: "今日尚未扫描",
-    error: "读取失败",
-    missing: "暂无扫描",
+    error: "扫描失败",
+    missing: "尚未扫描",
     unavailable: "不可用",
   }[status] || "待复核";
 }
@@ -760,7 +854,9 @@ function renderAiOpportunities() {
     : status === "missing"
     ? "本地暂无 AI 每日研究机会扫描结果。结果生成后会显示在这里，不影响其他看板模块。"
     : status === "error"
-      ? `今日 AI 研究机会扫描失败；未将旧结果当作今日结果。最近一次成功扫描：${formatDateTime(meta.last_success_at || meta.last_success_scan_generated_at)}`
+      ? meta.scan_status === "ok"
+        ? `今日 AI 研究机会扫描已完成，但看板刷新失败；未将未发布结果当作今日结果。扫描完成时间：${formatDateTime(meta.scan_generated_at || meta.generated_at)}`
+        : `今日 AI 研究机会扫描失败；未将旧结果当作今日结果。最近一次成功扫描：${formatDateTime(meta.last_success_at || meta.last_success_scan_generated_at)}`
     : status === "unavailable"
         ? "AI 每日研究机会暂时不可用；未生成研究机会，也未改变买入候选。"
       : status === "partial"
@@ -835,7 +931,19 @@ function keyCondition(record) {
 }
 
 function compactDataSummary(record) {
-  const drift = driftScanLabel(record);
+  const reviewCategory = record?.drift_review?.category;
+  const drift = {
+    true_current_drift: "待复核",
+    new_evidence_other_action: "有新材料",
+    reviewed_not_recognized: "状态异常",
+    never_reviewed: "未复核",
+    reviewed_insufficient_evidence: "证据不足",
+    reviewed_current: "已复核",
+  }[reviewCategory] || ({
+    current: "已复核",
+    stale: "待更新",
+    missing: "未复核",
+  }[record?.drift_scan?.status] || "待复核");
   const event = label("eventState", record?.event_radar?.state);
   const technical = dataLabel(record?.technical?.freshness || record?.technical?.status);
   const sentiment = sentimentLabel(record).stateText;
@@ -860,7 +968,7 @@ function filteredRecords() {
   const search = state.search.toLowerCase();
   const defaultResearchPool = state.lifecycle === "all" && !state.search.trim() && state.opportunity === "all";
   let records = stateRecords().filter((record) => {
-    if (defaultResearchPool && lifecycleOf(record) === "HOLDING") return false;
+    if (defaultResearchPool && ["HOLDING", "EXITED"].includes(lifecycleOf(record))) return false;
     const matchesSearch = !search || `${record.company} ${record.ticker}`.toLowerCase().includes(search);
     const matchesMarket = state.market === "all" || record.market === state.market;
     const matchesLifecycle = state.lifecycle === "all" || lifecycleOf(record) === state.lifecycle;
@@ -883,7 +991,7 @@ function renderWatchlist() {
   const records = filteredRecords();
   const pageRecords = records.slice(0, state.page * PAGE_SIZE);
   els.watchlist.innerHTML = pageRecords.map(renderWatchRow).join("");
-  els.watchlistCount.textContent = `${stateRecords().filter((record) => lifecycleOf(record) !== "HOLDING").length} 家`;
+  els.watchlistCount.textContent = `${stateRecords().filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record))).length} 家`;
   els.watchlistMeta.textContent = `显示 ${pageRecords.length} / ${records.length} 家 · 全部数据已加载到本地，详情按需打开`;
   els.loadMore.hidden = pageRecords.length >= records.length;
   els.loadMore.textContent = `加载更多（剩余 ${Math.max(0, records.length - pageRecords.length)} 家）`;
@@ -963,12 +1071,75 @@ function renderCurrentJudgment(record) {
   return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 论文相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
 }
 
+function decisionContextValues(record) {
+  const lifecycle = lifecycleOf(record);
+  const action = record?.next_action;
+  const drift = record?.drift || {};
+  const formalEvent = formalImportantEvent(record);
+  const triggered = triggeredRules(record);
+  const near = nearRules(record);
+  const tracking = trackingFor(record);
+  const whyNow = formalEvent
+    ? "正式事件进入当前重要状态，需要核对它是否改变原论文。"
+    : lifecycle === "HOLDING" && (tracking?.alerts || []).length
+      ? "当前持仓存在待处理提醒，应优先核对持仓周期。"
+      : action === "run_checklist"
+        ? lifecycle === "PRE_BUY" ? "公司已经进入买入前流程。" : "当前研究出现买入推进线索。"
+        : ["weakened", "broken"].includes(drift.direction)
+          ? `已记录${label("drift", drift.direction)}，需要核对核心假设。`
+          : near.length
+            ? "已有价格或经营条件接近触发。"
+            : `当前处于${label("lifecycle", lifecycle)}，下一步是${actionLabel(record)}。`;
+  const newInfo = formalEvent
+    ? shortText(formalEvent.headline || formalEvent.summary || "正式事件已记录")
+    : drift.direction && !["unknown", "unchanged"].includes(drift.direction)
+      ? `论文状态：${label("drift", drift.direction)}`
+      : record?.drift_scan?.status === "stale"
+        ? "论文复核水位存在更新，但当前动作仍需结合现有条件判断。"
+        : triggered.length
+          ? `已有 ${triggered.length} 条保存规则达到触发状态。`
+          : "尚未形成明确增量问题。";
+  const keyQuestion = action === "run_checklist"
+    ? "买入前条件是否已完整满足，而不是只有单一条件达到？"
+    : action === "run_drift" || action === "drift_recheck"
+      ? "新增事实是否改变原投资论文？"
+      : action === "drop_or_recheck" || action === "reduce_review"
+        ? "减弱或失效信号是否足以改变当前持有 / 观察动作？"
+        : keyCondition(record);
+  const evidence = [...triggered, ...near]
+    .map((rule) => rule?.condition)
+    .filter(Boolean)
+    .filter((condition, index, values) => values.indexOf(condition) === index)
+    .slice(0, 3);
+  if (formalEvent && !evidence.length) evidence.push(formalEvent.headline || formalEvent.summary || "正式事件原文");
+  return {
+    whyNow,
+    newInfo,
+    keyQuestion,
+    evidence: evidence.length ? evidence.join("；") : "尚未形成明确证据清单，请以主报告为准。",
+    nextStep: actionLabel(record),
+  };
+}
+
+function renderDecisionContext(record) {
+  const context = decisionContextValues(record);
+  const fields = [
+    ["为什么现在看", context.whyNow],
+    ["新增了什么", context.newInfo],
+    ["当前关键问题", context.keyQuestion],
+    ["需要哪份证据", context.evidence],
+    ["结果与下一步", context.nextStep],
+  ];
+  return `<div class="detail-section decision-context"><div class="detail-section-head"><h3>本次查看重点</h3><span class="mini-badge">只基于当前状态</span></div><div class="decision-context-grid">${fields.map(([name, value]) => `<div class="decision-context-item"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${escapeHtml(value)}</div></div>`).join("")}</div></div>`;
+}
+
 function renderDetail(record) {
   const ruleCount = rulesFor(record).length;
   els.drawerKicker.textContent = `${record.market || "待识别"} · ${record.ticker}`;
   els.drawerTitle.textContent = text(record.company);
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
+    renderDecisionContext(record),
     renderCurrentJudgment(record),
     renderAiOpportunitySection(record),
     `<div class="detail-section"><div class="detail-section-head"><h3>决策规则</h3><span class="section-count">${ruleCount} 条</span></div>${renderRules(record)}</div>`,
@@ -1048,7 +1219,7 @@ async function loadData({ silent = false } = {}) {
   state.tracking = normalizeTracking(payload.tracking);
   state.quotes = indexByTicker(payload.quotes?.quotes);
   state.quoteMeta = payload.quotes;
-  state.sentimentMeta = payload.sentiment;
+  state.sentimentMeta = { ...(payload.sentiment || {}), ...(payload.sentimentStatus || {}) };
   const scanPayload = payload.opportunityScans && Array.isArray(payload.opportunityScans.scans)
     ? payload.opportunityScans
     : { schema_version: 1, status: "unavailable", scans: [] };
@@ -1056,7 +1227,8 @@ async function loadData({ silent = false } = {}) {
   state.opportunityScanMeta = {
     ...scanPayload,
     ...scanStatus,
-    generated_at: scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
+    generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
+    scan_generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || null,
     scan_count: scanStatus.scan_count ?? scanPayload.scan_count,
     expected_scan_count: scanStatus.expected_scan_count ?? scanPayload.expected_scan_count,
     current_opportunity_count: scanStatus.current_opportunity_count ?? scanPayload.current_opportunity_count,

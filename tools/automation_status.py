@@ -49,6 +49,11 @@ def value_or_none(value: str | None) -> str | None:
     return value if value not in {None, "", "null"} else None
 
 
+def argument_value(arguments: argparse.Namespace, name: str) -> str | None:
+    """Read optional CLI metadata without breaking older callers/tests."""
+    return value_or_none(getattr(arguments, name, None))
+
+
 def update(arguments: argparse.Namespace) -> int:
     path = arguments.path.resolve()
     payload = load(path)
@@ -61,27 +66,51 @@ def update(arguments: argparse.Namespace) -> int:
             {
                 "job_id": job_id,
                 "status": "running",
-                "scheduled_for": value_or_none(arguments.scheduled_for),
+                "scheduled_for": argument_value(arguments, "scheduled_for"),
                 "started_at": timestamp,
                 "finished_at": None,
                 "duration_seconds": None,
-                "message": arguments.message or "",
+                "message": getattr(arguments, "message", None) or "",
+                "run_id": argument_value(arguments, "run_id"),
+                "phase": argument_value(arguments, "phase") or "queued",
+                "source_sha": argument_value(arguments, "source_sha"),
+                "result_id": argument_value(arguments, "result_id"),
             }
         )
+    elif arguments.command == "phase":
+        phase = argument_value(arguments, "phase")
+        if phase:
+            current["phase"] = phase
+        if argument_value(arguments, "run_id"):
+            current["run_id"] = argument_value(arguments, "run_id")
+        if argument_value(arguments, "source_sha"):
+            current["source_sha"] = argument_value(arguments, "source_sha")
+        if argument_value(arguments, "result_id"):
+            current["result_id"] = argument_value(arguments, "result_id")
+        if getattr(arguments, "message", None) is not None:
+            current["message"] = arguments.message or ""
+        current.setdefault("job_id", job_id)
+        current.setdefault("status", "running")
     else:
-        status = arguments.status or "ok"
+        status = getattr(arguments, "status", None) or "ok"
         current.update(
             {
                 "job_id": job_id,
                 "status": status,
                 "finished_at": timestamp,
-                "duration_seconds": arguments.duration,
-                "data_cutoff": value_or_none(arguments.data_cutoff),
-                "record_count": arguments.record_count,
-                "failed_count": arguments.failed_count,
-                "message": arguments.message or "",
+                "completed_at": timestamp,
+                "duration_seconds": getattr(arguments, "duration", None),
+                "data_cutoff": argument_value(arguments, "data_cutoff"),
+                "record_count": getattr(arguments, "record_count", None),
+                "failed_count": getattr(arguments, "failed_count", None),
+                "message": getattr(arguments, "message", None) or "",
+                "phase": argument_value(arguments, "phase") or ("complete" if status in {"ok", "partial", "deferred"} else "failed"),
             }
         )
+        for field in ("run_id", "source_sha", "result_id"):
+            value = argument_value(arguments, field)
+            if value:
+                current[field] = value
         if status == "ok":
             current["last_success_at"] = timestamp
             current["last_success_status"] = status
@@ -124,6 +153,17 @@ def main() -> int:
     start.add_argument("--job-id", required=True)
     start.add_argument("--scheduled-for")
     start.add_argument("--message")
+    start.add_argument("--run-id")
+    start.add_argument("--phase")
+    start.add_argument("--source-sha")
+    start.add_argument("--result-id")
+    phase = subparsers.add_parser("phase")
+    phase.add_argument("--job-id", required=True)
+    phase.add_argument("--phase", required=True)
+    phase.add_argument("--message")
+    phase.add_argument("--run-id")
+    phase.add_argument("--source-sha")
+    phase.add_argument("--result-id")
     finish = subparsers.add_parser("finish")
     finish.add_argument("--job-id", required=True)
     finish.add_argument(
@@ -136,6 +176,10 @@ def main() -> int:
     finish.add_argument("--record-count", type=int)
     finish.add_argument("--failed-count", type=int)
     finish.add_argument("--message")
+    finish.add_argument("--run-id")
+    finish.add_argument("--phase")
+    finish.add_argument("--source-sha")
+    finish.add_argument("--result-id")
     normalize = subparsers.add_parser("normalize")
     normalize.add_argument("--template", type=Path, required=True)
     arguments = parser.parse_args()

@@ -146,7 +146,12 @@ class DriftScanStateTests(unittest.TestCase):
         data.mkdir(parents=True, exist_ok=True)
         decision_state.write_json(data / "drift_scan_state.json", payload)
 
-    def _build(self, root: Path, event: dict | None = None) -> dict:
+    def _build(
+        self,
+        root: Path,
+        event: dict | None = None,
+        rules: list[dict] | None = None,
+    ) -> dict:
         return decision_state.build_state_layers(
             [{
                 "company": "示例公司",
@@ -156,6 +161,7 @@ class DriftScanStateTests(unittest.TestCase):
             }],
             root,
             event_payload=event,
+            rule_payload={"companies": [{"ticker": "600000.SH", "rules": rules}]} if rules is not None else None,
             write=False,
             legacy_mode=True,
         )["state"]["companies"][0]
@@ -302,15 +308,45 @@ class DriftScanStateTests(unittest.TestCase):
         self.assertEqual(state["drift_scan"]["result"], "unknown")
         self.assertEqual(state["next_action"], "drift_recheck")
 
-    def test_formal_improved_without_redline_runs_checklist(self):
+    def test_formal_improved_without_buy_condition_stays_watch(self):
         root, _ = self._root_with_report()
         data = root / "data" / "investment-dashboard"
         data.mkdir(parents=True, exist_ok=True)
+        (data / "quotes").mkdir(parents=True, exist_ok=True)
+        (data / "quotes" / "latest.json").write_text(
+            json.dumps({"quotes": [{"ticker": "600000.SH", "price": 10.0}]}),
+            encoding="utf-8",
+        )
         (data / "drift_states.json").write_text(
             json.dumps({"companies": {"600000.SH": {"direction": "improved"}}}),
             encoding="utf-8",
         )
         state = self._build(root)
+        self.assertEqual(state["next_action"], "keep_watch")
+
+    def test_formal_improved_with_explicit_buy_condition_runs_checklist(self):
+        root, _ = self._root_with_report()
+        data = root / "data" / "investment-dashboard"
+        data.mkdir(parents=True, exist_ok=True)
+        (data / "quotes").mkdir(parents=True, exist_ok=True)
+        (data / "quotes" / "latest.json").write_text(
+            json.dumps({"quotes": [{"ticker": "600000.SH", "price": 10.0}]}),
+            encoding="utf-8",
+        )
+        (data / "drift_states.json").write_text(
+            json.dumps({"companies": {"600000.SH": {"direction": "improved"}}}),
+            encoding="utf-8",
+        )
+        rules = [{
+            "rule_id": "entry-price",
+            "type": "PRICE",
+            "rule_scope": "entry",
+            "max": 10,
+            "status": "triggered",
+            "action": "review_decision",
+            "active": True,
+        }]
+        state = self._build(root, rules=rules)
         self.assertEqual(state["next_action"], "run_checklist")
 
     def test_formal_improved_redline_and_weakened_remain_drop_or_recheck(self):
