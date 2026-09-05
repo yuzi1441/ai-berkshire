@@ -70,8 +70,8 @@
               <div class="section-heading">
                 <div>
                   <p class="section-eyebrow">今天</p>
-                  <h1 id="today-title">今日必须处理</h1>
-                  <p class="section-note">先处理会改变下一步动作的事项；近期关注和普通变化分层收纳。</p>
+                  <h1 id="today-title">今天需要处置</h1>
+                  <p class="section-note">只把会改变下一步动作的事项放在前面；本周研究与持续观察分层收纳。</p>
                 </div>
                 <div class="section-heading-actions">
                   <span class="section-count" id="attention-count">—</span>
@@ -106,14 +106,16 @@
                   <h1 id="opportunity-title">买入候选</h1>
                 </div>
                 <div class="segmented-control" id="opportunity-tabs" role="tablist" aria-label="买入机会类型">
-                  <button class="segment is-active" type="button" data-opportunity-view="price" role="tab" aria-selected="true">价格机会池 <span id="price-count">0</span></button>
-                  <button class="segment" type="button" data-opportunity-view="condition" role="tab" aria-selected="false">条件机会池 <span id="condition-count">0</span></button>
+                  <button class="segment is-active" type="button" data-opportunity-view="checklist" role="tab" aria-selected="true">推进候选 <span id="checklist-tab-count">0</span></button>
+                  <button class="segment" type="button" data-opportunity-view="price" role="tab" aria-selected="false">价格条件池 <span id="price-count">0</span></button>
+                  <button class="segment" type="button" data-opportunity-view="condition" role="tab" aria-selected="false">待验证条件 <span id="condition-count">0</span></button>
                 </div>
               </div>
               <div class="opportunity-primary">
                 <div><span class="opportunity-primary-label">可进入买入前检查</span><strong id="checklist-count">—</strong><span class="opportunity-primary-unit">家公司</span></div>
-                <span class="opportunity-primary-note">价格与条件机会是二级机会池，先看最值得下一步动作的候选。</span>
+                <span class="opportunity-primary-note" id="opportunity-primary-note">价格与条件只是二级条件池，不等于当前机会。</span>
               </div>
+              <p class="opportunity-pool-note" id="opportunity-pool-note">只展示当前已有推进动作的候选；观察中的公司不会被自动改成买入前生命周期。</p>
               <div class="opportunity-list" id="opportunity-list"></div>
               <button class="button button-outline load-more" id="opportunity-view-all" type="button" hidden>查看全部机会</button>
             </section>
@@ -157,7 +159,7 @@
                 </label>
                 <label class="select-control"><span>市场</span><select id="market-filter"><option value="all">全部</option><option value="A股">A股</option><option value="港股">港股</option><option value="美股">美股</option><option value="未识别">待识别</option></select></label>
                 <label class="select-control"><span>状态</span><select id="lifecycle-filter"><option value="all">全部状态</option><option value="WATCH">观察中</option><option value="PRE_BUY">买入前</option><option value="HOLDING">持有中</option><option value="EXITED">已退出</option></select></label>
-                <label class="select-control"><span>机会</span><select id="opportunity-filter"><option value="all">全部机会</option><option value="price">价格机会</option><option value="condition">条件机会</option><option value="attention">待处理</option></select></label>
+                <label class="select-control"><span>条件</span><select id="opportunity-filter"><option value="all">全部条件</option><option value="price">价格条件</option><option value="condition">待验证条件</option><option value="attention">行动线索</option></select></label>
                 <label class="select-control"><span>排序</span><select id="sort-filter"><option value="attention">待处理优先</option><option value="lifecycle">按状态</option><option value="price">按价格机会</option><option value="name">按公司名</option></select></label>
                 <button class="button button-quiet" id="clear-filters" type="button">清除筛选</button>
               </div>

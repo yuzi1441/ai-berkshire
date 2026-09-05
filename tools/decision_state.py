@@ -763,8 +763,11 @@ def _next_action(
         return "hold"
     if lifecycle == "EXITED":
         return "none"
-    if drift.get("direction") == "improved":
-        return "run_checklist"
+    # An improved thesis is research evidence, not by itself a buy-progress
+    # condition.  Let an explicit Entry/buy-validation rule (or the existing
+    # PRE_BUY flow below) determine whether the next action is a Checklist.
+    # This prevents "the thesis improved" from silently becoming a purchase
+    # workflow when price and validation gates are still unknown.
     if drift.get("direction") == "weakened":
         return "drop_or_recheck"
     scan_status = compact((drift_scan or {}).get("status")).lower()

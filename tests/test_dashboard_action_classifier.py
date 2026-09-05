@@ -509,3 +509,70 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertIn('["待人工复核", manualReviewCount]', app)
         self.assertIn("每日机会筛选", html)
         self.assertIn("opportunityScans", app)
+
+    def test_dashboard_uses_current_actions_and_compact_research_statuses(self):
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+        self.assertIn('PRE_BUY: "买入前流程中的公司"', app)
+        self.assertIn('<span class="status-card-label">行动线索</span>', app)
+        self.assertIn('record.next_action === "run_checklist"', app)
+        self.assertIn('data-opportunity-view="checklist"', (ROOT / "site" / "index.html").read_text(encoding="utf-8"))
+        self.assertIn('const checklists = checklistRecords();', app)
+        self.assertIn('true_current_drift: "待复核"', app)
+        self.assertIn('new_evidence_other_action: "有新材料"', app)
+        self.assertIn('论文：${escapeHtml(drift)}', app)
+        self.assertIn('const attemptedAt = meta?.scan_generated_at || meta?.generated_at || meta?.attempted_at;', app)
+
+    def test_dashboard_attention_and_candidate_labels_are_explicit(self):
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+        html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('review_holding: "持仓论文复核"', app)
+        self.assertIn('condition_near_trigger: "接近经营条件"', app)
+        self.assertIn('must: "需要及时处置"', app)
+        self.assertIn('soon: "本周值得研究"', app)
+        self.assertIn('changes: "持续观察"', app)
+        self.assertIn('研究推进候选', app)
+        self.assertIn('待验证条件', html)
+        self.assertIn('尚未形成明确增量问题', app)
+        self.assertIn('为什么现在看', app)
+
+    def test_near_trigger_defaults_to_observation_not_weekly_task(self):
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+        start = app.index("function attentionTier(")
+        end = app.index("\nfunction attentionTierLabel", start)
+        tier = app[start:end]
+        self.assertIn('if (reviewDue(record)) return "soon";', app)
+        self.assertIn("A near trigger is an observation signal", app)
+        self.assertNotIn("nearRules(record).length", tier)
+        self.assertNotIn("priceOpportunities(record).some", tier)
+        self.assertNotIn("conditionOpportunities(record).some", tier)
+        self.assertNotIn('["weakened", "broken"].includes(drift.direction)', tier)
+
+    def test_major_event_summary_uses_only_formal_event(self):
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+
+        def extract(name):
+            start = app.index(f"function {name}(")
+            end = app.find("\nfunction ", start + 1)
+            return app[start:] if end == -1 else app[start:end]
+
+        script = """
+          function attentionReasonType() { return "重大事件"; }
+          function shortText(value) { return value; }
+          function label() { return ""; }
+        """ + "\n".join(extract(name) for name in ("formalImportantEvent", "hasFormalImportantEvent", "attentionSummary")) + """
+          const record = {
+            event_radar: {state: "important", events: [
+              {highest_source_tier: "D", state: "watch", thesis_relevant: false, headline: "普通讨论"},
+              {highest_source_tier: "A", state: "important", thesis_relevant: false, headline: "正式公告"}
+            ]}
+          };
+          process.stdout.write(JSON.stringify({
+            formal: hasFormalImportantEvent(record),
+            summary: attentionSummary(record)
+          }));
+        """
+        result = subprocess.run(["node"], input=script, check=True, capture_output=True, text=True)
+        payload = json.loads(result.stdout)
+        self.assertTrue(payload["formal"])
+        self.assertIn("正式公告", payload["summary"])
+        self.assertNotIn("普通讨论", payload["summary"])

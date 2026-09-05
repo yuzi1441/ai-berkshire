@@ -245,7 +245,7 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .lifecycle-badge[data-lifecycle="HOLDING"] { color: var(--green); background: var(--green-soft); }
 .lifecycle-badge[data-lifecycle="EXITED"] { color: var(--muted); }
 .attention-kind { margin-top: 15px; color: var(--muted); font-size: 10px; }
-.attention-reason { margin: 5px 0 14px; color: var(--text-soft); font-size: 13px; line-height: 1.55; }
+.attention-reason { display: -webkit-box; overflow: hidden; margin: 5px 0 14px; color: var(--text-soft); font-size: 13px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .attention-reason strong { color: var(--text); font-weight: 580; }
 .attention-action, .opportunity-action { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; color: var(--blue); font-size: 12px; }
 .attention-action::before { content: "下一步"; color: var(--muted); }
@@ -259,6 +259,7 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .opportunity-primary strong { margin-left: 10px; color: var(--text); font-size: 24px; font-weight: 650; font-variant-numeric: tabular-nums; }
 .opportunity-primary-unit { margin-left: 4px; color: var(--text-soft); font-size: 12px; }
 .opportunity-primary-note { color: var(--muted); font-size: 11px; }
+.opportunity-pool-note { margin: -4px 2px 15px; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .opportunity-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .opportunity-card { min-height: 174px; padding: 16px; text-align: left; transition: border-color .18s ease, transform .18s ease, background .18s ease; }
 .opportunity-card .company-name { font-size: 14px; }
@@ -377,6 +378,10 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .detail-field-value { margin-top: 3px; color: var(--text-soft); font-size: 12px; word-break: break-word; }
 .detail-field-value.large { color: var(--text); font-size: 18px; font-weight: 620; font-variant-numeric: tabular-nums; }
 .detail-copy { margin: 0; color: var(--text-soft); font-size: 12px; line-height: 1.7; }
+.decision-context { border-color: rgba(127,178,216,.28); background: linear-gradient(145deg, rgba(127,178,216,.08), var(--panel)); }
+.decision-context-grid { display: grid; gap: 11px; }
+.decision-context-item { padding-bottom: 10px; border-bottom: 1px solid var(--line-soft); }
+.decision-context-item:last-child { padding-bottom: 0; border-bottom: 0; }
 .rule-group + .rule-group { margin-top: 17px; padding-top: 17px; border-top: 1px solid var(--line-soft); }
 .rule-group-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; color: var(--text); font-size: 12px; font-weight: 620; }
 .rule-group-title span { color: var(--muted); font-weight: 450; }
@@ -426,13 +431,14 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
   .workspace-nav-item { flex: 0 0 auto; width: auto; min-height: 38px; padding: 0 12px; white-space: nowrap; }
   .workspace-sidebar-note { display: none; }
   .topbar, main, .app-footer { width: min(100% - 32px, var(--max-width)); }
-  .topbar { align-items: start; padding-top: 19px; flex-direction: column; }
+  .topbar { align-items: start; padding-top: 16px; padding-bottom: 17px; flex-direction: column; }
   .topbar-meta { width: 100%; justify-content: space-between; gap: 8px; }
   .meta-block { text-align: left; }
-  .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-bottom: 30px; }
-  .status-card { min-height: 88px; padding: 14px; }
+  main { padding-top: 18px; padding-bottom: 44px; }
+  .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-bottom: 23px; }
+  .status-card { min-height: 82px; padding: 13px; }
   .status-card-value { font-size: 25px; }
-  .section { margin-top: 34px; }
+  .section { margin-top: 28px; }
   .section-heading { align-items: start; flex-direction: column; gap: 9px; }
   .section-heading-tight { align-items: start; flex-direction: row; }
   .attention-layer-grid, .opportunity-list, .ai-opportunity-list, .holdings-grid { grid-template-columns: 1fr; }

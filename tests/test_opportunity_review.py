@@ -1,8 +1,10 @@
 import json
+import io
 import os
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,6 +15,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import opportunity_review as opportunity  # noqa: E402
 import scripts.run_after_close_ai_review as after_close  # noqa: E402
 from sentiment_snapshot import SentimentError  # noqa: E402
+from source_hash import canonical_file_sha256  # noqa: E402
 
 
 def ready(model: str, state: str) -> dict:
@@ -61,6 +64,199 @@ class OpportunityReviewTests(unittest.TestCase):
             "stale_count": 0,
             "error_count": 0,
         }))
+
+    def test_complete_same_day_scan_can_be_reused_without_model_call(self):
+        generated_at = "2026-08-24T18:10:00+08:00"
+        scan = {
+            "status": "ok",
+            "generated_at": generated_at,
+            "scan_count": 1,
+            "expected_scan_count": 1,
+            "model_result_count": 1,
+            "ready_count": 1,
+            "current_opportunity_count": 0,
+            "near_opportunity_count": 0,
+            "stale_count": 0,
+            "error_count": 0,
+        }
+        self.assertTrue(after_close.scan_generated_today(scan, today="2026-08-24"))
+        morning_scan = {**scan, "generated_at": "2026-08-24T09:00:00+08:00"}
+        self.assertFalse(after_close.scan_generated_today(morning_scan, today="2026-08-24"))
+        old_scan = {**scan, "generated_at": "2026-08-23T18:10:00+08:00"}
+        self.assertFalse(after_close.scan_generated_today(old_scan, today="2026-08-24"))
+
+    def test_same_day_reuse_requires_current_report_universe(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            report = root / "reports" / "sample.md"
+            report.parent.mkdir(parents=True)
+            report.write_text("# Sample\n\nVersion A\n", encoding="utf-8")
+            after_close.write_json(root / after_close.BOARD_RELATIVE, {
+                "decisions": [{
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "report_path": "reports/sample.md",
+                }],
+            })
+            scan = {
+                "status": "ok",
+                "market": "A股",
+                "generated_at": "2026-08-24T18:10:00+08:00",
+                "scan_count": 1,
+                "expected_scan_count": 1,
+                "model_result_count": 1,
+                "ready_count": 1,
+                "stale_count": 0,
+                "error_count": 0,
+                "scans": [{
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "report_path": "reports/sample.md",
+                    "report_sha256": canonical_file_sha256(report),
+                }],
+            }
+            self.assertTrue(after_close.scan_generated_today(scan, today="2026-08-24"))
+            self.assertTrue(after_close.scan_matches_current_universe(root, scan))
+            report.write_text("# Sample\n\nVersion B\n", encoding="utf-8")
+            self.assertFalse(after_close.scan_matches_current_universe(root, scan))
+
+    def test_reused_scan_build_failure_is_published_as_error(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            scan = {
+                "status": "ok",
+                "market": "A股",
+                "generated_at": "2026-08-24T18:10:00+08:00",
+                "scan_count": 1,
+                "expected_scan_count": 1,
+                "model_result_count": 1,
+                "ready_count": 1,
+                "current_opportunity_count": 0,
+                "near_opportunity_count": 0,
+                "stale_count": 0,
+                "error_count": 0,
+            }
+            report = root / "reports" / "sample.md"
+            report.parent.mkdir(parents=True)
+            report.write_text("# Sample\n", encoding="utf-8")
+            scan["scans"] = [{
+                "ticker": "600000.SH",
+                "market": "A股",
+                "report_path": "reports/sample.md",
+                "report_sha256": canonical_file_sha256(report),
+            }]
+            after_close.write_json(root / after_close.BOARD_RELATIVE, {
+                "decisions": [{
+                    "ticker": "600000.SH",
+                    "market": "A股",
+                    "report_path": "reports/sample.md",
+                }],
+            })
+            after_close.write_json(root / after_close.SCAN_RELATIVE, scan)
+            calls = []
+
+            def step(_root, label, _args):
+                calls.append(label)
+                if label == "确认今日扫描结果并刷新静态看板":
+                    raise after_close.JobError("simulated build failure")
+
+            output = io.StringIO()
+            with patch.object(sys, "argv", ["review", "--repo-root", directory, "--skip-git-sync"]), \
+                patch.object(after_close, "LOCK_PATH", root / "lock"), \
+                patch.object(after_close, "git_status", return_value=[]), \
+                patch.object(after_close, "now_iso", return_value="2026-08-24T18:20:00+08:00"), \
+                patch.object(after_close, "run_step", side_effect=step), \
+                redirect_stdout(output), redirect_stderr(output):
+                result = after_close.main()
+
+            status = after_close.load_json(root / after_close.STATUS_RELATIVE, {})
+            self.assertEqual(result, 1)
+            self.assertEqual(status["status"], "error")
+            self.assertEqual(status["scan_status"], "ok")
+            self.assertEqual(status["publication_status"], "error")
+            self.assertEqual(status["failure_phase"], "dashboard_build")
+            self.assertEqual(calls, ["确认今日扫描结果并刷新静态看板", "重建失败保护状态"])
+
+    def test_completed_scan_and_failed_final_build_remain_distinguishable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            old_scan = {
+                "status": "ok",
+                "generated_at": "2026-08-23T18:10:00+08:00",
+                "scan_count": 1,
+                "expected_scan_count": 1,
+                "model_result_count": 1,
+                "ready_count": 1,
+                "current_opportunity_count": 0,
+                "near_opportunity_count": 0,
+                "stale_count": 0,
+                "error_count": 0,
+            }
+            new_scan = {**old_scan, "generated_at": "2026-08-24T18:10:00+08:00", "near_opportunity_count": 2}
+            after_close.write_json(root / after_close.SCAN_RELATIVE, old_scan)
+            calls = []
+
+            def step(_root, label, _args):
+                calls.append(label)
+                if label == "收盘后扫描全部 A 股机会":
+                    after_close.write_json(root / after_close.SCAN_RELATIVE, new_scan)
+                if label == "重建静态看板":
+                    raise after_close.JobError("simulated final build failure")
+
+            output = io.StringIO()
+            with patch.object(sys, "argv", ["review", "--repo-root", directory, "--skip-git-sync"]), \
+                patch.object(after_close, "LOCK_PATH", root / "lock"), \
+                patch.object(after_close, "git_status", return_value=[]), \
+                patch.object(after_close, "now_iso", return_value="2026-08-24T18:20:00+08:00"), \
+                patch.object(after_close, "run_step", side_effect=step), \
+                redirect_stdout(output), redirect_stderr(output):
+                result = after_close.main()
+
+            status = after_close.load_json(root / after_close.STATUS_RELATIVE, {})
+            retained_scan = after_close.load_json(root / after_close.SCAN_RELATIVE, {})
+            self.assertEqual(result, 1)
+            self.assertEqual(retained_scan["generated_at"], new_scan["generated_at"])
+            self.assertEqual(status["status"], "error")
+            self.assertEqual(status["scan_status"], "ok")
+            self.assertEqual(status["scan_generated_at"], new_scan["generated_at"])
+            self.assertEqual(status["current_opportunity_count"], 0)
+            self.assertEqual(status["near_opportunity_count"], 2)
+            self.assertEqual(calls[-1], "重建失败保护状态")
+
+    def test_quote_failure_records_scan_not_started(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            previous_scan = {"status": "ok", "generated_at": "2026-08-23T18:10:00+08:00"}
+            after_close.write_json(root / after_close.SCAN_RELATIVE, previous_scan)
+
+            def step(_root, label, _args):
+                if label == "刷新收盘行情":
+                    raise after_close.JobError("simulated quote failure")
+
+            output = io.StringIO()
+            with patch.object(sys, "argv", ["review", "--repo-root", directory, "--skip-git-sync"]), \
+                patch.object(after_close, "LOCK_PATH", root / "lock"), \
+                patch.object(after_close, "git_status", return_value=[]), \
+                patch.object(after_close, "now_iso", return_value="2026-08-24T18:20:00+08:00"), \
+                patch.object(after_close, "run_step", side_effect=step), \
+                redirect_stdout(output), redirect_stderr(output):
+                result = after_close.main()
+
+            status = after_close.load_json(root / after_close.STATUS_RELATIVE, {})
+            self.assertEqual(result, 1)
+            self.assertEqual(status["status"], "error")
+            self.assertEqual(status["scan_status"], "not_started")
+            self.assertEqual(status["failure_phase"], "quote")
+
+    def test_skip_git_sync_disables_repository_publish_path(self):
+        source = (ROOT / "scripts" / "run_after_close_ai_review.py").read_text(encoding="utf-8")
+        self.assertFalse(after_close.should_publish_to_git([], True))
+        self.assertFalse(after_close.should_publish_to_git(None, False))
+        self.assertFalse(after_close.should_publish_to_git(["M file"], False))
+        self.assertTrue(after_close.should_publish_to_git([], False))
+        self.assertIn('parser.add_argument(\n        "--force"', source)
+        self.assertIn("return 75", source)
+        self.assertIn("scan_completed = True", source)
 
     def test_union_includes_a_current_opportunity(self):
         result = opportunity.union_result(
