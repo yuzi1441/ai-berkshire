@@ -132,6 +132,11 @@ def parse_tencent_payload(payload: str, symbols: dict[str, dict[str, str]]) -> l
                 "change_pct": change_pct,
                 "currency": quote_currency(metadata["market"]),
                 "provider_timestamp": provider_timestamp,
+                "data_cutoff": (
+                    f"{provider_timestamp[:4]}-{provider_timestamp[4:6]}-{provider_timestamp[6:8]}"
+                    if provider_timestamp
+                    else None
+                ),
                 "source": "Tencent quote",
             }
         )
@@ -199,6 +204,46 @@ def write_snapshot(path: Path, payload: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+def load_snapshot(path: Path) -> dict[str, Any] | None:
+    """Load a prior snapshot only when it contains a structurally usable quote list."""
+    if not path.is_file():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict) or not isinstance(payload.get("quotes"), list):
+        return None
+    return payload
+
+
+def _quote_dates(quotes: list[dict[str, Any]]) -> list[str]:
+    return sorted(
+        {
+            str(item.get("data_cutoff"))
+            for item in quotes
+            if isinstance(item, dict) and re.fullmatch(r"20\d{2}-\d{2}-\d{2}", str(item.get("data_cutoff") or ""))
+        }
+    )
+
+
+def _quote_phase(checked_at: datetime, active_markets: set[str], quotes: list[dict[str, Any]]) -> str:
+    """Classify a quote snapshot without treating a closed market as missing data."""
+    if active_markets:
+        return "intraday"
+    dates = _quote_dates(quotes)
+    if dates and dates[-1] == checked_at.date().isoformat():
+        return "close"
+    return "historical_close"
+
+
+def _write_site_snapshot(board_path: Path, output_path: Path, snapshot: dict[str, Any]) -> None:
+    repo_root = board_path.resolve().parents[2]
+    site_snapshot = repo_root / "site" / "data" / "quotes" / "latest.json"
+    if output_path.resolve() != site_snapshot.resolve():
+        write_snapshot(site_snapshot, snapshot)
+
+
 def refresh_snapshot(
     board_path: Path,
     output_path: Path,
@@ -226,27 +271,67 @@ def refresh_snapshot(
         for symbol, metadata in symbols.items()
         if force or metadata["market"] in active_markets
     }
-    quotes = fetch_quotes(active_symbols)
+    previous = load_snapshot(output_path)
+    try:
+        quotes = fetch_quotes(active_symbols)
+    except (OSError, UnicodeError, ValueError) as error:
+        if previous and previous.get("quotes"):
+            preserved = dict(previous)
+            preserved.update(
+                {
+                    "last_attempted_at": checked_at.isoformat(timespec="seconds"),
+                    "source_status": "unavailable",
+                    "source_error": str(error)[:300],
+                }
+            )
+            write_snapshot(output_path, preserved)
+            _write_site_snapshot(board_path, output_path, preserved)
+            return {"updated": False, "reason": "provider_unavailable_preserved_previous", **preserved}
+        return {
+            "updated": False,
+            "reason": "provider_unavailable",
+            "source_status": "unavailable",
+            "source_error": str(error)[:300],
+            "checked_at": checked_at.isoformat(timespec="seconds"),
+            "requested_markets": sorted(requested_markets),
+        }
     stock_quotes = [quote for quote in quotes if quote.get("kind") != "index"]
     index_quotes = [quote for quote in quotes if quote.get("kind") == "index"]
+    if not stock_quotes and previous and previous.get("quotes"):
+        preserved = dict(previous)
+        preserved.update(
+            {
+                "last_attempted_at": checked_at.isoformat(timespec="seconds"),
+                "source_status": "unavailable",
+                "source_error": "quote provider returned no stock quotes",
+            }
+        )
+        write_snapshot(output_path, preserved)
+        _write_site_snapshot(board_path, output_path, preserved)
+        return {"updated": False, "reason": "provider_returned_no_quotes_preserved_previous", **preserved}
+    tracked_count = len([item for item in active_symbols.values() if item.get("kind") != "index"])
+    index_tracked_count = len([item for item in active_symbols.values() if item.get("kind") == "index"])
+    source_status = "ok" if len(stock_quotes) == tracked_count else "partial" if stock_quotes else "unavailable"
+    data_dates = _quote_dates(stock_quotes)
     snapshot = {
         "schema_version": 1,
         "generated_at": checked_at.isoformat(timespec="seconds"),
         "market_status": "trading_session" if active_markets else "forced_refresh",
+        "quote_phase": _quote_phase(checked_at, active_markets, stock_quotes),
+        "source_status": source_status,
+        "data_cutoff": data_dates[-1] if data_dates else None,
         "requested_markets": sorted(requested_markets),
-        "tracked_count": len([item for item in active_symbols.values() if item.get("kind") != "index"]),
+        "last_attempted_at": checked_at.isoformat(timespec="seconds"),
+        "tracked_count": tracked_count,
         "quote_count": len(stock_quotes),
         "quotes": stock_quotes,
-        "index_tracked_count": len([item for item in active_symbols.values() if item.get("kind") == "index"]),
+        "index_tracked_count": index_tracked_count,
         "index_count": len(index_quotes),
         "indices": index_quotes,
     }
     write_snapshot(output_path, snapshot)
     # Keep the static site payload in sync for local preview and VPS serving.
-    repo_root = board_path.resolve().parents[2]
-    site_snapshot = repo_root / "site" / "data" / "quotes" / "latest.json"
-    if output_path.resolve() != site_snapshot.resolve():
-        write_snapshot(site_snapshot, snapshot)
+    _write_site_snapshot(board_path, output_path, snapshot)
     return {"updated": True, **snapshot}
 
 
@@ -283,7 +368,7 @@ def main() -> int:
         )
     else:
         print(f"Skipped refresh: {result['reason']}.")
-    return 0
+    return 2 if result.get("source_status") == "unavailable" else 0
 
 
 if __name__ == "__main__":

@@ -5692,6 +5692,10 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     decision_state.write_json(data_directory / "company_state.json", state_layers["state"])
     decision_state.write_json(data_directory / "technical_latest.json", state_layers["technical"])
     decision_state.write_json(data_directory / "checklist_states.json", state_layers["checklist"])
+    decision_state.write_json(
+        data_directory / "drift_review_audit.json",
+        state_layers["drift_review_audit"],
+    )
     event_radar.build_event_radar(repo_root, write=True, generated_at=event_radar_snapshot.get("generated_at"))
     write_json(site_directory / "data" / "reports_catalog.json", catalog)
     write_json(site_directory / "data" / "decision_board.json", board)
@@ -5705,6 +5709,20 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
         site_directory / "data" / "opportunity_scans.json",
         public_opportunity_scans(opportunity_scans),
     )
+    opportunity_status_path = data_directory / "opportunity_scan_status.json"
+    if opportunity_status_path.is_file():
+        write_json(
+            site_directory / "data" / "opportunity_scan_status.json",
+            load_json(opportunity_status_path, {}),
+        )
+    quote_path = data_directory / "quotes" / "latest.json"
+    if quote_path.is_file():
+        # Quotes are runtime input, while site/data is only the rebuildable
+        # browser payload. Keep both copies aligned after every ordinary build.
+        write_json(
+            site_directory / "data" / "quotes" / "latest.json",
+            load_json(quote_path, {}),
+        )
     write_json(site_directory / "data" / "main_report_review.json", main_report_review_snapshot)
     write_json(site_directory / "data" / "decision_rules.json", state_layers["rules"])
     write_json(site_directory / "data" / "company_state.json", state_layers["state"])
@@ -5712,6 +5730,10 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     write_json(site_directory / "data" / "checklist_states.json", state_layers["checklist"])
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
+    write_json(
+        site_directory / "data" / "drift_review_audit.json",
+        state_layers["drift_review_audit"],
+    )
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)
     write_library_moc(reports_directory / "00-index" / "报告库-MOC.md", reports_directory, decisions, generated_at)
     return board

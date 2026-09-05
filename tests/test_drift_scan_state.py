@@ -15,6 +15,53 @@ from source_hash import canonical_file_sha256
 
 
 class DriftScanStateTests(unittest.TestCase):
+    def test_drift_review_audit_is_independent_of_build_timestamp(self):
+        companies = [{
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "next_action": "keep_watch",
+            "drift": {},
+            "drift_scan": {"status": "current", "result": "unchanged"},
+        }]
+        first = decision_state.build_drift_review_audit({
+            "generated_at": "2026-09-04T01:00:00+08:00",
+            "companies": companies,
+        })
+        second = decision_state.build_drift_review_audit({
+            "generated_at": "2026-09-04T02:00:00+08:00",
+            "companies": companies,
+        })
+        self.assertEqual(first, second)
+        self.assertNotIn("generated_at", first)
+
+    def test_drift_review_categories_separate_stale_actions_and_history(self):
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "stale"}, {}, "run_drift")["category"],
+            "true_current_drift",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "stale"}, {}, "run_checklist")["category"],
+            "new_evidence_other_action",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "missing"}, {"last_checked": "2026-09-03"}, "keep_watch")["category"],
+            "reviewed_not_recognized",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "missing"}, {}, "keep_watch")["category"],
+            "never_reviewed",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "current", "result": "unknown"}, {}, "drift_recheck")["category"],
+            "reviewed_insufficient_evidence",
+        )
+        self.assertEqual(
+            decision_state.classify_drift_review("WATCH", {"status": "current", "result": "unchanged"}, {}, "keep_watch")["category"],
+            "reviewed_current",
+        )
+
     def _root_with_report(self) -> tuple[Path, dict[str, str]]:
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
