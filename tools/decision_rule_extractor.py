@@ -130,6 +130,10 @@ _NON_RULE_LABEL_RE = re.compile(
 
 _MONITOR_SOURCE_RE = re.compile(r"^(?:证券时报|虎嗅|财联社|雪球|来源|数据来源|新闻来源|媒体报道)\s*[-—:：]")
 _TABLE_HEADER_RE = re.compile(r"^(?:编号|序号|指标|事件|影响|行动建议|当前值|关注方向|说明|项目|条件|触发条件)(?:；|$)")
+# Keep decimal values intact when removing numeric Markdown list markers.
+# Without the delimiter boundary, ``138.06 元`` is mistaken for list item
+# ``138.`` and becomes ``06 元``.
+_LIST_PREFIX_RE = re.compile(r"^\d{1,3}[.)、](?:\s+|(?=[^\d.]))\s*")
 _RULE_LABEL_PREFIX_RE = re.compile(
     r"^(?:买入条件|买入触发条件|买入信号|加仓信号|卖出信号|减仓信号|减仓/回避信号|"
     r"减仓或论文失效信号|退出条件|失效条件|回避信号|触发条件|加仓条件|卖出条件|减仓条件|"
@@ -188,7 +192,7 @@ def _clean_markdown(line: str) -> str:
     text = re.sub(r"^#{1,6}\s*", "", text)
     text = re.sub(r"^[-*+]\s+", "", text)
     text = re.sub(r"^\[\s*[xX ]\s*\]\s*", "", text)
-    text = re.sub(r"^\d+[.)、]\s*", "", text)
+    text = _LIST_PREFIX_RE.sub("", text)
     text = re.sub(r"^[①②③④⑤⑥⑦⑧⑨⑩]\s*", "", text)
     text = text.replace("**", "").replace("__", "").replace("`", "")
     text = re.sub(r"\[([^]]+)\]\([^)]*\)", r"\1", text)
@@ -205,7 +209,8 @@ def _strip_rule_label(text: str) -> str:
     result = text.strip()
     for _ in range(2):
         result = _RULE_LABEL_PREFIX_RE.sub("", result).strip()
-        result = re.sub(r"^(?:[①②③④⑤⑥⑦⑧⑨⑩]|[（(]\s*\d+\s*[）)]|\d+[.)、])\s*", "", result)
+        result = re.sub(r"^(?:[①②③④⑤⑥⑦⑧⑨⑩]|[（(]\s*\d+\s*[）)])\s*", "", result)
+        result = _LIST_PREFIX_RE.sub("", result)
         result = re.sub(r"^(?:或|或者)\s*", "", result)
     # A table cell may begin with a recommendation preamble and then state
     # the actual price/trigger after a full stop.  Keep the decision clause,

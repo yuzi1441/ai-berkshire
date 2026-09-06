@@ -106,6 +106,39 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(public["scans"][0]["input_context"]["current_quote"]["price"], 10.5)
             self.assertNotIn("excerpt", public["scans"][0]["input_context"])
 
+    def test_public_original_buy_theses_preserves_holding_cycle_baseline(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            cycle_id = "600000.SH:2026-08-01"
+            source = root / "data" / "investment-dashboard" / "original_buy_theses.json"
+            source.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 2,
+                        "cycles": {
+                            cycle_id: {
+                                "position_id": cycle_id,
+                                "source_text": "买入时冻结的论文基线",
+                                "source_hash": "a" * 64,
+                                "captured_at": "2026-08-01T10:00:00+08:00",
+                            }
+                        },
+                        "active_position_ids": {"600000.SH": cycle_id},
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+
+            dashboard.build_dashboard(root, legacy_mode=True)
+
+            public = json.loads(
+                (root / "site" / "data" / "original_buy_theses.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(public["active_position_ids"]["600000.SH"], cycle_id)
+            self.assertEqual(public["cycles"][cycle_id]["source_text"], "买入时冻结的论文基线")
+
     def test_production_manual_review_covers_exact_a_share_universe(self):
         data_directory = ROOT / "data" / "investment-dashboard"
         board = json.loads((data_directory / "decision_board.json").read_text(encoding="utf-8"))

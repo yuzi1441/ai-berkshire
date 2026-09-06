@@ -81,6 +81,7 @@ const DATA_FILES = {
   sentiment: "./data/sentiment.json",
   sentimentStatus: "./data/sentiment_status.json",
   tracking: "./data/post_buy_tracking.json",
+  originalTheses: "./data/original_buy_theses.json",
   quotes: "./data/quotes/latest.json",
   intraday: "./data/intraday_technical.json",
   opportunityScans: "./data/opportunity_scans.json",
@@ -93,6 +94,7 @@ const OPTIONAL_DATA_FALLBACKS = {
   sentiment: { companies: [], status: "unknown" },
   sentimentStatus: { status: "unknown" },
   quotes: { quotes: [] },
+  originalTheses: { schema_version: 2, cycles: {}, active_position_ids: {} },
   intraday: { companies: [] },
   opportunityScans: { schema_version: 1, status: "unavailable", scans: [] },
   opportunityScanStatus: { schema_version: 1 },
@@ -106,6 +108,7 @@ const state = {
   technical: new Map(),
   sentiment: new Map(),
   tracking: new Map(),
+  originalTheses: { schema_version: 2, cycles: {}, active_position_ids: {} },
   quotes: new Map(),
   quoteMeta: null,
   sentimentMeta: null,
@@ -249,6 +252,30 @@ function trackingFor(record) {
   return state.tracking.get(record?.ticker) || record?.post_buy_tracking || null;
 }
 
+function originalThesisFor(record) {
+  const tracking = trackingFor(record);
+  if (!tracking || lifecycleOf(record) !== "HOLDING") return null;
+  const payload = state.originalTheses || {};
+  const ticker = record?.ticker;
+  const cycleId = tracking.position_id || (ticker && tracking.buy_date ? `${ticker}:${tracking.buy_date}` : null);
+  const activeId = payload.active_position_ids?.[ticker];
+  const cycles = payload.cycles || {};
+  // Prefer the position's explicit cycle binding.  The active map is only a
+  // compatibility fallback for older tracking records.
+  return (cycleId && cycles[cycleId]) || (activeId && cycles[activeId]) || payload.positions?.[ticker] || null;
+}
+
+function renderFrozenThesis(snapshot) {
+  if (!snapshot) return "";
+  const sourceText = String(snapshot.source_text || "").trim();
+  const provenance = snapshot.backfilled ? "历史补录，不能完全还原买入时快照" : "买入时冻结";
+  const captured = snapshot.captured_at ? ` · 保存于 ${formatDateTime(snapshot.captured_at)}` : "";
+  const body = sourceText
+    ? `<details class="thesis-snapshot"><summary>查看买入时冻结论文（${escapeHtml(provenance)}${escapeHtml(captured)}）</summary><div class="thesis-snapshot-text">${escapeHtml(sourceText)}</div></details>`
+    : `<div class="source-line">${escapeHtml(provenance)}${escapeHtml(captured)}；当前只保存论文哈希。</div>`;
+  return body;
+}
+
 function priceOpportunities(record) {
   return Array.isArray(record?.price_opportunities) ? record.price_opportunities : [];
 }
@@ -267,11 +294,10 @@ function nearRules(record) {
 
 function hasAttention(record) {
   const drift = record?.drift || {};
-  const event = record?.event_radar || {};
   const tracking = trackingFor(record);
   return Boolean(
     record?.needs_attention
-      || event.thesis_relevant
+      || hasUncoveredFormalImportantEvent(record)
       || ["weakened", "broken"].includes(drift.direction)
       || triggeredRules(record).length
       || (tracking?.alerts || []).length,
@@ -421,8 +447,23 @@ function formalImportantEvent(record) {
   const events = Array.isArray(radar.events) ? radar.events : [];
   return events.find((event) => (
     ["A", "B"].includes(event.highest_source_tier)
-      && (event.state === "important" || event.thesis_relevant)
+      && event.thesis_relevant === true
+      && ["important", "critical"].includes(event.state)
   )) || null;
+}
+
+function hasUncoveredFormalImportantEvent(record) {
+  const event = formalImportantEvent(record);
+  if (!event) return false;
+  const review = record?.drift_review || {};
+  const scan = record?.drift_scan || {};
+  // A current unchanged checkpoint already covers the event.  Keep the event
+  // visible in the detail view, but do not recreate the same human task.
+  if (
+    review.category === "reviewed_current"
+      || (scan.status === "current" && scan.result === "unchanged")
+  ) return false;
+  return true;
 }
 
 function attentionReason(record) {
@@ -431,7 +472,7 @@ function attentionReason(record) {
   const drift = record?.drift || {};
   const tracking = trackingFor(record);
   const triggered = triggeredRules(record);
-  const formalEvent = formalImportantEvent(record);
+  const formalEvent = hasUncoveredFormalImportantEvent(record) ? formalImportantEvent(record) : null;
   if (formalEvent) {
     reasons.push(`事件：${text(formalEvent.headline, "存在论文相关事件")}`);
   }
@@ -444,7 +485,7 @@ function attentionReason(record) {
 
 function hasFormalImportantEvent(record) {
   const radar = record?.event_radar || {};
-  return ["important", "critical"].includes(radar.state) && Boolean(formalImportantEvent(record));
+  return ["important", "critical"].includes(radar.state) && hasUncoveredFormalImportantEvent(record);
 }
 
 function reviewDue(record) {
@@ -674,7 +715,7 @@ function opportunityRecords(kind) {
 
 function checklistRecords() {
   return stateRecords()
-    .filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record)) && record.next_action === "run_checklist")
+    .filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record)) && ["run_checklist", "confirm_purchase"].includes(record.next_action))
     .map((record) => {
       const candidates = [...priceOpportunities(record), ...conditionOpportunities(record)]
         .filter((opportunity) => {
@@ -684,7 +725,9 @@ function checklistRecords() {
         .sort((a, b) => opportunityPriority(b) - opportunityPriority(a));
       return {
         record,
-        stage: lifecycleOf(record) === "PRE_BUY" ? "已进入买入前检查" : "研究推进候选",
+        stage: lifecycleOf(record) === "PRE_BUY"
+          ? record.next_action === "confirm_purchase" ? "检查已完成，等待本人决策" : "已进入买入前检查"
+          : "研究推进候选",
         opportunity: candidates[0] || {
           type: "CHECKLIST",
           status: "unknown",
@@ -717,13 +760,15 @@ function renderOpportunities() {
   const prices = opportunityRecords("price");
   const conditions = opportunityRecords("condition");
   const checklists = checklistRecords();
+  const preBuyCount = stateCount("PRE_BUY");
   const preBuyChecklists = checklists.filter(({ record }) => lifecycleOf(record) === "PRE_BUY");
+  const researchCandidates = checklists.filter(({ record }) => lifecycleOf(record) === "WATCH");
   els.priceCount.textContent = String(prices.length);
   els.conditionCount.textContent = String(conditions.length);
-  els.checklistCount.textContent = String(preBuyChecklists.length);
+  els.checklistCount.textContent = String(preBuyCount);
   if (els.checklistTabCount) els.checklistTabCount.textContent = String(checklists.length);
   if (els.opportunityPrimaryNote) {
-    els.opportunityPrimaryNote.textContent = `${preBuyChecklists.length} 家已进入买入前检查；${checklists.length - preBuyChecklists.length} 家仍是观察中的研究推进候选。价格和经营条件只作为二级条件池，不等于当前机会。`;
+    els.opportunityPrimaryNote.textContent = `${preBuyCount} 家处于买入前流程；${researchCandidates.length} 家仍是观察中的研究推进候选。价格和经营条件只作为二级条件池，不等于当前机会。`;
   }
   if (els.opportunityPoolNote) {
     if (state.opportunityView === "checklist") {
@@ -892,6 +937,7 @@ function redlineRules(record) {
 
 function renderHoldingCard(record) {
   const tracking = trackingFor(record) || {};
+  const snapshot = originalThesisFor(record);
   const quote = quoteFor(record);
   const result = holdingReturn(record, tracking);
   const drift = record.drift || {};
@@ -905,7 +951,7 @@ function renderHoldingCard(record) {
       <div><span class="metric-label">当前价格</span><strong class="metric-value">${escapeHtml(formatPrice(quote))}</strong></div>
     </div>
     <div class="holding-bottom">
-      <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">原始买入论文</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看原始买入论文</a></div></div>
+      <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">买入论文基线</div><div class="holding-detail-value">${snapshot ? "已绑定当前持仓周期" : "冻结基线未加载"}</div>${renderFrozenThesis(snapshot)}<div class="holding-detail-label" style="margin-top:9px">最新论文</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看最新论文</a></div></div>
       <div><div class="holding-detail-label">论文状态 / 最近漂移</div><div class="holding-detail-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div><div class="holding-detail-label" style="margin-top:9px">关键失效条件</div><ul class="redline-list">${redlines.length ? redlines.map((rule) => `<li>${escapeHtml(rule.condition)}</li>`).join("") : "<li>报告未提取明确失效条件</li>"}</ul></div>
     </div>
     <div class="holding-links"><a class="text-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>打开主报告</a><span class="table-next" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}</span></div>
@@ -1059,7 +1105,8 @@ function renderThesisSection(record) {
   const tracking = trackingFor(record);
   const drift = record.drift || {};
   if (lifecycleOf(record) === "HOLDING" && tracking) {
-    return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入论文</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">原始买入论文已绑定当前持仓周期，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">论文状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div><div class="source-line">当前持仓周期已绑定原始买入论文<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看原始买入论文 ↗</a></div>`;
+    const snapshot = originalThesisFor(record);
+    return `<div class="detail-section"><div class="detail-section-head"><h3>买入论文基线</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">论文状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结论文未加载。</div>"}<div class="source-line">当前持仓周期已绑定买入论文基线<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新论文 ↗</a></div>`;
   }
   return `<div class="detail-section"><div class="detail-section-head"><h3>当前研究论文</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；后续事实变化通过论文漂移检查复核。</p><div class="source-line">Canonical 主报告已关联<br />最近复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
 }
@@ -1075,7 +1122,7 @@ function decisionContextValues(record) {
   const lifecycle = lifecycleOf(record);
   const action = record?.next_action;
   const drift = record?.drift || {};
-  const formalEvent = formalImportantEvent(record);
+  const formalEvent = hasUncoveredFormalImportantEvent(record) ? formalImportantEvent(record) : null;
   const triggered = triggeredRules(record);
   const near = nearRules(record);
   const tracking = trackingFor(record);
@@ -1217,6 +1264,7 @@ async function loadData({ silent = false } = {}) {
   state.technical = indexByTicker(payload.technical?.companies);
   state.sentiment = indexByTicker(payload.sentiment?.companies);
   state.tracking = normalizeTracking(payload.tracking);
+  state.originalTheses = payload.originalTheses || { schema_version: 2, cycles: {}, active_position_ids: {} };
   state.quotes = indexByTicker(payload.quotes?.quotes);
   state.quoteMeta = payload.quotes;
   state.sentimentMeta = { ...(payload.sentiment || {}), ...(payload.sentimentStatus || {}) };

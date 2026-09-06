@@ -5730,6 +5730,16 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     write_json(site_directory / "data" / "checklist_states.json", state_layers["checklist"])
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
+    original_theses_path = data_directory / "original_buy_theses.json"
+    if original_theses_path.is_file():
+        # The frozen thesis is a holding-cycle read model.  Publish it
+        # separately from the mutable latest report so the UI can show the
+        # purchase-time baseline without pretending the report link is
+        # immutable.
+        write_json(
+            site_directory / "data" / "original_buy_theses.json",
+            load_json(original_theses_path, {}),
+        )
     write_json(
         site_directory / "data" / "drift_review_audit.json",
         state_layers["drift_review_audit"],

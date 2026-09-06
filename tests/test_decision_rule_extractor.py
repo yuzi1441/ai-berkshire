@@ -364,6 +364,20 @@ class DecisionRuleExtractorTests(unittest.TestCase):
             self.assertEqual(len(result["rules"]), 2)
             self.assertTrue(all(rule["rule_scope"] == "redline" for rule in result["rules"]))
 
+    def test_numeric_list_cleanup_preserves_decimal_price_thresholds(self):
+        self.assertEqual(
+            decision_rule_extractor._clean_markdown("①138.06 元以上而盈利未上修"),
+            "138.06 元以上而盈利未上修",
+        )
+        self.assertEqual(
+            decision_rule_extractor._clean_markdown("19.14元已经高于退出价值"),
+            "19.14元已经高于退出价值",
+        )
+        low, high, currency = decision_rule_extractor._price_fields(
+            "138.06 元（24x）以上而盈利未上修", "A股"
+        )
+        self.assertEqual((low, high, currency), (138.06, None, "CNY"))
+
 
 if __name__ == "__main__":
     unittest.main()

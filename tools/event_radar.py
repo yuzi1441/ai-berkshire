@@ -16,6 +16,7 @@ EVENT_STATES = ("normal", "watch", "important", "critical", "unknown")
 _PUNCT = re.compile(r"[^0-9a-zA-Z\u4e00-\u9fff]+")
 _GENERIC = re.compile(r"一般新闻|市场观点|行业观点|股价|行情|涨停|跌停|资金流向")
 _MATERIAL = re.compile(r"公告|政策|关税|监管|处罚|立案|调查|诉讼|事故|并购|收购|解禁|管理层|任命|辞职|客户|审批|许可|披露|控制权|业绩|财报|订单|产能|竞争对手|竞品")
+_CRITICAL = re.compile(r"处罚|立案|调查|财务造假|退市|重大事故|控制权|核心客户流失|客户流失|重大诉讼")
 _TIER_RANK = {"A": 4, "B": 3, "C": 2, "D": 1}
 
 
@@ -127,6 +128,39 @@ def _number(article: dict[str, Any], key: str) -> float:
         return 0.0
 
 
+def _formal_thesis_event(
+    cluster: list[dict[str, Any]],
+    *,
+    formal_evidence: bool,
+    material: bool,
+    generic: bool,
+) -> bool:
+    """Return whether evidence is strong enough for the thesis-drift lane.
+
+    A/B identifies a source that can be trusted, but source authority alone is
+    not proof that an announcement changes the investment thesis.  Require a
+    material event with either an explicit upstream thesis flag, a sufficiently
+    relevant/high-impact assessment, or a critical-risk phrase.  C/D can still
+    remain visible as watch/background evidence, but can never pass this gate.
+    """
+    if not formal_evidence or not material or generic:
+        return False
+    text = " ".join(
+        f"{item.get('title') or ''} {item.get('summary') or ''}"
+        for item in cluster
+    )
+    if _CRITICAL.search(text):
+        return True
+    return any(
+        str(item.get("source_tier") or "").upper() in {"A", "B"}
+        and (
+            item.get("thesis_relevant") is True
+            or (_number(item, "impact") >= 3 and _number(item, "relevance") >= 0.5)
+        )
+        for item in cluster
+    )
+
+
 def _cluster_record(ticker: str, cluster: list[dict[str, Any]], index: int) -> dict[str, Any]:
     representative = max(cluster, key=lambda item: (_TIER_RANK.get(str(item.get("source_tier") or "").upper(), 0), _number(item, "impact"), str(item.get("published_at") or "")))
     tiers = sorted({str(item.get("source_tier") or "unknown").upper() for item in cluster})
@@ -139,13 +173,21 @@ def _cluster_record(ticker: str, cluster: list[dict[str, Any]], index: int) -> d
     # still raise a visible watch signal, but impact and repost count alone do
     # not promote discussion into a thesis-relevant event.
     formal_evidence = any(str(item.get("source_tier") or "").upper() in {"A", "B"} for item in cluster)
-    thesis_relevant = material and not generic and formal_evidence
-    critical_terms = re.compile(r"处罚|立案|调查|财务造假|退市|重大事故|控制权|核心客户流失|重大诉讼")
-    independently_verified = "A" in tiers and "B" in tiers
-    if highest == "A" and critical_terms.search(" ".join(titles)):
+    thesis_relevant = _formal_thesis_event(
+        cluster,
+        formal_evidence=formal_evidence,
+        material=material,
+        generic=generic,
+    )
+    event_text = " ".join(
+        f"{item.get('title') or ''} {item.get('summary') or ''}" for item in cluster
+    )
+    if highest == "A" and _CRITICAL.search(event_text):
         state = "critical"
-    elif independently_verified or max_impact >= 4 or (highest == "A" and material):
-        state = "important" if formal_evidence else "watch"
+    elif thesis_relevant:
+        state = "important"
+    elif max_impact >= 4 or (material and formal_evidence):
+        state = "watch"
     elif material and not generic:
         state = "watch"
     else:

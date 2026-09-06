@@ -396,6 +396,9 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .rule-status[data-status="near_trigger"] { color: var(--yellow); background: var(--yellow-soft); }
 .rule-status[data-status="needs_review"], .rule-status[data-status="unknown"] { color: var(--muted); background: rgba(255,255,255,.04); }
 .thesis-banner { margin-bottom: 13px; padding: 11px; border-left: 2px solid var(--blue); border-radius: 0 8px 8px 0; background: var(--blue-soft); color: var(--text-soft); font-size: 12px; line-height: 1.6; }
+.thesis-snapshot { margin-top: 10px; color: var(--blue); font-size: 11px; }
+.thesis-snapshot summary { cursor: pointer; }
+.thesis-snapshot-text { max-height: 260px; overflow: auto; margin-top: 8px; padding: 10px; border: 1px solid var(--line-soft); border-radius: 8px; color: var(--text-soft); background: rgba(255,255,255,.025); font-size: 11px; line-height: 1.65; white-space: pre-wrap; }
 .event-list, .metric-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .event-item, .metric-item { padding: 9px 10px; border-radius: 8px; background: rgba(255,255,255,.025); }
 .event-item-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
