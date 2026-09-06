@@ -102,6 +102,43 @@ class EventRadarTests(unittest.TestCase):
             self.assertTrue(company["thesis_relevant"])
             self.assertEqual(company["recommended_action"], "run_drift")
 
+    def test_low_impact_official_announcement_stays_background(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sentiment = root / "data" / "sentiment"
+            sentiment.mkdir(parents=True)
+            (sentiment / "latest.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "status": "ok",
+                        "data_cutoff": "2026-09-04",
+                        "companies": [{
+                            "company": "示例公司",
+                            "ticker": "600000.SH",
+                            "market": "A股",
+                            "news_sentiment": {"items": [{
+                                "title": "示例公司关于使用闲置资金购买结构性存款的进展公告",
+                                "summary": "官方披露，影响评分较低",
+                                "publisher": "交易所",
+                                "source_tier": "A",
+                                "event_type": "公司公告",
+                                "impact": 1,
+                                "relevance": 0.3,
+                                "confidence": 0.7,
+                                "url": "https://a.example",
+                            }]},
+                        }],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            company = event_radar.build_event_radar(root, write=False)["companies"][0]
+            self.assertEqual(company["state"], "watch")
+            self.assertFalse(company["thesis_relevant"])
+            self.assertEqual(company["recommended_action"], "monitor")
+
     def test_reordered_source_articles_have_same_drift_fingerprint(self):
         source = {
             "schema_version": 1,

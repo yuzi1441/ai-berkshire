@@ -514,9 +514,11 @@ class DashboardActionClassifierTests(unittest.TestCase):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
         self.assertIn('PRE_BUY: "买入前流程中的公司"', app)
         self.assertIn('<span class="status-card-label">行动线索</span>', app)
-        self.assertIn('record.next_action === "run_checklist"', app)
+        self.assertIn('const preBuyChecklist = lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist";', app)
         self.assertIn('data-opportunity-view="checklist"', (ROOT / "site" / "index.html").read_text(encoding="utf-8"))
         self.assertIn('const checklists = checklistRecords();', app)
+        self.assertIn('["run_checklist", "confirm_purchase"].includes(record.next_action)', app)
+        self.assertIn('const preBuyCount = stateCount("PRE_BUY");', app)
         self.assertIn('true_current_drift: "待复核"', app)
         self.assertIn('new_evidence_other_action: "有新材料"', app)
         self.assertIn('论文：${escapeHtml(drift)}', app)
@@ -559,11 +561,11 @@ class DashboardActionClassifierTests(unittest.TestCase):
           function attentionReasonType() { return "重大事件"; }
           function shortText(value) { return value; }
           function label() { return ""; }
-        """ + "\n".join(extract(name) for name in ("formalImportantEvent", "hasFormalImportantEvent", "attentionSummary")) + """
+        """ + "\n".join(extract(name) for name in ("formalImportantEvent", "hasUncoveredFormalImportantEvent", "hasFormalImportantEvent", "attentionSummary")) + """
           const record = {
             event_radar: {state: "important", events: [
               {highest_source_tier: "D", state: "watch", thesis_relevant: false, headline: "普通讨论"},
-              {highest_source_tier: "A", state: "important", thesis_relevant: false, headline: "正式公告"}
+              {highest_source_tier: "A", state: "important", thesis_relevant: true, headline: "正式公告"}
             ]}
           };
           process.stdout.write(JSON.stringify({
