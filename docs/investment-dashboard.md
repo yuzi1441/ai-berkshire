@@ -106,6 +106,19 @@ OPPORTUNITY_DEEP_LUNA_REASONING_EFFORT=high
 
 ## 新报告后如何同步网页
 
+推荐使用统一入口。默认只做结构与绑定预检，不会写文件：
+
+```bash
+python3 tools/investment_workflow.py report reports/<公司>/<报告>.md
+python3 tools/investment_workflow.py checklist reports/<公司>/<Checklist>.md
+python3 tools/investment_workflow.py drift <ticker> --mode watch --direction unchanged \
+  --summary "本次复核摘要" --facts-source reports/<公司>/<主报告>.md
+```
+
+确认预检输出后显式加 `--write`，入口会重建看板并验证结构化状态。它不会自动
+commit、push、merge、deploy，也不会替用户作出买卖决定。Drift 仍由
+`thesis-drift` Skill 完成研究判断；统一入口只复用既有 handoff 合约。
+
 本地生成/归档新公司报告后执行：
 
 ```powershell
