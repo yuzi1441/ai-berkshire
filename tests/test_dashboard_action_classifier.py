@@ -610,6 +610,60 @@ class DashboardActionClassifierTests(unittest.TestCase):
         expected_light_thesis["missing"] = len(records) - sum(
             expected_light_thesis.values()
         )
+        def recommended_skills(record):
+            guidance = record.get("action_guidance") or {}
+            skills = guidance.get("recommended_skill")
+            return [skill for skill in skills if skill] if isinstance(skills, list) else []
+
+        attention_records = [
+            record
+            for record in records
+            if (record.get("action_guidance") or {}).get("requires_user_action") is True
+        ]
+        expected_attention = len(attention_records)
+        expected_skill_tickers = sorted(
+            record["ticker"] for record in attention_records if recommended_skills(record)
+        )
+        expected_manual = sum(
+            1 for record in attention_records if not recommended_skills(record)
+        )
+        expected_observe = len(records) - expected_attention
+        expected_drift_skill_tickers = [
+            record["ticker"]
+            for record in attention_records
+            if "thesis-drift" in recommended_skills(record)
+        ]
+        expected_tracker_skill_tickers = [
+            record["ticker"]
+            for record in attention_records
+            if "thesis-tracker" in recommended_skills(record)
+        ]
+        expected_actionable_skills = sorted(
+            {
+                skill
+                for record in attention_records
+                for skill in recommended_skills(record)
+            }
+        )
+        near_blocker_records = [
+            record
+            for record in records
+            if (record.get("action_guidance") or {}).get("blocker_code")
+            == "condition_near_trigger"
+        ]
+        expected_checklist_fail = sum(
+            1
+            for record in records
+            if str((record.get("checklist") or {}).get("status") or "UNKNOWN").upper()
+            == "FAIL"
+        )
+        expected_formal_major = sum(
+            1
+            for record in records
+            if (record.get("drift") or {}).get("last_checked")
+            and (record.get("drift") or {}).get("direction") == "weakened"
+            and (record.get("drift") or {}).get("severity") == "major"
+        )
         functions = "\n".join(
             self.app_function(name)
             for name in (
@@ -662,13 +716,13 @@ class DashboardActionClassifierTests(unittest.TestCase):
         result = subprocess.run(["node"], input=script, check=True, capture_output=True, text=True)
         payload = json.loads(result.stdout)
         self.assertEqual(payload["all"], 229)
-        self.assertEqual(payload["attention"], 10)
-        self.assertEqual(payload["skill"], ["603606.SH", "603659.SH"])
-        self.assertEqual(payload["manual"], 8)
-        self.assertEqual(payload["observe"], 219)
-        self.assertEqual(payload["driftSkill"], ["603606.SH"])
-        self.assertEqual(payload["trackerSkill"], ["603659.SH"])
-        self.assertEqual(payload["actionableSkills"], ["thesis-drift", "thesis-tracker"])
+        self.assertEqual(payload["attention"], expected_attention)
+        self.assertEqual(payload["skill"], expected_skill_tickers)
+        self.assertEqual(payload["manual"], expected_manual)
+        self.assertEqual(payload["observe"], expected_observe)
+        self.assertEqual(payload["driftSkill"], expected_drift_skill_tickers)
+        self.assertEqual(payload["trackerSkill"], expected_tracker_skill_tickers)
+        self.assertEqual(payload["actionableSkills"], expected_actionable_skills)
         self.assertEqual(payload["lightImproved"], expected_light_thesis["improved"])
         self.assertEqual(payload["lightWeakened"], expected_light_thesis["weakened"])
         self.assertEqual(payload["lightUnchanged"], expected_light_thesis["unchanged"])
@@ -677,12 +731,18 @@ class DashboardActionClassifierTests(unittest.TestCase):
             expected_light_thesis["insufficient_evidence"],
         )
         self.assertEqual(payload["lightMissing"], expected_light_thesis["missing"])
-        self.assertEqual(payload["nearBlockerCount"], 21)
-        self.assertFalse(payload["nearBlockerHasAction"])
+        self.assertEqual(payload["nearBlockerCount"], len(near_blocker_records))
+        self.assertEqual(
+            payload["nearBlockerHasAction"],
+            any(
+                (record.get("action_guidance") or {}).get("requires_user_action") is True
+                for record in near_blocker_records
+            ),
+        )
         self.assertEqual(payload["searchAndSkill"], ["603606.SH"])
         self.assertEqual(payload["impossible"], 0)
-        self.assertEqual(payload["checklistFail"], 5)
-        self.assertEqual(payload["formalMajor"], 8)
+        self.assertEqual(payload["checklistFail"], expected_checklist_fail)
+        self.assertEqual(payload["formalMajor"], expected_formal_major)
 
     def test_unified_filter_ui_keeps_business_state_read_only(self):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
