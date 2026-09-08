@@ -2,10 +2,9 @@
 """Refresh close quotes and the model-led A-share opportunity scan.
 
 This job is intended for the VPS after the A-share close. It refreshes the
-latest quote, rebuilds the board, then asks DeepSeek V4 Flash
-to independently identify research opportunities. A partial run may retain a
-per-model prior result for the same report, but a completely failed run never
-replaces the last successful opportunity_scans.json.
+latest quote, rebuilds the board, then asks DeepSeek V4 Flash to independently
+identify research opportunities. The scheduled path is incremental-first; a
+manual ``opportunity_review.py scan`` remains a full reconciliation.
 """
 
 from __future__ import annotations
@@ -284,7 +283,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="明确允许再次调用模型；默认复用今天已经完成的完整扫描",
+        help="显式执行 full reconciliation；默认运行 incremental materiality review",
     )
     parser.add_argument("--markets", default="A股", help="market list for the close quote refresh")
     return parser
@@ -301,6 +300,7 @@ def main() -> int:
     backup_path: Path | None = None
     lock_handle = None
     scan_completed = False
+    incremental_failure_projection = False
     scan: dict[str, Any] | None = None
     phase = "lock"
     try:
@@ -350,28 +350,6 @@ def main() -> int:
             with tempfile.NamedTemporaryFile(prefix="opportunity-scans-", suffix=".json", delete=False) as handle:
                 backup_path = Path(handle.name)
             shutil.copy2(scan_path, backup_path)
-        if (
-            not arguments.force
-            and scan_generated_today(existing_scan)
-            and scan_matches_current_universe(repo_root, existing_scan)
-        ):
-            scan = existing_scan
-            scan_completed = True
-            phase = "dashboard_build"
-            run_step(repo_root, "确认今日扫描结果并刷新静态看板", [str(python), "tools/build_investment_dashboard.py"])
-            phase = "status"
-            write_status(
-                repo_root,
-                "ok",
-                "今日已经存在完整机会扫描结果；为避免重复调用模型，直接复用并刷新看板。",
-                previous_status,
-                existing_scan,
-                scan_status="ok",
-                publication_status="ok",
-            )
-            print("今日机会扫描结果已存在，跳过重复模型调用。", flush=True)
-            return 0
-
         phase = "quote"
         run_step(
             repo_root,
@@ -386,7 +364,13 @@ def main() -> int:
             run_step(
                 repo_root,
                 "收盘后扫描全部 A 股机会",
-                [str(python), "tools/opportunity_review.py", "scan"],
+                [
+                    str(python),
+                    "tools/opportunity_review.py",
+                    "scan",
+                    "--mode",
+                    "full" if arguments.force else "incremental",
+                ],
             )
             scan = load_json(scan_path, {})
             if not scan_is_successful(scan):
@@ -422,6 +406,23 @@ def main() -> int:
         print("another AI Berkshire repository update is already running; exiting", flush=True)
         return 75
     except Exception as error:  # noqa: BLE001
+        if not scan_completed and phase == "opportunity_scan" and not arguments.force:
+            candidate = load_json(scan_path, {})
+            expected = candidate.get("expected_scan_count")
+            if (
+                candidate.get("mode") == "incremental"
+                and isinstance(expected, int)
+                and expected > 0
+                and candidate.get("scan_count") == expected
+                and isinstance(candidate.get("scans"), list)
+                and len(candidate["scans"]) == expected
+            ):
+                # A materially changed ticker that failed refresh is already
+                # represented as stale/error and excluded by union_result().
+                # Keep that truthful full-universe projection; restoring the
+                # whole old file could resurrect an obsolete current/near item.
+                scan = candidate
+                incremental_failure_projection = True
         if scan_completed and phase == "repository_sync" and scan:
             # The scan and local dashboard are already valid. A Git sync error
             # must not be presented as a failed model scan or roll back the
@@ -447,6 +448,12 @@ def main() -> int:
             # make the failed dashboard publication explicit to the frontend.
             failure_message = "今日机会扫描已完成，但看板刷新失败；未将未发布结果当作今日看板结果。"
             failure_scan_status = "ok"
+        elif incremental_failure_projection and scan:
+            failure_message = (
+                "增量机会扫描包含刷新失败；已保留当前 stale/error 投影，"
+                "未恢复可能过期的当前/临近机会。"
+            )
+            failure_scan_status = "partial"
         else:
             if backup_path and backup_path.is_file():
                 shutil.copy2(backup_path, scan_path)
@@ -460,7 +467,7 @@ def main() -> int:
                 "error",
                 f"{failure_message} 失败阶段：{phase}。详情见 VPS 服务日志。",
                 previous_status,
-                scan if scan_completed else None,
+                scan if scan_completed or incremental_failure_projection else None,
                 scan_status=failure_scan_status,
                 publication_status="error",
                 failure_phase=phase,

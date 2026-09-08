@@ -25,7 +25,7 @@ import tempfile
 import time
 import uuid
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -41,8 +41,12 @@ from sentiment_snapshot import SentimentError, http_json, parse_json_block  # no
 
 
 MARKET = "A股"
-SCAN_SCHEMA_VERSION = 1
+SCAN_SCHEMA_VERSION = 2
 DEEP_SCHEMA_VERSION = 1
+OPPORTUNITY_PROMPT_CONTRACT_VERSION = 1
+MATERIAL_TRIGGER_VERSION = 1
+INCREMENTAL_CONTRACT_VERSION = 1
+MAX_REUSE_AGE_DAYS = 7
 
 OPENCODE_GO_BASE = "https://opencode.ai/zen/go/v1"
 OPPORTUNITY_SCAN_USER_AGENT = "ai-berkshire-opportunity-review/1"
@@ -282,6 +286,230 @@ def build_opportunity_input(
     encoded = json.dumps(facts, ensure_ascii=False, sort_keys=True).encode("utf-8")
     facts["input_sha256"] = hashlib.sha256(encoded).hexdigest()
     return facts
+
+
+def stable_sha256(payload: Any) -> str:
+    encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
+        "utf-8"
+    )
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def stable_price_rule(rule: dict[str, Any]) -> dict[str, Any]:
+    """Return only deterministic price-rule semantics, never live prices."""
+    return {
+        "action_kind": rule.get("action_kind"),
+        "min": rule.get("min"),
+        "ceiling": rule.get("ceiling"),
+        "requires_validation": bool(rule.get("requires_validation")),
+        "validation_condition": clean_text(rule.get("validation_condition"), 240),
+    }
+
+
+def price_position_bucket(
+    price: float | None,
+    *,
+    status: str,
+    matched_rules: list[dict[str, Any]],
+    all_rules: list[dict[str, Any]],
+) -> str:
+    """Coarsen price position for model-refresh decisions only.
+
+    This is deliberately not an investment gate.  It merely prevents pennies
+    of quote noise from causing a model call while still allowing a large move
+    inside one broad rule to trigger a refresh.
+    """
+    if price is None:
+        return "no_quote"
+    bounded = [
+        rule
+        for rule in matched_rules
+        if isinstance(rule.get("min"), (int, float))
+        and isinstance(rule.get("ceiling"), (int, float))
+        and float(rule["ceiling"]) > float(rule["min"])
+    ]
+    if bounded:
+        rule = sorted(
+            bounded,
+            key=lambda item: (
+                float(item["ceiling"]) - float(item["min"]),
+                float(item["min"]),
+                float(item["ceiling"]),
+            ),
+        )[0]
+        position = (price - float(rule["min"])) / (float(rule["ceiling"]) - float(rule["min"]))
+        if position <= 1 / 3:
+            return "inside_low"
+        if position <= 2 / 3:
+            return "inside_mid"
+        return "inside_high"
+
+    if matched_rules:
+        # One-sided entry rules use distance from their nearest boundary.
+        ceilings = [float(rule["ceiling"]) for rule in matched_rules if isinstance(rule.get("ceiling"), (int, float))]
+        floors = [float(rule["min"]) for rule in matched_rules if isinstance(rule.get("min"), (int, float))]
+        boundary = min(ceilings, key=lambda value: abs(price - value)) if ceilings else (
+            min(floors, key=lambda value: abs(price - value)) if floors else None
+        )
+        if boundary and boundary > 0:
+            distance = abs(price - boundary) / boundary
+            if distance <= 0.02:
+                return "near_boundary"
+            if distance <= 0.10:
+                return "inside_mid"
+        return "inside_low"
+
+    ceilings = [float(rule["ceiling"]) for rule in all_rules if isinstance(rule.get("ceiling"), (int, float))]
+    floors = [float(rule["min"]) for rule in all_rules if isinstance(rule.get("min"), (int, float))]
+    if status == "above_all_entry_rules" and ceilings:
+        distance = (price - max(ceilings)) / max(ceilings) if max(ceilings) > 0 else 1.0
+        return "near_boundary" if distance <= 0.02 else "outside_near" if distance <= 0.10 else "above_all_rules"
+    if floors and price < min(floors):
+        distance = (min(floors) - price) / min(floors) if min(floors) > 0 else 1.0
+        return "near_boundary" if distance <= 0.02 else "outside_near" if distance <= 0.10 else "below_all_rules"
+    return "outside"
+
+
+def price_materiality_signature(facts: dict[str, Any]) -> dict[str, Any]:
+    context = facts.get("local_price_context") if isinstance(facts.get("local_price_context"), dict) else {}
+    policy = facts.get("execution_policy") if isinstance(facts.get("execution_policy"), dict) else {}
+    all_rules = [stable_price_rule(item) for item in policy.get("price_rules", []) if isinstance(item, dict)]
+    matched = [stable_price_rule(item) for item in context.get("matched_rules", []) if isinstance(item, dict)]
+    all_rules.sort(key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
+    matched.sort(key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
+    raw_price = context.get("price")
+    price = float(raw_price) if isinstance(raw_price, (int, float)) and math.isfinite(float(raw_price)) else None
+    return {
+        "status": context.get("status", "missing_quote"),
+        "matched_rule_identities": [stable_sha256(item) for item in matched],
+        "matched_requires_validation": [item["requires_validation"] for item in matched],
+        "rule_boundary_identity": stable_sha256(all_rules),
+        "position_bucket": price_position_bucket(
+            price,
+            status=str(context.get("status") or ""),
+            matched_rules=matched,
+            all_rules=all_rules,
+        ),
+    }
+
+
+def discrete_technical(value: Any, *, intraday: bool = False) -> dict[str, Any]:
+    value = value if isinstance(value, dict) else {}
+    result: dict[str, Any] = {
+        "status": value.get("status", "missing"),
+        "state": value.get("state", "待复核"),
+    }
+    if not intraday:
+        result["valid_buy_candidate"] = value.get("valid_buy_candidate")
+        result["lights"] = sorted(
+            [
+                {"dimension": item.get("dimension"), "light": item.get("light")}
+                for item in value.get("lights", [])
+                if isinstance(item, dict)
+            ],
+            key=lambda item: str(item.get("dimension") or ""),
+        )
+    else:
+        # Only named categorical states are material. Raw OHLC/indicator values,
+        # timestamps and free-form reasons intentionally stay out.
+        discrete_keys = {
+            "state", "status", "signal", "trend_state", "momentum_state",
+            "volatility_state", "ma_alignment", "light", "direction",
+        }
+        for section in ("trend", "momentum", "volatility", "session"):
+            source = value.get(section) if isinstance(value.get(section), dict) else {}
+            selected = {
+                key: item
+                for key, item in source.items()
+                if key in discrete_keys and isinstance(item, (str, bool, type(None)))
+            }
+            if selected:
+                result[section] = selected
+    return result
+
+
+def sentiment_material_signature(value: Any) -> dict[str, Any]:
+    value = value if isinstance(value, dict) else {}
+    combined = value.get("combined") if isinstance(value.get("combined"), dict) else {}
+    news = value.get("news") if isinstance(value.get("news"), dict) else {}
+    examples = [
+        {
+            "title": clean_text(item.get("title"), 100),
+            "published_at": item.get("published_at"),
+            "event_type": item.get("event_type"),
+            "direction": item.get("direction"),
+            "impact": item.get("impact"),
+            "source_tier": item.get("source_tier"),
+        }
+        for item in value.get("scored_news_examples", [])
+        if isinstance(item, dict)
+    ]
+    examples.sort(key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
+    return {
+        "status": value.get("status", "missing"),
+        "combined_state": combined.get("state"),
+        "news_state": news.get("state"),
+        "news_confidence": news.get("confidence"),
+        "material_evidence_digest": stable_sha256(examples),
+    }
+
+
+def material_trigger_snapshot(facts: dict[str, Any], report_hash: str) -> dict[str, Any]:
+    primary = facts.get("primary_judgment") if isinstance(facts.get("primary_judgment"), dict) else {}
+    policy = facts.get("execution_policy") if isinstance(facts.get("execution_policy"), dict) else {}
+    checklist = facts.get("checklist") if isinstance(facts.get("checklist"), dict) else {}
+    return {
+        "version": MATERIAL_TRIGGER_VERSION,
+        "report_sha256": report_hash,
+        "primary_judgment": {
+            key: primary.get(key)
+            for key in ("label", "action_kind", "empty_position_action", "trigger_condition", "summary", "artifact_status", "source_matches", "model_consensus")
+        },
+        "execution_policy": {
+            "main_label": policy.get("main_label"),
+            "condition_mode": policy.get("condition_mode"),
+            "event_condition": policy.get("event_condition"),
+            "guard_condition": policy.get("guard_condition"),
+            "reliability": policy.get("reliability"),
+            "price_rules": sorted(
+                [stable_price_rule(item) for item in policy.get("price_rules", []) if isinstance(item, dict)],
+                key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True),
+            ),
+        },
+        "price": price_materiality_signature(facts),
+        "checklist": {
+            "status": checklist.get("status", "missing"),
+            "hard_veto": checklist.get("hard_veto"),
+            "hard_veto_label": checklist.get("hard_veto_label"),
+            "mirror_test": checklist.get("mirror_test"),
+            "confidence": checklist.get("confidence"),
+            "summary": checklist.get("summary"),
+            "gates": sorted(
+                [
+                    {"name": gate.get("name"), "result": gate.get("result")}
+                    for gate in checklist.get("gates", [])
+                    if isinstance(gate, dict)
+                ],
+                key=lambda item: str(item.get("name") or ""),
+            ),
+        },
+        "daily_technical": discrete_technical(facts.get("daily_technical")),
+        "intraday_30m": discrete_technical(facts.get("intraday_30m"), intraday=True),
+        "sentiment": sentiment_material_signature(facts.get("sentiment")),
+    }
+
+
+def assessment_contract(config: ModelConfig) -> dict[str, Any]:
+    return {
+        "scan_schema_version": SCAN_SCHEMA_VERSION,
+        "incremental_contract_version": INCREMENTAL_CONTRACT_VERSION,
+        "opportunity_prompt_contract_version": OPPORTUNITY_PROMPT_CONTRACT_VERSION,
+        "trigger_fingerprint_version": MATERIAL_TRIGGER_VERSION,
+        "model": config.model,
+        "transport": config.transport,
+        "reasoning_policy": "highest supported only",
+        "reasoning_effort": config.reasoning_effort,
+    }
 
 
 def review_schema(deep: bool) -> dict[str, Any]:
@@ -709,6 +937,7 @@ def build_scan_payload(
     workers: int,
     expected_scan_count: int,
     checkpoint: bool,
+    mode: str = "full",
 ) -> dict[str, Any]:
     """Build a durable full-scan payload for a checkpoint or final write."""
     completed_scans = [item for item in scans if isinstance(item, dict)]
@@ -744,10 +973,20 @@ def build_scan_payload(
         if expected_scan_count
         else 0.0
     )
+    model_request_count = sum(int(item.get("model_request_count") or 0) for item in completed_scans)
+    reused_count = sum(1 for item in completed_scans if item.get("evaluation_mode") == "reused_unchanged")
+    filter_counts = {
+        name: sum(1 for item in completed_scans if item.get("filter_class") == name)
+        for name in (
+            "unchanged", "ordinary", "possibly_material", "insufficient",
+            "age_expired", "legacy_refresh",
+        )
+    }
     return {
         "schema_version": SCAN_SCHEMA_VERSION,
         "generated_at": now_iso(),
         "status": status,
+        "mode": mode,
         "market": MARKET,
         "models": [
             {
@@ -764,6 +1003,9 @@ def build_scan_payload(
         "checkpoint": checkpoint,
         "company_concurrency": workers,
         "model_result_count": len(model_results),
+        "model_request_count": model_request_count,
+        "reused_count": reused_count,
+        "filter_counts": filter_counts,
         "ready_count": ready,
         "current_opportunity_count": current_opportunity_count,
         "near_opportunity_count": near_opportunity_count,
@@ -794,6 +1036,83 @@ def previous_model(
     return None
 
 
+def previous_scan_record(previous: dict[str, Any], ticker: str) -> dict[str, Any] | None:
+    for record in previous.get("scans", []) if isinstance(previous, dict) else []:
+        if isinstance(record, dict) and str(record.get("ticker") or "").upper() == ticker:
+            return record
+    return None
+
+
+def parsed_timestamp(value: Any) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.astimezone() if parsed.tzinfo else parsed.astimezone()
+
+
+def prior_opportunity_state(record: dict[str, Any], model: str) -> str:
+    result = (record.get("models") or {}).get(model)
+    if not isinstance(result, dict) or result.get("status") != "ready":
+        return ""
+    return normalize_opportunity_state((result.get("assessment") or {}).get("opportunity_state"))
+
+
+def trigger_change_reasons(old: dict[str, Any], new: dict[str, Any]) -> list[str]:
+    labels = {
+        "report_sha256": "report_sha_changed",
+        "primary_judgment": "primary_judgment_changed",
+        "execution_policy": "execution_policy_changed",
+        "price": "price_materiality_changed",
+        "checklist": "checklist_changed",
+        "daily_technical": "daily_technical_changed",
+        "intraday_30m": "intraday_technical_changed",
+        "sentiment": "sentiment_material_evidence_changed",
+    }
+    return [label for key, label in labels.items() if old.get(key) != new.get(key)]
+
+
+def incremental_decision(
+    prior_record: dict[str, Any] | None,
+    *,
+    config: ModelConfig,
+    fingerprint: str,
+    trigger_snapshot: dict[str, Any],
+    current_input_sha256: str,
+    checked_at: str,
+) -> tuple[bool, str, list[str]]:
+    """Return whether Flash must run, the filter class, and auditable reasons."""
+    if not prior_record:
+        return True, "insufficient", ["no_previous_assessment"]
+    old_fingerprint = prior_record.get("material_trigger_fingerprint")
+    old_snapshot = prior_record.get("material_trigger_snapshot")
+    old_contract = prior_record.get("assessment_contract")
+    if not old_fingerprint or not isinstance(old_snapshot, dict) or not isinstance(old_contract, dict):
+        return True, "legacy_refresh", ["legacy_missing_incremental_contract"]
+    if old_contract != assessment_contract(config):
+        return True, "possibly_material", ["assessment_contract_changed"]
+    if old_fingerprint != fingerprint:
+        reasons = trigger_change_reasons(old_snapshot, trigger_snapshot)
+        return True, "possibly_material", reasons or ["material_trigger_changed"]
+
+    model_result = (prior_record.get("models") or {}).get(config.model)
+    if not isinstance(model_result, dict) or model_result.get("status") != "ready":
+        return True, "insufficient", ["previous_model_result_not_ready"]
+    prior_generated = parsed_timestamp(model_result.get("generated_at") or prior_record.get("generated_at"))
+    current_time = parsed_timestamp(checked_at)
+    if not prior_generated or not current_time:
+        return True, "age_expired", ["model_evaluation_age_unknown"]
+    state = prior_opportunity_state(prior_record, config.model)
+    if state in {"当前机会", "临近机会"} and prior_generated.date() < current_time.date():
+        return True, "age_expired", ["current_or_near_requires_daily_refresh"]
+    if current_time - prior_generated > timedelta(days=MAX_REUSE_AGE_DAYS):
+        return True, "age_expired", ["maximum_reuse_age_exceeded"]
+    exact_unchanged = prior_record.get("input_sha256") == current_input_sha256
+    return False, "unchanged" if exact_unchanged else "ordinary", [
+        "material_trigger_unchanged"
+    ]
+
+
 def scan_one(
     decision: dict[str, Any],
     *,
@@ -804,6 +1123,7 @@ def scan_one(
     quote_by_ticker: dict[str, Any],
     previous: dict[str, Any],
     extra_headers: dict[str, str] | None = None,
+    mode: str = "full",
 ) -> dict[str, Any]:
     ticker = str(decision.get("ticker") or "").upper()
     current_hash = report_sha256(repo_root, decision)
@@ -814,6 +1134,64 @@ def scan_one(
         intraday=intraday_by_ticker.get(ticker),
         quote=quote_by_ticker.get(ticker),
     )
+    checked_at = now_iso()
+    trigger_snapshot = material_trigger_snapshot(facts, current_hash)
+    trigger_fingerprint = stable_sha256(trigger_snapshot)
+    prior_record = previous_scan_record(previous, ticker)
+    contract = assessment_contract(configs[0])
+    if mode == "incremental":
+        should_evaluate, filter_class, trigger_reasons = incremental_decision(
+            prior_record,
+            config=configs[0],
+            fingerprint=trigger_fingerprint,
+            trigger_snapshot=trigger_snapshot,
+            current_input_sha256=str(facts.get("input_sha256") or ""),
+            checked_at=checked_at,
+        )
+    else:
+        should_evaluate, filter_class, trigger_reasons = True, "possibly_material", ["full_reconciliation"]
+
+    if not should_evaluate and prior_record:
+        preserved_models = {
+            key: dict(value)
+            for key, value in (prior_record.get("models") or {}).items()
+            if isinstance(value, dict)
+        }
+        model_generated = [
+            str(value.get("generated_at"))
+            for value in preserved_models.values()
+            if value.get("generated_at")
+        ]
+        return {
+            "schema_version": SCAN_SCHEMA_VERSION,
+            "status": "ready",
+            "company": decision.get("company"),
+            "ticker": ticker,
+            "market": decision.get("market"),
+            "report_path": decision.get("report_path"),
+            "report_sha256": current_hash,
+            # These remain the exact model input and provenance from the
+            # original evaluation. Current facts are stored separately below.
+            "input_sha256": prior_record.get("input_sha256"),
+            "generated_at": prior_record.get("generated_at"),
+            "models": preserved_models,
+            "union": union_result(preserved_models),
+            "input_snapshot": prior_record.get("input_snapshot"),
+            "evaluation_mode": "reused_unchanged",
+            "model_request_count": 0,
+            "filter_class": filter_class,
+            "trigger_reasons": trigger_reasons,
+            "assessment_contract": contract,
+            "material_trigger_fingerprint": trigger_fingerprint,
+            "material_trigger_snapshot": trigger_snapshot,
+            "material_trigger_checked_at": checked_at,
+            "last_model_evaluated_at": min(model_generated) if model_generated else None,
+            "reused_from_generated_at": prior_record.get("generated_at"),
+            "current_projection_context": {
+                "current_input_sha256": facts.get("input_sha256"),
+                "material_trigger_snapshot": trigger_snapshot,
+            },
+        }
     models: dict[str, dict[str, Any]] = {}
     # The selected scan model sees one frozen, auditable evidence snapshot.
     with concurrent.futures.ThreadPoolExecutor(max_workers=len(configs)) as executor:
@@ -848,6 +1226,18 @@ def scan_one(
                     fallback["last_attempt_at"] = result.get("generated_at")
                     result = fallback
             models[config.model] = result
+    refresh_failed = any(item.get("status") != "ready" for item in models.values())
+    preserved_input = (
+        prior_record.get("input_snapshot")
+        if refresh_failed and prior_record and any(item.get("status") == "stale" for item in models.values())
+        else facts
+    )
+    preserved_input_sha = (
+        prior_record.get("input_sha256")
+        if preserved_input is not facts and prior_record
+        else facts.get("input_sha256")
+    )
+    model_generated = [str(item.get("generated_at")) for item in models.values() if item.get("generated_at")]
     return {
         "schema_version": SCAN_SCHEMA_VERSION,
         "status": "ready" if all(item.get("status") == "ready" for item in models.values()) else "partial",
@@ -856,11 +1246,26 @@ def scan_one(
         "market": decision.get("market"),
         "report_path": decision.get("report_path"),
         "report_sha256": current_hash,
-        "input_sha256": facts.get("input_sha256"),
-        "generated_at": now_iso(),
+        "input_sha256": preserved_input_sha,
+        "generated_at": checked_at,
         "models": models,
         "union": union_result(models),
-        "input_snapshot": facts,
+        "input_snapshot": preserved_input,
+        "evaluation_mode": "refresh_failed" if refresh_failed else "model_evaluated",
+        "model_request_count": len(configs),
+        "filter_class": filter_class,
+        "trigger_reasons": trigger_reasons,
+        "assessment_contract": contract,
+        "material_trigger_fingerprint": trigger_fingerprint,
+        "material_trigger_snapshot": trigger_snapshot,
+        "material_trigger_checked_at": checked_at,
+        "last_model_evaluated_at": min(model_generated) if model_generated and not refresh_failed else (
+            prior_record.get("last_model_evaluated_at") if prior_record else None
+        ),
+        "current_projection_context": {
+            "current_input_sha256": facts.get("input_sha256"),
+            "material_trigger_snapshot": trigger_snapshot,
+        } if refresh_failed else None,
     }
 
 
@@ -871,7 +1276,10 @@ def scan_all(
     limit: int | None = None,
     previous: dict[str, Any] | None = None,
     checkpoint_path: Path | None = None,
+    mode: str = "full",
 ) -> dict[str, Any]:
+    if mode not in {"full", "incremental"}:
+        raise OpportunityReviewError(f"unsupported scan mode: {mode}")
     configs = [model_config("scan_flash")]
     scan_headers = opportunity_scan_headers()
     decisions = find_decisions(repo_root, ticker)
@@ -901,6 +1309,7 @@ def scan_all(
                 quote_by_ticker=quotes,
                 previous=prior,
                 extra_headers=scan_headers,
+                mode=mode,
             ): index
             for index, decision in enumerate(decisions)
         }
@@ -926,6 +1335,7 @@ def scan_all(
                         workers=min(workers, len(decisions) or 1),
                         expected_scan_count=len(decisions),
                         checkpoint=True,
+                        mode=mode,
                     ),
                 )
     payload = build_scan_payload(
@@ -934,6 +1344,7 @@ def scan_all(
         workers=min(workers, len(decisions) or 1),
         expected_scan_count=len(decisions),
         checkpoint=False,
+        mode=mode,
     )
     if checkpoint_path:
         write_json(checkpoint_path, payload)
@@ -1003,9 +1414,11 @@ def command_scan(arguments: argparse.Namespace) -> int:
         limit=arguments.limit,
         previous=prior,
         checkpoint_path=output,
+        mode=arguments.mode,
     )
     print(
-        f"Wrote {output} · {payload['ready_count']} ready · "
+        f"Wrote {output} · {payload['mode']} · {payload['ready_count']} ready · "
+        f"{payload['model_request_count']} model requests · {payload['reused_count']} reused · "
         f"{payload['current_opportunity_count']} current · "
         f"{payload['near_opportunity_count']} near · "
         f"{payload['stale_count']} stale · {payload['error_count']} error",
@@ -1034,6 +1447,12 @@ def build_parser() -> argparse.ArgumentParser:
     scan.add_argument("--repo-root", type=Path, default=ROOT)
     scan.add_argument("--ticker")
     scan.add_argument("--limit", type=int)
+    scan.add_argument(
+        "--mode",
+        choices=("full", "incremental"),
+        default="full",
+        help="full always evaluates every ticker; incremental reuses only contract-safe assessments",
+    )
     scan.add_argument(
         "--output",
         type=Path,
