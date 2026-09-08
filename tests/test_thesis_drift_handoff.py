@@ -4,7 +4,7 @@ import json
 import io
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -59,6 +59,23 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         drift = json.loads((root / "data/investment-dashboard/drift_states.json").read_text())
         self.assertEqual(len(drift["companies"]["600000.SH"]["review_history"]), 1)
         self.last_sync.assert_not_called()
+
+    def test_external_facts_source_is_rejected_before_any_write(self):
+        root, _, _ = self._repo("WATCH")
+        with tempfile.TemporaryDirectory() as outside_directory:
+            outside = Path(outside_directory) / "external-fact.md"
+            outside.write_text("外部临时事实", encoding="utf-8")
+            argv = [
+                "thesis_drift_handoff.py", "600000.SH", "--mode", "watch",
+                "--direction", "unchanged", "--summary", "无变化",
+                "--facts-source", str(outside), "--repo-root", str(root), "--dry-run",
+            ]
+            error = io.StringIO()
+            with patch.object(thesis_drift_handoff.sys, "argv", argv), redirect_stderr(error):
+                status = thesis_drift_handoff.main()
+        self.assertEqual(status, 1)
+        self.assertIn("research/sources", error.getvalue())
+        self.assertFalse((root / "data/investment-dashboard/drift_states.json").exists())
 
     def test_holding_handoff_freezes_original_thesis_and_appends_history(self):
         root, report, facts = self._repo("HOLDING")
