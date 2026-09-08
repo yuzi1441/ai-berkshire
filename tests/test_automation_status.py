@@ -141,6 +141,7 @@ class AutomationStatusTests(unittest.TestCase):
         self.assertIn('status_finish deferred "机会扫描等待运行锁，未重复调用模型；未安排新的 systemd 重试"', scheduler)
         self.assertIn('status_phase opportunity_scan', scheduler)
         self.assertIn('--skip-git-sync', scheduler)
+        self.assertIn('tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only', scheduler)
         self.assertLess(scheduler.index("JOB_DEFERRED == 1"), scheduler.index("JOB_PARTIAL == 1"))
 
     def test_scheduler_defers_internal_lock_without_false_success_or_resetting_budget(self):
@@ -215,3 +216,9 @@ class AutomationStatusTests(unittest.TestCase):
             "data/investment-dashboard/opportunity_scan_status.json",
         ):
             self.assertIn(relative, publisher)
+
+    def test_release_never_overlays_git_authoritative_light_thesis_signals(self):
+        publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")
+        runtime_copy_loop = publisher.split("for relative in", 1)[1].split("; do", 1)[0]
+        self.assertNotIn("light_thesis_signals.json", runtime_copy_loop)
+        self.assertIn("Git-authoritative", publisher)

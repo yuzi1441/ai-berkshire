@@ -274,10 +274,27 @@ class RuleLifecycleTests(unittest.TestCase):
         }]}]}
         data = root / "data" / "investment-dashboard" / "quotes"
         data.mkdir(parents=True)
-        (data / "latest.json").write_text(json.dumps({"quotes": [{"ticker": "600000.SH", "price": 12}]}), encoding="utf-8")
-        before = decision_state.build_state_layers([decision], root, rule_payload=rule_payload, write=False)
-        (data / "latest.json").write_text(json.dumps({"quotes": [{"ticker": "600000.SH", "price": 9}]}), encoding="utf-8")
-        after = decision_state.build_state_layers([decision], root, rule_payload=rule_payload, write=False)
+        (data / "latest.json").write_text(json.dumps({
+            "generated_at": "2026-09-07T15:05:00+08:00",
+            "source_status": "ok",
+            "data_cutoff": "2026-09-07",
+            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 12, "data_cutoff": "2026-09-07"}],
+        }), encoding="utf-8")
+        evaluated_at = "2026-09-07T15:05:00+08:00"
+        before = decision_state.build_state_layers(
+            [decision], root, rule_payload=rule_payload, write=False,
+            generated_at=evaluated_at,
+        )
+        (data / "latest.json").write_text(json.dumps({
+            "generated_at": "2026-09-07T15:05:00+08:00",
+            "source_status": "ok",
+            "data_cutoff": "2026-09-07",
+            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 9, "data_cutoff": "2026-09-07"}],
+        }), encoding="utf-8")
+        after = decision_state.build_state_layers(
+            [decision], root, rule_payload=rule_payload, write=False,
+            generated_at=evaluated_at,
+        )
         self.assertEqual(before["rules"]["companies"][0]["rules"][0]["condition"], after["rules"]["companies"][0]["rules"][0]["condition"])
         self.assertEqual(before["rules"]["companies"][0]["rules"][0]["status"], "not_triggered")
         self.assertEqual(after["rules"]["companies"][0]["rules"][0]["status"], "triggered")

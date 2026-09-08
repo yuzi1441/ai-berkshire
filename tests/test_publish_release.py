@@ -253,6 +253,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "decision_state.py",
                 "drift_scan_state.py",
                 "event_radar.py",
+                "light_thesis_signals.py",
                 "main_report_review.py",
                 "migrate_manual_execution_reviews.py",
                 "opportunity_review.py",

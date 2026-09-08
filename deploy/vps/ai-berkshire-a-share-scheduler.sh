@@ -212,6 +212,8 @@ run_morning() {
 run_market() {
     status_phase market_snapshot "刷新 A/H 行情"
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股
+    status_phase build "按同一行情快照重建状态"
+    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only
 }
 
 run_intraday() {

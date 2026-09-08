@@ -18,9 +18,10 @@ import hashlib
 import json
 import re
 import os
+import subprocess
 import sys
 from collections import defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,7 @@ import event_radar
 
 ROOT = Path(__file__).resolve().parents[1]
 REALTIME_MARKETS = {"A股", "港股"}
+SHANGHAI_TIMEZONE = timezone(timedelta(hours=8))
 REPORTS_DIRECTORY = ROOT / "reports"
 DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"
 SITE_DIRECTORY = ROOT / "site"
@@ -756,6 +758,11 @@ def attach_manual_execution_reviews(
             "opportunity_tier": None if reason else raw.get("opportunity_tier"),
             "opportunity_summary": None if reason else raw.get("opportunity_summary"),
             "checklist_blocked": raw.get("checklist_blocked") is True,
+            # Optional explicit acknowledgement of one formal Drift result.
+            # A later generic execution review must never close a major Drift.
+            "resolved_drift_trigger_fingerprint": raw.get(
+                "resolved_drift_trigger_fingerprint"
+            ),
             "source_snapshot": snapshot,
             "source_fingerprint_sha256": expected_fingerprint or current_fingerprint,
             "current_source_fingerprint_sha256": current_fingerprint,
@@ -1872,6 +1879,7 @@ def attach_human_review_plans(
     decisions: list[dict[str, Any]],
     calendar: dict[str, Any],
     as_of: date | None = None,
+    generated_at: str | None = None,
 ) -> None:
     """Attach the independent human-report review schedule to each decision."""
     current_date = as_of or datetime.now().astimezone().date()
@@ -1924,7 +1932,7 @@ def attach_human_review_plans(
             "schema_version": 1,
             "status": "ready",
             "source": "human_main_report + official_filing_calendar",
-            "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "generated_at": generated_at or datetime.now().astimezone().isoformat(timespec="seconds"),
             "calendar_generated_at": calendar_generated_at,
             "reviewed_at": judgment.get("human_reviewed_at"),
             "tasks": ordered,
@@ -5406,6 +5414,77 @@ def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     return split_dashboard_files(board, site_directory, data_directory)
 
 
+def refresh_runtime_state(repo_root: Path = ROOT) -> dict[str, Any]:
+    """Re-evaluate runtime state without reparsing or rewriting research.
+
+    The five-minute quote timer needs Company State to use the same snapshot
+    that was just published. A full dashboard build also scans thousands of
+    research files and rewrites report indexes, which is unnecessary for a
+    quote-only refresh. This path reads the existing board and authoritative
+    Rule definitions, then updates only runtime-derived state projections.
+    """
+    repo_root = repo_root.resolve()
+    data_directory = repo_root / "data" / "investment-dashboard"
+    site_data_directory = repo_root / "site" / "data"
+    board = load_json(data_directory / "decision_board.json", {})
+    decisions = board.get("decisions") if isinstance(board, dict) else None
+    if not isinstance(decisions, list):
+        raise ValueError("Invalid decision board for runtime state refresh")
+    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    event_snapshot = event_radar.build_event_radar(
+        repo_root, write=False, generated_at=generated_at
+    )
+    rule_payload = decision_state.load_rule_definitions(
+        data_directory / decision_state.RULES_RELATIVE.name,
+        strict=True,
+    )
+    decision_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in decisions
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    rule_tickers = {
+        str(item.get("ticker") or "").upper()
+        for item in rule_payload.get("companies", [])
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    if decision_tickers != rule_tickers:
+        raise ValueError("decision_rules company set does not match decision board")
+    layers = decision_state.build_state_layers(
+        decisions,
+        repo_root,
+        event_payload=event_snapshot,
+        rule_payload=rule_payload,
+        write=False,
+    )
+    errors = decision_state.validate_payloads(layers)
+    if errors:
+        raise ValueError("Invalid structured state: " + "; ".join(errors))
+    outputs = {
+        "company_state.json": layers["state"],
+        "technical_latest.json": layers["technical"],
+        "checklist_states.json": layers["checklist"],
+        "rule_evaluations.json": layers["evaluations"],
+        "drift_review_audit.json": layers["drift_review_audit"],
+    }
+    for filename, payload in outputs.items():
+        decision_state.write_json(data_directory / filename, payload)
+        write_json(site_data_directory / filename, payload)
+    # The source file is Git-authoritative and must never be rewritten by a
+    # runtime refresh. Only its lifecycle/baseline-aware projection is public.
+    write_json(site_data_directory / "light_thesis_signals.json", layers["light_thesis"])
+    # Browser Rule packages include current Evaluation status, while the data
+    # copy remains the immutable definition source.
+    write_json(site_data_directory / "decision_rules.json", layers["rules"])
+    write_json(data_directory / "event_radar.json", event_snapshot)
+    write_json(site_data_directory / "event_radar.json", event_snapshot)
+    return {
+        "decision_count": len(decisions),
+        "rule_count": layers["rules"].get("rule_count", 0),
+        "evaluation_count": layers["evaluations"].get("evaluation_count", 0),
+    }
+
+
 def load_post_buy_layer(
     data_directory: Path, *, strict: bool = True
 ) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -5482,7 +5561,11 @@ def attach_post_buy_tracking(
     return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
 
 
-def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
+def build_main_report_review_snapshot(
+    repo_root: Path,
+    *,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
     """Build the read-only dashboard layer from atomic per-stock review files."""
     rules_directory = repo_root / "data" / "investment-dashboard" / "main-report-review-rules"
     results_directory = repo_root / "local" / "fundamental-review-current"
@@ -5490,7 +5573,7 @@ def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
     if not rules_directory.is_dir() or not any(rules_directory.glob("*.json")):
         return {
             "schema_version": main_report_review.PUBLIC_SNAPSHOT_VERSION,
-            "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "generated_at": generated_at or datetime.now().astimezone().isoformat(timespec="seconds"),
             "source": "human_locked_rules + saved_deepseek_daily_review + strict_incremental_evidence",
             "status_counts": {},
             "stock_count": 0,
@@ -5506,14 +5589,81 @@ def build_main_report_review_snapshot(repo_root: Path) -> dict[str, Any]:
         results_directory,
         comparison,
         legacy_directory,
+        generated_at=generated_at,
     )
     saved = load_json(repo_root / "data" / "investment-dashboard" / "main_report_review.json", {})
     return main_report_review.merge_saved_layer_snapshot(snapshot, saved)
 
 
-def build_model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
+def build_model_review_comparison_snapshot(
+    repo_root: Path,
+    *,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
     """Publish the saved ZCode and DeepSeek comparison without rebuilding either run."""
-    return main_report_review.model_review_comparison_snapshot(repo_root)
+    return main_report_review.model_review_comparison_snapshot(
+        repo_root,
+        generated_at=generated_at,
+    )
+
+
+def dashboard_projection_generated_at(repo_root: Path) -> str:
+    """Return the newest stable provenance time for a normal Git build.
+
+    A dashboard build does not acquire market or research evidence. Reusing
+    source timestamps prevents the build wall clock from masquerading as a new
+    observation and makes repeated builds of identical inputs byte-stable.
+    Runtime refresh commands continue to record their actual execution time.
+    """
+    candidates: list[datetime] = []
+
+    def add(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text:
+            return
+        try:
+            parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError:
+            return
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=SHANGHAI_TIMEZONE)
+        candidates.append(parsed)
+
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(repo_root), "log", "-1", "--format=%cI"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        if completed.returncode == 0:
+            add(completed.stdout.strip())
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+    data_directory = repo_root / "data" / "investment-dashboard"
+    timestamp_sources = (
+        (data_directory / "quotes" / "latest.json", ("generated_at", "updated_at")),
+        (data_directory / "event_radar.json", ("generated_at", "updated_at")),
+        (data_directory / "decision_rules.json", ("generated_at", "updated_at")),
+        (data_directory / "light_thesis_signals.json", ("generated_at", "updated_at")),
+        (data_directory / "drift_scan_state.json", ("generated_at", "updated_at")),
+        (data_directory / "drift_states.json", ("generated_at", "updated_at")),
+        (data_directory / "annual_report_dates.json", ("generated_at", "updated_at")),
+        (data_directory / "human_review_calendar_seed.json", ("generated_at", "updated_at")),
+        (data_directory / "opportunity_scans.json", ("generated_at", "updated_at", "completed_at")),
+        (data_directory / "post_buy_tracking.json", ("generated_at", "updated_at")),
+    )
+    for path, fields in timestamp_sources:
+        payload = load_json(path, {})
+        if not isinstance(payload, dict):
+            continue
+        for field in fields:
+            add(payload.get(field))
+
+    projection_time = max(candidates) if candidates else datetime.now(SHANGHAI_TIMEZONE)
+    return projection_time.astimezone(SHANGHAI_TIMEZONE).isoformat(timespec="seconds")
 
 
 def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dict[str, Any]:
@@ -5521,6 +5671,8 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     reports_directory = repo_root / "reports"
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
+    generated_at = dashboard_projection_generated_at(repo_root)
+    projection_date = datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date()
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(
         data_directory, strict=not legacy_mode
     )
@@ -5558,10 +5710,20 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
         data_directory / "annual_report_dates.json",
         data_directory / "human_review_calendar_seed.json",
     )
-    attach_human_review_plans(decisions, human_review_calendar)
+    attach_human_review_plans(
+        decisions,
+        human_review_calendar,
+        as_of=projection_date,
+        generated_at=generated_at,
+    )
     attach_execution_policies(decisions)
     attach_checklists(decisions, checklist_records)
-    attach_manual_execution_reviews(decisions, manual_execution_reviews, repo_root)
+    attach_manual_execution_reviews(
+        decisions,
+        manual_execution_reviews,
+        repo_root,
+        as_of=projection_date,
+    )
     technical_snapshots = [
         snapshot
         for report_path in report_paths
@@ -5569,7 +5731,6 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
-    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     # Structured state is the new source consumed by the dashboard.  The
     # legacy fields above remain in the board for compatibility with existing
     # consumers and historical reports.
@@ -5598,12 +5759,18 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
             "decision_rules company set does not match decision board"
             f" (missing={missing[:5]}, extra={extra[:5]})"
         )
+    main_report_review_snapshot = build_main_report_review_snapshot(
+        repo_root,
+        generated_at=generated_at,
+    )
     state_layers = decision_state.build_state_layers(
         decisions,
         repo_root,
         event_payload=event_radar_snapshot,
         rule_payload=persisted_rule_payload if persisted_rule_payload.get("companies") else None,
         write=False,
+        generated_at=generated_at,
+        main_report_review_payload=main_report_review_snapshot,
         legacy_mode=legacy_mode,
     )
     state_errors = decision_state.validate_payloads(state_layers)
@@ -5614,11 +5781,13 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
         decision["realtime_scope"] = (
             "supported" if decision.get("market") in REALTIME_MARKETS else "research_only"
         )
-    main_report_review_snapshot = build_main_report_review_snapshot(repo_root)
-    model_review_comparison_snapshot = build_model_review_comparison_snapshot(repo_root)
+    model_review_comparison_snapshot = build_model_review_comparison_snapshot(
+        repo_root,
+        generated_at=generated_at,
+    )
     generation_id = hashlib.sha256(
         (
-            f"{datetime.now().astimezone().isoformat()}|{len(decisions)}|"
+            f"{generated_at}|{len(decisions)}|"
             f"{a_share_selection_manifest(decisions)}"
         ).encode("utf-8")
     ).hexdigest()[:20]
@@ -5641,6 +5810,7 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
             "event_radar": "data/investment-dashboard/event_radar.json",
             "technical_latest": "data/investment-dashboard/technical_latest.json",
             "checklist_states": "data/investment-dashboard/checklist_states.json",
+            "light_thesis_signals": "data/investment-dashboard/light_thesis_signals.json",
         },
         "selection_rule": "Each stock uses the latest pre-buy fundamental report with an explicit data cutoff; filesystem modification times and filename dates are excluded. Source-hashed human review of that exact main report may adjudicate model disagreement, while a changed report invalidates the resolution. A market-compatible, dated historical price reference may be displayed only when the selected report has no usable price plan; it never becomes the current report's price plan and does not affect live-price matching, conclusions, sorting, or filters. Daily technical snapshots, independent 30-minute intraday observations, and Checklist reports are attached separately and never replace the main fundamental conclusion or coarse filters. Explicit post-buy thesis/news reports are attached separately. Industry/theme reports are excluded from the decision board.",
         "decision_count": len(decisions),
@@ -5692,6 +5862,7 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     decision_state.write_json(data_directory / "company_state.json", state_layers["state"])
     decision_state.write_json(data_directory / "technical_latest.json", state_layers["technical"])
     decision_state.write_json(data_directory / "checklist_states.json", state_layers["checklist"])
+    decision_state.write_json(data_directory / "rule_evaluations.json", state_layers["evaluations"])
     decision_state.write_json(
         data_directory / "drift_review_audit.json",
         state_layers["drift_review_audit"],
@@ -5728,6 +5899,13 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
     write_json(site_directory / "data" / "company_state.json", state_layers["state"])
     write_json(site_directory / "data" / "technical_latest.json", state_layers["technical"])
     write_json(site_directory / "data" / "checklist_states.json", state_layers["checklist"])
+    write_json(site_directory / "data" / "rule_evaluations.json", state_layers["evaluations"])
+    # Publish a read-only projection; never copy site data back into the
+    # Git-authoritative source file.
+    write_json(
+        site_directory / "data" / "light_thesis_signals.json",
+        state_layers["light_thesis"],
+    )
     write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     original_theses_path = data_directory / "original_buy_theses.json"
@@ -5759,22 +5937,37 @@ def main() -> int:
         help="Split the existing static decision board without rebuilding reports or indexes.",
     )
     parser.add_argument(
+        "--state-only",
+        action="store_true",
+        help="Refresh quote-dependent state projections without reparsing research reports.",
+    )
+    parser.add_argument(
         "--legacy-mode",
         action="store_true",
         help="Allow explicit migration/test compatibility fallbacks; never use for production builds.",
     )
     arguments = parser.parse_args()
+    if arguments.split_only and arguments.state_only:
+        parser.error("--split-only and --state-only are mutually exclusive")
     try:
         board = (
             split_existing_dashboard(arguments.repo_root.resolve())
             if arguments.split_only
+            else refresh_runtime_state(arguments.repo_root.resolve())
+            if arguments.state_only
             else build_dashboard(arguments.repo_root.resolve(), legacy_mode=arguments.legacy_mode)
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
-    action = "Split" if arguments.split_only else "Built"
-    print(f"{action} {board['decision_count']} current company decisions from report data cutoffs.")
+    if arguments.state_only:
+        print(
+            f"Refreshed runtime state for {board['decision_count']} companies "
+            f"and {board['evaluation_count']} Rule Evaluations."
+        )
+    else:
+        action = "Split" if arguments.split_only else "Built"
+        print(f"{action} {board['decision_count']} current company decisions from report data cutoffs.")
     return 0
 
 

@@ -378,6 +378,46 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(body["thinking"]["type"], "enabled")
         self.assertEqual(body["thinking"]["budget_tokens"], 2800)
 
+    def test_scan_flash_request_includes_required_opencode_headers(self):
+        config = opportunity.ModelConfig(
+            "scan_flash",
+            "deepseek-v4-flash",
+            opportunity.TRANSPORT_OPENAI_CHAT,
+            "https://test/chat/completions",
+            "secret-api-key",
+            1000,
+            30,
+            0,
+            "max",
+            1024,
+        )
+        scan_headers = opportunity.opportunity_scan_headers()
+        with patch.object(
+            opportunity,
+            "http_json",
+            return_value={"choices": [{"message": {"content": '{"opportunity_state":"机会"}'}}]},
+        ) as request:
+            opportunity.request_json(
+                config,
+                system="system",
+                user="user",
+                extra_headers=scan_headers,
+            )
+
+        headers = request.call_args.kwargs["headers"]
+        self.assertEqual(headers["Authorization"], "Bearer secret-api-key")
+        self.assertEqual(headers["Content-Type"], "application/json")
+        self.assertEqual(headers["User-Agent"], opportunity.OPPORTUNITY_SCAN_USER_AGENT)
+        self.assertEqual(
+            headers[opportunity.OPENCODE_SESSION_HEADER],
+            scan_headers[opportunity.OPENCODE_SESSION_HEADER],
+        )
+        public_values = " ".join(scan_headers.values())
+        self.assertNotIn("secret-api-key", public_values)
+        self.assertNotIn("600000.SH", public_values)
+        self.assertNotIn("示例公司", public_values)
+        self.assertNotIn("HOLDING", public_values)
+
     def test_responses_transport_only_falls_back_to_high_not_low(self):
         config = opportunity.ModelConfig(
             "deep_luna",
@@ -405,6 +445,9 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(reasoning["effective"], "reasoning.effort=high")
         bodies = [json.loads(call.kwargs["body"].decode("utf-8")) for call in request.call_args_list]
         self.assertEqual([body["reasoning"]["effort"] for body in bodies], ["max", "xhigh", "high"])
+        for call in request.call_args_list:
+            self.assertNotIn(opportunity.OPENCODE_SESSION_HEADER, call.kwargs["headers"])
+            self.assertNotIn("User-Agent", call.kwargs["headers"])
 
     def test_prompt_separates_opportunity_identification_from_trade_actions(self):
         system, _ = opportunity.review_prompts({}, deep=False)
@@ -446,6 +489,7 @@ class OpportunityReviewTests(unittest.TestCase):
             "human_questions": [],
             "confidence": "medium",
         }
+        scan_headers = opportunity.opportunity_scan_headers()
         with patch.object(
             opportunity,
             "request_json",
@@ -458,11 +502,16 @@ class OpportunityReviewTests(unittest.TestCase):
                 config,
                 {"local_price_context": {"status": "inside_price_rule"}},
                 deep=False,
+                extra_headers=scan_headers,
             )
         self.assertEqual(result["status"], "ready")
         self.assertEqual(result["schema_repair_attempts"], 1)
         self.assertEqual(result["reasoning"]["effective"], "max")
         self.assertEqual(request.call_count, 2)
+        self.assertEqual(
+            [call.kwargs["extra_headers"] for call in request.call_args_list],
+            [scan_headers, scan_headers],
+        )
 
     def test_run_model_does_not_turn_repeated_blank_state_into_an_opportunity(self):
         config = opportunity.ModelConfig(
@@ -498,6 +547,43 @@ class OpportunityReviewTests(unittest.TestCase):
             result = opportunity.scan_all(Path("/tmp/unused"))
         selected.assert_called_once_with("scan_flash")
         self.assertEqual([item["model"] for item in result["models"]], ["deepseek-v4-flash"])
+
+    def test_full_scan_reuses_one_session_and_new_scan_gets_another(self):
+        config = opportunity.ModelConfig(
+            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        decisions = [{"ticker": "600000.SH"}, {"ticker": "000001.SZ"}]
+        captured_headers = []
+
+        def fake_scan_one(decision, **kwargs):
+            captured_headers.append(kwargs["extra_headers"])
+            return {
+                "ticker": decision["ticker"],
+                "models": {config.model: {"status": "ready", "model": config.model}},
+            }
+
+        with (
+            patch.object(opportunity, "model_config", return_value=config),
+            patch.object(opportunity, "find_decisions", return_value=decisions),
+            patch.object(opportunity, "snapshot_maps", return_value=({}, {}, {})),
+            patch.object(opportunity, "scan_one", side_effect=fake_scan_one),
+        ):
+            opportunity.scan_all(Path("/tmp/unused"))
+            first_attempt_headers = list(captured_headers)
+            captured_headers.clear()
+            opportunity.scan_all(Path("/tmp/unused"))
+            second_attempt_headers = list(captured_headers)
+
+        first_sessions = {
+            headers[opportunity.OPENCODE_SESSION_HEADER] for headers in first_attempt_headers
+        }
+        second_sessions = {
+            headers[opportunity.OPENCODE_SESSION_HEADER] for headers in second_attempt_headers
+        }
+        self.assertEqual(len(first_sessions), 1)
+        self.assertEqual(len(second_sessions), 1)
+        self.assertNotEqual(first_sessions, second_sessions)
+        self.assertTrue(next(iter(first_sessions)).startswith("ai-berkshire-opportunity-"))
 
     def test_full_scan_checkpoints_each_tenth_and_writes_final_payload(self):
         config = opportunity.ModelConfig(

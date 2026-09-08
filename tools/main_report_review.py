@@ -728,7 +728,12 @@ def manifest_evidence_rows(repo_root: Path, ticker: str) -> list[dict[str, str]]
     return rows
 
 
-def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) -> list[dict[str, Any]]:
+def collect_zcode_evidence_extracts(
+    repo_root: Path,
+    package: dict[str, Any],
+    *,
+    baseline_date: str | None = None,
+) -> list[dict[str, Any]]:
     """Reuse current facts already extracted by ZCode without inheriting its verdicts.
 
     The legacy ZCode packages were produced against an independently extracted,
@@ -738,7 +743,7 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
     can be passed to the new verifier without being extracted a second time.
     """
     ticker = str(package.get("ticker") or "")
-    baseline = report_baseline_date(package)
+    baseline = baseline_date or report_baseline_date(package)
     zcode = load_zcode_package(repo_root, ticker)
     if not isinstance(zcode, dict) or (zcode.get("model_review") or {}).get("status") != "completed":
         return []
@@ -831,8 +836,13 @@ def collect_zcode_evidence_extracts(repo_root: Path, package: dict[str, Any]) ->
     return extracts
 
 
-def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dict[str, Any]]:
-    baseline = report_baseline_date(package)
+def collect_local_evidence(
+    repo_root: Path,
+    package: dict[str, Any],
+    *,
+    baseline_date: str | None = None,
+) -> list[dict[str, Any]]:
+    baseline = baseline_date or report_baseline_date(package)
     task_text = " ".join(
         f"{rule.get('condition', '')} {' '.join(rule.get('metrics') or [])}"
         for rule in package.get("active_rules") or []
@@ -897,7 +907,13 @@ def collect_local_evidence(repo_root: Path, package: dict[str, Any]) -> list[dic
                 "content": "\n".join(selected)[:18000],
             }
         )
-    documents.extend(collect_zcode_evidence_extracts(repo_root, package))
+    documents.extend(
+        collect_zcode_evidence_extracts(
+            repo_root,
+            package,
+            baseline_date=baseline,
+        )
+    )
     return documents
 
 
@@ -997,10 +1013,15 @@ def official_candidate_score(row: dict[str, Any], package: dict[str, Any]) -> in
     return score
 
 
-def collect_official_evidence(package: dict[str, Any], *, lookback_days: int = 120) -> list[dict[str, Any]]:
+def collect_official_evidence(
+    package: dict[str, Any],
+    *,
+    lookback_days: int = 120,
+    baseline_date: str | None = None,
+) -> list[dict[str, Any]]:
     ticker = str(package.get("ticker") or "")
     company = str(package.get("company") or "")
-    baseline = report_baseline_date(package)
+    baseline = baseline_date or report_baseline_date(package)
     rows = sentiment_snapshot.fetch_cninfo_company_news(
         {"company": company, "ticker": ticker, "market": "A股"},
         display_name=company,
@@ -2046,7 +2067,11 @@ def _model_review_packet(
     }
 
 
-def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
+def model_review_comparison_snapshot(
+    repo_root: Path,
+    *,
+    generated_at: str | None = None,
+) -> dict[str, Any]:
     """Create the public ZCode-versus-DeepSeek comparison from saved runs.
 
     On the VPS the private local review directories are intentionally absent.
@@ -2065,7 +2090,7 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
             return saved
         return {
             "schema_version": 1,
-            "generated_at": now_iso(),
+            "generated_at": generated_at or now_iso(),
             "stock_count": 0,
             "summary": {},
             "reviews": [],
@@ -2114,7 +2139,7 @@ def model_review_comparison_snapshot(repo_root: Path) -> dict[str, Any]:
         )
     return {
         "schema_version": 1,
-        "generated_at": now_iso(),
+        "generated_at": generated_at or now_iso(),
         "stock_count": len(reviews),
         "input_fingerprint": canonical_json_sha256(inputs),
         "input_files": inputs,
@@ -2361,10 +2386,19 @@ def public_review_snapshot(
     comparison: dict[str, Any] | None = None,
     legacy_dir: Path | None = None,
     layers_dir: Path | None = None,
+    *,
+    generated_at: str | None = None,
 ) -> dict[str, Any]:
-    generated_at = now_iso()
+    generated_at = generated_at or now_iso()
+    try:
+        snapshot_time = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
+    except ValueError:
+        snapshot_time = datetime.now().astimezone()
+        generated_at = snapshot_time.isoformat(timespec="seconds")
+    if snapshot_time.tzinfo is None:
+        snapshot_time = snapshot_time.astimezone()
     repo_root = rules_dir.resolve().parents[2]
-    next_check_at = (datetime.now().astimezone() + timedelta(days=DAILY_REVIEW_DUE_DAYS)).isoformat(timespec="seconds")
+    next_check_at = (snapshot_time + timedelta(days=DAILY_REVIEW_DUE_DAYS)).isoformat(timespec="seconds")
     rules_by_ticker = {package["ticker"]: package for package in load_rule_packages(rules_dir)}
     codex_archive = load_json(rules_dir.parent / "codex_direct_manual_review.json", {})
     codex_by_ticker = {
@@ -2385,7 +2419,7 @@ def public_review_snapshot(
         result = load_json(output_dir / f"{ticker}.json", {})
         price_context = result.get("price_context") if isinstance(result, dict) else None
         if not isinstance(price_context, dict):
-            price_context = read_price_context(repo_root, ticker)
+            price_context = read_price_context(repo_root, ticker, now=snapshot_time)
         legacy_payload = load_json(legacy_dir / f"{ticker}.json", {}) if legacy_dir else {}
         legacy_daily = compact_legacy_daily_review(legacy_payload)
         result_is_current = (

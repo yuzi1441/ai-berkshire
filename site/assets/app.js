@@ -16,8 +16,8 @@ const LABELS = {
   ruleType: { PRICE_RANGE: "价格条件", METRIC: "经营条件", EVENT: "事件条件" },
   action: {
     run_checklist: "进行买入前检查",
-    run_drift: "进行论文漂移检查",
-    drift_recheck: "补充论文复核证据",
+    run_drift: "进行投资逻辑漂移检查",
+    drift_recheck: "补充投资逻辑复核证据",
     keep_watch: "继续观察",
     review_decision: "重新评估",
     drop_or_recheck: "降级观察 / 重新检查",
@@ -28,10 +28,10 @@ const LABELS = {
     confirm_purchase: "确认买入条件",
     price_near_trigger: "接近价格条件",
     condition_near_trigger: "接近经营条件",
-    review_holding: "持仓论文复核",
+    review_holding: "持仓投资逻辑复核",
     none: "暂不处理",
   },
-  drift: { improved: "论文增强", unchanged: "论文未变", weakened: "论文减弱", broken: "论文失效", unknown: "尚未复核" },
+  drift: { improved: "投资逻辑改善", unchanged: "投资逻辑未变", weakened: "投资逻辑走弱", broken: "投资逻辑失效", unknown: "尚未复核" },
   eventState: { important: "重要事件", watch: "普通观察", normal: "暂无重大变化", unknown: "未知", partial: "部分可用" },
   technical: { UP: "上升", DOWN: "下降", SIDEWAYS: "震荡", UNKNOWN: "未知", BROKEN: "弱势区间", NEAR_MEAN: "接近均值", EXTENDED: "偏离均值", FAVORABLE: "有利", UNFAVORABLE: "不利", NEUTRAL: "一般" },
   sentiment: { positive: "偏正面", neutral: "中性", negative: "偏负面", mixed: "分化", unknown: "未知" },
@@ -42,8 +42,13 @@ const WORKSPACES = {
   attention: "今日处理",
   holdings: "我的持仓",
   opportunities: "买入候选",
-  "ai-research": "AI研究机会",
+  "ai-research": "AI 每日机会",
   watchlist: "研究池",
+};
+
+const SKILL_DISPLAY_LABELS = {
+  "thesis-drift": "正式投资逻辑复核",
+  "thesis-tracker": "持仓投资逻辑跟踪",
 };
 
 // Legacy report-review names remain as non-rendering contract markers. The old
@@ -115,6 +120,7 @@ const state = {
   opportunityScans: new Map(),
   opportunityScanMeta: { status: "missing", scans: [] },
   loadedAt: null,
+  loadSequence: 0,
   opportunityView: "checklist",
   attentionExpanded: false,
   opportunityExpanded: false,
@@ -122,8 +128,16 @@ const state = {
   search: "",
   market: "all",
   lifecycle: "all",
+  actionStatus: "all",
+  skill: "all",
+  lightThesis: "all",
+  formalDrift: "all",
+  blocker: "all",
+  checklist: "all",
+  priceNear: false,
   opportunity: "all",
   sort: "attention",
+  quickFilter: "all",
   page: 1,
   selectedTicker: null,
   workspace: "attention",
@@ -160,8 +174,18 @@ const els = {
   search: document.querySelector("#company-search"),
   market: document.querySelector("#market-filter"),
   lifecycle: document.querySelector("#lifecycle-filter"),
+  actionStatus: document.querySelector("#action-status-filter"),
+  skill: document.querySelector("#skill-filter"),
+  lightThesis: document.querySelector("#light-thesis-filter"),
+  formalDrift: document.querySelector("#formal-drift-filter"),
+  blocker: document.querySelector("#blocker-filter"),
+  checklist: document.querySelector("#checklist-filter"),
   opportunity: document.querySelector("#opportunity-filter"),
   sort: document.querySelector("#sort-filter"),
+  quickFilters: document.querySelector(".quick-filter-bar"),
+  moreFilters: document.querySelector("#more-filters"),
+  advancedFilterCount: document.querySelector("#advanced-filter-count"),
+  activeFilterChips: document.querySelector("#active-filter-chips"),
   clearFilters: document.querySelector("#clear-filters"),
   drawer: document.querySelector("#detail-drawer"),
   backdrop: document.querySelector("#drawer-backdrop"),
@@ -183,6 +207,8 @@ const els = {
 
 const repositoryUrl = "https://github.com/yuzi1441/ai-berkshire/blob/main/";
 const PAGE_SIZE = 14;
+const PAGE_RESUME_REFRESH_AGE_MS = 60_000;
+let dataRequestSequence = 0;
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -271,8 +297,8 @@ function renderFrozenThesis(snapshot) {
   const provenance = snapshot.backfilled ? "历史补录，不能完全还原买入时快照" : "买入时冻结";
   const captured = snapshot.captured_at ? ` · 保存于 ${formatDateTime(snapshot.captured_at)}` : "";
   const body = sourceText
-    ? `<details class="thesis-snapshot"><summary>查看买入时冻结论文（${escapeHtml(provenance)}${escapeHtml(captured)}）</summary><div class="thesis-snapshot-text">${escapeHtml(sourceText)}</div></details>`
-    : `<div class="source-line">${escapeHtml(provenance)}${escapeHtml(captured)}；当前只保存论文哈希。</div>`;
+    ? `<details class="thesis-snapshot"><summary>查看买入时冻结逻辑（${escapeHtml(provenance)}${escapeHtml(captured)}）</summary><div class="thesis-snapshot-text">${escapeHtml(sourceText)}</div></details>`
+    : `<div class="source-line">${escapeHtml(provenance)}${escapeHtml(captured)}；当前只保存投资逻辑哈希。</div>`;
   return body;
 }
 
@@ -293,37 +319,64 @@ function nearRules(record) {
 }
 
 function hasAttention(record) {
-  const drift = record?.drift || {};
-  const tracking = trackingFor(record);
-  return Boolean(
-    record?.needs_attention
-      || hasUncoveredFormalImportantEvent(record)
-      || ["weakened", "broken"].includes(drift.direction)
-      || triggeredRules(record).length
-      || (tracking?.alerts || []).length,
-  );
+  return record?.action_guidance?.requires_user_action === true;
+}
+
+function guidanceFor(record) {
+  return record?.action_guidance || {
+    blocker_code: "state_projection_missing",
+    blocker_text: "当前导航状态尚未生成",
+    next_action_code: "wait_for_state_refresh",
+    next_action_text: "等待系统刷新状态",
+    recommended_skill: [],
+    recommended_skill_reason: "缺少确定性导航投影，不能从页面自行推断任务",
+    priority: "none",
+    requires_user_action: false,
+    completion_target: "状态刷新后重新判断",
+  };
+}
+
+function skillDisplayLabel(skill) {
+  return SKILL_DISPLAY_LABELS[skill] || skill;
+}
+
+function recommendedSkillIds(record) {
+  const guidance = guidanceFor(record);
+  if (!guidance.requires_user_action) return [];
+  const skills = Array.isArray(guidance.recommended_skill) ? guidance.recommended_skill : [];
+  return skills.filter(Boolean);
+}
+
+function recommendedSkillText(record) {
+  const guidance = guidanceFor(record);
+  if (!guidance.requires_user_action) return "无需运行";
+  const skills = recommendedSkillIds(record);
+  return skills.length ? skills.map(skillDisplayLabel).join(" + ") : "无需重复运行 · 人工判断";
+}
+
+function renderRecommendedSkill(record) {
+  const skills = recommendedSkillIds(record);
+  if (!skills.length) return escapeHtml(recommendedSkillText(record));
+  return `<span class="skill-display-list">${skills.map((skill) => `<span class="skill-display"><span>${escapeHtml(skillDisplayLabel(skill))}</span><small>${escapeHtml(skill)}</small></span>`).join("")}</span>`;
 }
 
 function actionLabel(record) {
-  const scan = record?.drift_scan || {};
-  if (record?.next_action === "run_drift" && ["stale", "missing"].includes(scan.status)) return "进行论文漂移复核";
-  if (record?.next_action === "drift_recheck") return "补充论文复核证据";
-  return label("action", record?.next_action, "继续观察");
+  return text(guidanceFor(record).next_action_text, label("action", record?.next_action, "继续观察"));
 }
 
 function driftScanLabel(record) {
   const review = record?.drift_review || {};
   const scan = record?.drift_scan || {};
-  if (review.category === "true_current_drift") return "系统建议重新论文复核";
-  if (review.category === "new_evidence_other_action") return "存在新材料，当前动作不是论文漂移";
-  if (review.category === "reviewed_not_recognized") return "论文复核状态异常";
-  if (review.category === "never_reviewed") return "从未完成论文漂移复核";
-  if (review.category === "reviewed_insufficient_evidence") return "论文已复核 · 证据不足";
-  if (review.category === "reviewed_current") return "论文已复核 · 当前有效";
+  if (review.category === "true_current_drift") return "系统建议重新复核投资逻辑";
+  if (review.category === "new_evidence_other_action") return "存在新材料，当前动作不是投资逻辑漂移";
+  if (review.category === "reviewed_not_recognized") return "投资逻辑复核状态异常";
+  if (review.category === "never_reviewed") return "从未完成投资逻辑漂移复核";
+  if (review.category === "reviewed_insufficient_evidence") return "投资逻辑已复核 · 证据不足";
+  if (review.category === "reviewed_current") return "投资逻辑已复核 · 当前有效";
   if (scan.status === "current" && scan.result === "unchanged") return "Drift 已复核 · 无变化";
   if (scan.status === "current" && scan.result === "unknown") return "Drift 待复核 · 证据不足";
-  if (scan.status === "stale") return "论文复核水位待更新";
-  if (scan.status === "missing") return "从未完成论文漂移复核";
+  if (scan.status === "stale") return "投资逻辑复核水位待更新";
+  if (scan.status === "missing") return "从未完成投资逻辑漂移复核";
   return label("drift", record?.drift?.direction);
 }
 
@@ -383,7 +436,7 @@ function aiNavigationCount() {
 }
 
 function renderWorkspaceNav() {
-  const attentionToday = attentionRecords().filter((record) => attentionTier(record) === "must").length;
+  const attentionToday = attentionRecords().length;
   const counts = {
     attention: attentionToday,
     holdings: stateCount("HOLDING"),
@@ -466,23 +519,6 @@ function hasUncoveredFormalImportantEvent(record) {
   return true;
 }
 
-function attentionReason(record) {
-  const reasons = [];
-  const event = record?.event_radar || {};
-  const drift = record?.drift || {};
-  const tracking = trackingFor(record);
-  const triggered = triggeredRules(record);
-  const formalEvent = hasUncoveredFormalImportantEvent(record) ? formalImportantEvent(record) : null;
-  if (formalEvent) {
-    reasons.push(`事件：${text(formalEvent.headline, "存在论文相关事件")}`);
-  }
-  if (drift.direction && drift.direction !== "unknown" && drift.direction !== "unchanged") reasons.push(`论文：${label("drift", drift.direction)}`);
-  if (triggered.length) reasons.push(`规则：${triggered.length} 条已触发`);
-  if (nearRules(record).length) reasons.push(`价格 / 条件：${nearRules(record).length} 条接近触发`);
-  if ((tracking?.alerts || []).length) reasons.push(`持仓：${tracking.alerts[0]?.detail || "有待处理提醒"}`);
-  return reasons.slice(0, 2).join("；") || "需要重新核对当前状态";
-}
-
 function hasFormalImportantEvent(record) {
   const radar = record?.event_radar || {};
   return ["important", "critical"].includes(radar.state) && hasUncoveredFormalImportantEvent(record);
@@ -496,71 +532,33 @@ function reviewDue(record) {
 }
 
 function attentionTier(record) {
-  const drift = record?.drift || {};
-  const triggered = triggeredRules(record);
-  const holdingAlert = lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length > 0;
-  const preBuyChecklist = lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist";
-  if (
-    triggered.some((rule) => rule.rule_scope === "redline")
-      || holdingAlert
-      || hasFormalImportantEvent(record)
-  ) return "must";
-  if (
-    ["run_checklist", "run_drift", "drift_recheck", "drop_or_recheck", "confirm_purchase", "reduce_review", "review_holding", "exit_review"].includes(record?.next_action)
-      || preBuyChecklist
-  ) return "soon";
-  // A near trigger is an observation signal, not automatically a weekly task.
-  // It may still become "soon" when an existing review date makes it timely;
-  // explicit next_action values are handled by the branch above.
-  if (reviewDue(record)) return "soon";
-  return "changes";
+  return guidanceFor(record).priority === "urgent" ? "must" : "soon";
 }
 
 function attentionTierLabel(tier) {
-  return { must: "需要及时处置", soon: "本周值得研究", changes: "持续观察" }[tier] || "持续观察";
+  return { must: "需要及时处置", soon: "需要人工完成" }[tier] || "需要人工完成";
 }
 
 function attentionReasonType(record) {
-  const drift = record?.drift || {};
-  if (triggeredRules(record).some((rule) => rule.rule_scope === "redline")) return "失效条件";
-  if (["weakened", "broken"].includes(drift.direction)) return "论文漂移";
-  if (hasFormalImportantEvent(record)) return "重大事件";
-  if (lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist") return "买入前检查";
-  if (lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length) return "持仓提醒";
-  if (record?.next_action === "drift_recheck") return "论文漂移待复核";
-  if (record?.next_action === "run_checklist") return "研究推进";
-  if (record?.next_action === "review_holding") return "持仓论文复核";
-  if (attentionTier(record) === "soon") return "接近触发";
-  return "普通变化";
+  const action = guidanceFor(record).next_action_code;
+  return {
+    review_investment_thesis: "投资逻辑复核",
+    review_holding_thesis: "持仓投资逻辑复核",
+    review_holding_cycle: "持仓复核",
+    decide_research_disposition: "研究去留判断",
+    decide_holding_disposition: "持仓判断",
+    make_purchase_decision: "买入判断",
+    run_investment_checklist: "买入前检查",
+    verify_condition_evidence: "事实核验",
+  }[action] || "人工决策";
 }
 
 function attentionSummary(record) {
-  const drift = record?.drift || {};
-  const type = attentionReasonType(record);
-  if (type === "失效条件") {
-    const rule = triggeredRules(record).find((candidate) => candidate.rule_scope === "redline");
-    return `失效条件：${shortText(rule?.condition || "明确失效条件已触发")}`;
-  }
-  if (type === "论文漂移") return `论文${label("drift", drift.direction)}：核对最新事实`;
-  if (type === "重大事件") {
-    const event = formalImportantEvent(record);
-    return `正式事件：${shortText(event?.headline || event?.summary || "核对其对论文的影响")}`;
-  }
-  if (type === "买入前检查") return "已进入买入前阶段，买入前检查尚未完成。";
-  if (type === "研究推进") return "论文或买入条件出现推进线索，本周核对依据即可。";
-  if (type === "持仓提醒") return `持仓提醒：${shortText(trackingFor(record)?.alerts?.[0]?.detail || "优先检查当前周期")}`;
-  if (type === "持仓论文复核") return "持仓周期已有复核安排，核对原始买入论文与最新事实。";
-  if (type === "论文漂移待复核") return "已有论文复核，但证据不足，需人工补充判断。";
-  if (type === "接近触发") return `接近条件：${shortText(keyCondition(record))}`;
-  return "有新的变化，暂不直接改变投资动作。";
+  return shortText(guidanceFor(record).blocker_text, 120);
 }
 
 function attentionTone(record) {
-  const drift = record?.drift || {};
-  const holdingAlert = lifecycleOf(record) === "HOLDING" && (trackingFor(record)?.alerts || []).length > 0;
-  if (holdingAlert || hasFormalImportantEvent(record) || triggeredRules(record).some((rule) => rule.rule_scope === "redline")) return "danger";
-  if (["broken", "weakened"].includes(drift.direction) || record?.next_action === "run_drift" || lifecycleOf(record) === "PRE_BUY") return "warning";
-  return "info";
+  return guidanceFor(record).priority === "urgent" ? "danger" : "warning";
 }
 
 function statusCard(lifecycle, value, hint, tone) {
@@ -578,9 +576,9 @@ function renderStatusCards() {
     statusCard("PRE_BUY", stateCount("PRE_BUY"), label("lifecycleHint", "PRE_BUY"), "yellow"),
     statusCard("HOLDING", stateCount("HOLDING"), label("lifecycleHint", "HOLDING"), "green"),
     `<button class="status-card" type="button" data-opportunity-jump="attention" data-tone="red">
-      <span class="status-card-label">行动线索</span>
+      <span class="status-card-label">需要人工处理</span>
       <strong class="status-card-value">${escapeHtml(attentionCount)}</strong>
-      <span class="status-card-hint">按紧迫程度分层显示</span>
+      <span class="status-card-hint">其余变化由系统继续观察</span>
     </button>`,
   ].join("");
 }
@@ -623,35 +621,23 @@ function compactCompany(record) {
 }
 
 function renderAttentionCard(record) {
+  const guidance = guidanceFor(record);
   return `<article class="attention-card" data-ticker="${escapeHtml(record.ticker)}" data-tone="${attentionTone(record)}" tabindex="0" role="button">
     <div class="card-topline">${compactCompany(record)}<span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div>
     <div class="attention-kind">${escapeHtml(attentionReasonType(record))}</div>
     <p class="attention-reason"><strong>${escapeHtml(attentionSummary(record))}</strong></p>
-    <div class="attention-action" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}<span aria-hidden="true">→</span></div>
+    <div class="attention-route"><span>下一步</span><strong>${escapeHtml(actionLabel(record))}</strong></div>
+    <div class="attention-route"><span>使用 Skill</span><strong>${renderRecommendedSkill(record)}</strong></div>
+    <p class="attention-explain">${escapeHtml(guidance.recommended_skill_reason)}</p>
+    <div class="attention-completion">完成标准：${escapeHtml(guidance.completion_target)}</div>
   </article>`;
 }
 
 function attentionRecords() {
-  return stateRecords().filter((record) => (
-    hasAttention(record)
-      || ["run_checklist", "run_drift", "drift_recheck", "drop_or_recheck", "confirm_purchase", "reduce_review", "review_holding", "exit_review", "price_near_trigger", "condition_near_trigger"].includes(record?.next_action)
-      || nearRules(record).length
-      || priceOpportunities(record).some((item) => item.status === "near_trigger")
-      || conditionOpportunities(record).some((item) => item.status === "near_trigger")
-      || reviewDue(record)
-  )).sort((a, b) => {
-    const tierScore = { must: 3, soon: 2, changes: 1 };
-    const actionScore = {
-      reduce_review: 40,
-      drop_or_recheck: 30,
-      run_drift: 25,
-      review_holding: 20,
-      run_checklist: 15,
-      confirm_purchase: 15,
-      drift_recheck: 10,
-    };
-    const score = (record) => (record.lifecycle === "HOLDING" ? 30 : 0) + (hasFormalImportantEvent(record) ? 20 : 0) + (triggeredRules(record).some((rule) => rule.rule_scope === "redline") ? 35 : 0) + (actionScore[record.next_action] || 0);
-    return tierScore[attentionTier(b)] - tierScore[attentionTier(a)] || score(b) - score(a) || String(a.company).localeCompare(String(b.company), "zh-CN");
+  return stateRecords().filter(hasAttention).sort((a, b) => {
+    const priorityScore = { urgent: 2, normal: 1, none: 0 };
+    return (priorityScore[guidanceFor(b).priority] || 0) - (priorityScore[guidanceFor(a).priority] || 0)
+      || String(a.company).localeCompare(String(b.company), "zh-CN");
   });
 }
 
@@ -665,10 +651,10 @@ function renderAttention() {
   }, { must: 0, soon: 0, changes: 0 });
   els.attentionCount.textContent = `${count} 项 · 及时处置 ${tierCounts.must}`;
   const visible = state.attentionExpanded ? records : records.slice(0, 8);
-  const grouped = ["must", "soon", "changes"].map((tier) => ({ tier, records: visible.filter((record) => attentionTier(record) === tier) })).filter((group) => group.records.length);
+  const grouped = ["must", "soon"].map((tier) => ({ tier, records: visible.filter((record) => attentionTier(record) === tier) })).filter((group) => group.records.length);
   els.attentionList.innerHTML = grouped.length
     ? grouped.map(({ tier, records: tierRecords }) => `<div class="attention-layer"><div class="attention-layer-heading"><span>${escapeHtml(attentionTierLabel(tier))}</span><span>${tierRecords.length}${state.attentionExpanded ? " 项" : " 项已显示"}</span></div><div class="attention-layer-grid">${tierRecords.map(renderAttentionCard).join("")}</div></div>`).join("")
-    : `<div class="loading-card">今天没有待处理事项。</div>`;
+    : `<div class="loading-card">今天没有需要你处理的事项，系统会继续观察。</div>`;
   els.attentionViewAll.hidden = records.length <= 8;
   els.attentionViewAll.textContent = state.attentionExpanded ? "收起" : `查看全部（${count}）`;
 }
@@ -951,8 +937,8 @@ function renderHoldingCard(record) {
       <div><span class="metric-label">当前价格</span><strong class="metric-value">${escapeHtml(formatPrice(quote))}</strong></div>
     </div>
     <div class="holding-bottom">
-      <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">买入论文基线</div><div class="holding-detail-value">${snapshot ? "已绑定当前持仓周期" : "冻结基线未加载"}</div>${renderFrozenThesis(snapshot)}<div class="holding-detail-label" style="margin-top:9px">最新论文</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看最新论文</a></div></div>
-      <div><div class="holding-detail-label">论文状态 / 最近漂移</div><div class="holding-detail-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div><div class="holding-detail-label" style="margin-top:9px">关键失效条件</div><ul class="redline-list">${redlines.length ? redlines.map((rule) => `<li>${escapeHtml(rule.condition)}</li>`).join("") : "<li>报告未提取明确失效条件</li>"}</ul></div>
+      <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">原始买入逻辑</div><div class="holding-detail-value">${snapshot ? "已绑定当前持仓周期" : "冻结基线未加载"}</div>${renderFrozenThesis(snapshot)}<div class="holding-detail-label" style="margin-top:9px">最新研究</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看最新研究</a></div></div>
+      <div><div class="holding-detail-label">投资逻辑状态 / 最近漂移</div><div class="holding-detail-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div><div class="holding-detail-label" style="margin-top:9px">关键失效条件</div><ul class="redline-list">${redlines.length ? redlines.map((rule) => `<li>${escapeHtml(rule.condition)}</li>`).join("") : "<li>报告未提取明确失效条件</li>"}</ul></div>
     </div>
     <div class="holding-links"><a class="text-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>打开主报告</a><span class="table-next" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}</span></div>
   </article>`;
@@ -993,7 +979,7 @@ function compactDataSummary(record) {
   const event = label("eventState", record?.event_radar?.state);
   const technical = dataLabel(record?.technical?.freshness || record?.technical?.status);
   const sentiment = sentimentLabel(record).stateText;
-  return `<div class="compact-statuses"><span>论文：${escapeHtml(drift)}</span><span>事件：${escapeHtml(event)}</span><span>技术：${escapeHtml(technical)}</span><span>情绪：${escapeHtml(sentiment)}</span></div>`;
+  return `<div class="compact-statuses"><span>投资逻辑：${escapeHtml(drift)}</span><span>事件：${escapeHtml(event)}</span><span>技术：${escapeHtml(technical)}</span><span>情绪：${escapeHtml(sentiment)}</span></div>`;
 }
 
 function renderWatchRow(record) {
@@ -1010,20 +996,83 @@ function renderWatchRow(record) {
   </tr>`;
 }
 
+function actionableSkills(records) {
+  return [...new Set(records.flatMap((record) => {
+    const guidance = record?.action_guidance || {};
+    return guidance.requires_user_action === true && Array.isArray(guidance.recommended_skill)
+      ? guidance.recommended_skill
+      : [];
+  }))].filter(Boolean).sort();
+}
+
+function lightThesisFilterValue(record) {
+  const signal = record?.light_thesis_signal || {};
+  return signal.status === "current" && signal.signal ? signal.signal : "missing";
+}
+
+function formalDriftMatches(record, value) {
+  if (value === "all") return true;
+  const drift = record?.drift || {};
+  const hasReview = Boolean(drift.last_checked);
+  if (value === "has-review") return hasReview;
+  if (value === "no-review") return !hasReview;
+  if (!hasReview) return false;
+  if (value === "major-weakened") return drift.direction === "weakened" && drift.severity === "major";
+  if (value === "minor-weakened") return drift.direction === "weakened" && drift.severity === "minor";
+  if (value === "improved") return drift.direction === "improved";
+  return false;
+}
+
+function actionStatusMatches(record, value) {
+  if (value === "all") return true;
+  const guidance = record?.action_guidance || {};
+  const requiresAction = guidance.requires_user_action === true;
+  const skills = Array.isArray(guidance.recommended_skill) ? guidance.recommended_skill : [];
+  if (value === "attention") return requiresAction;
+  if (value === "skill") return requiresAction && skills.length > 0;
+  if (value === "manual") return requiresAction && skills.length === 0;
+  if (value === "observe") return !requiresAction;
+  return false;
+}
+
+function skillMatches(record, value) {
+  if (value === "all") return true;
+  const guidance = record?.action_guidance || {};
+  const skills = Array.isArray(guidance.recommended_skill) ? guidance.recommended_skill : [];
+  if (value === "none") return guidance.requires_user_action !== true || skills.length === 0;
+  return guidance.requires_user_action === true && skills.includes(value);
+}
+
+function matchesUnifiedFilters(record, filters) {
+  const search = String(filters.search || "").toLowerCase();
+  const guidance = record?.action_guidance || {};
+  const checklistStatus = String(record?.checklist?.status || "UNKNOWN").toUpperCase();
+  const matchesSearch = !search || `${record.company || ""} ${record.ticker || ""}`.toLowerCase().includes(search);
+  const matchesMarket = filters.market === "all" || record.market === filters.market;
+  const matchesLifecycle = filters.lifecycle === "all" || lifecycleOf(record) === filters.lifecycle;
+  const matchesLight = filters.lightThesis === "all" || lightThesisFilterValue(record) === filters.lightThesis;
+  const matchesBlocker = filters.blocker === "all" || guidance.blocker_code === filters.blocker;
+  const matchesChecklist = filters.checklist === "all" || checklistStatus === filters.checklist;
+  const matchesOpportunity = filters.opportunity === "all"
+    || (filters.opportunity === "price" && priceOpportunities(record).length > 0)
+    || (filters.opportunity === "condition" && conditionOpportunities(record).length > 0);
+  const matchesPriceNear = !filters.priceNear
+    || priceOpportunities(record).some((item) => item.status === "near_trigger");
+  return matchesSearch
+    && matchesMarket
+    && matchesLifecycle
+    && actionStatusMatches(record, filters.actionStatus)
+    && skillMatches(record, filters.skill)
+    && matchesLight
+    && formalDriftMatches(record, filters.formalDrift)
+    && matchesBlocker
+    && matchesChecklist
+    && matchesOpportunity
+    && matchesPriceNear;
+}
+
 function filteredRecords() {
-  const search = state.search.toLowerCase();
-  const defaultResearchPool = state.lifecycle === "all" && !state.search.trim() && state.opportunity === "all";
-  let records = stateRecords().filter((record) => {
-    if (defaultResearchPool && ["HOLDING", "EXITED"].includes(lifecycleOf(record))) return false;
-    const matchesSearch = !search || `${record.company} ${record.ticker}`.toLowerCase().includes(search);
-    const matchesMarket = state.market === "all" || record.market === state.market;
-    const matchesLifecycle = state.lifecycle === "all" || lifecycleOf(record) === state.lifecycle;
-    const matchesOpportunity = state.opportunity === "all"
-      || (state.opportunity === "price" && priceOpportunities(record).length)
-      || (state.opportunity === "condition" && conditionOpportunities(record).length)
-      || (state.opportunity === "attention" && hasAttention(record));
-    return matchesSearch && matchesMarket && matchesLifecycle && matchesOpportunity;
-  });
+  const records = stateRecords().filter((record) => matchesUnifiedFilters(record, state));
   records.sort((a, b) => {
     if (state.sort === "name") return String(a.company).localeCompare(String(b.company), "zh-CN");
     if (state.sort === "lifecycle") return String(label("lifecycle", lifecycleOf(a))).localeCompare(String(label("lifecycle", lifecycleOf(b))), "zh-CN");
@@ -1033,15 +1082,89 @@ function filteredRecords() {
   return records;
 }
 
+function setSelectOptions(select, options, selected) {
+  select.innerHTML = options.map(({ value, label: optionLabel }) => `<option value="${escapeHtml(value)}">${escapeHtml(optionLabel)}</option>`).join("");
+  select.value = options.some((item) => item.value === selected) ? selected : "all";
+}
+
+function populateDynamicFilters() {
+  const records = stateRecords();
+  setSelectOptions(els.skill, [
+    { value: "all", label: "全部当前 Skill" },
+    { value: "none", label: "无需运行 Skill" },
+    ...actionableSkills(records).map((value) => ({ value, label: skillDisplayLabel(value) })),
+  ], state.skill);
+  state.skill = els.skill.value;
+  const blockers = new Map();
+  for (const record of records) {
+    const guidance = record?.action_guidance || {};
+    if (guidance.blocker_code) {
+      const previous = blockers.get(guidance.blocker_code) || { label: "", count: 0 };
+      const stableText = text(guidance.blocker_text, guidance.blocker_code).split(/[：:]/, 1)[0];
+      blockers.set(guidance.blocker_code, {
+        label: previous.label || shortText(stableText, 40),
+        count: previous.count + 1,
+      });
+    }
+  }
+  setSelectOptions(els.blocker, [
+    { value: "all", label: "全部卡点" },
+    ...[...blockers.entries()]
+      .sort((a, b) => a[1].label.localeCompare(b[1].label, "zh-CN"))
+      .map(([value, item]) => ({ value, label: `${item.label} · ${item.count}` })),
+  ], state.blocker);
+  state.blocker = els.blocker.value;
+}
+
+function selectedOptionText(select) {
+  return select?.selectedOptions?.[0]?.textContent?.trim() || "";
+}
+
+function activeFilterEntries() {
+  const entries = [];
+  const presetField = {
+    attention: "actionStatus", skill: "actionStatus", manual: "actionStatus", observe: "actionStatus",
+    "light-improved": "lightThesis", "light-weakened": "lightThesis", "price-near": "priceNear",
+  }[state.quickFilter];
+  const quickLabel = document.querySelector(`[data-quick-filter="${state.quickFilter}"]`)?.textContent?.trim();
+  if (state.quickFilter !== "all" && quickLabel) entries.push({ key: "quickFilter", label: `快捷：${quickLabel}` });
+  if (state.search) entries.push({ key: "search", label: `搜索：${state.search}` });
+  for (const [key, select, prefix] of [
+    ["market", els.market, "市场"], ["lifecycle", els.lifecycle, "阶段"],
+    ["actionStatus", els.actionStatus, "处理"], ["skill", els.skill, "Skill"],
+    ["lightThesis", els.lightThesis, "轻量逻辑"], ["formalDrift", els.formalDrift, "正式复核"],
+    ["blocker", els.blocker, "卡点"], ["checklist", els.checklist, "Checklist"],
+    ["opportunity", els.opportunity, "条件"],
+  ]) {
+    if (state[key] !== "all" && key !== presetField) entries.push({ key, label: `${prefix}：${selectedOptionText(select)}` });
+  }
+  if (state.priceNear && presetField !== "priceNear") entries.push({ key: "priceNear", label: "价格接近" });
+  if (state.sort !== "attention") entries.push({ key: "sort", label: `排序：${selectedOptionText(els.sort)}` });
+  return entries;
+}
+
+function renderFilterState() {
+  document.querySelectorAll("[data-quick-filter]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.quickFilter === state.quickFilter);
+  });
+  const entries = activeFilterEntries();
+  els.activeFilterChips.innerHTML = entries.length
+    ? entries.map((entry) => `<button type="button" class="active-filter-chip" data-clear-filter="${escapeHtml(entry.key)}">${escapeHtml(entry.label)}<span aria-hidden="true">×</span></button>`).join("")
+    : `<span class="filter-empty-note">当前显示全部公司</span>`;
+  const advancedCount = ["market", "lifecycle", "actionStatus", "skill", "lightThesis", "formalDrift", "blocker", "checklist", "opportunity"].filter((key) => state[key] !== "all").length;
+  els.advancedFilterCount.textContent = advancedCount ? `${advancedCount} 项已启用` : "未启用";
+}
+
 function renderWatchlist() {
   const records = filteredRecords();
   const pageRecords = records.slice(0, state.page * PAGE_SIZE);
   els.watchlist.innerHTML = pageRecords.map(renderWatchRow).join("");
-  els.watchlistCount.textContent = `${stateRecords().filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record))).length} 家`;
-  els.watchlistMeta.textContent = `显示 ${pageRecords.length} / ${records.length} 家 · 全部数据已加载到本地，详情按需打开`;
+  els.watchlistCount.textContent = `${records.length} / ${stateRecords().length} 家`;
+  els.watchlistMeta.textContent = `当前结果：${records.length} / ${stateRecords().length} 家${pageRecords.length < records.length ? ` · 已显示 ${pageRecords.length} 家` : ""}`;
   els.loadMore.hidden = pageRecords.length >= records.length;
   els.loadMore.textContent = `加载更多（剩余 ${Math.max(0, records.length - pageRecords.length)} 家）`;
   els.emptyState.hidden = records.length > 0;
+  renderFilterState();
 }
 
 function currentRecord(ticker) {
@@ -1073,8 +1196,8 @@ function renderEventSection(record) {
   const events = Array.isArray(radar.events) ? radar.events : [];
   const formal = events.filter((event) => event.thesis_relevant || ["A", "B"].includes(event.highest_source_tier)).slice(0, 3);
   const discussion = events.filter((event) => !event.thesis_relevant && ["C", "D"].includes(event.highest_source_tier)).slice(0, 3);
-  const renderEvent = (event) => `<li class="event-item"><div class="event-item-top"><span class="event-headline">${escapeHtml(text(event.headline, "未命名事件"))}</span><span class="mini-badge">${escapeHtml(eventTierLabel(event.highest_source_tier))}</span></div><div class="event-meta">${escapeHtml(text(event.summary, "暂无摘要"))} · ${escapeHtml(event.recommended_action === "run_drift" ? "建议检查论文" : "仅作辅助观察")}</div></li>`;
-  return `<div class="detail-section"><div class="detail-section-head"><h3>事件雷达</h3><span class="data-badge" data-status="${escapeHtml(radar.source_status || "unknown")}">${escapeHtml(label("eventState", radar.state))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">论文相关性</div><div class="detail-field-value">${escapeHtml(radar.thesis_relevant ? "已标记为论文相关" : "未标记为论文相关")}</div></div><div class="detail-field"><div class="detail-field-label">数据状态</div><div class="detail-field-value">${escapeHtml(dataLabel(radar.source_status))} · 截止 ${escapeHtml(formatDate(radar.data_cutoff))}</div></div></div>${formal.length ? `<div class="event-block"><div class="holding-detail-label" style="margin:15px 0 7px">重要事件</div><ul class="event-list">${formal.map(renderEvent).join("")}</ul></div>` : ""}${discussion.length ? `<div class="event-block"><div class="holding-detail-label" style="margin:15px 0 7px">市场讨论 / 背景</div><ul class="event-list">${discussion.map(renderEvent).join("")}</ul></div>` : ""}${!formal.length && !discussion.length ? `<p class="detail-copy" style="margin-top:12px">暂无可展示事件；来源不可用时只显示未知，不推断为正常。</p>` : ""}</div>`;
+  const renderEvent = (event) => `<li class="event-item"><div class="event-item-top"><span class="event-headline">${escapeHtml(text(event.headline, "未命名事件"))}</span><span class="mini-badge">${escapeHtml(eventTierLabel(event.highest_source_tier))}</span></div><div class="event-meta">${escapeHtml(text(event.summary, "暂无摘要"))} · ${escapeHtml(event.recommended_action === "run_drift" ? "建议检查投资逻辑" : "仅作辅助观察")}</div></li>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>事件雷达</h3><span class="data-badge" data-status="${escapeHtml(radar.source_status || "unknown")}">${escapeHtml(label("eventState", radar.state))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">投资逻辑相关性</div><div class="detail-field-value">${escapeHtml(radar.thesis_relevant ? "已标记为投资逻辑相关" : "未标记为投资逻辑相关")}</div></div><div class="detail-field"><div class="detail-field-label">数据状态</div><div class="detail-field-value">${escapeHtml(dataLabel(radar.source_status))} · 截止 ${escapeHtml(formatDate(radar.data_cutoff))}</div></div></div>${formal.length ? `<div class="event-block"><div class="holding-detail-label" style="margin:15px 0 7px">重要事件</div><ul class="event-list">${formal.map(renderEvent).join("")}</ul></div>` : ""}${discussion.length ? `<div class="event-block"><div class="holding-detail-label" style="margin:15px 0 7px">市场讨论 / 背景</div><ul class="event-list">${discussion.map(renderEvent).join("")}</ul></div>` : ""}${!formal.length && !discussion.length ? `<p class="detail-copy" style="margin-top:12px">暂无可展示事件；来源不可用时只显示未知，不推断为正常。</p>` : ""}</div>`;
 }
 
 function renderTechnicalSection(record) {
@@ -1106,78 +1229,46 @@ function renderThesisSection(record) {
   const drift = record.drift || {};
   if (lifecycleOf(record) === "HOLDING" && tracking) {
     const snapshot = originalThesisFor(record);
-    return `<div class="detail-section"><div class="detail-section-head"><h3>买入论文基线</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">论文状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结论文未加载。</div>"}<div class="source-line">当前持仓周期已绑定买入论文基线<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新论文 ↗</a></div>`;
+    return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入逻辑</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">投资逻辑状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结投资逻辑未加载。</div>"}<div class="source-line">当前持仓周期已绑定原始买入逻辑<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新研究 ↗</a></div>`;
   }
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前研究论文</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；后续事实变化通过论文漂移检查复核。</p><div class="source-line">Canonical 主报告已关联<br />最近复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
+  const light = record.light_thesis_signal || {};
+  const lightLabels = { improved: "改善", unchanged: "无明显变化", weakened: "走弱", insufficient_evidence: "证据不足" };
+  const lightText = light.status === "current" ? (lightLabels[light.signal] || "待判断") : light.status === "stale" ? "已有结果已过期" : "尚无轻量检查结果";
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前投资逻辑</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；正式漂移复核与日常轻量信号分开记录。</p><div class="detail-grid" style="margin-top:14px"><div class="detail-field"><div class="detail-field-label">正式投资逻辑复核</div><div class="detail-field-value">${escapeHtml(driftScanLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">轻量投资逻辑信号</div><div class="detail-field-value">${escapeHtml(lightText)}</div></div></div><div class="source-line">Canonical 主报告已关联<br />最近正式复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
 }
 
 function renderCurrentJudgment(record) {
   const quote = quoteFor(record);
   const sentiment = sentimentLabel(record);
   const radar = record.event_radar || {};
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 论文相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 投资逻辑相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
 }
 
 function decisionContextValues(record) {
-  const lifecycle = lifecycleOf(record);
-  const action = record?.next_action;
-  const drift = record?.drift || {};
-  const formalEvent = hasUncoveredFormalImportantEvent(record) ? formalImportantEvent(record) : null;
-  const triggered = triggeredRules(record);
-  const near = nearRules(record);
-  const tracking = trackingFor(record);
-  const whyNow = formalEvent
-    ? "正式事件进入当前重要状态，需要核对它是否改变原论文。"
-    : lifecycle === "HOLDING" && (tracking?.alerts || []).length
-      ? "当前持仓存在待处理提醒，应优先核对持仓周期。"
-      : action === "run_checklist"
-        ? lifecycle === "PRE_BUY" ? "公司已经进入买入前流程。" : "当前研究出现买入推进线索。"
-        : ["weakened", "broken"].includes(drift.direction)
-          ? `已记录${label("drift", drift.direction)}，需要核对核心假设。`
-          : near.length
-            ? "已有价格或经营条件接近触发。"
-            : `当前处于${label("lifecycle", lifecycle)}，下一步是${actionLabel(record)}。`;
-  const newInfo = formalEvent
-    ? shortText(formalEvent.headline || formalEvent.summary || "正式事件已记录")
-    : drift.direction && !["unknown", "unchanged"].includes(drift.direction)
-      ? `论文状态：${label("drift", drift.direction)}`
-      : record?.drift_scan?.status === "stale"
-        ? "论文复核水位存在更新，但当前动作仍需结合现有条件判断。"
-        : triggered.length
-          ? `已有 ${triggered.length} 条保存规则达到触发状态。`
-          : "尚未形成明确增量问题。";
-  const keyQuestion = action === "run_checklist"
-    ? "买入前条件是否已完整满足，而不是只有单一条件达到？"
-    : action === "run_drift" || action === "drift_recheck"
-      ? "新增事实是否改变原投资论文？"
-      : action === "drop_or_recheck" || action === "reduce_review"
-        ? "减弱或失效信号是否足以改变当前持有 / 观察动作？"
-        : keyCondition(record);
-  const evidence = [...triggered, ...near]
-    .map((rule) => rule?.condition)
-    .filter(Boolean)
-    .filter((condition, index, values) => values.indexOf(condition) === index)
-    .slice(0, 3);
-  if (formalEvent && !evidence.length) evidence.push(formalEvent.headline || formalEvent.summary || "正式事件原文");
+  const guidance = guidanceFor(record);
   return {
-    whyNow,
-    newInfo,
-    keyQuestion,
-    evidence: evidence.length ? evidence.join("；") : "尚未形成明确证据清单，请以主报告为准。",
-    nextStep: actionLabel(record),
+    lifecycle: label("lifecycle", lifecycleOf(record)),
+    blocker: guidance.blocker_text,
+    nextStep: guidance.next_action_text,
+    skill: recommendedSkillText(record),
+    reason: guidance.recommended_skill_reason,
+    completion: guidance.completion_target,
+    today: guidance.requires_user_action ? "是" : "否，系统继续观察",
   };
 }
 
 function renderDecisionContext(record) {
   const context = decisionContextValues(record);
   const fields = [
-    ["为什么现在看", context.whyNow],
-    ["新增了什么", context.newInfo],
-    ["当前关键问题", context.keyQuestion],
-    ["需要哪份证据", context.evidence],
-    ["结果与下一步", context.nextStep],
+    { name: "当前阶段", value: context.lifecycle },
+    { name: "当前卡点", value: context.blocker },
+    { name: "下一步", value: context.nextStep },
+    { name: "建议 Skill", value: renderRecommendedSkill(record), html: true },
+    { name: "为什么", value: context.reason },
+    { name: "完成后", value: context.completion },
+    { name: "今天需要处理", value: context.today },
   ];
-  return `<div class="detail-section decision-context"><div class="detail-section-head"><h3>本次查看重点</h3><span class="mini-badge">只基于当前状态</span></div><div class="decision-context-grid">${fields.map(([name, value]) => `<div class="decision-context-item"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${escapeHtml(value)}</div></div>`).join("")}</div></div>`;
+  return `<div class="detail-section decision-context"><div class="detail-section-head"><h3>现在该做什么</h3><span class="mini-badge">确定性状态导航</span></div><div class="decision-context-grid">${fields.map(({ name, value, html = false }) => `<div class="decision-context-item"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${html ? value : escapeHtml(value)}</div></div>`).join("")}</div></div>`;
 }
 
 function renderDetail(record) {
@@ -1221,7 +1312,12 @@ function toast(message) {
 }
 
 async function loadJson(path) {
-  const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
+  const separator = path.includes("?") ? "&" : "?";
+  const requestVersion = `${Date.now()}-${++dataRequestSequence}`;
+  const response = await fetch(`${path}${separator}v=${requestVersion}`, {
+    cache: "no-store",
+    headers: { "Cache-Control": "no-cache" },
+  });
   if (!response.ok) throw new Error(`${path} (${response.status})`);
   return response.json();
 }
@@ -1245,6 +1341,7 @@ function normalizeTracking(payload) {
 }
 
 async function loadData({ silent = false } = {}) {
+  const loadSequence = ++state.loadSequence;
   if (!silent) {
     els.attentionList.innerHTML = `<div class="loading-card">正在读取看板数据…</div>`;
     els.holdingList.innerHTML = `<div class="loading-card">正在读取持仓数据…</div>`;
@@ -1256,6 +1353,7 @@ async function loadData({ silent = false } = {}) {
       : await loadJson(path),
   ]));
   const payload = Object.fromEntries(entries);
+  if (loadSequence !== state.loadSequence) return false;
   if (!payload.companyState || !Array.isArray(payload.companyState.companies)) throw new Error("公司状态数据不可用");
   state.board = payload.board;
   state.companyState = indexByTicker(payload.companyState.companies);
@@ -1284,8 +1382,27 @@ async function loadData({ silent = false } = {}) {
   };
   state.opportunityScans = indexByTicker(state.opportunityScanMeta.scans);
   state.loadedAt = new Date().toISOString();
+  populateDynamicFilters();
   renderAll();
   syncWorkspaceFromLocation();
+  return true;
+}
+
+function shouldRefreshOnPageResume(now = Date.now()) {
+  if (!state.loadedAt) return false;
+  const loadedAt = Date.parse(state.loadedAt);
+  return Number.isFinite(loadedAt) && now - loadedAt >= PAGE_RESUME_REFRESH_AGE_MS;
+}
+
+async function refreshDataOnPageResume({ force = false } = {}) {
+  if (document.visibilityState !== "visible") return false;
+  if (!force && !shouldRefreshOnPageResume()) return false;
+  try {
+    return await loadData({ silent: true });
+  } catch {
+    toast("自动重新读取失败，当前仍显示上次读取的数据；可点击重新读取。");
+    return false;
+  }
 }
 
 function renderAll() {
@@ -1301,16 +1418,86 @@ function renderAll() {
 
 function applyFilterFromJump({ lifecycle = "all", opportunity = "all" } = {}) {
   state.lifecycle = lifecycle;
-  state.opportunity = opportunity;
+  state.actionStatus = opportunity === "attention" ? "attention" : "all";
+  state.opportunity = opportunity === "attention" ? "all" : opportunity;
+  state.quickFilter = opportunity === "attention" ? "attention" : "all";
   state.page = 1;
   els.lifecycle.value = lifecycle;
-  els.opportunity.value = opportunity;
+  els.actionStatus.value = state.actionStatus;
+  els.opportunity.value = state.opportunity;
   const targetWorkspace = lifecycle !== "all" ? "watchlist" : opportunity === "attention" ? "attention" : "watchlist";
   setWorkspace(targetWorkspace);
   if (targetWorkspace === "watchlist") {
     renderWatchlist();
     document.querySelector("#watchlist-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+}
+
+function resetFilterState({ preserveSearch = false } = {}) {
+  if (!preserveSearch) state.search = "";
+  state.market = "all";
+  state.lifecycle = "all";
+  state.actionStatus = "all";
+  state.skill = "all";
+  state.lightThesis = "all";
+  state.formalDrift = "all";
+  state.blocker = "all";
+  state.checklist = "all";
+  state.priceNear = false;
+  state.opportunity = "all";
+  state.sort = "attention";
+  state.quickFilter = "all";
+  state.page = 1;
+}
+
+function syncFilterControls() {
+  els.search.value = state.search;
+  els.market.value = state.market;
+  els.lifecycle.value = state.lifecycle;
+  els.actionStatus.value = state.actionStatus;
+  els.skill.value = state.skill;
+  els.lightThesis.value = state.lightThesis;
+  els.formalDrift.value = state.formalDrift;
+  els.blocker.value = state.blocker;
+  els.checklist.value = state.checklist;
+  els.opportunity.value = state.opportunity;
+  els.sort.value = state.sort;
+}
+
+function applyQuickFilter(value) {
+  if (value === "all") {
+    resetFilterState();
+  } else {
+    resetFilterState({ preserveSearch: true });
+    state.quickFilter = value;
+    if (["attention", "skill", "manual", "observe"].includes(value)) state.actionStatus = value;
+    if (value === "light-improved") state.lightThesis = "improved";
+    if (value === "light-weakened") state.lightThesis = "weakened";
+    if (value === "price-near") state.priceNear = true;
+  }
+  syncFilterControls();
+  renderWatchlist();
+}
+
+function clearSingleFilter(key) {
+  if (key === "quickFilter") {
+    const value = state.quickFilter;
+    if (["attention", "skill", "manual", "observe"].includes(value)) state.actionStatus = "all";
+    if (["light-improved", "light-weakened"].includes(value)) state.lightThesis = "all";
+    if (value === "price-near") state.priceNear = false;
+    state.quickFilter = "all";
+  } else if (key === "search") {
+    state.search = "";
+  } else if (key === "priceNear") {
+    state.priceNear = false;
+  } else if (key === "sort") {
+    state.sort = "attention";
+  } else if (Object.hasOwn(state, key)) {
+    state[key] = "all";
+  }
+  state.page = 1;
+  syncFilterControls();
+  renderWatchlist();
 }
 
 function bindEvents() {
@@ -1320,6 +1507,12 @@ function bindEvents() {
   });
   window.addEventListener("hashchange", syncWorkspaceFromLocation);
   window.addEventListener("popstate", syncWorkspaceFromLocation);
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) void refreshDataOnPageResume({ force: true });
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") void refreshDataOnPageResume();
+  });
   els.statusCards.addEventListener("click", (event) => {
     const lifecycleButton = event.target.closest("[data-lifecycle-jump]");
     const opportunityButton = event.target.closest("[data-opportunity-jump]");
@@ -1367,13 +1560,29 @@ function bindEvents() {
     if (row) { event.preventDefault(); openDetail(row.dataset.ticker); }
   });
   els.search.addEventListener("input", () => { state.search = els.search.value.trim(); state.page = 1; renderWatchlist(); });
-  els.market.addEventListener("change", () => { state.market = els.market.value; state.page = 1; renderWatchlist(); });
-  els.lifecycle.addEventListener("change", () => { state.lifecycle = els.lifecycle.value; state.page = 1; renderWatchlist(); });
-  els.opportunity.addEventListener("change", () => { state.opportunity = els.opportunity.value; state.page = 1; renderWatchlist(); });
-  els.sort.addEventListener("change", () => { state.sort = els.sort.value; state.page = 1; renderWatchlist(); });
+  for (const [select, key] of [
+    [els.market, "market"], [els.lifecycle, "lifecycle"], [els.actionStatus, "actionStatus"],
+    [els.skill, "skill"], [els.lightThesis, "lightThesis"], [els.formalDrift, "formalDrift"],
+    [els.blocker, "blocker"], [els.checklist, "checklist"], [els.opportunity, "opportunity"], [els.sort, "sort"],
+  ]) {
+    select.addEventListener("change", () => {
+      state[key] = select.value;
+      state.quickFilter = "all";
+      state.page = 1;
+      renderWatchlist();
+    });
+  }
+  els.quickFilters.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-quick-filter]");
+    if (button) applyQuickFilter(button.dataset.quickFilter);
+  });
+  els.activeFilterChips.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-clear-filter]");
+    if (button) clearSingleFilter(button.dataset.clearFilter);
+  });
   els.clearFilters.addEventListener("click", () => {
-    state.search = ""; state.market = "all"; state.lifecycle = "all"; state.opportunity = "all"; state.sort = "attention"; state.page = 1;
-    els.search.value = ""; els.market.value = "all"; els.lifecycle.value = "all"; els.opportunity.value = "all"; els.sort.value = "attention";
+    resetFilterState();
+    syncFilterControls();
     renderWatchlist();
   });
   els.loadMore.addEventListener("click", () => { state.page += 1; renderWatchlist(); });

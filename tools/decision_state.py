@@ -14,12 +14,14 @@ import hashlib
 import json
 import re
 import copy
-from datetime import date, datetime
+from datetime import date, datetime, time
 from pathlib import Path
 from typing import Any, Iterable
+from zoneinfo import ZoneInfo
 
 from source_hash import canonical_file_sha256
 import drift_scan_state
+import light_thesis_signals
 
 
 SCHEMA_VERSION = 1
@@ -29,8 +31,11 @@ AUTOMATION_LEVELS = ("AUTO", "REVIEW", "MANUAL")
 LIFECYCLES = ("WATCH", "PRE_BUY", "HOLDING", "EXITED")
 DRIFT_DIRECTIONS = ("improved", "unchanged", "weakened", "unknown")
 DRIFT_SEVERITIES = ("none", "minor", "major", "unknown")
-RULE_STATUSES = ("triggered", "near_trigger", "not_triggered", "unknown", "needs_review")
-RULE_RUNTIME_FIELDS = frozenset({"status", "last_checked"})
+RULE_STATUSES = (
+    "triggered", "near_trigger", "not_triggered", "unknown", "needs_review",
+    "invalid_definition", "data_error",
+)
+RULE_RUNTIME_FIELDS = frozenset({"status", "last_checked", "evaluation"})
 PRE_BUY_ACTIONS = frozenset({"run_checklist", "confirm_purchase"})
 DRIFT_REVIEW_CATEGORIES = (
     "true_current_drift",
@@ -50,11 +55,14 @@ DRIFT_REVIEW_LABELS = {
     "reviewed_insufficient_evidence": "论文已复核，但证据不足",
     "not_applicable": "当前生命周期不适用",
 }
+GUIDANCE_PRIORITIES = ("urgent", "normal", "monitor", "none")
+CANONICAL_SKILLS_DIRECTORY = Path(__file__).resolve().parent.parent / "skills"
 
 STATE_RELATIVE = Path("data/investment-dashboard/company_state.json")
 RULES_RELATIVE = Path("data/investment-dashboard/decision_rules.json")
 TECHNICAL_RELATIVE = Path("data/investment-dashboard/technical_latest.json")
 CHECKLIST_RELATIVE = Path("data/investment-dashboard/checklist_states.json")
+EVALUATIONS_RELATIVE = Path("data/investment-dashboard/rule_evaluations.json")
 OVERRIDES_RELATIVE = Path("data/investment-dashboard/company_state_overrides.json")
 DRIFT_RELATIVE = Path("data/investment-dashboard/drift_states.json")
 DRIFT_SCAN_RELATIVE = drift_scan_state.RELATIVE_PATH
@@ -69,10 +77,34 @@ _EVENT_WORDS = re.compile(
 _METRIC_WORDS = re.compile(
     r"收入|营收|利润|毛利率|净利率|现金流|自由现金流|ROE|市占|份额|产量|销量|订单|库存|负债|铜价|PE|PB|季度|财报|增速|盈利"
 )
+_COMPOSITE_PRICE_WORDS = re.compile(
+    r"中报|年报|季报|业绩|转负面|转正面|经营|订单|现金流|FCF|毛利率|收入|利润|公告|事件",
+    re.I,
+)
+_NON_EQUITY_PRICE_WORDS = re.compile(
+    r"亿元|万元|百万元|收入|营收|利润|现金流|FCF|净现金|批价|铝价|铜价|煤价|油价|"
+    r"产品价格|产品单价|元/吨|元/瓶|元/瓦|元/Wh|美元/吨",
+    re.I,
+)
+SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 
 
 def now_iso() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
+
+
+def _parse_iso_datetime(value: Any) -> datetime | None:
+    """Parse an ISO timestamp for ordering without relying on text layout."""
+    text = compact(value)
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=SHANGHAI_TIMEZONE)
+    return parsed
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -343,11 +375,28 @@ def _condition_rule(
 
 def _quote_by_ticker(data_directory: Path) -> dict[str, dict[str, Any]]:
     payload = load_json(data_directory / "quotes" / "latest.json", {})
-    return {
-        compact(item.get("ticker")).upper(): item
-        for item in payload.get("quotes", [])
-        if isinstance(item, dict) and compact(item.get("ticker"))
-    }
+    market_snapshots = payload.get("market_snapshots")
+    if not isinstance(market_snapshots, dict):
+        market_snapshots = {}
+    result: dict[str, dict[str, Any]] = {}
+    for item in payload.get("quotes", []):
+        if not isinstance(item, dict) or not compact(item.get("ticker")):
+            continue
+        quote = dict(item)
+        market = compact(item.get("market"))
+        market_snapshot = market_snapshots.get(market)
+        if not isinstance(market_snapshot, dict):
+            market_snapshot = {
+                "market": market,
+                "quote_type": payload.get("quote_phase"),
+                "source_status": payload.get("source_status"),
+                "refresh_status": "legacy_snapshot",
+                "data_cutoff": payload.get("data_cutoff"),
+                "last_success_at": payload.get("generated_at"),
+            }
+        quote["_market_snapshot"] = market_snapshot
+        result[compact(item.get("ticker")).upper()] = quote
+    return result
 
 
 def _quote_price(quote: dict[str, Any] | None) -> float | None:
@@ -360,6 +409,44 @@ def _quote_price(quote: dict[str, Any] | None) -> float | None:
         except (TypeError, ValueError):
             continue
     return None
+
+
+def _market_is_open(market: str, current: datetime) -> bool:
+    local = current.astimezone(SHANGHAI_TIMEZONE)
+    if local.weekday() >= 5:
+        return False
+    clock = local.time().replace(tzinfo=None)
+    if market == "A股":
+        return time(9, 30) <= clock <= time(11, 30) or time(13, 0) <= clock <= time(15, 0)
+    if market == "港股":
+        return time(9, 30) <= clock <= time(12, 0) or time(13, 0) <= clock <= time(16, 0)
+    return False
+
+
+def _quote_trust(quote: dict[str, Any] | None, evaluated_at: datetime) -> tuple[bool, str]:
+    if not isinstance(quote, dict) or _quote_price(quote) is None:
+        return False, "quote_missing"
+    if quote.get("snapshot_status") == "preserved_previous":
+        return False, "quote_missing_from_latest_refresh"
+    metadata = quote.get("_market_snapshot")
+    if not isinstance(metadata, dict):
+        return True, "direct_quote_without_snapshot_metadata"
+    if metadata.get("refresh_status") == "failed" or metadata.get("source_status") == "unavailable":
+        return False, "market_refresh_failed"
+    data_cutoff = compact(quote.get("data_cutoff") or metadata.get("data_cutoff"))
+    market = compact(quote.get("market") or metadata.get("market"))
+    if not re.fullmatch(r"20\d{2}-\d{2}-\d{2}", data_cutoff):
+        return False, "quote_date_missing"
+    if _market_is_open(market, evaluated_at) and data_cutoff != evaluated_at.astimezone(SHANGHAI_TIMEZONE).date().isoformat():
+        return False, "historical_close_during_trading_session"
+    return True, "quote_current_for_market_session"
+
+
+def _unparsed_price_composite(rule: dict[str, Any]) -> bool:
+    condition = compact(rule.get("condition"))
+    if not condition:
+        return False
+    return bool(_COMPOSITE_PRICE_WORDS.search(condition) and re.search(r"且|并且|同时|前提|后再|后可|未转|转正", condition))
 
 
 def _event_text(event: dict[str, Any]) -> str:
@@ -414,47 +501,206 @@ def evaluate_rule(
     event_relevant: bool = False,
     event_context: dict[str, Any] | None = None,
 ) -> str:
+    """Compatibility wrapper returning only the current Evaluation result."""
+    return evaluate_rule_result(rule, quote, event_relevant, event_context)["result"]
+
+
+def _apply_condition_review(
+    base: dict[str, Any], condition_review: dict[str, Any] | None
+) -> dict[str, Any] | None:
+    if not isinstance(condition_review, dict):
+        return None
+    review = condition_review.get("review") or {}
+    if condition_review.get("mapping_status") == "ambiguous":
+        base.update({
+            "result": "unknown",
+            "evidence_source": "human_locked_manual_review",
+            "evidence_date": review.get("latest_evidence_date"),
+            "reason": "ambiguous_review_mapping",
+        })
+        return base
+    reviewed = condition_review.get("result") or {}
+    definition = condition_review.get("definition") or {}
+    truth_state = compact(reviewed.get("truth_state")).lower()
+    if truth_state not in {"met", "not_met", "unknown", "not_due"}:
+        return None
+    if review.get("freshness") != "current":
+        base.update({
+            "result": "unknown",
+            "actual_value": reviewed.get("current_value"),
+            "period": definition.get("periods") or None,
+            "evidence_source": "human_locked_manual_review",
+            "evidence_date": review.get("latest_evidence_date") or review.get("reviewed_at"),
+            "reason": "stale_human_review",
+            "review_reason": reviewed.get("reason"),
+            "reviewed_at": review.get("reviewed_at"),
+            "last_evidence_probe_at": review.get("last_probe_at"),
+            "latest_relevant_evidence_at": review.get("latest_relevant_evidence_at"),
+            "evidence_fingerprint": review.get("evidence_fingerprint"),
+            "source_review_rule_id": definition.get("rule_id"),
+        })
+        return base
+    result = {
+        "met": "triggered",
+        "not_met": "not_triggered",
+        "unknown": "unknown",
+        "not_due": "unknown",
+    }[truth_state]
+    reason = {
+        "met": "reviewed_condition_met",
+        "not_met": "reviewed_condition_not_met",
+        "unknown": "reviewed_evidence_insufficient",
+        "not_due": "awaiting_scheduled_evidence",
+    }[truth_state]
+    base.update({
+        "result": result,
+        "actual_value": reviewed.get("current_value"),
+        "period": definition.get("periods") or None,
+        "evidence_source": "human_locked_manual_review",
+        "evidence_date": review.get("latest_evidence_date") or review.get("reviewed_at"),
+        "reason": reason,
+        "review_reason": reviewed.get("reason"),
+        "reviewed_at": review.get("reviewed_at"),
+        "evidence_fingerprint": review.get("evidence_fingerprint"),
+        "evidence_quality": review.get("evidence_quality"),
+        "last_evidence_probe_at": review.get("last_probe_at"),
+        "source_review_rule_id": definition.get("rule_id"),
+        "missing_codes": reviewed.get("missing_codes") or [],
+    })
+    return base
+
+
+def evaluate_rule_result(
+    rule: dict[str, Any],
+    quote: dict[str, Any] | None = None,
+    event_relevant: bool = False,
+    event_context: dict[str, Any] | None = None,
+    condition_review: dict[str, Any] | None = None,
+    *,
+    evaluated_at: str | None = None,
+) -> dict[str, Any]:
+    """Evaluate one definition into an auditable, non-authoritative result."""
+    evaluated_text = evaluated_at or now_iso()
+    try:
+        evaluated_datetime = datetime.fromisoformat(evaluated_text)
+    except ValueError:
+        evaluated_datetime = datetime.now().astimezone()
+    base = {
+        "rule_id": rule.get("rule_id"),
+        "result": "unknown",
+        "actual_value": None,
+        "period": None,
+        "evidence_source": None,
+        "evidence_date": None,
+        "market_data_cutoff": None,
+        "evaluated_at": evaluated_text,
+        "reason": "no deterministic evaluator",
+    }
     rule_type = rule.get("type")
     if rule_type in {"PRICE", "PRICE_RANGE"}:
         price = _quote_price(quote)
-        if price is None:
-            return "unknown"
+        metadata = quote.get("_market_snapshot") if isinstance(quote, dict) else {}
+        trusted, trust_reason = _quote_trust(quote, evaluated_datetime)
+        base.update({
+            "actual_value": price,
+            "evidence_source": quote.get("source") if isinstance(quote, dict) else None,
+            "evidence_date": quote.get("data_cutoff") if isinstance(quote, dict) else None,
+            "market_data_cutoff": quote.get("data_cutoff") if isinstance(quote, dict) else None,
+            "quote_type": metadata.get("quote_type") if isinstance(metadata, dict) else None,
+            "refresh_status": metadata.get("refresh_status") if isinstance(metadata, dict) else None,
+        })
+        if not trusted:
+            base.update({"result": "data_error", "reason": trust_reason})
+            return base
+        if _unparsed_price_composite(rule):
+            base.update({"result": "unknown", "reason": "composite_condition_not_structured"})
+            return base
+        if _NON_EQUITY_PRICE_WORDS.search(compact(rule.get("condition"))):
+            base.update({"result": "unknown", "reason": "non_equity_price_condition_not_structured"})
+            return base
         low, high = rule.get("min"), rule.get("max")
         try:
             low = float(low) if low is not None else None
             high = float(high) if high is not None else None
         except (TypeError, ValueError):
-            return "needs_review"
+            base.update({"result": "invalid_definition", "reason": "invalid_price_boundary"})
+            return base
         if rule_type == "PRICE_RANGE" and low is not None and high is not None:
             if low <= price <= high:
-                return "triggered"
-            distance = min(abs(price - low) / max(abs(low), 0.01), abs(price - high) / max(abs(high), 0.01))
-            return "near_trigger" if distance <= 0.10 else "not_triggered"
+                result = "triggered"
+            else:
+                distance = min(abs(price - low) / max(abs(low), 0.01), abs(price - high) / max(abs(high), 0.01))
+                result = "near_trigger" if distance <= 0.10 else "not_triggered"
+            base.update({"result": result, "reason": "price_range_evaluated"})
+            return base
         boundary = high if high is not None else low
         if boundary is None:
-            return "needs_review"
+            base.update({"result": "invalid_definition", "reason": "missing_price_boundary"})
+            return base
         triggered = price <= boundary if high is not None else price >= boundary
         distance = abs(price - boundary) / max(abs(boundary), 0.01)
-        return "triggered" if triggered else "near_trigger" if distance <= 0.10 else "not_triggered"
+        base.update({
+            "result": "triggered" if triggered else "near_trigger" if distance <= 0.10 else "not_triggered",
+            "reason": "price_boundary_evaluated",
+        })
+        return base
     if rule_type == "EVENT":
         if event_context is not None:
-            return "triggered" if _event_matches_rule(rule, event_context) else "unknown"
-        return "triggered" if event_relevant else "unknown"
-    if rule_type == "ALL_OF":
-        statuses = [evaluate_rule(child, quote, event_relevant, event_context) for child in rule.get("children", [])]
-        if statuses and all(item == "triggered" for item in statuses):
-            return "triggered"
-        if any(item == "unknown" for item in statuses):
-            return "unknown"
-        return "not_triggered"
-    if rule_type == "ANY_OF":
-        statuses = [evaluate_rule(child, quote, event_relevant, event_context) for child in rule.get("children", [])]
-        if any(item == "triggered" for item in statuses):
-            return "triggered"
-        if any(item in {"unknown", "needs_review"} for item in statuses):
-            return "unknown"
-        return "not_triggered"
-    return "unknown"
+            matched = _event_matches_rule(rule, event_context)
+            reviewed_result = None if matched else _apply_condition_review(base, condition_review)
+            if reviewed_result is not None:
+                return reviewed_result
+            base.update({
+                "result": "triggered" if matched else "unknown",
+                "evidence_source": event_context.get("source") or "event_radar",
+                "evidence_date": event_context.get("data_cutoff") or event_context.get("last_checked"),
+                "reason": "event_matched" if matched else "awaiting_event_confirmation",
+            })
+            return base
+        if not event_relevant:
+            reviewed_result = _apply_condition_review(base, condition_review)
+            if reviewed_result is not None:
+                return reviewed_result
+        base.update({
+            "result": "triggered" if event_relevant else "unknown",
+            "reason": "event_relevant" if event_relevant else "awaiting_event_confirmation",
+        })
+        return base
+    if rule_type == "METRIC":
+        reviewed_result = _apply_condition_review(base, condition_review)
+        if reviewed_result is not None:
+            return reviewed_result
+        base["reason"] = "missing_computable_definition"
+        return base
+    if rule_type in {"ALL_OF", "ANY_OF"}:
+        children = rule.get("children")
+        if not isinstance(children, list) or not children:
+            base.update({"result": "invalid_definition", "reason": "empty_composite_children", "children": []})
+            return base
+        child_results = [
+            evaluate_rule_result(
+                child, quote, event_relevant, event_context, evaluated_at=evaluated_text
+            )
+            for child in children
+        ]
+        statuses = [item["result"] for item in child_results]
+        if rule_type == "ALL_OF":
+            if "not_triggered" in statuses:
+                result = "not_triggered"
+            elif all(item == "triggered" for item in statuses):
+                result = "triggered"
+            else:
+                result = "unknown"
+        else:
+            if "triggered" in statuses:
+                result = "triggered"
+            elif all(item == "not_triggered" for item in statuses):
+                result = "not_triggered"
+            else:
+                result = "unknown"
+        base.update({"result": result, "reason": f"{rule_type.lower()}_aggregated", "children": child_results})
+        return base
+    return base
 
 
 def _rules_for_decision(decision: dict[str, Any]) -> list[dict[str, Any]]:
@@ -642,6 +888,109 @@ def _load_drift(data_directory: Path) -> dict[str, dict[str, Any]]:
     return values if isinstance(values, dict) else {}
 
 
+def _load_condition_reviews(
+    data_directory: Path,
+    current_review_payload: dict[str, Any] | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Load exact, human-locked condition results as evaluation evidence.
+
+    These files already exist as Git-authoritative research artifacts. They do
+    not redefine Decision Rules: a result is eligible only when its reviewed
+    Main Report hash still matches and one active human-locked condition maps
+    exactly to one persisted Rule condition.
+    """
+    payload = load_json(data_directory / "codex_direct_manual_review.json", {})
+    reviews = {
+        compact(item.get("ticker")).upper(): item
+        for item in payload.get("reviews", [])
+        if isinstance(item, dict) and compact(item.get("ticker"))
+    }
+    if current_review_payload is None:
+        current_review_payload = load_json(data_directory / "main_report_review.json", {})
+    current_reviews = {
+        compact(item.get("ticker")).upper(): item
+        for item in current_review_payload.get("reviews", [])
+        if isinstance(item, dict) and compact(item.get("ticker"))
+    }
+    result: dict[str, dict[str, Any]] = {}
+    rules_directory = data_directory / "main-report-review-rules"
+    for ticker, review in reviews.items():
+        package = load_json(rules_directory / f"{ticker}.json", {})
+        if (package.get("authority_policy") or {}).get("active_authority") != "human_locked":
+            continue
+        package_hash = compact((package.get("main_report") or {}).get("canonical_sha256"))
+        review_hash = compact((review.get("main_report") or {}).get("canonical_sha256"))
+        if not package_hash or package_hash != review_hash:
+            continue
+        review_results = {
+            compact(item.get("rule_id")): item
+            for item in review.get("rule_results", [])
+            if isinstance(item, dict) and compact(item.get("rule_id"))
+        }
+        current_review = current_reviews.get(ticker) or {}
+        strict_incremental = (
+            (current_review.get("routine") or {}).get("strict_incremental") or {}
+        )
+        last_probe_at = current_review.get("last_probe_at")
+        reviewed_at = review.get("reviewed_at")
+        last_probe_datetime = _parse_iso_datetime(last_probe_at)
+        reviewed_datetime = _parse_iso_datetime(reviewed_at)
+        freshness = "unverified"
+        if (
+            compact(strict_incremental.get("status")) == "waiting_evidence"
+            and strict_incremental.get("current_evidence_count") == 0
+            and last_probe_datetime is not None
+            and reviewed_datetime is not None
+            and last_probe_datetime >= reviewed_datetime
+        ):
+            freshness = "current"
+        elif strict_incremental.get("current_evidence_count"):
+            freshness = "new_evidence"
+        elif compact(strict_incremental.get("status")):
+            freshness = "stale"
+        by_condition: dict[str, list[dict[str, Any]]] = {}
+        for definition in package.get("active_rules", []):
+            if not isinstance(definition, dict) or definition.get("authority") != "human_locked":
+                continue
+            reviewed = review_results.get(compact(definition.get("rule_id")))
+            condition = compact(definition.get("condition"))
+            if reviewed is None or not condition:
+                continue
+            by_condition.setdefault(condition, []).append({
+                "definition": definition,
+                "result": reviewed,
+            })
+        result[ticker] = {
+            "baseline_report_sha256": package_hash,
+            "reviewed_at": review.get("reviewed_at"),
+            "latest_evidence_date": review.get("latest_evidence_date"),
+            "evidence_fingerprint": review.get("evidence_fingerprint"),
+            "evidence_quality": review.get("evidence_quality"),
+            "freshness": freshness,
+            "last_probe_at": last_probe_at,
+            "latest_relevant_evidence_at": strict_incremental.get("latest_evidence_date"),
+            "by_condition": by_condition,
+        }
+    return result
+
+
+def _condition_review_for_rule(
+    company_review: dict[str, Any] | None,
+    rule: dict[str, Any],
+    report_hash: str | None,
+) -> dict[str, Any] | None:
+    if not isinstance(company_review, dict):
+        return None
+    if not report_hash or company_review.get("baseline_report_sha256") != report_hash:
+        return None
+    matches = (company_review.get("by_condition") or {}).get(compact(rule.get("condition")), [])
+    if len(matches) > 1:
+        return {"mapping_status": "ambiguous", "review": company_review}
+    if len(matches) != 1:
+        return None
+    return {**matches[0], "mapping_status": "exact", "review": company_review}
+
+
 def _load_drift_scan(data_directory: Path, repo_root: Path) -> dict[str, dict[str, Any]]:
     """Load optional scan checkpoints; a present invalid file fails closed."""
     payload = drift_scan_state.load(data_directory / DRIFT_SCAN_RELATIVE.name, repo_root=repo_root)
@@ -696,6 +1045,12 @@ def rule_can_promote_pre_buy(rule: dict[str, Any]) -> bool:
     """Return whether one explicit buy-gate Rule may enter PRE_BUY."""
     if rule.get("status") != "triggered" or rule.get("active", True) is False or rule.get("needs_review"):
         return False
+    if rule.get("type") in {"PRICE", "PRICE_RANGE"}:
+        # Temporary fail-closed boundary: historical definitions may contain
+        # unstructured operating prerequisites in their price prose.  Price
+        # remains visible as an Evaluation signal but cannot alone grant
+        # Checklist eligibility until the compound definition is explicit.
+        return rule.get("checklist_eligibility") == "price_only_explicit"
     scope = compact(rule.get("rule_scope")).lower()
     action = compact(rule.get("action")).lower()
     if scope == "entry":
@@ -787,6 +1142,7 @@ def _next_action(
     if any(
         rule.get("status") == "triggered"
         and rule.get("active", True) is not False
+        and rule.get("type") not in {"PRICE", "PRICE_RANGE"}
         and compact(rule.get("action")).lower() in {"run_checklist", "review_decision", "confirm_purchase"}
         for rule in rules
     ):
@@ -796,6 +1152,545 @@ def _next_action(
     if any(rule.get("status") == "near_trigger" for rule in rules):
         return "condition_near_trigger"
     return "keep_watch"
+
+
+def _guidance_rule(
+    rules: list[dict[str, Any]],
+    *,
+    statuses: set[str] | None = None,
+    reasons: set[str] | None = None,
+    scope: str | None = None,
+) -> dict[str, Any] | None:
+    """Return the first active Rule matching a deterministic guidance gate."""
+    for rule in rules:
+        if rule.get("active", True) is False:
+            continue
+        evaluation = rule.get("evaluation") or {}
+        status = compact(rule.get("status") or evaluation.get("result")).lower()
+        reason = compact(evaluation.get("reason")).lower()
+        if statuses is not None and status not in statuses:
+            continue
+        if reasons is not None and reason not in reasons:
+            continue
+        if scope is not None and compact(rule.get("rule_scope")).lower() != scope:
+            continue
+        return rule
+    return None
+
+
+def canonical_skill_names() -> set[str]:
+    """Return the canonical workflow names exposed by ``skills/*.md``."""
+    if not CANONICAL_SKILLS_DIRECTORY.is_dir():
+        return set()
+    return {path.stem for path in CANONICAL_SKILLS_DIRECTORY.glob("*.md") if path.is_file()}
+
+
+def thesis_drift_eligibility(
+    lifecycle: str,
+    rules: list[dict[str, Any]],
+    event: dict[str, Any],
+    drift_scan: dict[str, Any] | None,
+    next_action: str,
+) -> tuple[bool, str]:
+    """Return the single deterministic gate for recommending thesis-drift."""
+    scan_status = compact((drift_scan or {}).get("status")).lower()
+    scan_result = compact((drift_scan or {}).get("result")).lower()
+    formal_review_covers_current_trigger = (
+        scan_status == "current"
+        and scan_result in {"improved", "unchanged", "weakened"}
+    )
+    if next_action == "drift_recheck":
+        return True, "current_formal_review_requires_additional_evidence"
+    non_price_redline = _guidance_rule(rules, statuses={"triggered"}, scope="redline")
+    if non_price_redline is not None and non_price_redline.get("type") not in {"PRICE", "PRICE_RANGE"}:
+        if formal_review_covers_current_trigger:
+            return False, "confirmed_redline_already_covered_by_current_formal_review"
+        return True, "confirmed_non_price_redline_not_covered_by_current_formal_review"
+    material_holding_event = (
+        lifecycle == "HOLDING"
+        and compact(event.get("state")).lower() in {"important", "critical"}
+        and bool(event.get("thesis_relevant"))
+    )
+    if material_holding_event:
+        if formal_review_covers_current_trigger:
+            return False, "holding_event_already_covered_by_current_formal_review"
+        return True, "holding_material_event_not_covered_by_current_formal_review"
+    if next_action == "run_drift":
+        if formal_review_covers_current_trigger:
+            return False, "current_formal_review_already_covers_trigger"
+        return True, "explicit_run_drift_action_not_covered_by_current_formal_review"
+    return False, "no_current_thesis_drift_trigger"
+
+
+def derive_review_coverage(
+    decision: dict[str, Any],
+    drift: dict[str, Any],
+    drift_scan: dict[str, Any] | None,
+    checklist: dict[str, Any],
+    condition_review: dict[str, Any] | None,
+    report_hash: str | None,
+    generated_at: str,
+) -> dict[str, Any]:
+    """Project whether existing reviews still cover the current baseline."""
+    manual = decision.get("manual_execution_review") or {}
+    snapshot_hash = compact(
+        (((manual.get("source_snapshot") or {}).get("main_report") or {}).get("sha256"))
+    )
+    reviewed_at = _parse_iso_datetime(manual.get("reviewed_at"))
+    drift_checked_at = _parse_iso_datetime(drift.get("last_checked"))
+    formal_drift_fingerprint = compact((drift_scan or {}).get("trigger_fingerprint"))
+    resolved_drift_fingerprint = compact(
+        manual.get("resolved_drift_trigger_fingerprint")
+    )
+    generated_datetime = _parse_iso_datetime(generated_at)
+    valid_until_text = compact(manual.get("valid_until"))
+    try:
+        valid_until = date.fromisoformat(valid_until_text) if valid_until_text else None
+    except ValueError:
+        valid_until = None
+    manual_ready = (
+        compact(manual.get("status")).lower() == "ready"
+        and compact(manual.get("validity_state")).lower() == "ready"
+        and bool(report_hash)
+        and snapshot_hash == report_hash
+        and (
+            not manual.get("source_fingerprint_sha256")
+            or manual.get("source_fingerprint_sha256")
+            == manual.get("current_source_fingerprint_sha256")
+        )
+        and valid_until is not None
+        and generated_datetime is not None
+        and valid_until >= generated_datetime.astimezone(SHANGHAI_TIMEZONE).date()
+    )
+    if not manual:
+        manual_status = "missing"
+    elif snapshot_hash != report_hash:
+        manual_status = "baseline_mismatch"
+    elif valid_until is None or (
+        generated_datetime is not None
+        and valid_until < generated_datetime.astimezone(SHANGHAI_TIMEZONE).date()
+    ):
+        manual_status = "expired"
+    elif not manual_ready:
+        manual_status = "invalid"
+    else:
+        manual_status = "current"
+    drift_resolution = "not_required"
+    if drift_checked_at is not None:
+        if manual_ready and reviewed_at is not None and reviewed_at < drift_checked_at:
+            drift_resolution = "manual_review_precedes_drift"
+        elif not manual_ready or reviewed_at is None:
+            drift_resolution = "unresolved"
+        elif not formal_drift_fingerprint or not resolved_drift_fingerprint:
+            drift_resolution = "manual_review_missing_drift_binding"
+        elif resolved_drift_fingerprint != formal_drift_fingerprint:
+            drift_resolution = "manual_review_drift_binding_mismatch"
+        else:
+            drift_resolution = "resolved_by_current_manual_review"
+    checklist_status = compact(checklist.get("status")).upper() or "UNKNOWN"
+    checklist_review = (
+        "completed"
+        if checklist_status in {"PASS", "CONDITIONAL_PASS", "FAIL"}
+        and bool(checklist.get("checked_at") or checklist.get("report_path"))
+        else "missing"
+    )
+    condition_freshness = (
+        compact((condition_review or {}).get("freshness")).lower() or "missing"
+    )
+    return {
+        "formal_drift": {
+            "status": compact((drift_scan or {}).get("status")).lower() or "missing",
+            "result": compact((drift_scan or {}).get("result")).lower() or None,
+            "last_checked": drift.get("last_checked"),
+        },
+        "manual_decision": {
+            "status": manual_status,
+            "reviewed_at": manual.get("reviewed_at"),
+            "valid_until": manual.get("valid_until"),
+            "execution_key": manual.get("execution_key"),
+            "resolved_drift_trigger_fingerprint": resolved_drift_fingerprint or None,
+            "current_formal_drift_trigger_fingerprint": formal_drift_fingerprint or None,
+            "drift_resolution": drift_resolution,
+        },
+        "checklist": {
+            "status": checklist_status,
+            "coverage": checklist_review,
+            "checked_at": checklist.get("checked_at"),
+            "report_path": checklist.get("report_path"),
+        },
+        "financial_condition_review": {
+            "status": condition_freshness,
+            "reviewed_at": (condition_review or {}).get("reviewed_at"),
+            "last_probe_at": (condition_review or {}).get("last_probe_at"),
+        },
+    }
+
+
+def derive_action_guidance(
+    lifecycle: str,
+    rules: list[dict[str, Any]],
+    checklist: dict[str, Any],
+    drift: dict[str, Any],
+    event: dict[str, Any],
+    tracking: dict[str, Any] | None,
+    drift_scan: dict[str, Any] | None,
+    next_action: str,
+    review_coverage: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Derive one user-facing blocker and route without changing control state.
+
+    This is a navigation projection. It never promotes lifecycle, executes a
+    Skill, or rewrites a Rule/Checklist/Drift result. Unknown observations are
+    therefore not automatically turned into user work.
+    """
+    result = {
+        "blocker_code": "none",
+        "blocker_text": "当前没有需要人工处理的明确卡点",
+        "next_action_code": "continue_monitoring",
+        "next_action_text": "无需操作，系统继续观察",
+        "recommended_skill": [],
+        "recommended_skill_reason": "当前没有达到需要专业检查的确定性条件",
+        "priority": "none",
+        "requires_user_action": False,
+        "completion_target": "等待新证据、条件变化或既定复核时间",
+    }
+    drift_eligible, drift_eligibility_reason = thesis_drift_eligibility(
+        lifecycle, rules, event, drift_scan, next_action
+    )
+    review_coverage = review_coverage or {}
+
+    def guidance(
+        blocker_code: str,
+        blocker_text: str,
+        action_code: str,
+        action_text: str,
+        skills: list[str],
+        skill_reason: str,
+        priority: str,
+        requires_user_action: bool,
+        completion_target: str,
+    ) -> dict[str, Any]:
+        return {
+            "blocker_code": blocker_code,
+            "blocker_text": blocker_text,
+            "next_action_code": action_code,
+            "next_action_text": action_text,
+            "recommended_skill": skills,
+            "recommended_skill_reason": skill_reason,
+            "priority": priority,
+            "requires_user_action": requires_user_action,
+            "completion_target": completion_target,
+        }
+
+    redline = _guidance_rule(rules, statuses={"triggered"}, scope="redline")
+    if redline is not None:
+        condition = compact(redline.get("condition")) or "失效条件"
+        if redline.get("type") in {"PRICE", "PRICE_RANGE"}:
+            if lifecycle == "HOLDING":
+                return guidance(
+                    "holding_price_redline",
+                    f"持仓价格相关红线已触发：{condition}",
+                    "review_portfolio_position",
+                    "结合估值与组合情况作人工判断",
+                    ["portfolio-review"],
+                    "价格或估值红线不是投资逻辑漂移，持仓动作应在组合层判断",
+                    "urgent",
+                    True,
+                    "记录继续持有、调整仓位或退出的组合决策",
+                )
+            return guidance(
+                "watch_price_redline",
+                f"当前价格不符合观察标的的估值或安全边际要求：{condition}",
+                "continue_monitoring",
+                "无需研究，继续等待价格条件改善",
+                [],
+                "价格红线不等于投资逻辑变化，不应启动 thesis-drift",
+                "monitor",
+                False,
+                "等待价格回到可研究区间，或由新的基本面事实改变估值依据",
+            )
+        holding_prefix = "持仓" if lifecycle == "HOLDING" else "观察标的"
+        if not drift_eligible:
+            return guidance(
+                "covered_redline_requires_decision",
+                f"当前正式投资逻辑复核已覆盖该失效条件：{condition}",
+                "decide_research_disposition",
+                "根据已有复核结论决定降级、继续观察或退出",
+                [],
+                "该触发已被当前有效的正式复核覆盖，不应重复运行 thesis-drift",
+                "urgent" if lifecycle == "HOLDING" else "normal",
+                True,
+                "记录对既有复核结论的处置决定",
+            )
+        return guidance(
+            "confirmed_redline",
+            f"{holding_prefix}的失效条件已确认触发：{condition}",
+            "review_investment_thesis",
+            "复核投资逻辑并决定降级、继续观察或调整持仓",
+            ["thesis-drift"],
+            "当前已有确定性失效信号，需要核对其是否改变核心投资逻辑",
+            "urgent" if lifecycle == "HOLDING" else "normal",
+            True,
+            "形成对该失效条件的明确处理结论，并记录继续、降级或退出依据",
+        )
+
+    event_state = compact(event.get("state")).lower()
+    if lifecycle == "HOLDING":
+        if drift.get("direction") == "weakened" and drift.get("severity") == "major":
+            return guidance(
+                "holding_thesis_weakened",
+                "持仓公司的正式投资逻辑复核显示重大走弱",
+                "review_holding_thesis",
+                "围绕原始买入逻辑复核持仓",
+                ["thesis-tracker"],
+                "这是买入后的持续纪律问题，应以 Original Buy Thesis 为基准处理",
+                "urgent",
+                True,
+                "明确继续持有、降低仓位或退出的依据，不覆盖 Original Buy Thesis",
+            )
+        if event_state in {"important", "critical"} and event.get("thesis_relevant"):
+            if not drift_eligible:
+                return guidance(
+                    "covered_holding_event_requires_decision",
+                    "当前正式投资逻辑复核已覆盖该持仓重要事件",
+                    "decide_holding_disposition",
+                    "阅读现有复核结论并决定持仓动作",
+                    [],
+                    "该事件已被当前有效的正式复核覆盖，不应重复运行 thesis-drift",
+                    "urgent",
+                    True,
+                    "记录继续持有、调整仓位或退出的人工决定",
+                )
+            return guidance(
+                "holding_material_event",
+                "持仓公司出现已确认可能影响投资逻辑的重要事件",
+                "review_holding_thesis",
+                "复核事件对原始买入逻辑的影响",
+                ["thesis-drift"],
+                "事实已被事件层判定为重要且与投资逻辑相关，需要正式复核",
+                "urgent",
+                True,
+                "确认 Original Buy Thesis 是否仍成立，并记录持仓动作",
+            )
+        alerts = list((tracking or {}).get("alerts") or [])
+        if alerts:
+            detail = compact((alerts[0] or {}).get("detail")) or "持仓周期存在待处理提醒"
+            return guidance(
+                "holding_review_due",
+                detail,
+                "review_holding_cycle",
+                "核对持仓周期与最新事实",
+                ["thesis-tracker"],
+                "当前缺的是买入后的持续跟踪结论，不是新的买入前检查",
+                "urgent",
+                True,
+                "完成本次持仓复核并更新下一次复核日期",
+            )
+        return result
+
+    if lifecycle == "EXITED":
+        return {**result, "blocker_text": "该公司已退出当前投资流程", "completion_target": "无需后续动作"}
+
+    if next_action in {"drop_or_recheck", "reduce_review"} and drift.get("direction") == "weakened":
+        if drift.get("severity") == "minor":
+            return guidance(
+                "minor_thesis_weakening_monitored",
+                "正式复核记录为轻度走弱，但未达到需要立即处置的程度",
+                "continue_monitoring",
+                "无需操作，按既定条件继续观察",
+                [],
+                "轻度走弱已被正式复核记录，不应每天重复生成研究或处置任务",
+                "monitor",
+                False,
+                "等待下一份正式披露、条件变化或既定复核时点",
+            )
+        drift_resolution = compact(
+            ((review_coverage.get("manual_decision") or {}).get("drift_resolution"))
+        ).lower()
+        if drift_resolution == "resolved_by_current_manual_review":
+            return guidance(
+                "major_weakening_decision_recorded",
+                "重大走弱已有更新后的人工处置结论覆盖",
+                "continue_monitoring",
+                "无需重复处理，按已记录决定继续",
+                [],
+                "人工执行复核晚于正式 Drift 且当前仍有效，当前事项已经完成",
+                "none",
+                False,
+                "仅在新证据、基线变化或复核到期时重新打开",
+            )
+        return guidance(
+            "reviewed_thesis_weakened",
+            "正式投资逻辑复核已经完成，并记录为走弱",
+            "decide_research_disposition",
+            "根据已有复核结论决定降级、继续观察或退出",
+            [],
+            "正式复核已有结果，不应重复运行 thesis-drift；当前缺的是投资者处置决定",
+            "urgent" if lifecycle == "HOLDING" else "normal",
+            True,
+            "记录对现有走弱结论的处置决定，避免同一结果重复生成研究任务",
+        )
+
+    if next_action in {"run_drift", "drift_recheck"} and drift_eligible:
+        if event_state in {"important", "critical"} and event.get("thesis_relevant"):
+            blocker = "已确认的重要事件可能改变核心投资逻辑"
+        elif drift.get("direction") == "weakened":
+            blocker = "正式投资逻辑复核显示原有判断走弱"
+        else:
+            blocker = "现有证据要求重新核对核心投资逻辑"
+        return guidance(
+            "thesis_review_required",
+            blocker,
+            "review_investment_thesis",
+            "复核投资逻辑",
+            ["thesis-drift"],
+            "当前问题已经超出普通事实核验，可能影响核心投资逻辑",
+            "normal",
+            True,
+            "确认投资逻辑是否维持、改善、走弱或失效，并记录后续动作",
+        )
+
+    if next_action in {"run_drift", "drift_recheck"}:
+        return guidance(
+            "formal_review_already_current",
+            "当前正式投资逻辑复核已覆盖这次触发",
+            "decide_research_disposition",
+            "阅读现有复核结论并决定后续状态",
+            [],
+            f"无需重复运行 thesis-drift：{drift_eligibility_reason}",
+            "normal",
+            True,
+            "记录对当前正式复核结果的处置决定",
+        )
+
+    if next_action in {"drop_or_recheck", "reduce_review"}:
+        return guidance(
+            "review_result_requires_decision",
+            "已有检查结果要求作出降级或重新评估决定",
+            "decide_research_disposition",
+            "阅读已有检查依据并决定后续状态",
+            [],
+            "当前缺的是对既有结果的人工决定，不应自动重复运行研究 Skill",
+            "normal",
+            True,
+            "记录继续观察、降级或退出决定，并关闭同一结果产生的重复提醒",
+        )
+
+    checklist_status = compact(checklist.get("status")).upper()
+    if lifecycle == "PRE_BUY" and checklist_status in {"PASS", "CONDITIONAL_PASS"}:
+        return guidance(
+            "human_purchase_decision",
+            "买入前检查已有结果，当前等待投资者本人决策",
+            "make_purchase_decision",
+            "阅读检查结论并作出是否买入的人工判断",
+            [],
+            "专业检查已经完成，不需要重复运行 Skill",
+            "normal",
+            True,
+            "记录买入、继续等待或放弃的决定；系统不得自动买入",
+        )
+    if lifecycle == "PRE_BUY" or next_action == "run_checklist":
+        return guidance(
+            "pre_buy_checklist_missing",
+            "已具备买入推进资格，但正式买入前检查尚未完成",
+            "run_investment_checklist",
+            "执行买入前检查",
+            ["investment-checklist"],
+            "核心研究和买入推进资格已经具备，当前缺少正式买入决策审查",
+            "normal",
+            True,
+            "生成可审计的 PASS、CONDITIONAL_PASS 或 FAIL 检查结论",
+        )
+
+    if checklist_status == "FAIL" and (
+        ((review_coverage.get("checklist") or {}).get("coverage")) == "completed"
+    ):
+        return guidance(
+            "checklist_failed_current",
+            "已有买入前检查未通过，当前不具备买入资格",
+            "continue_monitoring",
+            "无需重复检查，继续观察或放弃",
+            [],
+            "Checklist 已有 FAIL 结果；没有新的重新开启条件时不应重复生成",
+            "none",
+            False,
+            "仅在 Main Report、关键证据或明确买入资格发生变化时重新打开",
+        )
+
+    stale_review = _guidance_rule(rules, reasons={"stale_human_review", "ambiguous_review_mapping"})
+    if stale_review is not None:
+        condition = compact(stale_review.get("condition")) or "非价格条件"
+        is_metric = stale_review.get("type") == "METRIC"
+        return guidance(
+            "condition_review_stale",
+            f"已有人工条件结论无法覆盖当前证据：{condition}",
+            "verify_condition_evidence",
+            "重新核验该条件的最新事实",
+            ["financial-data" if is_metric else "news-pulse"],
+            "当前缺的是条件事实更新，不应直接启动完整投资逻辑漂移复核",
+            "normal",
+            True,
+            "取得带日期和来源的当前事实，使条件恢复为可判定状态",
+        )
+
+    quote_error = _guidance_rule(rules, statuses={"data_error"})
+    if quote_error is not None:
+        return guidance(
+            "market_data_unavailable",
+            "当前缺少可信行情，价格条件不能判定",
+            "wait_for_market_data",
+            "无需投资者处理，等待行情链路恢复",
+            [],
+            "这是运行数据问题，不应转嫁为投资研究任务",
+            "monitor",
+            False,
+            "行情恢复后由系统自动重新计算价格条件",
+        )
+
+    if _guidance_rule(rules, statuses={"near_trigger"}) is not None:
+        return guidance(
+            "condition_near_trigger",
+            "价格或其他条件接近触发，但尚未形成完整推进资格",
+            "continue_monitoring",
+            "无需操作，继续观察",
+            [],
+            "接近条件只是自动观察信号，不等于买入前检查任务",
+            "monitor",
+            False,
+            "等待条件明确满足，或出现需要核验的新事实",
+        )
+
+    missing_metric = _guidance_rule(rules, reasons={"missing_computable_definition"})
+    if missing_metric is not None:
+        return guidance(
+            "financial_definition_missing",
+            f"经营条件尚无可计算定义：{compact(missing_metric.get('condition')) or '经营指标条件'}",
+            "continue_monitoring",
+            "当前无需操作；进入重点研究时再补齐财务定义",
+            ["financial-data"],
+            "如需推进，首先应核验指标口径和当前值，而不是直接运行论文漂移",
+            "monitor",
+            False,
+            "形成 metric、operator、threshold、period、source 后再自动求值",
+        )
+
+    awaiting = _guidance_rule(
+        rules,
+        reasons={"awaiting_scheduled_evidence", "awaiting_event_confirmation", "reviewed_evidence_insufficient"},
+    )
+    if awaiting is not None:
+        return guidance(
+            "evidence_not_available",
+            "相关条件仍在等待披露、事件确认或充分证据",
+            "continue_monitoring",
+            "无需操作，等待新证据",
+            [],
+            "当前没有足够事实支持专业检查，unknown 不应自动成为人工待办",
+            "monitor",
+            False,
+            "新证据到达后由系统重新判断是否需要专业 Skill",
+        )
+    return result
 
 
 def classify_drift_review(
@@ -842,8 +1737,92 @@ def classify_drift_review(
     }
 
 
+def classify_drift_audit_review(
+    lifecycle: str,
+    drift_scan: dict[str, Any] | None,
+    drift: dict[str, Any],
+    canonical_report_sha256: str | None,
+    rules: Iterable[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Classify the tracked Drift audit from research authority only.
+
+    ``drift_scan`` on Company State is a runtime projection: its derived
+    ``status`` and ``current_trigger_fingerprint`` may change with quotes or
+    Event Radar.  The tracked audit must not inherit those changes.  For this
+    projection a persisted checkpoint remains current while it still covers
+    the same canonical report, mode, and fingerprint contract.  A changed
+    report (or incompatible checkpoint contract) is stable Git evidence that
+    a new Drift review is required.
+
+    The generic Company State ``next_action`` is intentionally not an input.
+    Formal Drift direction is used only for the stable research disposition,
+    never to reproduce quote/event-driven dashboard actions.
+    """
+    scan = drift_scan if isinstance(drift_scan, dict) else {}
+    has_checkpoint = any(
+        scan.get(field) is not None
+        for field in ("checked_at", "batch_id", "source")
+    )
+    if not has_checkpoint:
+        checkpoint_status = "missing"
+    elif (
+        compact(scan.get("mode")).lower() != "watch"
+        or scan.get("trigger_fingerprint_version") != drift_scan_state.FINGERPRINT_VERSION
+        or scan.get("baseline_report_sha256") != canonical_report_sha256
+    ):
+        checkpoint_status = "stale"
+    else:
+        checkpoint_status = "current"
+
+    checkpoint_result = compact(scan.get("result")).lower() or None
+    stable_redlines = [
+        rule
+        for rule in rules
+        if isinstance(rule, dict)
+        and rule.get("active", True) is not False
+        and rule.get("status") == "triggered"
+        and compact(rule.get("rule_scope")).lower() == "redline"
+        and rule.get("type") not in {"PRICE", "PRICE_RANGE"}
+    ]
+    stable_redline_requests_drift = any(
+        compact(rule.get("action")).lower() == "run_drift"
+        for rule in stable_redlines
+    )
+    if lifecycle != "WATCH":
+        category = "not_applicable"
+        current_action = "not_applicable"
+    elif checkpoint_status == "stale" or stable_redline_requests_drift:
+        category = "true_current_drift"
+        current_action = "run_drift"
+    elif checkpoint_status == "current" and checkpoint_result == "unknown":
+        category = "reviewed_insufficient_evidence"
+        current_action = "run_drift"
+    elif checkpoint_status == "current":
+        category = "reviewed_current"
+        current_action = (
+            "drop_or_recheck"
+            if stable_redlines or compact(drift.get("direction")).lower() == "weakened"
+            else "keep_watch"
+        )
+    elif drift.get("last_checked"):
+        category = "reviewed_not_recognized"
+        current_action = "reviewed_waiting_disposition"
+    else:
+        category = "never_reviewed"
+        current_action = "keep_watch"
+
+    return {
+        "category": category,
+        "label": DRIFT_REVIEW_LABELS[category],
+        "current_action": current_action,
+        "checkpoint_status": checkpoint_status,
+        "checkpoint_result": checkpoint_result,
+        "last_checked": drift.get("last_checked"),
+    }
+
+
 def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
-    """Build a machine-readable audit of the dashboard's Drift action mapping."""
+    """Build a deterministic research-only Drift audit."""
     companies = [
         item
         for item in state_payload.get("companies", [])
@@ -852,11 +1831,12 @@ def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     counts = {category: 0 for category in DRIFT_REVIEW_CATEGORIES}
     for item in companies:
-        review = item.get("drift_review") or classify_drift_review(
+        review = classify_drift_audit_review(
             str(item.get("lifecycle") or ""),
             item.get("drift_scan"),
             item.get("drift") or {},
-            str(item.get("next_action") or "keep_watch"),
+            item.get("canonical_report_sha256"),
+            ((item.get("decision_rules") or {}).get("rules") or []),
         )
         category = review.get("category")
         if category not in counts:
@@ -870,7 +1850,7 @@ def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
                 "lifecycle": item.get("lifecycle"),
                 "category": category,
                 "label": DRIFT_REVIEW_LABELS[category],
-                "current_action": item.get("next_action"),
+                "current_action": review.get("current_action"),
                 "checkpoint_status": review.get("checkpoint_status"),
                 "checkpoint_result": review.get("checkpoint_result"),
                 "last_checked": review.get("last_checked"),
@@ -917,6 +1897,7 @@ def build_state_layers(
     rule_payload: dict[str, Any] | None = None,
     write: bool = True,
     generated_at: str | None = None,
+    main_report_review_payload: dict[str, Any] | None = None,
     legacy_mode: bool = False,
 ) -> dict[str, Any]:
     """Evaluate persisted rules; only an explicit legacy mode may infer them."""
@@ -926,6 +1907,15 @@ def build_state_layers(
     sentiment = _sentiment_by_ticker(data_directory)
     overrides = _load_overrides(data_directory)
     drift_values = _load_drift(data_directory)
+    condition_reviews = _load_condition_reviews(
+        data_directory,
+        current_review_payload=main_report_review_payload,
+    )
+    light_thesis_payload = light_thesis_signals.load(
+        data_directory / light_thesis_signals.RELATIVE_PATH.name,
+        strict=True,
+    )
+    light_thesis_records = light_thesis_payload.get("companies") or {}
     technical_values = _load_technical_latest(data_directory)
     tracking = _tracking_by_ticker(data_directory)
     events = _event_by_ticker(event_payload)
@@ -936,9 +1926,11 @@ def build_state_layers(
         if isinstance(item, dict) and compact(item.get("ticker"))
     }
     rule_companies: list[dict[str, Any]] = []
+    evaluation_companies: list[dict[str, Any]] = []
     states: list[dict[str, Any]] = []
     technical_latest: list[dict[str, Any]] = []
     checklist_states: list[dict[str, Any]] = []
+    light_thesis_projections: list[dict[str, Any]] = []
     for decision in decisions:
         ticker = compact(decision.get("ticker")).upper()
         cid = company_id(decision)
@@ -993,10 +1985,23 @@ def build_state_layers(
         ):
             event["state"] = "unknown"
         quote = quotes.get(ticker)
+        report_hash = canonical_report_hash(decision, repo_root)
+        company_condition_review = condition_reviews.get(ticker)
+        company_evaluations: list[dict[str, Any]] = []
         for rule in rules:
             event_triggered = bool(event.get("thesis_relevant")) and event.get("state") in {"important", "critical"}
-            rule["status"] = evaluate_rule(rule, quote, event_triggered, event)
+            evaluation = evaluate_rule_result(
+                rule,
+                quote,
+                event_triggered,
+                event,
+                _condition_review_for_rule(company_condition_review, rule, report_hash),
+                evaluated_at=generated_at,
+            )
+            rule["status"] = evaluation["result"]
             rule["last_checked"] = generated_at
+            rule["evaluation"] = evaluation
+            company_evaluations.append(evaluation)
         checklist = _checklist_state(decision)
         drift_raw = drift_values.get(ticker) or drift_values.get(cid) or {}
         drift = {
@@ -1009,6 +2014,12 @@ def build_state_layers(
             "source": drift_raw.get("source"),
         }
         lifecycle, warning = _lifecycle((overrides.get(ticker) or {}).get("lifecycle"), tracking.get(ticker), rules, checklist)
+        light_thesis = light_thesis_signals.project_record(
+            light_thesis_records.get(ticker),
+            lifecycle=lifecycle,
+            canonical_report_path=decision.get("report_path") or None,
+            canonical_report_sha256=report_hash,
+        )
         technical = _technical_state(decision, technical_values.get(ticker))
         if not realtime_supported:
             sentiment_item = {
@@ -1029,7 +2040,6 @@ def build_state_layers(
         prices, conditions = _opportunities(rules)
         intraday_eligible = lifecycle == "PRE_BUY" and checklist["status"] in {"PASS", "CONDITIONAL_PASS"}
         technical["intraday_eligible"] = intraday_eligible
-        report_hash = canonical_report_hash(decision, repo_root)
         checkpoint = drift_scan_values.get(ticker)
         checkpoint_evidence_sha = (
             checkpoint.get("research_evidence_sha256")
@@ -1058,6 +2068,26 @@ def build_state_layers(
         next_action = _next_action(
             lifecycle, rules, checklist, drift, event, tracking.get(ticker), drift_scan
         )
+        review_coverage = derive_review_coverage(
+            decision,
+            drift,
+            drift_scan,
+            checklist,
+            company_condition_review,
+            report_hash,
+            generated_at,
+        )
+        action_guidance = derive_action_guidance(
+            lifecycle,
+            rules,
+            checklist,
+            drift,
+            event,
+            tracking.get(ticker),
+            drift_scan,
+            next_action,
+            review_coverage,
+        )
         drift_review = classify_drift_review(lifecycle, drift_scan, drift, next_action)
         state = {
             "company_id": cid,
@@ -1085,6 +2115,8 @@ def build_state_layers(
             "drift": drift,
             "drift_scan": drift_scan,
             "drift_review": drift_review,
+            "light_thesis_signal": light_thesis,
+            "review_coverage": review_coverage,
             "event_radar": {
                 "state": event.get("state", "unknown"),
                 "thesis_relevant": bool(event.get("thesis_relevant")),
@@ -1103,6 +2135,7 @@ def build_state_layers(
             "condition_opportunities": conditions,
             "opportunity_type": "both" if prices and conditions else "price" if prices else "condition" if conditions else "none",
             "next_action": next_action,
+            "action_guidance": action_guidance,
             "needs_attention": next_action not in {"keep_watch", "hold", "none"} or lifecycle == "PRE_BUY",
             "warning": warning,
             "post_buy_tracking": tracking.get(ticker) if tracking.get(ticker) else {"status": "not_tracked"},
@@ -1127,8 +2160,22 @@ def build_state_layers(
             "extraction_error": extraction_error,
             "summary": rule_summary,
         })
+        evaluation_companies.append({
+            "company_id": cid,
+            "company": decision.get("company"),
+            "ticker": ticker or None,
+            "market": decision.get("market") or "unknown",
+            "evaluations": company_evaluations,
+        })
         technical_latest.append({"company_id": cid, "company": decision.get("company"), "ticker": ticker or None, "market": decision.get("market"), **technical})
         checklist_states.append({"company_id": cid, "company": decision.get("company"), "ticker": ticker or None, "market": decision.get("market"), **checklist})
+        light_thesis_projections.append({
+            "company_id": cid,
+            "company": decision.get("company"),
+            "ticker": ticker or None,
+            "market": decision.get("market"),
+            **light_thesis,
+        })
 
     rules_payload = {
         "schema_version": SCHEMA_VERSION,
@@ -1164,11 +2211,27 @@ def build_state_layers(
     }
     technical_payload = {"schema_version": SCHEMA_VERSION, "generated_at": generated_at, "companies": technical_latest}
     checklist_payload = {"schema_version": SCHEMA_VERSION, "generated_at": generated_at, "companies": checklist_states}
+    evaluations_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": generated_at,
+        "company_count": len(evaluation_companies),
+        "evaluation_count": sum(len(item["evaluations"]) for item in evaluation_companies),
+        "companies": evaluation_companies,
+    }
+    light_thesis_projection_payload = {
+        "schema_version": light_thesis_signals.SCHEMA_VERSION,
+        "generated_at": generated_at,
+        "authority": "git_source_read_only_projection",
+        "company_count": len(light_thesis_projections),
+        "companies": light_thesis_projections,
+    }
     result = {
         "rules": rules_payload,
         "state": state_payload,
         "technical": technical_payload,
         "checklist": checklist_payload,
+        "evaluations": evaluations_payload,
+        "light_thesis": light_thesis_projection_payload,
         "drift_review_audit": build_drift_review_audit(state_payload),
     }
     if write:
@@ -1177,6 +2240,7 @@ def build_state_layers(
         write_json(data_directory / STATE_RELATIVE.name, state_payload)
         write_json(data_directory / TECHNICAL_RELATIVE.name, technical_payload)
         write_json(data_directory / CHECKLIST_RELATIVE.name, checklist_payload)
+        write_json(data_directory / EVALUATIONS_RELATIVE.name, evaluations_payload)
     return result
 
 
@@ -1191,24 +2255,64 @@ def attach_company_states(decisions: list[dict[str, Any]], state_payload: dict[s
             decision["company_state_ref"] = "data/investment-dashboard/company_state.json"
             decision["lifecycle"] = state.get("lifecycle")
             decision["next_action"] = state.get("next_action")
+            decision["action_guidance"] = state.get("action_guidance")
 
 
 def validate_payloads(payloads: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     rules = payloads.get("rules") or {}
     state = payloads.get("state") or {}
+    evaluations = payloads.get("evaluations") or {}
     if rules.get("schema_version") != SCHEMA_VERSION:
         errors.append("decision_rules schema_version")
     if state.get("schema_version") != SCHEMA_VERSION:
         errors.append("company_state schema_version")
     if rules.get("rule_types") != list(RULE_TYPES):
         errors.append("decision_rules rule_types")
+    if evaluations and evaluations.get("schema_version") != SCHEMA_VERSION:
+        errors.append("rule_evaluations schema_version")
+    evaluation_rows = [
+        evaluation
+        for company in evaluations.get("companies", [])
+        if isinstance(company, dict)
+        for evaluation in company.get("evaluations", [])
+        if isinstance(evaluation, dict)
+    ]
+    if evaluations and evaluations.get("evaluation_count") != len(evaluation_rows):
+        errors.append("rule_evaluations evaluation_count")
+    for evaluation in evaluation_rows:
+        if evaluation.get("result") not in RULE_STATUSES:
+            errors.append(f"invalid evaluation result: {evaluation.get('rule_id')}")
     scan = payloads.get("drift_scan")
     if scan is not None:
         errors.extend(f"{error}" for error in drift_scan_state.validate_payload(scan))
     for item in state.get("companies", []):
         if item.get("lifecycle") not in LIFECYCLES:
             errors.append(f"invalid lifecycle: {item.get('ticker')}")
+        guidance = item.get("action_guidance")
+        if not isinstance(guidance, dict):
+            errors.append(f"missing action guidance: {item.get('ticker')}")
+        else:
+            required_guidance_fields = {
+                "blocker_code", "blocker_text", "next_action_code", "next_action_text",
+                "recommended_skill", "recommended_skill_reason", "priority",
+                "requires_user_action", "completion_target",
+            }
+            if not required_guidance_fields <= set(guidance):
+                errors.append(f"incomplete action guidance: {item.get('ticker')}")
+            if guidance.get("priority") not in GUIDANCE_PRIORITIES:
+                errors.append(f"invalid action guidance priority: {item.get('ticker')}")
+            if not isinstance(guidance.get("recommended_skill"), list):
+                errors.append(f"invalid action guidance skills: {item.get('ticker')}")
+            else:
+                available_skills = canonical_skill_names()
+                missing_skills = sorted(set(guidance.get("recommended_skill") or []) - available_skills)
+                if missing_skills:
+                    errors.append(
+                        f"action guidance skill not available: {item.get('ticker')} ({','.join(missing_skills)})"
+                    )
+            if not isinstance(guidance.get("requires_user_action"), bool):
+                errors.append(f"invalid action guidance user flag: {item.get('ticker')}")
         scan = item.get("drift_scan")
         if isinstance(scan, dict):
             scan_status = compact(scan.get("status")).lower()

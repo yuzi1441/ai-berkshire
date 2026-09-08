@@ -10,6 +10,14 @@ from tools.source_hash import canonical_file_sha256
 
 
 class CanonicalSourceHashTests(unittest.TestCase):
+    def test_empty_model_comparison_uses_supplied_projection_timestamp(self):
+        with tempfile.TemporaryDirectory() as directory:
+            snapshot = review.model_review_comparison_snapshot(
+                Path(directory),
+                generated_at="2026-09-08T01:51:29+08:00",
+            )
+            self.assertEqual(snapshot["generated_at"], "2026-09-08T01:51:29+08:00")
+
     def test_lf_crlf_and_bom_have_the_same_hash(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
