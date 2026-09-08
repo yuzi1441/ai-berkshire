@@ -216,6 +216,241 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(request.call_args.kwargs["attempts"], 5)
         self.assertEqual(request.call_args.kwargs["retry_backoff_seconds"], 8)
 
+    def test_opencode_go_endpoint_detection_is_exact(self):
+        self.assertTrue(
+            sentiment_snapshot.is_opencode_go_endpoint(
+                "https://opencode.ai/zen/go/v1/chat/completions"
+            )
+        )
+        self.assertFalse(
+            sentiment_snapshot.is_opencode_go_endpoint(
+                "https://api.opencode.ai/zen/go/v1/chat/completions"
+            )
+        )
+        self.assertFalse(
+            sentiment_snapshot.is_opencode_go_endpoint(
+                "https://example.com/proxy/opencode.ai/zen/go/v1/chat/completions"
+            )
+        )
+        self.assertFalse(
+            sentiment_snapshot.is_opencode_go_endpoint(
+                "https://opencode.ai/zen/v1/chat/completions"
+            )
+        )
+
+    def test_opencode_go_scoring_reuses_one_session_across_batches_roles_and_workers(self):
+        endpoint = "https://opencode.ai/zen/go/v1/chat/completions"
+        primary = sentiment_snapshot.LLMConfig(
+            endpoint=endpoint,
+            api_key="primary-key",
+            model="primary-model",
+            batch_size=1,
+            workers=2,
+        )
+        review = sentiment_snapshot.LLMConfig(
+            endpoint=endpoint,
+            api_key="review-key",
+            model="review-model",
+            batch_size=1,
+            workers=2,
+        )
+        articles = [
+            {
+                "id": f"go-{index}",
+                "scope": "company",
+                "company": f"示例公司{index}",
+                "display_name": f"示例公司{index}",
+                "ticker": f"60000{index}.SH",
+                "market": "A股",
+                "source_tier": "A",
+                "title": f"示例公司{index}发布公告",
+                "summary": "公司公告",
+            }
+            for index in range(2)
+        ]
+        calls = []
+
+        def fake_http_json(url, **kwargs):
+            payload = json.loads(kwargs["body"].decode("utf-8"))
+            items = json.loads(payload["messages"][1]["content"])
+            calls.append((url, dict(kwargs["headers"])))
+            return {
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "items": [
+                                        {
+                                            "id": item["id"],
+                                            "direction": 0,
+                                            "impact": 1,
+                                            "relevance": 1,
+                                            "confidence": 1,
+                                            "event_type": "一般新闻",
+                                        }
+                                        for item in items
+                                    ]
+                                }
+                            )
+                        }
+                    }
+                ]
+            }
+
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                articles, primary, review
+            )
+        self.assertEqual(len(scored), 2)
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(len(calls), 4)
+        sessions = {headers["x-opencode-session"] for _, headers in calls}
+        self.assertEqual(len(sessions), 1)
+        self.assertTrue(next(iter(sessions)).startswith("ai-berkshire-sentiment-"))
+        self.assertTrue(all(headers["User-Agent"] == sentiment_snapshot.USER_AGENT for _, headers in calls))
+        self.assertEqual(
+            {headers["Authorization"] for _, headers in calls},
+            {"Bearer primary-key", "Bearer review-key"},
+        )
+        self.assertTrue(all(headers["Content-Type"] == "application/json" for _, headers in calls))
+
+        first_session = next(iter(sessions))
+        calls.clear()
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            sentiment_snapshot.score_articles(articles[:1], primary, review)
+        self.assertNotEqual(calls[0][1]["x-opencode-session"], first_session)
+
+    def test_opencode_go_single_item_recovery_reuses_invocation_session(self):
+        config = sentiment_snapshot.LLMConfig(
+            endpoint="https://opencode.ai/zen/go/v1/chat/completions",
+            api_key="test-key",
+            model="test-model",
+            batch_size=2,
+            workers=2,
+            missing_result_retries=1,
+        )
+        articles = [
+            {
+                "id": item_id,
+                "scope": "company",
+                "company": "示例公司",
+                "display_name": "示例公司",
+                "ticker": "00001.HK",
+                "market": "港股",
+                "title": f"示例公司新闻{item_id}",
+                "summary": "",
+            }
+            for item_id in ("complete", "missing")
+        ]
+        sessions = []
+        call_count = 0
+
+        def fake_http_json(_url, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            sessions.append(kwargs["headers"]["x-opencode-session"])
+            payload = json.loads(kwargs["body"].decode("utf-8"))
+            items = json.loads(payload["messages"][1]["content"])
+            returned = items[:1] if call_count == 1 else items
+            return {
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "items": [
+                                        {
+                                            "id": item["id"],
+                                            "direction": 0,
+                                            "impact": 1,
+                                            "relevance": 1,
+                                            "confidence": 1,
+                                            "event_type": "一般新闻",
+                                        }
+                                        for item in returned
+                                    ]
+                                }
+                            )
+                        }
+                    }
+                ]
+            }
+
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            scored, warnings, skipped = sentiment_snapshot.score_articles(
+                articles, config, None
+            )
+        self.assertEqual({item["id"] for item in scored}, {"complete", "missing"})
+        self.assertEqual(warnings, [])
+        self.assertEqual(skipped, [])
+        self.assertEqual(call_count, 2)
+        self.assertEqual(len(set(sessions)), 1)
+
+    def test_only_opencode_go_role_receives_session_headers(self):
+        go_config = sentiment_snapshot.LLMConfig(
+            endpoint="https://opencode.ai/zen/go/v1/chat/completions",
+            api_key="go-key",
+            model="go-model",
+            workers=1,
+        )
+        direct_config = sentiment_snapshot.LLMConfig(
+            endpoint="https://api.deepseek.com/chat/completions",
+            api_key="direct-key",
+            model="direct-model",
+            workers=1,
+        )
+        article = {
+            "id": "mixed-provider",
+            "scope": "company",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "source_tier": "A",
+            "title": "示例公司发布公告",
+            "summary": "公司公告",
+        }
+        calls = []
+
+        def fake_http_json(url, **kwargs):
+            calls.append((url, dict(kwargs["headers"])))
+            payload = json.loads(kwargs["body"].decode("utf-8"))
+            item = json.loads(payload["messages"][1]["content"])[0]
+            return {
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "items": [
+                                        {
+                                            "id": item["id"],
+                                            "direction": 0,
+                                            "impact": 1,
+                                            "relevance": 1,
+                                            "confidence": 1,
+                                            "event_type": "一般新闻",
+                                        }
+                                    ]
+                                }
+                            )
+                        }
+                    }
+                ]
+            }
+
+        with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
+            sentiment_snapshot.score_articles([article], go_config, direct_config)
+        go_headers = next(headers for url, headers in calls if url == go_config.endpoint)
+        direct_headers = next(
+            headers for url, headers in calls if url == direct_config.endpoint
+        )
+        self.assertIn("x-opencode-session", go_headers)
+        self.assertNotIn("x-opencode-session", direct_headers)
+        self.assertEqual(direct_headers["Authorization"], "Bearer direct-key")
+
     def test_score_with_llm_accepts_json_in_reasoning_content(self):
         config = sentiment_snapshot.LLMConfig(
             endpoint="https://example.com",
@@ -763,11 +998,20 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual({item["ticker"] for item in universe}, {"00700.HK", "600519.SH"})
 
     def test_parse_args_can_limit_snapshot_to_a_shares(self):
-        args = sentiment_snapshot.parse_args(["--markets", "A股"])
+        with patch.dict(os.environ, {}, clear=True):
+            args = sentiment_snapshot.parse_args(["--markets", "A股"])
         self.assertEqual(args.markets, ["A股"])
         self.assertEqual(args.auxiliary_news_limit, 60)
         self.assertEqual(args.rss_news_limit, 20)
         self.assertEqual(args.cache_dir, sentiment_snapshot.DEFAULT_CACHE_DIR)
+        self.assertEqual(args.news_cache_ttl_minutes, 30)
+
+    def test_parse_args_reads_explicit_news_cache_ttl(self):
+        with patch.dict(
+            os.environ, {"SENTIMENT_NEWS_CACHE_TTL_MINUTES": "45"}, clear=True
+        ):
+            args = sentiment_snapshot.parse_args([])
+        self.assertEqual(args.news_cache_ttl_minutes, 45)
 
     def test_news_cache_round_trip_and_policy_mismatch(self):
         universe = [{"ticker": "600000.SH", "market": "A股"}]
@@ -802,6 +1046,14 @@ class SentimentSnapshotTests(unittest.TestCase):
                 company_warnings={"600000.SH": []},
                 industry_news={},
                 industry_warnings={},
+                company_fetch_state={
+                    "600000.SH": {
+                        "fetched_at": "2026-08-18T17:50:00+08:00",
+                        "last_attempt_at": "2026-08-18T17:50:00+08:00",
+                        "last_attempt_status": "success",
+                    }
+                },
+                source_identity=sentiment_snapshot.news_cache_source_identity(),
             )
             loaded = sentiment_snapshot.load_news_cache(
                 path, universe_signature=signature, parameters=parameters
@@ -875,6 +1127,14 @@ class SentimentSnapshotTests(unittest.TestCase):
                 company_warnings={"600000.SH": []},
                 industry_news={},
                 industry_warnings={},
+                company_fetch_state={
+                    "600000.SH": {
+                        "fetched_at": "2026-08-18T17:50:00+08:00",
+                        "last_attempt_at": "2026-08-18T17:50:00+08:00",
+                        "last_attempt_status": "success",
+                    }
+                },
+                source_identity=sentiment_snapshot.news_cache_source_identity(),
             )
             primary = sentiment_snapshot.LLMConfig(
                 endpoint="https://example.com", api_key="test", model="primary"
@@ -905,9 +1165,356 @@ class SentimentSnapshotTests(unittest.TestCase):
                     markets={"A股"},
                     llm_config=primary,
                     cache_dir=cache_dir,
+                    news_cache_ttl_minutes=30,
                 )
             company_fetch.assert_not_called()
             self.assertEqual(result["companies"][0]["news_sentiment"]["score_0_100"], 65.0)
+
+    def test_entity_cache_freshness_uses_success_time_ttl_and_source_identity(self):
+        now = datetime(2026, 8, 18, 18, 10, tzinfo=SHANGHAI)
+        payload = {
+            "_freshness_compatible": True,
+            "company_fetch_state": {
+                "fresh": {"fetched_at": "2026-08-18T17:50:00+08:00"},
+                "stale": {"fetched_at": "2026-08-18T16:40:00+08:00"},
+            },
+        }
+        self.assertTrue(
+            sentiment_snapshot.cache_entity_is_fresh(
+                payload,
+                entity_kind="company",
+                entity_id="fresh",
+                now=now,
+                ttl_minutes=30,
+            )
+        )
+        self.assertFalse(
+            sentiment_snapshot.cache_entity_is_fresh(
+                payload,
+                entity_kind="company",
+                entity_id="stale",
+                now=now,
+                ttl_minutes=30,
+            )
+        )
+        payload["_freshness_compatible"] = False
+        self.assertFalse(
+            sentiment_snapshot.cache_entity_is_fresh(
+                payload,
+                entity_kind="company",
+                entity_id="fresh",
+                now=now,
+                ttl_minutes=30,
+            )
+        )
+
+    def test_v1_and_source_mismatched_cache_are_stale_but_loadable_as_fallback(self):
+        universe = [{"ticker": "600000.SH", "market": "A股"}]
+        signature = sentiment_snapshot.news_cache_universe_signature(universe)
+        parameters = {
+            "as_of": "2026-08-18",
+            "lookback_days": 7,
+            "fallback_lookback_days": 30,
+            "news_limit": 8,
+            "auxiliary_news_limit": 60,
+            "context_analysis_limit": 12,
+            "rss_news_limit": 20,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "cache.json"
+            v1 = {
+                "schema_version": 1,
+                "as_of": "2026-08-18",
+                "parameters": parameters,
+                "universe_signature": signature,
+                "updated_at": "2026-08-18T18:00:00+08:00",
+                "company_news": {"600000.SH": [{"id": "old"}]},
+            }
+            path.write_text(json.dumps(v1), encoding="utf-8")
+            loaded_v1 = sentiment_snapshot.load_news_cache(
+                path,
+                universe_signature=signature,
+                parameters=parameters,
+                source_identity=sentiment_snapshot.news_cache_source_identity(),
+            )
+            self.assertEqual(loaded_v1["company_news"]["600000.SH"][0]["id"], "old")
+            self.assertFalse(loaded_v1["_freshness_compatible"])
+
+            sentiment_snapshot.save_news_cache(
+                path,
+                as_of=date(2026, 8, 18),
+                parameters=parameters,
+                universe_signature=signature,
+                company_news={"600000.SH": [{"id": "old"}]},
+                company_warnings={"600000.SH": []},
+                industry_news={},
+                industry_warnings={},
+                company_fetch_state={
+                    "600000.SH": {"fetched_at": "2026-08-18T18:00:00+08:00"}
+                },
+                source_identity="different-policy",
+            )
+            loaded_mismatch = sentiment_snapshot.load_news_cache(
+                path,
+                universe_signature=signature,
+                parameters=parameters,
+                source_identity=sentiment_snapshot.news_cache_source_identity(),
+            )
+            self.assertFalse(loaded_mismatch["_freshness_compatible"])
+
+    def test_v1_stale_fallback_is_preserved_and_retried_next_invocation(self):
+        universe = [{"company": "示例公司", "ticker": "600000.SH", "market": "A股"}]
+        parameters = {
+            "as_of": "2026-08-18",
+            "lookback_days": 7,
+            "fallback_lookback_days": 30,
+            "news_limit": 8,
+            "auxiliary_news_limit": 60,
+            "context_analysis_limit": 12,
+            "rss_news_limit": 20,
+        }
+        article = {
+            "id": "v1-old",
+            "company": "示例公司",
+            "display_name": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "scope": "company",
+            "title": "示例公司旧公告",
+            "summary": "旧公告",
+            "publisher": "巨潮资讯",
+            "url": "https://example.com/v1-old",
+            "published_at": "2026-08-18T10:00:00+08:00",
+            "source_tier": "A",
+            "score_eligible": True,
+            "event_type": "经营事件",
+            "direction": 0,
+            "impact": 1,
+            "relevance": 1,
+            "confidence": 1,
+            "scoring_method": "test",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            cache_dir = Path(directory) / "cache"
+            cache_dir.mkdir()
+            cache_path = sentiment_snapshot.news_cache_path(
+                cache_dir,
+                as_of=date(2026, 8, 18),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+                auxiliary_news_limit=60,
+                context_analysis_limit=12,
+                rss_news_limit=20,
+            )
+            cache_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "as_of": "2026-08-18",
+                        "parameters": parameters,
+                        "universe_signature": sentiment_snapshot.news_cache_universe_signature(universe),
+                        "updated_at": "2026-08-18T18:05:00+08:00",
+                        "company_news": {"600000.SH": [article]},
+                        "company_warnings": {"600000.SH": []},
+                        "industry_news": {},
+                        "industry_warnings": {},
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            def run_once():
+                with patch.object(sentiment_snapshot, "load_universe", return_value=universe), \
+                    patch.object(sentiment_snapshot, "load_registry_names", return_value={}), \
+                    patch.object(sentiment_snapshot, "fetch_provider_names", return_value={}), \
+                    patch.object(sentiment_snapshot, "load_cached_industry_mapping", return_value={}), \
+                    patch.object(sentiment_snapshot, "fetch_provider_industries", return_value=({}, [])), \
+                    patch.object(
+                        sentiment_snapshot,
+                        "fetch_market_context",
+                        return_value=({"status": "ok", "score_0_100": 50, "state": "中性"}, {}),
+                    ), \
+                    patch.object(
+                        sentiment_snapshot,
+                        "fetch_company_news_result",
+                        side_effect=sentiment_snapshot.SentimentError("source unavailable"),
+                    ) as company_fetch, \
+                    patch.object(
+                        sentiment_snapshot,
+                        "score_articles",
+                        side_effect=lambda rows, *_args, **_kwargs: (rows, [], []),
+                    ):
+                    result = sentiment_snapshot.build_snapshot(
+                        board_path=Path(directory) / "board.json",
+                        registry_path=Path(directory) / "registry.json",
+                        as_of=date(2026, 8, 18),
+                        now=datetime(2026, 8, 18, 18, 10, tzinfo=SHANGHAI),
+                        lookback_days=7,
+                        news_limit=8,
+                        workers=1,
+                        markets={"A股"},
+                        cache_dir=cache_dir,
+                        news_cache_ttl_minutes=30,
+                    )
+                company_fetch.assert_called_once()
+                return result
+
+            first = run_once()
+            self.assertTrue(any("stale fallback" in warning for warning in first["warnings"]))
+            saved = json.loads(cache_path.read_text(encoding="utf-8"))
+            self.assertEqual(saved["company_news"]["600000.SH"][0]["id"], "v1-old")
+            self.assertNotIn("fetched_at", saved["company_fetch_state"]["600000.SH"])
+            self.assertEqual(
+                saved["company_fetch_state"]["600000.SH"]["last_attempt_status"],
+                "failed_stale_fallback",
+            )
+            run_once()
+
+    def test_stale_entities_refresh_independently_and_failures_keep_old_fetch_time(self):
+        universe = [
+            {"company": "新鲜公司", "ticker": "600000.SH", "market": "A股"},
+            {"company": "过期公司", "ticker": "600001.SH", "market": "A股"},
+        ]
+        parameters = {
+            "as_of": "2026-08-18",
+            "lookback_days": 7,
+            "fallback_lookback_days": 30,
+            "news_limit": 8,
+            "auxiliary_news_limit": 60,
+            "context_analysis_limit": 12,
+            "rss_news_limit": 20,
+        }
+
+        def article(item_id, ticker, company):
+            return {
+                "id": item_id,
+                "company": company,
+                "display_name": company,
+                "ticker": ticker,
+                "market": "A股",
+                "scope": "company",
+                "title": f"{company}公告",
+                "summary": "公告",
+                "publisher": "巨潮资讯",
+                "url": f"https://example.com/{item_id}",
+                "published_at": "2026-08-18T10:00:00+08:00",
+                "source_tier": "A",
+                "score_eligible": True,
+                "event_type": "经营事件",
+                "direction": 0,
+                "impact": 1,
+                "relevance": 1,
+                "confidence": 1,
+                "scoring_method": "test",
+            }
+
+        fresh_article = article("fresh", "600000.SH", "新鲜公司")
+        old_article = article("old", "600001.SH", "过期公司")
+        new_article = article("new", "600001.SH", "过期公司")
+        now = datetime(2026, 8, 18, 18, 10, tzinfo=SHANGHAI)
+        with tempfile.TemporaryDirectory() as directory:
+            cache_dir = Path(directory) / "cache"
+            signature = sentiment_snapshot.news_cache_universe_signature(universe)
+            cache_path = sentiment_snapshot.news_cache_path(
+                cache_dir,
+                as_of=date(2026, 8, 18),
+                lookback_days=7,
+                fallback_lookback_days=30,
+                news_limit=8,
+                auxiliary_news_limit=60,
+                context_analysis_limit=12,
+                rss_news_limit=20,
+            )
+            sentiment_snapshot.save_news_cache(
+                cache_path,
+                as_of=date(2026, 8, 18),
+                parameters=parameters,
+                universe_signature=signature,
+                company_news={
+                    "600000.SH": [fresh_article],
+                    "600001.SH": [old_article],
+                },
+                company_warnings={"600000.SH": [], "600001.SH": []},
+                industry_news={"行业新鲜": [fresh_article], "行业过期": [old_article]},
+                industry_warnings={"行业新鲜": [], "行业过期": []},
+                company_fetch_state={
+                    "600000.SH": {"fetched_at": "2026-08-18T17:50:00+08:00"},
+                    "600001.SH": {"fetched_at": "2026-08-18T16:40:00+08:00"},
+                },
+                industry_fetch_state={
+                    "行业新鲜": {"fetched_at": "2026-08-18T17:50:00+08:00"},
+                    "行业过期": {"fetched_at": "2026-08-18T16:40:00+08:00"},
+                },
+                source_identity=sentiment_snapshot.news_cache_source_identity(),
+            )
+
+            def company_fetch(item, **_kwargs):
+                self.assertEqual(item["ticker"], "600001.SH")
+                return [new_article], []
+
+            def industry_fetch(industry, **_kwargs):
+                self.assertEqual(industry, "行业过期")
+                raise sentiment_snapshot.SentimentError("source unavailable")
+
+            with patch.object(sentiment_snapshot, "load_universe", return_value=universe), \
+                patch.object(sentiment_snapshot, "load_registry_names", return_value={}), \
+                patch.object(sentiment_snapshot, "fetch_provider_names", return_value={}), \
+                patch.object(sentiment_snapshot, "load_cached_industry_mapping", return_value={}), \
+                patch.object(
+                    sentiment_snapshot,
+                    "fetch_provider_industries",
+                    return_value=({"600000.SH": "行业新鲜", "600001.SH": "行业过期"}, []),
+                ), \
+                patch.object(
+                    sentiment_snapshot,
+                    "fetch_market_context",
+                    return_value=({"status": "ok", "score_0_100": 50, "state": "中性"}, {}),
+                ), \
+                patch.object(sentiment_snapshot, "fetch_company_news_result", side_effect=company_fetch) as company_request, \
+                patch.object(sentiment_snapshot, "fetch_industry_news", side_effect=industry_fetch) as industry_request, \
+                patch.object(
+                    sentiment_snapshot,
+                    "score_articles",
+                    side_effect=lambda rows, *_args, **_kwargs: (rows, [], []),
+                ):
+                result = sentiment_snapshot.build_snapshot(
+                    board_path=Path(directory) / "board.json",
+                    registry_path=Path(directory) / "registry.json",
+                    as_of=date(2026, 8, 18),
+                    now=now,
+                    lookback_days=7,
+                    news_limit=8,
+                    workers=1,
+                    markets={"A股"},
+                    cache_dir=cache_dir,
+                    news_cache_ttl_minutes=30,
+                )
+            company_request.assert_called_once()
+            industry_request.assert_called_once()
+            self.assertTrue(any("stale fallback" in warning for warning in result["warnings"]))
+            saved = json.loads(cache_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                saved["company_fetch_state"]["600000.SH"]["fetched_at"],
+                "2026-08-18T17:50:00+08:00",
+            )
+            self.assertEqual(
+                saved["company_fetch_state"]["600001.SH"]["fetched_at"],
+                now.isoformat(),
+            )
+            self.assertEqual(
+                saved["industry_fetch_state"]["行业新鲜"]["fetched_at"],
+                "2026-08-18T17:50:00+08:00",
+            )
+            self.assertEqual(
+                saved["industry_fetch_state"]["行业过期"]["fetched_at"],
+                "2026-08-18T16:40:00+08:00",
+            )
+            self.assertEqual(
+                saved["industry_fetch_state"]["行业过期"]["last_attempt_status"],
+                "failed_stale_fallback",
+            )
+            self.assertEqual(saved["industry_news"]["行业过期"][0]["id"], "old")
 
     def test_effective_as_of_uses_prior_day_before_close(self):
         morning = datetime(2026, 8, 10, 10, 0, tzinfo=SHANGHAI)
