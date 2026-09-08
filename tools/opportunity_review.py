@@ -23,6 +23,7 @@ import re
 import sys
 import tempfile
 import time
+import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -44,6 +45,8 @@ SCAN_SCHEMA_VERSION = 1
 DEEP_SCHEMA_VERSION = 1
 
 OPENCODE_GO_BASE = "https://opencode.ai/zen/go/v1"
+OPPORTUNITY_SCAN_USER_AGENT = "ai-berkshire-opportunity-review/1"
+OPENCODE_SESSION_HEADER = "x-opencode-session"
 TRANSPORT_OPENAI_CHAT = "openai_chat"
 TRANSPORT_ANTHROPIC_MESSAGES = "anthropic_messages"
 TRANSPORT_OPENAI_RESPONSES = "openai_responses"
@@ -171,6 +174,14 @@ def model_config(role: str) -> ModelConfig:
             os.environ.get(f"{prefix}THINKING_BUDGET_TOKENS"), 32000, 1024, 48000
         ),
     )
+
+
+def opportunity_scan_headers() -> dict[str, str]:
+    """Create the non-sensitive headers shared by one full scan attempt."""
+    return {
+        "User-Agent": OPPORTUNITY_SCAN_USER_AGENT,
+        OPENCODE_SESSION_HEADER: f"ai-berkshire-opportunity-{uuid.uuid4()}",
+    }
 
 
 def report_sha256(repo_root: Path, decision: dict[str, Any]) -> str:
@@ -373,6 +384,7 @@ def request_json(
     *,
     system: str,
     user: str,
+    extra_headers: dict[str, str] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Call one provider with the strongest supported reasoning request.
 
@@ -401,7 +413,11 @@ def request_json(
             try:
                 response = http_json(
                     config.endpoint,
-                    headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
+                    headers={
+                        **(extra_headers or {}),
+                        "Authorization": f"Bearer {config.api_key}",
+                        "Content-Type": "application/json",
+                    },
                     body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
                     timeout=config.timeout_seconds,
                     attempts=attempts,
@@ -569,13 +585,24 @@ def validate_assessment(
     return cleaned
 
 
-def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict[str, Any]:
+def run_model(
+    config: ModelConfig,
+    facts: dict[str, Any],
+    *,
+    deep: bool,
+    extra_headers: dict[str, str] | None = None,
+) -> dict[str, Any]:
     started = time.perf_counter()
     system, user = review_prompts(facts, deep=deep)
     repair_attempts = 0
     validation_error_text = ""
     try:
-        raw, reasoning = request_json(config, system=system, user=user)
+        raw, reasoning = request_json(
+            config,
+            system=system,
+            user=user,
+            extra_headers=extra_headers,
+        )
         try:
             assessment = validate_assessment(raw, deep=deep, facts=facts)
         except OpportunityReviewError as validation_error:
@@ -592,7 +619,12 @@ def run_model(config: ModelConfig, facts: dict[str, Any], *, deep: bool) -> dict
                 f"\n事实输入：{json.dumps(facts, ensure_ascii=False)}"
                 "\n只输出修复后的严格JSON。"
             )
-            raw, repair_reasoning = request_json(config, system=system, user=repair_user)
+            raw, repair_reasoning = request_json(
+                config,
+                system=system,
+                user=repair_user,
+                extra_headers=extra_headers,
+            )
             try:
                 assessment = validate_assessment(raw, deep=deep, facts=facts)
             except OpportunityReviewError as repair_error:
@@ -771,6 +803,7 @@ def scan_one(
     intraday_by_ticker: dict[str, Any],
     quote_by_ticker: dict[str, Any],
     previous: dict[str, Any],
+    extra_headers: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     ticker = str(decision.get("ticker") or "").upper()
     current_hash = report_sha256(repo_root, decision)
@@ -784,7 +817,16 @@ def scan_one(
     models: dict[str, dict[str, Any]] = {}
     # The selected scan model sees one frozen, auditable evidence snapshot.
     with concurrent.futures.ThreadPoolExecutor(max_workers=len(configs)) as executor:
-        futures = {executor.submit(run_model, config, facts, deep=False): config for config in configs}
+        futures = {
+            executor.submit(
+                run_model,
+                config,
+                facts,
+                deep=False,
+                extra_headers=extra_headers,
+            ): config
+            for config in configs
+        }
         for future in concurrent.futures.as_completed(futures):
             config = futures[future]
             try:
@@ -831,6 +873,7 @@ def scan_all(
     checkpoint_path: Path | None = None,
 ) -> dict[str, Any]:
     configs = [model_config("scan_flash")]
+    scan_headers = opportunity_scan_headers()
     decisions = find_decisions(repo_root, ticker)
     if limit is not None:
         decisions = decisions[: max(0, limit)]
@@ -857,6 +900,7 @@ def scan_all(
                 intraday_by_ticker=intraday,
                 quote_by_ticker=quotes,
                 previous=prior,
+                extra_headers=scan_headers,
             ): index
             for index, decision in enumerate(decisions)
         }

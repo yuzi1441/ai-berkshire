@@ -11,6 +11,12 @@ CLASSIFIER = ROOT / "site" / "assets" / "action-classifier.mjs"
 
 @unittest.skipUnless(shutil.which("node"), "Node.js is required for frontend classifier tests")
 class DashboardActionClassifierTests(unittest.TestCase):
+    def app_function(self, name: str) -> str:
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+        start = app.index(f"function {name}(")
+        end = app.find("\nfunction ", start + 1)
+        return app[start:] if end == -1 else app[start:end]
+
     def run_classifier(self, expression: str):
         script = f"""
           import * as classifier from {json.dumps(CLASSIFIER.as_uri())};
@@ -513,43 +519,42 @@ class DashboardActionClassifierTests(unittest.TestCase):
     def test_dashboard_uses_current_actions_and_compact_research_statuses(self):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
         self.assertIn('PRE_BUY: "买入前流程中的公司"', app)
-        self.assertIn('<span class="status-card-label">行动线索</span>', app)
-        self.assertIn('const preBuyChecklist = lifecycleOf(record) === "PRE_BUY" && record?.next_action === "run_checklist";', app)
+        self.assertIn('<span class="status-card-label">需要人工处理</span>', app)
+        self.assertIn('record?.action_guidance?.requires_user_action === true', app)
         self.assertIn('data-opportunity-view="checklist"', (ROOT / "site" / "index.html").read_text(encoding="utf-8"))
         self.assertIn('const checklists = checklistRecords();', app)
         self.assertIn('["run_checklist", "confirm_purchase"].includes(record.next_action)', app)
         self.assertIn('const preBuyCount = stateCount("PRE_BUY");', app)
         self.assertIn('true_current_drift: "待复核"', app)
         self.assertIn('new_evidence_other_action: "有新材料"', app)
-        self.assertIn('论文：${escapeHtml(drift)}', app)
+        self.assertIn('投资逻辑：${escapeHtml(drift)}', app)
+        self.assertIn('name: "建议 Skill", value: renderRecommendedSkill(record)', app)
         self.assertIn('const attemptedAt = meta?.scan_generated_at || meta?.generated_at || meta?.attempted_at;', app)
 
     def test_dashboard_attention_and_candidate_labels_are_explicit(self):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
         html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
-        self.assertIn('review_holding: "持仓论文复核"', app)
+        self.assertIn('review_holding: "持仓投资逻辑复核"', app)
         self.assertIn('condition_near_trigger: "接近经营条件"', app)
         self.assertIn('must: "需要及时处置"', app)
-        self.assertIn('soon: "本周值得研究"', app)
-        self.assertIn('changes: "持续观察"', app)
+        self.assertIn('soon: "需要人工完成"', app)
         self.assertIn('研究推进候选', app)
         self.assertIn('待验证条件', html)
-        self.assertIn('尚未形成明确增量问题', app)
-        self.assertIn('为什么现在看', app)
+        self.assertIn('当前卡点', app)
+        self.assertIn('完成标准：', app)
 
     def test_near_trigger_defaults_to_observation_not_weekly_task(self):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
-        start = app.index("function attentionTier(")
-        end = app.index("\nfunction attentionTierLabel", start)
-        tier = app[start:end]
-        self.assertIn('if (reviewDue(record)) return "soon";', app)
-        self.assertIn("A near trigger is an observation signal", app)
-        self.assertNotIn("nearRules(record).length", tier)
-        self.assertNotIn("priceOpportunities(record).some", tier)
-        self.assertNotIn("conditionOpportunities(record).some", tier)
-        self.assertNotIn('["weakened", "broken"].includes(drift.direction)', tier)
+        start = app.index("function attentionRecords(")
+        end = app.index("\nfunction renderAttention", start)
+        records = app[start:end]
+        self.assertIn("stateRecords().filter(hasAttention)", records)
+        self.assertNotIn("nearRules", records)
+        self.assertNotIn("priceOpportunities", records)
+        self.assertNotIn("conditionOpportunities", records)
+        self.assertNotIn("reviewDue", records)
 
-    def test_major_event_summary_uses_only_formal_event(self):
+    def test_attention_uses_only_backend_action_guidance(self):
         app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
 
         def extract(name):
@@ -558,23 +563,135 @@ class DashboardActionClassifierTests(unittest.TestCase):
             return app[start:] if end == -1 else app[start:end]
 
         script = """
-          function attentionReasonType() { return "重大事件"; }
           function shortText(value) { return value; }
-          function label() { return ""; }
-        """ + "\n".join(extract(name) for name in ("formalImportantEvent", "hasUncoveredFormalImportantEvent", "hasFormalImportantEvent", "attentionSummary")) + """
-          const record = {
-            event_radar: {state: "important", events: [
-              {highest_source_tier: "D", state: "watch", thesis_relevant: false, headline: "普通讨论"},
-              {highest_source_tier: "A", state: "important", thesis_relevant: true, headline: "正式公告"}
-            ]}
-          };
+        """ + "\n".join(extract(name) for name in (
+            "guidanceFor", "hasAttention", "attentionTier", "attentionReasonType", "attentionSummary"
+        )) + """
+          const record = {action_guidance: {
+            requires_user_action: true,
+            priority: "urgent",
+            blocker_text: "正式投资逻辑复核已经完成，并记录为重大走弱",
+            next_action_code: "decide_research_disposition"
+          }};
           process.stdout.write(JSON.stringify({
-            formal: hasFormalImportantEvent(record),
+            attention: hasAttention(record),
+            tier: attentionTier(record),
+            type: attentionReasonType(record),
             summary: attentionSummary(record)
           }));
         """
         result = subprocess.run(["node"], input=script, check=True, capture_output=True, text=True)
         payload = json.loads(result.stdout)
-        self.assertTrue(payload["formal"])
-        self.assertIn("正式公告", payload["summary"])
-        self.assertNotIn("普通讨论", payload["summary"])
+        self.assertTrue(payload["attention"])
+        self.assertEqual(payload["tier"], "must")
+        self.assertEqual(payload["type"], "研究去留判断")
+        self.assertIn("重大走弱", payload["summary"])
+
+    def test_unified_filters_match_current_dashboard_projection(self):
+        records = json.loads(
+            (ROOT / "data" / "investment-dashboard" / "company_state.json").read_text(
+                encoding="utf-8"
+            )
+        )["companies"]
+        expected_light_thesis = {
+            signal: sum(
+                1
+                for record in records
+                if record.get("light_thesis_signal", {}).get("status") == "current"
+                and record.get("light_thesis_signal", {}).get("signal") == signal
+            )
+            for signal in (
+                "improved",
+                "weakened",
+                "unchanged",
+                "insufficient_evidence",
+            )
+        }
+        expected_light_thesis["missing"] = len(records) - sum(
+            expected_light_thesis.values()
+        )
+        functions = "\n".join(
+            self.app_function(name)
+            for name in (
+                "lifecycleOf",
+                "priceOpportunities",
+                "conditionOpportunities",
+                "actionableSkills",
+                "lightThesisFilterValue",
+                "formalDriftMatches",
+                "actionStatusMatches",
+                "skillMatches",
+                "matchesUnifiedFilters",
+            )
+        )
+        script = f"""
+          {functions}
+          const records = {json.dumps(records, ensure_ascii=False)};
+          const base = {{
+            search: "", market: "all", lifecycle: "all", actionStatus: "all",
+            skill: "all", lightThesis: "all", formalDrift: "all", blocker: "all",
+            checklist: "all", opportunity: "all", priceNear: false
+          }};
+          const filtered = (patch) => records.filter((record) => matchesUnifiedFilters(record, {{...base, ...patch}}));
+          const result = {{
+            all: filtered({{}}).length,
+            attention: filtered({{actionStatus: "attention"}}).length,
+            skill: filtered({{actionStatus: "skill"}}).map((record) => record.ticker).sort(),
+            manual: filtered({{actionStatus: "manual"}}).length,
+            observe: filtered({{actionStatus: "observe"}}).length,
+            driftSkill: filtered({{skill: "thesis-drift"}}).map((record) => record.ticker),
+            trackerSkill: filtered({{skill: "thesis-tracker"}}).map((record) => record.ticker),
+            actionableSkills: actionableSkills(records),
+            lightImproved: filtered({{lightThesis: "improved"}}).length,
+            lightWeakened: filtered({{lightThesis: "weakened"}}).length,
+            lightUnchanged: filtered({{lightThesis: "unchanged"}}).length,
+            lightInsufficient: filtered({{lightThesis: "insufficient_evidence"}}).length,
+            lightMissing: filtered({{lightThesis: "missing"}}).length,
+            nearBlocker: filtered({{blocker: "condition_near_trigger"}}),
+            searchAndSkill: filtered({{search: "东方电缆", actionStatus: "skill"}}).map((record) => record.ticker),
+            impossible: filtered({{lifecycle: "HOLDING", skill: "thesis-drift"}}).length,
+            checklistFail: filtered({{checklist: "FAIL"}}).length,
+            formalMajor: filtered({{formalDrift: "major-weakened"}}).length
+          }};
+          process.stdout.write(JSON.stringify({{
+            ...result,
+            nearBlockerCount: result.nearBlocker.length,
+            nearBlockerHasAction: result.nearBlocker.some((record) => record.action_guidance.requires_user_action === true)
+          }}));
+        """
+        result = subprocess.run(["node"], input=script, check=True, capture_output=True, text=True)
+        payload = json.loads(result.stdout)
+        self.assertEqual(payload["all"], 229)
+        self.assertEqual(payload["attention"], 10)
+        self.assertEqual(payload["skill"], ["603606.SH", "603659.SH"])
+        self.assertEqual(payload["manual"], 8)
+        self.assertEqual(payload["observe"], 219)
+        self.assertEqual(payload["driftSkill"], ["603606.SH"])
+        self.assertEqual(payload["trackerSkill"], ["603659.SH"])
+        self.assertEqual(payload["actionableSkills"], ["thesis-drift", "thesis-tracker"])
+        self.assertEqual(payload["lightImproved"], expected_light_thesis["improved"])
+        self.assertEqual(payload["lightWeakened"], expected_light_thesis["weakened"])
+        self.assertEqual(payload["lightUnchanged"], expected_light_thesis["unchanged"])
+        self.assertEqual(
+            payload["lightInsufficient"],
+            expected_light_thesis["insufficient_evidence"],
+        )
+        self.assertEqual(payload["lightMissing"], expected_light_thesis["missing"])
+        self.assertEqual(payload["nearBlockerCount"], 21)
+        self.assertFalse(payload["nearBlockerHasAction"])
+        self.assertEqual(payload["searchAndSkill"], ["603606.SH"])
+        self.assertEqual(payload["impossible"], 0)
+        self.assertEqual(payload["checklistFail"], 5)
+        self.assertEqual(payload["formalMajor"], 8)
+
+    def test_unified_filter_ui_keeps_business_state_read_only(self):
+        app = (ROOT / "site" / "assets" / "app.js").read_text(encoding="utf-8")
+        html = (ROOT / "site" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="more-filters"', html)
+        self.assertIn('data-quick-filter="attention"', html)
+        self.assertIn('id="active-filter-chips"', html)
+        self.assertIn("当前没有符合条件的公司", html)
+        self.assertIn('guidance.requires_user_action === true && skills.includes(value)', app)
+        self.assertIn('signal.status === "current" && signal.signal', app)
+        self.assertIn('guidance.blocker_code === filters.blocker', app)
+        self.assertNotIn("record.drift.direction === \"improved\" ? record.light_thesis_signal", app)

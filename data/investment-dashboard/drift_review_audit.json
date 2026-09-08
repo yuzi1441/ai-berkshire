@@ -10,10 +10,10 @@
   },
   "category_counts": {
     "true_current_drift": 0,
-    "new_evidence_other_action": 26,
+    "new_evidence_other_action": 27,
     "reviewed_not_recognized": 0,
     "never_reviewed": 151,
-    "reviewed_current": 50,
+    "reviewed_current": 49,
     "reviewed_insufficient_evidence": 0,
     "not_applicable": 0
   },
@@ -169,7 +169,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -217,7 +217,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T15:51:19+08:00"
@@ -277,7 +277,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -325,7 +325,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -337,7 +337,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -361,7 +361,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T15:48:06+08:00"
@@ -433,7 +433,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -541,7 +541,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -781,7 +781,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -901,7 +901,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -1057,7 +1057,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -1321,7 +1321,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -1693,7 +1693,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -1717,7 +1717,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -1777,7 +1777,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -1813,7 +1813,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "drop_or_recheck",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -1885,7 +1885,7 @@
       "lifecycle": "WATCH",
       "category": "never_reviewed",
       "label": "从未完成论文漂移复核",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "missing",
       "checkpoint_result": null,
       "last_checked": null
@@ -1897,7 +1897,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T15:45:58+08:00"
@@ -1933,7 +1933,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
@@ -2029,7 +2029,7 @@
       "lifecycle": "WATCH",
       "category": "new_evidence_other_action",
       "label": "存在新材料，当前动作不是论文漂移",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "stale",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T22:36:50+08:00"
@@ -2137,7 +2137,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T15:47:08+08:00"
@@ -2197,7 +2197,7 @@
       "lifecycle": "WATCH",
       "category": "reviewed_current",
       "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
+      "current_action": "price_near_trigger",
       "checkpoint_status": "current",
       "checkpoint_result": "improved",
       "last_checked": "2026-09-03T15:51:48+08:00"
@@ -2291,10 +2291,10 @@
       "company": "东方电缆",
       "market": "A股",
       "lifecycle": "WATCH",
-      "category": "reviewed_current",
-      "label": "论文已复核，当前有效",
-      "current_action": "keep_watch",
-      "checkpoint_status": "current",
+      "category": "new_evidence_other_action",
+      "label": "存在新材料，当前动作不是论文漂移",
+      "current_action": "drop_or_recheck",
+      "checkpoint_status": "stale",
       "checkpoint_result": "unchanged",
       "last_checked": null
     },

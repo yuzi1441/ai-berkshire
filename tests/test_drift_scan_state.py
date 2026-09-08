@@ -314,7 +314,15 @@ class DriftScanStateTests(unittest.TestCase):
         data.mkdir(parents=True, exist_ok=True)
         (data / "quotes").mkdir(parents=True, exist_ok=True)
         (data / "quotes" / "latest.json").write_text(
-            json.dumps({"quotes": [{"ticker": "600000.SH", "price": 10.0}]}),
+            json.dumps({
+                "generated_at": "2026-09-07T15:05:00+08:00",
+                "source_status": "ok",
+                "data_cutoff": "2026-09-07",
+                "quotes": [{
+                    "ticker": "600000.SH", "market": "A股", "price": 10.0,
+                    "data_cutoff": "2026-09-07",
+                }],
+            }),
             encoding="utf-8",
         )
         (data / "drift_states.json").write_text(
@@ -324,30 +332,31 @@ class DriftScanStateTests(unittest.TestCase):
         state = self._build(root)
         self.assertEqual(state["next_action"], "keep_watch")
 
-    def test_formal_improved_with_explicit_buy_condition_runs_checklist(self):
-        root, _ = self._root_with_report()
-        data = root / "data" / "investment-dashboard"
-        data.mkdir(parents=True, exist_ok=True)
-        (data / "quotes").mkdir(parents=True, exist_ok=True)
-        (data / "quotes" / "latest.json").write_text(
-            json.dumps({"quotes": [{"ticker": "600000.SH", "price": 10.0}]}),
-            encoding="utf-8",
-        )
-        (data / "drift_states.json").write_text(
-            json.dumps({"companies": {"600000.SH": {"direction": "improved"}}}),
-            encoding="utf-8",
-        )
+    def test_formal_improved_with_explicit_non_price_buy_condition_runs_checklist(self):
         rules = [{
-            "rule_id": "entry-price",
-            "type": "PRICE",
-            "rule_scope": "entry",
-            "max": 10,
+            "rule_id": "validation-metric",
+            "type": "METRIC",
+            "rule_scope": "validation",
             "status": "triggered",
-            "action": "review_decision",
+            "action": "run_checklist",
             "active": True,
         }]
-        state = self._build(root, rules=rules)
-        self.assertEqual(state["next_action"], "run_checklist")
+        lifecycle, warning = decision_state._lifecycle(
+            None, None, rules, {"status": "UNKNOWN"}
+        )
+        self.assertEqual(lifecycle, "PRE_BUY")
+        self.assertIsNone(warning)
+        self.assertEqual(
+            decision_state._next_action(
+                lifecycle,
+                rules,
+                {"status": "UNKNOWN"},
+                {"direction": "improved"},
+                {},
+                None,
+            ),
+            "run_checklist",
+        )
 
     def test_formal_improved_redline_and_weakened_remain_drop_or_recheck(self):
         redline = [{

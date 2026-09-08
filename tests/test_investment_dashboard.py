@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import build_investment_dashboard as dashboard  # noqa: E402
+import light_thesis_signals  # noqa: E402
 import migrate_decision_contracts as migration  # noqa: E402
 
 
@@ -32,6 +33,25 @@ class InvestmentDashboardTests(unittest.TestCase):
             json.dumps({"schema_version": 1, "reports": {}, "companies": {}}, ensure_ascii=False),
             encoding="utf-8",
         )
+
+    def test_projection_timestamp_uses_latest_saved_source_provenance(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            data = root / "data" / "investment-dashboard"
+            (data / "quotes").mkdir(parents=True)
+            (data / "quotes" / "latest.json").write_text(
+                json.dumps({"generated_at": "2026-09-07T18:17:53+08:00"}),
+                encoding="utf-8",
+            )
+            (data / "event_radar.json").write_text(
+                json.dumps({"generated_at": "2026-09-08T01:51:29+08:00"}),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                dashboard.dashboard_projection_generated_at(root),
+                "2026-09-08T01:51:29+08:00",
+            )
 
     def test_production_build_blocks_on_corrupt_post_buy_tracking(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -63,6 +83,74 @@ class InvestmentDashboardTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 dashboard.build_dashboard(root)
             self.assertFalse((data / "company_state.json").exists())
+
+    def test_runtime_state_refresh_does_not_rebuild_reports_or_rule_definitions(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            report = root / "reports" / "示例公司" / "main.md"
+            report.write_text(
+                "# 示例公司\n\n数据截止：2026-09-07\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n股价低于 10 元时进入买入复核。\n",
+                encoding="utf-8",
+            )
+            board = dashboard.build_dashboard(root, legacy_mode=True)
+            data = root / "data" / "investment-dashboard"
+            site = root / "site" / "data"
+            built_state = json.loads((data / "company_state.json").read_text(encoding="utf-8"))
+            company_state = built_state["companies"][0]
+            light_thesis_signals.upsert(root, {
+                "ticker": "600000.SH",
+                "lifecycle_at_review": "WATCH",
+                "baseline_report_path": company_state["canonical_report"],
+                "baseline_report_sha256": company_state["canonical_report_sha256"],
+                "checked_at": "2026-09-07T14:00:00+08:00",
+                "evidence_fingerprint": "b" * 64,
+                "signal": "unchanged",
+                "summary": "当前无明显变化",
+                "material_evidence": [{"summary": "公告无变化", "source": "交易所"}],
+                "model": "gpt-5.6-luna",
+                "provider": "local_codex",
+                "provenance": "local_codex_light_thesis",
+            })
+            light_source = data / "light_thesis_signals.json"
+            light_source_before = light_source.read_bytes()
+            rules = json.loads((site / "decision_rules.json").read_text(encoding="utf-8"))
+            dashboard.decision_state.write_json(
+                data / "decision_rules.json",
+                dashboard.decision_state.rule_definition_payload(rules),
+            )
+            rules_before = (data / "decision_rules.json").read_bytes()
+            index_path = root / "reports" / "00-index" / "投资决策总表.md"
+            index_before = index_path.read_bytes()
+            quote_path = data / "quotes" / "latest.json"
+            quote_path.parent.mkdir(parents=True, exist_ok=True)
+            quote_path.write_text(json.dumps({
+                "generated_at": "2026-09-07T15:05:00+08:00",
+                "source_status": "ok",
+                "data_cutoff": "2026-09-07",
+                "quotes": [{
+                    "ticker": "600000.SH", "market": "A股", "price": 9.0,
+                    "data_cutoff": "2026-09-07", "source": "Tencent quote",
+                }],
+            }), encoding="utf-8")
+
+            result = dashboard.refresh_runtime_state(root)
+
+            self.assertEqual(result["decision_count"], board["decision_count"])
+            self.assertEqual((data / "decision_rules.json").read_bytes(), rules_before)
+            self.assertEqual(index_path.read_bytes(), index_before)
+            self.assertEqual(light_source.read_bytes(), light_source_before)
+            evaluations = json.loads((data / "rule_evaluations.json").read_text(encoding="utf-8"))
+            self.assertEqual(evaluations["evaluation_count"], result["rule_count"])
+            self.assertEqual(
+                (data / "company_state.json").read_bytes(),
+                (site / "company_state.json").read_bytes(),
+            )
+            light_projection = json.loads(
+                (site / "light_thesis_signals.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(light_projection["companies"][0]["status"], "current")
 
     def test_public_opportunity_scan_omits_full_input_snapshot(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -473,6 +561,7 @@ class InvestmentDashboardTests(unittest.TestCase):
                     "reviewed_at": "2026-08-23T12:00:00+08:00",
                     "valid_until": "2026-09-22",
                     "execution_key": "wait_price",
+                    "resolved_drift_trigger_fingerprint": "d" * 64,
                     "source_fingerprint_sha256": dashboard.manual_review_fingerprint(snapshot),
                 }
             payload = {"schema_version": 2, "status": "ready", "reviews": reviews}
@@ -486,6 +575,12 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(
                 by_ticker["600002.SH"]["source_fingerprint_sha256"],
                 reviews["600002.SH"]["source_fingerprint_sha256"],
+            )
+            self.assertEqual(
+                by_ticker["600002.SH"]["manual_execution_review"][
+                    "resolved_drift_trigger_fingerprint"
+                ],
+                "d" * 64,
             )
 
     def test_manual_review_expires_after_thirty_calendar_days(self):

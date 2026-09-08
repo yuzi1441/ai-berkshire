@@ -60,8 +60,9 @@ fi
 # Authority boundary:
 # - Git-authoritative: source code, canonical reports, Decision Rule
 #   definitions, reviewed persisted state changes, and
-#   drift_scan_state.json checkpoints.  The checkpoint is never copied from
-#   PREVIOUS, so an older release cannot erase a newly reviewed scan handoff.
+#   drift_scan_state.json checkpoints and light_thesis_signals.json. Neither
+#   file is ever copied from PREVIOUS, so an older release cannot erase newly
+#   reviewed Git state.
 # - Runtime-authoritative after first deploy: live user-operated positions and
 #   Original Buy Thesis cycles below.  They seed from Git only on first deploy.
 # - Persistent reconciled state: Drift, Rule Lifecycle, and Change Log merge
