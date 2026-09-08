@@ -1737,8 +1737,92 @@ def classify_drift_review(
     }
 
 
+def classify_drift_audit_review(
+    lifecycle: str,
+    drift_scan: dict[str, Any] | None,
+    drift: dict[str, Any],
+    canonical_report_sha256: str | None,
+    rules: Iterable[dict[str, Any]] = (),
+) -> dict[str, Any]:
+    """Classify the tracked Drift audit from research authority only.
+
+    ``drift_scan`` on Company State is a runtime projection: its derived
+    ``status`` and ``current_trigger_fingerprint`` may change with quotes or
+    Event Radar.  The tracked audit must not inherit those changes.  For this
+    projection a persisted checkpoint remains current while it still covers
+    the same canonical report, mode, and fingerprint contract.  A changed
+    report (or incompatible checkpoint contract) is stable Git evidence that
+    a new Drift review is required.
+
+    The generic Company State ``next_action`` is intentionally not an input.
+    Formal Drift direction is used only for the stable research disposition,
+    never to reproduce quote/event-driven dashboard actions.
+    """
+    scan = drift_scan if isinstance(drift_scan, dict) else {}
+    has_checkpoint = any(
+        scan.get(field) is not None
+        for field in ("checked_at", "batch_id", "source")
+    )
+    if not has_checkpoint:
+        checkpoint_status = "missing"
+    elif (
+        compact(scan.get("mode")).lower() != "watch"
+        or scan.get("trigger_fingerprint_version") != drift_scan_state.FINGERPRINT_VERSION
+        or scan.get("baseline_report_sha256") != canonical_report_sha256
+    ):
+        checkpoint_status = "stale"
+    else:
+        checkpoint_status = "current"
+
+    checkpoint_result = compact(scan.get("result")).lower() or None
+    stable_redlines = [
+        rule
+        for rule in rules
+        if isinstance(rule, dict)
+        and rule.get("active", True) is not False
+        and rule.get("status") == "triggered"
+        and compact(rule.get("rule_scope")).lower() == "redline"
+        and rule.get("type") not in {"PRICE", "PRICE_RANGE"}
+    ]
+    stable_redline_requests_drift = any(
+        compact(rule.get("action")).lower() == "run_drift"
+        for rule in stable_redlines
+    )
+    if lifecycle != "WATCH":
+        category = "not_applicable"
+        current_action = "not_applicable"
+    elif checkpoint_status == "stale" or stable_redline_requests_drift:
+        category = "true_current_drift"
+        current_action = "run_drift"
+    elif checkpoint_status == "current" and checkpoint_result == "unknown":
+        category = "reviewed_insufficient_evidence"
+        current_action = "run_drift"
+    elif checkpoint_status == "current":
+        category = "reviewed_current"
+        current_action = (
+            "drop_or_recheck"
+            if stable_redlines or compact(drift.get("direction")).lower() == "weakened"
+            else "keep_watch"
+        )
+    elif drift.get("last_checked"):
+        category = "reviewed_not_recognized"
+        current_action = "reviewed_waiting_disposition"
+    else:
+        category = "never_reviewed"
+        current_action = "keep_watch"
+
+    return {
+        "category": category,
+        "label": DRIFT_REVIEW_LABELS[category],
+        "current_action": current_action,
+        "checkpoint_status": checkpoint_status,
+        "checkpoint_result": checkpoint_result,
+        "last_checked": drift.get("last_checked"),
+    }
+
+
 def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
-    """Build a machine-readable audit of the dashboard's Drift action mapping."""
+    """Build a deterministic research-only Drift audit."""
     companies = [
         item
         for item in state_payload.get("companies", [])
@@ -1747,11 +1831,12 @@ def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     counts = {category: 0 for category in DRIFT_REVIEW_CATEGORIES}
     for item in companies:
-        review = item.get("drift_review") or classify_drift_review(
+        review = classify_drift_audit_review(
             str(item.get("lifecycle") or ""),
             item.get("drift_scan"),
             item.get("drift") or {},
-            str(item.get("next_action") or "keep_watch"),
+            item.get("canonical_report_sha256"),
+            ((item.get("decision_rules") or {}).get("rules") or []),
         )
         category = review.get("category")
         if category not in counts:
@@ -1765,7 +1850,7 @@ def build_drift_review_audit(state_payload: dict[str, Any]) -> dict[str, Any]:
                 "lifecycle": item.get("lifecycle"),
                 "category": category,
                 "label": DRIFT_REVIEW_LABELS[category],
-                "current_action": item.get("next_action"),
+                "current_action": review.get("current_action"),
                 "checkpoint_status": review.get("checkpoint_status"),
                 "checkpoint_result": review.get("checkpoint_result"),
                 "last_checked": review.get("last_checked"),

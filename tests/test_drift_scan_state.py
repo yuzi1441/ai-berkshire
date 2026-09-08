@@ -21,9 +21,17 @@ class DriftScanStateTests(unittest.TestCase):
             "ticker": "600000.SH",
             "market": "A股",
             "lifecycle": "WATCH",
+            "canonical_report_sha256": "a" * 64,
             "next_action": "keep_watch",
             "drift": {},
-            "drift_scan": {"status": "current", "result": "unchanged"},
+            "drift_scan": {
+                "status": "current",
+                "result": "unchanged",
+                "mode": "watch",
+                "checked_at": "2026-09-03",
+                "baseline_report_sha256": "a" * 64,
+                "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+            },
         }]
         first = decision_state.build_drift_review_audit({
             "generated_at": "2026-09-04T01:00:00+08:00",
@@ -35,6 +43,113 @@ class DriftScanStateTests(unittest.TestCase):
         })
         self.assertEqual(first, second)
         self.assertNotIn("generated_at", first)
+
+    def test_tracked_audit_ignores_runtime_actions_events_and_alerts(self):
+        stable = {
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "canonical_report_sha256": "a" * 64,
+            "drift": {},
+            "drift_scan": {
+                "status": "stale",
+                "result": "unchanged",
+                "mode": "watch",
+                "checked_at": "2026-09-03",
+                "baseline_report_sha256": "a" * 64,
+                "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+                "trigger_fingerprint": "b" * 64,
+            },
+        }
+        variants = []
+        for action in ("keep_watch", "price_near_trigger", "drop_or_recheck", "run_drift"):
+            item = dict(stable)
+            item.update({
+                "next_action": action,
+                "event_radar": {"state": "critical", "thesis_relevant": True},
+                "post_buy_tracking": {"alerts": [{"type": "runtime"}]},
+                "drift_review": {"category": "true_current_drift", "current_action": action},
+            })
+            variants.append(decision_state.build_drift_review_audit({"companies": [item]}))
+        self.assertTrue(all(payload == variants[0] for payload in variants[1:]))
+        row = variants[0]["companies"][0]
+        self.assertEqual(row["category"], "reviewed_current")
+        self.assertEqual(row["current_action"], "keep_watch")
+
+    def test_tracked_audit_reopens_only_for_stable_checkpoint_mismatch(self):
+        base = {
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "canonical_report_sha256": "a" * 64,
+            "next_action": "price_near_trigger",
+            "drift": {},
+            "drift_scan": {
+                "status": "current",
+                "result": "unchanged",
+                "mode": "watch",
+                "checked_at": "2026-09-03",
+                "baseline_report_sha256": "b" * 64,
+                "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+            },
+        }
+        row = decision_state.build_drift_review_audit({"companies": [base]})["companies"][0]
+        self.assertEqual(row["category"], "true_current_drift")
+        self.assertEqual(row["current_action"], "run_drift")
+        self.assertEqual(row["checkpoint_status"], "stale")
+
+    def test_tracked_audit_uses_formal_drift_for_stable_disposition(self):
+        company = {
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "canonical_report_sha256": "a" * 64,
+            "next_action": "keep_watch",
+            "drift": {"direction": "weakened", "last_checked": "2026-09-03"},
+            "drift_scan": {
+                "status": "current",
+                "result": "weakened",
+                "mode": "watch",
+                "checked_at": "2026-09-03",
+                "baseline_report_sha256": "a" * 64,
+                "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+            },
+        }
+        row = decision_state.build_drift_review_audit({"companies": [company]})["companies"][0]
+        self.assertEqual(row["category"], "reviewed_current")
+        self.assertEqual(row["current_action"], "drop_or_recheck")
+
+    def test_tracked_audit_ignores_price_redline_but_keeps_research_redline(self):
+        company = {
+            "company": "示例公司",
+            "ticker": "600000.SH",
+            "market": "A股",
+            "lifecycle": "WATCH",
+            "canonical_report_sha256": "a" * 64,
+            "next_action": "drop_or_recheck",
+            "drift": {},
+            "drift_scan": {
+                "result": "unchanged",
+                "mode": "watch",
+                "checked_at": "2026-09-03",
+                "baseline_report_sha256": "a" * 64,
+                "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+            },
+            "decision_rules": {"rules": [{
+                "type": "PRICE",
+                "rule_scope": "redline",
+                "action": "drop_or_recheck",
+                "status": "triggered",
+            }]},
+        }
+        price_row = decision_state.build_drift_review_audit({"companies": [company]})["companies"][0]
+        self.assertEqual(price_row["current_action"], "keep_watch")
+        company["decision_rules"]["rules"][0]["type"] = "METRIC"
+        research_row = decision_state.build_drift_review_audit({"companies": [company]})["companies"][0]
+        self.assertEqual(research_row["current_action"], "drop_or_recheck")
 
     def test_drift_review_categories_separate_stale_actions_and_history(self):
         self.assertEqual(
