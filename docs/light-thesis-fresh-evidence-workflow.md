@@ -54,3 +54,33 @@ python3 tools/light_thesis_evidence.py validate \
 它不包含准备时间、模型输出或随机值。相同 baseline 和证据必然得到相同指纹；
 新证据进入后指纹变化，现有单记录 authority 会安全替换上一轮 pipeline-validation
 结果。相同 baseline/证据却产生不同 signal 时，authority 继续关闭失败。
+
+## 可恢复的正式运行入口
+
+`tools/light_thesis_workflow.py` 只负责本地流程控制，不调用模型、provider、
+`codex exec` 或 VPS。运行目录位于已忽略的 `local/light-thesis-runs/`，只是可删除的
+checkpoint；唯一正式 authority 仍是 `light_thesis_signals.json`。
+
+```bash
+python3 tools/light_thesis_workflow.py prepare \
+  --run-id light-20260908 --model gpt-5.6-luna --reasoning-effort high
+
+python3 tools/light_thesis_workflow.py prepare \
+  --run-id light-20260908 --model gpt-5.6-luna --reasoning-effort high --write
+
+python3 tools/light_thesis_workflow.py status --run light-20260908
+python3 tools/light_thesis_workflow.py validate --run light-20260908
+python3 tools/light_thesis_workflow.py apply --run light-20260908 --write
+python3 tools/light_thesis_workflow.py finalize --run light-20260908 --write
+```
+
+`prepare --write` 后，当前 Codex 客户端中的 Luna 逐条读取 `packages/` 并把结果
+写入同一运行目录的 `results/`。结果必须声明
+`provenance=MODEL_RESULT_PROVIDED_BY_CODEX_CLIENT`，并绑定 package fingerprint、
+baseline SHA、evidence fingerprint 和 package 内的 evidence IDs。脚本只把 operator
+声明的模型元数据记录为声明值，不伪装成经过 provider API 验证。
+
+`apply` 会重新准备当前证据并检查 WATCH、baseline 和 evidence 是否仍与冻结 package
+一致，然后逐 ticker 调用现有原子 upsert。中断后可重复执行，已成功项不会重写；
+只有全部 ticker 均成功应用后，`finalize` 才会构建 Dashboard、运行 validators 并将
+本地 run 标记为完成。删除整个运行目录不会改变 authority 或 Dashboard。

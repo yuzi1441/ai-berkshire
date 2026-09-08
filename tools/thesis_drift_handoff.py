@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import build_investment_dashboard  # noqa: E402
 import decision_state  # noqa: E402
+import drift_provenance  # noqa: E402
 import post_buy_tracking  # noqa: E402
 import rule_lifecycle  # noqa: E402
 
@@ -118,12 +119,12 @@ def main() -> int:
         return 1
     sources: list[str] = []
     for raw in args.facts_source:
-        path = Path(raw)
-        resolved = path if path.is_absolute() else root / path
-        if not resolved.is_file():
-            print(f"FAIL: facts source 不存在: {raw}", file=sys.stderr)
+        try:
+            source = drift_provenance.normalize_facts_source(root, raw)
+        except ValueError as error:
+            print(f"FAIL: {error}", file=sys.stderr)
             return 1
-        sources.append(resolved.relative_to(root).as_posix() if resolved.is_relative_to(root) else str(resolved))
+        sources.append(source)
 
     record = {
         "direction": args.direction,
@@ -155,6 +156,13 @@ def main() -> int:
     history.append(dict(record))
     record["review_history"] = history
     payload["companies"][ticker] = record
+    provenance_errors = drift_provenance.validate_drift_facts_sources(root, payload)
+    if provenance_errors:
+        print(
+            json.dumps({"status": "blocked", "errors": provenance_errors}, ensure_ascii=False, indent=2),
+            file=sys.stderr,
+        )
+        return 1
     _save(drift_path, payload)
     rule_sync = {"status": "not_requested", "reason": "unchanged drift does not mutate Rule content"}
     if args.direction != "unchanged":

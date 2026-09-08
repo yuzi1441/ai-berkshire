@@ -25,6 +25,7 @@ import signal
 import statistics
 import sys
 import time
+import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date, datetime, time as clock_time, timedelta
@@ -48,7 +49,8 @@ DEFAULT_ARCHIVE_DIR = ROOT / "data" / "sentiment" / "snapshots"
 DEFAULT_CACHE_DIR = ROOT / "data" / "sentiment" / "cache"
 DEFAULT_SITE_OUTPUT = ROOT / "site" / "data" / "sentiment.json"
 DEFAULT_STATUS_OUTPUT = ROOT / "site" / "data" / "sentiment_status.json"
-NEWS_CACHE_SCHEMA_VERSION = 1
+NEWS_CACHE_SCHEMA_VERSION = 2
+NEWS_ACQUISITION_POLICY_VERSION = 1
 NEWS_CATALOG_SCHEMA_VERSION = 1
 NEWS_CATALOG_FILENAME = "news-catalog.json"
 NEWS_SCORING_POLICY_VERSION = 1
@@ -59,6 +61,7 @@ DEFAULT_LLM_RETRIES = 4
 DEFAULT_LLM_RETRY_BACKOFF_SECONDS = 5.0
 DEFAULT_LLM_MISSING_RESULT_RETRIES = 3
 DEFAULT_CONTEXT_ANALYSIS_LIMIT = 12
+DEFAULT_NEWS_CACHE_TTL_MINUTES = 30
 TRANSIENT_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
@@ -479,6 +482,24 @@ def safe_float(value: Any, default: float = 0.0) -> float:
 def chunks(items: list[Any], size: int) -> Iterable[list[Any]]:
     for start in range(0, len(items), size):
         yield items[start : start + size]
+
+
+def is_opencode_go_endpoint(endpoint: str) -> bool:
+    """Return whether an endpoint uses the OpenCode Go HTTP compatibility API."""
+    parsed = urlsplit(endpoint)
+    path = parsed.path.rstrip("/")
+    return (
+        parsed.hostname == "opencode.ai"
+        and (path == "/zen/go/v1" or path.startswith("/zen/go/v1/"))
+    )
+
+
+def sentiment_run_headers() -> dict[str, str]:
+    """Create non-sensitive headers shared by one Sentiment scoring invocation."""
+    return {
+        "User-Agent": USER_AGENT,
+        "x-opencode-session": f"ai-berkshire-sentiment-{uuid.uuid4()}",
+    }
 
 
 def http_text(
@@ -2055,7 +2076,11 @@ def parse_json_block(content: str) -> Any:
 
 
 def score_with_llm(
-    batch: list[dict[str, Any]], config: LLMConfig, provider_label: str = "primary"
+    batch: list[dict[str, Any]],
+    config: LLMConfig,
+    provider_label: str = "primary",
+    *,
+    run_headers: dict[str, str] | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Score a bounded headline batch using an OpenAI-compatible chat API."""
     compact_articles = [
@@ -2089,9 +2114,22 @@ def score_with_llm(
     if config.max_tokens:
         request_payload["max_tokens"] = config.max_tokens
     body = json.dumps(request_payload, ensure_ascii=False).encode("utf-8")
+    request_headers = {
+        "Authorization": f"Bearer {config.api_key}",
+        "Content-Type": "application/json",
+    }
+    if is_opencode_go_endpoint(config.endpoint) and run_headers:
+        # Only copy the provider contract fields.  Callers cannot replace auth.
+        request_headers.update(
+            {
+                key: run_headers[key]
+                for key in ("User-Agent", "x-opencode-session")
+                if run_headers.get(key)
+            }
+        )
     response = http_json(
         config.endpoint,
-        headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
+        headers=request_headers,
         body=body,
         timeout=config.timeout_seconds,
         attempts=config.max_retries + 1,
@@ -2225,6 +2263,27 @@ def score_articles(
     if requires_review and review_config is None:
         raise SentimentError("A/B 双复核或 C/D MiMo 分析需要复核模型配置")
 
+    opencode_go_run_headers = (
+        sentiment_run_headers()
+        if any(
+            config is not None and is_opencode_go_endpoint(config.endpoint)
+            for config in (primary_config, review_config)
+        )
+        else None
+    )
+
+    def invoke_score(
+        batch: list[dict[str, Any]], config: LLMConfig, provider_label: str
+    ) -> dict[str, dict[str, Any]]:
+        if is_opencode_go_endpoint(config.endpoint):
+            return score_with_llm(
+                batch,
+                config,
+                provider_label,
+                run_headers=opencode_go_run_headers,
+            )
+        return score_with_llm(batch, config, provider_label)
+
     def collect_scores(
         target_articles: list[dict[str, Any]],
         config: LLMConfig,
@@ -2302,7 +2361,7 @@ def score_articles(
                 ) as retry_executor:
                     retry_futures = {
                         retry_executor.submit(
-                            score_with_llm, [item], config, provider_label
+                            invoke_score, [item], config, provider_label
                         ): item
                         for item in remaining
                     }
@@ -2332,7 +2391,7 @@ def score_articles(
 
         with ThreadPoolExecutor(max_workers=min(config.workers, len(batches))) as executor:
             futures = {
-                executor.submit(score_with_llm, batch, config, provider_label): batch
+                executor.submit(invoke_score, batch, config, provider_label): batch
                 for batch in batches
             }
             for future in as_completed(futures):
@@ -3121,13 +3180,35 @@ def news_cache_universe_signature(universe: list[dict[str, str]]) -> str:
     ).hexdigest()
 
 
+def news_cache_source_identity() -> str:
+    """Identify the deterministic news-acquisition policy without runtime data."""
+    policy = {
+        "schema_version": NEWS_CACHE_SCHEMA_VERSION,
+        "acquisition_policy_version": NEWS_ACQUISITION_POLICY_VERSION,
+        "sources": [
+            "baidu_news_reader_proxy",
+            "bing_news_rss",
+            "cninfo_direct",
+            "eastmoney_guba",
+            "eastmoney_search",
+            "google_news_rss",
+            "sina_stock_news",
+            "xueqiu_public_index",
+        ],
+    }
+    return hashlib.sha256(
+        json.dumps(policy, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()
+
+
 def load_news_cache(
     path: Path,
     *,
     universe_signature: str,
     parameters: dict[str, Any],
+    source_identity: str | None = None,
 ) -> dict[str, Any]:
-    """Load a resumable raw-news cache, returning an empty cache on mismatch."""
+    """Load compatible cached data, retaining old policies only as stale fallback."""
     if not path.exists():
         return {}
     try:
@@ -3136,13 +3217,43 @@ def load_news_cache(
         return {}
     if not isinstance(payload, dict):
         return {}
-    if payload.get("schema_version") != NEWS_CACHE_SCHEMA_VERSION:
+    if payload.get("schema_version") not in {1, NEWS_CACHE_SCHEMA_VERSION}:
         return {}
     if payload.get("universe_signature") != universe_signature:
         return {}
     if payload.get("parameters") != parameters:
         return {}
+    payload["_freshness_compatible"] = bool(
+        payload.get("schema_version") == NEWS_CACHE_SCHEMA_VERSION
+        and (
+            source_identity is None
+            or payload.get("source_identity") == source_identity
+        )
+    )
     return payload
+
+
+def cache_entity_is_fresh(
+    payload: dict[str, Any],
+    *,
+    entity_kind: str,
+    entity_id: str,
+    now: datetime,
+    ttl_minutes: int,
+) -> bool:
+    """Check freshness from the entity's last successful network acquisition."""
+    if not payload.get("_freshness_compatible"):
+        return False
+    states = payload.get(f"{entity_kind}_fetch_state")
+    if not isinstance(states, dict):
+        return False
+    state = states.get(entity_id)
+    if not isinstance(state, dict):
+        return False
+    fetched_at = parse_datetime(state.get("fetched_at"))
+    if fetched_at is None or fetched_at > now:
+        return False
+    return now - fetched_at <= timedelta(minutes=ttl_minutes)
 
 
 def save_news_cache(
@@ -3155,20 +3266,26 @@ def save_news_cache(
     company_warnings: dict[str, list[str]],
     industry_news: dict[str, list[dict[str, Any]]],
     industry_warnings: dict[str, list[str]],
+    company_fetch_state: dict[str, dict[str, Any]] | None = None,
+    industry_fetch_state: dict[str, dict[str, Any]] | None = None,
+    source_identity: str | None = None,
 ) -> None:
     """Persist completed entity fetches so a later run can resume by entity."""
     write_json(
         path,
         {
             "schema_version": NEWS_CACHE_SCHEMA_VERSION,
-            "as_of": as_of.isoformat(),
+            "data_as_of": as_of.isoformat(),
             "parameters": parameters,
             "universe_signature": universe_signature,
+            "source_identity": source_identity or news_cache_source_identity(),
             "updated_at": datetime.now(tz=SHANGHAI_TIMEZONE).isoformat(),
             "company_news": company_news,
             "company_warnings": company_warnings,
+            "company_fetch_state": company_fetch_state or {},
             "industry_news": industry_news,
             "industry_warnings": industry_warnings,
+            "industry_fetch_state": industry_fetch_state or {},
         },
     )
 
@@ -3495,6 +3612,7 @@ def build_snapshot(
     llm_config: LLMConfig | None = None,
     review_llm_config: LLMConfig | None = None,
     cache_dir: Path | None = None,
+    news_cache_ttl_minutes: int = DEFAULT_NEWS_CACHE_TTL_MINUTES,
     checkpoint_callback: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
     selected_markets = markets or SUPPORTED_MARKETS
@@ -3570,10 +3688,12 @@ def build_snapshot(
         rss_news_limit=rss_news_limit,
     )
     universe_signature = news_cache_universe_signature(universe)
+    source_identity = news_cache_source_identity()
     cached_news = load_news_cache(
         cache_path,
         universe_signature=universe_signature,
         parameters=cache_parameters,
+        source_identity=source_identity,
     )
     catalog_path = news_catalog_path(resolved_cache_dir)
     news_catalog = load_news_catalog(catalog_path)
@@ -3609,6 +3729,39 @@ def build_snapshot(
         for industry, rows in (cached_news.get("industry_news") or {}).items()
         if isinstance(rows, list)
     }
+    freshness_compatible = bool(cached_news.get("_freshness_compatible"))
+    company_fetch_state = {
+        str(ticker): dict(state)
+        for ticker, state in (cached_news.get("company_fetch_state") or {}).items()
+        if isinstance(state, dict)
+    } if freshness_compatible else {}
+    industry_fetch_state = {
+        str(industry): dict(state)
+        for industry, state in (cached_news.get("industry_fetch_state") or {}).items()
+        if isinstance(state, dict)
+    } if freshness_compatible else {}
+    fresh_company_news = {
+        ticker: rows
+        for ticker, rows in cached_company_news.items()
+        if cache_entity_is_fresh(
+            cached_news,
+            entity_kind="company",
+            entity_id=ticker,
+            now=now,
+            ttl_minutes=news_cache_ttl_minutes,
+        )
+    }
+    fresh_industry_news = {
+        industry: rows
+        for industry, rows in cached_industry_news.items()
+        if cache_entity_is_fresh(
+            cached_news,
+            entity_kind="industry",
+            entity_id=industry,
+            now=now,
+            ttl_minutes=news_cache_ttl_minutes,
+        )
+    }
     company_source_warnings = {
         str(ticker): [str(item) for item in warnings]
         for ticker, warnings in (cached_news.get("company_warnings") or {}).items()
@@ -3629,7 +3782,7 @@ def build_snapshot(
         )
     company_news_counts: dict[str, int] = {
         ticker: len(rows) for ticker, rows in articles_by_ticker.items()
-        if ticker in cached_company_news
+        if ticker in fresh_company_news
     }
     industry_articles_by_name: dict[str, list[dict[str, Any]]] = {
         industry: cached_industry_news.get(industry, []) for industry in industry_names
@@ -3641,7 +3794,7 @@ def build_snapshot(
     industry_news_counts: dict[str, int] = {
         industry: len(rows)
         for industry, rows in industry_articles_by_name.items()
-        if industry in cached_industry_news
+        if industry in fresh_industry_news
     }
     for ticker, source_warnings in company_source_warnings.items():
         warnings.extend(f"{ticker} source warning: {item}" for item in source_warnings)
@@ -3665,6 +3818,9 @@ def build_snapshot(
             company_warnings=company_source_warnings,
             industry_news=industry_articles_by_name,
             industry_warnings=industry_source_warnings,
+            company_fetch_state=company_fetch_state,
+            industry_fetch_state=industry_fetch_state,
+            source_identity=source_identity,
         )
 
     def persist_news_catalog(*, force: bool = False) -> None:
@@ -3856,7 +4012,7 @@ def build_snapshot(
     )
 
     pending_company_items = [
-        item for item in universe if item["ticker"] not in cached_company_news
+        item for item in universe if item["ticker"] not in fresh_company_news
     ]
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
@@ -3882,14 +4038,30 @@ def build_snapshot(
                 articles_by_ticker[item["ticker"]] = rows
                 company_news_counts[item["ticker"]] = len(rows)
                 company_source_warnings[item["ticker"]] = source_warnings
+                company_fetch_state[item["ticker"]] = {
+                    "fetched_at": now.isoformat(),
+                    "last_attempt_at": now.isoformat(),
+                    "last_attempt_status": "success",
+                }
                 warnings.extend(
                     f"{item['ticker']} source warning: {warning}" for warning in source_warnings
                 )
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-                articles_by_ticker[item["ticker"]] = []
-                company_source_warnings[item["ticker"]] = [str(exc)]
-                warnings.append(f"news failed for {item['ticker']}: {exc}")
-                company_news_counts[item["ticker"]] = 0
+                old_rows = cached_company_news.get(item["ticker"], [])
+                stale_warning = f"stale cache fallback after refresh failed: {exc}"
+                articles_by_ticker[item["ticker"]] = old_rows
+                company_source_warnings[item["ticker"]] = [stale_warning] if old_rows else [str(exc)]
+                company_fetch_state[item["ticker"]] = {
+                    **company_fetch_state.get(item["ticker"], {}),
+                    "last_attempt_at": now.isoformat(),
+                    "last_attempt_status": "failed_stale_fallback" if old_rows else "failed",
+                }
+                warnings.append(
+                    f"news stale fallback for {item['ticker']}: {exc}"
+                    if old_rows
+                    else f"news failed for {item['ticker']}: {exc}"
+                )
+                company_news_counts[item["ticker"]] = len(old_rows)
             persist_news_cache()
             persist_news_catalog()
             completed_company_news = len(company_news_counts)
@@ -3912,7 +4084,7 @@ def build_snapshot(
         )
 
     pending_industries = [
-        industry for industry in industry_names if industry not in cached_industry_news
+        industry for industry in industry_names if industry not in fresh_industry_news
     ]
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 6))) as executor:
         futures = {
@@ -3936,11 +4108,27 @@ def build_snapshot(
                 )
                 industry_news_counts[industry] = len(industry_articles_by_name[industry])
                 industry_source_warnings[industry] = []
+                industry_fetch_state[industry] = {
+                    "fetched_at": now.isoformat(),
+                    "last_attempt_at": now.isoformat(),
+                    "last_attempt_status": "success",
+                }
             except (SentimentError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-                industry_articles_by_name[industry] = []
-                industry_source_warnings[industry] = [str(exc)]
-                warnings.append(f"industry news failed for {industry}: {exc}")
-                industry_news_counts[industry] = 0
+                old_rows = cached_industry_news.get(industry, [])
+                stale_warning = f"stale cache fallback after refresh failed: {exc}"
+                industry_articles_by_name[industry] = old_rows
+                industry_source_warnings[industry] = [stale_warning] if old_rows else [str(exc)]
+                industry_fetch_state[industry] = {
+                    **industry_fetch_state.get(industry, {}),
+                    "last_attempt_at": now.isoformat(),
+                    "last_attempt_status": "failed_stale_fallback" if old_rows else "failed",
+                }
+                warnings.append(
+                    f"industry news stale fallback for {industry}: {exc}"
+                    if old_rows
+                    else f"industry news failed for {industry}: {exc}"
+                )
+                industry_news_counts[industry] = len(old_rows)
             persist_news_cache()
             persist_news_catalog()
             if len(industry_news_counts) % 5 == 0 or len(industry_news_counts) == len(industry_names):
@@ -4251,12 +4439,25 @@ def build_snapshot(
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
+    cache_ttl_text = os.environ.get(
+        "SENTIMENT_NEWS_CACHE_TTL_MINUTES", str(DEFAULT_NEWS_CACHE_TTL_MINUTES)
+    ).strip()
+    try:
+        default_cache_ttl = int(cache_ttl_text)
+    except ValueError:
+        default_cache_ttl = DEFAULT_NEWS_CACHE_TTL_MINUTES
     parser.add_argument("--board", type=Path, default=DEFAULT_BOARD)
     parser.add_argument("--registry", type=Path, default=DEFAULT_REGISTRY)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--working-output", type=Path, default=DEFAULT_WORKING_OUTPUT)
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE_DIR)
     parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR)
+    parser.add_argument(
+        "--news-cache-ttl-minutes",
+        type=int,
+        default=default_cache_ttl,
+        help="reuse an entity only this many minutes after its last successful fetch",
+    )
     parser.add_argument("--site-output", type=Path, default=DEFAULT_SITE_OUTPUT)
     parser.add_argument("--status-output", type=Path, default=DEFAULT_STATUS_OUTPUT)
     parser.add_argument("--as-of", type=date.fromisoformat, help="end-of-day cutoff (YYYY-MM-DD)")
@@ -4383,9 +4584,10 @@ def main(argv: list[str] | None = None) -> int:
             or args.context_analysis_limit < 0
             or args.rss_news_limit < 1
             or args.workers < 1
+            or args.news_cache_ttl_minutes < 1
         ):
             raise SentimentError(
-                "lookback-days, fallback-lookback-days, news limits and workers must be positive; context-analysis-limit cannot be negative"
+                "lookback-days, fallback-lookback-days, news limits, workers and news-cache TTL must be positive; context-analysis-limit cannot be negative"
             )
         if args.fallback_lookback_days < args.lookback_days:
             raise SentimentError("fallback-lookback-days must be >= lookback-days")
@@ -4418,6 +4620,7 @@ def main(argv: list[str] | None = None) -> int:
             llm_config=primary_config,
             review_llm_config=review_config,
             cache_dir=args.cache_dir.resolve(),
+            news_cache_ttl_minutes=args.news_cache_ttl_minutes,
             checkpoint_callback=lambda snapshot: persist_checkpoint(
                 snapshot, "情绪任务进行中；页面显示最近一次阶段性结果。"
             ),

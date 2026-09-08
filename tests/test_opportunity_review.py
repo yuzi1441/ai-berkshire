@@ -38,6 +38,115 @@ def ready(model: str, state: str) -> dict:
     }
 
 
+def scan_config(model: str = "deepseek-v4-flash") -> opportunity.ModelConfig:
+    return opportunity.ModelConfig(
+        "scan_flash", model, "test", "https://test", "key", 1000, 30, 0, "max", 1024
+    )
+
+
+def opportunity_facts(
+    *,
+    price: float = 22.1,
+    report_marker: str = "A",
+    checklist_status: str = "ready",
+    technical_state: str = "观察",
+    sentiment_score: float = 50.0,
+    news_title: str = "材料A",
+) -> dict:
+    rule = {
+        "action_kind": "buy",
+        "min": 22.0,
+        "ceiling": 25.0,
+        "requires_validation": False,
+        "validation_condition": None,
+    }
+    facts = {
+        "primary_judgment": {
+            "label": "等待验证",
+            "action_kind": "watch",
+            "empty_position_action": f"等待{report_marker}",
+            "trigger_condition": "条件A",
+            "summary": "摘要A",
+            "artifact_status": "human_reviewed",
+            "source_matches": True,
+            "model_consensus": False,
+        },
+        "execution_policy": {
+            "main_label": "等待验证",
+            "condition_mode": "price",
+            "event_condition": None,
+            "guard_condition": None,
+            "reliability": "high",
+            "price_rules": [rule],
+        },
+        "local_price_context": {
+            "status": "inside_price_rule",
+            "price": price,
+            "matched_rules": [rule],
+        },
+        "daily_technical": {
+            "status": "ready",
+            "state": technical_state,
+            "latest_price": price,
+            "lights": [{"dimension": "短期", "light": "黄", "meaning": "ignored"}],
+        },
+        "intraday_30m": {"status": "ready", "state": "观察", "latest": {"close": price}},
+        "sentiment": {
+            "status": "ready",
+            "combined": {"score_0_100": sentiment_score, "state": "中性"},
+            "news": {"score_0_100": sentiment_score, "state": "中性", "confidence": "medium"},
+            "scored_news_examples": [{
+                "title": news_title,
+                "published_at": "2026-09-08T10:00:00+08:00",
+                "event_type": "业绩",
+                "direction": "positive",
+                "impact": "medium",
+                "source_tier": "A",
+            }],
+        },
+        "checklist": {
+            "status": checklist_status,
+            "hard_veto": False,
+            "hard_veto_label": "无",
+            "mirror_test": "pass",
+            "confidence": "medium",
+            "gates": [{"name": "估值", "result": "pass", "reason": "ignored"}],
+        },
+    }
+    facts["input_sha256"] = opportunity.stable_sha256(facts)
+    return facts
+
+
+def prior_record(
+    facts: dict,
+    *,
+    generated_at: str = "2026-09-08T18:00:00+08:00",
+    state: str = "暂不构成当前机会",
+    report_hash: str = "report-a",
+    config=None,
+) -> dict:
+    config = config or scan_config()
+    snapshot = opportunity.material_trigger_snapshot(facts, report_hash)
+    model = ready(config.model, state)
+    model["generated_at"] = generated_at
+    return {
+        "ticker": "600000.SH",
+        "company": "示例公司",
+        "market": "A股",
+        "report_path": "reports/example.md",
+        "report_sha256": report_hash,
+        "input_sha256": facts["input_sha256"],
+        "generated_at": generated_at,
+        "models": {config.model: model},
+        "union": opportunity.union_result({config.model: model}),
+        "input_snapshot": facts,
+        "assessment_contract": opportunity.assessment_contract(config),
+        "material_trigger_snapshot": snapshot,
+        "material_trigger_fingerprint": opportunity.stable_sha256(snapshot),
+        "last_model_evaluated_at": generated_at,
+    }
+
+
 class OpportunityReviewTests(unittest.TestCase):
     def test_zero_opportunity_scan_is_still_a_successful_scan(self):
         scan = {
@@ -120,7 +229,7 @@ class OpportunityReviewTests(unittest.TestCase):
             report.write_text("# Sample\n\nVersion B\n", encoding="utf-8")
             self.assertFalse(after_close.scan_matches_current_universe(root, scan))
 
-    def test_reused_scan_build_failure_is_published_as_error(self):
+    def test_same_day_scan_does_not_skip_incremental_materiality_check(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             scan = {
@@ -157,8 +266,9 @@ class OpportunityReviewTests(unittest.TestCase):
 
             def step(_root, label, _args):
                 calls.append(label)
-                if label == "确认今日扫描结果并刷新静态看板":
-                    raise after_close.JobError("simulated build failure")
+                if label == "收盘后扫描全部 A 股机会":
+                    self.assertEqual(_args[-2:], ["--mode", "incremental"])
+                    after_close.write_json(root / after_close.SCAN_RELATIVE, scan)
 
             output = io.StringIO()
             with patch.object(sys, "argv", ["review", "--repo-root", directory, "--skip-git-sync"]), \
@@ -170,12 +280,14 @@ class OpportunityReviewTests(unittest.TestCase):
                 result = after_close.main()
 
             status = after_close.load_json(root / after_close.STATUS_RELATIVE, {})
-            self.assertEqual(result, 1)
-            self.assertEqual(status["status"], "error")
+            self.assertEqual(result, 0)
+            self.assertEqual(status["status"], "ok")
             self.assertEqual(status["scan_status"], "ok")
-            self.assertEqual(status["publication_status"], "error")
-            self.assertEqual(status["failure_phase"], "dashboard_build")
-            self.assertEqual(calls, ["确认今日扫描结果并刷新静态看板", "重建失败保护状态"])
+            self.assertEqual(status["publication_status"], "ok")
+            self.assertEqual(
+                calls,
+                ["刷新收盘行情", "重建含最新价格的决策板", "收盘后扫描全部 A 股机会", "重建静态看板"],
+            )
 
     def test_completed_scan_and_failed_final_build_remain_distinguishable(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -631,6 +743,290 @@ class OpportunityReviewTests(unittest.TestCase):
                 opportunity.parse_integer(os.environ.get("OPPORTUNITY_SCAN_CONCURRENCY"), 3, 1, 6),
                 3,
             )
+
+    def test_price_materiality_uses_coarse_buckets_not_exact_quote(self):
+        low_a = opportunity.price_materiality_signature(opportunity_facts(price=22.10))
+        low_b = opportunity.price_materiality_signature(opportunity_facts(price=22.11))
+        high = opportunity.price_materiality_signature(opportunity_facts(price=24.90))
+        self.assertEqual(low_a, low_b)
+        self.assertEqual(low_a["position_bucket"], "inside_low")
+        self.assertEqual(high["position_bucket"], "inside_high")
+        self.assertNotIn("price", low_a)
+
+    def test_material_trigger_covers_semantics_but_ignores_raw_floats(self):
+        base = opportunity_facts()
+        snapshot = opportunity.material_trigger_snapshot(base, "report-a")
+        same = opportunity.material_trigger_snapshot(
+            opportunity_facts(price=22.11, sentiment_score=50.01), "report-a"
+        )
+        self.assertEqual(snapshot, same)
+        changed = {
+            "report": opportunity.material_trigger_snapshot(base, "report-b"),
+            "primary": opportunity.material_trigger_snapshot(opportunity_facts(report_marker="B"), "report-a"),
+            "price": opportunity.material_trigger_snapshot(opportunity_facts(price=24.9), "report-a"),
+            "checklist": opportunity.material_trigger_snapshot(opportunity_facts(checklist_status="failed"), "report-a"),
+            "technical": opportunity.material_trigger_snapshot(opportunity_facts(technical_state="转强"), "report-a"),
+            "sentiment": opportunity.material_trigger_snapshot(opportunity_facts(news_title="重大合同"), "report-a"),
+        }
+        for name, candidate in changed.items():
+            with self.subTest(name=name):
+                self.assertNotEqual(snapshot, candidate)
+
+    def test_incremental_decision_reuses_within_age_and_refreshes_expired(self):
+        config = scan_config()
+        facts = opportunity_facts()
+        prior = prior_record(facts, config=config)
+        snapshot = prior["material_trigger_snapshot"]
+        fingerprint = prior["material_trigger_fingerprint"]
+        reuse = opportunity.incremental_decision(
+            prior,
+            config=config,
+            fingerprint=fingerprint,
+            trigger_snapshot=snapshot,
+            current_input_sha256=facts["input_sha256"],
+            checked_at="2026-09-08T18:10:00+08:00",
+        )
+        self.assertEqual(reuse[:2], (False, "unchanged"))
+        expired = opportunity.incremental_decision(
+            prior,
+            config=config,
+            fingerprint=fingerprint,
+            trigger_snapshot=snapshot,
+            current_input_sha256=facts["input_sha256"],
+            checked_at="2026-09-16T18:10:00+08:00",
+        )
+        self.assertEqual(expired[:2], (True, "age_expired"))
+
+    def test_current_and_near_refresh_next_daily_cycle(self):
+        config = scan_config()
+        facts = opportunity_facts()
+        for state in ("当前机会", "临近机会"):
+            with self.subTest(state=state):
+                prior = prior_record(
+                    facts,
+                    config=config,
+                    state=state,
+                    generated_at="2026-09-07T18:10:00+08:00",
+                )
+                decision = opportunity.incremental_decision(
+                    prior,
+                    config=config,
+                    fingerprint=prior["material_trigger_fingerprint"],
+                    trigger_snapshot=prior["material_trigger_snapshot"],
+                    current_input_sha256=facts["input_sha256"],
+                    checked_at="2026-09-08T18:10:00+08:00",
+                )
+                self.assertEqual(decision[:2], (True, "age_expired"))
+
+    def test_legacy_and_assessment_contract_changes_refresh(self):
+        config = scan_config()
+        facts = opportunity_facts()
+        prior = prior_record(facts, config=config)
+        legacy = dict(prior)
+        legacy.pop("material_trigger_fingerprint")
+        result = opportunity.incremental_decision(
+            legacy,
+            config=config,
+            fingerprint=prior["material_trigger_fingerprint"],
+            trigger_snapshot=prior["material_trigger_snapshot"],
+            current_input_sha256=facts["input_sha256"],
+            checked_at="2026-09-08T18:10:00+08:00",
+        )
+        self.assertEqual(result[:2], (True, "legacy_refresh"))
+        changed_contract = dict(prior)
+        changed_contract["assessment_contract"] = {
+            **prior["assessment_contract"],
+            "opportunity_prompt_contract_version": 999,
+        }
+        result = opportunity.incremental_decision(
+            changed_contract,
+            config=config,
+            fingerprint=prior["material_trigger_fingerprint"],
+            trigger_snapshot=prior["material_trigger_snapshot"],
+            current_input_sha256=facts["input_sha256"],
+            checked_at="2026-09-08T18:10:00+08:00",
+        )
+        self.assertEqual(result[:2], (True, "possibly_material"))
+        changed_model = scan_config("different-model")
+        result = opportunity.incremental_decision(
+            prior,
+            config=changed_model,
+            fingerprint=prior["material_trigger_fingerprint"],
+            trigger_snapshot=prior["material_trigger_snapshot"],
+            current_input_sha256=facts["input_sha256"],
+            checked_at="2026-09-08T18:10:00+08:00",
+        )
+        self.assertEqual(result[:2], (True, "possibly_material"))
+
+    def test_incremental_reuse_preserves_original_model_input_provenance(self):
+        config = scan_config()
+        old_facts = opportunity_facts(price=22.10, sentiment_score=50.0)
+        new_facts = opportunity_facts(price=22.11, sentiment_score=50.01)
+        prior = prior_record(old_facts, config=config)
+        with (
+            patch.object(opportunity, "report_sha256", return_value="report-a"),
+            patch.object(opportunity, "build_opportunity_input", return_value=new_facts),
+            patch.object(opportunity, "now_iso", return_value="2026-09-08T18:10:00+08:00"),
+            patch.object(opportunity, "run_model") as model,
+        ):
+            result = opportunity.scan_one(
+                {"ticker": "600000.SH", "company": "示例公司", "market": "A股", "report_path": "reports/example.md"},
+                repo_root=Path("/tmp/unused"),
+                configs=[config],
+                sentiment_by_ticker={},
+                intraday_by_ticker={},
+                quote_by_ticker={},
+                previous={"scans": [prior]},
+                mode="incremental",
+            )
+        model.assert_not_called()
+        self.assertEqual(result["evaluation_mode"], "reused_unchanged")
+        self.assertEqual(result["input_sha256"], old_facts["input_sha256"])
+        self.assertEqual(result["input_snapshot"], old_facts)
+        self.assertEqual(result["generated_at"], prior["generated_at"])
+        self.assertEqual(result["current_projection_context"]["current_input_sha256"], new_facts["input_sha256"])
+
+    def test_full_mode_always_calls_model(self):
+        config = scan_config()
+        facts = opportunity_facts()
+        with (
+            patch.object(opportunity, "report_sha256", return_value="report-a"),
+            patch.object(opportunity, "build_opportunity_input", return_value=facts),
+            patch.object(opportunity, "run_model", return_value=ready(config.model, "暂不构成当前机会")) as model,
+        ):
+            result = opportunity.scan_one(
+                {"ticker": "600000.SH", "company": "示例公司", "market": "A股", "report_path": "reports/example.md"},
+                repo_root=Path("/tmp/unused"), configs=[config], sentiment_by_ticker={},
+                intraday_by_ticker={}, quote_by_ticker={}, previous={"scans": [prior_record(facts)]},
+                mode="full",
+            )
+        model.assert_called_once()
+        self.assertEqual(result["model_request_count"], 1)
+        self.assertEqual(result["evaluation_mode"], "model_evaluated")
+
+    def test_incremental_payload_with_zero_requests_is_complete_success(self):
+        model = ready("deepseek-v4-flash", "暂不构成当前机会")
+        scan = {
+            "ticker": "600000.SH",
+            "evaluation_mode": "reused_unchanged",
+            "model_request_count": 0,
+            "filter_class": "ordinary",
+            "models": {"deepseek-v4-flash": model},
+            "union": opportunity.union_result({"deepseek-v4-flash": model}),
+        }
+        payload = opportunity.build_scan_payload(
+            [scan_config()], [scan], workers=1, expected_scan_count=1,
+            checkpoint=False, mode="incremental",
+        )
+        self.assertEqual(payload["status"], "ok")
+        self.assertEqual(payload["scan_count"], 1)
+        self.assertEqual(payload["model_result_count"], 1)
+        self.assertEqual(payload["model_request_count"], 0)
+        self.assertEqual(payload["reused_count"], 1)
+        self.assertEqual(payload["filter_counts"]["ordinary"], 1)
+        self.assertTrue(after_close.scan_is_successful(payload))
+
+    def test_material_refresh_failure_keeps_old_content_stale_and_excluded(self):
+        config = scan_config()
+        old_facts = opportunity_facts(price=22.10)
+        new_facts = opportunity_facts(price=24.90)
+        prior = prior_record(old_facts, config=config, state="当前机会")
+        failed = {
+            "status": "error",
+            "model": config.model,
+            "transport": config.transport,
+            "generated_at": "2026-09-08T18:10:00+08:00",
+            "error": "provider unavailable",
+        }
+        with (
+            patch.object(opportunity, "report_sha256", return_value="report-a"),
+            patch.object(opportunity, "build_opportunity_input", return_value=new_facts),
+            patch.object(opportunity, "now_iso", return_value="2026-09-08T18:10:00+08:00"),
+            patch.object(opportunity, "run_model", return_value=failed),
+        ):
+            result = opportunity.scan_one(
+                {"ticker": "600000.SH", "company": "示例公司", "market": "A股", "report_path": "reports/example.md"},
+                repo_root=Path("/tmp/unused"), configs=[config], sentiment_by_ticker={},
+                intraday_by_ticker={}, quote_by_ticker={}, previous={"scans": [prior]},
+                mode="incremental",
+            )
+        self.assertEqual(result["evaluation_mode"], "refresh_failed")
+        self.assertEqual(result["models"][config.model]["status"], "stale")
+        self.assertEqual(result["input_snapshot"], old_facts)
+        self.assertEqual(result["current_projection_context"]["current_input_sha256"], new_facts["input_sha256"])
+        self.assertFalse(result["union"]["included"])
+        self.assertFalse(result["union"]["near_included"])
+
+    def test_incremental_resume_reuses_completed_checkpoint_without_duplicate_call(self):
+        config = scan_config()
+        facts = opportunity_facts()
+        prior = prior_record(facts, config=config)
+        with (
+            patch.object(opportunity, "report_sha256", return_value="report-a"),
+            patch.object(opportunity, "build_opportunity_input", return_value=facts),
+            patch.object(opportunity, "now_iso", return_value="2026-09-08T18:20:00+08:00"),
+            patch.object(opportunity, "run_model") as model,
+        ):
+            resumed = opportunity.scan_one(
+                {"ticker": "600000.SH", "company": "示例公司", "market": "A股", "report_path": "reports/example.md"},
+                repo_root=Path("/tmp/unused"), configs=[config], sentiment_by_ticker={},
+                intraday_by_ticker={}, quote_by_ticker={}, previous={"scans": [prior]},
+                mode="incremental",
+            )
+        model.assert_not_called()
+        self.assertEqual(resumed["model_request_count"], 0)
+        self.assertEqual(resumed["last_model_evaluated_at"], "2026-09-08T18:00:00+08:00")
+
+    def test_cli_scan_defaults_full_and_supports_incremental(self):
+        parser = opportunity.build_parser()
+        self.assertEqual(parser.parse_args(["scan"]).mode, "full")
+        self.assertEqual(parser.parse_args(["scan", "--mode", "incremental"]).mode, "incremental")
+
+    def test_incremental_failure_projection_is_not_restored_from_backup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            old = {
+                "schema_version": 2, "mode": "incremental", "status": "ok",
+                "generated_at": "2026-09-07T18:10:00+08:00", "scan_count": 1,
+                "expected_scan_count": 1, "model_result_count": 1, "ready_count": 1,
+                "stale_count": 0, "error_count": 0,
+                "scans": [{"ticker": "600000.SH", "union": {"included": True, "near_included": False}}],
+            }
+            stale_model = ready("deepseek-v4-flash", "当前机会")
+            stale_model["status"] = "stale"
+            partial = {
+                **old,
+                "status": "partial",
+                "generated_at": "2026-09-08T18:10:00+08:00",
+                "ready_count": 0,
+                "stale_count": 1,
+                "scans": [{
+                    "ticker": "600000.SH", "evaluation_mode": "refresh_failed",
+                    "models": {"deepseek-v4-flash": stale_model},
+                    "union": opportunity.union_result({"deepseek-v4-flash": stale_model}),
+                }],
+            }
+            after_close.write_json(root / after_close.SCAN_RELATIVE, old)
+
+            def step(_root, label, _args):
+                if label == "收盘后扫描全部 A 股机会":
+                    after_close.write_json(root / after_close.SCAN_RELATIVE, partial)
+                    raise after_close.JobError("simulated material refresh failure")
+
+            with patch.object(sys, "argv", ["review", "--repo-root", directory, "--skip-git-sync"]), \
+                patch.object(after_close, "LOCK_PATH", root / "lock"), \
+                patch.object(after_close, "git_status", return_value=[]), \
+                patch.object(after_close, "run_step", side_effect=step), \
+                redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                result = after_close.main()
+
+            retained = after_close.load_json(root / after_close.SCAN_RELATIVE, {})
+            status = after_close.load_json(root / after_close.STATUS_RELATIVE, {})
+            self.assertEqual(result, 1)
+            self.assertEqual(retained["generated_at"], partial["generated_at"])
+            self.assertFalse(retained["scans"][0]["union"]["included"])
+            self.assertFalse(retained["scans"][0]["union"]["near_included"])
+            self.assertEqual(status["scan_status"], "partial")
 
 
 if __name__ == "__main__":

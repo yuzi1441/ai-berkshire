@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "migration_id": "drift-provenance-repair-2026-09-03-v1",
+  "migration_date": "2026-09-08",
+  "artifact_role": "provenance_repair_audit_only",
+  "investment_semantics_changed": false,
+  "original_source_identity": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+  "archived_evidence_path": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+  "source_sha256": "fd163ab2d2578197f9aa46c0fc7d435ede8c72647cf75432f4188242b37d8eaf",
+  "archived_sha256": "fd163ab2d2578197f9aa46c0fc7d435ede8c72647cf75432f4188242b37d8eaf",
+  "repaired_reference_count": 74,
+  "affected_tickers": [
+    "000408.SZ",
+    "000933.SZ",
+    "002028.SZ",
+    "002246.SZ",
+    "002270.SZ",
+    "002272.SZ",
+    "002353.SZ",
+    "002594.SZ",
+    "002597.SZ",
+    "002600.SZ",
+    "002683.SZ",
+    "002916.SZ",
+    "300274.SZ",
+    "300760.SZ",
+    "301308.SZ",
+    "301666.SZ",
+    "600161.SH",
+    "600176.SH",
+    "600183.SH",
+    "600309.SH",
+    "600312.SH",
+    "600372.SH",
+    "600420.SH",
+    "600809.SH",
+    "600900.SH",
+    "600941.SH",
+    "601020.SH",
+    "601156.SH",
+    "601179.SH",
+    "601717.SH",
+    "601899.SH",
+    "601919.SH",
+    "603993.SH",
+    "688008.SH",
+    "688361.SH",
+    "688825.SH"
+  ],
+  "repairs": [
+    {
+      "ticker": "002594.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002594.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "603993.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "603993.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "301666.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "301666.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002272.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002272.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002683.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002683.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688008.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688008.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688361.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688361.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600309.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600309.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601156.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601156.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600176.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600176.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600941.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600941.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601179.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601179.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600372.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600372.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601919.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601919.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002246.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002246.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002270.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002270.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600420.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600420.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600161.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600161.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600312.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600312.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002028.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002028.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "301308.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "301308.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600809.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600809.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002916.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002916.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600183.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600183.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "000933.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "000933.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601899.SH",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601899.SH",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "000408.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "000408.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "300760.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "300760.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002597.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002597.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "300274.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "300274.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002600.SZ",
+      "location": "current",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002600.SZ",
+      "location": "review_history[0]",
+      "old_reference": "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "archived_batch_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002353.SZ",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/002353-order.html",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "002353.SZ",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/002353-order.html",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600900.SH",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/600900-h1.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "600900.SH",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/600900-h1.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601020.SH",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601020-h1.txt",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601020.SH",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601020-production.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601020.SH",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601020-h1.txt",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601020.SH",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601020-production.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601717.SH",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601717-h1.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "601717.SH",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/601717-h1.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688825.SH",
+      "location": "current",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/688825-impairment.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    },
+    {
+      "ticker": "688825.SH",
+      "location": "review_history[0]",
+      "old_reference": "/tmp/ai-berkshire-delta.lVZ02A/688825-impairment.pdf",
+      "replacement_reference": "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+      "reason": "lost_ephemeral_source",
+      "replacement_evidence_present": true
+    }
+  ]
+}

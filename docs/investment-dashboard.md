@@ -54,7 +54,10 @@
 
 顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股由 Flash 阅读主报告、当前行情、技术辅助、情绪和 Checklist，理解“为什么是现在”。
 
-- 全量扫描：仅使用 `deepseek-v4-flash`
+- 正式日常扫描：仅使用 `deepseek-v4-flash`，采用 incremental-first；报告、规则位置、Checklist、离散技术状态或重要新闻证据变化时才重新请求模型
+- 复用安全：当前机会和临近机会不能跨下一个日常收盘批次复用；其他判断最多复用 7 个日历日，且模型、提示词或增量契约变化会强制重评
+- 价格变化：几分钱噪音不会触发重评，但价格在稳定规则边界中的低/中/高位置桶变化会触发；该桶只控制是否询问模型，不是买入或 Checklist 门禁
+- 结果溯源：复用时保留模型实际看过的原始 input snapshot，当前投影另行记录，避免伪造“模型已看过最新精确价格”
 - Provider：全量扫描通过 OpenCode Go HTTP 调用；每次完整扫描使用一个非敏感的 `x-opencode-session`，并在该批次的所有公司、传输重试和结构修复中复用
 - 当前机会：必须回答“为什么是现在”，并至少指出一个已经满足的关键条件
 - 临近机会：具体触发器已经接近或部分满足，但仍差一个决定性条件；单独折叠展示
@@ -64,11 +67,17 @@
 - 推理：所有调用请求供应商支持的最高推理档；产物会记录实际生效档位，若无法启用不会悄悄降为低推理
 - 数据体积：完整模型输入保留在 `data/investment-dashboard` 供审计；公开网页只发布精简结果和行情上下文
 
-收盘后全量扫描：
+手工全量对账（CLI 默认仍是 full）：
 
 ```powershell
 py -3 tools\opportunity_review.py scan
 py -3 tools\build_investment_dashboard.py
+```
+
+显式增量扫描：
+
+```powershell
+py -3 tools\opportunity_review.py scan --mode incremental
 ```
 
 单只股票的深度复核使用 `deepseek-v4-pro` + `gpt-5.6-luna`：
@@ -96,6 +105,19 @@ OPPORTUNITY_DEEP_LUNA_REASONING_EFFORT=high
 
 
 ## 新报告后如何同步网页
+
+推荐使用统一入口。默认只做结构与绑定预检，不会写文件：
+
+```bash
+python3 tools/investment_workflow.py report reports/<公司>/<报告>.md
+python3 tools/investment_workflow.py checklist reports/<公司>/<Checklist>.md
+python3 tools/investment_workflow.py drift <ticker> --mode watch --direction unchanged \
+  --summary "本次复核摘要" --facts-source reports/<公司>/<主报告>.md
+```
+
+确认预检输出后显式加 `--write`，入口会重建看板并验证结构化状态。它不会自动
+commit、push、merge、deploy，也不会替用户作出买卖决定。Drift 仍由
+`thesis-drift` Skill 完成研究判断；统一入口只复用既有 handoff 合约。
 
 本地生成/归档新公司报告后执行：
 

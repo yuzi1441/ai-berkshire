@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import decision_state  # noqa: E402
 import drift_scan_state  # noqa: E402
+import drift_provenance  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -59,6 +60,14 @@ def main() -> int:
         errors.append("checklist_states schema_version")
     if event.get("schema_version") != 1:
         errors.append("event_radar schema_version")
+    drift_path = data / "drift_states.json"
+    if drift_path.is_file():
+        try:
+            errors.extend(drift_provenance.validate_drift_facts_sources(
+                args.repo_root.resolve(), load(drift_path)
+            ))
+        except ValueError as error:
+            errors.append(str(error))
     state_tickers = {item.get("ticker") for item in state.get("companies", [])}
     rule_tickers = {item.get("ticker") for item in rules.get("companies", [])}
     if state_tickers != rule_tickers:
