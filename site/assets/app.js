@@ -49,6 +49,14 @@ const WORKSPACES = {
 const SKILL_DISPLAY_LABELS = {
   "thesis-drift": "正式投资逻辑复核",
   "thesis-tracker": "持仓投资逻辑跟踪",
+  "investment-research": "完整投资研究",
+};
+
+const CHECKLIST_DISPLAY_LABELS = {
+  PASS: "通过",
+  CONDITIONAL_PASS: "条件通过",
+  FAIL: "未通过",
+  UNKNOWN: "尚未检查",
 };
 
 // Legacy report-review names remain as non-rendering contract markers. The old
@@ -119,6 +127,9 @@ const state = {
   sentimentMeta: null,
   opportunityScans: new Map(),
   opportunityScanMeta: { status: "missing", scans: [] },
+  dispositionAccess: false,
+  dispositionAuthority: null,
+  pendingDisposition: null,
   loadedAt: null,
   loadSequence: 0,
   opportunityView: "checklist",
@@ -194,6 +205,11 @@ const els = {
   drawerSubtitle: document.querySelector("#drawer-subtitle"),
   drawerContent: document.querySelector("#drawer-content"),
   drawerClose: document.querySelector("#drawer-close"),
+  dispositionDialog: document.querySelector("#disposition-dialog"),
+  dispositionDialogTitle: document.querySelector("#disposition-dialog-title"),
+  dispositionDialogCopy: document.querySelector("#disposition-dialog-copy"),
+  dispositionCancel: document.querySelector("#disposition-cancel"),
+  dispositionConfirm: document.querySelector("#disposition-confirm"),
   toast: document.querySelector("#toast"),
   workspaceNav: document.querySelector(".workspace-nav"),
   workspacePanels: [...document.querySelectorAll("[data-workspace-panel]")],
@@ -427,12 +443,42 @@ function opportunityScanDayStatus(meta) {
   return status;
 }
 
+function opportunityScanDisplayTimestamp(meta) {
+  return meta?.display_result_generated_at
+    || meta?.last_success_scan_generated_at
+    || meta?.last_success_at
+    || meta?.generated_at
+    || null;
+}
+
+function hasDisplayableOpportunityScan(meta) {
+  return Boolean(opportunityScanDisplayTimestamp(meta) && state.opportunityScans.size);
+}
+
+function opportunityScanDisplayMode(meta) {
+  const status = opportunityScanDayStatus(meta);
+  if (!hasDisplayableOpportunityScan(meta)) return "empty";
+  if (["ok", "ready", "partial"].includes(status)) return "current";
+  if (status === "not_run_today") return "carry_forward";
+  if (["error", "stale"].includes(status)) return "fallback";
+  return "historical";
+}
+
+function aiOpportunityDisplayStatusText(meta) {
+  const status = opportunityScanDayStatus(meta);
+  const mode = opportunityScanDisplayMode(meta);
+  if (mode === "carry_forward") return "今日尚未刷新 · 展示最近一次成功结果";
+  if (mode === "fallback") {
+    return status === "error"
+      ? "今日刷新失败 · 展示最近一次成功结果"
+      : "最新刷新异常 · 展示最近一次成功结果";
+  }
+  return aiScanStatusText(status);
+}
+
 function aiNavigationCount() {
-  const status = opportunityScanDayStatus(state.opportunityScanMeta);
-  const items = aiOpportunityItems();
-  if (["ok", "ready"].includes(status)) return String(items.length);
-  if (status === "partial" && items.length) return String(items.length);
-  return "—";
+  if (!hasDisplayableOpportunityScan(state.opportunityScanMeta)) return "—";
+  return String(aiOpportunityItems().length);
 }
 
 function renderWorkspaceNav() {
@@ -829,7 +875,7 @@ function aiScanStatusText(status) {
 }
 
 function aiOpportunityItems() {
-  if (!["ok", "ready", "partial"].includes(opportunityScanDayStatus(state.opportunityScanMeta))) return [];
+  if (!hasDisplayableOpportunityScan(state.opportunityScanMeta)) return [];
   const items = [];
   for (const scan of state.opportunityScans.values()) {
     const record = currentRecord(scan?.ticker);
@@ -848,7 +894,7 @@ function renderAiOpportunityCard(item) {
   const { record, scan, classification } = item;
   const whyNow = aiScanText(scan, "why_now");
   const summary = aiScanText(scan, "opportunity_summary");
-  const generatedAt = scan.generated_at || state.opportunityScanMeta.generated_at;
+  const generatedAt = scan.generated_at || opportunityScanDisplayTimestamp(state.opportunityScanMeta);
   return `<article class="ai-opportunity-card" data-ticker="${escapeHtml(record.ticker)}" tabindex="0" role="button">
     <div class="ai-opportunity-topline">${compactCompany(record)}<span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div>
     <div class="ai-opportunity-facts"><span class="ai-opportunity-classification">${escapeHtml(classification)}</span><span>扫描 ${escapeHtml(formatDateTime(generatedAt))}</span></div>
@@ -862,16 +908,18 @@ function renderAiOpportunities() {
   const items = aiOpportunityItems();
   const meta = state.opportunityScanMeta || {};
   const status = opportunityScanDayStatus(meta);
-  const hasCurrentScan = ["ok", "ready", "partial"].includes(status);
-  const coverage = hasCurrentScan && Number.isFinite(Number(meta.scan_count)) && Number.isFinite(Number(meta.expected_scan_count))
-    ? ` · ${meta.scan_count}/${meta.expected_scan_count}`
+  const displayMode = opportunityScanDisplayMode(meta);
+  const hasDisplayable = hasDisplayableOpportunityScan(meta);
+  const coverage = hasDisplayable && Number.isFinite(Number(meta.display_scan_count)) && Number.isFinite(Number(meta.display_expected_scan_count))
+    ? ` · ${meta.display_scan_count}/${meta.display_expected_scan_count}`
     : "";
-  const currentCount = hasCurrentScan && Number.isFinite(Number(meta.current_opportunity_count)) ? Number(meta.current_opportunity_count) : null;
-  const nearCount = hasCurrentScan && Number.isFinite(Number(meta.near_opportunity_count)) ? Number(meta.near_opportunity_count) : null;
+  const currentCount = hasDisplayable && Number.isFinite(Number(meta.display_current_opportunity_count)) ? Number(meta.display_current_opportunity_count) : null;
+  const nearCount = hasDisplayable && Number.isFinite(Number(meta.display_near_opportunity_count)) ? Number(meta.display_near_opportunity_count) : null;
   const opportunitySummary = currentCount !== null
     ? ` · 当前机会 ${currentCount}${nearCount !== null ? ` · 临近 ${nearCount}` : ""}`
     : "";
-  els.aiOpportunityMeta.textContent = `${aiScanStatusText(status)}${coverage}${opportunitySummary}${meta.generated_at ? ` · ${formatDateTime(meta.generated_at)}` : ""}`;
+  const displayAt = opportunityScanDisplayTimestamp(meta);
+  els.aiOpportunityMeta.textContent = `${aiOpportunityDisplayStatusText(meta)}${coverage}${opportunitySummary}${displayAt ? ` · ${formatDateTime(displayAt)}` : ""}`;
   if (items.length) {
     const visible = state.aiOpportunityExpanded ? items : items.slice(0, 6);
     els.aiOpportunityList.innerHTML = visible.map(renderAiOpportunityCard).join("");
@@ -880,14 +928,22 @@ function renderAiOpportunities() {
     return;
   }
   els.aiOpportunityViewAll.hidden = true;
-  const message = status === "not_run_today"
-    ? `今日尚未完成 AI 研究机会扫描；最近一次结果为 ${formatDateTime(meta.last_success_at || meta.generated_at)}，未将旧结果当作今日结果。`
-    : status === "missing"
+  if (hasDisplayable) {
+    const suffix = displayMode === "carry_forward"
+      ? "；今日尚未刷新。"
+      : displayMode === "fallback"
+        ? "；今日刷新未成功，当前仍展示最近一次成功结果。"
+        : "。";
+    const base = currentCount === 0 && nearCount === 0
+      ? `最近一次成功扫描（${formatDateTime(displayAt)}）没有筛出当前或临近研究机会`
+      : `当前展示最近一次成功扫描（${formatDateTime(displayAt)}）的结果`;
+    els.aiOpportunityList.innerHTML = `<div class="ai-opportunity-empty">${escapeHtml(base + suffix)}</div>`;
+    return;
+  }
+  const message = status === "missing"
     ? "本地暂无 AI 每日研究机会扫描结果。结果生成后会显示在这里，不影响其他看板模块。"
     : status === "error"
-      ? meta.scan_status === "ok"
-        ? `今日 AI 研究机会扫描已完成，但看板刷新失败；未将未发布结果当作今日结果。扫描完成时间：${formatDateTime(meta.scan_generated_at || meta.generated_at)}`
-        : `今日 AI 研究机会扫描失败；未将旧结果当作今日结果。最近一次成功扫描：${formatDateTime(meta.last_success_at || meta.last_success_scan_generated_at)}`
+      ? "今日 AI 研究机会扫描失败，且当前没有可展示的成功结果。"
     : status === "unavailable"
         ? "AI 每日研究机会暂时不可用；未生成研究机会，也未改变买入候选。"
       : status === "partial"
@@ -902,13 +958,16 @@ function renderAiOpportunities() {
 
 function renderAiOpportunitySection(record) {
   const scan = state.opportunityScans.get(record?.ticker);
-  if (!scan || !["ok", "ready", "partial"].includes(opportunityScanDayStatus(state.opportunityScanMeta))) return "";
+  if (!scan || !hasDisplayableOpportunityScan(state.opportunityScanMeta)) return "";
   const classification = aiScanClassification(scan);
   const whyNow = aiScanText(scan, "why_now");
   const summary = aiScanText(scan, "opportunity_summary");
   const satisfied = aiScanAssessments(scan).flatMap(({ assessment }) => Array.isArray(assessment.satisfied_conditions) ? assessment.satisfied_conditions : []).filter(Boolean);
   const unmet = aiScanAssessments(scan).flatMap(({ assessment }) => Array.isArray(assessment.unmet_conditions) ? assessment.unmet_conditions : []).filter(Boolean);
-  return `<div class="detail-section ai-opportunity-detail"><div class="detail-section-head"><h3>AI 每日研究机会</h3><span class="data-badge" data-status="${escapeHtml(scan.status || "unknown")}">${escapeHtml(classification)}</span></div><p class="detail-copy">这是独立的研究发现，不改变当前生命周期、决策规则或买入候选。</p>${whyNow ? `<div class="detail-field"><div class="detail-field-label">为什么现在</div><div class="detail-field-value">${escapeHtml(whyNow)}</div></div>` : ""}${summary ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">机会摘要</div><div class="detail-field-value">${escapeHtml(summary)}</div></div>` : ""}${satisfied.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">已满足条件</div><div class="detail-field-value">${escapeHtml(satisfied.join("；"))}</div></div>` : ""}${unmet.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">仍待确认</div><div class="detail-field-value">${escapeHtml(unmet.join("；"))}</div></div>` : ""}</div>`;
+  const historicalNote = opportunityScanDisplayMode(state.opportunityScanMeta) === "current"
+    ? ""
+    : `<div class="source-line">当前展示最近一次成功 AI 机会结果 · ${escapeHtml(formatDateTime(opportunityScanDisplayTimestamp(state.opportunityScanMeta)))}</div>`;
+  return `<div class="detail-section ai-opportunity-detail"><div class="detail-section-head"><h3>AI 每日研究机会</h3><span class="data-badge" data-status="${escapeHtml(scan.status || "unknown")}">${escapeHtml(classification)}</span></div><p class="detail-copy">这是独立的研究发现，不改变当前生命周期、决策规则或买入候选。</p>${whyNow ? `<div class="detail-field"><div class="detail-field-label">为什么现在</div><div class="detail-field-value">${escapeHtml(whyNow)}</div></div>` : ""}${summary ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">机会摘要</div><div class="detail-field-value">${escapeHtml(summary)}</div></div>` : ""}${satisfied.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">已满足条件</div><div class="detail-field-value">${escapeHtml(satisfied.join("；"))}</div></div>` : ""}${unmet.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">仍待确认</div><div class="detail-field-value">${escapeHtml(unmet.join("；"))}</div></div>` : ""}${historicalNote}</div>`;
 }
 
 function holdingReturn(record, tracking) {
@@ -1008,6 +1067,10 @@ function actionableSkills(records) {
 function lightThesisFilterValue(record) {
   const signal = record?.light_thesis_signal || {};
   return signal.status === "current" && signal.signal ? signal.signal : "missing";
+}
+
+function checklistDisplayLabel(value) {
+  return CHECKLIST_DISPLAY_LABELS[String(value || "UNKNOWN").toUpperCase()] || CHECKLIST_DISPLAY_LABELS.UNKNOWN;
 }
 
 function formalDriftMatches(record, value) {
@@ -1171,6 +1234,34 @@ function currentRecord(ticker) {
   return state.companyState.get(ticker) || null;
 }
 
+const DISPOSITION_LABELS = {
+  keep_watch: "继续观察",
+  redo_research: "重做研究",
+  formal_drift: "正式 Drift",
+  archive_drop: "停止重点跟踪",
+};
+
+const DISPOSITION_CONFIRM_COPY = {
+  keep_watch: "关闭当前证据 fingerprint 对应的提醒。新证据或基线变化后会重新打开。",
+  redo_research: "只记录研究意图，不会自动运行模型、生成报告或覆盖主报告。",
+  formal_drift: "只记录正式复核意图，不会自动运行模型或写入正式 Drift 结论。",
+  archive_drop: "只停止重点跟踪；不会删除研究、修改持仓、退出生命周期或移除 Rule。",
+};
+
+function renderDispositionControls(record) {
+  const manual = record?.manual_disposition || {};
+  const options = Array.isArray(manual.allowed_options) ? manual.allowed_options : [];
+  if (!options.length) return "";
+  if (manual.status === "current" && manual.selected_disposition) {
+    return `<div class="detail-section disposition-panel"><div class="detail-section-head"><h3>人工处置</h3><span class="mini-badge">已记录</span></div><p class="detail-copy">${escapeHtml(DISPOSITION_LABELS[manual.selected_disposition] || manual.selected_disposition)}</p><div class="source-line">绑定当前任务 fingerprint${manual.selected_at ? ` · ${escapeHtml(formatDateTime(manual.selected_at))}` : ""}<br />新的证据、报告基线或正式 Drift 触发会重新打开任务。</div></div>`;
+  }
+  if (!state.dispositionAccess) {
+    return `<div class="detail-section disposition-panel"><div class="detail-section-head"><h3>人工处置</h3><span class="mini-badge">只读</span></div><p class="detail-copy">请从受保护的管理入口记录处置。公开看板不能写入任何决定。</p></div>`;
+  }
+  if (record?.action_guidance?.requires_user_action !== true) return "";
+  return `<div class="detail-section disposition-panel"><div class="detail-section-head"><h3>人工处置</h3><span class="mini-badge">需要本人确认</span></div><p class="detail-copy">选择只会写入运行态 disposition authority，并绑定当前任务 fingerprint。</p><div class="disposition-actions">${options.map((option) => `<button class="button ${option === "archive_drop" ? "button-quiet" : "button-outline"}" type="button" data-disposition="${escapeHtml(option)}">${escapeHtml(DISPOSITION_LABELS[option] || option)}</button>`).join("")}</div>${options.includes("archive_drop") ? `<div class="source-line">“停止重点跟踪”不会删除研究、不改持仓、不设为已退出。</div>` : ""}</div>`;
+}
+
 function ruleGroupTitle(scope) {
   return LABELS.scope[scope] || "其他条件";
 }
@@ -1232,16 +1323,36 @@ function renderThesisSection(record) {
     return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入逻辑</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">投资逻辑状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结投资逻辑未加载。</div>"}<div class="source-line">当前持仓周期已绑定原始买入逻辑<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新研究 ↗</a></div>`;
   }
   const light = record.light_thesis_signal || {};
-  const lightLabels = { improved: "改善", unchanged: "无明显变化", weakened: "走弱", insufficient_evidence: "证据不足" };
-  const lightText = light.status === "current" ? (lightLabels[light.signal] || "待判断") : light.status === "stale" ? "已有结果已过期" : "尚无轻量检查结果";
+  const lightText = light.status === "current" ? lightThesisSignalLabel(light.signal) : light.status === "stale" ? "已有结果已过期" : "尚无轻量检查结果";
   return `<div class="detail-section"><div class="detail-section-head"><h3>当前投资逻辑</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；正式漂移复核与日常轻量信号分开记录。</p><div class="detail-grid" style="margin-top:14px"><div class="detail-field"><div class="detail-field-label">正式投资逻辑复核</div><div class="detail-field-value">${escapeHtml(driftScanLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">轻量投资逻辑信号</div><div class="detail-field-value">${escapeHtml(lightText)}</div></div></div><div class="source-line">Canonical 主报告已关联<br />最近正式复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
+}
+
+function lightThesisSignalLabel(signal) {
+  return {
+    improved: "改善",
+    unchanged: "无明显变化",
+    weakened: "走弱",
+    insufficient_evidence: "证据不足",
+  }[signal] || "尚无结果";
+}
+
+function renderLightThesisReason(record) {
+  const thesis = record?.light_thesis_signal;
+  if (!thesis || thesis.status !== "current") return "";
+  const summary = shortText(String(thesis.summary || "").trim(), 600);
+  const evidence = Array.isArray(thesis.material_evidence) ? thesis.material_evidence.slice(0, 4) : [];
+  const evidenceHtml = evidence.length
+    ? `<ul class="event-list">${evidence.map((item) => `<li class="event-item"><div class="event-item-top"><span class="event-headline">${escapeHtml(shortText(item.summary || "证据", 280))}</span>${item.date ? `<span class="mini-badge">${escapeHtml(formatDate(item.date))}</span>` : ""}</div><div class="event-meta">来源：${escapeHtml(item.source || "未注明")}</div></li>`).join("")}</ul>`
+    : `<div class="source-line">本次没有单独列出关键证据。</div>`;
+  const provenance = [thesis.model, thesis.provider, thesis.provenance].filter(Boolean).join(" · ");
+  return `<div class="detail-section light-thesis-reason"><div class="detail-section-head"><h3>轻量投资逻辑</h3><span class="data-badge" data-status="${escapeHtml(thesis.signal || "unknown")}">${escapeHtml(lightThesisSignalLabel(thesis.signal))}</span></div><div class="detail-field"><div class="detail-field-label">为什么</div><div class="detail-field-value">${escapeHtml(summary || "本次结果未提供简短原因说明。")}</div></div><div class="holding-detail-label" style="margin:15px 0 7px">关键证据</div>${evidenceHtml}<div class="source-line">${thesis.checked_at ? `检查时间：${escapeHtml(formatDateTime(thesis.checked_at))}<br />` : ""}${provenance ? `模型来源：${escapeHtml(provenance)}<br />` : ""}性质：轻量检查，不等于正式 Thesis Drift</div></div>`;
 }
 
 function renderCurrentJudgment(record) {
   const quote = quoteFor(record);
   const sentiment = sentimentLabel(record);
   const radar = record.event_radar || {};
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 投资逻辑相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">Checklist</div><div class="detail-field-value">${escapeHtml(checklistDisplayLabel(record?.checklist?.status))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 投资逻辑相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
 }
 
 function decisionContextValues(record) {
@@ -1278,7 +1389,9 @@ function renderDetail(record) {
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
     renderDecisionContext(record),
+    renderDispositionControls(record),
     renderCurrentJudgment(record),
+    renderLightThesisReason(record),
     renderAiOpportunitySection(record),
     `<div class="detail-section"><div class="detail-section-head"><h3>决策规则</h3><span class="section-count">${ruleCount} 条</span></div>${renderRules(record)}</div>`,
     renderThesisSection(record),
@@ -1311,6 +1424,48 @@ function toast(message) {
   toast.timer = window.setTimeout(() => { els.toast.hidden = true; }, 2600);
 }
 
+function openDispositionDialog(record, selectedDisposition) {
+  const manual = record?.manual_disposition || {};
+  if (!state.dispositionAccess || !manual.allowed_options?.includes(selectedDisposition)) return;
+  state.pendingDisposition = {
+    ticker: record.ticker,
+    selected_disposition: selectedDisposition,
+    disposition_target_fingerprint: manual.disposition_target_fingerprint,
+  };
+  els.dispositionDialogTitle.textContent = `确认：${DISPOSITION_LABELS[selectedDisposition] || selectedDisposition}`;
+  els.dispositionDialogCopy.textContent = DISPOSITION_CONFIRM_COPY[selectedDisposition] || "确认记录这项人工处置。";
+  els.dispositionDialog.showModal();
+}
+
+async function submitDisposition() {
+  const pending = state.pendingDisposition;
+  if (!pending) return;
+  els.dispositionConfirm.disabled = true;
+  try {
+    const response = await fetch("/api/investment-dispositions", {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pending),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || `保存失败（${response.status}）`);
+    const overlay = payload.resolved_current_task;
+    const current = currentRecord(pending.ticker);
+    if (current && overlay) state.companyState.set(pending.ticker, { ...current, ...overlay });
+    els.dispositionDialog.close();
+    state.pendingDisposition = null;
+    renderAll();
+    const updated = currentRecord(pending.ticker);
+    if (updated) renderDetail(updated);
+    toast(payload.status === "noop" ? "该处置已记录，无需重复保存" : "人工处置已安全记录");
+  } catch (error) {
+    toast(error.message);
+  } finally {
+    els.dispositionConfirm.disabled = false;
+  }
+}
+
 async function loadJson(path) {
   const separator = path.includes("?") ? "&" : "?";
   const requestVersion = `${Date.now()}-${++dataRequestSequence}`;
@@ -1327,6 +1482,30 @@ async function loadOptionalJson(path, fallback) {
     return await loadJson(path);
   } catch {
     return fallback();
+  }
+}
+
+async function loadDispositionAuthority() {
+  try {
+    const response = await fetch(`/api/investment-dispositions?v=${Date.now()}`, {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" },
+    });
+    if (response.status === 403 || response.status === 404) return { authorized: false, payload: null };
+    if (!response.ok) throw new Error(`investment dispositions (${response.status})`);
+    return { authorized: true, payload: await response.json() };
+  } catch {
+    return { authorized: false, payload: null };
+  }
+}
+
+function applyDispositionAuthority(result) {
+  state.dispositionAccess = result.authorized === true;
+  state.dispositionAuthority = result.payload;
+  for (const overlay of result.payload?.resolved_companies || []) {
+    const current = state.companyState.get(overlay.ticker);
+    if (!current) continue;
+    state.companyState.set(overlay.ticker, { ...current, ...overlay });
   }
 }
 
@@ -1353,10 +1532,12 @@ async function loadData({ silent = false } = {}) {
       : await loadJson(path),
   ]));
   const payload = Object.fromEntries(entries);
+  const dispositionResult = await loadDispositionAuthority();
   if (loadSequence !== state.loadSequence) return false;
   if (!payload.companyState || !Array.isArray(payload.companyState.companies)) throw new Error("公司状态数据不可用");
   state.board = payload.board;
   state.companyState = indexByTicker(payload.companyState.companies);
+  applyDispositionAuthority(dispositionResult);
   state.rulePackages = indexByTicker(payload.rules?.companies);
   state.events = indexByTicker(payload.events?.companies);
   state.technical = indexByTicker(payload.technical?.companies);
@@ -1375,6 +1556,11 @@ async function loadData({ silent = false } = {}) {
     ...scanStatus,
     generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
     scan_generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || null,
+    display_result_generated_at: scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
+    display_scan_count: scanPayload.scan_count ?? scanStatus.last_success_scan_count ?? null,
+    display_expected_scan_count: scanPayload.expected_scan_count ?? scanStatus.last_success_expected_scan_count ?? null,
+    display_current_opportunity_count: scanPayload.current_opportunity_count ?? scanStatus.last_success_current_opportunity_count ?? null,
+    display_near_opportunity_count: scanPayload.near_opportunity_count ?? scanStatus.last_success_near_opportunity_count ?? null,
     scan_count: scanStatus.scan_count ?? scanPayload.scan_count,
     expected_scan_count: scanStatus.expected_scan_count ?? scanPayload.expected_scan_count,
     current_opportunity_count: scanStatus.current_opportunity_count ?? scanPayload.current_opportunity_count,
@@ -1588,6 +1774,17 @@ function bindEvents() {
   els.loadMore.addEventListener("click", () => { state.page += 1; renderWatchlist(); });
   els.drawerClose.addEventListener("click", closeDetail);
   els.backdrop.addEventListener("click", closeDetail);
+  els.drawerContent.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-disposition]");
+    const record = state.selectedTicker ? currentRecord(state.selectedTicker) : null;
+    if (button && record) openDispositionDialog(record, button.dataset.disposition);
+  });
+  els.dispositionCancel.addEventListener("click", () => {
+    state.pendingDisposition = null;
+    els.dispositionDialog.close();
+  });
+  els.dispositionConfirm.addEventListener("click", submitDisposition);
+  els.dispositionDialog.addEventListener("cancel", () => { state.pendingDisposition = null; });
   els.refresh.addEventListener("click", async () => {
     els.refresh.disabled = true;
     try { await loadData({ silent: true }); toast("看板数据已重新读取"); } catch (error) { toast(`读取失败：${error.message}`); } finally { els.refresh.disabled = false; }
