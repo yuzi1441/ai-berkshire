@@ -1104,6 +1104,13 @@ def _next_action(
     drift_scan: dict[str, Any] | None = None,
 ) -> str:
     event_state = compact(event.get("state")).lower()
+    # A prior weakening result covers only its own evidence, not a later event.
+    covered_event = (
+        compact((drift_scan or {}).get("status")).lower() == "current"
+        and compact((drift_scan or {}).get("result")).lower() in {"improved", "unchanged", "weakened"}
+    )
+    if lifecycle != "EXITED" and event_state in {"important", "critical"} and event.get("thesis_relevant") and not covered_event:
+        return "run_drift"
     redlines = _triggered_redlines(rules)
     if any(compact(rule.get("action")).lower() == "run_drift" for rule in redlines):
         return "run_drift"
@@ -1239,7 +1246,10 @@ def derive_review_coverage(
     )
     reviewed_at = _parse_iso_datetime(manual.get("reviewed_at"))
     drift_checked_at = _parse_iso_datetime(drift.get("last_checked"))
-    formal_drift_fingerprint = compact((drift_scan or {}).get("trigger_fingerprint"))
+    reviewed_drift_fingerprint = compact((drift_scan or {}).get("trigger_fingerprint"))
+    formal_drift_fingerprint = compact((drift_scan or {}).get("current_trigger_fingerprint"))
+    if not formal_drift_fingerprint and (drift_scan or {}).get("status") != "stale":
+        formal_drift_fingerprint = reviewed_drift_fingerprint
     resolved_drift_fingerprint = compact(
         manual.get("resolved_drift_trigger_fingerprint")
     )
@@ -1286,6 +1296,8 @@ def derive_review_coverage(
             drift_resolution = "manual_review_missing_drift_binding"
         elif resolved_drift_fingerprint != formal_drift_fingerprint:
             drift_resolution = "manual_review_drift_binding_mismatch"
+        elif (drift_scan or {}).get("status") == "stale":
+            drift_resolution = "formal_review_no_longer_covers_current_trigger"
         else:
             drift_resolution = "resolved_by_current_manual_review"
     checklist_status = compact(checklist.get("status")).upper() or "UNKNOWN"
@@ -1300,6 +1312,8 @@ def derive_review_coverage(
     )
     return {
         "formal_drift": {
+            "reviewed_trigger_fingerprint": reviewed_drift_fingerprint or None,
+            "current_trigger_fingerprint": formal_drift_fingerprint or None,
             "status": compact((drift_scan or {}).get("status")).lower() or "missing",
             "result": compact((drift_scan or {}).get("result")).lower() or None,
             "last_checked": drift.get("last_checked"),
@@ -1383,6 +1397,17 @@ def derive_action_guidance(
             "completion_target": completion_target,
         }
 
+    # Resolve uncovered material events before historical weakening or price
+    # redlines can turn this into ordinary monitoring.
+    if lifecycle != "EXITED" and next_action == "run_drift" and drift_eligible and compact(event.get("state")).lower() in {"important", "critical"} and event.get("thesis_relevant"):
+        return guidance(
+            "holding_material_event" if lifecycle == "HOLDING" else "thesis_review_required",
+            "新的重要事件尚未被当前正式投资逻辑复核覆盖",
+            "review_investment_thesis", "复核新事件对投资逻辑的影响",
+            ["thesis-drift"], "旧复核与旧人工处置不能覆盖新事实",
+            "urgent" if lifecycle == "HOLDING" else "normal", True,
+            "复核当前事件并记录结果及其覆盖的证据",
+        )
     redline = _guidance_rule(rules, statuses={"triggered"}, scope="redline")
     if redline is not None:
         condition = compact(redline.get("condition")) or "失效条件"
