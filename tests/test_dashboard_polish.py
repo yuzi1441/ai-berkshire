@@ -11,6 +11,32 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_delayed_disposition_response_cannot_close_new_task(self):
+        self.run_js(["submitDisposition", "applyDispositionAuthority", "dispositionOverlayMatches"], '''
+import assert from 'node:assert/strict';
+const task = (fp) => ({ticker:'X', manual_disposition:{disposition_target_fingerprint:fp}, action_guidance:{requires_user_action:true}});
+const state = {pendingDisposition:{ticker:'X'}, companyState:new Map([['X',task('A')]])};
+const els = {dispositionConfirm:{},dispositionDialog:{close(){}}};
+const currentRecord = ticker => state.companyState.get(ticker);
+let respond;
+const fetch = () => new Promise(resolve => {respond=resolve;});
+let reloads=0;
+const loadData = async () => {reloads++;};
+const renderAll=()=>{}, renderDetail=()=>{}, toast=()=>{};
+''', '''
+const saving=submitDisposition();
+state.companyState.set('X',task('B'));
+const oldOverlay={...task('A'),action_guidance:{requires_user_action:false}};
+respond({ok:true,json:async()=>({resolved_current_task:oldOverlay})});
+await saving;
+assert.equal(reloads,1);
+assert.equal(currentRecord('X').action_guidance.requires_user_action,true);
+applyDispositionAuthority({authorized:true,payload:{resolved_companies:[oldOverlay]}});
+assert.equal(currentRecord('X').action_guidance.requires_user_action,true);
+applyDispositionAuthority({authorized:true,payload:{resolved_companies:[{...task('B'),action_guidance:{requires_user_action:false}}]}});
+assert.equal(currentRecord('X').action_guidance.requires_user_action,false);
+''')
+
     def run_js(self, names, setup, checks):
         app = APP.read_text()
         functions = []
@@ -26,7 +52,7 @@ class DashboardPolishTests(unittest.TestCase):
 
     def test_initial_latest_projection_and_old_response_cannot_overwrite(self):
         records = json.loads((ROOT / "site/data/company_state.json").read_text())["companies"]
-        self.run_js(["loadJson", "loadDispositionAuthority", "applyDispositionAuthority",
+        self.run_js(["loadJson", "loadDispositionAuthority", "applyDispositionAuthority", "dispositionOverlayMatches",
                      "loadData", "indexByTicker", "normalizeTracking",
                      "lightThesisFilterValue", "shouldRefreshOnPageResume", "refreshDataOnPageResume"],
                     '''import assert from 'node:assert/strict';
