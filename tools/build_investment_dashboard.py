@@ -34,6 +34,7 @@ import investment_dispositions
 
 ROOT = Path(__file__).resolve().parents[1]
 REALTIME_MARKETS = {"A股", "港股"}
+SUPPORTED_OPPORTUNITY_SCAN_SCHEMA_VERSIONS = frozenset({1, 2})
 SHANGHAI_TIMEZONE = timezone(timedelta(hours=8))
 REPORTS_DIRECTORY = ROOT / "reports"
 DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"
@@ -795,7 +796,11 @@ def load_opportunity_scans(data_directory: Path) -> dict[str, Any]:
         data_directory / "opportunity_scans.json",
         {"schema_version": 1, "status": "missing", "models": [], "scans": []},
     )
-    if payload.get("schema_version") != 1 or not isinstance(payload.get("scans"), list):
+    if (
+        not isinstance(payload, dict)
+        or payload.get("schema_version") not in SUPPORTED_OPPORTUNITY_SCAN_SCHEMA_VERSIONS
+        or not isinstance(payload.get("scans"), list)
+    ):
         raise ValueError("Invalid opportunity scan payload")
     return payload
 
