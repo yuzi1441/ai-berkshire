@@ -26,7 +26,8 @@ class DashboardPolishTests(unittest.TestCase):
 
     def test_initial_latest_projection_and_old_response_cannot_overwrite(self):
         records = json.loads((ROOT / "site/data/company_state.json").read_text())["companies"]
-        self.run_js(["loadJson", "loadData", "indexByTicker", "normalizeTracking",
+        self.run_js(["loadJson", "loadDispositionAuthority", "applyDispositionAuthority",
+                     "loadData", "indexByTicker", "normalizeTracking",
                      "lightThesisFilterValue", "shouldRefreshOnPageResume", "refreshDataOnPageResume"],
                     '''import assert from 'node:assert/strict';
 const state = {loadSequence: 0, companyState: new Map()};
@@ -41,7 +42,9 @@ function populateDynamicFilters() {}
 function renderAll() {}
 function syncWorkspaceFromLocation() {}
 const pending = [];
-const fetch = (url, options) => new Promise(resolve => pending.push({url, options, resolve}));
+const fetch = (url, options) => String(url).startsWith('/api/')
+ ? Promise.resolve({ok:false,status:403})
+ : new Promise(resolve => pending.push({url, options, resolve}));
 const reply = (request, companies) => request.resolve({ok:true,json:async()=>({companies})});
 ''' + 'const records = ' + json.dumps(records) + ';', '''
 const initial = loadData();
@@ -98,8 +101,71 @@ for (const [id, label] of Object.entries(SKILL_DISPLAY_LABELS)) {
 }
 ''')
 
+    def test_light_thesis_reason_and_checklist_labels_are_display_only(self):
+        app = APP.read_text()
+        labels = re.search(r'const CHECKLIST_DISPLAY_LABELS = \{.*?\n\};', app, re.S).group()
+        self.run_js(
+            ["escapeHtml", "shortText", "checklistDisplayLabel", "lightThesisSignalLabel", "renderLightThesisReason"],
+            "import assert from 'node:assert/strict';\n" + labels + '''
+function formatDate(value){return value || '—';}
+function formatDateTime(value){return value || '—';}
+''',
+            '''
+assert.equal(checklistDisplayLabel('PASS'),'通过');
+assert.equal(checklistDisplayLabel('CONDITIONAL_PASS'),'条件通过');
+assert.equal(checklistDisplayLabel('FAIL'),'未通过');
+assert.equal(checklistDisplayLabel('UNKNOWN'),'尚未检查');
+assert.equal(checklistDisplayLabel('unexpected'),'尚未检查');
+const record={light_thesis_signal:{
+ status:'current',signal:'improved',summary:'订单兑现与盈利质量改善',
+ checked_at:'2026-09-07T18:00:00+08:00',model:'luna',provider:'codex',provenance:'local',
+ material_evidence:[1,2,3,4,5].map(n=>({summary:'证据'+n,source:'来源'+n,date:'2026-09-0'+n}))
+}};
+const html=renderLightThesisReason(record);
+for (const expected of ['轻量投资逻辑','改善','为什么','订单兑现与盈利质量改善','关键证据','检查时间','轻量检查，不等于正式 Thesis Drift','luna · codex · local']) assert.ok(html.includes(expected));
+for (const expected of ['证据1','证据2','证据3','证据4']) assert.ok(html.includes(expected));
+assert.ok(!html.includes('证据5'));
+assert.equal(renderLightThesisReason({light_thesis_signal:{status:'stale'}}),'');
+''',
+        )
+        index = (ROOT / "site/index.html").read_text()
+        for value, label in {
+            "PASS": "通过", "CONDITIONAL_PASS": "条件通过",
+            "FAIL": "未通过", "UNKNOWN": "尚未检查",
+        }.items():
+            self.assertIn(f'<option value="{value}">{label}</option>', index)
+        self.assertIn('checklistStatus === filters.checklist', app)
+
+    def test_human_disposition_buttons_are_explicit_localized_and_admin_only(self):
+        app = APP.read_text()
+        labels = re.search(r'const DISPOSITION_LABELS = \{.*?\n\};', app, re.S).group()
+        self.run_js(
+            ["escapeHtml", "renderDispositionControls"],
+            "import assert from 'node:assert/strict';\n" + labels + '''
+const state={dispositionAccess:true};
+function formatDateTime(value){return value || '—';}
+''',
+            '''
+const options=['keep_watch','redo_research','formal_drift','archive_drop'];
+const actionable={action_guidance:{requires_user_action:true},manual_disposition:{allowed_options:options,status:'none',disposition_target_fingerprint:'a'.repeat(64)}};
+const html=renderDispositionControls(actionable);
+for (const expected of ['继续观察','重做研究','正式 Drift','停止重点跟踪','需要本人确认']) assert.ok(html.includes(expected));
+assert.ok(html.includes('不会删除研究、不改持仓、不设为已退出'));
+assert.equal(renderDispositionControls({action_guidance:{requires_user_action:false},manual_disposition:{allowed_options:options,status:'none'}}),'');
+state.dispositionAccess=false;
+assert.ok(renderDispositionControls(actionable).includes('公开看板不能写入任何决定'));
+const recorded={action_guidance:{requires_user_action:false},manual_disposition:{allowed_options:options,status:'current',selected_disposition:'keep_watch',selected_at:'2026-09-09'}};
+assert.ok(renderDispositionControls(recorded).includes('已记录'));
+assert.ok(!renderDispositionControls(recorded).includes('data-disposition='));
+''',
+        )
+        self.assertIn('body: JSON.stringify(pending)', app)
+        self.assertIn('disposition_target_fingerprint', app)
+
     def test_ai_module_independent_of_zero_and_cleared_company_filters(self):
         self.run_js(["escapeHtml", "aiScanState", "aiScanAssessments", "aiScanClassification",
+                     "opportunityScanDisplayTimestamp", "hasDisplayableOpportunityScan",
+                     "opportunityScanDisplayMode", "aiOpportunityDisplayStatusText",
                      "aiOpportunityItems", "renderAiOpportunities", "aiScanStatusText", "resetFilterState"],
                     '''import assert from 'node:assert/strict';
 const state={opportunityScanMeta:{status:'missing'},opportunityScans:new Map(),search:'no-match'};
@@ -111,7 +177,7 @@ function formatDateTime(value){return value || '—';}
 ''', '''
 renderAiOpportunities();
 assert.ok(els.aiOpportunityList.innerHTML.includes('暂无'));
-state.opportunityScanMeta={status:'ok',scan_count:1,expected_scan_count:1};
+state.opportunityScanMeta={status:'ok',generated_at:'2026-09-09T10:00:00+08:00',display_result_generated_at:'2026-09-09T10:00:00+08:00',display_scan_count:1,display_expected_scan_count:1};
 state.opportunityScans.set('FIXTURE',{ticker:'FIXTURE',status:'ready',assessment:{opportunity_state:'机会'}});
 renderAiOpportunities();
 assert.ok(els.aiOpportunityList.innerHTML.includes('FIXTURE'));
@@ -119,3 +185,50 @@ const before=els.aiOpportunityList.innerHTML;
 resetFilterState();renderAiOpportunities();
 assert.equal(els.aiOpportunityList.innerHTML,before);
 ''')
+
+    def test_ai_opportunity_last_success_survives_midnight_and_failed_refresh(self):
+        self.run_js(
+            ["escapeHtml", "opportunityScanDayStatus", "opportunityScanDisplayTimestamp",
+             "hasDisplayableOpportunityScan", "opportunityScanDisplayMode",
+             "aiOpportunityDisplayStatusText", "aiNavigationCount", "aiScanState",
+             "aiScanAssessments", "aiScanClassification", "aiScanStatusText",
+             "aiOpportunityItems", "renderAiOpportunities"],
+            '''import assert from 'node:assert/strict';
+const yesterday='2026-09-08T22:28:00+08:00';
+const state={opportunityScanMeta:{
+ status:'ok',scan_generated_at:yesterday,display_result_generated_at:yesterday,
+ display_scan_count:93,display_expected_scan_count:93,
+ display_current_opportunity_count:1,display_near_opportunity_count:0,
+},opportunityScans:new Map(),aiOpportunityExpanded:false};
+const els={aiOpportunityMeta:{},aiOpportunityList:{},aiOpportunityViewAll:{}};
+function todayInShanghai(){return '2026-09-09';}
+function formatDate(value){return String(value || '').slice(0,10);}
+function formatDateTime(value){return value || '—';}
+function currentRecord(ticker){return {ticker,company:'Fixture'};}
+function renderAiOpportunityCard(item){return item.record.ticker;}
+''',
+            '''
+state.opportunityScans.set('FIXTURE',{ticker:'FIXTURE',status:'ready',generated_at:yesterday,assessment:{opportunity_state:'机会'}});
+assert.equal(opportunityScanDayStatus(state.opportunityScanMeta),'not_run_today');
+assert.equal(hasDisplayableOpportunityScan(state.opportunityScanMeta),true);
+assert.equal(aiOpportunityItems().length,1);
+assert.equal(aiNavigationCount(),'1');
+renderAiOpportunities();
+assert.ok(els.aiOpportunityList.innerHTML.includes('FIXTURE'));
+assert.ok(els.aiOpportunityMeta.textContent.includes('今日尚未刷新'));
+assert.ok(els.aiOpportunityMeta.textContent.includes('展示最近一次成功结果'));
+assert.ok(els.aiOpportunityMeta.textContent.includes(yesterday));
+state.opportunityScanMeta.status='error';
+state.opportunityScanMeta.attempted_at='2026-09-09T18:10:00+08:00';
+renderAiOpportunities();
+assert.ok(els.aiOpportunityList.innerHTML.includes('FIXTURE'));
+assert.ok(els.aiOpportunityMeta.textContent.includes('今日刷新失败'));
+assert.ok(!els.aiOpportunityMeta.textContent.includes('已完成'));
+state.opportunityScans.clear();
+state.opportunityScanMeta={status:'missing'};
+assert.equal(aiOpportunityItems().length,0);
+assert.equal(aiNavigationCount(),'—');
+renderAiOpportunities();
+assert.ok(els.aiOpportunityList.innerHTML.includes('暂无'));
+''',
+        )

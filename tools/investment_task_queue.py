@@ -9,20 +9,14 @@ import json
 from pathlib import Path
 from typing import Any
 
+import investment_dispositions
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE = Path("data/investment-dashboard/company_state.json")
 DEFAULT_DRIFT = Path("data/investment-dashboard/drift_states.json")
 DEFAULT_BUY_THESES = Path("data/investment-dashboard/original_buy_theses.json")
 DEFAULT_OUTPUT = Path("logs/investment-task-queue.json")
-
-DISPOSITION_OPTIONS = {
-    "reviewed_thesis_weakened": [
-        "keep_watch", "redo_research", "formal_drift", "archive_drop",
-    ],
-    "confirmed_redline": ["formal_drift"],
-    "holding_review_due": ["run_thesis_tracker"],
-}
 
 WORKFLOW_STATUS = {
     "reviewed_thesis_weakened": "READY_FOR_USER_DISPOSITION",
@@ -125,6 +119,7 @@ def build_task_queue(
     *,
     drift_payload: dict[str, Any] | None = None,
     original_buy_theses: dict[str, Any] | None = None,
+    disposition_payload: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     companies = state_payload.get("companies")
     if not isinstance(companies, list):
@@ -140,6 +135,15 @@ def build_task_queue(
         ticker = str(company.get("ticker") or "").upper()
         blocker = str(guidance.get("blocker_code") or "unknown")
         manual = ((company.get("review_coverage") or {}).get("manual_decision") or {})
+        options = investment_dispositions.allowed_dispositions(company)
+        disposition_fingerprint = (
+            investment_dispositions.target_fingerprint(company) if options else None
+        )
+        current_disposition = investment_dispositions.current_record(
+            disposition_payload,
+            ticker,
+            disposition_fingerprint or "",
+        )
         packet = {
             "ticker": ticker,
             "company": company.get("company"),
@@ -154,7 +158,9 @@ def build_task_queue(
             "recommended_skill": list(guidance.get("recommended_skill") or []),
             "completion_target": guidance.get("completion_target"),
             "workflow_status": WORKFLOW_STATUS.get(blocker, "READY_FOR_USER_REVIEW"),
-            "allowed_user_dispositions": DISPOSITION_OPTIONS.get(blocker, []),
+            "allowed_user_dispositions": options,
+            "disposition_target_fingerprint": disposition_fingerprint,
+            "current_disposition": current_disposition,
             "current_evidence": _evidence_items(company, drift_records.get(ticker)),
             "authority_references": {
                 "canonical_report": company.get("canonical_report"),

@@ -21,6 +21,7 @@ from zoneinfo import ZoneInfo
 
 from source_hash import canonical_file_sha256
 import drift_scan_state
+import investment_dispositions
 import light_thesis_signals
 
 
@@ -1898,6 +1899,7 @@ def build_state_layers(
     write: bool = True,
     generated_at: str | None = None,
     main_report_review_payload: dict[str, Any] | None = None,
+    investment_disposition_payload: dict[str, Any] | None = None,
     legacy_mode: bool = False,
 ) -> dict[str, Any]:
     """Evaluate persisted rules; only an explicit legacy mode may infer them."""
@@ -2141,6 +2143,9 @@ def build_state_layers(
             "post_buy_tracking": tracking.get(ticker) if tracking.get(ticker) else {"status": "not_tracked"},
             "generated_at": generated_at,
         }
+        state = investment_dispositions.project_company(
+            state, investment_disposition_payload
+        )
         states.append(state)
         rule_summary = state["decision_rules"].copy()
         rule_summary["rules"] = None
@@ -2256,6 +2261,7 @@ def attach_company_states(decisions: list[dict[str, Any]], state_payload: dict[s
             decision["lifecycle"] = state.get("lifecycle")
             decision["next_action"] = state.get("next_action")
             decision["action_guidance"] = state.get("action_guidance")
+            decision["manual_disposition"] = state.get("manual_disposition")
 
 
 def validate_payloads(payloads: dict[str, Any]) -> list[str]:

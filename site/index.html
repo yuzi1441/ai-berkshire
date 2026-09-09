@@ -180,7 +180,7 @@
                     <label class="select-control"><span>轻量投资逻辑</span><select id="light-thesis-filter"><option value="all">全部轻量信号</option><option value="improved">改善</option><option value="unchanged">无明显变化</option><option value="weakened">走弱</option><option value="insufficient_evidence">证据不足</option><option value="missing">尚无当前结果</option></select></label>
                     <label class="select-control"><span>正式投资逻辑复核</span><select id="formal-drift-filter"><option value="all">全部正式结果</option><option value="major-weakened">重大走弱</option><option value="minor-weakened">轻度走弱</option><option value="improved">正式结果：改善</option><option value="has-review">存在正式复核记录</option><option value="no-review">无正式复核记录</option></select></label>
                     <label class="select-control"><span>当前卡点</span><select id="blocker-filter"><option value="all">全部卡点</option></select></label>
-                    <label class="select-control"><span>Checklist 结果</span><select id="checklist-filter"><option value="all">全部 Checklist</option><option value="PASS">已完成 PASS</option><option value="CONDITIONAL_PASS">已完成 CONDITIONAL_PASS</option><option value="FAIL">已完成 FAIL</option><option value="UNKNOWN">尚未完成 / 无结果</option></select></label>
+                    <label class="select-control"><span>Checklist 结果</span><select id="checklist-filter"><option value="all">全部 Checklist</option><option value="PASS">通过</option><option value="CONDITIONAL_PASS">条件通过</option><option value="FAIL">未通过</option><option value="UNKNOWN">尚未检查</option></select></label>
                     <label class="select-control"><span>条件类型</span><select id="opportunity-filter"><option value="all">全部条件</option><option value="price">价格条件</option><option value="condition">待验证条件</option></select></label>
                     <label class="select-control"><span>排序</span><select id="sort-filter"><option value="attention">待处理优先</option><option value="lifecycle">按阶段</option><option value="price">按价格机会</option><option value="name">按公司名</option></select></label>
                   </div>
@@ -253,6 +253,16 @@
     </aside>
 
     <div class="toast" id="toast" role="status" hidden></div>
+    <dialog class="confirmation-dialog" id="disposition-dialog" aria-labelledby="disposition-dialog-title">
+      <form method="dialog">
+        <h2 id="disposition-dialog-title">确认人工处置</h2>
+        <p id="disposition-dialog-copy"></p>
+        <div class="confirmation-actions">
+          <button class="button button-quiet" id="disposition-cancel" type="button">取消</button>
+          <button class="button button-primary" id="disposition-confirm" type="button">确认记录</button>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="./assets/app.js?v=dashboard-polish-v1"></script>
   </body>
 </html>

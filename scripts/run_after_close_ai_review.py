@@ -89,6 +89,24 @@ def run_step(repo_root: Path, label: str, args: list[str]) -> None:
         raise JobError(f"{label} failed with exit code {completed.returncode}")
 
 
+def dashboard_build_args(
+    python: Path,
+    repo_root: Path,
+    investment_dispositions_path: Path | None,
+    *extra: str,
+) -> list[str]:
+    args = [
+        str(python),
+        "tools/build_investment_dashboard.py",
+        "--repo-root",
+        str(repo_root),
+        *extra,
+    ]
+    if investment_dispositions_path is not None:
+        args.extend(["--investment-dispositions", str(investment_dispositions_path)])
+    return args
+
+
 def git_status(repo_root: Path) -> list[str] | None:
     completed = subprocess.run(
         ["git", "status", "--porcelain", "--untracked-files=all"],
@@ -286,6 +304,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="显式执行 full reconciliation；默认运行 incremental materiality review",
     )
     parser.add_argument("--markets", default="A股", help="market list for the close quote refresh")
+    parser.add_argument(
+        "--investment-dispositions",
+        type=Path,
+        default=None,
+        help="Explicit runtime disposition authority propagated to every dashboard build.",
+    )
     return parser
 
 
@@ -357,7 +381,13 @@ def main() -> int:
             [str(python), "tools/market_snapshot.py", "--markets", arguments.markets, "--force"],
         )
         phase = "preliminary_build"
-        run_step(repo_root, "重建含最新价格的决策板", [str(python), "tools/build_investment_dashboard.py"])
+        run_step(
+            repo_root,
+            "重建含最新价格的决策板",
+            dashboard_build_args(
+                python, repo_root, arguments.investment_dispositions
+            ),
+        )
 
         try:
             phase = "opportunity_scan"
@@ -382,7 +412,13 @@ def main() -> int:
                 )
             scan_completed = True
             phase = "dashboard_build"
-            run_step(repo_root, "重建静态看板", [str(python), "tools/build_investment_dashboard.py"])
+            run_step(
+                repo_root,
+                "重建静态看板",
+                dashboard_build_args(
+                    python, repo_root, arguments.investment_dispositions
+                ),
+            )
             phase = "status"
             write_status(
                 repo_root,
@@ -475,7 +511,13 @@ def main() -> int:
         except Exception as status_error:  # noqa: BLE001
             print(f"Could not record close-review failure status: {status_error}", file=sys.stderr)
         try:
-            run_step(repo_root, "重建失败保护状态", [str(python), "tools/build_investment_dashboard.py"])
+            run_step(
+                repo_root,
+                "重建失败保护状态",
+                dashboard_build_args(
+                    python, repo_root, arguments.investment_dispositions
+                ),
+            )
         except Exception as publish_error:  # noqa: BLE001
             print(f"Could not publish failure status: {publish_error}", file=sys.stderr)
         print(f"After-close opportunity scan failed closed: {error}", file=sys.stderr)

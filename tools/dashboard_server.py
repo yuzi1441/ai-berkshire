@@ -28,6 +28,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import opportunity_review  # noqa: E402
+import investment_dispositions  # noqa: E402
+import investment_task_queue  # noqa: E402
 
 
 class DashboardServerError(RuntimeError):
@@ -148,10 +150,12 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         directory: str | None = None,
         repo_root: Path,
         store: DeepReviewStore,
+        disposition_store: investment_dispositions.DispositionStore,
         **kwargs: Any,
     ) -> None:
         self.repo_root = repo_root
         self.store = store
+        self.disposition_store = disposition_store
         super().__init__(*args, directory=directory, **kwargs)
 
     def log_message(self, format: str, *args: Any) -> None:  # noqa: A003 - base API name
@@ -249,15 +253,69 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
 
     def require_auth(self) -> bool:
         if not self.authorized():
-            self.json_response(HTTPStatus.FORBIDDEN, {"error": "深度复核接口仅允许从管理入口访问。"})
+            self.json_response(HTTPStatus.FORBIDDEN, {"error": "该接口仅允许从管理入口访问。"})
             return False
         return True
+
+    def same_origin(self) -> bool:
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True
+        parsed = urlparse(origin)
+        return parsed.scheme in {"http", "https"} and parsed.netloc == self.headers.get("Host")
+
+    def current_disposition_state(self) -> tuple[dict[str, Any], dict[str, Any]]:
+        data_directory = self.repo_root / "data" / "investment-dashboard"
+        state = investment_task_queue.load_json(data_directory / "company_state.json")
+        disposition_payload = self.disposition_store.payload()
+        queue = investment_task_queue.build_task_queue(
+            state,
+            drift_payload=(
+                investment_task_queue.load_json(data_directory / "drift_states.json")
+                if (data_directory / "drift_states.json").is_file()
+                else None
+            ),
+            original_buy_theses=(
+                investment_task_queue.load_json(data_directory / "original_buy_theses.json")
+                if (data_directory / "original_buy_theses.json").is_file()
+                else None
+            ),
+            disposition_payload=disposition_payload,
+        )
+        resolved_companies = []
+        for company in state.get("companies", []):
+            if not isinstance(company, dict):
+                continue
+            projected = investment_dispositions.project_company(company, disposition_payload)
+            manual = projected.get("manual_disposition") or {}
+            if manual.get("status") != "current":
+                continue
+            resolved_companies.append({
+                "ticker": projected.get("ticker"),
+                "next_action": projected.get("next_action"),
+                "action_guidance": projected.get("action_guidance"),
+                "manual_disposition": manual,
+            })
+        return state, {
+            **disposition_payload,
+            "tasks": queue["tasks"],
+            "resolved_companies": resolved_companies,
+        }
 
     def do_GET(self) -> None:  # noqa: N802 - HTTP handler API
         path = urlparse(self.path).path
         if path == "/api/deep-reviews":
             if self.require_auth():
                 self.json_response(HTTPStatus.OK, self.store.payload())
+            return
+        if path == "/api/investment-dispositions":
+            if not self.require_auth():
+                return
+            try:
+                _state, payload = self.current_disposition_state()
+                self.json_response(HTTPStatus.OK, payload)
+            except (OSError, ValueError, json.JSONDecodeError) as error:
+                self.json_response(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": str(error)})
             return
         super().do_GET()
 
@@ -284,13 +342,22 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 - HTTP handler API
         path = urlparse(self.path).path
         body = self.drain_request_body()
-        if path != "/api/deep-reviews":
+        if path not in {"/api/deep-reviews", "/api/investment-dispositions"}:
             self.json_response(HTTPStatus.NOT_FOUND, {"error": "unknown API route"})
             return
         if not body:
             self.json_response(HTTPStatus.BAD_REQUEST, {"error": "request body is invalid"})
             return
         if not self.require_auth():
+            return
+        if not self.same_origin():
+            self.json_response(HTTPStatus.FORBIDDEN, {"error": "请求来源与管理入口不一致。"})
+            return
+        if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+            self.json_response(HTTPStatus.UNSUPPORTED_MEDIA_TYPE, {"error": "Content-Type 必须是 application/json。"})
+            return
+        if path == "/api/investment-dispositions":
+            self.handle_disposition_post(body)
             return
         try:
             payload = json.loads(body.decode("utf-8"))
@@ -322,6 +389,50 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
         finally:
             self.store.lock.release()
 
+    def handle_disposition_post(self, body: bytes) -> None:
+        try:
+            payload = json.loads(body.decode("utf-8"))
+            if not isinstance(payload, dict):
+                raise DashboardServerError("request body must be an object")
+            ticker = clean_ticker(payload.get("ticker"))
+            selected = str(payload.get("selected_disposition") or "")
+            fingerprint = str(payload.get("disposition_target_fingerprint") or "")
+            if selected not in investment_dispositions.ALL_DISPOSITIONS:
+                raise DashboardServerError("selected_disposition is invalid")
+            if len(fingerprint) != 64 or any(character not in "0123456789abcdef" for character in fingerprint):
+                raise DashboardServerError("disposition_target_fingerprint is invalid")
+            state, _current_payload = self.current_disposition_state()
+            companies = [
+                item for item in state.get("companies", [])
+                if isinstance(item, dict) and str(item.get("ticker") or "").upper() == ticker
+            ]
+            if len(companies) != 1:
+                raise DashboardServerError("ticker does not resolve to exactly one current company")
+            status, record, saved_payload = self.disposition_store.save(
+                current_company=companies[0],
+                selected_disposition=selected,
+                submitted_fingerprint=fingerprint,
+            )
+            projected = investment_dispositions.project_company(companies[0], saved_payload)
+            self.json_response(HTTPStatus.OK, {
+                "status": status,
+                "saved_disposition": record,
+                "resolved_current_task": {
+                    "ticker": ticker,
+                    "lifecycle": projected.get("lifecycle"),
+                    "next_action": projected.get("next_action"),
+                    "action_guidance": projected.get("action_guidance"),
+                    "manual_disposition": projected.get("manual_disposition"),
+                },
+                "resulting_next_action_projection": projected.get("action_guidance"),
+            })
+        except investment_dispositions.DispositionConflict as error:
+            self.json_response(HTTPStatus.CONFLICT, {"error": str(error)})
+        except (UnicodeDecodeError, json.JSONDecodeError, DashboardServerError, investment_dispositions.DispositionError) as error:
+            self.json_response(HTTPStatus.BAD_REQUEST, {"error": str(error)})
+        except OSError as error:
+            self.json_response(HTTPStatus.INTERNAL_SERVER_ERROR, {"error": str(error)})
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -344,11 +455,15 @@ def main() -> int:
         runtime_directory,
         parse_limit(os.environ.get("DASHBOARD_DEEP_REVIEW_DAILY_LIMIT"), 12),
     )
+    disposition_store = investment_dispositions.DispositionStore(
+        runtime_directory / investment_dispositions.FILENAME
+    )
     handler = lambda *args, **kwargs: DashboardRequestHandler(  # noqa: E731
         *args,
         directory=str(site_directory),
         repo_root=repo_root,
         store=store,
+        disposition_store=disposition_store,
         **kwargs,
     )
     server = ThreadingHTTPServer((arguments.bind, arguments.port), handler)

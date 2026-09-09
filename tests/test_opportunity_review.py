@@ -370,6 +370,28 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertIn("return 75", source)
         self.assertIn("scan_completed = True", source)
 
+    def test_after_close_propagates_optional_disposition_path_to_every_build(self):
+        path = Path("/runtime/manual_investment_dispositions.json")
+        args = after_close.dashboard_build_args(
+            Path("/python"), Path("/repo"), path, "--state-only"
+        )
+        self.assertEqual(args, [
+            "/python",
+            "tools/build_investment_dashboard.py",
+            "--repo-root",
+            "/repo",
+            "--state-only",
+            "--investment-dispositions",
+            str(path),
+        ])
+        without_runtime = after_close.dashboard_build_args(
+            Path("/python"), Path("/repo"), None
+        )
+        self.assertNotIn("--investment-dispositions", without_runtime)
+        source = (ROOT / "scripts" / "run_after_close_ai_review.py").read_text(encoding="utf-8")
+        self.assertEqual(source.count('"tools/build_investment_dashboard.py"'), 1)
+        self.assertEqual(source.count("dashboard_build_args("), 4)
+
     def test_union_includes_a_current_opportunity(self):
         result = opportunity.union_result(
             {

@@ -63,6 +63,8 @@ class InvestmentTaskQueueTests(unittest.TestCase):
         self.assertEqual(task["allowed_user_dispositions"], [
             "keep_watch", "redo_research", "formal_drift", "archive_drop",
         ])
+        self.assertEqual(len(task["disposition_target_fingerprint"]), 64)
+        self.assertIsNone(task["current_disposition"])
         self.assertNotIn("selected_disposition", task)
 
     def test_confirmed_redline_is_ready_input_not_completed_drift(self):
