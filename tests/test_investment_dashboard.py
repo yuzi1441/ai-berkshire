@@ -53,6 +53,41 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "2026-09-08T01:51:29+08:00",
             )
 
+    def test_malformed_runtime_disposition_fails_before_any_projection_write(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            data = root / "data" / "investment-dashboard"
+            site = root / "site" / "data"
+            data.mkdir(parents=True)
+            site.mkdir(parents=True)
+            disposition_path = root / "runtime" / "manual_investment_dispositions.json"
+            disposition_path.parent.mkdir()
+            disposition_path.write_text("{not-json", encoding="utf-8")
+            protected = {
+                data / "company_state.json": b'old-company-state\n',
+                data / "decision_board.json": b'old-decision-board\n',
+                site / "company_state.json": b'old-site-state\n',
+            }
+            for path, content in protected.items():
+                path.write_bytes(content)
+
+            with self.assertRaises(json.JSONDecodeError):
+                dashboard.build_dashboard(
+                    root,
+                    legacy_mode=True,
+                    investment_dispositions_path=disposition_path,
+                )
+            for path, content in protected.items():
+                self.assertEqual(path.read_bytes(), content)
+
+            with self.assertRaises(json.JSONDecodeError):
+                dashboard.refresh_runtime_state(
+                    root,
+                    investment_dispositions_path=disposition_path,
+                )
+            for path, content in protected.items():
+                self.assertEqual(path.read_bytes(), content)
+
     def test_production_build_blocks_on_corrupt_post_buy_tracking(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

@@ -29,6 +29,7 @@ from source_hash import canonical_file_sha256, canonical_sha256_text
 import main_report_review
 import decision_state
 import event_radar
+import investment_dispositions
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -5414,7 +5415,11 @@ def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     return split_dashboard_files(board, site_directory, data_directory)
 
 
-def refresh_runtime_state(repo_root: Path = ROOT) -> dict[str, Any]:
+def refresh_runtime_state(
+    repo_root: Path = ROOT,
+    *,
+    investment_dispositions_path: Path | None = None,
+) -> dict[str, Any]:
     """Re-evaluate runtime state without reparsing or rewriting research.
 
     The five-minute quote timer needs Company State to use the same snapshot
@@ -5424,6 +5429,10 @@ def refresh_runtime_state(repo_root: Path = ROOT) -> dict[str, Any]:
     Rule definitions, then updates only runtime-derived state projections.
     """
     repo_root = repo_root.resolve()
+    # Validate the optional runtime authority before writing any projection.
+    disposition_payload = investment_dispositions.load(
+        investment_dispositions_path, strict=True
+    )
     data_directory = repo_root / "data" / "investment-dashboard"
     site_data_directory = repo_root / "site" / "data"
     board = load_json(data_directory / "decision_board.json", {})
@@ -5456,6 +5465,7 @@ def refresh_runtime_state(repo_root: Path = ROOT) -> dict[str, Any]:
         event_payload=event_snapshot,
         rule_payload=rule_payload,
         write=False,
+        investment_disposition_payload=disposition_payload,
     )
     errors = decision_state.validate_payloads(layers)
     if errors:
@@ -5666,8 +5676,19 @@ def dashboard_projection_generated_at(repo_root: Path) -> str:
     return projection_time.astimezone(SHANGHAI_TIMEZONE).isoformat(timespec="seconds")
 
 
-def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dict[str, Any]:
+def build_dashboard(
+    repo_root: Path = ROOT,
+    *,
+    legacy_mode: bool = False,
+    investment_dispositions_path: Path | None = None,
+) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
+    # Validate the optional runtime authority before the builder can write any
+    # report index or dashboard projection. Missing is a valid empty layer;
+    # malformed input fails closed.
+    disposition_payload = investment_dispositions.load(
+        investment_dispositions_path, strict=True
+    )
     reports_directory = repo_root / "reports"
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
@@ -5771,6 +5792,7 @@ def build_dashboard(repo_root: Path = ROOT, *, legacy_mode: bool = False) -> dic
         write=False,
         generated_at=generated_at,
         main_report_review_payload=main_report_review_snapshot,
+        investment_disposition_payload=disposition_payload,
         legacy_mode=legacy_mode,
     )
     state_errors = decision_state.validate_payloads(state_layers)
@@ -5946,6 +5968,15 @@ def main() -> int:
         action="store_true",
         help="Allow explicit migration/test compatibility fallbacks; never use for production builds.",
     )
+    parser.add_argument(
+        "--investment-dispositions",
+        type=Path,
+        default=None,
+        help=(
+            "Explicit runtime authority path. If omitted, no live dispositions "
+            "are read and clean builds remain deterministic."
+        ),
+    )
     arguments = parser.parse_args()
     if arguments.split_only and arguments.state_only:
         parser.error("--split-only and --state-only are mutually exclusive")
@@ -5953,9 +5984,16 @@ def main() -> int:
         board = (
             split_existing_dashboard(arguments.repo_root.resolve())
             if arguments.split_only
-            else refresh_runtime_state(arguments.repo_root.resolve())
+            else refresh_runtime_state(
+                arguments.repo_root.resolve(),
+                investment_dispositions_path=arguments.investment_dispositions,
+            )
             if arguments.state_only
-            else build_dashboard(arguments.repo_root.resolve(), legacy_mode=arguments.legacy_mode)
+            else build_dashboard(
+                arguments.repo_root.resolve(),
+                legacy_mode=arguments.legacy_mode,
+                investment_dispositions_path=arguments.investment_dispositions,
+            )
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)
