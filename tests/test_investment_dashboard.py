@@ -229,6 +229,99 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(public["scans"][0]["input_context"]["current_quote"]["price"], 10.5)
             self.assertNotIn("excerpt", public["scans"][0]["input_context"])
 
+    def test_schema_v2_opportunity_scan_builds_and_preserves_public_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            source = root / "data" / "investment-dashboard" / "opportunity_scans.json"
+            payload = {
+                "schema_version": 2,
+                "status": "partial",
+                "mode": "incremental",
+                "model_request_count": 0,
+                "reused_count": 1,
+                "filter_counts": {"eligible": 1},
+                "scans": [
+                    {
+                        "company": "示例公司",
+                        "ticker": "600000.SH",
+                        "market": "A股",
+                        "evaluation_mode": "refresh_failed_last_success",
+                        "material_trigger_fingerprint": "a" * 64,
+                        "models": {"deepseek": {"status": "stale"}},
+                        "union": {"included": False, "near_included": True},
+                        "input_snapshot": {
+                            "report": {
+                                "data_cutoff": "2026-09-08",
+                                "excerpt": "仅保留在审计数据中的完整输入",
+                            },
+                            "current_quote": {"price": 10.5, "currency": "CNY"},
+                            "local_price_context": {"status": "inside_price_rule"},
+                        },
+                    }
+                ],
+            }
+            source.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+            dashboard.build_dashboard(root, legacy_mode=True)
+
+            full = json.loads(source.read_text(encoding="utf-8"))
+            public = json.loads(
+                (root / "site" / "data" / "opportunity_scans.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(full["schema_version"], 2)
+            self.assertEqual(full["mode"], "incremental")
+            self.assertIn("input_snapshot", full["scans"][0])
+            self.assertEqual(public["schema_version"], 2)
+            self.assertEqual(public["mode"], "incremental")
+            self.assertEqual(public["model_request_count"], 0)
+            self.assertEqual(public["reused_count"], 1)
+            self.assertEqual(public["filter_counts"], {"eligible": 1})
+            self.assertEqual(
+                public["scans"][0]["evaluation_mode"],
+                "refresh_failed_last_success",
+            )
+            self.assertEqual(
+                public["scans"][0]["material_trigger_fingerprint"], "a" * 64
+            )
+            self.assertNotIn("input_snapshot", public["scans"][0])
+            self.assertEqual(
+                public["scans"][0]["input_context"]["current_quote"]["price"],
+                10.5,
+            )
+
+    def test_opportunity_scan_loader_rejects_unknown_schema(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            data = Path(temporary_directory)
+            (data / "opportunity_scans.json").write_text(
+                json.dumps({"schema_version": 3, "scans": []}),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "Invalid opportunity scan payload"):
+                dashboard.load_opportunity_scans(data)
+
+    def test_opportunity_scan_loader_rejects_non_list_scans(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            data = Path(temporary_directory)
+            (data / "opportunity_scans.json").write_text(
+                json.dumps({"schema_version": 2, "scans": {}}),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "Invalid opportunity scan payload"):
+                dashboard.load_opportunity_scans(data)
+
+    def test_opportunity_scan_loader_rejects_non_object_payload(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            data = Path(temporary_directory)
+            (data / "opportunity_scans.json").write_text("[]", encoding="utf-8")
+
+            with self.assertRaises(ValueError):
+                dashboard.load_opportunity_scans(data)
+
     def test_public_original_buy_theses_preserves_holding_cycle_baseline(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
