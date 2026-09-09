@@ -8,6 +8,7 @@ CURRENT_LINK="${CURRENT_LINK:-/srv/ai-berkshire/current}"
 BASE_DIR="${BASE_DIR:-$(dirname "${CURRENT_LINK}")}"
 LEGACY_DIR="${LEGACY_DIR:-/opt/ai-berkshire}"
 RUNTIME_DIR="${RUNTIME_DIR:-/var/lib/ai-berkshire}"
+INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH:-${RUNTIME_DIR}/manual_investment_dispositions.json}"
 RUNTIME_SENTIMENT_STATUS="${RUNTIME_SENTIMENT_STATUS:-${RUNTIME_DIR}/sentiment-status.json}"
 ORIGIN_URL="${ORIGIN_URL:-https://github.com/yuzi1441/ai-berkshire.git}"
 SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
@@ -132,14 +133,16 @@ fi
 # board and preserves the runtime audit history copied above.  A final build
 # then evaluates the reconciled Rules into Company State and site output.
 "${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
-    --repo-root "${STAGING_RELEASE}"
+    --repo-root "${STAGING_RELEASE}" \
+    --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/rule_lifecycle.py" \
     --repo-root "${STAGING_RELEASE}" --write
 
 "${PYTHON}" "${STAGING_RELEASE}/tools/migrate_manual_execution_reviews.py" \
     --repo-root "${STAGING_RELEASE}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
-    --repo-root "${STAGING_RELEASE}"
+    --repo-root "${STAGING_RELEASE}" \
+    --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 "${PYTHON}" -m compileall -q "${STAGING_RELEASE}/tools"
 (
     cd "${STAGING_RELEASE}"

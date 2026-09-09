@@ -142,7 +142,18 @@ class AutomationStatusTests(unittest.TestCase):
         self.assertIn('status_phase opportunity_scan', scheduler)
         self.assertIn('--skip-git-sync', scheduler)
         self.assertIn('tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only', scheduler)
+        self.assertIn('INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH:-${RUNTIME_DIR}/manual_investment_dispositions.json}"', scheduler)
+        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 3)
         self.assertLess(scheduler.index("JOB_DEFERRED == 1"), scheduler.index("JOB_PARTIAL == 1"))
+
+    def test_all_production_dashboard_builds_receive_runtime_disposition_path(self):
+        publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")
+        scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
+        after_close = (ROOT / "scripts" / "run_after_close_ai_review.py").read_text(encoding="utf-8")
+        self.assertEqual(publisher.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 2)
+        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 3)
+        self.assertIn('parser.add_argument(\n        "--investment-dispositions"', after_close)
+        self.assertEqual(after_close.count('"tools/build_investment_dashboard.py"'), 1)
 
     def test_scheduler_defers_internal_lock_without_false_success_or_resetting_budget(self):
         scheduler = ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh"

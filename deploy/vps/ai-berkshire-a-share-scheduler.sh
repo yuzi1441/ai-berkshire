@@ -5,6 +5,7 @@ IFS=$'\n\t'
 REPO_ROOT="${REPO_ROOT:-/srv/ai-berkshire/current}"
 PYTHON="${PYTHON:-${REPO_ROOT}/.venv/bin/python}"
 RUNTIME_DIR="${RUNTIME_DIR:-/var/lib/ai-berkshire}"
+INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH:-${RUNTIME_DIR}/manual_investment_dispositions.json}"
 LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-runtime.lock}"
 LOCK_RETRY_EXIT=75
 LOCK_RETRY_COUNTER="${LOCK_RETRY_COUNTER:-/run/ai-berkshire-${1:-unknown}-lock-retries}"
@@ -173,7 +174,8 @@ cd "${REPO_ROOT}"
 status_start
 
 build_dashboard() {
-    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}"
+    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" \
+        --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 }
 
 post_buy_check() {
@@ -213,7 +215,8 @@ run_market() {
     status_phase market_snapshot "刷新 A/H 行情"
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股
     status_phase build "按同一行情快照重建状态"
-    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only
+    "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only \
+        --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 }
 
 run_intraday() {
@@ -294,7 +297,8 @@ run_heavy() {
     "${PYTHON}" scripts/run_after_close_ai_review.py \
         --repo-root "${REPO_ROOT}" \
         --skip-git-sync \
-        --markets A股,港股 || scan_rc=$?
+        --markets A股,港股 \
+        --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}" || scan_rc=$?
     if (( scan_rc == LOCK_RETRY_EXIT )); then
         mark_internal_scan_retry "${sentiment_rc}"
         JOB_DEFERRED=1
