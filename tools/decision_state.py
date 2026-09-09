@@ -14,6 +14,7 @@ import hashlib
 import json
 import re
 import copy
+import math
 from datetime import date, datetime, time
 from pathlib import Path
 from typing import Any, Iterable
@@ -406,9 +407,21 @@ def _quote_price(quote: dict[str, Any] | None) -> float | None:
     for key in ("price", "latest_price", "close", "last", "current_price"):
         try:
             if quote.get(key) is not None:
-                return float(quote[key])
+                value = float(quote[key])
+                return value if math.isfinite(value) and value > 0 else None
         except (TypeError, ValueError):
             continue
+    return None
+
+
+def quote_observed_at(quote: dict[str, Any]) -> datetime | None:
+    """Provider observation time, never the time an old snapshot was rebuilt."""
+    value = compact(quote.get("provider_timestamp"))
+    for pattern in ("%Y%m%d%H%M%S", "%Y/%m/%d %H:%M:%S"):
+        try:
+            return datetime.strptime(value, pattern).replace(tzinfo=SHANGHAI_TIMEZONE)
+        except ValueError:
+            pass
     return None
 
 
@@ -440,6 +453,14 @@ def _quote_trust(quote: dict[str, Any] | None, evaluated_at: datetime) -> tuple[
         return False, "quote_date_missing"
     if _market_is_open(market, evaluated_at) and data_cutoff != evaluated_at.astimezone(SHANGHAI_TIMEZONE).date().isoformat():
         return False, "historical_close_during_trading_session"
+    observed_at = quote_observed_at(quote)
+    if observed_at is None:
+        return False, "quote_timestamp_missing"
+    age_minutes = (evaluated_at - observed_at).total_seconds() / 60
+    if age_minutes < -2:
+        return False, "quote_timestamp_in_future"
+    if _market_is_open(market, evaluated_at) and age_minutes > 10:
+        return False, "quote_stale_during_trading_session"
     return True, "quote_current_for_market_session"
 
 
@@ -1147,13 +1168,7 @@ def _next_action(
         return "confirm_purchase"
     if lifecycle == "PRE_BUY":
         return "run_checklist"
-    if any(
-        rule.get("status") == "triggered"
-        and rule.get("active", True) is not False
-        and rule.get("type") not in {"PRICE", "PRICE_RANGE"}
-        and compact(rule.get("action")).lower() in {"run_checklist", "review_decision", "confirm_purchase"}
-        for rule in rules
-    ):
+    if any(rule_can_promote_pre_buy(rule) for rule in rules):
         return "run_checklist"
     if any(rule.get("status") == "near_trigger" for rule in rules if rule.get("type") in {"PRICE", "PRICE_RANGE"}):
         return "price_near_trigger"

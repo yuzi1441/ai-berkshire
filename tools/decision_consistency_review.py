@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import build_investment_dashboard as dashboard  # noqa: E402
 import report_judgment  # noqa: E402
+import decision_state  # noqa: E402
 from sentiment_snapshot import LLMConfig, http_json, parse_json_block  # noqa: E402
 
 
@@ -119,12 +120,24 @@ def find_decisions(board_path: Path, ticker: str | None, company: str | None) ->
     return sorted(selected, key=lambda item: (str(item.get("company") or ""), str(item.get("ticker") or "")))
 
 
-def price_context(policy: dict[str, Any], quote: dict[str, Any] | None) -> dict[str, Any]:
+def price_context(policy: dict[str, Any], quote: dict[str, Any] | None, *, evaluated_at: datetime | None = None) -> dict[str, Any]:
     """Evaluate simple price-rule membership locally before asking the model."""
     price = finite_number((quote or {}).get("price"))
     rules = policy.get("price_rules") if isinstance(policy, dict) else []
-    if price is None:
+    if price is None or price <= 0 or (quote or {}).get("snapshot_status") == "preserved_previous":
         return {"status": "no_current_quote", "price": None, "matched_rules": []}
+    if quote and ("provider_timestamp" in quote or "_market_snapshot" in quote):
+        current = dict(quote)
+        observed = decision_state.quote_observed_at(current)
+        current.setdefault("_market_snapshot", {})
+        current.setdefault("market", REVIEW_MARKET)
+        if observed:
+            current.setdefault("data_cutoff", observed.date().isoformat())
+        trusted, reason = decision_state._quote_trust(
+            current, evaluated_at or datetime.now(decision_state.SHANGHAI_TIMEZONE),
+        )
+        if not trusted:
+            return {"status": "no_current_quote", "price": None, "matched_rules": [], "reason": reason}
     matched: list[dict[str, Any]] = []
     ceilings: list[float] = []
     for rule in rules if isinstance(rules, list) else []:

@@ -47,6 +47,17 @@ class DashboardActionClassifierTests(unittest.TestCase):
         self.assertEqual(result[2]["min"], 39.6)
         self.assertEqual(result[2]["max"], 42.9)
 
+    def test_freshness_uses_provider_time_not_snapshot_time(self):
+        result = self.run_classifier('''[
+          classifier.quoteFreshnessState({price: 9, provider_timestamp: "20260909093000", snapshot_generated_at: "2026-09-09T14:00:00+08:00"}, new Date("2026-09-09T14:01:00+08:00")),
+          classifier.quoteFreshnessState({price: 9, provider_timestamp: "2026/09/09 14:00:00"}, new Date("2026-09-09T14:01:00+08:00")),
+          classifier.quoteFreshnessState({price: 0, provider_timestamp: "20260909140000"}, new Date("2026-09-09T14:01:00+08:00"))
+        ]''')
+        self.assertEqual(result[0]["state"], "stale")
+        self.assertEqual(result[0]["age_minutes"], 271)
+        self.assertEqual(result[1]["state"], "fresh")
+        self.assertEqual(result[2]["state"], "stale")
+
     def test_observation_language_does_not_become_sell_or_exclude(self):
         result = self.run_classifier(
             """[

@@ -278,7 +278,7 @@ class RuleLifecycleTests(unittest.TestCase):
             "generated_at": "2026-09-07T15:05:00+08:00",
             "source_status": "ok",
             "data_cutoff": "2026-09-07",
-            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 12, "data_cutoff": "2026-09-07"}],
+            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 12, "data_cutoff": "2026-09-07", "provider_timestamp": "20260907150000"}],
         }), encoding="utf-8")
         evaluated_at = "2026-09-07T15:05:00+08:00"
         before = decision_state.build_state_layers(
@@ -289,7 +289,7 @@ class RuleLifecycleTests(unittest.TestCase):
             "generated_at": "2026-09-07T15:05:00+08:00",
             "source_status": "ok",
             "data_cutoff": "2026-09-07",
-            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 9, "data_cutoff": "2026-09-07"}],
+            "quotes": [{"ticker": "600000.SH", "market": "A股", "price": 9, "data_cutoff": "2026-09-07", "provider_timestamp": "20260907150000"}],
         }), encoding="utf-8")
         after = decision_state.build_state_layers(
             [decision], root, rule_payload=rule_payload, write=False,
