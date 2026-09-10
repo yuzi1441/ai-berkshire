@@ -224,7 +224,12 @@ export function aShareMarketSessionState(now = new Date()) {
 }
 
 export function quoteFreshnessState(quote, now = new Date()) {
-  const timestamp = quote?.snapshot_generated_at || quote?.generated_at || quote?.checked_at;
+  const provider = String(quote?.provider_timestamp || "");
+  const match = provider.match(/^(20\d{2})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/)
+    || provider.match(/^(20\d{2})\/(\d{2})\/(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
+  const timestamp = match
+    ? `${match[1]}-${match[2]}-${match[3]}T${match[4]}:${match[5]}:${match[6]}+08:00`
+    : null;
   if (!timestamp) return { state: "missing", age_minutes: null, timestamp: null };
   const observedAt = new Date(timestamp);
   const current = now instanceof Date ? now : new Date(now);
@@ -234,16 +239,15 @@ export function quoteFreshnessState(quote, now = new Date()) {
   const ageMinutes = (current.getTime() - observedAt.getTime()) / 60_000;
   const observedParts = shanghaiDateTimeParts(observedAt);
   const currentParts = shanghaiDateTimeParts(current);
-  const providerMatch = String(quote?.provider_timestamp || "").match(
-    /^(20\d{2})(\d{2})(\d{2})/,
-  );
-  const providerDateKey = providerMatch
-    ? `${providerMatch[1]}-${providerMatch[2]}-${providerMatch[3]}`
+  const providerDateKey = match
+    ? `${match[1]}-${match[2]}-${match[3]}`
     : null;
   const sameSnapshotDate = observedParts?.dateKey === currentParts?.dateKey;
   const sameProviderDate = providerDateKey === currentParts?.dateKey;
   const sameTradingDate = sameSnapshotDate && sameProviderDate;
-  const fresh = sameTradingDate && ageMinutes >= -2 && ageMinutes <= 10;
+  const fresh = sameTradingDate && ageMinutes >= -2 && ageMinutes <= 10
+    && Number.isFinite(Number(quote?.price)) && Number(quote?.price) > 0
+    && quote?.snapshot_status !== "preserved_previous";
   return {
     state: fresh ? "fresh" : "stale",
     age_minutes: Math.round(ageMinutes * 10) / 10,
