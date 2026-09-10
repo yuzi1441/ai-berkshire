@@ -83,6 +83,8 @@ for relative in \
     data/investment-dashboard/annual_report_dates.json \
     data/investment-dashboard/automation_status.json \
     data/investment-dashboard/intraday_technical.json \
+    data/investment-dashboard/technical_latest.json \
+    data/investment-dashboard/technical_daily_snapshot.json \
     data/investment-dashboard/main_report_review.json \
     data/investment-dashboard/opportunity_scans.json \
     data/investment-dashboard/opportunity_scan_status.json \

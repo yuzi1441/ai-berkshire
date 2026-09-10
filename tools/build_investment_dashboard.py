@@ -5215,11 +5215,11 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
         if technical.get("status") == "review":
             lines.append("技术报告待复核，暂不展示推断指标。")
             continue
-        source_link = str(technical["report_path"]).removeprefix("reports/").rsplit(".", 1)[0]
+        source_link = str(technical.get("report_path") or "").removeprefix("reports/").rsplit(".", 1)[0]
         lines.extend(
             [
                 f"技术状态：**{technical.get('state', '待复核')}**；技术日：{technical.get('data_cutoff', '待复核')}；观察区：{technical.get('observation_zone', '待复核')}",
-                f"来源：[[{source_link}|技术面辅助报告]]",
+                f"来源：[[{source_link}|技术面辅助报告]]" if source_link else "来源：日线结构化快照（不生成重复报告）",
                 "",
                 "| 短期 | 中期 | 长期 | 量能 |",
                 "|---|---|---|---|",
@@ -5756,6 +5756,13 @@ def build_dashboard(
         if (snapshot := technical_snapshot(report_path, repo_root, registry)) is not None
     ]
     attach_technical_snapshots(decisions, technical_snapshots)
+    # Daily runtime output supersedes legacy Markdown for every consumer,
+    # including the AI opportunity input, not only company_state.
+    daily_runtime = decision_state._load_technical_latest(data_directory)
+    for decision in decisions:
+        current_daily = daily_runtime.get(str(decision.get("ticker") or "").upper())
+        if current_daily is not None:
+            decision["technical_analysis"] = dict(current_daily)
     post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
     # Structured state is the new source consumed by the dashboard.  The
     # legacy fields above remain in the board for compatibility with existing

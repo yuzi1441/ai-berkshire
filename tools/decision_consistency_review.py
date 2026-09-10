@@ -178,12 +178,17 @@ def compact_technical(technical: dict[str, Any] | None) -> dict[str, Any]:
     technical = technical if isinstance(technical, dict) else {}
     return {
         "status": technical.get("status", "missing"),
-        "state": technical.get("state", "待复核"),
+        "state": technical.get("state") or technical.get("technical_state") or "待复核",
         "data_cutoff": technical.get("data_cutoff"),
         "latest_price": technical.get("latest_price"),
         "observation_zone": technical.get("observation_zone"),
         "combined_candidate_zone": technical.get("combined_candidate_zone"),
         "valid_buy_candidate": technical.get("valid_buy_candidate"),
+        "last_attempt_at": technical.get("last_attempt_at"),
+        "last_success_at": technical.get("last_success_at"),
+        "last_error": technical.get("last_error"),
+        "freshness": technical.get("freshness"),
+        "analysis": technical.get("analysis"),
         "lights": [
             {
                 "dimension": item.get("dimension"),
