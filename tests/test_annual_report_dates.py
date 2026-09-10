@@ -1,5 +1,7 @@
 import sys
 import unittest
+from datetime import date
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -10,6 +12,42 @@ import annual_report_dates as annual  # noqa: E402
 
 
 class AnnualReportDateTests(unittest.TestCase):
+    def test_source_failure_is_bounded_and_does_not_discard_other_source(self):
+        outcomes = []
+        with patch.object(annual, "fetch_eastmoney_period", return_value={"600000": {"ACTUAL_PUBLISH_DATE": "2026-08-30"}}), \
+             patch.object(annual, "fetch_cninfo_market", side_effect=annual.AnnualDateError("HTTP 504")) as cninfo:
+            records = annual.fetch_period_records([{"company": "示例公司", "ticker": "600000.SH"}], "2026-06-30", outcomes=outcomes)
+        self.assertEqual(cninfo.call_count, 4)
+        self.assertEqual(records[0]["actual_disclosure_date"], "2026-08-30")
+        self.assertEqual(records[0]["actual_verification"], "single_source")
+        self.assertEqual(records[0]["acquisition_status"], "partial")
+        self.assertEqual([row["status"] for row in outcomes], ["ok", "failed", "failed"])
+
+    def test_build_fetches_each_period_once(self):
+        with patch.object(annual, "board_universe", return_value=[{"ticker": "600000.SH", "company": "示例公司"}]), \
+             patch.object(annual, "fetch_eastmoney_period", return_value={}) as eastmoney, \
+             patch.object(annual, "fetch_cninfo_market", return_value={}):
+            result = annual.build_snapshot(Path("/unused"), date(2026, 9, 9))
+        periods = [call.args[0] for call in eastmoney.call_args_list]
+        self.assertEqual(len(periods), 5)
+        self.assertEqual(len(set(periods)), 5)
+        self.assertEqual(result["status"], "ok")
+
+    def test_total_failure_preserves_success_date_and_records(self):
+        old = {"generated_at": "2026-09-03T18:00:00+08:00", "data_cutoff": "2026-09-03", "records": [{"ticker": "A"}]}
+        failed = {"generated_at": "2026-09-09T18:00:00+08:00", "status": "failed", "source_outcomes": [{"source": "cninfo", "status": "failed"}]}
+        result = annual.retain_last_success(failed, old)
+        self.assertEqual(result["records"], old["records"])
+        self.assertEqual(result["data_cutoff"], "2026-09-03")
+        self.assertEqual(result["last_success_at"], old["generated_at"])
+        self.assertEqual(result["last_attempt_at"], failed["generated_at"])
+        self.assertEqual(result["freshness"], "stale")
+
+    def test_malformed_cninfo_response_is_failure_not_empty_success(self):
+        with patch.object(annual, "fetch_json", return_value={"error": "gateway failure"}):
+            with self.assertRaises(annual.AnnualDateError):
+                annual.fetch_cninfo_market("szsh", "2026-06-30")
+
     def test_effective_appointment_prefers_latest_change(self):
         self.assertEqual(
             annual.effective_appointment(
