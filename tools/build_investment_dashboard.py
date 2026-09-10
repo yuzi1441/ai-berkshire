@@ -5834,6 +5834,10 @@ def build_dashboard(
     }
     board = {
         "schema_version": 7,
+        "data_health": {"annual_report_dates": {
+            key: value for key, value in load_json(data_directory / "annual_report_dates.json", {}).items()
+            if key in {"status", "generated_at", "last_attempt_at", "last_success_at", "freshness", "source_outcomes"}
+        }},
         "generated_at": generated_at,
         "generation_id": generation_id,
         "scope": "individual-stocks-only",

@@ -172,7 +172,7 @@ def fetch_cninfo_market(market: str, report_period: str) -> dict[str, dict[str, 
         method="POST",
     )
     rows = payload.get("prbookinfos") if isinstance(payload, dict) else None
-    if rows is None and isinstance(payload, dict) and int(payload.get("totalRows") or 0) == 0:
+    if rows is None and isinstance(payload, dict) and "totalRows" in payload and int(payload.get("totalRows") or 0) == 0:
         # The next annual appointment table is commonly absent until the
         # exchanges publish it. This is a valid empty schedule, not a source
         # failure.
@@ -267,12 +267,39 @@ def report_period_record(
 
 
 def fetch_period_records(
-    universe: list[dict[str, str]], report_period: str
+    universe: list[dict[str, str]], report_period: str, *, outcomes: list[dict[str, Any]] | None = None
 ) -> list[dict[str, Any]]:
-    eastmoney = fetch_eastmoney_period(report_period)
-    cninfo = fetch_cninfo_market("szsh", report_period)
-    cninfo.update(fetch_cninfo_market("bj", report_period))
-    return [report_period_record(item, report_period, eastmoney, cninfo) for item in universe]
+    sources: dict[str, dict[str, Any]] = {}
+    statuses = {}
+    for name, fetch in (
+        ("eastmoney", lambda: fetch_eastmoney_period(report_period)),
+        ("cninfo_szsh", lambda: fetch_cninfo_market("szsh", report_period)),
+        ("cninfo_bj", lambda: fetch_cninfo_market("bj", report_period)),
+    ):
+        rows, error_text = {}, None
+        for attempt in range(2):
+            try:
+                rows = fetch()
+                error_text = None
+                break
+            except (AnnualDateError, OSError, ValueError) as error:
+                error_text = str(error)
+        sources[name] = rows
+        statuses[name] = {"source": name, "report_period": report_period,
+                          "status": "failed" if error_text else "ok", "error": error_text,
+                          "attempts": attempt + 1, "record_count": len(rows)}
+        if outcomes is not None:
+            outcomes.append(statuses[name])
+    records = []
+    for item in universe:
+        cninfo_name = "cninfo_bj" if item["ticker"].endswith(".BJ") else "cninfo_szsh"
+        record = report_period_record(item, report_period, sources["eastmoney"], sources[cninfo_name])
+        relevant = [statuses["eastmoney"], statuses[cninfo_name]]
+        failures = sum(row["status"] == "failed" for row in relevant)
+        record["acquisition_status"] = "failed" if failures == 2 else "partial" if failures else "ok"
+        record["source_outcomes"] = relevant
+        records.append(record)
+    return records
 
 
 def period_key_for(year: int, suffix: str) -> str:
@@ -287,8 +314,14 @@ def build_snapshot(repo_root: Path, as_of: date) -> dict[str, Any]:
     universe = board_universe(repo_root / "data" / "investment-dashboard" / "decision_board.json")
     latest_period = date(as_of.year - 1, 12, 31).isoformat()
     next_period = date(as_of.year, 12, 31).isoformat()
-    latest_records = fetch_period_records(universe, latest_period)
-    next_records = fetch_period_records(universe, next_period)
+    outcomes: list[dict[str, Any]] = []
+    period_cache: dict[str, list[dict[str, Any]]] = {}
+    def records_for(period: str) -> list[dict[str, Any]]:
+        if period not in period_cache:
+            period_cache[period] = fetch_period_records(universe, period, outcomes=outcomes)
+        return period_cache[period]
+    latest_records = records_for(latest_period)
+    next_records = records_for(next_period)
     next_by_ticker = {item["ticker"]: item for item in next_records}
 
     records: list[dict[str, Any]] = []
@@ -315,13 +348,16 @@ def build_snapshot(repo_root: Path, as_of: date) -> dict[str, Any]:
                 "next_actual_disclosure_date": upcoming["actual_disclosure_date"],
                 "next_status": upcoming["date_status"],
                 "sources": latest["sources"],
+                "latest_acquisition_status": latest["acquisition_status"],
+                "next_acquisition_status": upcoming["acquisition_status"],
+                "acquisition_status": "failed" if latest["acquisition_status"] == upcoming["acquisition_status"] == "failed" else "partial" if "failed" in {latest["acquisition_status"], upcoming["acquisition_status"]} or "partial" in {latest["acquisition_status"], upcoming["acquisition_status"]} else "ok",
             }
         )
 
     report_periods: list[dict[str, Any]] = []
     for suffix, month_day, label in REPORT_PERIOD_SPECS:
         report_period = f"{as_of.year}-{month_day}"
-        period_records = fetch_period_records(universe, report_period)
+        period_records = records_for(report_period)
         report_periods.append(
             {
                 "period_key": period_key_for(as_of.year, suffix),
@@ -346,9 +382,43 @@ def build_snapshot(repo_root: Path, as_of: date) -> dict[str, Any]:
         "missing_latest_actual_count": missing_latest,
         "next_scheduled_count": next_scheduled_count,
         "source_policy": "Eastmoney primary appointment table + CNINFO independent cross-check; no estimated dates",
+        "status": "failed" if all(item["status"] == "failed" for item in outcomes) else "partial" if any(item["status"] == "failed" for item in outcomes) else "ok",
+        "source_outcomes": outcomes,
         "records": records,
         "report_periods": report_periods,
     }
+
+
+def retain_last_success(payload: dict[str, Any], previous: dict[str, Any]) -> dict[str, Any]:
+    attempted_at = payload["generated_at"]
+    if payload["status"] == "failed" and previous.get("records"):
+        return {**previous, "status": "failed", "last_attempt_at": attempted_at,
+                "source_outcomes": payload["source_outcomes"],
+                "last_success_at": previous.get("last_success_at") or previous.get("generated_at"),
+                "freshness": "stale"}
+    payload["last_attempt_at"] = attempted_at
+    payload["last_success_at"] = attempted_at if payload["status"] != "failed" else previous.get("last_success_at")
+    old_annual = {row["ticker"]: row for row in previous.get("records", [])}
+    for row in payload.get("records", []):
+        old = old_annual.get(row["ticker"], {})
+        for prefix in ("latest_", "next_"):
+            if row.get(prefix + "acquisition_status") != "failed" or row.get(prefix + "report_period") != old.get(prefix + "report_period"):
+                continue
+            for key, value in old.items():
+                if key.startswith(prefix) and key != prefix + "acquisition_status":
+                    row[key] = value
+            row[prefix + "freshness"] = "stale"
+            row[prefix + "last_success_at"] = old.get(prefix + "last_success_at") or previous.get("last_success_at") or previous.get("generated_at")
+    old_periods = {row["report_period"]: row for row in previous.get("report_periods", [])}
+    for period in payload.get("report_periods", []):
+        old_rows = {row["ticker"]: row for row in old_periods.get(period["report_period"], {}).get("records", [])}
+        period["records"] = [
+            {**old_rows[row["ticker"]], "acquisition_status": "failed", "freshness": "stale",
+             "source_outcomes": row["source_outcomes"], "last_attempt_at": attempted_at}
+            if row["acquisition_status"] == "failed" and row["ticker"] in old_rows else row
+            for row in period["records"]
+        ]
+    return payload
 
 
 def main() -> int:
@@ -364,7 +434,8 @@ def main() -> int:
     repo_root = arguments.repo_root.resolve()
     output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
     try:
-        payload = build_snapshot(repo_root, arguments.as_of)
+        previous = json.loads(output.read_text(encoding="utf-8")) if output.is_file() else {}
+        payload = retain_last_success(build_snapshot(repo_root, arguments.as_of), previous)
         write_json(output.resolve(), payload)
         site_output = repo_root / "site" / "data" / "annual_report_dates.json"
         write_json(site_output, payload)
@@ -376,7 +447,7 @@ def main() -> int:
         f"latest missing {payload['missing_latest_actual_count']}, "
         f"next scheduled {payload['next_scheduled_count']}."
     )
-    return 0
+    return 2 if payload["status"] == "failed" else 0
 
 
 if __name__ == "__main__":
