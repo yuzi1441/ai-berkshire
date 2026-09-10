@@ -151,6 +151,9 @@ def price_context(policy: dict[str, Any], quote: dict[str, Any] | None, *, evalu
         if in_rule:
             matched.append(
                 {
+                    "rule_id": rule.get("rule_id"),
+                    "min": minimum,
+                    "ceiling": ceiling,
                     "action_kind": rule.get("action_kind"),
                     "action": clean_text(rule.get("action"), 80),
                     "price_range": clean_text(rule.get("price_range"), 80),
@@ -275,6 +278,38 @@ def compact_checklist(checklist: dict[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def current_decision_facts(repo_root: Path, decision: dict[str, Any]) -> dict[str, Any]:
+    relative = "data/investment-dashboard/company_state.json"
+    payload = load_json(repo_root / relative, {})
+    ticker = str(decision.get("ticker") or "").upper()
+    matches = [row for row in payload.get("companies", []) if str(row.get("ticker") or "").upper() == ticker]
+    if not matches:
+        return {"status": "missing", "source": relative, "ticker": ticker}
+    if len(matches) != 1:
+        raise ConsistencyReviewError(f"duplicate current state for {ticker}")
+    current = matches[0]
+    report_path = repo_root / str(decision.get("report_path") or "")
+    from source_hash import canonical_file_sha256
+    if current.get("canonical_report_sha256") != canonical_file_sha256(report_path):
+        raise ConsistencyReviewError(f"current state/report baseline mismatch for {ticker}")
+    return {
+        "status": "current", "source": relative, "ticker": ticker,
+        "projection_generated_at": payload.get("generated_at"),
+        **{key: current.get(key) for key in (
+            "canonical_report", "canonical_report_sha256", "lifecycle", "next_action",
+            "action_guidance", "drift", "drift_scan", "drift_review", "review_coverage",
+            "light_thesis_signal", "event_radar", "checklist", "manual_disposition",
+        )},
+        "rule_evaluations": [
+            {key: rule.get(key) for key in (
+                "rule_id", "type", "rule_scope", "condition", "status", "active",
+                "needs_review", "action", "evaluation", "source_report", "source_hash",
+            )}
+            for rule in (current.get("decision_rules") or {}).get("rules", [])
+        ],
+    }
+
+
 def build_review_input(
     decision: dict[str, Any],
     *,
@@ -359,6 +394,7 @@ def build_review_input(
         "intraday_30m": compact_intraday(intraday),
         "sentiment": compact_sentiment(sentiment),
         "checklist": compact_checklist(decision.get("checklist")),
+        "current_decision_facts": current_decision_facts(repo_root, decision),
     }
     encoded = json.dumps(facts, ensure_ascii=False, sort_keys=True).encode("utf-8")
     facts["input_sha256"] = hashlib.sha256(encoded).hexdigest()
