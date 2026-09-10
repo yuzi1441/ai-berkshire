@@ -251,7 +251,7 @@ run_daily() {
         --as-of "${AS_OF}" \
         --attempts 4 \
         --force \
-        --output "${REPO_ROOT}/data/investment-dashboard/technical_latest.json" \
+        --output "${REPO_ROOT}/data/investment-dashboard/technical_daily_snapshot.json" \
         --manifest "${REPO_ROOT}/logs/technical-analysis-batch-ah-${AS_OF//-/}.json"
     status_phase market_snapshot "刷新 A/H 收盘行情"
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股 --force

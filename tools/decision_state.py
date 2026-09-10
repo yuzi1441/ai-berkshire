@@ -841,6 +841,8 @@ def normalize_technical_state(raw: dict[str, Any] | None) -> dict[str, Any]:
         freshness = "fresh" if (date.fromisoformat(str(requested_cutoff)) - date.fromisoformat(str(data_cutoff))).days <= 7 else "stale"
     except (TypeError, ValueError):
         pass
+    if raw.get("freshness") == "stale" or raw_status == "stale":
+        freshness = "stale"
     if raw_status not in {"ready", "ok"}:
         return {
             "trend": "UNKNOWN",
@@ -1021,7 +1023,15 @@ def _load_drift_scan(data_directory: Path, repo_root: Path) -> dict[str, dict[st
 
 
 def _load_technical_latest(data_directory: Path) -> dict[str, dict[str, Any]]:
-    payload = load_json(data_directory / TECHNICAL_RELATIVE.name, {})
+    path = data_directory / "technical_daily_snapshot.json"
+    payload = load_json(path, {})
+    if not payload:
+        legacy = load_json(data_directory / TECHNICAL_RELATIVE.name, {})
+        # The old path mixed raw acquisition and rebuildable projections.
+        # Only an actual batch output is eligible as acquisition authority.
+        payload = legacy if legacy.get("output_mode") == "structured_latest" else {}
+    if payload and payload.get("schema_version") != 1:
+        raise ValueError("unsupported daily technical snapshot schema")
     values = (payload.get("companies") or []) if isinstance(payload, dict) else []
     return {
         compact(item.get("ticker")).upper(): item
