@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 import build_investment_dashboard  # noqa: E402
 import decision_state  # noqa: E402
 import drift_provenance  # noqa: E402
+import drift_scan_state  # noqa: E402
 import post_buy_tracking  # noqa: E402
 import rule_lifecycle  # noqa: E402
 
@@ -35,6 +36,67 @@ def _load(path: Path) -> dict:
 
 def _save(path: Path, payload: dict) -> None:
     decision_state.write_json(path, payload)
+
+
+def _watch_scan_checkpoint(
+    root: Path,
+    data: Path,
+    company: dict,
+    record: dict,
+) -> tuple[Path, dict] | None:
+    """Bind a completed WATCH review to the exact current Drift trigger.
+
+    ``drift_states.json`` stores the conclusion, while
+    ``drift_scan_state.json`` stores the evidence/baseline fingerprint that
+    conclusion covers.  Persisting only the former leaves the checkpoint
+    stale and makes Action Guidance immediately request the same review again.
+    """
+    if record.get("mode") != "watch":
+        return None
+    scan = company.get("drift_scan") or {}
+    trigger_fingerprint = (
+        scan.get("current_trigger_fingerprint")
+        or scan.get("trigger_fingerprint")
+    )
+    baseline_report = company.get("canonical_report")
+    baseline_report_sha256 = company.get("canonical_report_sha256")
+    if not baseline_report or not baseline_report_sha256:
+        raise ValueError("WATCH Drift handoff 缺少当前 canonical report 基线")
+    if not drift_scan_state.is_sha256(trigger_fingerprint):
+        raise ValueError("WATCH Drift handoff 缺少当前 trigger fingerprint")
+
+    path = data / drift_scan_state.RELATIVE_PATH.name
+    payload = _load(path) if path.is_file() else {
+        "schema_version": drift_scan_state.SCHEMA_VERSION,
+        "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+        "description": "Durable WATCH thesis-drift review checkpoints.",
+        "companies": {},
+    }
+    if (
+        payload.get("schema_version") != drift_scan_state.SCHEMA_VERSION
+        or payload.get("trigger_fingerprint_version")
+        != drift_scan_state.FINGERPRINT_VERSION
+        or not isinstance(payload.get("companies"), dict)
+    ):
+        raise ValueError(f"Drift scan checkpoint schema 无法识别: {path}")
+    ticker = str(company.get("ticker") or "").upper()
+    payload["companies"][ticker] = {
+        "ticker": ticker,
+        "company": company.get("company"),
+        "market": company.get("market"),
+        "mode": "watch",
+        "checked_at": record["last_checked"],
+        "result": record["direction"],
+        "baseline_report": baseline_report,
+        "baseline_report_sha256": baseline_report_sha256,
+        "trigger_fingerprint_version": drift_scan_state.FINGERPRINT_VERSION,
+        "trigger_fingerprint": trigger_fingerprint,
+        "source": "thesis-drift-handoff",
+    }
+    errors = drift_scan_state.validate_payload(payload, repo_root=root)
+    if errors:
+        raise ValueError("Drift scan checkpoint 无效: " + "; ".join(errors))
+    return path, payload
 
 
 def _original_thesis_snapshot(
@@ -136,9 +198,24 @@ def main() -> int:
         "facts_sources": sources,
         "mode": args.mode,
     }
+    try:
+        watch_checkpoint = _watch_scan_checkpoint(root, data, company, record)
+    except ValueError as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        return 1
     if args.dry_run:
         original = _original_thesis_snapshot(root, ticker, timestamp=record["last_checked"], write=False) if args.mode == "holding" else None
-        print(json.dumps({"status": "dry_run", "ticker": ticker, "mode": args.mode, "record": record, "original_buy_thesis": original}, ensure_ascii=False, indent=2))
+        print(json.dumps({
+            "status": "dry_run",
+            "ticker": ticker,
+            "mode": args.mode,
+            "record": record,
+            "drift_scan_checkpoint": (
+                watch_checkpoint[1]["companies"][ticker]
+                if watch_checkpoint is not None else None
+            ),
+            "original_buy_thesis": original,
+        }, ensure_ascii=False, indent=2))
         return 0
 
     original = _original_thesis_snapshot(root, ticker, timestamp=record["last_checked"], write=True) if args.mode == "holding" else None
@@ -164,6 +241,8 @@ def main() -> int:
         )
         return 1
     _save(drift_path, payload)
+    if watch_checkpoint is not None:
+        _save(*watch_checkpoint)
     rule_sync = {"status": "not_requested", "reason": "unchanged drift does not mutate Rule content"}
     if args.direction != "unchanged":
         rule_sync = rule_lifecycle.sync_decision_rules(root, tickers=[ticker], write=True, rebuild_dashboard=False)

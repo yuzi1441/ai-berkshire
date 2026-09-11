@@ -713,7 +713,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
             lightInsufficient: filtered({{lightThesis: "insufficient_evidence"}}).length,
             lightMissing: filtered({{lightThesis: "missing"}}).length,
             nearBlocker: filtered({{blocker: "condition_near_trigger"}}),
-            searchAndSkill: filtered({{search: "东方电缆", actionStatus: "skill"}}).map((record) => record.ticker),
+            searchAndManual: filtered({{search: "东方电缆", actionStatus: "manual"}}).map((record) => record.ticker),
             impossible: filtered({{lifecycle: "HOLDING", skill: "thesis-drift"}}).length,
             checklistFail: filtered({{checklist: "FAIL"}}).length,
             formalMajor: filtered({{formalDrift: "major-weakened"}}).length
@@ -750,7 +750,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
                 for record in near_blocker_records
             ),
         )
-        self.assertEqual(payload["searchAndSkill"], ["603606.SH"])
+        self.assertEqual(payload["searchAndManual"], ["603606.SH"])
         self.assertEqual(payload["impossible"], 0)
         self.assertEqual(payload["checklistFail"], expected_checklist_fail)
         self.assertEqual(payload["formalMajor"], expected_formal_major)

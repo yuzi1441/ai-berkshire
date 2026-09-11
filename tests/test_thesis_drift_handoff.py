@@ -27,8 +27,21 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         facts = root / "facts.md"
         facts.write_text("最新事实。\n", encoding="utf-8")
         (data / "company_state.json").write_text(json.dumps({"companies": [{
-            "ticker": "600000.SH", "company": "示例公司", "lifecycle": lifecycle,
+            "ticker": "600000.SH", "company": "示例公司", "market": "A股",
+            "lifecycle": lifecycle,
+            "canonical_report": "reports/示例公司/thesis.md",
+            "canonical_report_sha256": "a" * 64,
+            "drift_scan": {
+                "status": "stale",
+                "trigger_fingerprint": "c" * 64,
+                "current_trigger_fingerprint": "b" * 64,
+            },
         }]}), encoding="utf-8")
+        (data / "drift_scan_state.json").write_text(json.dumps({
+            "schema_version": 1,
+            "trigger_fingerprint_version": 2,
+            "companies": {},
+        }), encoding="utf-8")
         (data / "post_buy_tracking.json").write_text(json.dumps({"schema_version": 1, "positions": {
             "600000.SH": {"company": "示例公司", "ticker": "600000.SH", "market": "A股",
                           "status": "holding", "buy_date": "2026-08-01",
@@ -58,6 +71,11 @@ class ThesisDriftHandoffTests(unittest.TestCase):
         self._run(root, facts, "unchanged", "watch")
         drift = json.loads((root / "data/investment-dashboard/drift_states.json").read_text())
         self.assertEqual(len(drift["companies"]["600000.SH"]["review_history"]), 1)
+        scan = json.loads((root / "data/investment-dashboard/drift_scan_state.json").read_text())
+        checkpoint = scan["companies"]["600000.SH"]
+        self.assertEqual(checkpoint["result"], "unchanged")
+        self.assertEqual(checkpoint["trigger_fingerprint"], "b" * 64)
+        self.assertEqual(checkpoint["baseline_report_sha256"], "a" * 64)
         self.last_sync.assert_not_called()
 
     def test_external_facts_source_is_rejected_before_any_write(self):
