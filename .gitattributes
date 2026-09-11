@@ -7,3 +7,14 @@
 *.css text eol=lf
 *.html text eol=lf
 *.sh text eol=lf
+
+# These historical source captures are byte-preserved CRLF files.  Keep them
+# outside the repository-wide LF conversion so a fresh checkout does not
+# manufacture a false diff.  Normalize them only as an explicit migration.
+research/sources/oriental_elec_2025_annual_sina.txt -text
+research/sources/sec_beone/sina_a_page.html -text
+research/sources/uih_annual_sina.html -text
+research/sources/联影医疗/2025年报_sina.html -text
+research/sources/联影医疗/2025年报_sina_text.txt -text
+research/sources/联影医疗/2026Q1_sina.html -text
+research/sources/联影医疗/2026Q1_sina_text.txt -text
