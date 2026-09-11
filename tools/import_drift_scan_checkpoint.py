@@ -27,6 +27,9 @@ from source_hash import canonical_file_sha256  # noqa: E402
 
 BATCH_ID = "a-share-watch-full-drift-20260903-v2"
 EXPECTED_DISTRIBUTION = {"improved": 17, "unchanged": 40, "weakened": 14, "unknown": 5}
+CANONICAL_ARTIFACT_RELATIVE = Path(
+    "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json"
+)
 
 
 def _load(path: Path, label: str) -> Any:
@@ -73,7 +76,31 @@ def _current_state_by_ticker(root: Path) -> dict[str, dict[str, Any]]:
     }
 
 
+def canonical_artifact_path(root: Path, supplied_path: Path) -> Path:
+    """Resolve duplicate legacy input to the tracked canonical archive.
+
+    The old batch JSON may still exist as a local recovery copy under
+    ``reports/thesis-drift-batch``.  It must never become the durable state
+    reference again, even when a caller passes that legacy path explicitly.
+    """
+    canonical = (root / CANONICAL_ARTIFACT_RELATIVE).resolve()
+    supplied = supplied_path.resolve()
+    if supplied == canonical:
+        return canonical
+    if (
+        supplied.is_file()
+        and canonical.is_file()
+        and canonical_file_sha256(supplied) == canonical_file_sha256(canonical)
+    ):
+        return canonical
+    raise ValueError(
+        "drift audit artifact must be the tracked canonical archive: "
+        f"{CANONICAL_ARTIFACT_RELATIVE.as_posix()}"
+    )
+
+
 def build_checkpoint(root: Path, artifact_path: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+    artifact_path = canonical_artifact_path(root, artifact_path)
     artifact = _load(artifact_path, "drift audit artifact")
     if not isinstance(artifact, dict):
         raise ValueError("drift audit artifact must be an object")
@@ -197,7 +224,7 @@ def main() -> int:
     parser.add_argument(
         "--artifact",
         type=Path,
-        default=ROOT / "reports/thesis-drift-batch/A股-WATCH-全量论文漂移检测-20260903-v2.json",
+        default=ROOT / CANONICAL_ARTIFACT_RELATIVE,
     )
     parser.add_argument("--write", action="store_true", help="write drift_scan_state.json after validation")
     args = parser.parse_args()

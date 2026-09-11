@@ -1173,6 +1173,37 @@ class InvestmentDashboardTests(unittest.TestCase):
                 {record["report_path"] for record in catalog["records"]},
             )
 
+    def test_excludes_thesis_drift_batch_staging_from_catalog_and_board(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            (root / "reports" / "示例公司" / "main.md").write_text(
+                "# 示例公司研究\n\n数据截止：2026-07-10\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察，等待验证。\n",
+                encoding="utf-8",
+            )
+            batch = root / "reports" / "thesis-drift-batch" / "companies"
+            batch.mkdir(parents=True)
+            (batch / "600000.SH-WATCH-drift-20260903.md").write_text(
+                "# 批量论文漂移\n\n数据截止：2026-09-03\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n可分批买入，9-10 元。\n",
+                encoding="utf-8",
+            )
+
+            board = dashboard.build_dashboard(root, legacy_mode=True)
+            catalog = json.loads(
+                (root / "data" / "investment-dashboard" / "reports_catalog.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+
+            self.assertEqual(board["decision_count"], 1)
+            self.assertEqual(catalog["record_count"], 1)
+            self.assertNotIn(
+                "reports/thesis-drift-batch/companies/600000.SH-WATCH-drift-20260903.md",
+                {record["report_path"] for record in catalog["records"]},
+            )
+
     def test_excludes_industry_and_person_folders_from_board(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

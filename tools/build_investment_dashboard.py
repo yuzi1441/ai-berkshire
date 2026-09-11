@@ -41,7 +41,18 @@ DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"
 SITE_DIRECTORY = ROOT / "site"
 REGISTRY_PATH = ROOT / "data" / "report-routing" / "company_registry.json"
 OVERRIDES_PATH = DATA_DIRECTORY / "overrides.json"
-SKIPPED_PATH_PARTS = {"00-index", "_inbox", "_scripts", "_templates", "sources", "source_docs"}
+# Batch/staging reports are retained locally for review but are not formal
+# dashboard/catalog assets.  Formal drift evidence lives under
+# ``research/sources/thesis-drift-batch`` instead.
+SKIPPED_PATH_PARTS = {
+    "00-index",
+    "_inbox",
+    "_scripts",
+    "_templates",
+    "sources",
+    "source_docs",
+    "thesis-drift-batch",
+}
 TOPIC_DIRECTORIES = {
     "AI产业研究",
     "AI高速互联PCB材料",
@@ -364,6 +375,9 @@ def extract_technical_lights(lines: list[str]) -> list[dict[str, str]]:
 
 def technical_snapshot(report_path: Path, repo_root: Path, registry: list[dict[str, Any]]) -> dict[str, Any] | None:
     """Read a technical report as an auxiliary snapshot, never a decision candidate."""
+    relative = report_path.relative_to(repo_root)
+    if any(part in SKIPPED_PATH_PARTS for part in relative.parts):
+        return None
     text = report_path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
     frontmatter = parse_frontmatter(lines)

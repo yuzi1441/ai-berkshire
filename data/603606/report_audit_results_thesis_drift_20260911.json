@@ -1,0 +1,112 @@
+[
+  {
+    "id": 2,
+    "label": "旧基线 · 对象",
+    "reported_value": 68916.0,
+    "unit": "",
+    "fetched_value": 68916.0,
+    "fetched_source": "Git 历史提交 fc68916a 中的提交标识片段；审计器将哈希中的数字误识别为数据点",
+    "fetched_value2": 68916.0,
+    "fetched_source2": "git show fc68916a:reports/东方电缆/东方电缆-thesis-tracker-20260805.md 可复核"
+  },
+  {
+    "id": 10,
+    "label": "核心假设清单 · 旧判断",
+    "reported_value": 91.28,
+    "unit": "亿元",
+    "fetched_value": 91.28,
+    "fetched_source": "东方电缆 2026 年半年度报告，截至 2026-08-03 海缆与高压电缆订单 91.28 亿元",
+    "fetched_value2": 91.28,
+    "fetched_source2": "2026-08-05 投资论文追踪报告从公司半年报独立摘录"
+  },
+  {
+    "id": 15,
+    "label": "绿色输电设施 · 中标金额",
+    "reported_value": 15.2,
+    "unit": "亿元",
+    "fetched_value": 15.2,
+    "fetched_source": "上交所 2026-08-25《东方电缆关于近期中标相关项目的提示性公告》",
+    "fetched_value2": 15.2,
+    "fetched_source2": "东方财富公告镜像 AN202608241828366318 全文"
+  },
+  {
+    "id": 25,
+    "label": "股价 · 变化解释",
+    "reported_value": -8.8,
+    "unit": "%",
+    "fetched_value": -8.8,
+    "fetched_source": "financial_rigor Decimal 复算：(35.65 / 39.09 - 1) × 100 = -8.8002%",
+    "fetched_value2": -8.8,
+    "fetched_source2": "腾讯 2026-09-11 收盘价 35.65 元与 2026-08-05 追踪报告价格 39.09 元复算"
+  },
+  {
+    "id": 24,
+    "label": "股价 · 2026-09-11",
+    "reported_value": 35.65,
+    "unit": "",
+    "fetched_value": 35.65,
+    "fetched_source": "腾讯行情 sh603606，2026-09-11 收盘 35.65 元",
+    "fetched_value2": 35.65,
+    "fetched_source2": "东方财富行情 f43=3565，2026-09-11 收盘 35.65 元；新浪行情同值"
+  },
+  {
+    "id": 26,
+    "label": "市值 · 2026-08-05",
+    "reported_value": 322.42,
+    "unit": "亿元",
+    "fetched_value": 322.42,
+    "fetched_source": "financial_rigor Decimal 复算：39.09 × 824,808,488 / 1亿 = 322.4176 亿元",
+    "fetched_value2": 322.42,
+    "fetched_source2": "2026-08-05 投资论文追踪报告行情快照"
+  },
+  {
+    "id": 34,
+    "label": "PB · 2026-09-11",
+    "reported_value": 3.48,
+    "unit": "x",
+    "fetched_value": 3.48,
+    "fetched_source": "financial_rigor verify-valuation：35.65 / 10.2527 = 3.4771x",
+    "fetched_value2": 3.48,
+    "fetched_source2": "东方财富行情 PB 字段 f167=348，即 3.48x"
+  },
+  {
+    "id": 38,
+    "label": "FCF Yield · 2026-08-05",
+    "reported_value": 1.05,
+    "unit": "%",
+    "fetched_value": 1.05,
+    "fetched_source": "financial_rigor Decimal 复算：1 / 95.31 × 100 = 1.0492%",
+    "fetched_value2": 1.05,
+    "fetched_source2": "2026-08-05 论文追踪 P/FCF 95.31x 的倒数"
+  },
+  {
+    "id": 47,
+    "label": "悲观 · 第三年目标价",
+    "reported_value": 24.8,
+    "unit": "",
+    "fetched_value": 24.8,
+    "fetched_source": "financial_rigor three-scenario 输出：悲观 0% 增长、15x PE，第三年目标价 24.8 元",
+    "fetched_value2": 24.8,
+    "fetched_source2": "1.6528 × 15 = 24.792 元，按表格精度显示 24.80 元"
+  },
+  {
+    "id": 49,
+    "label": "悲观 · 相对 35.65 元",
+    "reported_value": -46.28,
+    "unit": "%",
+    "fetched_value": -46.28,
+    "fetched_source": "financial_rigor Decimal 复算：(19.15 / 35.65 - 1) × 100 = -46.2833%",
+    "fetched_value2": -46.28,
+    "fetched_source2": "悲观折现值 19.15 元与三源收盘价 35.65 元交叉复算"
+  },
+  {
+    "id": 52,
+    "label": "腾讯、新浪、东方财富收盘行情",
+    "reported_value": 2026.0,
+    "unit": "",
+    "fetched_value": 2026.0,
+    "fetched_source": "行情日期 2026-09-11 中的年份；审计器将年份误识别为数据点",
+    "fetched_value2": 2026.0,
+    "fetched_source2": "腾讯行情时间戳 20260911160310 与新浪行情日期 2026-09-11"
+  }
+]

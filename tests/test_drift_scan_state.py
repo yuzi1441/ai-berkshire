@@ -11,10 +11,31 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import decision_state
 import drift_scan_state
+import import_drift_scan_checkpoint as checkpoint
 from source_hash import canonical_file_sha256
 
 
 class DriftScanStateTests(unittest.TestCase):
+    def test_duplicate_checkpoint_input_resolves_to_tracked_canonical_archive(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            canonical = root / checkpoint.CANONICAL_ARTIFACT_RELATIVE
+            canonical.parent.mkdir(parents=True)
+            canonical.write_text('{"canonical": true}\n', encoding="utf-8")
+            legacy = root / "reports" / "thesis-drift-batch" / "legacy.json"
+            legacy.parent.mkdir(parents=True)
+            legacy.write_text('{"canonical": true}\n', encoding="utf-8")
+
+            self.assertEqual(
+                checkpoint.canonical_artifact_path(root, legacy), canonical.resolve()
+            )
+
+    def test_checkpoint_canonical_archive_is_under_research_sources(self):
+        self.assertEqual(
+            checkpoint.CANONICAL_ARTIFACT_RELATIVE.as_posix(),
+            "research/sources/thesis-drift-batch/2026-09-03-watch-drift-v2.json",
+        )
+
     def test_drift_review_audit_is_independent_of_build_timestamp(self):
         companies = [{
             "company": "示例公司",
