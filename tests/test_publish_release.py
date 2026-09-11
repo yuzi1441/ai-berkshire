@@ -22,6 +22,8 @@ PRESERVED_RUNTIME_FILES = (
     "drift_states.json",
     "rule_lifecycle.json",
     "rule_change_log.json",
+    "technical_latest.json",
+    "technical_daily_snapshot.json",
 )
 
 
@@ -98,6 +100,8 @@ class PublishReleaseTests(unittest.TestCase):
             old_data.mkdir(parents=True)
             old_release.joinpath(".source-sha").write_text("old-source-sha\n", encoding="utf-8")
             markers = {
+                "technical_daily_snapshot.json": {"schema_version": 1, "companies": [{"ticker": "T", "status": "ready", "data_cutoff": "2026-09-09", "analysis": {"momentum": {"rsi14": 45}}}]},
+                "technical_latest.json": {"schema_version": 1, "companies": [{"ticker": "T", "status": "ready", "data_cutoff": "2026-09-09", "analysis": {"momentum": {"rsi14": 45}}}]},
                 "post_buy_tracking.json": {"schema_version": 1, "positions": {"T": {"status": "holding", "marker": "old"}}},
                 "original_buy_theses.json": {"schema_version": 2, "cycles": {"T:one": {"position_status": "holding", "marker": "old"}}, "active_position_ids": {"T": "T:one"}},
                 "drift_states.json": {"schema_version": 1, "companies": {"T": {"review_history": [{"marker": "old"}]}}},

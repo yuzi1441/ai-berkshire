@@ -635,6 +635,14 @@ function renderTopMeta() {
   const total = stateRecords().length;
   const ruleCount = [...state.rulePackages.values()].reduce((sum, pack) => sum + (Array.isArray(pack?.rules) ? pack.rules.length : 0), 0);
   els.datasetSummary.textContent = `${total} 家公司 · ${ruleCount} 条规则`;
+  const annualHealth = state.board?.data_health?.annual_report_dates || {};
+  if (["partial", "failed"].includes(annualHealth.status)) {
+    const healthLabel = annualHealth.status === "failed" ? "更新失败，保留历史" : "部分来源可用";
+    els.datasetSummary.textContent += ` · 财报日期${healthLabel}（成功 ${formatDateTime(annualHealth.last_success_at)}；尝试 ${formatDateTime(annualHealth.last_attempt_at)}）`;
+  }
+  els.datasetSummary.title = (annualHealth.source_outcomes || [])
+    .filter((item) => item.status === "failed")
+    .map((item) => `${item.source} ${item.report_period}: ${item.error || "获取失败"}`).join("\n");
   const quoteUniverse = stateRecords().filter((record) => ["A股", "港股"].includes(record.market));
   const quoteCount = quoteUniverse.filter((record) => state.quotes.has(record.ticker)).length;
   const quoteTotal = quoteUniverse.length;
@@ -1452,7 +1460,11 @@ async function submitDisposition() {
     if (!response.ok) throw new Error(payload.error || `保存失败（${response.status}）`);
     const overlay = payload.resolved_current_task;
     const current = currentRecord(pending.ticker);
-    if (current && overlay) state.companyState.set(pending.ticker, { ...current, ...overlay });
+    if (current && overlay && dispositionOverlayMatches(current, overlay)) {
+      state.companyState.set(pending.ticker, { ...current, ...overlay });
+    } else {
+      await loadData({ silent: true });
+    }
     els.dispositionDialog.close();
     state.pendingDisposition = null;
     renderAll();
@@ -1499,12 +1511,17 @@ async function loadDispositionAuthority() {
   }
 }
 
+function dispositionOverlayMatches(current, overlay) {
+  const fingerprint = current?.manual_disposition?.disposition_target_fingerprint;
+  return Boolean(fingerprint && fingerprint === overlay?.manual_disposition?.disposition_target_fingerprint);
+}
+
 function applyDispositionAuthority(result) {
   state.dispositionAccess = result.authorized === true;
   state.dispositionAuthority = result.payload;
   for (const overlay of result.payload?.resolved_companies || []) {
     const current = state.companyState.get(overlay.ticker);
-    if (!current) continue;
+    if (!current || !dispositionOverlayMatches(current, overlay)) continue;
     state.companyState.set(overlay.ticker, { ...current, ...overlay });
   }
 }

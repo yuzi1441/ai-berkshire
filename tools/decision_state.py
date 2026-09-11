@@ -14,6 +14,7 @@ import hashlib
 import json
 import re
 import copy
+import math
 from datetime import date, datetime, time
 from pathlib import Path
 from typing import Any, Iterable
@@ -406,9 +407,21 @@ def _quote_price(quote: dict[str, Any] | None) -> float | None:
     for key in ("price", "latest_price", "close", "last", "current_price"):
         try:
             if quote.get(key) is not None:
-                return float(quote[key])
+                value = float(quote[key])
+                return value if math.isfinite(value) and value > 0 else None
         except (TypeError, ValueError):
             continue
+    return None
+
+
+def quote_observed_at(quote: dict[str, Any]) -> datetime | None:
+    """Provider observation time, never the time an old snapshot was rebuilt."""
+    value = compact(quote.get("provider_timestamp"))
+    for pattern in ("%Y%m%d%H%M%S", "%Y/%m/%d %H:%M:%S"):
+        try:
+            return datetime.strptime(value, pattern).replace(tzinfo=SHANGHAI_TIMEZONE)
+        except ValueError:
+            pass
     return None
 
 
@@ -440,6 +453,14 @@ def _quote_trust(quote: dict[str, Any] | None, evaluated_at: datetime) -> tuple[
         return False, "quote_date_missing"
     if _market_is_open(market, evaluated_at) and data_cutoff != evaluated_at.astimezone(SHANGHAI_TIMEZONE).date().isoformat():
         return False, "historical_close_during_trading_session"
+    observed_at = quote_observed_at(quote)
+    if observed_at is None:
+        return False, "quote_timestamp_missing"
+    age_minutes = (evaluated_at - observed_at).total_seconds() / 60
+    if age_minutes < -2:
+        return False, "quote_timestamp_in_future"
+    if _market_is_open(market, evaluated_at) and age_minutes > 10:
+        return False, "quote_stale_during_trading_session"
     return True, "quote_current_for_market_session"
 
 
@@ -820,6 +841,8 @@ def normalize_technical_state(raw: dict[str, Any] | None) -> dict[str, Any]:
         freshness = "fresh" if (date.fromisoformat(str(requested_cutoff)) - date.fromisoformat(str(data_cutoff))).days <= 7 else "stale"
     except (TypeError, ValueError):
         pass
+    if raw.get("freshness") == "stale" or raw_status == "stale":
+        freshness = "stale"
     if raw_status not in {"ready", "ok"}:
         return {
             "trend": "UNKNOWN",
@@ -1000,7 +1023,15 @@ def _load_drift_scan(data_directory: Path, repo_root: Path) -> dict[str, dict[st
 
 
 def _load_technical_latest(data_directory: Path) -> dict[str, dict[str, Any]]:
-    payload = load_json(data_directory / TECHNICAL_RELATIVE.name, {})
+    path = data_directory / "technical_daily_snapshot.json"
+    payload = load_json(path, {})
+    if not payload:
+        legacy = load_json(data_directory / TECHNICAL_RELATIVE.name, {})
+        # The old path mixed raw acquisition and rebuildable projections.
+        # Only an actual batch output is eligible as acquisition authority.
+        payload = legacy if legacy.get("output_mode") == "structured_latest" else {}
+    if payload and payload.get("schema_version") != 1:
+        raise ValueError("unsupported daily technical snapshot schema")
     values = (payload.get("companies") or []) if isinstance(payload, dict) else []
     return {
         compact(item.get("ticker")).upper(): item
@@ -1104,6 +1135,13 @@ def _next_action(
     drift_scan: dict[str, Any] | None = None,
 ) -> str:
     event_state = compact(event.get("state")).lower()
+    # A prior weakening result covers only its own evidence, not a later event.
+    covered_event = (
+        compact((drift_scan or {}).get("status")).lower() == "current"
+        and compact((drift_scan or {}).get("result")).lower() in {"improved", "unchanged", "weakened"}
+    )
+    if lifecycle != "EXITED" and event_state in {"important", "critical"} and event.get("thesis_relevant") and not covered_event:
+        return "run_drift"
     redlines = _triggered_redlines(rules)
     if any(compact(rule.get("action")).lower() == "run_drift" for rule in redlines):
         return "run_drift"
@@ -1140,13 +1178,7 @@ def _next_action(
         return "confirm_purchase"
     if lifecycle == "PRE_BUY":
         return "run_checklist"
-    if any(
-        rule.get("status") == "triggered"
-        and rule.get("active", True) is not False
-        and rule.get("type") not in {"PRICE", "PRICE_RANGE"}
-        and compact(rule.get("action")).lower() in {"run_checklist", "review_decision", "confirm_purchase"}
-        for rule in rules
-    ):
+    if any(rule_can_promote_pre_buy(rule) for rule in rules):
         return "run_checklist"
     if any(rule.get("status") == "near_trigger" for rule in rules if rule.get("type") in {"PRICE", "PRICE_RANGE"}):
         return "price_near_trigger"
@@ -1239,7 +1271,10 @@ def derive_review_coverage(
     )
     reviewed_at = _parse_iso_datetime(manual.get("reviewed_at"))
     drift_checked_at = _parse_iso_datetime(drift.get("last_checked"))
-    formal_drift_fingerprint = compact((drift_scan or {}).get("trigger_fingerprint"))
+    reviewed_drift_fingerprint = compact((drift_scan or {}).get("trigger_fingerprint"))
+    formal_drift_fingerprint = compact((drift_scan or {}).get("current_trigger_fingerprint"))
+    if not formal_drift_fingerprint and (drift_scan or {}).get("status") != "stale":
+        formal_drift_fingerprint = reviewed_drift_fingerprint
     resolved_drift_fingerprint = compact(
         manual.get("resolved_drift_trigger_fingerprint")
     )
@@ -1286,6 +1321,8 @@ def derive_review_coverage(
             drift_resolution = "manual_review_missing_drift_binding"
         elif resolved_drift_fingerprint != formal_drift_fingerprint:
             drift_resolution = "manual_review_drift_binding_mismatch"
+        elif (drift_scan or {}).get("status") == "stale":
+            drift_resolution = "formal_review_no_longer_covers_current_trigger"
         else:
             drift_resolution = "resolved_by_current_manual_review"
     checklist_status = compact(checklist.get("status")).upper() or "UNKNOWN"
@@ -1300,6 +1337,8 @@ def derive_review_coverage(
     )
     return {
         "formal_drift": {
+            "reviewed_trigger_fingerprint": reviewed_drift_fingerprint or None,
+            "current_trigger_fingerprint": formal_drift_fingerprint or None,
             "status": compact((drift_scan or {}).get("status")).lower() or "missing",
             "result": compact((drift_scan or {}).get("result")).lower() or None,
             "last_checked": drift.get("last_checked"),
@@ -1383,6 +1422,17 @@ def derive_action_guidance(
             "completion_target": completion_target,
         }
 
+    # Resolve uncovered material events before historical weakening or price
+    # redlines can turn this into ordinary monitoring.
+    if lifecycle != "EXITED" and next_action == "run_drift" and drift_eligible and compact(event.get("state")).lower() in {"important", "critical"} and event.get("thesis_relevant"):
+        return guidance(
+            "holding_material_event" if lifecycle == "HOLDING" else "thesis_review_required",
+            "新的重要事件尚未被当前正式投资逻辑复核覆盖",
+            "review_investment_thesis", "复核新事件对投资逻辑的影响",
+            ["thesis-drift"], "旧复核与旧人工处置不能覆盖新事实",
+            "urgent" if lifecycle == "HOLDING" else "normal", True,
+            "复核当前事件并记录结果及其覆盖的证据",
+        )
     redline = _guidance_rule(rules, statuses={"triggered"}, scope="redline")
     if redline is not None:
         condition = compact(redline.get("condition")) or "失效条件"

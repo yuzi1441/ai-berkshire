@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import tempfile
 import re
 import sys
 import time
@@ -150,6 +152,7 @@ def generate_one(
         )
         technical.write_output(destination, content, force=force)
     quality = result["data_quality"]
+    guidance = technical.decision_snapshot(result, fundamental_bands)
     return {
         "company": company,
         "ticker": ticker,
@@ -161,6 +164,14 @@ def generate_one(
         "requested_cutoff": result["requested_cutoff"],
         "data_cutoff": result["data_cutoff"],
         "technical_state": result["technical_state"],
+        "state": result["technical_state"],
+        "market": market,
+        "latest_price": result["latest"]["close"],
+        "observation_zone": technical.display_zone(guidance["technical_zone"]),
+        "combined_candidate_zone": technical.display_intersections(guidance["intersections"], result["latest"].get("currency") or ""),
+        "valid_buy_candidate": guidance["answer"],
+        "lights": guidance["lights"],
+        "analysis": result,
         "publishable": bool(quality["publishable"]),
         "confidence": quality["confidence"],
         "cross_check": result["cross_check"].get("status"),
@@ -171,7 +182,42 @@ def generate_one(
 
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, delete=False) as handle:
+        temporary = Path(handle.name)
+        try:
+            handle.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        except BaseException:
+            temporary.unlink(missing_ok=True)
+            raise
+    try:
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def carry_forward(payload: dict[str, Any], previous: dict[str, Any]) -> dict[str, Any]:
+    """Keep actual success dates; failures never become fresh successful rows."""
+    if previous and previous.get("schema_version") != 1:
+        raise ValueError("unsupported previous technical snapshot schema")
+    previous_rows = {row["ticker"]: row for row in previous.get("companies", []) if isinstance(row, dict) and row.get("ticker")}
+    rows = dict(previous_rows)
+    attempted_at = payload["generated_at"]
+    for item in payload["results"]:
+        rows[item["ticker"]] = dict(item, last_attempt_at=attempted_at, last_success_at=attempted_at)
+    for failure in payload["failures"]:
+        ticker = failure["ticker"]
+        previous_row = previous_rows.get(ticker, {})
+        rows[ticker] = dict(previous_row, ticker=ticker, company=failure["company"],
+                            status="stale" if previous_row else failure["status"],
+                            freshness="stale" if previous_row else "unknown",
+                            last_attempt_at=attempted_at, last_error=failure["error"],
+                            attempt_status=failure["status"])
+    payload["companies"] = [rows[ticker] for ticker in sorted(rows)]
+    payload["status"] = "partial" if payload["failures"] and payload["results"] else "failed" if payload["failures"] else "ok"
+    payload["last_success_at"] = attempted_at if payload["results"] else previous.get("last_success_at")
+    return payload
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -196,7 +242,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--output",
         type=Path,
-        default=ROOT / "data" / "investment-dashboard" / "technical_latest.json",
+        default=ROOT / "data" / "investment-dashboard" / "technical_daily_snapshot.json",
         help="structured daily output path",
     )
     parser.add_argument("--limit", type=int)
@@ -260,7 +306,7 @@ def main() -> int:
             failure = {
                 "company": company,
                 "ticker": ticker,
-                "status": "failed",
+                "status": "insufficient_history" if "valid trading rows are required" in str(error) else "failed",
                 "error": str(error),
             }
             failures.append(failure)
@@ -285,16 +331,19 @@ def main() -> int:
         "failures": failures,
     }
     if not arguments.write_reports:
-        payload["companies"] = results
         payload["output_mode"] = "structured_latest"
         output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
+        previous = json.loads(output.read_text(encoding="utf-8")) if output.is_file() else {}
+        payload = carry_forward(payload, previous)
         write_manifest(output, payload)
     write_manifest(manifest_path, payload)
     print(
         f"Completed {len(results)}/{len(decisions)} reports; "
         f"{len(failures)} failed. Manifest: {manifest_path}"
     )
-    return 1 if failures else 0
+    # Per-company failures are explicit in the snapshot. Publish successful
+    # rows and continue the scheduler's quotes/build phases on partial success.
+    return 1 if failures and not results and any(item["status"] == "failed" for item in failures) else 0
 
 
 if __name__ == "__main__":

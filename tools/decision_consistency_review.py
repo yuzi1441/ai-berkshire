@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import build_investment_dashboard as dashboard  # noqa: E402
 import report_judgment  # noqa: E402
+import decision_state  # noqa: E402
 from sentiment_snapshot import LLMConfig, http_json, parse_json_block  # noqa: E402
 
 
@@ -119,12 +120,24 @@ def find_decisions(board_path: Path, ticker: str | None, company: str | None) ->
     return sorted(selected, key=lambda item: (str(item.get("company") or ""), str(item.get("ticker") or "")))
 
 
-def price_context(policy: dict[str, Any], quote: dict[str, Any] | None) -> dict[str, Any]:
+def price_context(policy: dict[str, Any], quote: dict[str, Any] | None, *, evaluated_at: datetime | None = None) -> dict[str, Any]:
     """Evaluate simple price-rule membership locally before asking the model."""
     price = finite_number((quote or {}).get("price"))
     rules = policy.get("price_rules") if isinstance(policy, dict) else []
-    if price is None:
+    if price is None or price <= 0 or (quote or {}).get("snapshot_status") == "preserved_previous":
         return {"status": "no_current_quote", "price": None, "matched_rules": []}
+    if quote and ("provider_timestamp" in quote or "_market_snapshot" in quote):
+        current = dict(quote)
+        observed = decision_state.quote_observed_at(current)
+        current.setdefault("_market_snapshot", {})
+        current.setdefault("market", REVIEW_MARKET)
+        if observed:
+            current.setdefault("data_cutoff", observed.date().isoformat())
+        trusted, reason = decision_state._quote_trust(
+            current, evaluated_at or datetime.now(decision_state.SHANGHAI_TIMEZONE),
+        )
+        if not trusted:
+            return {"status": "no_current_quote", "price": None, "matched_rules": [], "reason": reason}
     matched: list[dict[str, Any]] = []
     ceilings: list[float] = []
     for rule in rules if isinstance(rules, list) else []:
@@ -138,6 +151,9 @@ def price_context(policy: dict[str, Any], quote: dict[str, Any] | None) -> dict[
         if in_rule:
             matched.append(
                 {
+                    "rule_id": rule.get("rule_id"),
+                    "min": minimum,
+                    "ceiling": ceiling,
                     "action_kind": rule.get("action_kind"),
                     "action": clean_text(rule.get("action"), 80),
                     "price_range": clean_text(rule.get("price_range"), 80),
@@ -165,12 +181,17 @@ def compact_technical(technical: dict[str, Any] | None) -> dict[str, Any]:
     technical = technical if isinstance(technical, dict) else {}
     return {
         "status": technical.get("status", "missing"),
-        "state": technical.get("state", "待复核"),
+        "state": technical.get("state") or technical.get("technical_state") or "待复核",
         "data_cutoff": technical.get("data_cutoff"),
         "latest_price": technical.get("latest_price"),
         "observation_zone": technical.get("observation_zone"),
         "combined_candidate_zone": technical.get("combined_candidate_zone"),
         "valid_buy_candidate": technical.get("valid_buy_candidate"),
+        "last_attempt_at": technical.get("last_attempt_at"),
+        "last_success_at": technical.get("last_success_at"),
+        "last_error": technical.get("last_error"),
+        "freshness": technical.get("freshness"),
+        "analysis": technical.get("analysis"),
         "lights": [
             {
                 "dimension": item.get("dimension"),
@@ -253,6 +274,38 @@ def compact_checklist(checklist: dict[str, Any] | None) -> dict[str, Any]:
             }
             for gate in gates
             if isinstance(gate, dict)
+        ],
+    }
+
+
+def current_decision_facts(repo_root: Path, decision: dict[str, Any]) -> dict[str, Any]:
+    relative = "data/investment-dashboard/company_state.json"
+    payload = load_json(repo_root / relative, {})
+    ticker = str(decision.get("ticker") or "").upper()
+    matches = [row for row in payload.get("companies", []) if str(row.get("ticker") or "").upper() == ticker]
+    if not matches:
+        return {"status": "missing", "source": relative, "ticker": ticker}
+    if len(matches) != 1:
+        raise ConsistencyReviewError(f"duplicate current state for {ticker}")
+    current = matches[0]
+    report_path = repo_root / str(decision.get("report_path") or "")
+    from source_hash import canonical_file_sha256
+    if current.get("canonical_report_sha256") != canonical_file_sha256(report_path):
+        raise ConsistencyReviewError(f"current state/report baseline mismatch for {ticker}")
+    return {
+        "status": "current", "source": relative, "ticker": ticker,
+        "projection_generated_at": payload.get("generated_at"),
+        **{key: current.get(key) for key in (
+            "canonical_report", "canonical_report_sha256", "lifecycle", "next_action",
+            "action_guidance", "drift", "drift_scan", "drift_review", "review_coverage",
+            "light_thesis_signal", "event_radar", "checklist", "manual_disposition",
+        )},
+        "rule_evaluations": [
+            {key: rule.get(key) for key in (
+                "rule_id", "type", "rule_scope", "condition", "status", "active",
+                "needs_review", "action", "evaluation", "source_report", "source_hash",
+            )}
+            for rule in (current.get("decision_rules") or {}).get("rules", [])
         ],
     }
 
@@ -341,6 +394,7 @@ def build_review_input(
         "intraday_30m": compact_intraday(intraday),
         "sentiment": compact_sentiment(sentiment),
         "checklist": compact_checklist(decision.get("checklist")),
+        "current_decision_facts": current_decision_facts(repo_root, decision),
     }
     encoded = json.dumps(facts, ensure_ascii=False, sort_keys=True).encode("utf-8")
     facts["input_sha256"] = hashlib.sha256(encoded).hexdigest()

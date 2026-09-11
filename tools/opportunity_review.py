@@ -43,9 +43,9 @@ from sentiment_snapshot import SentimentError, http_json, parse_json_block  # no
 MARKET = "A股"
 SCAN_SCHEMA_VERSION = 2
 DEEP_SCHEMA_VERSION = 1
-OPPORTUNITY_PROMPT_CONTRACT_VERSION = 1
-MATERIAL_TRIGGER_VERSION = 1
-INCREMENTAL_CONTRACT_VERSION = 1
+OPPORTUNITY_PROMPT_CONTRACT_VERSION = 2
+MATERIAL_TRIGGER_VERSION = 2
+INCREMENTAL_CONTRACT_VERSION = 2
 MAX_REUSE_AGE_DAYS = 7
 
 OPENCODE_GO_BASE = "https://opencode.ai/zen/go/v1"
@@ -282,6 +282,7 @@ def build_opportunity_input(
         "current_panel_rule": "只有模型判为当前机会才进入主面板；临近机会单独折叠展示",
         "investor_role": "投资者根据完整材料自行决定买、不买或继续观察",
         "mechanical_gate_warning": "本地价格匹配、Checklist、技术面和情绪均是输入事实，不得机械地充当机会否决器",
+        "risk_authority_boundary": "必须明确讨论当前已确认红线、投资逻辑复核要求与未解决条件。机会只是研究线索，不得覆盖确定性风险状态、授予Checklist资格或推导可以买入。缺失或冲突的当前状态不能当作风险已解除。",
     }
     encoded = json.dumps(facts, ensure_ascii=False, sort_keys=True).encode("utf-8")
     facts["input_sha256"] = hashlib.sha256(encoded).hexdigest()
@@ -454,6 +455,23 @@ def sentiment_material_signature(value: Any) -> dict[str, Any]:
     }
 
 
+def stable_current_facts(value: Any) -> Any:
+    """Ignore refresh clocks, retaining evidence dates, identities and results."""
+    volatile = {"generated_at", "projection_generated_at", "evaluated_at", "evaluation_at",
+                "checked_at", "last_checked", "last_attempt_at", "elapsed_seconds"}
+    if isinstance(value, dict):
+        if value.get("type") in {"PRICE", "PRICE_RANGE"}:
+            value = dict(value)
+            evaluation = value.get("evaluation") or {}
+            # Price movement is already represented by the bounded price
+            # bucket; penny changes must not reopen an otherwise same task.
+            value["evaluation"] = {key: evaluation.get(key) for key in ("result", "reason")}
+        return {key: stable_current_facts(item) for key, item in value.items() if key not in volatile}
+    if isinstance(value, list):
+        return sorted((stable_current_facts(item) for item in value), key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True))
+    return value
+
+
 def material_trigger_snapshot(facts: dict[str, Any], report_hash: str) -> dict[str, Any]:
     primary = facts.get("primary_judgment") if isinstance(facts.get("primary_judgment"), dict) else {}
     policy = facts.get("execution_policy") if isinstance(facts.get("execution_policy"), dict) else {}
@@ -461,6 +479,7 @@ def material_trigger_snapshot(facts: dict[str, Any], report_hash: str) -> dict[s
     return {
         "version": MATERIAL_TRIGGER_VERSION,
         "report_sha256": report_hash,
+        "current_decision_facts": stable_current_facts(facts.get("current_decision_facts")),
         "primary_judgment": {
             key: primary.get(key)
             for key in ("label", "action_kind", "empty_position_action", "trigger_condition", "summary", "artifact_status", "source_matches", "model_consensus")

@@ -14,6 +14,7 @@ import argparse
 from contextlib import contextmanager
 import fcntl
 import json
+import math
 import re
 import sys
 from datetime import datetime, time
@@ -102,7 +103,7 @@ def parse_tencent_payload(payload: str, symbols: dict[str, dict[str, str]]) -> l
             previous_close = float(fields[4])
         except ValueError:
             continue
-        if price <= 0:
+        if not math.isfinite(price) or price <= 0 or not math.isfinite(previous_close):
             continue
         provider_timestamp = next(
             (
