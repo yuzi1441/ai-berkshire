@@ -19,6 +19,7 @@ class FinancialFactsTests(unittest.TestCase):
             "source_identity": "https://example.test/report.pdf", "evidence_date": "2026-08-30",
             "content_sha256": "a" * 64, "checked_at": "2026-09-01", "valid_until": "2026-12-31",
             "baseline_report_sha256": "b" * 64,
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
         }
         value.update(overrides)
         return value
@@ -27,6 +28,7 @@ class FinancialFactsTests(unittest.TestCase):
         return {
             "type": "METRIC", "metric": "gross_margin", "operator": ">=",
             "threshold": "30", "unit": "percent", "period": "2026H1",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
         }
 
     def test_validate_and_resolve_exact_fact(self):

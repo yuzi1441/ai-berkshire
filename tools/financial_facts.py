@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import calendar
 import json
 import math
 import os
@@ -20,6 +21,21 @@ SUPPORTED_METRICS = frozenset({
     "gross_margin", "operating_cash_flow", "revenue_yoy", "net_profit_yoy",
 })
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+DEFINITION_FIELDS = ("metric", "operator", "threshold", "period", "unit", "accounting_basis", "period_basis")
+FACT_ID_FIELDS = ("ticker", "metric", "period", "unit", "accounting_basis", "period_basis")
+
+
+def period_end(value: Any) -> date | None:
+    match = re.fullmatch(r"(20\d{2})(FY|H[12]|Q[1-4])?", str(value))
+    if not match:
+        return None
+    year, suffix = int(match[1]), match[2] or "FY"
+    month = 12 if suffix == "FY" else int(suffix[1]) * (6 if suffix[0] == "H" else 3)
+    return date(year, month, calendar.monthrange(year, month)[1])
+
+
+def definition_complete(rule: dict[str, Any]) -> bool:
+    return all(rule.get(field) not in (None, "") for field in DEFINITION_FIELDS)
 
 
 def empty_payload() -> dict[str, Any]:
@@ -65,7 +81,7 @@ def validate_payload(payload: Any) -> list[str]:
     facts = payload.get("facts")
     if not isinstance(facts, list):
         return errors + ["facts must be a list"]
-    identities: set[tuple[str, str, str, str]] = set()
+    identities: set[tuple[str, ...]] = set()
     for index, fact in enumerate(facts):
         prefix = f"facts[{index}]"
         if not isinstance(fact, dict):
@@ -79,10 +95,14 @@ def validate_payload(payload: Any) -> list[str]:
             errors.append(f"{prefix}.ticker")
         if metric not in SUPPORTED_METRICS:
             errors.append(f"{prefix}.metric")
-        if not period:
+        if period_end(period) is None:
             errors.append(f"{prefix}.period")
         if not unit:
             errors.append(f"{prefix}.unit")
+        if fact.get("accounting_basis") not in {"consolidated", "parent_only"}:
+            errors.append(f"{prefix}.accounting_basis")
+        if fact.get("period_basis") not in {"cumulative", "standalone"}:
+            errors.append(f"{prefix}.period_basis")
         try:
             numeric_value = float(str(fact.get("actual_value")))
             if not math.isfinite(numeric_value):
@@ -92,6 +112,11 @@ def validate_payload(payload: Any) -> list[str]:
         for field in ("evidence_date", "checked_at", "valid_until"):
             if not _date(fact.get(field)):
                 errors.append(f"{prefix}.{field}")
+        if all(_date(fact.get(field)) for field in ("evidence_date", "checked_at", "valid_until")):
+            if not fact["evidence_date"] <= fact["checked_at"] <= fact["valid_until"]:
+                errors.append(f"{prefix}.date_order")
+            if period_end(period) and date.fromisoformat(fact["evidence_date"]) < period_end(period):
+                errors.append(f"{prefix}.evidence precedes reporting period end")
         for field in ("evidence_source", "source_identity"):
             if not str(fact.get(field) or "").strip():
                 errors.append(f"{prefix}.{field}")
@@ -100,7 +125,7 @@ def validate_payload(payload: Any) -> list[str]:
         baseline = fact.get("baseline_report_sha256")
         if baseline is not None and not SHA256_RE.fullmatch(str(baseline)):
             errors.append(f"{prefix}.baseline_report_sha256")
-        identity = (ticker, metric, period, unit)
+        identity = tuple(str(fact.get(field) or "") for field in FACT_ID_FIELDS)
         if identity in identities:
             errors.append(f"{prefix} duplicate identity")
         identities.add(identity)
@@ -121,14 +146,15 @@ def resolve(
     *,
     baseline_report_sha256: str | None,
 ) -> dict[str, Any] | None:
-    required = ("metric", "operator", "threshold", "period", "unit")
-    if any(rule.get(field) in (None, "") for field in required):
+    if not definition_complete(rule):
         return None
     matches = [
         fact for fact in facts
         if fact.get("metric") == rule.get("metric")
         and str(fact.get("period")) == str(rule.get("period"))
         and fact.get("unit") == rule.get("unit")
+        and fact.get("accounting_basis") == rule.get("accounting_basis")
+        and fact.get("period_basis") == rule.get("period_basis")
         and (
             not fact.get("baseline_report_sha256")
             or fact.get("baseline_report_sha256") == baseline_report_sha256
@@ -167,12 +193,13 @@ def main() -> int:
         return 0
     fact_path = arguments.fact if arguments.fact.is_absolute() else root / arguments.fact
     fact = json.loads(fact_path.read_text(encoding="utf-8"))
-    identity = tuple(str(fact.get(field) or "") for field in ("ticker", "metric", "period", "unit"))
+    fact["ticker"] = str(fact.get("ticker") or "").upper()
+    identity = tuple(str(fact.get(field) or "") for field in FACT_ID_FIELDS)
     payload["facts"] = [
         item for item in payload.get("facts", [])
-        if tuple(str(item.get(field) or "") for field in ("ticker", "metric", "period", "unit")) != identity
+        if tuple(str(item.get(field) or "") for field in FACT_ID_FIELDS) != identity
     ] + [fact]
-    payload["facts"].sort(key=lambda item: tuple(str(item.get(field) or "") for field in ("ticker", "metric", "period", "unit")))
+    payload["facts"].sort(key=lambda item: tuple(str(item.get(field) or "") for field in FACT_ID_FIELDS))
     errors = validate_payload(payload)
     if errors:
         raise ValueError("invalid financial fact: " + "; ".join(errors))

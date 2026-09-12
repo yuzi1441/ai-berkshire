@@ -15,6 +15,7 @@ import json
 import re
 import copy
 import math
+import subprocess
 from decimal import Decimal, InvalidOperation
 from datetime import date, datetime, time
 from pathlib import Path
@@ -26,6 +27,9 @@ import drift_scan_state
 import investment_dispositions
 import light_thesis_signals
 import financial_facts
+import holding_research_reviews
+import investment_tasks
+import quote_quality
 
 
 SCHEMA_VERSION = 1
@@ -61,6 +65,17 @@ DRIFT_REVIEW_LABELS = {
 }
 GUIDANCE_PRIORITIES = ("urgent", "normal", "monitor", "none")
 CANONICAL_SKILLS_DIRECTORY = Path(__file__).resolve().parent.parent / "skills"
+
+
+def projection_source_sha(root: Path) -> str | None:
+    marker = root / ".source-sha"
+    if marker.is_file():
+        value = marker.read_text(encoding="utf-8").strip()
+    else:
+        result = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"],
+                                capture_output=True, text=True, check=False)
+        value = result.stdout.strip() if result.returncode == 0 else ""
+    return value if re.fullmatch(r"[0-9a-f]{40}", value) else None
 
 STATE_RELATIVE = Path("data/investment-dashboard/company_state.json")
 RULES_RELATIVE = Path("data/investment-dashboard/decision_rules.json")
@@ -446,24 +461,11 @@ def _quote_trust(quote: dict[str, Any] | None, evaluated_at: datetime) -> tuple[
         return False, "quote_missing_from_latest_refresh"
     metadata = quote.get("_market_snapshot")
     if not isinstance(metadata, dict):
+        # Legacy arithmetic callers supply bare prices. Repository/public
+        # snapshots always receive market metadata in _quote_by_ticker.
         return True, "direct_quote_without_snapshot_metadata"
-    if metadata.get("refresh_status") == "failed" or metadata.get("source_status") == "unavailable":
-        return False, "market_refresh_failed"
-    data_cutoff = compact(quote.get("data_cutoff") or metadata.get("data_cutoff"))
-    market = compact(quote.get("market") or metadata.get("market"))
-    if not re.fullmatch(r"20\d{2}-\d{2}-\d{2}", data_cutoff):
-        return False, "quote_date_missing"
-    if _market_is_open(market, evaluated_at) and data_cutoff != evaluated_at.astimezone(SHANGHAI_TIMEZONE).date().isoformat():
-        return False, "historical_close_during_trading_session"
-    observed_at = quote_observed_at(quote)
-    if observed_at is None:
-        return False, "quote_timestamp_missing"
-    age_minutes = (evaluated_at - observed_at).total_seconds() / 60
-    if age_minutes < -2:
-        return False, "quote_timestamp_in_future"
-    if _market_is_open(market, evaluated_at) and age_minutes > 10:
-        return False, "quote_stale_during_trading_session"
-    return True, "quote_current_for_market_session"
+    quality = quote_quality.quote_quality(quote, evaluated_at)
+    return quality["eligible"], quality["reason"]
 
 
 def _unparsed_price_composite(rule: dict[str, Any]) -> bool:
@@ -697,9 +699,14 @@ def evaluate_rule_result(
         reviewed_result = _apply_condition_review(base, condition_review)
         if reviewed_result is not None:
             return reviewed_result
-        required = ("metric", "operator", "threshold", "period", "unit")
-        if any(rule.get(field) in (None, "") for field in required):
+        if not financial_facts.definition_complete(rule):
             base["reason"] = "missing_computable_definition"
+            return base
+        if (rule.get("metric") not in financial_facts.SUPPORTED_METRICS
+                or financial_facts.period_end(rule.get("period")) is None
+                or rule.get("accounting_basis") not in {"consolidated", "parent_only"}
+                or rule.get("period_basis") not in {"cumulative", "standalone"}):
+            base.update({"result": "invalid_definition", "reason": "invalid_metric_definition"})
             return base
         if not isinstance(financial_fact, dict) or financial_fact.get("resolution_status") == "missing":
             base.update({"result": "data_error", "reason": "financial_fact_missing"})
@@ -710,15 +717,30 @@ def evaluate_rule_result(
         if financial_fact.get("unit") != rule.get("unit"):
             base.update({"result": "data_error", "reason": "financial_fact_unit_mismatch"})
             return base
+        if any(financial_fact.get(field) != rule.get(field) for field in
+               ("metric", "period", "accounting_basis", "period_basis")):
+            base.update({"result": "data_error", "reason": "financial_fact_basis_mismatch"})
+            return base
         try:
             actual = Decimal(str(financial_fact.get("actual_value")))
             threshold = Decimal(str(rule.get("threshold")))
             valid_until = date.fromisoformat(str(financial_fact.get("valid_until")))
+            evidence_date = date.fromisoformat(str(financial_fact.get("evidence_date")))
+            checked_at = date.fromisoformat(str(financial_fact.get("checked_at")))
         except (InvalidOperation, ValueError):
             base.update({"result": "data_error", "reason": "financial_fact_invalid"})
             return base
         if not actual.is_finite() or not threshold.is_finite():
             base.update({"result": "data_error", "reason": "financial_fact_invalid"})
+            return base
+        if not evidence_date <= checked_at <= valid_until:
+            base.update({"result": "data_error", "reason": "financial_fact_invalid"})
+            return base
+        if evidence_date < financial_facts.period_end(rule["period"]):
+            base.update({"result": "data_error", "reason": "financial_fact_invalid"})
+            return base
+        if checked_at > evaluated_datetime.astimezone(SHANGHAI_TIMEZONE).date():
+            base.update({"result": "data_error", "reason": "financial_fact_future"})
             return base
         if valid_until < evaluated_datetime.astimezone(SHANGHAI_TIMEZONE).date():
             base.update({"result": "data_error", "reason": "financial_fact_stale"})
@@ -1227,6 +1249,10 @@ def _next_action(
         return "hold"
     if lifecycle == "EXITED":
         return "none"
+    # A completed veto takes precedence over an unchanged entry trigger.
+    # Material events/redlines and holding reviews above remain actionable.
+    if checklist.get("status") == "FAIL":
+        return "keep_watch"
     # An improved thesis is research evidence, not by itself a buy-progress
     # condition.  Let an explicit Entry/buy-validation rule (or the existing
     # PRE_BUY flow below) determine whether the next action is a Checklist.
@@ -1558,17 +1584,34 @@ def derive_action_guidance(
 
     event_state = compact(event.get("state")).lower()
     if lifecycle == "HOLDING":
+        if (tracking or {}).get("research_binding_status") in {"binding_mismatch", "unreviewed"}:
+            return guidance(
+                "holding_research_binding_required", "持仓研究结果尚未绑定当前持仓周期",
+                "verify_holding_research_binding", "核对持仓周期、冻结论文与研究报告", [],
+                "先修复研究身份或补建基线，不能套用旧持仓的结论", "normal", True,
+                "确认当前周期及报告身份，再采用对应研究结果",
+            )
         if drift.get("direction") == "weakened" and drift.get("severity") == "major":
             return guidance(
                 "holding_thesis_weakened",
                 "持仓公司的正式投资逻辑复核显示重大走弱",
-                "review_holding_thesis",
-                "围绕原始买入逻辑复核持仓",
-                ["thesis-tracker"],
-                "这是买入后的持续纪律问题，应以 Original Buy Thesis 为基准处理",
+                "decide_holding_disposition",
+                "阅读已有复核结果并决定持仓动作",
+                [],
+                "正式复核已有结果，当前等待人工处置，不应重复研究",
                 "urgent",
                 True,
                 "明确继续持有、降低仓位或退出的依据，不覆盖 Original Buy Thesis",
+            )
+        if ((tracking or {}).get("research_binding_status") == "matched"
+                and (tracking or {}).get("thesis_status") in {"damaged", "broken"}):
+            return guidance(
+                "holding_research_requires_decision",
+                "当前持仓周期的有效研究已判断投资逻辑受损或失效",
+                "decide_holding_disposition", "阅读已有持仓研究并决定持仓动作", [],
+                "研究已有结论，当前缺的是人工决定，不是重复运行研究",
+                "urgent", True,
+                "记录继续持有、调整仓位或退出的依据；成交仍由本人确认",
             )
         if event_state in {"important", "critical"} and event.get("thesis_relevant"):
             if not drift_eligible:
@@ -1594,7 +1637,10 @@ def derive_action_guidance(
                 True,
                 "确认 Original Buy Thesis 是否仍成立，并记录持仓动作",
             )
-        alerts = [item for item in list((tracking or {}).get("alerts") or []) if isinstance(item, dict)]
+        as_of_datetime = _parse_iso_datetime(evaluated_at) or datetime.now().astimezone()
+        alerts = holding_research_reviews.pending_alerts(
+            tracking or {}, as_of=as_of_datetime.astimezone(SHANGHAI_TIMEZONE).date()
+        )
         review_alerts = [
             item
             for item in alerts
@@ -1608,7 +1654,6 @@ def derive_action_guidance(
             )
         ]
         next_review = compact((tracking or {}).get("next_review_date"))
-        as_of_datetime = _parse_iso_datetime(evaluated_at) or datetime.now().astimezone()
         review_overdue = False
         if re.fullmatch(r"20\d{2}-\d{2}-\d{2}", next_review):
             try:
@@ -1627,6 +1672,13 @@ def derive_action_guidance(
                 "urgent",
                 True,
                 "完成本次持仓复核并更新下一次复核日期",
+            )
+        if any(item.get("kind") == "identity_verification" for item in alerts):
+            return guidance(
+                "holding_event_identity_unverified", "历史事件或提醒缺少可核验的持仓周期、来源或证据身份",
+                "verify_holding_event_identity", "核对历史事件身份后再决定是否复核", [],
+                "不把未绑定的旧事件套用到当前持仓，也不自动关闭风险", "normal", True,
+                "补齐并核验当前周期及证据身份；无法对应的旧记录继续隔离保留",
             )
         price_alerts = [item for item in alerts if item.get("kind") == "price_move"]
         if price_alerts:
@@ -1733,6 +1785,13 @@ def derive_action_guidance(
         )
 
     checklist_status = compact(checklist.get("status")).upper()
+    if checklist_status == "FAIL":
+        return guidance(
+            "checklist_failed_current", "已有买入前检查未通过，当前不具备买入资格",
+            "continue_monitoring", "无需重复检查，继续观察或放弃", [],
+            "有效 FAIL 阻止买入推进；必须由新基线或有效新证据明确重新开启",
+            "none", False, "仅在基线或有效证据改变并完成资格重审后重新打开",
+        )
     if lifecycle == "PRE_BUY" and checklist_status in {"PASS", "CONDITIONAL_PASS"}:
         return guidance(
             "human_purchase_decision",
@@ -1796,6 +1855,9 @@ def derive_action_guidance(
             "quote_date_missing", "historical_close_during_trading_session",
             "quote_timestamp_missing", "quote_timestamp_in_future",
             "quote_stale_during_trading_session",
+            "quote_not_latest_trading_session", "quote_stale_for_market_session",
+            "market_calendar_unavailable", "quote_date_mismatch", "quote_metadata_missing",
+            "quote_source_unavailable",
         },
     )
     if quote_error is not None:
@@ -1816,6 +1878,7 @@ def derive_action_guidance(
         reasons={
             "financial_fact_missing", "financial_fact_conflict",
             "financial_fact_unit_mismatch", "financial_fact_invalid", "financial_fact_stale",
+            "financial_fact_basis_mismatch", "financial_fact_future",
         },
     )
     if financial_error is not None:
@@ -1844,7 +1907,7 @@ def derive_action_guidance(
             "等待条件明确满足，或出现需要核验的新事实",
         )
 
-    missing_metric = _guidance_rule(rules, reasons={"missing_computable_definition"})
+    missing_metric = _guidance_rule(rules, reasons={"missing_computable_definition", "invalid_metric_definition"})
     if missing_metric is not None:
         return guidance(
             "financial_definition_missing",
@@ -2084,10 +2147,15 @@ def build_state_layers(
     main_report_review_payload: dict[str, Any] | None = None,
     investment_disposition_payload: dict[str, Any] | None = None,
     legacy_mode: bool = False,
+    as_of: date | None = None,
 ) -> dict[str, Any]:
     """Evaluate persisted rules; only an explicit legacy mode may infer them."""
     data_directory = repo_root / "data" / "investment-dashboard"
     generated_at = generated_at or now_iso()
+    evaluated_at = (
+        datetime.combine(as_of, time.max, tzinfo=SHANGHAI_TIMEZONE).isoformat()
+        if as_of is not None else generated_at
+    )
     quotes = _quote_by_ticker(data_directory)
     sentiment = _sentiment_by_ticker(data_directory)
     overrides = _load_overrides(data_directory)
@@ -2201,13 +2269,13 @@ def build_state_layers(
                 event_triggered,
                 event,
                 condition_resolver(rule),
-                evaluated_at=generated_at,
+                evaluated_at=evaluated_at,
                 financial_fact=fact_resolver(rule),
                 condition_review_resolver=condition_resolver,
                 financial_fact_resolver=fact_resolver,
             )
             rule["status"] = evaluation["result"]
-            rule["last_checked"] = generated_at
+            rule["last_checked"] = evaluated_at
             rule["evaluation"] = evaluation
             company_evaluations.append(evaluation)
         checklist = _checklist_state(decision)
@@ -2220,6 +2288,7 @@ def build_state_layers(
             "next_review": drift_raw.get("next_review"),
             "summary": drift_raw.get("summary"),
             "source": drift_raw.get("source"),
+            "facts_sources": list(drift_raw.get("facts_sources") or []),
         }
         lifecycle, warning = _lifecycle((overrides.get(ticker) or {}).get("lifecycle"), tracking_record, rules, checklist)
         light_thesis = light_thesis_signals.project_record(
@@ -2283,7 +2352,7 @@ def build_state_layers(
             checklist,
             company_condition_review,
             report_hash,
-            generated_at,
+            evaluated_at,
         )
         action_guidance = derive_action_guidance(
             lifecycle,
@@ -2295,7 +2364,7 @@ def build_state_layers(
             drift_scan,
             next_action,
             review_coverage,
-            evaluated_at=generated_at,
+            evaluated_at=evaluated_at,
         )
         drift_review = classify_drift_review(lifecycle, drift_scan, drift, next_action)
         state = {
@@ -2353,6 +2422,7 @@ def build_state_layers(
         state = investment_dispositions.project_company(
             state, investment_disposition_payload
         )
+        state["action_guidance"].update(investment_tasks.classify(state["action_guidance"]))
         states.append(state)
         rule_summary = state["decision_rules"].copy()
         rule_summary["rules"] = None
@@ -2415,6 +2485,8 @@ def build_state_layers(
     state_payload = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at,
+        "evaluated_at": evaluated_at,
+        "source_sha": projection_source_sha(repo_root),
         "lifecycle_states": list(LIFECYCLES),
         "company_count": len(states),
         "companies": states,
@@ -2426,6 +2498,7 @@ def build_state_layers(
     evaluations_payload = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": generated_at,
+        "evaluated_at": evaluated_at,
         "company_count": len(evaluation_companies),
         "evaluation_count": sum(len(item["evaluations"]) for item in evaluation_companies),
         "companies": evaluation_companies,

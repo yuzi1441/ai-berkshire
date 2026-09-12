@@ -12,7 +12,7 @@ const LABELS = {
   lifecycle: { WATCH: "观察中", PRE_BUY: "买入前", HOLDING: "持有中", EXITED: "已退出" },
   lifecycleHint: { WATCH: "等待条件或价格", PRE_BUY: "买入前流程中的公司", HOLDING: "优先管理已有仓位", EXITED: "历史持仓周期" },
   scope: { entry: "买入条件", validation: "验证条件", redline: "失效条件", unknown: "其他条件" },
-  ruleStatus: { triggered: "已触发", near_trigger: "接近触发", not_triggered: "未触发", unknown: "待判断", needs_review: "需要复核", stale: "数据过期" },
+  ruleStatus: { triggered: "已触发", near_trigger: "接近触发", not_triggered: "未触发", unknown: "待判断", needs_review: "需要复核", stale: "数据过期", data_error: "数据不可用" },
   ruleType: { PRICE_RANGE: "价格条件", METRIC: "经营条件", EVENT: "事件条件" },
   action: {
     run_checklist: "进行买入前检查",
@@ -86,15 +86,9 @@ void humanReviewExecutionState;
 void LABELS;
 
 const DATA_FILES = {
-  board: "./data/decision_board.json",
-  companyState: "./data/company_state.json",
-  rules: "./data/decision_rules.json",
-  events: "./data/event_radar.json",
-  technical: "./data/technical_latest.json",
+  core: "./data/dashboard_core.json",
   sentiment: "./data/sentiment.json",
   sentimentStatus: "./data/sentiment_status.json",
-  tracking: "./data/post_buy_tracking.json",
-  originalTheses: "./data/original_buy_theses.json",
   quotes: "./data/quotes/latest.json",
   intraday: "./data/intraday_technical.json",
   opportunityScans: "./data/opportunity_scans.json",
@@ -116,6 +110,7 @@ const OPTIONAL_DATA_FALLBACKS = {
 const state = {
   board: null,
   companyState: new Map(),
+  companyStateMeta: null,
   rulePackages: new Map(),
   events: new Map(),
   technical: new Map(),
@@ -151,11 +146,13 @@ const state = {
   quickFilter: "all",
   page: 1,
   selectedTicker: null,
+  drawerReturnFocus: null,
   workspace: "attention",
 };
 
 const els = {
   lastUpdated: document.querySelector("#last-updated"),
+  dataSource: document.querySelector("#data-source"),
   datasetSummary: document.querySelector("#dataset-summary"),
   quoteStatus: document.querySelector("#quote-status"),
   quoteStatusText: document.querySelector("#quote-status-text"),
@@ -252,7 +249,17 @@ function label(group, value, fallback = "待复核") {
 
 function formatDateTime(value) {
   if (!value) return "—";
-  const raw = String(value).replace("T", " ").replace(/([+-]\d\d:\d\d|Z)$/, "");
+  // Zoned timestamps represent instants, not strings whose offsets can be cut off.
+  if (/(Z|[+-]\d\d:\d\d)$/.test(String(value))) {
+    const date = new Date(value);
+    if (!Number.isFinite(date.getTime())) return "—";
+    const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23",
+    }).formatToParts(date).map(({ type, value: part }) => [type, part]));
+    return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`;
+  }
+  const raw = String(value).replace("T", " ");
   return raw.length > 16 ? raw.slice(0, 16) : raw;
 }
 
@@ -261,13 +268,14 @@ function formatDate(value) {
 }
 
 function formatNumber(value, digits = 2) {
+  if (value == null || typeof value === "boolean" || String(value).trim() === "") return "—";
   const number = Number(value);
   if (!Number.isFinite(number)) return "—";
   return number.toLocaleString("zh-CN", { maximumFractionDigits: digits });
 }
 
 function formatPrice(quote, fallback = "—") {
-  if (!quote || !Number.isFinite(Number(quote.price))) return fallback;
+  if (!quote || typeof quote.price === "boolean" || !Number.isFinite(Number(quote.price)) || Number(quote.price) <= 0) return fallback;
   const currency = quote.currency === "HKD" ? "HK$" : quote.currency === "USD" ? "US$" : "¥";
   return `${currency}${formatNumber(quote.price, 2)}`;
 }
@@ -285,13 +293,29 @@ function quoteFor(record) {
   return state.quotes.get(record?.ticker) || null;
 }
 
+function quoteIsCurrent(quote, now = Date.now()) {
+  const quality = quote?.quality;
+  const until = Date.parse(quality?.valid_until || "");
+  const from = Date.parse(quality?.evaluated_at || "");
+  return quality?.eligible === true && Number.isFinite(until) && Number.isFinite(from)
+    && now >= from - 120000 && now <= until && formatPrice(quote) !== "—";
+}
+
+function quoteReference(quote) {
+  if (formatPrice(quote) === "—" || quoteIsCurrent(quote)) return "";
+  const observed = quote?.quality?.observed_at || quote?.data_cutoff;
+  return `历史参考 · ${observed ? formatDateTime(observed) : "日期未核验"}`;
+}
+
 function rulesFor(record) {
   const pack = state.rulePackages.get(record?.ticker);
   return Array.isArray(pack?.rules) ? pack.rules : [];
 }
 
 function trackingFor(record) {
-  return state.tracking.get(record?.ticker) || record?.post_buy_tracking || null;
+  // The embedded projection shares the lifecycle/research generation. A separate
+  // runtime file may have been fetched across a refresh or release boundary.
+  return record?.post_buy_tracking || state.tracking.get(record?.ticker) || null;
 }
 
 function originalThesisFor(record) {
@@ -302,9 +326,11 @@ function originalThesisFor(record) {
   const cycleId = tracking.position_id || (ticker && tracking.buy_date ? `${ticker}:${tracking.buy_date}` : null);
   const activeId = payload.active_position_ids?.[ticker];
   const cycles = payload.cycles || {};
-  // Prefer the position's explicit cycle binding.  The active map is only a
-  // compatibility fallback for older tracking records.
-  return (cycleId && cycles[cycleId]) || (activeId && cycles[activeId]) || payload.positions?.[ticker] || null;
+  if (!cycleId || (activeId && activeId !== cycleId)) return null;
+  const snapshot = cycles[cycleId];
+  if (!snapshot || (snapshot.position_id && snapshot.position_id !== cycleId)
+      || (snapshot.ticker && snapshot.ticker !== ticker)) return null;
+  return snapshot;
 }
 
 function renderFrozenThesis(snapshot) {
@@ -486,9 +512,9 @@ function renderWorkspaceNav() {
   const counts = {
     attention: attentionToday,
     holdings: stateCount("HOLDING"),
-    opportunities: stateCount("PRE_BUY"),
+    opportunities: checklistRecords().length,
     "ai-research": aiNavigationCount(),
-    watchlist: stateRecords().filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record))).length,
+    watchlist: stateRecords().length,
   };
   const elements = {
     attention: els.navAttentionCount,
@@ -527,6 +553,9 @@ function hideDetailDrawer() {
   els.backdrop.hidden = true;
   els.drawer.hidden = true;
   document.body.classList.remove("drawer-open");
+  document.querySelector(".app-shell").inert = false;
+  if (state.drawerReturnFocus?.isConnected) state.drawerReturnFocus.focus({ preventScroll: true });
+  state.drawerReturnFocus = null;
 }
 
 function syncWorkspaceFromLocation() {
@@ -596,7 +625,7 @@ function attentionReasonType(record) {
     make_purchase_decision: "买入判断",
     run_investment_checklist: "买入前检查",
     verify_condition_evidence: "事实核验",
-  }[action] || "人工决策";
+  }[action] || guidanceFor(record).task_label || "需要人工完成";
 }
 
 function attentionSummary(record) {
@@ -632,6 +661,12 @@ function renderStatusCards() {
 function renderTopMeta() {
   const generated = state.board?.generated_at || state.loadedAt;
   els.lastUpdated.textContent = formatDateTime(generated);
+  if (els.dataSource) {
+    const local = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+    const metadata = state.companyStateMeta || {};
+    els.dataSource.textContent = `${local ? "本地预览 · 不代表线上状态" : "当前站点快照"}${metadata.source_sha ? ` · ${metadata.source_sha.slice(0, 8)}` : ""}`;
+    els.dataSource.title = `状态求值：${formatDateTime(metadata.evaluated_at)}（北京时间）；构建时间不代表新证据时间`;
+  }
   const total = stateRecords().length;
   const ruleCount = [...state.rulePackages.values()].reduce((sum, pack) => sum + (Array.isArray(pack?.rules) ? pack.rules.length : 0), 0);
   els.datasetSummary.textContent = `${total} 家公司 · ${ruleCount} 条规则`;
@@ -644,16 +679,22 @@ function renderTopMeta() {
     .filter((item) => item.status === "failed")
     .map((item) => `${item.source} ${item.report_period}: ${item.error || "获取失败"}`).join("\n");
   const quoteUniverse = stateRecords().filter((record) => ["A股", "港股"].includes(record.market));
-  const quoteCount = quoteUniverse.filter((record) => state.quotes.has(record.ticker)).length;
+  const quoteCount = quoteUniverse.filter((record) => {
+    const quote = state.quotes.get(record.ticker);
+    return quoteIsCurrent(quote);
+  }).length;
   const quoteTotal = quoteUniverse.length;
   const quoteMeta = state.quoteMeta || {};
-  const quoteDate = quoteMeta.data_cutoff || quoteMeta.generated_at;
+  const quoteDate = quoteMeta.data_cutoff;
   const phase = quoteMeta.quote_phase;
   const sourceStatus = quoteMeta.source_status || (quoteCount ? "partial" : "unavailable");
-  const isComplete = quoteCount === quoteTotal && sourceStatus === "ok";
+  const isComplete = quoteTotal > 0 && quoteCount === quoteTotal;
   els.quoteStatus.dataset.tone = isComplete ? "fresh" : "stale";
-  let quoteLabel = sourceStatus === "unavailable"
-    ? quoteCount ? "行情更新失败 · 保留上次数据" : "行情更新失败"
+  let quoteLabel = quoteMeta._load_state === "missing" || (!quoteMeta.source_status && !quoteMeta.generated_at && !quoteCount && !quoteMeta._load_state)
+    ? "尚未取得行情快照"
+    : quoteMeta._load_state === "load_failed" ? "行情快照读取失败"
+    : ["unavailable", "error", "failed"].includes(sourceStatus)
+    ? state.quotes.size ? "行情更新失败 · 保留上次数据" : "行情更新失败"
     : quoteCount < quoteTotal
       ? "行情部分可用"
       : phase === "intraday"
@@ -662,12 +703,12 @@ function renderTopMeta() {
           ? "行情历史收盘"
           : "行情收盘";
   const cutoffLabel = quoteDate && phase !== "intraday" ? ` · 截至 ${formatDate(quoteDate)} 收盘` : quoteDate ? ` · ${formatDateTime(quoteDate)}` : "";
-  els.quoteStatusText.textContent = `${quoteLabel} · ${quoteCount}/${quoteTotal}${cutoffLabel}`;
+  els.quoteStatusText.textContent = `${quoteLabel} · A/H 有效覆盖 ${quoteCount}/${quoteTotal}${cutoffLabel}`;
 }
 
 function cardCompany(record) {
   const quote = quoteFor(record);
-  return `<div class="card-company"><span class="company-name">${escapeHtml(text(record.company))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span><span class="price-value">${escapeHtml(formatPrice(quote))}</span></div>`;
+  return `<div class="card-company"><span class="company-name">${escapeHtml(text(record.company))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span><span class="price-value">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<span class="source-line">${escapeHtml(quoteReference(quote))}</span>` : ""}</div>`;
 }
 
 function compactCompany(record) {
@@ -755,7 +796,10 @@ function opportunityRecords(kind) {
 
 function checklistRecords() {
   return stateRecords()
-    .filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record)) && ["run_checklist", "confirm_purchase"].includes(record.next_action))
+    .filter((record) => !["HOLDING", "EXITED"].includes(lifecycleOf(record))
+      && record.checklist?.status !== "FAIL"
+      && record.action_guidance?.requires_user_action === true
+      && ["run_investment_checklist", "make_purchase_decision"].includes(record.action_guidance.next_action_code))
     .map((record) => {
       const candidates = [...priceOpportunities(record), ...conditionOpportunities(record)]
         .filter((opportunity) => {
@@ -765,9 +809,8 @@ function checklistRecords() {
         .sort((a, b) => opportunityPriority(b) - opportunityPriority(a));
       return {
         record,
-        stage: lifecycleOf(record) === "PRE_BUY"
-          ? record.next_action === "confirm_purchase" ? "检查已完成，等待本人决策" : "已进入买入前检查"
-          : "研究推进候选",
+        stage: record.action_guidance.next_action_code === "make_purchase_decision"
+          ? "检查已完成，等待本人决策" : "需要买入前检查",
         opportunity: candidates[0] || {
           type: "CHECKLIST",
           status: "unknown",
@@ -800,7 +843,7 @@ function renderOpportunities() {
   const prices = opportunityRecords("price");
   const conditions = opportunityRecords("condition");
   const checklists = checklistRecords();
-  const preBuyCount = stateCount("PRE_BUY");
+  const preBuyCount = checklists.filter(({record}) => record.action_guidance.next_action_code === "run_investment_checklist").length;
   const preBuyChecklists = checklists.filter(({ record }) => lifecycleOf(record) === "PRE_BUY");
   const researchCandidates = checklists.filter(({ record }) => lifecycleOf(record) === "WATCH");
   els.priceCount.textContent = String(prices.length);
@@ -808,7 +851,7 @@ function renderOpportunities() {
   els.checklistCount.textContent = String(preBuyCount);
   if (els.checklistTabCount) els.checklistTabCount.textContent = String(checklists.length);
   if (els.opportunityPrimaryNote) {
-    els.opportunityPrimaryNote.textContent = `${preBuyCount} 家处于买入前流程；${researchCandidates.length} 家仍是观察中的研究推进候选。价格和经营条件只作为二级条件池，不等于当前机会。`;
+    els.opportunityPrimaryNote.textContent = `${preBuyCount} 家需要买入前检查；${checklists.length - preBuyCount} 家检查已完成、等待本人决策。价格和经营条件只作为二级条件池，不等于当前机会。`;
   }
   if (els.opportunityPoolNote) {
     if (state.opportunityView === "checklist") {
@@ -912,20 +955,24 @@ function renderAiOpportunityCard(item) {
   </article>`;
 }
 
+function validScanCount(value) {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
 function renderAiOpportunities() {
   const items = aiOpportunityItems();
   const meta = state.opportunityScanMeta || {};
   const status = opportunityScanDayStatus(meta);
   const displayMode = opportunityScanDisplayMode(meta);
   const hasDisplayable = hasDisplayableOpportunityScan(meta);
-  const coverage = hasDisplayable && Number.isFinite(Number(meta.display_scan_count)) && Number.isFinite(Number(meta.display_expected_scan_count))
+  const coverage = hasDisplayable && validScanCount(meta.display_scan_count) && validScanCount(meta.display_expected_scan_count)
     ? ` · ${meta.display_scan_count}/${meta.display_expected_scan_count}`
     : "";
-  const currentCount = hasDisplayable && Number.isFinite(Number(meta.display_current_opportunity_count)) ? Number(meta.display_current_opportunity_count) : null;
-  const nearCount = hasDisplayable && Number.isFinite(Number(meta.display_near_opportunity_count)) ? Number(meta.display_near_opportunity_count) : null;
+  const currentCount = hasDisplayable && validScanCount(meta.display_current_opportunity_count) ? meta.display_current_opportunity_count : null;
+  const nearCount = hasDisplayable && validScanCount(meta.display_near_opportunity_count) ? meta.display_near_opportunity_count : null;
   const opportunitySummary = currentCount !== null
     ? ` · 当前机会 ${currentCount}${nearCount !== null ? ` · 临近 ${nearCount}` : ""}`
-    : "";
+    : hasDisplayable ? " · 机会总数待核验" : "";
   const displayAt = opportunityScanDisplayTimestamp(meta);
   els.aiOpportunityMeta.textContent = `${aiOpportunityDisplayStatusText(meta)}${coverage}${opportunitySummary}${displayAt ? ` · ${formatDateTime(displayAt)}` : ""}`;
   if (items.length) {
@@ -980,12 +1027,19 @@ function renderAiOpportunitySection(record) {
 
 function holdingReturn(record, tracking) {
   const quote = quoteFor(record);
-  if (!quote || !Number.isFinite(Number(tracking?.cost_basis)) || !Number.isFinite(Number(quote.price))) return null;
+  if (!quoteIsCurrent(quote) || formatPrice({price: tracking?.cost_basis}) === "—") return null;
   return Number(quote.price) / Number(tracking.cost_basis) - 1;
 }
 
 function redlineRules(record) {
   return rulesFor(record).filter((rule) => rule.rule_scope === "redline").slice(0, 3);
+}
+
+function renderHoldingReview(tracking) {
+  if (tracking?.research_binding_status !== "matched") {
+    return `<div class="source-line">持仓研究身份待核对，不能将旧周期结论作为当前建议。</div>`;
+  }
+  return `<div class="source-line">最近持仓复核：${escapeHtml(formatDate(tracking.last_review_date))} · 下次复核：${escapeHtml(formatDate(tracking.next_review_date))}</div><p class="detail-copy">研究建议：${escapeHtml(tracking.review_action || "尚未记录建议")}（不是成交记录）</p>`;
 }
 
 function renderHoldingCard(record) {
@@ -1001,12 +1055,13 @@ function renderHoldingCard(record) {
       <div><span class="metric-label">成本</span><strong class="metric-value">${escapeHtml(formatPrice({price: tracking.cost_basis, currency: quote?.currency}, "—"))}</strong></div>
       <div><span class="metric-label">收益率</span><strong class="metric-value holding-pnl ${result == null ? "" : result >= 0 ? "positive" : "negative"}">${result == null ? "—" : escapeHtml(`${result >= 0 ? "+" : ""}${(result * 100).toFixed(2)}%`)}</strong></div>
       <div><span class="metric-label">仓位</span><strong class="metric-value">${escapeHtml(tracking.position_weight == null ? "—" : `${formatNumber(tracking.position_weight, 1)}%`)}</strong></div>
-      <div><span class="metric-label">当前价格</span><strong class="metric-value">${escapeHtml(formatPrice(quote))}</strong></div>
+      <div><span class="metric-label">${quoteIsCurrent(quote) ? "当前价格" : "历史参考价格"}</span><strong class="metric-value">${escapeHtml(formatPrice(quote))}</strong>${quoteReference(quote) ? `<span class="source-line">${escapeHtml(quoteReference(quote))}</span>` : ""}</div>
     </div>
     <div class="holding-bottom">
       <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">原始买入逻辑</div><div class="holding-detail-value">${snapshot ? "已绑定当前持仓周期" : "冻结基线未加载"}</div>${renderFrozenThesis(snapshot)}<div class="holding-detail-label" style="margin-top:9px">最新研究</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看最新研究</a></div></div>
       <div><div class="holding-detail-label">投资逻辑状态 / 最近漂移</div><div class="holding-detail-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div><div class="holding-detail-label" style="margin-top:9px">关键失效条件</div><ul class="redline-list">${redlines.length ? redlines.map((rule) => `<li>${escapeHtml(rule.condition)}</li>`).join("") : "<li>报告未提取明确失效条件</li>"}</ul></div>
     </div>
+    ${renderHoldingReview(tracking)}
     <div class="holding-links"><a class="text-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>打开主报告</a><span class="table-next" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}</span></div>
   </article>`;
 }
@@ -1055,7 +1110,7 @@ function renderWatchRow(record) {
   const action = record.next_action;
   return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
     <td>${compactCompany(record)}</td>
-    <td><span class="table-price">${escapeHtml(formatPrice(quote))}</span>${quote?.change_pct != null ? `<div class="table-secondary ${quote.change_pct >= 0 ? "price-change-up" : "price-change-down"}">${quote.change_pct >= 0 ? "+" : ""}${escapeHtml(formatNumber(quote.change_pct, 2))}%</div>` : ""}</td>
+    <td><span class="table-price">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<div class="table-secondary">${escapeHtml(quoteReference(quote))}</div>` : ""}${quoteIsCurrent(quote) && quote?.change_pct != null ? `<div class="table-secondary ${quote.change_pct >= 0 ? "price-change-up" : "price-change-down"}">${quote.change_pct >= 0 ? "+" : ""}${escapeHtml(formatNumber(quote.change_pct, 2))}%</div>` : ""}</td>
     <td><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycle)}">${escapeHtml(label("lifecycle", lifecycle))}</span><div class="table-secondary">${escapeHtml(record.opportunity_type === "both" ? "价格 + 条件" : record.opportunity_type === "price" ? "价格机会" : record.opportunity_type === "condition" ? "条件机会" : "普通观察")}</div></td>
     <td><div class="table-condition">${escapeHtml(keyCondition(record))}</div></td>
     <td>${compactDataSummary(record)}</td>
@@ -1084,7 +1139,7 @@ function checklistDisplayLabel(value) {
 function formalDriftMatches(record, value) {
   if (value === "all") return true;
   const drift = record?.drift || {};
-  const hasReview = Boolean(drift.last_checked);
+  const hasReview = Boolean(drift.last_checked || record?.drift_scan?.checked_at);
   if (value === "has-review") return hasReview;
   if (value === "no-review") return !hasReview;
   if (!hasReview) return false;
@@ -1247,6 +1302,9 @@ const DISPOSITION_LABELS = {
   redo_research: "重做研究",
   formal_drift: "正式 Drift",
   archive_drop: "停止重点跟踪",
+  keep_holding: "继续持有",
+  request_position_review: "申请仓位调整复核",
+  request_exit_review: "申请退出复核",
 };
 
 const DISPOSITION_CONFIRM_COPY = {
@@ -1254,6 +1312,9 @@ const DISPOSITION_CONFIRM_COPY = {
   redo_research: "只记录研究意图，不会自动运行模型、生成报告或覆盖主报告。",
   formal_drift: "只记录正式复核意图，不会自动运行模型或写入正式 Drift 结论。",
   archive_drop: "只停止重点跟踪；不会删除研究、修改持仓、退出生命周期或移除 Rule。",
+  keep_holding: "记录继续持有的决定，仅关闭本次研究对应的提醒；新研究、新事件或复核到期会重新打开。不会修改成本或仓位。",
+  request_position_review: "只登记仓位调整复核意图，不会执行买卖或修改实际仓位。",
+  request_exit_review: "只登记退出复核意图，不是卖出成交，不会关闭实际持仓。",
 };
 
 function renderDispositionControls(record) {
@@ -1328,11 +1389,19 @@ function renderThesisSection(record) {
   const drift = record.drift || {};
   if (lifecycleOf(record) === "HOLDING" && tracking) {
     const snapshot = originalThesisFor(record);
-    return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入逻辑</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">投资逻辑状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结投资逻辑未加载。</div>"}<div class="source-line">当前持仓周期已绑定原始买入逻辑<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新研究 ↗</a></div>`;
+    return `<div class="detail-section"><div class="detail-section-head"><h3>原始买入逻辑</h3><span class="mini-badge">当前持仓周期</span></div><div class="thesis-banner">冻结基线与当前持仓周期绑定，不会因后续报告改写而被替换。</div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">投资逻辑状态</div><div class="detail-field-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div></div><div class="detail-field"><div class="detail-field-label">健康度</div><div class="detail-field-value">${tracking.health_score == null ? "—" : escapeHtml(`${tracking.health_score}/10`)}</div></div><div class="detail-field"><div class="detail-field-label">买入日期</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.buy_date))}</div></div><div class="detail-field"><div class="detail-field-label">下一次复核</div><div class="detail-field-value">${escapeHtml(formatDate(tracking.next_review_date))}</div></div></div>${snapshot ? renderFrozenThesis(snapshot) : "<div class=\"source-line\">当前周期冻结投资逻辑未加载。</div>"}<div class="source-line">${snapshot ? "当前持仓周期已绑定原始买入逻辑" : "当前周期冻结投资逻辑缺失，不能套用旧周期"}<br />最近漂移检查：${escapeHtml(formatDateTime(drift.last_checked))}</div>${renderHoldingReview(tracking)}<a class="drawer-report-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer">查看最新研究 ↗</a></div>`;
   }
   const light = record.light_thesis_signal || {};
   const lightText = light.status === "current" ? lightThesisSignalLabel(light.signal) : light.status === "stale" ? "已有结果已过期" : "尚无轻量检查结果";
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前投资逻辑</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；正式漂移复核与日常轻量信号分开记录。</p><div class="detail-grid" style="margin-top:14px"><div class="detail-field"><div class="detail-field-label">正式投资逻辑复核</div><div class="detail-field-value">${escapeHtml(driftScanLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">轻量投资逻辑信号</div><div class="detail-field-value">${escapeHtml(lightText)}</div></div></div><div class="source-line">Canonical 主报告已关联<br />最近正式复核：${escapeHtml(formatDateTime(drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前投资逻辑</h3><span class="mini-badge">${escapeHtml(driftScanLabel(record))}</span></div><p class="detail-copy">当前为${escapeHtml(label("lifecycle", lifecycleOf(record)))}；正式漂移复核与日常轻量信号分开记录。</p><div class="detail-grid" style="margin-top:14px"><div class="detail-field"><div class="detail-field-label">正式投资逻辑复核</div><div class="detail-field-value">${escapeHtml(driftScanLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">轻量投资逻辑信号</div><div class="detail-field-value">${escapeHtml(lightText)}</div></div></div><div class="source-line">Canonical 主报告已关联<br />最近正式复核：${escapeHtml(formatDateTime(record.drift_scan?.checked_at || drift.last_checked))}</div><a class="drawer-report-link" href="${escapeHtml(reportHref(record.canonical_report))}" target="_blank" rel="noreferrer">打开主报告 ↗</a></div>`;
+}
+
+function renderFormalDriftResult(record) {
+  const drift = record?.drift || {};
+  if (!drift.last_checked) return "";
+  const reports = (Array.isArray(drift.facts_sources) ? drift.facts_sources : [])
+    .filter((path) => typeof path === "string" && path.startsWith("reports/") && path.endsWith(".md") && !path.split("/").includes(".."));
+  return `<div class="detail-section"><div class="detail-section-head"><h3>正式投资逻辑复核结论</h3><span class="mini-badge">${escapeHtml(label("drift", drift.direction))}</span></div><p class="detail-copy">${escapeHtml(drift.summary || "当前记录没有摘要，请查看正式复核报告。")}</p><div class="source-line">复核时间：${escapeHtml(formatDateTime(drift.last_checked))}<br />${escapeHtml(driftScanLabel(record))}；不因局部改善自动获得买入资格。</div>${reports.map((path) => `<a class="drawer-report-link" href="${escapeHtml(reportHref(path))}" target="_blank" rel="noreferrer">查看正式复核报告：${escapeHtml(path.split("/").pop())} ↗</a>`).join("")}</div>`;
 }
 
 function lightThesisSignalLabel(signal) {
@@ -1360,7 +1429,7 @@ function renderCurrentJudgment(record) {
   const quote = quoteFor(record);
   const sentiment = sentimentLabel(record);
   const radar = record.event_radar || {};
-  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">当前价格</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div></div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">Checklist</div><div class="detail-field-value">${escapeHtml(checklistDisplayLabel(record?.checklist?.status))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 投资逻辑相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>当前判断</h3><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycleOf(record))}">${escapeHtml(label("lifecycle", lifecycleOf(record)))}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">${quoteIsCurrent(quote) ? "当前价格" : "历史参考价格"}</div><div class="detail-field-value large">${escapeHtml(formatPrice(quote))}</div>${quoteReference(quote) ? `<div class="source-line">${escapeHtml(quoteReference(quote))}</div>` : ""}</div><div class="detail-field"><div class="detail-field-label">下一步</div><div class="detail-field-value large">${escapeHtml(actionLabel(record))}</div></div><div class="detail-field"><div class="detail-field-label">研究判断</div><div class="detail-field-value">${escapeHtml(text(record.action, "观察"))}</div></div><div class="detail-field"><div class="detail-field-label">Checklist</div><div class="detail-field-value">${escapeHtml(checklistDisplayLabel(record?.checklist?.status))}</div></div><div class="detail-field"><div class="detail-field-label">情绪辅助</div><div class="detail-field-value">${escapeHtml(sentiment.stateText)}${sentiment.score == null ? "" : ` · ${formatNumber(sentiment.score, 1)}`}</div></div><div class="detail-field"><div class="detail-field-label">最近事件</div><div class="detail-field-value">${escapeHtml(label("eventState", radar.state))}${radar.thesis_relevant ? " · 投资逻辑相关" : ""}</div></div><div class="detail-field"><div class="detail-field-label">数据范围</div><div class="detail-field-value">${escapeHtml(record.realtime_scope === "research_only" ? "仅研究" : "A/H 实时支持")}</div></div></div>${record.conclusion_summary ? `<p class="source-line">${escapeHtml(record.conclusion_summary)}</p>` : ""}</div>`;
 }
 
 function decisionContextValues(record) {
@@ -1379,6 +1448,7 @@ function decisionContextValues(record) {
 function renderDecisionContext(record) {
   const context = decisionContextValues(record);
   const fields = [
+    { name: "任务类型", value: guidanceFor(record).task_label || "等待状态刷新" },
     { name: "当前阶段", value: context.lifecycle },
     { name: "当前卡点", value: context.blocker },
     { name: "下一步", value: context.nextStep },
@@ -1399,6 +1469,7 @@ function renderDetail(record) {
     renderDecisionContext(record),
     renderDispositionControls(record),
     renderCurrentJudgment(record),
+    renderFormalDriftResult(record),
     renderLightThesisReason(record),
     renderAiOpportunitySection(record),
     `<div class="detail-section"><div class="detail-section-head"><h3>决策规则</h3><span class="section-count">${ruleCount} 条</span></div>${renderRules(record)}</div>`,
@@ -1412,11 +1483,19 @@ function renderDetail(record) {
 function openDetail(ticker) {
   const record = currentRecord(ticker);
   if (!record) return;
+  const opening = els.drawer.hidden;
+  const changed = state.selectedTicker !== ticker;
+  if (opening) state.drawerReturnFocus = document.activeElement;
   state.selectedTicker = ticker;
   renderDetail(record);
   els.backdrop.hidden = false;
   els.drawer.hidden = false;
   document.body.classList.add("drawer-open");
+  document.querySelector(".app-shell").inert = true;
+  if (opening || changed) {
+    els.drawer.scrollTop = 0;
+    els.drawerClose.focus({ preventScroll: true });
+  }
   history.replaceState(null, "", `#${state.workspace}/company=${encodeURIComponent(ticker)}`);
 }
 
@@ -1481,31 +1560,31 @@ async function submitDisposition() {
 async function loadJson(path) {
   const separator = path.includes("?") ? "&" : "?";
   const requestVersion = `${Date.now()}-${++dataRequestSequence}`;
-  const response = await fetch(`${path}${separator}v=${requestVersion}`, {
-    cache: "no-store",
-    headers: { "Cache-Control": "no-cache" },
-  });
-  if (!response.ok) throw new Error(`${path} (${response.status})`);
-  return response.json();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), path === DATA_FILES.core ? 15000 : 4000);
+  try {
+    const response = await fetch(`${path}${separator}v=${requestVersion}`, {
+      cache: "no-store", signal: controller.signal,
+      headers: { "Cache-Control": "no-cache" },
+    });
+    if (!response.ok) throw Object.assign(new Error(`${path} (${response.status})`), { status: response.status });
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function loadOptionalJson(path, fallback) {
   try {
     return await loadJson(path);
-  } catch {
-    return fallback();
+  } catch (error) {
+    return { ...fallback(), _load_state: error.status === 404 ? "missing" : "load_failed" };
   }
 }
 
 async function loadDispositionAuthority() {
   try {
-    const response = await fetch(`/api/investment-dispositions?v=${Date.now()}`, {
-      cache: "no-store",
-      headers: { "Cache-Control": "no-cache" },
-    });
-    if (response.status === 403 || response.status === 404) return { authorized: false, payload: null };
-    if (!response.ok) throw new Error(`investment dispositions (${response.status})`);
-    return { authorized: true, payload: await response.json() };
+    return { authorized: true, payload: await loadJson("/api/investment-dispositions") };
   } catch {
     return { authorized: false, payload: null };
   }
@@ -1536,31 +1615,54 @@ function normalizeTracking(payload) {
   return new Map(Object.entries(positions || {}).filter(([, item]) => item?.ticker).map(([ticker, item]) => [ticker, item]));
 }
 
+function validateDashboardCore(payload) {
+  if (payload?.schema_version !== 1 || payload.artifact_role !== "derived_dashboard_core"
+      || !/^[a-f0-9]{64}$/.test(payload.generation_id || "")) {
+    throw new Error("看板核心数据版本不匹配，请完成构建后重新读取。");
+  }
+  const populations = [payload.companyState?.companies, payload.rules?.companies];
+  if (populations.some(rows => !Array.isArray(rows))) throw new Error("看板核心数据不完整");
+  const tickers = populations.map(rows => rows.map(row => row?.ticker));
+  if (tickers.some(items => items.some(t => !t) || new Set(items).size !== items.length)
+      || tickers[0].length !== tickers[1].length || tickers[0].some(t => !tickers[1].includes(t))) {
+    throw new Error("公司状态与规则集合不一致，保留上次完整看板。");
+  }
+  return payload;
+}
+
 async function loadData({ silent = false } = {}) {
   const loadSequence = ++state.loadSequence;
-  if (!silent) {
+  if (!silent && !state.loadedAt) {
     els.attentionList.innerHTML = `<div class="loading-card">正在读取看板数据…</div>`;
     els.holdingList.innerHTML = `<div class="loading-card">正在读取持仓数据…</div>`;
   }
-  const entries = await Promise.all(Object.entries(DATA_FILES).map(async ([name, path]) => [
-    name,
-    OPTIONAL_DATA_FALLBACKS[name]
-      ? await loadOptionalJson(path, () => ({ ...OPTIONAL_DATA_FALLBACKS[name] }))
-      : await loadJson(path),
-  ]));
-  const payload = Object.fromEntries(entries);
-  const dispositionResult = await loadDispositionAuthority();
+  const core = validateDashboardCore(await loadJson(DATA_FILES.core));
   if (loadSequence !== state.loadSequence) return false;
-  if (!payload.companyState || !Array.isArray(payload.companyState.companies)) throw new Error("公司状态数据不可用");
-  state.board = payload.board;
-  state.companyState = indexByTicker(payload.companyState.companies);
+  // One atomically published core response; never combine independent rule,
+  // state or holding-generation files. Auxiliary feeds cannot block first paint.
+  state.board = core.board;
+  state.coreGeneration = core.generation_id;
+  state.companyStateMeta = core.companyState;
+  state.companyState = indexByTicker(core.companyState.companies);
+  state.rulePackages = indexByTicker(core.rules.companies);
+  state.technical = indexByTicker(core.technical?.companies);
+  state.tracking = normalizeTracking(core.tracking);
+  state.originalTheses = core.originalTheses || {schema_version: 2, cycles: {}, active_position_ids: {}};
+  state.dispositionAccess = false;
+  state.loadedAt = new Date().toISOString();
+  populateDynamicFilters();
+  renderAll();
+  syncWorkspaceFromLocation();
+  const [entries, dispositionResult] = await Promise.all([
+    Promise.all(Object.entries(DATA_FILES).filter(([name]) => name !== "core").map(async ([name, path]) => [
+      name, await loadOptionalJson(path, () => ({ ...OPTIONAL_DATA_FALLBACKS[name] })),
+    ])),
+    loadDispositionAuthority(),
+  ]);
+  if (loadSequence !== state.loadSequence) return false;
+  const payload = Object.fromEntries(entries);
   applyDispositionAuthority(dispositionResult);
-  state.rulePackages = indexByTicker(payload.rules?.companies);
-  state.events = indexByTicker(payload.events?.companies);
-  state.technical = indexByTicker(payload.technical?.companies);
   state.sentiment = indexByTicker(payload.sentiment?.companies);
-  state.tracking = normalizeTracking(payload.tracking);
-  state.originalTheses = payload.originalTheses || { schema_version: 2, cycles: {}, active_position_ids: {} };
   state.quotes = indexByTicker(payload.quotes?.quotes);
   state.quoteMeta = payload.quotes;
   state.sentimentMeta = { ...(payload.sentiment || {}), ...(payload.sentimentStatus || {}) };
@@ -1574,10 +1676,10 @@ async function loadData({ silent = false } = {}) {
     generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
     scan_generated_at: scanStatus.scan_generated_at || scanPayload.generated_at || null,
     display_result_generated_at: scanPayload.generated_at || scanStatus.last_success_scan_generated_at || scanStatus.last_success_at || null,
-    display_scan_count: scanPayload.scan_count ?? scanStatus.last_success_scan_count ?? null,
-    display_expected_scan_count: scanPayload.expected_scan_count ?? scanStatus.last_success_expected_scan_count ?? null,
-    display_current_opportunity_count: scanPayload.current_opportunity_count ?? scanStatus.last_success_current_opportunity_count ?? null,
-    display_near_opportunity_count: scanPayload.near_opportunity_count ?? scanStatus.last_success_near_opportunity_count ?? null,
+    display_scan_count: scanPayload.scan_count ?? null,
+    display_expected_scan_count: scanPayload.expected_scan_count ?? null,
+    display_current_opportunity_count: scanPayload.current_opportunity_count ?? null,
+    display_near_opportunity_count: scanPayload.near_opportunity_count ?? null,
     scan_count: scanStatus.scan_count ?? scanPayload.scan_count,
     expected_scan_count: scanStatus.expected_scan_count ?? scanPayload.expected_scan_count,
     current_opportunity_count: scanStatus.current_opportunity_count ?? scanPayload.current_opportunity_count,
@@ -1608,6 +1710,27 @@ async function refreshDataOnPageResume({ force = false } = {}) {
   }
 }
 
+function scheduleQuoteExpiry() {
+  clearTimeout(state.quoteExpiryTimer);
+  const now = Date.now();
+  const deadlines = [...state.quotes.values()]
+    .filter(quote => quoteIsCurrent(quote, now))
+    .map(quote => Date.parse(quote.quality.valid_until));
+  if (!deadlines.length) return;
+  state.quoteExpiryTimer = setTimeout(function expire() {
+    // Do not replace controls while a disposition confirmation is in progress.
+    if (state.pendingDisposition) {
+      state.quoteExpiryTimer = setTimeout(expire, 1000);
+      return;
+    }
+    const focusedId = document.activeElement?.id;
+    renderAll();
+    const selected = state.selectedTicker && currentRecord(state.selectedTicker);
+    if (selected && !els.drawer.hidden) renderDetail(selected);
+    if (focusedId) document.getElementById(focusedId)?.focus({preventScroll: true});
+  }, Math.min(2147483647, Math.max(1, Math.min(...deadlines) - now + 1)));
+}
+
 function renderAll() {
   renderTopMeta();
   renderStatusCards();
@@ -1617,6 +1740,7 @@ function renderAll() {
   renderHoldings();
   renderWatchlist();
   renderWorkspaceNav();
+  scheduleQuoteExpiry();
 }
 
 function applyFilterFromJump({ lifecycle = "all", opportunity = "all" } = {}) {
@@ -1743,11 +1867,12 @@ function bindEvents() {
   });
   for (const container of [els.attentionList, els.opportunityList, els.aiOpportunityList, els.holdingList]) {
     container.addEventListener("click", (event) => {
-      if (event.target.closest("a[data-stop-card]")) return;
+      if (event.target.closest("a, button, summary, input, select, textarea")) return;
       const card = event.target.closest("[data-ticker]");
       if (card) openDetail(card.dataset.ticker);
     });
     container.addEventListener("keydown", (event) => {
+      if (event.target.closest("a, button, summary, input, select, textarea")) return;
       if (event.key !== "Enter" && event.key !== " ") return;
       const card = event.target.closest("[data-ticker]");
       if (card) { event.preventDefault(); openDetail(card.dataset.ticker); }
@@ -1807,8 +1932,18 @@ function bindEvents() {
     try { await loadData({ silent: true }); toast("看板数据已重新读取"); } catch (error) { toast(`读取失败：${error.message}`); } finally { els.refresh.disabled = false; }
   });
   document.addEventListener("keydown", (event) => {
+    if (els.dispositionDialog.open) return;
     if (event.key === "Escape" && !els.drawer.hidden) closeDetail();
-    if (event.key === "/" && document.activeElement?.tagName !== "INPUT") { event.preventDefault(); els.search.focus(); }
+    if (event.key === "Tab" && !els.drawer.hidden) {
+      const focusable = [...els.drawer.querySelectorAll('a[href], button:not([disabled]), summary, input, select, textarea, [tabindex="0"]')]
+        .filter((element) => element.getClientRects().length);
+      const first = focusable[0], last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
+    if (event.key === "/" && els.drawer.hidden && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName) && !document.activeElement?.isContentEditable) {
+      event.preventDefault(); setWorkspace("watchlist"); els.search.focus();
+    }
   });
 }
 

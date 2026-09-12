@@ -157,7 +157,7 @@ checkpoint 的 workflow handoff；旧 `set-drift` 已拒绝直接写入：
 
 ```bash
 python3 tools/company_state.py set-lifecycle 000682.SZ PRE_BUY --reason "等待确认买入前检查"
-python3 tools/investment_workflow.py drift 000682.SZ --result /path/to/review-result.json --write
+python3 tools/investment_workflow.py drift 000682.SZ --mode holding --direction unchanged --summary "已完成的复核摘要" --facts-source reports/东方电子/东方电子-thesis.md --write
 python3 tools/build_investment_dashboard.py
 ```
 
@@ -222,7 +222,7 @@ python3 tools/financial_facts.py validate
 python3 tools/financial_facts.py upsert --fact /path/to/fact.json
 ```
 
-只有 metric、operator、threshold、period、unit 全部经过批准，且事实未过期、单位一致、
+只有 metric、operator、threshold、period、unit、accounting_basis、period_basis 全部经过批准，且事实未过期、单位/口径一致、
 证据身份稳定时才求值。“明显改善”等模糊条件继续保持待定义。
 
 机会扫描失败项可单独重试并合并回完整集合，不会用单股结果覆盖其余公司：

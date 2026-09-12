@@ -17,6 +17,18 @@ VENV_DIR="${VENV_DIR:-/opt/ai-berkshire-venv}"
 REFRESH_SERVICES="${REFRESH_SERVICES:-/usr/local/sbin/ai-berkshire-refresh-services}"
 GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-yuzi1441/ai-berkshire}"
 REQUIRE_GITHUB_CI="${REQUIRE_GITHUB_CI:-1}"
+# A preinstalled bootstrap pins these helpers alongside this publisher, so an
+# older source checkout cannot remove the guard during a transition.
+GATE_TOOLS="${RELEASE_GATE_TOOLS:-${SOURCE_DIR}/tools}"
+
+# Check the actual service interpreter before touching the source or release.
+# Dependency installation is an explicit maintenance step, not a deploy side effect.
+"${PYTHON}" - <<'PY'
+from importlib.metadata import version
+import exchange_calendars
+if version("exchange-calendars") != "4.13.2":
+    raise SystemExit("release blocked: install reviewed requirements-technical.txt in the service venv")
+PY
 
 mkdir -p "${RELEASE_ROOT}" "${RUNTIME_DIR}"
 if [[ ! -d "${SOURCE_DIR}/.git" ]]; then
@@ -34,19 +46,23 @@ git -C "${SOURCE_DIR}" diff --check
 SOURCE_SHA="$(git -C "${SOURCE_DIR}" rev-parse HEAD)"
 SOURCE_TREE="$(git -C "${SOURCE_DIR}" rev-parse HEAD^{tree})"
 if [[ -f "${CURRENT_LINK}/.source-sha" ]] && [[ "$(<"${CURRENT_LINK}/.source-sha")" == "${SOURCE_SHA}" ]]; then
-    echo "release ${SOURCE_SHA} is already current"
-    exit 0
+    if "${PYTHON}" "${GATE_TOOLS}/release_validation_record.py" --check \
+        --repo-root "${CURRENT_LINK}" --source-sha "${SOURCE_SHA}" --source-tree "${SOURCE_TREE}"; then
+        echo "release ${SOURCE_SHA} is already current and validated"
+        exit 0
+    fi
+    echo "same-SHA release lacks a valid activation record; rebuilding through all gates" >&2
 fi
 
 # A scheduled publisher can race GitHub Actions.  Pending, missing or failed
 # validation keeps the prior release active; the next timer run retries.
 if [[ "${REQUIRE_GITHUB_CI}" == "1" ]]; then
-    "${PYTHON}" "${SOURCE_DIR}/tools/verify_github_ci.py" \
+    "${PYTHON}" "${GATE_TOOLS}/verify_github_ci.py" \
         --repository "${GITHUB_REPOSITORY}" --sha "${SOURCE_SHA}"
 fi
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
-FINAL_RELEASE="${RELEASE_ROOT}/${SOURCE_SHA:0:12}-${STAMP}"
+FINAL_RELEASE="${RELEASE_ROOT}/${SOURCE_SHA:0:12}-${STAMP}-$$"
 STAGING_RELEASE="${FINAL_RELEASE}.next"
 cleanup_staging() {
     local rc=$?
@@ -171,7 +187,7 @@ fi
         tests.test_market_snapshot \
         tests.test_reconcile_release_state
 )
-"${PYTHON}" "${STAGING_RELEASE}/tools/release_validation_record.py" \
+"${PYTHON}" "${GATE_TOOLS}/release_validation_record.py" \
     --repo-root "${STAGING_RELEASE}" --source-sha "${SOURCE_SHA}" --source-tree "${SOURCE_TREE}"
 
 mv "${STAGING_RELEASE}" "${FINAL_RELEASE}"
@@ -183,12 +199,17 @@ TEMP_LINK="${BASE_DIR}/.current-${SOURCE_SHA:0:12}-$$"
 ln -s "${FINAL_RELEASE}" "${TEMP_LINK}"
 mv -Tf "${TEMP_LINK}" "${CURRENT_LINK}"
 
-if ! "${REFRESH_SERVICES}"; then
+if ! "${REFRESH_SERVICES}" || ! "${PYTHON}" "${GATE_TOOLS}/release_validation_record.py" --activate \
+    --repo-root "${FINAL_RELEASE}" --source-sha "${SOURCE_SHA}" --source-tree "${SOURCE_TREE}"; then
     if [[ -n "${OLD_RELEASE}" ]]; then
         ROLLBACK_LINK="${BASE_DIR}/.rollback-${SOURCE_SHA:0:12}-$$"
         ln -s "${OLD_RELEASE}" "${ROLLBACK_LINK}"
         mv -Tf "${ROLLBACK_LINK}" "${CURRENT_LINK}"
         "${REFRESH_SERVICES}" || true
+    else
+        # First activation has no prior symlink. Do not leave a failed release
+        # looking current on the next retry; the legacy checkout is untouched.
+        unlink "${CURRENT_LINK}"
     fi
     echo "release activation failed; current was restored" >&2
     exit 1

@@ -16,6 +16,7 @@ import drift_scan_state  # noqa: E402
 import drift_provenance  # noqa: E402
 import holding_research_reviews  # noqa: E402
 import financial_facts  # noqa: E402
+import dashboard_snapshot  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -86,6 +87,14 @@ def main() -> int:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
     errors = decision_state.validate_payloads({"rules": rules, "state": state})
+    core_path = args.repo_root.resolve() / "site" / "data" / dashboard_snapshot.FILENAME
+    if core_path.is_file():
+        try:
+            dashboard_snapshot.validate_snapshot(load(core_path))
+        except ValueError as error:
+            errors.append(str(error))
+    elif args.require_tracked_assets:
+        errors.append("missing atomic dashboard core; rebuild before release")
     scan_path = data / drift_scan_state.RELATIVE_PATH.name
     scan = None
     scan_stale_baselines = []

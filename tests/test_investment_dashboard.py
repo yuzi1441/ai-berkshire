@@ -934,7 +934,8 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(selected["action"], "观察")
             self.assertEqual(selected["post_buy_tracking"]["status"], "holding")
             self.assertEqual(selected["post_buy_tracking"]["thesis_status"], "healthy")
-            self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 1)
+            # An undated cached deadline cannot override the current October review date.
+            self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 0)
             self.assertTrue((root / "site" / "data" / "post_buy_tracking.json").is_file())
 
     def test_public_holding_projection_does_not_mutate_runtime_execution_facts(self):

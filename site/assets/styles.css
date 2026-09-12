@@ -444,7 +444,7 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .metric-item { display: grid; grid-template-columns: minmax(100px, .6fr) 1fr; gap: 8px; color: var(--text-soft); font-size: 11px; }
 .metric-item span:first-child { color: var(--muted); }
 .source-line { margin-top: 13px; padding-top: 11px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 10px; line-height: 1.6; }
-.drawer-report-link { display: inline-flex; margin-top: 12px; color: var(--blue); font-size: 12px; text-decoration: none; }
+.drawer-report-link { display: inline-flex; max-width: 100%; overflow-wrap: anywhere; margin-top: 12px; color: var(--blue); font-size: 12px; text-decoration: none; }
 .drawer-report-link:hover { text-decoration: underline; }
 .unsupported-note { color: var(--muted); font-size: 11px; }
 
@@ -482,6 +482,7 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
   .section-heading { align-items: start; flex-direction: column; gap: 9px; }
   .section-heading-tight { align-items: start; flex-direction: row; }
   .attention-layer-grid, .opportunity-list, .ai-opportunity-list, .holdings-grid { grid-template-columns: 1fr; }
+  .opportunity-primary { flex-direction: column; align-items: stretch; gap: 8px; }
   .filter-primary-row { align-items: stretch; flex-direction: column; gap: 9px; }
   .filter-primary-row .search-control { flex: 0 0 auto; width: 100%; max-width: none; margin-left: 0; }
   .search-control, .select-control { min-width: 0; }

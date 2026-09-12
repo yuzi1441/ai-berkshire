@@ -15,9 +15,11 @@ Examples::
     python3 tools/post_buy_tracking.py update 600406.SH \
       --thesis-status healthy --health-score 8 --last-review 2026-08-01
     python3 tools/post_buy_tracking.py event 600406.SH \
+      --expected-position-id 600406.SH:2026-08-01 \
       --change-pct -6.4 --window 1日 --category 情绪 \
       --summary "大盘与行业同步回撤，暂未发现公司特有事件" \
-      --no-review-required
+      --report-path reports/国电南瑞/国电南瑞-news-20260801.md \
+      --no-review-required --attribution-status completed --covers-alert-id <event_id>
     python3 tools/post_buy_tracking.py check
 """
 
@@ -26,9 +28,11 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import math
 import os
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, time
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -634,26 +638,84 @@ def command_event(args: argparse.Namespace, repo_root: Path) -> None:
             print(f"Skipped event; no registered post-buy position: {key_for_ticker(args.ticker)}")
             return
         raise
+    expected_id = str(getattr(args, "expected_position_id", None) or "")
+    if not expected_id or expected_id != item.get("position_id"):
+        raise ValueError("--expected-position-id must match the current holding cycle")
+    if item.get("status") not in {"holding", "paused"}:
+        raise ValueError("cannot attach an event to a closed holding cycle")
     event_date = parse_iso_date(args.event_date, "event-date") or today().isoformat()
+    if (item.get("buy_date") and event_date < item["buy_date"]) or event_date > today().isoformat():
+        raise ValueError("event-date must belong to the current holding cycle and cannot be in the future")
+    root = repo_root.resolve()
+    report = (root / str(args.report_path or "")).resolve()
+    if root not in report.parents or not report.is_file():
+        raise ValueError("--report-path must identify an existing report inside the repository")
+    report_path = report.relative_to(root).as_posix()
+    report_hash = canonical_file_sha256(report)
+    expected_hash = getattr(args, "report_sha256", None)
+    if expected_hash and expected_hash != report_hash:
+        raise ValueError("report-sha256 mismatch; review the current report before saving")
+    attribution = getattr(args, "attribution_status", "unresolved")
+    covers_id = getattr(args, "covers_alert_id", None)
+    if attribution == "completed" and (not covers_id or args.category == "不明"):
+        raise ValueError("completed attribution requires --covers-alert-id and a resolved category")
+    covered = None
+    if covers_id:
+        matches = [alert for alert in load_json(root / ALERTS_RELATIVE, {"alerts": []}).get("alerts", [])
+                   if isinstance(alert, dict) and alert.get("kind") == "price_move"
+                   and alert.get("event_id") == covers_id]
+        if not matches:
+            # A successful check removes the alert. Keep its exact target in the
+            # event authority so retrying the same completion remains idempotent.
+            prior_targets = {holding_research_reviews.identity_sha256(event["covered_price_move"]): event["covered_price_move"]
+                             for event in item.get("events") or []
+                             if isinstance(event, dict) and event.get("position_id") == expected_id
+                             and event.get("covers_alert_id") == covers_id
+                             and holding_research_reviews.event_identity_complete(event)
+                             and isinstance(event.get("covered_price_move"), dict)}
+            matches = list(prior_targets.values())
+        if len(matches) != 1:
+            raise ValueError("covers-alert-id must resolve to one current price-move alert")
+        covered = matches[0]
+        if (covered.get("position_id") != expected_id
+                or covered.get("ticker") != key_for_ticker(args.ticker)
+                or not holding_research_reviews.price_identity_complete(covered)
+                or covered.get("event_date") != event_date
+                or covered.get("window") != args.window):
+            raise ValueError("covered alert cycle, date, window or quote identity mismatch")
     event = {
+        "ticker": key_for_ticker(args.ticker),
+        "position_id": expected_id,
         "date": event_date,
         "change_pct": args.change_pct,
         "window": args.window,
         "category": args.category,
         "summary": args.summary,
         "review_required": bool(args.review_required),
-        "report_path": args.report_path,
+        "report_path": report_path,
+        "source_identity": report_path,
+        "content_sha256": report_hash,
+        "attribution_status": attribution,
+        "covers_alert_id": covers_id,
+        "quote_identity": covered.get("quote_identity") if covered else None,
+        "quote_content_sha256": covered.get("content_sha256") if covered else None,
+        "covered_price_move": copy.deepcopy(covered),
+        "recorded_at": iso_now(),
     }
+    event["event_id"] = holding_research_reviews.news_event_id(event)
     events = item.setdefault("events", [])
     if not isinstance(events, list):
         raise ValueError("position.events must be a list")
+    if any(isinstance(existing, dict) and existing.get("event_id") == event["event_id"] for existing in events):
+        print(f"Event already recorded: {event['event_id']}")
+        return
     events.append(event)
     item["events"] = events[-50:]
     item["latest_event"] = event
     item["updated_at"] = iso_now()
     payload["updated_at"] = iso_now()
     save_json(path, payload)
-    print(f"Added post-buy event: {key_for_ticker(args.ticker)} {event_date}")
+    print(f"Added post-buy event: {key_for_ticker(args.ticker)} {event_date} {event['event_id']}")
 
 
 def load_quotes(repo_root: Path, quote_path: Path | None) -> dict[str, dict[str, Any]]:
@@ -668,28 +730,68 @@ def load_quotes(repo_root: Path, quote_path: Path | None) -> dict[str, dict[str,
         quotes = payload.get("quotes")
         if not isinstance(quotes, list):
             continue
-        return {
-            str(item.get("ticker")).upper(): item
-            for item in quotes
-            if isinstance(item, dict) and item.get("ticker")
-        }
+        from quote_quality import with_quote_metadata
+        return with_quote_metadata(payload)
     return {}
 
 
+def price_move_identity(ticker: str, position_id: str | None, quote: dict[str, Any],
+                        observed_at: Any) -> dict[str, Any]:
+    """Identify an exact observed move; rebuild timestamps never enter the key."""
+    if not position_id or not observed_at:
+        return {}
+    try:
+        observed = (observed_at if isinstance(observed_at, datetime)
+                    else datetime.fromisoformat(str(observed_at)))
+        if observed.tzinfo is None:
+            return {}
+        change = format(Decimal(str(quote["change_pct"])).normalize(), "f")
+    except (KeyError, ValueError, ArithmeticError):
+        return {}
+    evidence = {"ticker": ticker, "observed_at": observed.astimezone(SHANGHAI).isoformat(),
+                "change_pct": change, "window": "1日"}
+    digest = holding_research_reviews.identity_sha256(evidence)
+    quote_id = "quote:" + digest
+    return {"position_id": position_id, "quote_identity": quote_id,
+            "source_identity": quote_id, "content_sha256": digest, "quote_evidence": evidence,
+            "event_id": "price_move:" + holding_research_reviews.identity_sha256(
+                {"position_id": position_id, "quote_identity": quote_id}),
+            "event_date": observed.astimezone(
+                ZoneInfo("America/New_York") if quote.get("market") == "美股" else SHANGHAI
+            ).date().isoformat(), "window": "1日"}
+
+
+def check_quote_time(as_of: str | None, market: str, now: datetime) -> datetime:
+    if not as_of:
+        return now
+    zone = ZoneInfo("America/New_York") if market == "美股" else SHANGHAI
+    return datetime.combine(date.fromisoformat(as_of), time(15 if market == "A股" else 16, 10), tzinfo=zone)
+
+
 def command_check(args: argparse.Namespace, repo_root: Path) -> None:
+    from quote_quality import quote_quality
     tracking_path = repo_root / TRACKING_RELATIVE
     payload = load_tracking(tracking_path)
-    as_of = date.fromisoformat(args.as_of) if args.as_of else today()
+    checked_at = datetime.now(SHANGHAI)
+    as_of = date.fromisoformat(args.as_of) if args.as_of else checked_at.date()
     quotes = load_quotes(repo_root, args.quote_path)
     research_payload = holding_research_reviews.load(
         repo_root / holding_research_reviews.RELATIVE_PATH, strict=True
     )
     original_payload = load_original_thesis(repo_root / ORIGINAL_THESIS_RELATIVE)
+    old_alerts = load_json(repo_root / ALERTS_RELATIVE, {"alerts": []}).get("alerts") or []
     alerts: list[dict[str, Any]] = []
 
     for key, item in payload["positions"].items():
         if not isinstance(item, dict) or item.get("status") != "holding":
             continue
+        # Legacy unbound cache remains inspectable until explicitly repaired.
+        position_alerts = [dict(alert) for alert in old_alerts
+                           if isinstance(alert, dict) and alert.get("ticker") == key
+                           and (alert.get("kind") == "identity_verification"
+                                or (alert.get("kind") in {"price_move", "thesis_review"}
+                                    and "binding_reasons" not in alert
+                                    and (not alert.get("position_id") or not alert.get("event_id"))))]
         thresholds = item.get("thresholds") if isinstance(item.get("thresholds"), dict) else {}
         daily_pct = float(thresholds.get("daily_pct", DEFAULT_THRESHOLDS["daily_pct"]))
         review_days = int(thresholds.get("review_days_before", DEFAULT_THRESHOLDS["review_days_before"]))
@@ -698,16 +800,20 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
         research_projection = holding_research_reviews.apply_review(
             dict(item), review=review, position=position_record,
             original_buy_theses=original_payload, repo_root=repo_root,
-            allow_legacy=True,
+            # Explicitly support pre-cycle legacy records only. A current
+            # position with missing Git research must never inherit old research.
+            allow_legacy=not bool(item.get("position_id")),
         )
         next_review = research_projection.get("next_review_date")
-        if research_projection.get("research_binding_status") == "binding_mismatch":
-            alerts.append({
+        if research_projection.get("research_binding_status") in {"binding_mismatch", "unreviewed"}:
+            position_alerts.append({
                 "ticker": key,
                 "company": item.get("company", key),
                 "kind": "thesis_review",
                 "severity": "critical",
                 "title": "持仓研究结果绑定待核对",
+                "position_id": item.get("position_id"),
+                "reason_code": "research_binding_required",
                 "detail": "Git 研究结果与当前持仓周期或冻结买入逻辑不匹配",
                 "binding_reasons": research_projection.get("research_binding_reasons") or [],
             })
@@ -715,7 +821,7 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
             review_date = date.fromisoformat(next_review)
             days_left = (review_date - as_of).days
             if days_left <= review_days:
-                alerts.append(
+                position_alerts.append(
                     {
                         "ticker": key,
                         "company": item.get("company", key),
@@ -724,12 +830,16 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
                         "title": "论文复核已到期" if days_left <= 0 else "论文复核即将到期",
                         "detail": f"复核日期 {next_review}（{'逾期' if days_left < 0 else f'{days_left} 天后'}）",
                         "due_date": next_review,
+                        "position_id": item.get("position_id"),
                     }
                 )
         quote = quotes.get(key)
         change = quote.get("change_pct") if isinstance(quote, dict) else None
-        if isinstance(change, (int, float)) and abs(float(change)) >= daily_pct:
-            alerts.append(
+        evaluated_at = check_quote_time(args.as_of, (quote or {}).get("market") or item.get("market", ""), checked_at)
+        quality = quote_quality(quote, evaluated_at)
+        if (quality.get("eligible") is True and isinstance(change, (int, float))
+                and not isinstance(change, bool) and math.isfinite(change) and abs(change) >= daily_pct):
+            position_alerts.append(
                 {
                     "ticker": key,
                     "company": item.get("company", key),
@@ -739,23 +849,13 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
                     "detail": f"单日涨跌 {float(change):+.2f}%，达到 ±{daily_pct:g}% 预警线",
                     "change_pct": float(change),
                     "quote_timestamp": quote.get("provider_timestamp"),
+                    **price_move_identity(key, item.get("position_id"), quote, quality.get("observed_at")),
                 }
             )
-        latest_event = item.get("latest_event")
-        if isinstance(latest_event, dict) and latest_event.get("review_required"):
-            alerts.append(
-                {
-                    "ticker": key,
-                    "company": item.get("company", key),
-                    "kind": "thesis_review",
-                    "severity": "critical",
-                    "title": "异动报告要求重审论文",
-                    "detail": latest_event.get("summary") or "请运行 thesis-tracker",
-                    "event_date": latest_event.get("date"),
-                    "report_path": latest_event.get("report_path"),
-                }
-            )
-
+        # Keep all unresolved events, not only whichever report was appended last.
+        research_projection["alerts"] = position_alerts
+        alerts.extend({**alert, "ticker": key, "company": item.get("company", key)}
+                      for alert in holding_research_reviews.pending_alerts(research_projection, as_of=as_of))
     result = {
         "schema_version": SCHEMA_VERSION,
         "generated_at": iso_now(),
@@ -803,6 +903,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     event = sub.add_parser("event", help="append a manually reviewed price/news event")
     event.add_argument("ticker")
+    event.add_argument("--expected-position-id", help="required for registered holdings; rejects delayed results from another cycle")
     event.add_argument("--event-date")
     event.add_argument("--change-pct", type=float)
     event.add_argument("--window", default="1日")
@@ -812,6 +913,10 @@ def build_parser() -> argparse.ArgumentParser:
     event.add_argument("--no-review-required", dest="review_required", action="store_false")
     event.set_defaults(review_required=False)
     event.add_argument("--report-path")
+    event.add_argument("--report-sha256", help="optional expected canonical report hash; mismatches are rejected")
+    event.add_argument("--covers-alert-id", help="exact price_move event_id from post_buy_alerts.json")
+    event.add_argument("--attribution-status", choices=("completed", "unresolved"), default="unresolved",
+                       help="completed requires a verified report and an exact covered alert; default never closes price alerts")
     event.add_argument("--skip-unregistered", action="store_true", help="exit successfully when the stock is not a registered position")
     event.set_defaults(handler=command_event)
 

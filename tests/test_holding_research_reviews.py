@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import date
 from pathlib import Path
 
 
@@ -15,6 +16,20 @@ from source_hash import canonical_file_sha256  # noqa: E402
 
 
 class HoldingResearchReviewTests(unittest.TestCase):
+    def test_repaired_binding_closes_only_binding_alert_not_uncovered_event(self):
+        binding = {"kind": "thesis_review", "binding_reasons": ["original_buy_thesis_sha256_mismatch"]}
+        event = {"kind": "thesis_review", "source_identity": "new-event", "date": "2026-09-11",
+                 "position_id": "p1", "content_sha256": "a" * 64, "review_required": True,
+                 "evidence_status": "matched"}
+        event["event_id"] = reviews.news_event_id(event)
+        projection = {"position_id": "p1", "research_binding_status": "binding_mismatch",
+                      "next_review_date": "2026-12-31", "alerts": [binding, event], "news_pulse_events": [event]}
+        self.assertEqual(len(reviews.pending_alerts(projection, as_of=date(2026, 9, 12))), 2)
+        projection["research_binding_status"] = "matched"
+        pending = reviews.pending_alerts(projection, as_of=date(2026, 9, 12))
+        self.assertEqual(len(pending), 1)
+        self.assertEqual(pending[0]["event_id"], event["event_id"])
+
     def fixture(self, root: Path) -> tuple[dict, dict, dict]:
         report = root / "reports" / "示例公司" / "review.md"
         report.parent.mkdir(parents=True)
@@ -36,7 +51,10 @@ class HoldingResearchReviewTests(unittest.TestCase):
             "report_path": "reports/示例公司/review.md", "report_sha256": report_sha,
             "reviewed_at": "2026-09-01", "next_review_date": "2026-10-01",
             "thesis_status": "healthy", "health_score": 8,
-            "review_action": "持有", "metrics": [], "evidence": [],
+            "review_action": "持有", "metrics": [], "evidence": [{
+                "source_identity": "https://example.test/report", "content_sha256": "c" * 64,
+                "date": "2026-09-01",
+            }],
             "provenance": "thesis-tracker",
         }
         return position, original, review

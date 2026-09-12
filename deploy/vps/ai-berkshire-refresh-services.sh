@@ -55,10 +55,13 @@ DASHBOARD_ADMIN_PASSWORD_HASH="${ADMIN_HASH}" \
 
 install -D -m 0755 "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-scheduler.sh" \
     /usr/local/sbin/ai-berkshire-a-share-scheduler
-install -D -m 0755 "${REPO_ROOT}/deploy/vps/ai-berkshire-publish-release.sh" \
-    /usr/local/sbin/ai-berkshire-publish-release
-install -D -m 0755 "${REPO_ROOT}/deploy/vps/ai-berkshire-refresh-services.sh" \
-    /usr/local/sbin/ai-berkshire-refresh-services
+if [[ -f "${REPO_ROOT}/deploy/vps/install-release-guard.sh" ]]; then
+    BOOTSTRAP_ROOT="${REPO_ROOT}" bash "${REPO_ROOT}/deploy/vps/install-release-guard.sh"
+else
+    # A rollback can select a release predating the guard. Its publisher and
+    # refresh script must not replace the hardened, separately installed pair.
+    echo "legacy release: retaining the installed release guard and refresh script"
+fi
 bash "${REPO_ROOT}/deploy/vps/install-opencode-review-agent.sh"
 install -D -m 0755 "${REPO_ROOT}/deploy/vps/ai-berkshire-opencode-review.sh" \
     /usr/local/sbin/ai-berkshire-opencode-review

@@ -52,7 +52,9 @@ def main() -> int:
         return 0
     print(
         "set-drift is retired because it cannot preserve evidence references and review history. "
-        "Use tools/investment_workflow.py drift <ticker> --result <file> --write.",
+        "Use tools/investment_workflow.py drift <ticker> --mode <watch|holding> "
+        "--direction <improved|unchanged|weakened|unknown> --summary <summary> "
+        "--facts-source <evidence-path> --write.",
         file=sys.stderr,
     )
     return 2

@@ -3,8 +3,9 @@
 
 from __future__ import annotations
 
+import argparse
+import hashlib
 import re
-import sys
 import os
 from pathlib import Path
 
@@ -90,20 +91,75 @@ def codex_body(name: str, source_name: str, source_text: str) -> str:
     return note + body.rstrip() + "\n"
 
 
+def package_manifest(package: Path) -> dict[str, str]:
+    """Hash every installed package file, including auxiliary and hidden files.
+
+    Symlinks are rejected: following directory links could silently omit files
+    or compare content outside the package being installed.
+    """
+    if package.is_symlink() or not package.is_dir():
+        raise ValueError(f"not a regular package directory: {package}")
+    manifest = {}
+    for path in sorted(package.rglob("*")):
+        if path.is_symlink():
+            raise ValueError(f"package symlink is unsupported: {path}")
+        if path.is_file():
+            manifest[path.relative_to(package).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+        elif not path.is_dir():
+            raise ValueError(f"unsupported package entry: {path}")
+    if "SKILL.md" not in manifest:
+        raise ValueError(f"package has no SKILL.md: {package}")
+    return manifest
+
+
+def check_installed_packages(install_root: Path) -> tuple[int, int, list[str]]:
+    """Compare repository-owned packages only; unrelated user skills are allowed."""
+    packages = sorted(path for path in CODEX_SKILLS.iterdir() if path.is_dir() or path.is_symlink())
+    if not packages:
+        raise ValueError(f"no skill packages found in {CODEX_SKILLS}")
+    stale = []
+    file_count = 0
+    for package in packages:
+        expected = package_manifest(package)
+        file_count += len(expected)
+        try:
+            actual = package_manifest(install_root / package.name)
+        except (OSError, ValueError) as exc:
+            stale.append(str(exc))
+            continue
+        for relative in sorted(expected.keys() | actual.keys()):
+            if expected.get(relative) != actual.get(relative):
+                kind = "missing" if relative not in actual else "unexpected" if relative not in expected else "changed"
+                stale.append(f"{kind}: {install_root / package.name / relative}")
+    return len(packages), file_count, stale
+
+
 def main() -> None:
-    check = "--check" in sys.argv[1:]
-    check_installed = "--check-installed" in sys.argv[1:]
-    install_root_arg = next(
-        (arg.split("=", 1)[1] for arg in sys.argv[1:] if arg.startswith("--install-root=")),
-        None,
-    )
-    unknown_args = [
-        arg for arg in sys.argv[1:]
-        if arg not in {"--check", "--check-installed"} and not arg.startswith("--install-root=")
-    ]
-    if unknown_args:
-        joined = ", ".join(unknown_args)
-        raise SystemExit(f"Unknown argument(s): {joined}")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="check canonical generation without writing")
+    parser.add_argument("--check-installed", action="store_true", help="compare complete installed package manifests")
+    parser.add_argument("--install-root", type=Path)
+    args = parser.parse_args()
+    if args.install_root is not None and not args.check_installed:
+        parser.error("--install-root requires --check-installed")
+    check, check_installed = args.check, args.check_installed
+
+    installed_stale = []
+    if check_installed:
+        codex_home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
+        install_root = args.install_root if args.install_root is not None else codex_home / "skills"
+        try:
+            package_count, file_count, installed_stale = check_installed_packages(install_root)
+        except (OSError, ValueError) as exc:
+            raise SystemExit(str(exc)) from exc
+        if installed_stale:
+            print("Installed Codex package manifests differ:\n  " + "\n  ".join(installed_stale))
+        else:
+            print(f"Checked {package_count} installed Codex packages ({file_count} files)")
+        if not check:
+            if installed_stale:
+                raise SystemExit(1)
+            return
 
     if not check and not check_installed:
         CODEX_SKILLS.mkdir(exist_ok=True)
@@ -118,34 +174,23 @@ def main() -> None:
         content = metadata_for(name, source.name, source_text) + codex_body(
             name, source.name, source_text
         )
-        comparison_target = target
-        if check_installed:
-            codex_home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
-            install_root = Path(install_root_arg) if install_root_arg else codex_home / "skills"
-            comparison_target = install_root / name / "SKILL.md"
-        if check or check_installed:
-            if not comparison_target.exists() or comparison_target.read_text(encoding="utf-8") != content:
-                try:
-                    display = str(comparison_target.relative_to(ROOT))
-                except ValueError:
-                    display = str(comparison_target)
-                stale.append(display)
+        if check:
+            if not target.exists() or target.read_text(encoding="utf-8") != content:
+                stale.append(str(target.relative_to(ROOT)))
         else:
             target_dir.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
         count += 1
 
-    if check or check_installed:
+    if check:
         if stale:
-            label = "Installed Codex skills" if check_installed else "Codex skills"
-            print(f"{label} are out of date:")
+            print("Canonical Codex skills are out of date:")
             for path in stale:
                 print(f"  {path}")
             raise SystemExit(1)
-        if check_installed:
-            print(f"Checked {count} installed Codex skills")
-        else:
-            print(f"Checked {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")
+        print(f"Checked {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")
+        if installed_stale:
+            raise SystemExit(1)
         return
 
     print(f"Generated {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")

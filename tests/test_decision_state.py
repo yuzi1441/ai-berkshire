@@ -10,10 +10,27 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import decision_state
+import post_buy_tracking
 from source_hash import canonical_file_sha256
 
 
 class DecisionStateTests(unittest.TestCase):
+    def test_bound_damaged_holding_research_requires_decision_not_rerun(self):
+        def guidance(status, binding="matched"):
+            return decision_state.derive_action_guidance(
+                "HOLDING", [], {}, {}, {"state": "normal"},
+                {"research_binding_status": binding, "thesis_status": status,
+                 "health_score": 1, "review_action": "清仓", "next_review_date": "2026-12-31"},
+                None, "hold", evaluated_at="2026-09-12T12:00:00+08:00",
+            )
+        for status in ("broken", "damaged"):
+            result = guidance(status)
+            self.assertTrue(result["requires_user_action"])
+            self.assertEqual(result["next_action_code"], "decide_holding_disposition")
+            self.assertEqual(result["recommended_skill"], [])
+        self.assertFalse(guidance("healthy")["requires_user_action"])
+        self.assertEqual(guidance("broken", "binding_mismatch")["blocker_code"], "holding_research_binding_required")
+
     def test_action_guidance_skills_must_exist_in_canonical_registry(self):
         guidance = decision_state.derive_action_guidance(
             "WATCH", [], {"status": "UNKNOWN"},
@@ -498,7 +515,9 @@ class DecisionStateTests(unittest.TestCase):
             "HOLDING", [], {"status": "CONDITIONAL_PASS"},
             {"direction": "unknown", "severity": "none"},
             {"state": "normal", "thesis_relevant": False},
-            {"alerts": [{"detail": "季度复核到期"}]}, None, "review_holding",
+            {"position_id":"A:2026-01-01", "next_review_date":"2026-09-01",
+             "alerts": [{"kind":"review_due", "due_date":"2026-09-01", "position_id":"A:2026-01-01", "detail": "季度复核到期"}]},
+            None, "review_holding", evaluated_at="2026-09-12T09:00:00+08:00",
         )
         self.assertEqual(guidance["blocker_code"], "holding_review_due")
         self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
@@ -516,11 +535,12 @@ class DecisionStateTests(unittest.TestCase):
         self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
 
     def test_holding_price_move_routes_to_news_pulse_only(self):
+        identity=post_buy_tracking.price_move_identity("A", "A:2026-01-01", {"change_pct":-8}, "2026-09-11T15:00:00+08:00")
         guidance = decision_state.derive_action_guidance(
             "HOLDING", [], {"status": "CONDITIONAL_PASS"},
             {"direction": "unknown", "severity": "none"},
             {"state": "normal", "thesis_relevant": False},
-            {"alerts": [{"kind": "price_move", "detail": "单日下跌 8%"}]},
+            {"position_id":"A:2026-01-01", "alerts": [{**identity, "ticker":"A", "kind": "price_move", "detail": "单日下跌 8%"}]},
             None, "review_holding", evaluated_at="2026-09-12T09:00:00+08:00",
         )
         self.assertEqual(guidance["blocker_code"], "holding_price_move_unexplained")
@@ -544,12 +564,15 @@ class DecisionStateTests(unittest.TestCase):
         rule = {
             "rule_id": "metric-gm", "type": "METRIC", "metric": "gross_margin",
             "operator": ">=", "threshold": "30", "period": "2026H1", "unit": "percent",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
         }
         fact = {
             "resolution_status": "ready", "actual_value": "30.000",
             "period": "2026H1", "unit": "percent", "valid_until": "2026-12-31",
             "evidence_source": "半年报", "source_identity": "https://example.test/a.pdf",
             "evidence_date": "2026-08-30", "content_sha256": "a" * 64,
+            "checked_at": "2026-09-01", "metric": "gross_margin",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
         }
         evaluation = decision_state.evaluate_rule_result(
             rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,
@@ -562,6 +585,7 @@ class DecisionStateTests(unittest.TestCase):
         rule = {
             "rule_id": "metric-ocf", "type": "METRIC", "metric": "operating_cash_flow",
             "operator": ">", "threshold": "0", "period": "2026H1", "unit": "CNY",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
         }
         cases = [
             ({"resolution_status": "missing"}, "financial_fact_missing"),
@@ -569,6 +593,9 @@ class DecisionStateTests(unittest.TestCase):
             ({"resolution_status": "ready", "actual_value": "1", "period": "2026H1", "unit": "CNY", "valid_until": "2026-09-01"}, "financial_fact_stale"),
         ]
         for fact, reason in cases:
+            fact = {"metric": "operating_cash_flow", "accounting_basis": "consolidated",
+                    "period_basis": "cumulative", "evidence_date": "2026-08-30",
+                    "checked_at": "2026-09-01", **fact}
             with self.subTest(reason=reason):
                 result = decision_state.evaluate_rule_result(
                     rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,

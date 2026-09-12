@@ -260,6 +260,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "financial_facts.py",
                 "holding_research_reviews.py",
                 "investment_dispositions.py",
+                "investment_tasks.py",
                 "light_thesis_signals.py",
                 "main_report_review.py",
                 "migrate_manual_execution_reviews.py",

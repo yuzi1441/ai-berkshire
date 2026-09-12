@@ -13,6 +13,11 @@ python3 tools/financial_facts.py upsert --fact {结构化事实JSON}
 python3 tools/financial_facts.py validate
 ```
 
+事实与规则必须明确、匹配 `accounting_basis`（`consolidated` 合并报表或 `parent_only` 母公司报表）
+及 `period_basis`（`cumulative` 年内累计或 `standalone` 单期）。未知口径不得默认填合并或累计；
+规则尚未批准这些定义时先保留事实草稿。`evidence_date <= checked_at <= valid_until`，
+求值时晚于检查截止日的证据/核验结果不得使用。写入事实不等于批准规则，更不等于完成投资复核。
+
 ---
 
 ## 数据源优先级
