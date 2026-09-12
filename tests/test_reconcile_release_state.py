@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,6 +14,28 @@ import reconcile_release_state
 
 
 class ReconcileReleaseStateTests(unittest.TestCase):
+    def test_replay_committed_reference_repair_preserves_semantics_and_unknowns(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / 'research/sources/archive.json'
+            self._write(archive, {'evidence': 'retained'})
+            audit = {'archived_evidence_path': 'research/sources/archive.json',
+                     'archived_sha256': hashlib.sha256(archive.read_bytes()).hexdigest(),
+                     'repairs': [{'ticker': 'A', 'old_reference': '/tmp/old',
+                                  'replacement_reference': 'research/sources/archive.json',
+                                  'replacement_evidence_present': True}]}
+            self._write(root / 'research/sources/thesis-drift-batch/2026-09-03-provenance-repair.json', audit)
+            payload = {'companies': {'A': {'direction': 'improved', 'review_history': [
+                {'direction': 'unchanged', 'facts_sources': ['/tmp/old', '/tmp/unknown']}]}}}
+            result = reconcile_release_state.normalize_audited_history(payload, root)
+            self.assertEqual(result['companies']['A']['direction'], 'improved')
+            self.assertEqual(result['companies']['A']['review_history'][0],
+                             {'direction': 'unchanged', 'facts_sources': ['research/sources/archive.json', '/tmp/unknown']})
+            self.assertEqual(payload['companies']['A']['review_history'][0]['facts_sources'][0], '/tmp/old')
+            archive.write_text('tampered')
+            with self.assertRaisesRegex(ValueError, 'hash mismatch'):
+                reconcile_release_state.normalize_audited_history(payload, root)
+
     def _write(self, path: Path, payload: dict) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")

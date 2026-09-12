@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -79,6 +80,29 @@ def _merge_review_history(source: dict[str, Any], previous: dict[str, Any]) -> d
     return result
 
 
+def normalize_audited_history(payload: dict[str, Any], root: Path) -> dict[str, Any]:
+    """Replay only the committed provenance repair, never guess missing evidence."""
+    audit_path = root / "research/sources/thesis-drift-batch/2026-09-03-provenance-repair.json"
+    if not audit_path.is_file():
+        return payload
+    audit = _read(audit_path, label="provenance repair audit")
+    archive = root / audit["archived_evidence_path"]
+    if not archive.resolve().is_relative_to(root.resolve()):
+        raise ValueError("provenance archive outside release")
+    if hashlib.sha256(archive.read_bytes()).hexdigest() != audit["archived_sha256"]:
+        raise ValueError("provenance archive hash mismatch")
+    mappings = {(item["ticker"], item["old_reference"]): item["replacement_reference"]
+                for item in audit["repairs"] if item.get("replacement_evidence_present") is True
+                and item["replacement_reference"] == audit["archived_evidence_path"]}
+    result = copy.deepcopy(payload)
+    for ticker, company in result.get("companies", {}).items():
+        for record in company.get("review_history", []):
+            if isinstance(record, dict) and isinstance(record.get("facts_sources"), list):
+                record["facts_sources"] = list(dict.fromkeys(
+                    mappings.get((ticker, source), source) for source in record["facts_sources"]))
+    return result
+
+
 def _merge_lifecycle_record(source: dict[str, Any], previous: dict[str, Any]) -> dict[str, Any]:
     """Keep source current fields and only carry explicit history fields."""
     result = copy.deepcopy(source)
@@ -126,6 +150,8 @@ def reconcile_file(previous: Path, source: Path, output: Path, kind: str) -> str
     if previous_exists:
         previous_payload = _read(previous, label=f"previous {kind}")
         _validate(previous_payload, kind, path=previous)
+        if kind == "drift":
+            previous_payload = normalize_audited_history(previous_payload, source.parents[2])
     if not source_exists:
         # Preserve the runtime seed byte-for-byte when Git has no state file
         # yet.  Validation above still makes a corrupt previous release fail
