@@ -21,8 +21,6 @@ for skill_dir in "$ROOT"/codex-skills/*; do
   cp -R "$skill_dir" "$DEST/$name"
 done
 
-chmod +x "$ROOT"/tools/*.py "$ROOT"/tools/*.sh 2>/dev/null || true
-
 echo "Installed Codex skills to $DEST"
 if [ "$BACKED_UP" -eq 1 ]; then
   echo "Backed up differing installed skills to $BACKUP_ROOT"
