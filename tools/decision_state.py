@@ -717,23 +717,26 @@ def evaluate_rule_result(
         except (InvalidOperation, ValueError):
             base.update({"result": "data_error", "reason": "financial_fact_invalid"})
             return base
+        if not actual.is_finite() or not threshold.is_finite():
+            base.update({"result": "data_error", "reason": "financial_fact_invalid"})
+            return base
         if valid_until < evaluated_datetime.astimezone(SHANGHAI_TIMEZONE).date():
             base.update({"result": "data_error", "reason": "financial_fact_stale"})
             return base
-        operators = {
-            ">": actual > threshold,
-            ">=": actual >= threshold,
-            "<": actual < threshold,
-            "<=": actual <= threshold,
-            "==": actual == threshold,
-            "!=": actual != threshold,
-        }
         operator = str(rule.get("operator"))
-        if operator not in operators:
+        comparisons = {
+            ">": lambda: actual > threshold,
+            ">=": lambda: actual >= threshold,
+            "<": lambda: actual < threshold,
+            "<=": lambda: actual <= threshold,
+            "==": lambda: actual == threshold,
+            "!=": lambda: actual != threshold,
+        }
+        if operator not in comparisons:
             base.update({"result": "invalid_definition", "reason": "unsupported_metric_operator"})
             return base
         base.update({
-            "result": "triggered" if operators[operator] else "not_triggered",
+            "result": "triggered" if comparisons[operator]() else "not_triggered",
             "actual_value": str(actual),
             "threshold": str(threshold),
             "operator": operator,

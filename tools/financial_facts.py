@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 from datetime import date
@@ -83,7 +84,9 @@ def validate_payload(payload: Any) -> list[str]:
         if not unit:
             errors.append(f"{prefix}.unit")
         try:
-            float(str(fact.get("actual_value")))
+            numeric_value = float(str(fact.get("actual_value")))
+            if not math.isfinite(numeric_value):
+                raise ValueError("non-finite")
         except (TypeError, ValueError):
             errors.append(f"{prefix}.actual_value")
         for field in ("evidence_date", "checked_at", "valid_until"):

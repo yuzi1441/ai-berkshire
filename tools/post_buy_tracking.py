@@ -786,7 +786,10 @@ def build_parser() -> argparse.ArgumentParser:
     register.add_argument("--force", action="store_true")
     register.set_defaults(handler=command_register)
 
-    update = sub.add_parser("update", help="update thesis or review state")
+    update = sub.add_parser(
+        "update",
+        help="update runtime position status; research fields return a holding_research_reviews migration error",
+    )
     update.add_argument("ticker")
     update.add_argument("--status", choices=POSITION_STATUSES)
     update.add_argument("--thesis-status", choices=THESIS_STATUSES)

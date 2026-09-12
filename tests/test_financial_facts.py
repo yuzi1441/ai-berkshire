@@ -42,6 +42,10 @@ class FinancialFactsTests(unittest.TestCase):
         missing = financial_facts.resolve([self.fact()], self.rule(), baseline_report_sha256="c" * 64)
         self.assertEqual(missing["resolution_status"], "missing")
 
+    def test_non_finite_values_are_rejected(self):
+        payload = {"schema_version": 1, "authority": "git", "facts": [self.fact(actual_value="NaN")]}
+        self.assertIn("facts[0].actual_value", financial_facts.validate_payload(payload))
+
 
 if __name__ == "__main__":
     unittest.main()
