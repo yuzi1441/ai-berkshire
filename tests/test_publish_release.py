@@ -252,6 +252,8 @@ class PublishReleaseTests(unittest.TestCase):
             for name in (
                 "automation_status.py",
                 "build_investment_dashboard.py",
+                "dashboard_snapshot.py",
+                "quote_quality.py",
                 "decision_consistency_review.py",
                 "decision_rule_extractor.py",
                 "decision_state.py",
