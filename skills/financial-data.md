@@ -6,7 +6,12 @@
 
 本 Skill 负责取得并交叉核验事实值、报告期、单位、口径、来源日期和稳定证据身份。它不负责猜测投资规则中的指标、运算符或阈值，也不直接修改 Decision Rule、生命周期、Checklist 或买卖状态。
 
-用于自动条件求值时，必须把结果交给项目的结构化事实入口，至少包含：`ticker`、`metric`、`actual_value`、`unit`、`period`、`evidence_source`、`evidence_date`、`content_sha256` 和 `checked_at`。规则侧仍须独立保存 `metric`、`operator` 与 `threshold`；“明显改善”等没有明确阈值的文字继续标为待定义。
+用于自动条件求值时，必须把结果交给项目的结构化事实入口，至少包含：`ticker`、`metric`、`actual_value`、`unit`、`period`、`evidence_source`、`source_identity`、`evidence_date`、`content_sha256`、`checked_at`、`valid_until`，并在适用时绑定 `baseline_report_sha256`。规则侧仍须独立保存 `metric`、`operator` 与 `threshold`；“明显改善”等没有明确阈值的文字继续标为待定义。
+
+```bash
+python3 tools/financial_facts.py upsert --fact {结构化事实JSON}
+python3 tools/financial_facts.py validate
+```
 
 ---
 

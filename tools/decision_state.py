@@ -15,6 +15,7 @@ import json
 import re
 import copy
 import math
+from decimal import Decimal, InvalidOperation
 from datetime import date, datetime, time
 from pathlib import Path
 from typing import Any, Iterable
@@ -24,6 +25,7 @@ from source_hash import canonical_file_sha256
 import drift_scan_state
 import investment_dispositions
 import light_thesis_signals
+import financial_facts
 
 
 SCHEMA_VERSION = 1
@@ -600,6 +602,9 @@ def evaluate_rule_result(
     condition_review: dict[str, Any] | None = None,
     *,
     evaluated_at: str | None = None,
+    financial_fact: dict[str, Any] | None = None,
+    condition_review_resolver: Any = None,
+    financial_fact_resolver: Any = None,
 ) -> dict[str, Any]:
     """Evaluate one definition into an auditable, non-authoritative result."""
     evaluated_text = evaluated_at or now_iso()
@@ -692,7 +697,54 @@ def evaluate_rule_result(
         reviewed_result = _apply_condition_review(base, condition_review)
         if reviewed_result is not None:
             return reviewed_result
-        base["reason"] = "missing_computable_definition"
+        required = ("metric", "operator", "threshold", "period", "unit")
+        if any(rule.get(field) in (None, "") for field in required):
+            base["reason"] = "missing_computable_definition"
+            return base
+        if not isinstance(financial_fact, dict) or financial_fact.get("resolution_status") == "missing":
+            base.update({"result": "data_error", "reason": "financial_fact_missing"})
+            return base
+        if financial_fact.get("resolution_status") == "conflict":
+            base.update({"result": "data_error", "reason": "financial_fact_conflict"})
+            return base
+        if financial_fact.get("unit") != rule.get("unit"):
+            base.update({"result": "data_error", "reason": "financial_fact_unit_mismatch"})
+            return base
+        try:
+            actual = Decimal(str(financial_fact.get("actual_value")))
+            threshold = Decimal(str(rule.get("threshold")))
+            valid_until = date.fromisoformat(str(financial_fact.get("valid_until")))
+        except (InvalidOperation, ValueError):
+            base.update({"result": "data_error", "reason": "financial_fact_invalid"})
+            return base
+        if valid_until < evaluated_datetime.astimezone(SHANGHAI_TIMEZONE).date():
+            base.update({"result": "data_error", "reason": "financial_fact_stale"})
+            return base
+        operators = {
+            ">": actual > threshold,
+            ">=": actual >= threshold,
+            "<": actual < threshold,
+            "<=": actual <= threshold,
+            "==": actual == threshold,
+            "!=": actual != threshold,
+        }
+        operator = str(rule.get("operator"))
+        if operator not in operators:
+            base.update({"result": "invalid_definition", "reason": "unsupported_metric_operator"})
+            return base
+        base.update({
+            "result": "triggered" if operators[operator] else "not_triggered",
+            "actual_value": str(actual),
+            "threshold": str(threshold),
+            "operator": operator,
+            "unit": rule.get("unit"),
+            "period": financial_fact.get("period"),
+            "evidence_source": financial_fact.get("evidence_source"),
+            "source_identity": financial_fact.get("source_identity"),
+            "evidence_date": financial_fact.get("evidence_date"),
+            "content_sha256": financial_fact.get("content_sha256"),
+            "reason": "metric_evaluated",
+        })
         return base
     if rule_type in {"ALL_OF", "ANY_OF"}:
         children = rule.get("children")
@@ -701,7 +753,15 @@ def evaluate_rule_result(
             return base
         child_results = [
             evaluate_rule_result(
-                child, quote, event_relevant, event_context, evaluated_at=evaluated_text
+                child,
+                quote,
+                event_relevant,
+                event_context,
+                condition_review_resolver(child) if condition_review_resolver else None,
+                evaluated_at=evaluated_text,
+                financial_fact=financial_fact_resolver(child) if financial_fact_resolver else None,
+                condition_review_resolver=condition_review_resolver,
+                financial_fact_resolver=financial_fact_resolver,
             )
             for child in children
         ]
@@ -973,6 +1033,7 @@ def _load_condition_reviews(
         elif compact(strict_incremental.get("status")):
             freshness = "stale"
         by_condition: dict[str, list[dict[str, Any]]] = {}
+        by_rule_id: dict[str, list[dict[str, Any]]] = {}
         for definition in package.get("active_rules", []):
             if not isinstance(definition, dict) or definition.get("authority") != "human_locked":
                 continue
@@ -980,10 +1041,12 @@ def _load_condition_reviews(
             condition = compact(definition.get("condition"))
             if reviewed is None or not condition:
                 continue
-            by_condition.setdefault(condition, []).append({
+            mapped = {
                 "definition": definition,
                 "result": reviewed,
-            })
+            }
+            by_condition.setdefault(condition, []).append(mapped)
+            by_rule_id.setdefault(compact(definition.get("rule_id")), []).append(mapped)
         result[ticker] = {
             "baseline_report_sha256": package_hash,
             "reviewed_at": review.get("reviewed_at"),
@@ -994,6 +1057,7 @@ def _load_condition_reviews(
             "last_probe_at": last_probe_at,
             "latest_relevant_evidence_at": strict_incremental.get("latest_evidence_date"),
             "by_condition": by_condition,
+            "by_rule_id": by_rule_id,
         }
     return result
 
@@ -1007,7 +1071,10 @@ def _condition_review_for_rule(
         return None
     if not report_hash or company_review.get("baseline_report_sha256") != report_hash:
         return None
-    matches = (company_review.get("by_condition") or {}).get(compact(rule.get("condition")), [])
+    rule_id = compact(rule.get("rule_id"))
+    matches = (company_review.get("by_rule_id") or {}).get(rule_id, []) if rule_id else []
+    if not matches:
+        matches = (company_review.get("by_condition") or {}).get(compact(rule.get("condition")), [])
     if len(matches) > 1:
         return {"mapping_status": "ambiguous", "review": company_review}
     if len(matches) != 1:
@@ -1719,7 +1786,15 @@ def derive_action_guidance(
             "取得带日期和来源的当前事实，使条件恢复为可判定状态",
         )
 
-    quote_error = _guidance_rule(rules, statuses={"data_error"})
+    quote_error = _guidance_rule(
+        rules,
+        reasons={
+            "quote_missing", "quote_missing_from_latest_refresh", "market_refresh_failed",
+            "quote_date_missing", "historical_close_during_trading_session",
+            "quote_timestamp_missing", "quote_timestamp_in_future",
+            "quote_stale_during_trading_session",
+        },
+    )
     if quote_error is not None:
         return guidance(
             "market_data_unavailable",
@@ -1731,6 +1806,26 @@ def derive_action_guidance(
             "monitor",
             False,
             "行情恢复后由系统自动重新计算价格条件",
+        )
+
+    financial_error = _guidance_rule(
+        rules,
+        reasons={
+            "financial_fact_missing", "financial_fact_conflict",
+            "financial_fact_unit_mismatch", "financial_fact_invalid", "financial_fact_stale",
+        },
+    )
+    if financial_error is not None:
+        return guidance(
+            "financial_data_unavailable",
+            f"结构化财务事实暂不可用：{compact(financial_error.get('condition')) or '财务指标条件'}",
+            "repair_financial_fact",
+            "等待财务事实包补齐或修复",
+            [],
+            "规则定义已经明确，但事实缺失、过期或冲突属于数据链路问题",
+            "monitor",
+            False,
+            "补齐同期间、同单位且带稳定证据引用的财务事实后自动重算",
         )
 
     if _guidance_rule(rules, statuses={"near_trigger"}) is not None:
@@ -1753,11 +1848,11 @@ def derive_action_guidance(
             f"经营条件尚无可计算定义：{compact(missing_metric.get('condition')) or '经营指标条件'}",
             "continue_monitoring",
             "当前无需操作；进入重点研究时再补齐财务定义",
-            ["financial-data"],
-            "如需推进，首先应核验指标口径和当前值，而不是直接运行论文漂移",
+            [],
+            "这是规则定义缺口；financial-data 只能提供事实，不能替用户批准指标、阈值或运算符",
             "monitor",
             False,
-            "形成 metric、operator、threshold、period、source 后再自动求值",
+            "由人工批准 metric、operator、threshold、period、unit 后，再由 financial-data 提供事实包",
         )
 
     awaiting = _guidance_rule(
@@ -1998,6 +2093,10 @@ def build_state_layers(
         data_directory,
         current_review_payload=main_report_review_payload,
     )
+    financial_fact_payload = financial_facts.load(
+        data_directory / financial_facts.RELATIVE_PATH.name,
+        strict=not legacy_mode,
+    )
     light_thesis_payload = light_thesis_signals.load(
         data_directory / light_thesis_signals.RELATIVE_PATH.name,
         strict=True,
@@ -2081,6 +2180,15 @@ def build_state_layers(
         quote = quotes.get(ticker)
         report_hash = canonical_report_hash(decision, repo_root)
         company_condition_review = condition_reviews.get(ticker)
+        company_financial_facts = financial_facts.for_ticker(financial_fact_payload, ticker)
+        condition_resolver = lambda candidate: _condition_review_for_rule(
+            company_condition_review, candidate, report_hash
+        )
+        fact_resolver = lambda candidate: financial_facts.resolve(
+            company_financial_facts,
+            candidate,
+            baseline_report_sha256=report_hash,
+        )
         company_evaluations: list[dict[str, Any]] = []
         for rule in rules:
             event_triggered = bool(event.get("thesis_relevant")) and event.get("state") in {"important", "critical"}
@@ -2089,8 +2197,11 @@ def build_state_layers(
                 quote,
                 event_triggered,
                 event,
-                _condition_review_for_rule(company_condition_review, rule, report_hash),
+                condition_resolver(rule),
                 evaluated_at=generated_at,
+                financial_fact=fact_resolver(rule),
+                condition_review_resolver=condition_resolver,
+                financial_fact_resolver=fact_resolver,
             )
             rule["status"] = evaluation["result"]
             rule["last_checked"] = generated_at

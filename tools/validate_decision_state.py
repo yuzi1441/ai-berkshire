@@ -15,6 +15,7 @@ import decision_state  # noqa: E402
 import drift_scan_state  # noqa: E402
 import drift_provenance  # noqa: E402
 import holding_research_reviews  # noqa: E402
+import financial_facts  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -100,6 +101,12 @@ def main() -> int:
                         scan_stale_baselines.append(ticker)
                 except OSError:
                     scan_stale_baselines.append(ticker)
+        except ValueError as error:
+            errors.append(str(error))
+    financial_path = data / financial_facts.RELATIVE_PATH.name
+    if financial_path.is_file():
+        try:
+            errors.extend(financial_facts.validate_payload(load(financial_path)))
         except ValueError as error:
             errors.append(str(error))
     if technical.get("schema_version") != decision_state.SCHEMA_VERSION:

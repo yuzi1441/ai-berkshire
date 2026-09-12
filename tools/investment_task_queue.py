@@ -39,9 +39,11 @@ TASK_CLASSES = {
     "holding_review_due": "research_now",
     "pre_buy_checklist_missing": "research_now",
     "market_data_unavailable": "system_data_issue",
+    "financial_data_unavailable": "system_data_issue",
     "financial_definition_missing": "definition_gap",
     "evidence_not_available": "waiting_evidence",
 }
+PASSIVE_QUEUE_CLASSES = frozenset({"system_data_issue", "definition_gap", "waiting_evidence"})
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -209,10 +211,13 @@ def build_task_queue(
         if market and company.get("market") != market:
             continue
         guidance = company.get("action_guidance")
-        if not isinstance(guidance, dict) or guidance.get("requires_user_action") is not True:
+        if not isinstance(guidance, dict):
             continue
         ticker = str(company.get("ticker") or "").upper()
         blocker = str(guidance.get("blocker_code") or "unknown")
+        task_class = TASK_CLASSES.get(blocker, "human_review")
+        if guidance.get("requires_user_action") is not True and task_class not in PASSIVE_QUEUE_CLASSES:
+            continue
         manual = ((company.get("review_coverage") or {}).get("manual_decision") or {})
         options = investment_dispositions.allowed_dispositions(company)
         disposition_fingerprint = (
@@ -237,7 +242,7 @@ def build_task_queue(
             "recommended_skill": list(guidance.get("recommended_skill") or []),
             "completion_target": guidance.get("completion_target"),
             "workflow_status": WORKFLOW_STATUS.get(blocker, "READY_FOR_USER_REVIEW"),
-            "task_class": TASK_CLASSES.get(blocker, "human_review"),
+            "task_class": task_class,
             "allowed_user_dispositions": options,
             "disposition_target_fingerprint": disposition_fingerprint,
             "current_disposition": current_disposition,

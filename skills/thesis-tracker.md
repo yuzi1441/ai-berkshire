@@ -115,16 +115,16 @@ python3 tools/post_buy_tracking.py register \
   --buy-date {YYYY-MM-DD} --cost-basis {成交成本} --position-weight {仓位百分比} \
   --next-review {YYYY-MM-DD} --thesis-report {论文相对路径} \
   --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"成立"}]'
-python3 tools/post_buy_tracking.py update {股票代码} \
-  --thesis-status healthy --health-score {首次论文健康度1-10} \
-  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
-  --review-action 持有 --thesis-report {论文相对路径} \
-  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/holding_research_reviews.py upsert --record {结构化研究结果JSON}
 python3 tools/post_buy_tracking.py check
 python3 tools/build_investment_dashboard.py
 ```
 
-首次建立论文后必须同步初始健康度、复核动作和下一次复核日期；登记只更新买入后跟踪层，不改写主报告的基本面建议、技术面结论或历史研报。
+结构化研究结果必须包含 `ticker`、当前 `position_id`、冻结的
+`original_buy_thesis_sha256`、论文 `report_path/report_sha256`、原始复核日期、
+下一复核日期、健康度、动作、指标和证据引用。只有四项身份全部匹配，Dashboard
+才采用研究结果。首次登记只更新运行端成交事实；研究结果随 Git 发布，二者都不改写
+主报告的基本面建议、技术面结论或历史研报。
 
 ---
 
@@ -226,17 +226,19 @@ python3 tools/build_investment_dashboard.py
 
 ### B8：同步论文健康度到看板
 
-在 B7 成功写入后，更新已登记持仓的论文状态。映射必须固定：`完整`→`healthy`、`边际弱化`→`borderline`、`受损`→`damaged`、`破裂`→`broken`。健康度使用 B6 的 1-10 分；下次复核日期必须是明确的 YYYY-MM-DD，不能只写“下个季报后”。
+在 B7 成功写入后，生成并 upsert Git 管理的结构化研究结果。映射必须固定：
+`完整`→`healthy`、`边际弱化`→`borderline`、`受损`→`damaged`、`破裂`→`broken`。
+健康度使用 B6 的 1-10 分；下次复核日期必须是明确的 YYYY-MM-DD，不能只写“下个季报后”。
 
 ```bash
-python3 tools/post_buy_tracking.py update {股票代码} \
-  --thesis-status {healthy/borderline/damaged/broken} --health-score {1-10} \
-  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
-  --review-action {加仓/持有/减仓/清仓/观察} --thesis-report {论文相对路径} \
-  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/holding_research_reviews.py upsert --record {结构化研究结果JSON}
+python3 tools/holding_research_reviews.py validate
 python3 tools/post_buy_tracking.py check
 python3 tools/build_investment_dashboard.py
 ```
+
+不得用 `post_buy_tracking.py update` 发布论文健康度、复核日期或研究指标；该入口只保留给
+实际持仓状态等运行事实。迁移旧结果时必须保留原复核日期，不得把迁移时间写成新复核。
 
 若该公司尚未登记为实际持仓，保留论文文件但不要尝试用论文结论自动建立持仓。
 

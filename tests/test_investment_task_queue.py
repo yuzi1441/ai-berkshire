@@ -47,6 +47,23 @@ class InvestmentTaskQueueTests(unittest.TestCase):
         self.assertEqual(result["task_count"], 1)
         self.assertEqual(result["tasks"][0]["ticker"], "600001.SH")
 
+    def test_passive_data_and_definition_work_are_classified_but_near_price_is_not(self):
+        payload = {"companies": [
+            self.company("600001.SH", "market_data_unavailable", action=False),
+            self.company("600002.SH", "financial_definition_missing", action=False),
+            self.company("600003.SH", "evidence_not_available", action=False),
+            self.company("600004.SH", "condition_near_trigger", action=False),
+        ]}
+        result = queue.build_task_queue(payload)
+        self.assertEqual(
+            [(item["ticker"], item["task_class"]) for item in result["tasks"]],
+            [
+                ("600001.SH", "system_data_issue"),
+                ("600002.SH", "definition_gap"),
+                ("600003.SH", "waiting_evidence"),
+            ],
+        )
+
     def test_reviewed_weakening_requires_disposition_not_skill_rerun(self):
         company = self.company(
             "600001.SH",

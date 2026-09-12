@@ -55,6 +55,7 @@ jobs:
           git diff --exit-code -- data/investment-dashboard/rule_change_log.json
           git diff --exit-code -- data/investment-dashboard/post_buy_tracking.json
           git diff --exit-code -- data/investment-dashboard/holding_research_reviews.json
+          git diff --exit-code -- data/investment-dashboard/financial_facts.json
           python - <<'PY'
           import re
           import subprocess

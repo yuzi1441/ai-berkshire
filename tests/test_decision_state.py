@@ -540,6 +540,65 @@ class DecisionStateTests(unittest.TestCase):
         self.assertEqual(evaluation["result"], "unknown")
         self.assertEqual(evaluation["reason"], "composite_condition_not_structured")
 
+    def test_structured_metric_uses_exact_decimal_fact(self):
+        rule = {
+            "rule_id": "metric-gm", "type": "METRIC", "metric": "gross_margin",
+            "operator": ">=", "threshold": "30", "period": "2026H1", "unit": "percent",
+        }
+        fact = {
+            "resolution_status": "ready", "actual_value": "30.000",
+            "period": "2026H1", "unit": "percent", "valid_until": "2026-12-31",
+            "evidence_source": "半年报", "source_identity": "https://example.test/a.pdf",
+            "evidence_date": "2026-08-30", "content_sha256": "a" * 64,
+        }
+        evaluation = decision_state.evaluate_rule_result(
+            rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,
+        )
+        self.assertEqual(evaluation["result"], "triggered")
+        self.assertEqual(evaluation["actual_value"], "30.000")
+        self.assertEqual(evaluation["reason"], "metric_evaluated")
+
+    def test_structured_metric_missing_stale_or_wrong_unit_fails_closed(self):
+        rule = {
+            "rule_id": "metric-ocf", "type": "METRIC", "metric": "operating_cash_flow",
+            "operator": ">", "threshold": "0", "period": "2026H1", "unit": "CNY",
+        }
+        cases = [
+            ({"resolution_status": "missing"}, "financial_fact_missing"),
+            ({"resolution_status": "ready", "actual_value": "1", "period": "2026H1", "unit": "USD", "valid_until": "2026-12-31"}, "financial_fact_unit_mismatch"),
+            ({"resolution_status": "ready", "actual_value": "1", "period": "2026H1", "unit": "CNY", "valid_until": "2026-09-01"}, "financial_fact_stale"),
+        ]
+        for fact, reason in cases:
+            with self.subTest(reason=reason):
+                result = decision_state.evaluate_rule_result(
+                    rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,
+                )
+                self.assertEqual(result["result"], "data_error")
+                self.assertEqual(result["reason"], reason)
+
+    def test_composite_passes_each_leaf_its_own_review(self):
+        child_a = {"rule_id": "leaf-a", "type": "METRIC", "condition": "毛利率达标"}
+        child_b = {"rule_id": "leaf-b", "type": "EVENT", "condition": "订单确认"}
+        reviews = {
+            "leaf-a": {
+                "mapping_status": "exact", "review": {"freshness": "current", "reviewed_at": "2026-09-01"},
+                "definition": {"rule_id": "leaf-a", "periods": ["2026H1"]},
+                "result": {"truth_state": "met", "current_value": "31%"},
+            },
+            "leaf-b": {
+                "mapping_status": "exact", "review": {"freshness": "current", "reviewed_at": "2026-09-01"},
+                "definition": {"rule_id": "leaf-b", "periods": []},
+                "result": {"truth_state": "not_met", "current_value": "未确认"},
+            },
+        }
+        composite = decision_state.evaluate_rule_result(
+            {"rule_id": "parent", "type": "ALL_OF", "children": [child_a, child_b]},
+            condition_review_resolver=lambda rule: reviews.get(rule.get("rule_id")),
+            evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual([item["result"] for item in composite["children"]], ["triggered", "not_triggered"])
+        self.assertEqual(composite["result"], "not_triggered")
+
     def test_non_equity_price_condition_never_uses_stock_quote(self):
         conditions = [
             "经济 FCF 低于 35 亿元",

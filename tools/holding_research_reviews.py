@@ -163,7 +163,9 @@ def apply_review(
             "research_evidence": review.get("evidence") or [],
             "research_provenance": review.get("provenance"),
         })
-    elif not allow_legacy:
+    elif status == "unreviewed" and allow_legacy:
+        projection["research_binding_status"] = "runtime_legacy"
+    else:
         projection.update({
             "thesis_status": "not_established",
             "health_score": None,
@@ -173,8 +175,6 @@ def apply_review(
             "metrics": [],
             "research_evidence": [],
         })
-    else:
-        projection["research_binding_status"] = "runtime_legacy"
     return projection
 
 

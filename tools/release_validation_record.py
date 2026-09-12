@@ -15,6 +15,7 @@ from typing import Any
 AUTHORITY_INPUTS = (
     "data/investment-dashboard/decision_rules.json",
     "data/investment-dashboard/drift_states.json",
+    "data/investment-dashboard/financial_facts.json",
     "data/investment-dashboard/holding_research_reviews.json",
     "data/investment-dashboard/light_thesis_signals.json",
     "data/investment-dashboard/original_buy_theses.json",

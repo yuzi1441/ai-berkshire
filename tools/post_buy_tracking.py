@@ -34,6 +34,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from source_hash import canonical_file_sha256
+import holding_research_reviews
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -555,6 +556,21 @@ def command_update(args: argparse.Namespace, repo_root: Path) -> None:
     path = repo_root / TRACKING_RELATIVE
     payload = load_tracking(path)
     item = position(payload, args.ticker)
+    retired_research_fields = {
+        "--thesis-status": args.thesis_status,
+        "--health-score": args.health_score,
+        "--last-review": args.last_review,
+        "--next-review": args.next_review,
+        "--review-action": args.review_action,
+        "--thesis-report": args.thesis_report,
+        "--metrics": args.metrics,
+    }
+    requested_retired = [name for name, value in retired_research_fields.items() if value is not None]
+    if requested_retired:
+        raise ValueError(
+            "research updates moved to holding_research_reviews.py upsert: "
+            + ", ".join(requested_retired)
+        )
     updates: dict[str, Any] = {}
     for source, target in (
         (args.status, "status"),
@@ -665,6 +681,10 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
     payload = load_tracking(tracking_path)
     as_of = date.fromisoformat(args.as_of) if args.as_of else today()
     quotes = load_quotes(repo_root, args.quote_path)
+    research_payload = holding_research_reviews.load(
+        repo_root / holding_research_reviews.RELATIVE_PATH, strict=True
+    )
+    original_payload = load_original_thesis(repo_root / ORIGINAL_THESIS_RELATIVE)
     alerts: list[dict[str, Any]] = []
 
     for key, item in payload["positions"].items():
@@ -673,7 +693,24 @@ def command_check(args: argparse.Namespace, repo_root: Path) -> None:
         thresholds = item.get("thresholds") if isinstance(item.get("thresholds"), dict) else {}
         daily_pct = float(thresholds.get("daily_pct", DEFAULT_THRESHOLDS["daily_pct"]))
         review_days = int(thresholds.get("review_days_before", DEFAULT_THRESHOLDS["review_days_before"]))
-        next_review = item.get("next_review_date")
+        position_record = {**item, "ticker": key}
+        review = (research_payload.get("reviews") or {}).get(str(item.get("position_id") or ""))
+        research_projection = holding_research_reviews.apply_review(
+            dict(item), review=review, position=position_record,
+            original_buy_theses=original_payload, repo_root=repo_root,
+            allow_legacy=True,
+        )
+        next_review = research_projection.get("next_review_date")
+        if research_projection.get("research_binding_status") == "binding_mismatch":
+            alerts.append({
+                "ticker": key,
+                "company": item.get("company", key),
+                "kind": "thesis_review",
+                "severity": "critical",
+                "title": "持仓研究结果绑定待核对",
+                "detail": "Git 研究结果与当前持仓周期或冻结买入逻辑不匹配",
+                "binding_reasons": research_projection.get("research_binding_reasons") or [],
+            })
         if next_review:
             review_date = date.fromisoformat(next_review)
             days_left = (review_date - as_of).days
