@@ -45,10 +45,11 @@
           <div class="workspace-context">
             <p class="section-eyebrow">当前工作区</p>
             <strong id="active-workspace-title">今日处理</strong>
+            <p class="section-note" id="data-source" aria-live="polite"></p>
           </div>
           <div class="topbar-meta">
             <div class="meta-block">
-              <span class="meta-label">最后更新</span>
+              <span class="meta-label">看板构建时间（北京时间）</span>
               <strong id="last-updated">加载中</strong>
             </div>
             <div class="meta-block meta-scale">
@@ -240,7 +241,7 @@
     </div>
 
     <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
-    <aside class="detail-drawer" id="detail-drawer" aria-label="公司详情" hidden>
+    <aside class="detail-drawer" id="detail-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
       <div class="drawer-header">
         <div>
           <p class="drawer-kicker" id="drawer-kicker">公司详情</p>

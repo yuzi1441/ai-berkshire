@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
+import quote_quality
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -210,7 +211,13 @@ def write_snapshot(path: Path, payload: dict[str, Any]) -> None:
     """Write a UTF-8 quote snapshot and create its parent directory if needed."""
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    checked = payload.get("last_attempted_at") or payload.get("generated_at")
+    try:
+        evaluated_at = datetime.fromisoformat(str(checked))
+    except ValueError:
+        evaluated_at = datetime.now(SHANGHAI_TIMEZONE)
+    annotated = quote_quality.annotate_snapshot(payload, evaluated_at=evaluated_at)
+    temporary.write_text(json.dumps(annotated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 

@@ -97,8 +97,8 @@ fi
 if [[ ! -x /opt/ai-berkshire-venv/bin/python ]]; then
     python3 -m venv /opt/ai-berkshire-venv
     /opt/ai-berkshire-venv/bin/pip install --upgrade pip
-    /opt/ai-berkshire-venv/bin/pip install -r "${BOOTSTRAP_ROOT}/requirements-technical.txt"
 fi
+/opt/ai-berkshire-venv/bin/pip install -r "${BOOTSTRAP_ROOT}/requirements-technical.txt"
 
 if [[ ! -f /etc/ai-berkshire/dashboard-caddy.env ]]; then
     PASSWORD_HASH="$(caddy hash-password --plaintext "${TEMP_PASSWORD}")"
@@ -114,10 +114,7 @@ install -d -m 0755 /etc/systemd/system/caddy.service.d
 install -D -m 0644 "${BOOTSTRAP_ROOT}/deploy/vps/caddy-systemd-override.conf" \
     /etc/systemd/system/caddy.service.d/ai-berkshire.conf
 
-install -D -m 0755 "${BOOTSTRAP_ROOT}/deploy/vps/ai-berkshire-publish-release.sh" \
-    /usr/local/sbin/ai-berkshire-publish-release
-install -D -m 0755 "${BOOTSTRAP_ROOT}/deploy/vps/ai-berkshire-refresh-services.sh" \
-    /usr/local/sbin/ai-berkshire-refresh-services
+BOOTSTRAP_ROOT="${BOOTSTRAP_ROOT}" bash "${BOOTSTRAP_ROOT}/deploy/vps/install-release-guard.sh"
 
 /usr/local/sbin/ai-berkshire-publish-release
 

@@ -50,20 +50,14 @@ def main() -> int:
         _save(path, payload)
         print(f"Saved lifecycle override {args.ticker.upper()} -> {args.lifecycle}; HOLDING must be registered via post_buy_tracking.")
         return 0
-    path = data / decision_state.DRIFT_RELATIVE.name
-    payload = decision_state.load_json(path, {"schema_version": 1, "companies": {}})
-    payload.setdefault("schema_version", 1)
-    payload.setdefault("companies", {})[args.ticker.upper()] = {
-        "direction": args.direction,
-        "severity": args.severity,
-        "summary": args.summary,
-        "last_checked": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "next_review": args.next_review,
-        "source": "manual",
-    }
-    _save(path, payload)
-    print(f"Saved Drift state {args.ticker.upper()} -> {args.direction}/{args.severity}.")
-    return 0
+    print(
+        "set-drift is retired because it cannot preserve evidence references and review history. "
+        "Use tools/investment_workflow.py drift <ticker> --mode <watch|holding> "
+        "--direction <improved|unchanged|weakened|unknown> --summary <summary> "
+        "--facts-source <evidence-path> --write.",
+        file=sys.stderr,
+    )
+    return 2
 
 
 if __name__ == "__main__":

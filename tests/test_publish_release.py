@@ -252,12 +252,17 @@ class PublishReleaseTests(unittest.TestCase):
             for name in (
                 "automation_status.py",
                 "build_investment_dashboard.py",
+                "dashboard_snapshot.py",
+                "quote_quality.py",
                 "decision_consistency_review.py",
                 "decision_rule_extractor.py",
                 "decision_state.py",
                 "drift_scan_state.py",
                 "event_radar.py",
+                "financial_facts.py",
+                "holding_research_reviews.py",
                 "investment_dispositions.py",
+                "investment_tasks.py",
                 "light_thesis_signals.py",
                 "main_report_review.py",
                 "migrate_manual_execution_reviews.py",
@@ -267,6 +272,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "sentiment_snapshot.py",
                 "source_hash.py",
                 "reconcile_release_state.py",
+                "release_validation_record.py",
             ):
                 (seed / "tools").mkdir(exist_ok=True)
                 shutil.copy2(ROOT / "tools" / name, seed / "tools" / name)
@@ -383,8 +389,11 @@ class PublishReleaseTests(unittest.TestCase):
             calls = (root / "python-calls.log").read_text(encoding="utf-8").splitlines()
             build_calls = [index for index, call in enumerate(calls) if call.endswith("/build_investment_dashboard.py")]
             lifecycle_calls = [index for index, call in enumerate(calls) if call.endswith("/rule_lifecycle.py")]
+            ci_gate_calls = [index for index, call in enumerate(calls) if call.endswith("/verify_github_ci.py")]
             self.assertEqual(len(build_calls), 2)
             self.assertEqual(len(lifecycle_calls), 1)
+            self.assertEqual(len(ci_gate_calls), 1)
+            self.assertLess(ci_gate_calls[0], build_calls[0])
             self.assertLess(build_calls[0], lifecycle_calls[0])
             self.assertLess(lifecycle_calls[0], build_calls[1])
 

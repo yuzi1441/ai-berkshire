@@ -11,6 +11,128 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_quote_expiry_repaints_without_network_and_waits_for_confirmation(self):
+        self.run_js(["scheduleQuoteExpiry", "quoteIsCurrent"], '''
+import assert from 'node:assert/strict';
+let now=1000, callback, delay, paints=0;
+Date.now=()=>now;
+const setTimeout=(fn,ms)=>{callback=fn;delay=ms;return 1;};
+const clearTimeout=()=>{};
+const formatPrice=()=> '10';
+const state={quotes:new Map([['A',{quality:{eligible:true,evaluated_at:new Date(0).toISOString(),valid_until:new Date(2000).toISOString()}}]])};
+const document={activeElement:null};
+const els={drawer:{hidden:true}};
+const renderAll=()=>{paints++;scheduleQuoteExpiry();};
+''', '''
+scheduleQuoteExpiry();assert.equal(delay,1001);
+state.pendingDisposition={};now=2001;callback();assert.equal(paints,0);
+state.pendingDisposition=null;callback();assert.equal(paints,1);
+assert.equal(quoteIsCurrent(state.quotes.get('A')),false);
+''')
+
+    def test_holding_snapshot_never_falls_back_to_another_cycle(self):
+        self.run_js(["trackingFor", "originalThesisFor", "lifecycleOf", "renderHoldingReview", "escapeHtml", "formatDate"], '''
+import assert from 'node:assert/strict';
+const old={position_id:'OLD',ticker:'A',source_text:'old thesis'};
+const state={tracking:new Map([['A',{position_id:'OLD'}]]),originalTheses:{active_position_ids:{A:'OLD'},cycles:{OLD:old}}};
+const record={ticker:'A',lifecycle:'HOLDING',post_buy_tracking:{position_id:'NEW'}};
+''', '''
+assert.equal(trackingFor(record).position_id,'NEW');
+assert.equal(originalThesisFor(record),null);
+state.originalTheses.active_position_ids.A='NEW';assert.equal(originalThesisFor(record),null);
+state.originalTheses.cycles.NEW={position_id:'NEW',ticker:'A',source_text:'current'};
+assert.equal(originalThesisFor(record).source_text,'current');
+state.originalTheses.cycles.NEW.ticker='B';assert.equal(originalThesisFor(record),null);
+const invalid={research_binding_status:'binding_mismatch',review_action:'清仓'};
+assert.ok(!renderHoldingReview(invalid).includes('清仓'));
+assert.ok(renderHoldingReview({...invalid,research_binding_status:'matched',last_review_date:'2026-09-01',next_review_date:'2026-10-01'}).includes('清仓（不是成交记录）'));
+''')
+
+    def test_missing_financial_values_never_render_zero_or_minus_100_percent(self):
+        self.run_js(["formatNumber", "formatPrice", "holdingReturn", "quoteIsCurrent"], '''
+import assert from 'node:assert/strict';
+let quote; const quoteFor=()=>quote;
+const quality={eligible:true,evaluated_at:new Date().toISOString(),valid_until:new Date(Date.now()+60000).toISOString()};
+''', '''
+for (const value of [null, undefined, '', ' ', false, true, NaN, Infinity]) {
+ assert.equal(formatNumber(value), '—');
+ assert.equal(formatPrice({price:value}), '—');
+ quote={price:value,quality};assert.equal(holdingReturn({}, {cost_basis:10}), null);
+ quote={price:10,quality};assert.equal(holdingReturn({}, {cost_basis:value}), null);
+}
+for (const value of [0,-1]) {
+ quote={price:10,quality};assert.equal(holdingReturn({}, {cost_basis:value}), null);
+}
+quote={price:12,quality};assert.ok(Math.abs(holdingReturn({}, {cost_basis:10})-.2)<1e-9);
+assert.equal(formatNumber(0), '0');
+assert.equal(formatPrice({price:12,currency:'HKD'}), 'HK$12');
+''')
+
+    def test_timestamps_are_shanghai_instants_not_offset_stripping(self):
+        self.run_js(["formatDateTime"], "import assert from 'node:assert/strict';", '''
+assert.equal(formatDateTime('2026-09-11T20:00:00Z'), '2026-09-12 04:00');
+assert.equal(formatDateTime('2026-09-12T04:00:00+08:00'), '2026-09-12 04:00');
+assert.equal(formatDateTime('2026-09-12'), '2026-09-12');
+assert.equal(formatDateTime(null), '—');
+''')
+
+    def test_quote_load_failure_missing_and_valid_coverage_are_distinct(self):
+        self.run_js(["loadOptionalJson", "renderTopMeta", "formatPrice", "formatNumber", "formatDateTime", "formatDate", "quoteIsCurrent"], '''
+import assert from 'node:assert/strict';
+let error={status:404}; const loadJson=async()=>{throw error;};
+const state={board:{},companyStateMeta:{source_sha:'abc12345xxxx'},rulePackages:new Map(),quotes:new Map()};
+const records=[{ticker:'A',market:'A股'},{ticker:'H',market:'港股'},{ticker:'U',market:'美股'}];
+const stateRecords=()=>records;
+const location={hostname:'127.0.0.1'};
+const els={lastUpdated:{},dataSource:{},datasetSummary:{},quoteStatus:{dataset:{}},quoteStatusText:{}};
+const quality={eligible:true,evaluated_at:new Date().toISOString(),valid_until:new Date(Date.now()+60000).toISOString()};
+''', '''
+state.quoteMeta=await loadOptionalJson('q',()=>({quotes:[]}));renderTopMeta();
+assert.ok(els.quoteStatusText.textContent.includes('尚未取得行情快照'));
+assert.ok(els.dataSource.textContent.includes('不代表线上状态'));
+error={status:500};state.quoteMeta=await loadOptionalJson('q',()=>({quotes:[]}));renderTopMeta();
+assert.ok(els.quoteStatusText.textContent.includes('读取失败'));
+state.quoteMeta={source_status:'unavailable',generated_at:'2026-09-12T12:00:00Z'};renderTopMeta();
+assert.ok(els.quoteStatusText.textContent.includes('更新失败'));
+assert.ok(!els.quoteStatusText.textContent.includes('截至'));
+state.quotes=new Map([['A',{price:null}],['H',{price:3,snapshot_status:'preserved_previous'}],['U',{price:5}]]);
+state.quoteMeta={source_status:'ok'};renderTopMeta();assert.ok(els.quoteStatusText.textContent.includes('0/2'));
+state.quotes.set('A',{price:10,quality});renderTopMeta();assert.ok(els.quoteStatusText.textContent.includes('1/2'));
+state.quotes.set('H',{price:3,quality});renderTopMeta();assert.equal(els.quoteStatus.dataset.tone,'fresh');
+''')
+
+    def test_review_presence_navigation_and_task_copy_match_projections(self):
+        self.run_js(["formalDriftMatches", "attentionReasonType", "guidanceFor", "renderWorkspaceNav", "stateCount", "lifecycleOf", "checklistRecords"], '''
+import assert from 'node:assert/strict';
+const records=[{lifecycle:'WATCH'},{lifecycle:'HOLDING'},{lifecycle:'EXITED'}];
+const stateRecords=()=>records, attentionRecords=()=>[], aiNavigationCount=()=>0;
+const els={navWatchlistCount:{}};
+''', '''
+const checkpoint={drift:{},drift_scan:{checked_at:'2026-09-03',result:'unchanged'}};
+assert.equal(formalDriftMatches(checkpoint,'has-review'),true);
+assert.equal(formalDriftMatches(checkpoint,'no-review'),false);
+assert.equal(formalDriftMatches(checkpoint,'improved'),false);
+assert.equal(formalDriftMatches({light_thesis_signal:{checked_at:'2026-09-03'}},'has-review'),false);
+assert.equal(attentionReasonType({action_guidance:{task_label:'现在需要研究',next_action_code:'review_portfolio_position'}}),'现在需要研究');
+renderWorkspaceNav();assert.equal(els.navWatchlistCount.textContent,'3');
+''')
+
+    def test_formal_drift_summary_and_report_are_visible_without_rewriting_authority(self):
+        record = next(r for r in json.loads((ROOT / "site/data/company_state.json").read_text())["companies"]
+                      if r["ticker"] == "603606.SH")
+        self.run_js(["renderFormalDriftResult", "escapeHtml", "formatDateTime"], '''
+import assert from 'node:assert/strict';
+const label=(_,v)=>v, driftScanLabel=()=>"当前有效", reportHref=p=>'https://example.test/'+p;
+''' + 'const record=' + json.dumps(record) + ';', '''
+const before=JSON.stringify(record), html=renderFormalDriftResult(record);
+assert.ok(html.includes('局部正向漂移但尚未修复'));
+assert.ok(html.includes('2026-09-11'));
+assert.ok(html.includes('东方电缆-thesis-drift-20260911.md'));
+assert.ok(html.includes('不因局部改善自动获得买入资格'));
+assert.equal(JSON.stringify(record),before);
+assert.equal(renderFormalDriftResult({light_thesis_signal:{signal:'improved'}}),'');
+''')
+
     def test_delayed_disposition_response_cannot_close_new_task(self):
         self.run_js(["submitDisposition", "applyDispositionAuthority", "dispositionOverlayMatches"], '''
 import assert from 'node:assert/strict';
@@ -53,13 +175,13 @@ assert.equal(currentRecord('X').action_guidance.requires_user_action,false);
     def test_initial_latest_projection_and_old_response_cannot_overwrite(self):
         records = json.loads((ROOT / "site/data/company_state.json").read_text())["companies"]
         self.run_js(["loadJson", "loadDispositionAuthority", "applyDispositionAuthority", "dispositionOverlayMatches",
-                     "loadData", "indexByTicker", "normalizeTracking",
+                     "loadData", "indexByTicker", "normalizeTracking", "validateDashboardCore",
                      "lightThesisFilterValue", "shouldRefreshOnPageResume", "refreshDataOnPageResume"],
                     '''import assert from 'node:assert/strict';
 const state = {loadSequence: 0, companyState: new Map()};
 let dataRequestSequence = 0;
 const PAGE_RESUME_REFRESH_AGE_MS = 60000;
-const DATA_FILES = {companyState: './data/company_state.json'};
+const DATA_FILES = {core: './data/dashboard_core.json'};
 const OPTIONAL_DATA_FALLBACKS = {};
 const els = {attentionList:{}, holdingList:{}};
 const document = {visibilityState: 'visible'};
@@ -71,7 +193,10 @@ const pending = [];
 const fetch = (url, options) => String(url).startsWith('/api/')
  ? Promise.resolve({ok:false,status:403})
  : new Promise(resolve => pending.push({url, options, resolve}));
-const reply = (request, companies) => request.resolve({ok:true,json:async()=>({companies})});
+const reply = (request, companies) => request.resolve({ok:true,json:async()=>({
+ schema_version:1,artifact_role:'derived_dashboard_core',generation_id:'a'.repeat(64),board:{},
+ companyState:{companies},rules:{companies:companies.map(c=>({ticker:c.ticker,rules:[]}))}
+})});
 ''' + 'const records = ' + json.dumps(records) + ';', '''
 const initial = loadData();
 assert.equal(pending[0].options.cache, 'no-store');
@@ -192,7 +317,7 @@ assert.ok(!renderDispositionControls(recorded).includes('data-disposition='));
         self.run_js(["escapeHtml", "aiScanState", "aiScanAssessments", "aiScanClassification",
                      "opportunityScanDisplayTimestamp", "hasDisplayableOpportunityScan",
                      "opportunityScanDisplayMode", "aiOpportunityDisplayStatusText",
-                     "aiOpportunityItems", "renderAiOpportunities", "aiScanStatusText", "resetFilterState"],
+                     "aiOpportunityItems", "renderAiOpportunities", "validScanCount", "aiScanStatusText", "resetFilterState"],
                     '''import assert from 'node:assert/strict';
 const state={opportunityScanMeta:{status:'missing'},opportunityScans:new Map(),search:'no-match'};
 const els={aiOpportunityMeta:{},aiOpportunityList:{},aiOpportunityViewAll:{}};
@@ -218,7 +343,7 @@ assert.equal(els.aiOpportunityList.innerHTML,before);
              "hasDisplayableOpportunityScan", "opportunityScanDisplayMode",
              "aiOpportunityDisplayStatusText", "aiNavigationCount", "aiScanState",
              "aiScanAssessments", "aiScanClassification", "aiScanStatusText",
-             "aiOpportunityItems", "renderAiOpportunities"],
+             "aiOpportunityItems", "renderAiOpportunities", "validScanCount"],
             '''import assert from 'node:assert/strict';
 const yesterday='2026-09-08T22:28:00+08:00';
 const state={opportunityScanMeta:{

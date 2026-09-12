@@ -196,7 +196,7 @@ description: 公司新闻脉搏：股价异动时快速归因。用 4 个并行 
 
 | 行动 | 是否建议 | 理由 |
 |------|--------|------|
-| 触发投资论文重审（`/thesis-tracker`） | | |
+| 已确认的重要基本面事件：正式逻辑复核（`/thesis-drift`）；持仓周期到期跟踪：`/thesis-tracker` | | |
 | 触发深度财报研读（`/earnings-review`） | | |
 | 触发管理层重审（`/management-deep-dive`） | | |
 | 调仓动作（加仓/减仓/不动） | | 仅做提示，最终决策权在用户 |
@@ -226,6 +226,7 @@ description: 公司新闻脉搏：股价异动时快速归因。用 4 个并行 
 
 ```bash
 python3 tools/post_buy_tracking.py event {股票代码} \
+  --expected-position-id "{任务中的当前 position_id}" \
   --event-date {YYYY-MM-DD} --change-pct {涨跌幅} --window {窗口} \
   --category {基本面/行业/情绪/技术/混合/不明} --summary "{归因摘要}" \
   --report-path {报告相对路径} --skip-unregistered {--review-required 或 --no-review-required}
@@ -234,6 +235,10 @@ python3 tools/build_investment_dashboard.py
 ```
 
 `--skip-unregistered` 会让非持仓标的安静跳过。同步事件只能标记“异动待分析”或“论文待重审”，不得自动改写持仓、基本面建议或执行调仓。
+
+研究开始时捕获当前 `position_id` 和目标提醒身份，完成时仍使用这组身份，不能重新读取新周期来替代，也不能按股票代码猜测持仓周期。报告保存后由入口计算并保存来源及内容哈希；可传 `--report-sha256` 约束已审核的报告版本。周期已变化或事件早于本次买入时停止回写，不改成新周期重试。
+
+只有已完成归因、且能精确对应本次 `price_move` 提醒时，增加 `--attribution-status completed --covers-alert-id "{提醒 event_id}"`。这会绑定该提醒的报价身份，仅关闭同一次异动；不能用 `--no-review-required` 代替完成凭证。真因不明或缺少匹配提醒时保留默认 `unresolved`，不得编造 ID。若结论要求重审，同时传 `--review-required`，归因完成不代表风险已解决。
 
 ### 第九步：清理团队
 

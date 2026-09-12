@@ -39,7 +39,7 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 
 ### 第一步：判断操作模式
 
-检查是否已存在该公司的投资论文文件（`reports/{公司名}-thesis.md`）：
+检查是否已存在该公司的投资论文文件（`reports/{公司名}/{公司名}-thesis.md`）：
 - 如果不存在 → 进入**建立论文**模式
 - 如果存在 → 进入**追踪检查**模式
 - 如果找不到但用户表示已有 → 询问文件路径
@@ -107,7 +107,7 @@ This skill is generated from `skills/thesis-tracker.md` so Claude Code and Codex
 
 ### A5：保存论文
 
-将投资论文写入 `reports/{公司名}-thesis.md`，包含：
+将投资论文写入 `reports/{公司名}/{公司名}-thesis.md`，包含：
 - 建立日期
 - 买入价格和仓位
 - 核心论文（5句话）
@@ -130,16 +130,23 @@ python3 tools/post_buy_tracking.py register \
   --buy-date {YYYY-MM-DD} --cost-basis {成交成本} --position-weight {仓位百分比} \
   --next-review {YYYY-MM-DD} --thesis-report {论文相对路径} \
   --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"成立"}]'
-python3 tools/post_buy_tracking.py update {股票代码} \
-  --thesis-status healthy --health-score {首次论文健康度1-10} \
-  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
-  --review-action 持有 --thesis-report {论文相对路径} \
-  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/holding_research_reviews.py upsert --record {结构化研究结果JSON}
 python3 tools/post_buy_tracking.py check
 python3 tools/build_investment_dashboard.py
 ```
 
-首次建立论文后必须同步初始健康度、复核动作和下一次复核日期；登记只更新买入后跟踪层，不改写主报告的基本面建议、技术面结论或历史研报。
+结构化研究结果必须包含 `ticker`、当前 `position_id`、冻结的
+`original_buy_thesis_sha256`、论文 `report_path/report_sha256`、原始复核日期、
+下一复核日期、健康度、动作、指标和证据引用。只有四项身份全部匹配，Dashboard
+才采用研究结果。首次登记只更新运行端成交事实；研究结果随 Git 发布，二者都不改写
+主报告的基本面建议、技术面结论或历史研报。
+
+新研究结果的 `reviewed_at`、`next_review_date` 必填，下一复核日期必须晚于本次复核。
+`evidence` 不能为空；每项至少含 `source_identity`、`content_sha256`、`date`（不得晚于复核日期）。
+
+关闭某条持仓事件时，证据须精确引用该事件报告的日期、来源身份和内容 SHA，并绑定相同持仓周期与事件 ID；不得用本次 Tracker 报告的 SHA 替代事件报告 SHA。缺少可核验身份的旧事件继续隔离，不得宣称已覆盖。
+覆盖某项事件时保留该事件的原始来源身份；仅有新的复核日期不能关闭其他事件提醒。
+历史迁移记录的空证据不代表新结果可省略证据，也不得通过填写迁移标记绕过正式写入校验。
 
 ---
 
@@ -147,7 +154,7 @@ python3 tools/build_investment_dashboard.py
 
 ### B1：读取现有论文
 
-读取 `reports/{公司名}-thesis.md`，加载：
+读取 `reports/{公司名}/{公司名}-thesis.md`，加载：
 - 核心论文
 - 核心假设清单
 - 红线清单
@@ -233,7 +240,7 @@ python3 tools/build_investment_dashboard.py
 
 ### B7：更新论文文件
 
-将本次检查记录追加到 `reports/{公司名}-thesis.md` 的追踪记录表中：
+将本次检查记录追加到 `reports/{公司名}/{公司名}-thesis.md` 的追踪记录表中：
 
 | 检查日期 | 健康度 | 核心变化 | 动作建议 |
 |---------|:------:|---------|---------|
@@ -241,17 +248,19 @@ python3 tools/build_investment_dashboard.py
 
 ### B8：同步论文健康度到看板
 
-在 B7 成功写入后，更新已登记持仓的论文状态。映射必须固定：`完整`→`healthy`、`边际弱化`→`borderline`、`受损`→`damaged`、`破裂`→`broken`。健康度使用 B6 的 1-10 分；下次复核日期必须是明确的 YYYY-MM-DD，不能只写“下个季报后”。
+在 B7 成功写入后，生成并 upsert Git 管理的结构化研究结果。映射必须固定：
+`完整`→`healthy`、`边际弱化`→`borderline`、`受损`→`damaged`、`破裂`→`broken`。
+健康度使用 B6 的 1-10 分；下次复核日期必须是明确的 YYYY-MM-DD，不能只写“下个季报后”。
 
 ```bash
-python3 tools/post_buy_tracking.py update {股票代码} \
-  --thesis-status {healthy/borderline/damaged/broken} --health-score {1-10} \
-  --last-review {YYYY-MM-DD} --next-review {YYYY-MM-DD} \
-  --review-action {加仓/持有/减仓/清仓/观察} --thesis-report {论文相对路径} \
-  --metrics '[{"name":"指标","target":"阈值","frequency":"频率","status":"当前状态"}]'
+python3 tools/holding_research_reviews.py upsert --record {结构化研究结果JSON}
+python3 tools/holding_research_reviews.py validate
 python3 tools/post_buy_tracking.py check
 python3 tools/build_investment_dashboard.py
 ```
+
+不得用 `post_buy_tracking.py update` 发布论文健康度、复核日期或研究指标；该入口只保留给
+实际持仓状态等运行事实。迁移旧结果时必须保留原复核日期，不得把迁移时间写成新复核。
 
 若该公司尚未登记为实际持仓，保留论文文件但不要尝试用论文结论自动建立持仓。
 

@@ -22,12 +22,18 @@ ALL_DISPOSITIONS = {
     "redo_research",
     "formal_drift",
     "archive_drop",
+    "keep_holding",
+    "request_position_review",
+    "request_exit_review",
 }
 DISPOSITION_EFFECT_CODES = {
     "keep_watch": "KEEP_WATCH",
     "redo_research": "REDO_RESEARCH",
     "formal_drift": "FORMAL_DRIFT_REQUESTED",
     "archive_drop": "USER_REQUESTED_ARCHIVE",
+    "keep_holding": "KEEP_HOLDING",
+    "request_position_review": "POSITION_REVIEW_REQUESTED",
+    "request_exit_review": "EXIT_REVIEW_REQUESTED",
 }
 DISPOSITION_OPTIONS = {
     "reviewed_thesis_weakened": [
@@ -35,6 +41,33 @@ DISPOSITION_OPTIONS = {
     ],
     "confirmed_redline": ["formal_drift"],
 }
+HOLDING_DISPOSITIONS = ["keep_holding", "request_position_review", "request_exit_review"]
+HOLDING_DECISION_BLOCKERS = {
+    "holding_thesis_weakened", "holding_research_requires_decision",
+    "covered_holding_event_requires_decision", "covered_redline_requires_decision",
+}
+DISPOSITION_BLOCKERS = {
+    "user_selected_keep_watch", "user_requested_research_refresh",
+    "user_requested_formal_drift", "user_requested_archive",
+    "user_selected_keep_holding", "user_requested_position_review",
+    "user_requested_exit_review",
+}
+
+
+def _source_company(company: dict[str, Any]) -> dict[str, Any]:
+    """Recover the unresolved route, retaining the company's current evidence."""
+    manual = company.get("manual_disposition") or {}
+    source = manual.get("source_task") or {}
+    if (manual.get("status") == "current" and isinstance(source.get("action_guidance"), dict)
+            and (company.get("action_guidance") or {}).get("blocker_code") in DISPOSITION_BLOCKERS):
+        return {**company, **{key: source.get(key) for key in (
+            "action_guidance", "next_action", "needs_attention",
+        )}}
+    return company
+
+
+def _sha256(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
 
 
 class DispositionError(ValueError):
@@ -54,23 +87,33 @@ def empty_payload() -> dict[str, Any]:
 
 
 def allowed_dispositions(company: dict[str, Any]) -> list[str]:
-    projected = company.get("manual_disposition")
-    if isinstance(projected, dict) and isinstance(projected.get("allowed_options"), list):
-        options = [str(item) for item in projected["allowed_options"]]
-        if all(item in ALL_DISPOSITIONS for item in options):
-            return options
+    company = _source_company(company)
     guidance = company.get("action_guidance")
     if not isinstance(guidance, dict) or guidance.get("requires_user_action") is not True:
+        return []
+    if company.get("lifecycle") == "EXITED":
+        return []
+    if company.get("lifecycle") == "HOLDING":
+        tracking = company.get("post_buy_tracking") or {}
+        if (tracking.get("research_binding_status") != "matched"
+                or tracking.get("status") not in {"holding", "paused"}
+                or not str(tracking.get("position_id") or "").startswith(f"{company.get('ticker')}:")
+                or not _sha256(tracking.get("original_buy_thesis_sha256"))
+                or not _sha256(tracking.get("research_report_sha256"))):
+            return []
+        if guidance.get("blocker_code") in HOLDING_DECISION_BLOCKERS:
+            return list(HOLDING_DISPOSITIONS)
         return []
     return list(DISPOSITION_OPTIONS.get(str(guidance.get("blocker_code") or ""), []))
 
 
 def disposition_target(company: dict[str, Any]) -> dict[str, Any]:
+    company = _source_company(company)
     guidance = company.get("action_guidance") if isinstance(company.get("action_guidance"), dict) else {}
     review = company.get("review_coverage") if isinstance(company.get("review_coverage"), dict) else {}
     manual = review.get("manual_decision") if isinstance(review.get("manual_decision"), dict) else {}
     drift = company.get("drift") if isinstance(company.get("drift"), dict) else {}
-    return {
+    target = {
         "ticker": str(company.get("ticker") or "").upper(),
         "blocker_code": str(guidance.get("blocker_code") or ""),
         "canonical_report_sha256": company.get("canonical_report_sha256") or None,
@@ -87,6 +130,29 @@ def disposition_target(company: dict[str, Any]) -> dict[str, Any]:
             "source": drift.get("source") or None,
         },
     }
+    if company.get("lifecycle") == "HOLDING":
+        tracking = company.get("post_buy_tracking") or {}
+        radar = company.get("event_radar") or {}
+        target["holding"] = {
+            "lifecycle": "HOLDING",
+            **{key: tracking.get(key) for key in (
+                "position_id", "original_buy_thesis_sha256", "research_report_sha256",
+                "thesis_report_path", "research_binding_status", "last_review_date",
+                "next_review_date", "thesis_status", "review_action",
+            )},
+            "research_evidence": sorted(tracking.get("research_evidence") or [], key=lambda x: json.dumps(x, sort_keys=True)),
+            "latest_event": tracking.get("latest_event"),
+            "alerts": sorted(tracking.get("alerts") or [], key=lambda x: json.dumps(x, sort_keys=True)),
+            "events": sorted([
+                {key: event.get(key) for key in (
+                    "source_identity", "event_id", "id", "url", "report_path",
+                    "content_sha256", "event_date", "date", "state", "thesis_relevant",
+                    "highest_source_tier", "title", "summary",
+                )}
+                for event in radar.get("events", []) if isinstance(event, dict)
+            ], key=lambda x: json.dumps(x, sort_keys=True)),
+        }
+    return target
 
 
 def fingerprint_for_target(target: dict[str, Any]) -> str:
@@ -100,11 +166,6 @@ def fingerprint_for_target(target: dict[str, Any]) -> str:
 
 
 def target_fingerprint(company: dict[str, Any]) -> str:
-    projected = company.get("manual_disposition")
-    if isinstance(projected, dict):
-        existing = str(projected.get("disposition_target_fingerprint") or "")
-        if len(existing) == 64 and all(character in "0123456789abcdef" for character in existing):
-            return existing
     return fingerprint_for_target(disposition_target(company))
 
 
@@ -179,16 +240,22 @@ def project_company(
     company: dict[str, Any], payload: dict[str, Any] | None
 ) -> dict[str, Any]:
     """Attach exact-fingerprint options and apply a matching human route."""
-    result = copy.deepcopy(company)
+    result = copy.deepcopy(_source_company(company))
     options = allowed_dispositions(result)
     fingerprint = target_fingerprint(result) if options else None
     record = current_record(payload, str(result.get("ticker") or ""), fingerprint or "")
+    if record and record.get("selected_disposition") not in options:
+        record = None
+    source_task = {key: copy.deepcopy(result.get(key)) for key in (
+        "action_guidance", "next_action", "needs_attention",
+    )}
     result["manual_disposition"] = {
         "allowed_options": options,
         "disposition_target_fingerprint": fingerprint,
         "selected_disposition": record.get("selected_disposition") if record else None,
         "selected_at": record.get("selected_at") if record else None,
         "status": "current" if record else "none",
+        "source_task": source_task,
     }
     if not record:
         return result
@@ -246,6 +313,36 @@ def project_company(
             "completion_target": "保留全部研究资料，未来出现新 fingerprint 时可重新进入队列",
         })
         result["next_action"] = "keep_watch"
+    elif selected == "keep_holding":
+        guidance.update({
+            "blocker_code": "user_selected_keep_holding",
+            "blocker_text": "已记录人工决定：继续持有当前仓位",
+            "next_action_code": "continue_holding",
+            "next_action_text": "按已记录决定继续持有，等待新的复核事实",
+            "recommended_skill": [],
+            "recommended_skill_reason": "已记录本次持仓判断，实际仓位和成交记录未改变",
+            "priority": "none", "requires_user_action": False,
+            "completion_target": "仅在持仓周期、原始买入逻辑、研究或事件证据变化时重新判断",
+        })
+        result["next_action"] = "hold"
+    elif selected in {"request_position_review", "request_exit_review"}:
+        exiting = selected == "request_exit_review"
+        guidance.update({
+            "blocker_code": "user_requested_exit_review" if exiting else "user_requested_position_review",
+            "blocker_text": "已申请退出研究" if exiting else "已申请调整仓位研究",
+            "next_action_code": "review_holding_exit" if exiting else "review_portfolio_position",
+            "next_action_text": "研究退出方案后由本人决定" if exiting else "研究仓位调整方案后由本人决定",
+            "recommended_skill": ["portfolio-review"],
+            "recommended_skill_reason": "只记录研究请求；不会自动下单、调整实际仓位或结束持仓周期",
+            "priority": "normal", "requires_user_action": True,
+            "completion_target": "完成组合研究并记录人工判断；真实交易须另行确认登记",
+        })
+        result["next_action"] = "exit_review" if exiting else "add_reduce_review"
+    # Keep live API overlays consistent with the state/CLI task contract.
+    import investment_tasks
+    guidance.update(investment_tasks.classify(guidance))
+    if selected == "keep_holding":
+        guidance["task_label"] = "继续持有"
     result["action_guidance"] = guidance
     result["needs_attention"] = guidance.get("requires_user_action") is True
     return result

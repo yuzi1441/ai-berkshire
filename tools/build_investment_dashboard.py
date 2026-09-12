@@ -30,6 +30,9 @@ import main_report_review
 import decision_state
 import event_radar
 import investment_dispositions
+import holding_research_reviews
+import dashboard_snapshot
+import quote_quality
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -5438,6 +5441,7 @@ def refresh_runtime_state(
     repo_root: Path = ROOT,
     *,
     investment_dispositions_path: Path | None = None,
+    as_of: date | None = None,
 ) -> dict[str, Any]:
     """Re-evaluate runtime state without reparsing or rewriting research.
 
@@ -5459,6 +5463,21 @@ def refresh_runtime_state(
     if not isinstance(decisions, list):
         raise ValueError("Invalid decision board for runtime state refresh")
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    # The saved board is a projection, never authority for execution facts.
+    # Reuse the full-build binding path after every runtime position change.
+    tracking, alerts = load_post_buy_layer(
+        data_directory, strict=(data_directory / "post_buy_tracking.json").is_file()
+    )
+    original_buy_theses = load_json(data_directory / "original_buy_theses.json", {})
+    attach_post_buy_tracking(
+        decisions, tracking, alerts,
+        research_reviews=holding_research_reviews.load(
+            data_directory / holding_research_reviews.RELATIVE_PATH.name
+        ),
+        original_buy_theses=original_buy_theses,
+        repo_root=repo_root,
+        as_of=as_of or datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date(),
+    )
     event_snapshot = event_radar.build_event_radar(
         repo_root, write=False, generated_at=generated_at
     )
@@ -5485,6 +5504,8 @@ def refresh_runtime_state(
         rule_payload=rule_payload,
         write=False,
         investment_disposition_payload=disposition_payload,
+        generated_at=generated_at,
+        as_of=as_of,
     )
     errors = decision_state.validate_payloads(layers)
     if errors:
@@ -5507,6 +5528,20 @@ def refresh_runtime_state(
     write_json(site_data_directory / "decision_rules.json", layers["rules"])
     write_json(data_directory / "event_radar.json", event_snapshot)
     write_json(site_data_directory / "event_radar.json", event_snapshot)
+    write_json(site_data_directory / "post_buy_tracking.json", public_post_buy_tracking(tracking, decisions))
+    write_json(site_data_directory / "post_buy_alerts.json", public_post_buy_alerts(alerts, decisions))
+    original_path = data_directory / "original_buy_theses.json"
+    if original_path.is_file():
+        write_json(site_data_directory / original_path.name, original_buy_theses)
+    quote_path = data_directory / "quotes" / "latest.json"
+    if quote_path.is_file():
+        write_json(site_data_directory / "quotes" / "latest.json", quote_quality.annotate_snapshot(
+            load_json(quote_path, {}), evaluated_at=datetime.fromisoformat(generated_at)))
+    dashboard_snapshot.publish_snapshot(
+        site_data_directory / dashboard_snapshot.FILENAME,
+        board=board, layers=layers, tracking=public_post_buy_tracking(tracking, decisions),
+        original_theses=original_buy_theses,
+    )
     return {
         "decision_count": len(decisions),
         "rule_count": layers["rules"].get("rule_count", 0),
@@ -5546,6 +5581,12 @@ def attach_post_buy_tracking(
     decisions: list[dict[str, Any]],
     tracking: dict[str, Any],
     alerts: dict[str, Any],
+    *,
+    research_reviews: dict[str, Any] | None = None,
+    original_buy_theses: dict[str, Any] | None = None,
+    repo_root: Path | None = None,
+    allow_legacy_research: bool = False,
+    as_of: date | None = None,
 ) -> dict[str, int]:
     """Attach only explicitly registered post-buy positions to board records."""
     positions = tracking.get("positions") or {}
@@ -5572,8 +5613,9 @@ def attach_post_buy_tracking(
             continue
         current_alerts = alerts_by_ticker.get(ticker, [])
         status = registered.get("status") or "holding"
-        decision["post_buy_tracking"] = {
+        projection = {
             "status": status,
+            "position_id": registered.get("position_id"),
             "buy_date": registered.get("buy_date"),
             "cost_basis": registered.get("cost_basis"),
             "position_weight": registered.get("position_weight"),
@@ -5587,7 +5629,71 @@ def attach_post_buy_tracking(
             "latest_event": registered.get("latest_event"),
             "alerts": current_alerts,
         }
+        if repo_root is not None:
+            position_record = {**registered, "ticker": ticker}
+            review = ((research_reviews or {}).get("reviews") or {}).get(
+                str(registered.get("position_id") or "")
+            )
+            projection = holding_research_reviews.apply_review(
+                projection,
+                review=review,
+                position=position_record,
+                original_buy_theses=original_buy_theses or {},
+                repo_root=repo_root,
+                allow_legacy=allow_legacy_research,
+            )
+        if as_of is not None:
+            projection["alerts"] = (
+                holding_research_reviews.pending_alerts(projection, as_of=as_of)
+                if status == "holding" else []
+            )
+        decision["post_buy_tracking"] = projection
+    if as_of is not None:
+        alert_count = sum(len((d.get("post_buy_tracking") or {}).get("alerts", [])) for d in decisions)
     return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
+
+
+def public_post_buy_alerts(alerts: dict[str, Any], decisions: list[dict[str, Any]]) -> dict[str, Any]:
+    current = [
+        {**alert, "ticker": decision["ticker"], "company": decision.get("company")}
+        for decision in decisions
+        for alert in (decision.get("post_buy_tracking") or {}).get("alerts", [])
+    ]
+    return {**alerts, "alerts": current, "alert_count": len(current)}
+
+
+def public_post_buy_tracking(
+    tracking: dict[str, Any], decisions: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Project the same bound research layer used by the decision board.
+
+    The runtime source is never mutated.  Execution fields remain intact, but
+    stale runtime research fields cannot disagree with the public board.
+    """
+    payload = json.loads(json.dumps(tracking, ensure_ascii=False))
+    positions = payload.get("positions") or {}
+    by_ticker = {
+        str(item.get("ticker") or "").upper(): item.get("post_buy_tracking")
+        for item in decisions
+        if isinstance(item, dict) and isinstance(item.get("post_buy_tracking"), dict)
+    }
+    research_fields = (
+        "thesis_report_path", "thesis_status", "health_score", "last_review_date",
+        "next_review_date", "review_action", "metrics", "research_evidence",
+        "research_provenance", "research_binding_status", "research_binding_reasons",
+    )
+    for ticker, position in positions.items():
+        projection = by_ticker.get(str(ticker).upper())
+        if not isinstance(position, dict) or not isinstance(projection, dict):
+            continue
+        for field in research_fields:
+            if field in projection:
+                position[field] = projection[field]
+    payload["authority"] = {
+        "execution_facts": "runtime",
+        "research_results": "git_bound_holding_research_reviews",
+    }
+    return payload
 
 
 def build_main_report_review_snapshot(
@@ -5700,6 +5806,7 @@ def build_dashboard(
     *,
     legacy_mode: bool = False,
     investment_dispositions_path: Path | None = None,
+    as_of: date | None = None,
 ) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     # Validate the optional runtime authority before the builder can write any
@@ -5712,9 +5819,17 @@ def build_dashboard(
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
     generated_at = dashboard_projection_generated_at(repo_root)
-    projection_date = datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date()
+    projection_date = as_of or datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date()
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(
         data_directory, strict=not legacy_mode
+    )
+    holding_reviews = holding_research_reviews.load(
+        data_directory / holding_research_reviews.RELATIVE_PATH.name,
+        strict=not legacy_mode,
+    )
+    original_buy_theses = load_json(
+        data_directory / "original_buy_theses.json",
+        {"schema_version": 2, "cycles": {}, "active_position_ids": {}},
     )
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
@@ -5777,7 +5892,16 @@ def build_dashboard(
         current_daily = daily_runtime.get(str(decision.get("ticker") or "").upper())
         if current_daily is not None:
             decision["technical_analysis"] = dict(current_daily)
-    post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
+    post_buy_summary = attach_post_buy_tracking(
+        decisions,
+        post_buy_tracking,
+        post_buy_alerts,
+        research_reviews=holding_reviews,
+        original_buy_theses=original_buy_theses,
+        repo_root=repo_root,
+        allow_legacy_research=legacy_mode,
+        as_of=projection_date,
+    )
     # Structured state is the new source consumed by the dashboard.  The
     # legacy fields above remain in the board for compatibility with existing
     # consumers and historical reports.
@@ -5820,6 +5944,7 @@ def build_dashboard(
         main_report_review_payload=main_report_review_snapshot,
         investment_disposition_payload=disposition_payload,
         legacy_mode=legacy_mode,
+        as_of=as_of,
     )
     state_errors = decision_state.validate_payloads(state_layers)
     if state_errors:
@@ -5842,6 +5967,7 @@ def build_dashboard(
     catalog = {
         "schema_version": 1,
         "generated_at": generated_at,
+        "as_of": projection_date.isoformat(),
         "record_count": len(records),
         "checklist_count": len(checklist_records),
         "records": records,
@@ -5853,6 +5979,7 @@ def build_dashboard(
             if key in {"status", "generated_at", "last_attempt_at", "last_success_at", "freshness", "source_outcomes"}
         }},
         "generated_at": generated_at,
+        "as_of": projection_date.isoformat(),
         "generation_id": generation_id,
         "scope": "individual-stocks-only",
         "state_layer": {
@@ -5944,7 +6071,8 @@ def build_dashboard(
         # browser payload. Keep both copies aligned after every ordinary build.
         write_json(
             site_directory / "data" / "quotes" / "latest.json",
-            load_json(quote_path, {}),
+            quote_quality.annotate_snapshot(load_json(quote_path, {}),
+                                            evaluated_at=datetime.fromisoformat(generated_at)),
         )
     write_json(site_directory / "data" / "main_report_review.json", main_report_review_snapshot)
     write_json(site_directory / "data" / "decision_rules.json", state_layers["rules"])
@@ -5958,8 +6086,11 @@ def build_dashboard(
         site_directory / "data" / "light_thesis_signals.json",
         state_layers["light_thesis"],
     )
-    write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
-    write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
+    write_json(
+        site_directory / "data" / "post_buy_tracking.json",
+        public_post_buy_tracking(post_buy_tracking, decisions),
+    )
+    write_json(site_directory / "data" / "post_buy_alerts.json", public_post_buy_alerts(post_buy_alerts, decisions))
     original_theses_path = data_directory / "original_buy_theses.json"
     if original_theses_path.is_file():
         # The frozen thesis is a holding-cycle read model.  Publish it
@@ -5976,6 +6107,12 @@ def build_dashboard(
     )
     write_decision_table(reports_directory / "00-index" / "投资决策总表.md", decisions, generated_at)
     write_library_moc(reports_directory / "00-index" / "报告库-MOC.md", reports_directory, decisions, generated_at)
+    dashboard_snapshot.publish_snapshot(
+        site_directory / "data" / dashboard_snapshot.FILENAME,
+        board=board, layers=state_layers,
+        tracking=public_post_buy_tracking(post_buy_tracking, decisions),
+        original_theses=original_buy_theses,
+    )
     return board
 
 
@@ -6007,6 +6144,12 @@ def main() -> int:
             "are read and clean builds remain deterministic."
         ),
     )
+    parser.add_argument(
+        "--as-of",
+        type=date.fromisoformat,
+        default=None,
+        help="Evaluate calendar deadlines as of YYYY-MM-DD without treating that date as evidence.",
+    )
     arguments = parser.parse_args()
     if arguments.split_only and arguments.state_only:
         parser.error("--split-only and --state-only are mutually exclusive")
@@ -6017,12 +6160,14 @@ def main() -> int:
             else refresh_runtime_state(
                 arguments.repo_root.resolve(),
                 investment_dispositions_path=arguments.investment_dispositions,
+                as_of=arguments.as_of,
             )
             if arguments.state_only
             else build_dashboard(
                 arguments.repo_root.resolve(),
                 legacy_mode=arguments.legacy_mode,
                 investment_dispositions_path=arguments.investment_dispositions,
+                as_of=arguments.as_of,
             )
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:

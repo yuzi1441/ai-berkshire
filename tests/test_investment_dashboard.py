@@ -53,6 +53,16 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "2026-09-08T01:51:29+08:00",
             )
 
+    def test_explicit_as_of_is_recorded_without_becoming_source_time(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            board = dashboard.build_dashboard(
+                root, legacy_mode=True, as_of=date(2026, 9, 1)
+            )
+            self.assertEqual(board["as_of"], "2026-09-01")
+            self.assertNotEqual(board["generated_at"][:10], board["as_of"])
+
     def test_malformed_runtime_disposition_fails_before_any_projection_write(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
@@ -924,8 +934,22 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(selected["action"], "观察")
             self.assertEqual(selected["post_buy_tracking"]["status"], "holding")
             self.assertEqual(selected["post_buy_tracking"]["thesis_status"], "healthy")
-            self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 1)
+            # An undated cached deadline cannot override the current October review date.
+            self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 0)
             self.assertTrue((root / "site" / "data" / "post_buy_tracking.json").is_file())
+
+    def test_public_holding_projection_does_not_mutate_runtime_execution_facts(self):
+        runtime = {"schema_version": 1, "positions": {"600000.SH": {
+            "ticker": "600000.SH", "cost_basis": 10.0, "position_weight": 5.0,
+            "thesis_status": "damaged",
+        }}}
+        decisions = [{"ticker": "600000.SH", "post_buy_tracking": {
+            "thesis_status": "healthy", "research_binding_status": "matched",
+        }}]
+        projected = dashboard.public_post_buy_tracking(runtime, decisions)
+        self.assertEqual(projected["positions"]["600000.SH"]["thesis_status"], "healthy")
+        self.assertEqual(projected["positions"]["600000.SH"]["cost_basis"], 10.0)
+        self.assertEqual(runtime["positions"]["600000.SH"]["thesis_status"], "damaged")
 
     def test_extracts_full_price_plan_and_three_scenario_targets(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

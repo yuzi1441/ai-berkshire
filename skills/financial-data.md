@@ -2,6 +2,22 @@
 
 本规范适用于所有涉及企业财务数据的研究。**每个关键数据必须来自两个独立来源，误差>1%须标记。**
 
+## 与决策看板的边界
+
+本 Skill 负责取得并交叉核验事实值、报告期、单位、口径、来源日期和稳定证据身份。它不负责猜测投资规则中的指标、运算符或阈值，也不直接修改 Decision Rule、生命周期、Checklist 或买卖状态。
+
+用于自动条件求值时，必须把结果交给项目的结构化事实入口，至少包含：`ticker`、`metric`、`actual_value`、`unit`、`period`、`evidence_source`、`source_identity`、`evidence_date`、`content_sha256`、`checked_at`、`valid_until`，并在适用时绑定 `baseline_report_sha256`。规则侧仍须独立保存 `metric`、`operator` 与 `threshold`；“明显改善”等没有明确阈值的文字继续标为待定义。
+
+```bash
+python3 tools/financial_facts.py upsert --fact {结构化事实JSON}
+python3 tools/financial_facts.py validate
+```
+
+事实与规则必须明确、匹配 `accounting_basis`（`consolidated` 合并报表或 `parent_only` 母公司报表）
+及 `period_basis`（`cumulative` 年内累计或 `standalone` 单期）。未知口径不得默认填合并或累计；
+规则尚未批准这些定义时先保留事实草稿。`evidence_date <= checked_at <= valid_until`，
+求值时晚于检查截止日的证据/核验结果不得使用。写入事实不等于批准规则，更不等于完成投资复核。
+
 ---
 
 ## 数据源优先级

@@ -8,6 +8,7 @@ slash-command style entry point that Claude Code users expect.
 from __future__ import annotations
 
 import sys
+import os
 from pathlib import Path
 
 
@@ -49,8 +50,8 @@ def prompt_for(source: Path) -> str:
         "argument-hint: $ARGUMENTS\n"
         "---\n\n"
         f"Use the installed AI Berkshire Codex skill `{name}` for this request.\n\n"
-        f"If the skill is not already loaded, read and follow "
-        f"`~/ai-berkshire/codex-skills/{name}/SKILL.md`.\n\n"
+        f"If the skill is not already loaded, locate the actual repository checkout "
+        f"and read `codex-skills/{name}/SKILL.md`; do not assume a fixed home-directory path.\n\n"
         "User arguments:\n"
         "$ARGUMENTS\n"
     )
@@ -58,12 +59,20 @@ def prompt_for(source: Path) -> str:
 
 def main() -> None:
     check = "--check" in sys.argv[1:]
-    unknown_args = [arg for arg in sys.argv[1:] if arg != "--check"]
+    check_installed = "--check-installed" in sys.argv[1:]
+    install_root_arg = next(
+        (arg.split("=", 1)[1] for arg in sys.argv[1:] if arg.startswith("--install-root=")),
+        None,
+    )
+    unknown_args = [
+        arg for arg in sys.argv[1:]
+        if arg not in {"--check", "--check-installed"} and not arg.startswith("--install-root=")
+    ]
     if unknown_args:
         joined = ", ".join(unknown_args)
         raise SystemExit(f"Unknown argument(s): {joined}")
 
-    if not check:
+    if not check and not check_installed:
         CODEX_PROMPTS.mkdir(exist_ok=True)
 
     count = 0
@@ -71,20 +80,33 @@ def main() -> None:
     for source in sorted(CLAUDE_SKILLS.glob("*.md")):
         target = CODEX_PROMPTS / source.name
         content = prompt_for(source)
-        if check:
-            if not target.exists() or target.read_text(encoding="utf-8") != content:
-                stale.append(str(target.relative_to(ROOT)))
+        comparison_target = target
+        if check_installed:
+            codex_home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
+            install_root = Path(install_root_arg) if install_root_arg else codex_home / "prompts"
+            comparison_target = install_root / source.name
+        if check or check_installed:
+            if not comparison_target.exists() or comparison_target.read_text(encoding="utf-8") != content:
+                try:
+                    display = str(comparison_target.relative_to(ROOT))
+                except ValueError:
+                    display = str(comparison_target)
+                stale.append(display)
         else:
             target.write_text(content, encoding="utf-8")
         count += 1
 
-    if check:
+    if check or check_installed:
         if stale:
-            print("Codex prompts are out of date:")
+            label = "Installed Codex prompts" if check_installed else "Codex prompts"
+            print(f"{label} are out of date:")
             for path in stale:
                 print(f"  {path}")
             raise SystemExit(1)
-        print(f"Checked {count} Codex prompts in {CODEX_PROMPTS.relative_to(ROOT)}")
+        if check_installed:
+            print(f"Checked {count} installed Codex prompts")
+        else:
+            print(f"Checked {count} Codex prompts in {CODEX_PROMPTS.relative_to(ROOT)}")
         return
 
     print(f"Generated {count} Codex prompts in {CODEX_PROMPTS.relative_to(ROOT)}")

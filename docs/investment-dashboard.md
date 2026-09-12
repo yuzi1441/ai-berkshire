@@ -152,11 +152,12 @@ python3 tools/migrate_decision_state.py --write
 python3 tools/validate_decision_state.py
 ```
 
-需要人工指定生命周期或补充 Drift 结论时，使用显式覆盖文件，不直接改生成 JSON：
+需要人工指定生命周期时使用显式覆盖。正式 Drift 必须经过带基线、证据和
+checkpoint 的 workflow handoff；旧 `set-drift` 已拒绝直接写入：
 
 ```bash
 python3 tools/company_state.py set-lifecycle 000682.SZ PRE_BUY --reason "等待确认买入前检查"
-python3 tools/company_state.py set-drift 000682.SZ unchanged --severity minor --summary "已复核，未改变核心假设"
+python3 tools/investment_workflow.py drift 000682.SZ --mode holding --direction unchanged --summary "已完成的复核摘要" --facts-source reports/东方电子/东方电子-thesis.md --write
 python3 tools/build_investment_dashboard.py
 ```
 
@@ -174,13 +175,16 @@ py -3 tools\post_buy_tracking.py register `
   --next-review 2026-11-01 --thesis-report reports/国电南瑞/国电南瑞-thesis.md
 ```
 
-论文检查完成后更新状态；健康度范围为 1-10：
+论文检查完成后，把研究结果写入 Git 管理的
+`holding_research_reviews.json`。记录必须绑定 `ticker + position_id + Original Buy Thesis SHA + report SHA`；
+运行端的成本、仓位和持仓周期不随 Git 覆盖。可用以下命令校验或写入一条已准备好的结果：
 
-```powershell
-py -3 tools\post_buy_tracking.py update 600406.SH `
-  --thesis-status healthy --health-score 8 `
-  --last-review 2026-08-01 --next-review 2026-11-01 --review-action 持有
+```bash
+python3 tools/holding_research_reviews.py validate
+python3 tools/holding_research_reviews.py upsert --record /path/to/holding-review.json
 ```
+
+旧 `post_buy_tracking.py update` 仅管理运行端持仓事实；不要再用它发布研究结论。
 
 股价异动分析完成后记录事件。只有明确需要重审论文时才传入 `--review-required`：
 
@@ -199,6 +203,34 @@ py -3 tools\build_investment_dashboard.py
 ```
 
 默认预警线为单日涨跌幅 `±5%`、复核日前 7 天、复核日到期/逾期。预警只标记“待分析”或“待复核”，不会自动下单、调仓或改变基本面建议。
+
+固定路由：复核日期到期使用 `thesis-tracker`；只有价格异动先使用 `news-pulse`；
+确认的重要基本面事件才进入 `thesis-drift`。任务查询必须显式选择一套来源：
+
+```bash
+python3 tools/investment_task_queue.py --source local --market A股
+python3 tools/investment_task_queue.py --source production --market A股
+```
+
+production 查询失败不会回退本地。输出会注明代码 SHA、行情/证据截止日、求值时间和完整度。
+构建测试可使用 `--as-of YYYY-MM-DD` 固定到期判断；该日期不被当作新证据。
+
+明确数值财务条件由 `financial_facts.json` 提供事实，规则仍在 `decision_rules.json`：
+
+```bash
+python3 tools/financial_facts.py validate
+python3 tools/financial_facts.py upsert --fact /path/to/fact.json
+```
+
+只有 metric、operator、threshold、period、unit、accounting_basis、period_basis 全部经过批准，且事实未过期、单位/口径一致、
+证据身份稳定时才求值。“明显改善”等模糊条件继续保持待定义。
+
+机会扫描失败项可单独重试并合并回完整集合，不会用单股结果覆盖其余公司：
+
+```bash
+python3 tools/opportunity_review.py retry-failed
+python3 tools/opportunity_review.py retry-failed --ticker 600000.SH
+```
 
 ## 本地预览
 

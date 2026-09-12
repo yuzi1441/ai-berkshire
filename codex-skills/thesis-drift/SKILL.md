@@ -44,7 +44,7 @@ This skill is generated from `skills/thesis-drift.md` so Claude Code and Codex u
 - `WATCH MODE`：比较 Main Report、Decision Rules 与最新事实；结论为 Improved / Unchanged / Weakened，动作只允许 KEEP WATCH / RUN CHECKLIST / DROP。
 - `HOLDING MODE`：比较 Original Buy Thesis 与最新事实；结论为 Improved / Unchanged / Weakened，动作只允许 ADD REVIEW / HOLD / REDUCE REVIEW / EXIT REVIEW。
 
-输出同步写入 `data/investment-dashboard/drift_states.json` 的对应公司记录。没有足够证据时使用 `unknown` 或 `needs_review`，不得把价格波动直接判定为论文漂移，也不得自动交易。主报告只在 Minor Fundamental Drift 或 Major Drift 经人工复核后 patch 对应章节；No Drift 与 Price Only 不生成完整新报告。
+研究完成后必须通过 `python3 tools/investment_workflow.py drift <ticker> --mode <watch|holding> --direction <结果> --summary <摘要> --facts-source <实际证据路径...> --write` 进行正式 handoff，由工具绑定当前基线、证据引用、WATCH checkpoint、历史记录和看板状态。不得直接编辑 `drift_states.json`，也不得使用旧的 `company_state.py set-drift` 覆盖正式记录。没有足够证据时使用 `unknown`，不得把价格波动直接判定为论文漂移，也不得自动交易。
 
 ## 执行流程
 

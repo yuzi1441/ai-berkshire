@@ -10,10 +10,27 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 
 import decision_state
+import post_buy_tracking
 from source_hash import canonical_file_sha256
 
 
 class DecisionStateTests(unittest.TestCase):
+    def test_bound_damaged_holding_research_requires_decision_not_rerun(self):
+        def guidance(status, binding="matched"):
+            return decision_state.derive_action_guidance(
+                "HOLDING", [], {}, {}, {"state": "normal"},
+                {"research_binding_status": binding, "thesis_status": status,
+                 "health_score": 1, "review_action": "清仓", "next_review_date": "2026-12-31"},
+                None, "hold", evaluated_at="2026-09-12T12:00:00+08:00",
+            )
+        for status in ("broken", "damaged"):
+            result = guidance(status)
+            self.assertTrue(result["requires_user_action"])
+            self.assertEqual(result["next_action_code"], "decide_holding_disposition")
+            self.assertEqual(result["recommended_skill"], [])
+        self.assertFalse(guidance("healthy")["requires_user_action"])
+        self.assertEqual(guidance("broken", "binding_mismatch")["blocker_code"], "holding_research_binding_required")
+
     def test_action_guidance_skills_must_exist_in_canonical_registry(self):
         guidance = decision_state.derive_action_guidance(
             "WATCH", [], {"status": "UNKNOWN"},
@@ -498,11 +515,36 @@ class DecisionStateTests(unittest.TestCase):
             "HOLDING", [], {"status": "CONDITIONAL_PASS"},
             {"direction": "unknown", "severity": "none"},
             {"state": "normal", "thesis_relevant": False},
-            {"alerts": [{"detail": "季度复核到期"}]}, None, "review_holding",
+            {"position_id":"A:2026-01-01", "next_review_date":"2026-09-01",
+             "alerts": [{"kind":"review_due", "due_date":"2026-09-01", "position_id":"A:2026-01-01", "detail": "季度复核到期"}]},
+            None, "review_holding", evaluated_at="2026-09-12T09:00:00+08:00",
         )
         self.assertEqual(guidance["blocker_code"], "holding_review_due")
         self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
         self.assertTrue(guidance["requires_user_action"])
+
+    def test_holding_review_due_is_derived_without_alert_cache(self):
+        guidance = decision_state.derive_action_guidance(
+            "HOLDING", [], {"status": "CONDITIONAL_PASS"},
+            {"direction": "unknown", "severity": "none"},
+            {"state": "normal", "thesis_relevant": False},
+            {"alerts": [], "next_review_date": "2026-09-11"}, None, "review_holding",
+            evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual(guidance["blocker_code"], "holding_review_due")
+        self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
+
+    def test_holding_price_move_routes_to_news_pulse_only(self):
+        identity=post_buy_tracking.price_move_identity("A", "A:2026-01-01", {"change_pct":-8}, "2026-09-11T15:00:00+08:00")
+        guidance = decision_state.derive_action_guidance(
+            "HOLDING", [], {"status": "CONDITIONAL_PASS"},
+            {"direction": "unknown", "severity": "none"},
+            {"state": "normal", "thesis_relevant": False},
+            {"position_id":"A:2026-01-01", "alerts": [{**identity, "ticker":"A", "kind": "price_move", "detail": "单日下跌 8%"}]},
+            None, "review_holding", evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual(guidance["blocker_code"], "holding_price_move_unexplained")
+        self.assertEqual(guidance["recommended_skill"], ["news-pulse"])
 
     def test_unstructured_price_and_operating_condition_fails_closed(self):
         evaluation = decision_state.evaluate_rule_result(
@@ -517,6 +559,72 @@ class DecisionStateTests(unittest.TestCase):
         )
         self.assertEqual(evaluation["result"], "unknown")
         self.assertEqual(evaluation["reason"], "composite_condition_not_structured")
+
+    def test_structured_metric_uses_exact_decimal_fact(self):
+        rule = {
+            "rule_id": "metric-gm", "type": "METRIC", "metric": "gross_margin",
+            "operator": ">=", "threshold": "30", "period": "2026H1", "unit": "percent",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
+        }
+        fact = {
+            "resolution_status": "ready", "actual_value": "30.000",
+            "period": "2026H1", "unit": "percent", "valid_until": "2026-12-31",
+            "evidence_source": "半年报", "source_identity": "https://example.test/a.pdf",
+            "evidence_date": "2026-08-30", "content_sha256": "a" * 64,
+            "checked_at": "2026-09-01", "metric": "gross_margin",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
+        }
+        evaluation = decision_state.evaluate_rule_result(
+            rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,
+        )
+        self.assertEqual(evaluation["result"], "triggered")
+        self.assertEqual(evaluation["actual_value"], "30.000")
+        self.assertEqual(evaluation["reason"], "metric_evaluated")
+
+    def test_structured_metric_missing_stale_or_wrong_unit_fails_closed(self):
+        rule = {
+            "rule_id": "metric-ocf", "type": "METRIC", "metric": "operating_cash_flow",
+            "operator": ">", "threshold": "0", "period": "2026H1", "unit": "CNY",
+            "accounting_basis": "consolidated", "period_basis": "cumulative",
+        }
+        cases = [
+            ({"resolution_status": "missing"}, "financial_fact_missing"),
+            ({"resolution_status": "ready", "actual_value": "1", "period": "2026H1", "unit": "USD", "valid_until": "2026-12-31"}, "financial_fact_unit_mismatch"),
+            ({"resolution_status": "ready", "actual_value": "1", "period": "2026H1", "unit": "CNY", "valid_until": "2026-09-01"}, "financial_fact_stale"),
+        ]
+        for fact, reason in cases:
+            fact = {"metric": "operating_cash_flow", "accounting_basis": "consolidated",
+                    "period_basis": "cumulative", "evidence_date": "2026-08-30",
+                    "checked_at": "2026-09-01", **fact}
+            with self.subTest(reason=reason):
+                result = decision_state.evaluate_rule_result(
+                    rule, evaluated_at="2026-09-12T09:00:00+08:00", financial_fact=fact,
+                )
+                self.assertEqual(result["result"], "data_error")
+                self.assertEqual(result["reason"], reason)
+
+    def test_composite_passes_each_leaf_its_own_review(self):
+        child_a = {"rule_id": "leaf-a", "type": "METRIC", "condition": "毛利率达标"}
+        child_b = {"rule_id": "leaf-b", "type": "EVENT", "condition": "订单确认"}
+        reviews = {
+            "leaf-a": {
+                "mapping_status": "exact", "review": {"freshness": "current", "reviewed_at": "2026-09-01"},
+                "definition": {"rule_id": "leaf-a", "periods": ["2026H1"]},
+                "result": {"truth_state": "met", "current_value": "31%"},
+            },
+            "leaf-b": {
+                "mapping_status": "exact", "review": {"freshness": "current", "reviewed_at": "2026-09-01"},
+                "definition": {"rule_id": "leaf-b", "periods": []},
+                "result": {"truth_state": "not_met", "current_value": "未确认"},
+            },
+        }
+        composite = decision_state.evaluate_rule_result(
+            {"rule_id": "parent", "type": "ALL_OF", "children": [child_a, child_b]},
+            condition_review_resolver=lambda rule: reviews.get(rule.get("rule_id")),
+            evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual([item["result"] for item in composite["children"]], ["triggered", "not_triggered"])
+        self.assertEqual(composite["result"], "not_triggered")
 
     def test_non_equity_price_condition_never_uses_stock_quote(self):
         conditions = [

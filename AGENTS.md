@@ -35,7 +35,7 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   marked as Codex-only and do not create a same-named `skills/*.md` file unless
   intentionally adopting the workflow for Claude Code too.
 - Keep tool paths compatible with the documented checkout path:
-  `~/ai-berkshire/tools/...`
+  `tools/...` from the actual Git checkout (currently `/Users/liyuwen/Projects/ai-berkshire`)
 - Keep `CLAUDE.md` for Claude Code behavior and this `AGENTS.md` for Codex
   behavior.
 
@@ -116,5 +116,4 @@ validation tools. Keep compatibility with both Claude Code and Codex users.
   `python3 scripts/sync-codex-skills.py --check`
   and, when slash prompts are relevant:
   `python3 scripts/sync-codex-prompts.py --check`
-
 

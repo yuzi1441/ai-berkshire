@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -13,6 +14,9 @@ sys.path.insert(0, str(ROOT / "tools"))
 import decision_state  # noqa: E402
 import drift_scan_state  # noqa: E402
 import drift_provenance  # noqa: E402
+import holding_research_reviews  # noqa: E402
+import financial_facts  # noqa: E402
+import dashboard_snapshot  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -22,9 +26,55 @@ def load(path: Path) -> dict:
         raise ValueError(f"{path}: {error}") from error
 
 
+def git_tracked(root: Path, relative_path: str) -> bool:
+    completed = subprocess.run(
+        ["git", "ls-files", "--error-unmatch", "--", relative_path],
+        cwd=root,
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return completed.returncode == 0
+
+
+def formal_asset_paths(data: Path) -> set[str]:
+    paths: set[str] = set()
+    catalog_path = data / "reports_catalog.json"
+    if catalog_path.is_file():
+        for record in load(catalog_path).get("records", []):
+            if isinstance(record, dict) and record.get("report_path"):
+                paths.add(str(record["report_path"]))
+    scan_path = data / "drift_scan_state.json"
+    if scan_path.is_file():
+        payload = load(scan_path)
+        companies = payload.get("companies", payload)
+        for record in companies.values() if isinstance(companies, dict) else []:
+            if isinstance(record, dict) and record.get("baseline_report"):
+                paths.add(str(record["baseline_report"]))
+    drift_path = data / "drift_states.json"
+    if drift_path.is_file():
+        for record in (load(drift_path).get("companies") or {}).values():
+            if not isinstance(record, dict):
+                continue
+            for source in record.get("facts_sources") or []:
+                if isinstance(source, str) and not source.startswith(("http://", "https://")):
+                    paths.add(source)
+    holding_path = data / holding_research_reviews.RELATIVE_PATH.name
+    if holding_path.is_file():
+        for review in (load(holding_path).get("reviews") or {}).values():
+            if isinstance(review, dict) and review.get("report_path"):
+                paths.add(str(review["report_path"]))
+    return paths
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=ROOT)
+    parser.add_argument("--require-tracked-assets", action="store_true")
+    parser.add_argument(
+        "--tracked-root", type=Path, default=None,
+        help="Git checkout used for tracked-asset checks when validating an assembled release.",
+    )
     args = parser.parse_args()
     data = args.repo_root.resolve() / "data" / "investment-dashboard"
     try:
@@ -37,6 +87,14 @@ def main() -> int:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
     errors = decision_state.validate_payloads({"rules": rules, "state": state})
+    core_path = args.repo_root.resolve() / "site" / "data" / dashboard_snapshot.FILENAME
+    if core_path.is_file():
+        try:
+            dashboard_snapshot.validate_snapshot(load(core_path))
+        except ValueError as error:
+            errors.append(str(error))
+    elif args.require_tracked_assets:
+        errors.append("missing atomic dashboard core; rebuild before release")
     scan_path = data / drift_scan_state.RELATIVE_PATH.name
     scan = None
     scan_stale_baselines = []
@@ -54,6 +112,12 @@ def main() -> int:
                     scan_stale_baselines.append(ticker)
         except ValueError as error:
             errors.append(str(error))
+    financial_path = data / financial_facts.RELATIVE_PATH.name
+    if financial_path.is_file():
+        try:
+            errors.extend(financial_facts.validate_payload(load(financial_path)))
+        except ValueError as error:
+            errors.append(str(error))
     if technical.get("schema_version") != decision_state.SCHEMA_VERSION:
         errors.append("technical_latest schema_version")
     if checklist.get("schema_version") != decision_state.SCHEMA_VERSION:
@@ -68,6 +132,22 @@ def main() -> int:
             ))
         except ValueError as error:
             errors.append(str(error))
+    holding_path = data / holding_research_reviews.RELATIVE_PATH.name
+    if holding_path.is_file():
+        try:
+            errors.extend(
+                holding_research_reviews.validate_payload(load(holding_path), repo_root=args.repo_root.resolve())
+            )
+        except ValueError as error:
+            errors.append(str(error))
+    if args.require_tracked_assets:
+        tracked_root = (args.tracked_root or args.repo_root).resolve()
+        for relative_path in sorted(formal_asset_paths(data)):
+            candidate = args.repo_root.resolve() / relative_path
+            if not candidate.is_file():
+                errors.append(f"formal asset missing: {relative_path}")
+            elif not git_tracked(tracked_root, relative_path):
+                errors.append(f"formal asset is not Git tracked: {relative_path}")
     state_tickers = {item.get("ticker") for item in state.get("companies", [])}
     rule_tickers = {item.get("ticker") for item in rules.get("companies", [])}
     if state_tickers != rule_tickers:

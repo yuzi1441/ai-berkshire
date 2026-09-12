@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 
@@ -646,6 +647,61 @@ class OpportunityReviewTests(unittest.TestCase):
             [call.kwargs["extra_headers"] for call in request.call_args_list],
             [scan_headers, scan_headers],
         )
+
+    def test_run_model_repairs_malformed_json_once(self):
+        config = scan_config()
+        repaired = {
+            "opportunity_state": "证据不足",
+            "opportunity_summary": "响应已修复为完整结构",
+            "why_now": "当前输入不足以形成机会判断",
+            "satisfied_conditions": [],
+            "unmet_conditions": ["仍缺关键事实"],
+            "constraint_override_reason": "",
+            "supporting_evidence": [],
+            "risks_or_counterevidence": [],
+            "human_questions": [],
+            "confidence": "low",
+        }
+        parse_error = opportunity.OpportunityResponseParseError(
+            "truncated JSON", raw_text='{"opportunity_state":',
+            reasoning={"requested": "max", "effective": "max", "provider_finish_reason": "length"},
+        )
+        with patch.object(
+            opportunity, "request_json",
+            side_effect=[parse_error, (repaired, {"requested": "max", "effective": "max"})],
+        ) as request:
+            result = opportunity.run_model(config, {}, deep=False)
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["schema_repair_attempts"], 1)
+        self.assertEqual(request.call_count, 2)
+        self.assertTrue(result["reasoning"]["schema_repair"])
+
+    def test_retry_failed_merges_replacement_into_full_scan(self):
+        config = scan_config()
+        prior_scans = [
+            {"ticker": "600000.SH", "models": {config.model: ready(config.model, "证据不足")}, "union": {}},
+            {"ticker": "600001.SH", "models": {config.model: {"status": "error", "model": config.model}}, "union": {}},
+        ]
+        replacement = {
+            "ticker": "600001.SH", "models": {config.model: ready(config.model, "证据不足")}, "union": {},
+        }
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = Path(temporary_directory) / "opportunity_scans.json"
+            output.write_text(json.dumps({
+                "expected_scan_count": 2, "scans": prior_scans,
+            }, ensure_ascii=False), encoding="utf-8")
+            arguments = SimpleNamespace(
+                repo_root=Path(temporary_directory), output=output, ticker=None,
+            )
+            with (
+                patch.object(opportunity, "scan_all", return_value={"scans": [replacement]}),
+                patch.object(opportunity, "model_config", return_value=config),
+            ):
+                result_code = opportunity.command_retry_failed(arguments)
+            payload = json.loads(output.read_text(encoding="utf-8"))
+        self.assertEqual(result_code, 0)
+        self.assertEqual([item["ticker"] for item in payload["scans"]], ["600000.SH", "600001.SH"])
+        self.assertEqual(payload["retry"]["replaced_count"], 1)
 
     def test_run_model_does_not_turn_repeated_blank_state_into_an_opportunity(self):
         config = opportunity.ModelConfig(

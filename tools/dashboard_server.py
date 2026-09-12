@@ -292,8 +292,10 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
                 continue
             resolved_companies.append({
                 "ticker": projected.get("ticker"),
+                "lifecycle": projected.get("lifecycle"),
                 "next_action": projected.get("next_action"),
                 "action_guidance": projected.get("action_guidance"),
+                "needs_attention": projected.get("needs_attention"),
                 "manual_disposition": manual,
             })
         return state, {
@@ -422,6 +424,7 @@ class DashboardRequestHandler(SimpleHTTPRequestHandler):
                     "lifecycle": projected.get("lifecycle"),
                     "next_action": projected.get("next_action"),
                     "action_guidance": projected.get("action_guidance"),
+                    "needs_attention": projected.get("needs_attention"),
                     "manual_disposition": projected.get("manual_disposition"),
                 },
                 "resulting_next_action_projection": projected.get("action_guidance"),

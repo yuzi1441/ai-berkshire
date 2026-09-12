@@ -172,6 +172,68 @@ class DispositionApiTests(unittest.TestCase):
         self.assertEqual(len(self.disposition_store.payload()["records"]), 1)
         self.assertEqual(self.request("POST", body=body, admin=True)[1]["status"], "noop")
 
+    def test_get_task_queue_and_overlays_agree_after_each_watch_disposition(self):
+        for index, (choice, skill) in enumerate([
+            ("keep_watch", None), ("archive_drop", None),
+            ("redo_research", "investment-research"), ("formal_drift", "thesis-drift"),
+        ]):
+            with self.subTest(choice=choice):
+                self.company["canonical_report_sha256"] = f"report-{index}"
+                state_path = self.root / "data/investment-dashboard/company_state.json"
+                state_path.write_text(json.dumps({"companies": [self.company]}))
+                before = state_path.read_bytes()
+                fingerprint = dashboard_server.investment_dispositions.target_fingerprint(self.company)
+                status, saved = self.request("POST", json.dumps({
+                    "ticker": self.company["ticker"], "selected_disposition": choice,
+                    "disposition_target_fingerprint": fingerprint,
+                }).encode(), admin=True)
+                self.assertEqual(status, 200)
+                status, current = self.request("GET", admin=True)
+                self.assertEqual(status, 200)
+                overlay = current["resolved_companies"][0]
+                self.assertEqual(overlay, saved["resolved_current_task"])
+                self.assertEqual(len(current["tasks"]), int(skill is not None))
+                if skill:
+                    task = current["tasks"][0]
+                    self.assertEqual(task["action_guidance"], overlay["action_guidance"])
+                    self.assertEqual(task["recommended_skill"], [skill])
+                    self.assertEqual(task["task_class"], "research_now")
+                self.assertEqual(state_path.read_bytes(), before)
+
+    def test_holding_decision_api_preserves_execution_and_rejects_old_cycle(self):
+        from tests.test_disposition_effective_routes import holding_company
+        self.company = holding_company()
+        state_path = self.root / "data/investment-dashboard/company_state.json"
+        for choice in ["keep_holding", "request_position_review", "request_exit_review"]:
+            with self.subTest(choice=choice):
+                self.company["post_buy_tracking"]["last_review_date"] = {
+                    "keep_holding": "2026-09-10", "request_position_review": "2026-09-11",
+                    "request_exit_review": "2026-09-12",
+                }[choice]
+                state_path.write_text(json.dumps({"companies": [self.company]}))
+                before = state_path.read_bytes()
+                fingerprint = dashboard_server.investment_dispositions.target_fingerprint(self.company)
+                request = {"ticker": self.company["ticker"], "selected_disposition": choice,
+                           "disposition_target_fingerprint": fingerprint}
+                status, saved = self.request("POST", json.dumps(request).encode(), admin=True)
+                self.assertEqual(status, 200)
+                self.assertEqual(saved["resolved_current_task"]["lifecycle"], "HOLDING")
+                status, current = self.request("GET", admin=True)
+                self.assertEqual(status, 200)
+                self.assertEqual(current["resolved_companies"][0], saved["resolved_current_task"])
+                self.assertEqual(len(current["tasks"]), int(choice != "keep_holding"))
+                self.assertEqual(state_path.read_bytes(), before)
+        self.company["post_buy_tracking"]["position_id"] = "600000.SH:2026-09-12"
+        state_path.write_text(json.dumps({"companies": [self.company]}))
+        self.assertEqual(self.request("POST", json.dumps(request).encode(), admin=True)[0], 409)
+        status, current = self.request("GET", admin=True)
+        self.assertEqual(status, 200)
+        self.assertEqual(current["resolved_companies"], [])
+        self.assertEqual(current["tasks"][0]["task_class"], "human_decision")
+        request.update(selected_disposition="archive_drop",
+                       disposition_target_fingerprint=dashboard_server.investment_dispositions.target_fingerprint(self.company))
+        self.assertEqual(self.request("POST", json.dumps(request).encode(), admin=True)[0], 400)
+
     def test_admin_post_rejects_stale_fingerprint_wrong_origin_and_content_type(self):
         body = json.dumps({
             "ticker": "600000.SH",

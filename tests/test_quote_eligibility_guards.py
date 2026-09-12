@@ -24,7 +24,7 @@ class QuoteEligibilityGuardsTests(unittest.TestCase):
                  "snapshot_generated_at": "2026-09-09T14:00:00+08:00",
                  "_market_snapshot": {"refresh_status": "success"}}
         now = datetime.fromisoformat("2026-09-09T14:01:00+08:00")
-        self.assertEqual(state._quote_trust(quote, now), (False, "quote_stale_during_trading_session"))
+        self.assertEqual(state._quote_trust(quote, now), (False, "quote_stale_for_market_session"))
         self.assertEqual(review.price_context({"price_rules": [{"ceiling": 10}]}, quote, evaluated_at=now)["status"], "no_current_quote")
         quote["provider_timestamp"] = "2026/09/09 14:00:00"
         self.assertTrue(state._quote_trust(quote, now)[0])

@@ -3,18 +3,6 @@ name: Investment dashboard
 on:
   push:
     branches: [main]
-    paths:
-      - "reports/**"
-      - "data/investment-dashboard/**"
-      - "data/report-routing/**"
-      - "tools/build_investment_dashboard.py"
-      - "tools/market_snapshot.py"
-      - "tools/batch_intraday_technical.py"
-      - "tools/post_buy_tracking.py"
-      - "tools/annual_report_dates.py"
-      - "tools/automation_status.py"
-      - "site/**"
-      - ".github/workflows/investment-dashboard.yml"
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -27,8 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  pr-validation:
-    if: github.event_name == 'pull_request'
+  validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -46,7 +33,9 @@ jobs:
           mkdir -p "$TMPDIR"
           python -m unittest discover -s tests -p 'test*.py' -q
       - name: Check Skill sync
-        run: python scripts/sync-codex-skills.py --check
+        run: |
+          python scripts/sync-codex-skills.py --check
+          python scripts/sync-codex-prompts.py --check
       - name: Check Python syntax
         run: python -m compileall -q tools
       - name: Check Node syntax
@@ -54,9 +43,12 @@ jobs:
           node --check site/assets/action-classifier.mjs
           node --check site/assets/app.js
       - name: Check Bash syntax
-        run: bash -n deploy/vps/*.sh
+        run: |
+          for script in deploy/vps/*.sh; do
+            bash -n "$script" || exit 1
+          done
       - name: Validate structured state
-        run: python tools/validate_decision_state.py
+        run: python tools/validate_decision_state.py --require-tracked-assets
       - name: Verify clean generated-state boundary
         run: |
           git diff --exit-code -- data/investment-dashboard/decision_rules.json
@@ -65,6 +57,8 @@ jobs:
           git diff --exit-code -- data/investment-dashboard/rule_lifecycle.json
           git diff --exit-code -- data/investment-dashboard/rule_change_log.json
           git diff --exit-code -- data/investment-dashboard/post_buy_tracking.json
+          git diff --exit-code -- data/investment-dashboard/holding_research_reviews.json
+          git diff --exit-code -- data/investment-dashboard/financial_facts.json
           python - <<'PY'
           import re
           import subprocess
@@ -105,6 +99,7 @@ jobs:
           PY
   build:
     if: github.event_name != 'pull_request'
+    needs: validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -112,7 +107,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Build report-derived data
-        run: python tools/build_investment_dashboard.py
+        # Use the same calendar and parsing dependencies as validation.
+        run: |
+          python -m pip install pypdf -r requirements-technical.txt
+          python tools/build_investment_dashboard.py
       - name: Generate post-buy review and price-move alerts
         run: python tools/post_buy_tracking.py check
       - name: Attach post-buy alerts to dashboard data

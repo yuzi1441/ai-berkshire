@@ -25,7 +25,7 @@ GitHub 只保存文件，不会因为 push 就自动运行复核程序。
 
 仓库就是整个项目 “ai-berkshire”。当前电脑的目录是：
 
-    /Users/liyuwen/Documents/ai-berkshire
+    /Users/liyuwen/Projects/ai-berkshire
 
 GitHub 仓库是：
 
@@ -48,11 +48,10 @@ GitHub 仓库是：
 分支是同一个仓库里的不同版本线：
 
     main                                      稳定主版本
-    codex/dongfang-fundamental-review-pilot   当前复核工作版本
+    codex/<task-name>                         每项工作使用的短期分支
 
-当前分支是 “codex/dongfang-fundamental-review-pilot”。它包含 main 的基础内容，以及复核程序、测试和 93 个单股票结果。
-
-其他 “codex/...” 或 “agent/...” 分支大多是以前任务留下的历史分支，不会自动影响当前分支。
+不要依赖文档中的历史分支名；用 `git branch --show-current` 查看真实分支。其他
+“codex/...” 或 “agent/...” 分支不会自动影响当前分支。
 
 ## 二、常用查看命令
 
@@ -111,14 +110,14 @@ GitHub 仓库是：
 
 如果以后开始完全新的任务，建议：
 
-    cd /Users/liyuwen/Documents/ai-berkshire
+    cd /Users/liyuwen/Projects/ai-berkshire
     git switch main
     git pull --ff-only origin main
     git switch -c codex/new-task
 
 ### cd
 
-    cd /Users/liyuwen/Documents/ai-berkshire
+    cd /Users/liyuwen/Projects/ai-berkshire
 
 “cd” 是 change directory，意思是进入项目目录。Git 命令应该在项目目录中执行。
 
@@ -185,7 +184,7 @@ GitHub 仓库是：
 
 ### git push -u origin 分支名
 
-    git push -u origin codex/dongfang-fundamental-review-pilot
+    git push -u origin codex/new-task
 
 - “push”：上传提交；
 - “-u”：建立本地分支和远程分支的跟踪关系；
@@ -343,4 +342,3 @@ GitHub 仓库是：
     工作分支 = 当前任务的独立版本
     commit = 一个保存点
     GitHub = 远程同步位置
-
