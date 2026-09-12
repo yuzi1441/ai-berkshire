@@ -1376,6 +1376,7 @@ def derive_action_guidance(
     drift_scan: dict[str, Any] | None,
     next_action: str,
     review_coverage: dict[str, Any] | None = None,
+    evaluated_at: str | None = None,
 ) -> dict[str, Any]:
     """Derive one user-facing blocker and route without changing control state.
 
@@ -1523,9 +1524,29 @@ def derive_action_guidance(
                 True,
                 "确认 Original Buy Thesis 是否仍成立，并记录持仓动作",
             )
-        alerts = list((tracking or {}).get("alerts") or [])
-        if alerts:
-            detail = compact((alerts[0] or {}).get("detail")) or "持仓周期存在待处理提醒"
+        alerts = [item for item in list((tracking or {}).get("alerts") or []) if isinstance(item, dict)]
+        review_alerts = [
+            item
+            for item in alerts
+            if item.get("kind") in {"review_due", "thesis_review"}
+            or (
+                not compact(item.get("kind"))
+                and any(
+                    token in compact(item.get("detail"))
+                    for token in ("复核", "review", "季度")
+                )
+            )
+        ]
+        next_review = compact((tracking or {}).get("next_review_date"))
+        as_of_datetime = _parse_iso_datetime(evaluated_at) or datetime.now().astimezone()
+        review_overdue = False
+        if re.fullmatch(r"20\d{2}-\d{2}-\d{2}", next_review):
+            try:
+                review_overdue = date.fromisoformat(next_review) <= as_of_datetime.date()
+            except ValueError:
+                review_overdue = False
+        if review_alerts or review_overdue:
+            detail = compact((review_alerts[0] or {}).get("detail")) if review_alerts else f"复核日期 {next_review}（到期或逾期）"
             return guidance(
                 "holding_review_due",
                 detail,
@@ -1536,6 +1557,20 @@ def derive_action_guidance(
                 "urgent",
                 True,
                 "完成本次持仓复核并更新下一次复核日期",
+            )
+        price_alerts = [item for item in alerts if item.get("kind") == "price_move"]
+        if price_alerts:
+            detail = compact(price_alerts[0].get("detail")) or "持仓出现价格异动"
+            return guidance(
+                "holding_price_move_unexplained",
+                detail,
+                "explain_holding_price_move",
+                "核对价格异动是否来自公司、行业或市场事件",
+                ["news-pulse"],
+                "价格异动需要先归因；只有确认影响原始买入逻辑后才进入正式复核",
+                "normal",
+                True,
+                "形成事件归因，并明确是否需要 thesis-drift 或继续观察",
             )
         return result
 
@@ -2139,6 +2174,7 @@ def build_state_layers(
             drift_scan,
             next_action,
             review_coverage,
+            evaluated_at=generated_at,
         )
         drift_review = classify_drift_review(lifecycle, drift_scan, drift, next_action)
         state = {

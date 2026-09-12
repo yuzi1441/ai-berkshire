@@ -53,6 +53,16 @@ class InvestmentDashboardTests(unittest.TestCase):
                 "2026-09-08T01:51:29+08:00",
             )
 
+    def test_explicit_as_of_is_recorded_without_becoming_source_time(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            self.setup_repository(root)
+            board = dashboard.build_dashboard(
+                root, legacy_mode=True, as_of=date(2026, 9, 1)
+            )
+            self.assertEqual(board["as_of"], "2026-09-01")
+            self.assertNotEqual(board["generated_at"][:10], board["as_of"])
+
     def test_malformed_runtime_disposition_fails_before_any_projection_write(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

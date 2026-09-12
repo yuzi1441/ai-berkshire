@@ -227,7 +227,7 @@
 
 ### 第八步：保存报告
 
-将完整最终报告写入 `~/{公司名}投资研究报告_{日期}.md`（日期格式 YYYYMMDD）。
+先通过 `tools/report_routing.py resolve` 解析公司目录，将完整最终报告写入 `reports/{公司名}/{公司名}-investment-team-{日期}.md`（日期格式 YYYYMMDD）。不得写入用户主目录或 `reports/` 根目录；保存后使用 `tools/investment_workflow.py report <路径> --write` 校验并刷新看板。
 
 ### 第九步：数据抽检（准出流程）
 

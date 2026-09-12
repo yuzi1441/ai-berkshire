@@ -23,6 +23,7 @@ import re
 import sys
 import tempfile
 import time
+import urllib.error
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -58,6 +59,28 @@ TRANSPORT_OPENAI_RESPONSES = "openai_responses"
 
 class OpportunityReviewError(RuntimeError):
     """Raised when an opportunity-review result is unusable."""
+
+
+class OpportunityResponseParseError(OpportunityReviewError):
+    """Keep malformed provider text available for one bounded repair request."""
+
+    def __init__(self, message: str, *, raw_text: str, reasoning: dict[str, Any]):
+        super().__init__(message)
+        self.raw_text = raw_text
+        self.reasoning = reasoning
+
+
+def error_category(error: Exception) -> str:
+    if isinstance(error, OpportunityResponseParseError):
+        return "json_parse_error"
+    text = str(error).casefold()
+    if "no output text" in text or "no text block" in text or "no choices" in text or "no message" in text:
+        return "empty_response"
+    if isinstance(error, (TimeoutError, urllib.error.URLError, OSError)):
+        return "transport_error"
+    if "must include" in text or "must be" in text or "校验" in text:
+        return "schema_validation_error"
+    return "provider_error"
 
 
 @dataclass(frozen=True)
@@ -626,6 +649,36 @@ def extract_responses_text(response: dict[str, Any]) -> str:
     return text
 
 
+def _parse_provider_json(raw_text: str, reasoning: dict[str, Any]) -> dict[str, Any]:
+    try:
+        parsed = parse_json_block(raw_text)
+    except (ValueError, json.JSONDecodeError) as error:
+        raise OpportunityResponseParseError(
+            f"provider returned malformed JSON: {error}",
+            raw_text=clean_text(raw_text, 4000),
+            reasoning=reasoning,
+        ) from error
+    if not isinstance(parsed, dict):
+        raise OpportunityResponseParseError(
+            "provider did not return a JSON object",
+            raw_text=clean_text(raw_text, 4000),
+            reasoning=reasoning,
+        )
+    return parsed
+
+
+def _reasoning_parameter_rejected(error: Exception) -> bool:
+    text = str(error).casefold()
+    parameter_named = any(token in text for token in ("reasoning", "thinking", "effort"))
+    explicit_alias_rejection = any(
+        phrase in text
+        for phrase in ("alias rejected", "max rejected", "xhigh rejected", "high rejected")
+    )
+    return (parameter_named or explicit_alias_rejection) and any(
+        token in text for token in ("reject", "unsupported", "invalid", "not support")
+    )
+
+
 def request_json(
     config: ModelConfig,
     *,
@@ -669,15 +722,16 @@ def request_json(
                     timeout=config.timeout_seconds,
                     attempts=attempts,
                 )
-                parsed = parse_json_block(extract_openai_chat_text(response))
-                if not isinstance(parsed, dict):
-                    raise OpportunityReviewError("chat model did not return a JSON object")
-                return parsed, {
+                reasoning = {
                     "requested": f"thinking=enabled; reasoning_effort={requested}",
                     "effective": f"thinking=enabled; reasoning_effort={effective}",
+                    "provider_finish_reason": ((response.get("choices") or [{}])[0] or {}).get("finish_reason"),
                 }
+                return _parse_provider_json(extract_openai_chat_text(response), reasoning), reasoning
             except Exception as error:  # noqa: BLE001 - try the documented high fallback only
                 last_error = error
+                if not _reasoning_parameter_rejected(error):
+                    raise
         raise OpportunityReviewError(f"highest reasoning chat request failed: {last_error}")
 
     if config.transport == TRANSPORT_ANTHROPIC_MESSAGES:
@@ -700,11 +754,13 @@ def request_json(
             timeout=config.timeout_seconds,
             attempts=attempts,
         )
-        parsed = parse_json_block(extract_anthropic_text(response))
-        if not isinstance(parsed, dict):
-            raise OpportunityReviewError("messages model did not return a JSON object")
         reasoning = f"thinking=enabled; budget_tokens={budget}"
-        return parsed, {"requested": reasoning, "effective": reasoning}
+        metadata = {
+            "requested": reasoning,
+            "effective": reasoning,
+            "provider_finish_reason": response.get("stop_reason"),
+        }
+        return _parse_provider_json(extract_anthropic_text(response), metadata), metadata
 
     if config.transport == TRANSPORT_OPENAI_RESPONSES:
         requested = config.reasoning_effort or "max"
@@ -731,15 +787,16 @@ def request_json(
                     timeout=config.timeout_seconds,
                     attempts=attempts,
                 )
-                parsed = parse_json_block(extract_responses_text(response))
-                if not isinstance(parsed, dict):
-                    raise OpportunityReviewError("Responses model did not return a JSON object")
-                return parsed, {
+                reasoning = {
                     "requested": f"reasoning.effort={requested}",
                     "effective": f"reasoning.effort={effective}",
+                    "provider_finish_reason": response.get("status"),
                 }
+                return _parse_provider_json(extract_responses_text(response), reasoning), reasoning
             except Exception as error:  # noqa: BLE001 - try only xhigh/high, never a low fallback
                 last_error = error
+                if not _reasoning_parameter_rejected(error):
+                    raise
         raise OpportunityReviewError(f"highest reasoning Responses request failed: {last_error}")
 
     raise OpportunityReviewError(f"unsupported transport: {config.transport}")
@@ -843,17 +900,46 @@ def run_model(
     system, user = review_prompts(facts, deep=deep)
     repair_attempts = 0
     validation_error_text = ""
+    failure_category = ""
     try:
-        raw, reasoning = request_json(
-            config,
-            system=system,
-            user=user,
-            extra_headers=extra_headers,
-        )
+        try:
+            raw, reasoning = request_json(
+                config,
+                system=system,
+                user=user,
+                extra_headers=extra_headers,
+            )
+        except OpportunityResponseParseError as parse_error:
+            failure_category = "json_parse_error"
+            validation_error_text = str(parse_error)
+            repair_attempts = 1
+            repair_user = (
+                "上一次返回不是有效JSON。只修复JSON语法和完整性，不得改变事实、推理强度或结论含义。"
+                f"\n解析错误：{parse_error}"
+                f"\n上一次原文：{parse_error.raw_text}"
+                f"\n必须满足的结构：{json.dumps(review_schema(deep), ensure_ascii=False)}"
+                f"\n事实输入：{json.dumps(facts, ensure_ascii=False)}"
+                "\n只输出修复后的严格JSON。"
+            )
+            raw, repair_reasoning = request_json(
+                config,
+                system=system,
+                user=repair_user,
+                extra_headers=extra_headers,
+            )
+            reasoning = {
+                **repair_reasoning,
+                "schema_repair": True,
+                "initial_effective": parse_error.reasoning.get("effective"),
+                "initial_provider_finish_reason": parse_error.reasoning.get("provider_finish_reason"),
+            }
         try:
             assessment = validate_assessment(raw, deep=deep, facts=facts)
         except OpportunityReviewError as validation_error:
             validation_error_text = str(validation_error)
+            failure_category = "schema_validation_error"
+            if repair_attempts:
+                raise
             repair_attempts = 1
             repair_user = (
                 "上一次返回的JSON未通过结构校验。请重新检查输入事实并只修复结构，不得降低推理强度、改变事实或增加外部信息。"
@@ -893,6 +979,12 @@ def run_model(
             "elapsed_seconds": round(time.perf_counter() - started, 3),
         }
     except Exception as error:  # noqa: BLE001 - preserve a durable per-model error
+        failure_category = failure_category or error_category(error)
+        provider_finish_reason = None
+        if "reasoning" in locals() and isinstance(reasoning, dict):
+            provider_finish_reason = reasoning.get("provider_finish_reason")
+        if isinstance(error, OpportunityResponseParseError):
+            provider_finish_reason = error.reasoning.get("provider_finish_reason")
         return {
             "status": "error",
             "model": config.model,
@@ -904,6 +996,8 @@ def run_model(
             },
             "schema_repair_attempts": repair_attempts,
             "validation_error": validation_error_text,
+            "failure_category": failure_category,
+            "provider_finish_reason": provider_finish_reason,
             "error": clean_text(error, 600),
             "elapsed_seconds": round(time.perf_counter() - started, 3),
         }
@@ -1449,6 +1543,52 @@ def command_scan(arguments: argparse.Namespace) -> int:
     return 0 if payload["status"] == "ok" else 2
 
 
+def command_retry_failed(arguments: argparse.Namespace) -> int:
+    repo_root = arguments.repo_root.resolve()
+    output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
+    previous = load_json(output, {})
+    previous_scans = [item for item in previous.get("scans", []) if isinstance(item, dict)]
+    if not previous_scans:
+        raise OpportunityReviewError("retry-failed requires an existing full scan payload")
+    requested = str(arguments.ticker or "").upper()
+    failed_tickers = [
+        str(item.get("ticker") or "").upper()
+        for item in previous_scans
+        if any(
+            result.get("status") != "ready"
+            for result in (item.get("models") or {}).values()
+            if isinstance(result, dict)
+        )
+    ]
+    targets = [requested] if requested else failed_tickers
+    if requested and requested not in {str(item.get("ticker") or "").upper() for item in previous_scans}:
+        raise OpportunityReviewError(f"ticker is not in existing scan: {requested}")
+    replacements: dict[str, dict[str, Any]] = {}
+    for ticker in targets:
+        retry = scan_all(repo_root, ticker=ticker, previous=previous, mode="full")
+        if len(retry.get("scans") or []) != 1:
+            raise OpportunityReviewError(f"retry did not return exactly one scan: {ticker}")
+        replacements[ticker] = retry["scans"][0]
+    merged = [replacements.get(str(item.get("ticker") or "").upper(), item) for item in previous_scans]
+    configs = [model_config("scan_flash")]
+    payload = build_scan_payload(
+        configs,
+        merged,
+        workers=1,
+        expected_scan_count=int(previous.get("expected_scan_count") or len(previous_scans)),
+        checkpoint=False,
+        mode="retry_failed",
+    )
+    payload["retry"] = {"requested": targets, "replaced_count": len(replacements)}
+    write_json(output, payload)
+    print(
+        f"Wrote {output} · retried {len(replacements)} · {payload['ready_count']} ready · "
+        f"{payload['stale_count']} stale · {payload['error_count']} error",
+        flush=True,
+    )
+    return 0 if payload["status"] == "ok" else 2
+
+
 def command_deep(arguments: argparse.Namespace) -> int:
     repo_root = arguments.repo_root.resolve()
     output = arguments.output if arguments.output.is_absolute() else repo_root / arguments.output
@@ -1478,6 +1618,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=ROOT / "data" / "investment-dashboard" / "opportunity_scans.json",
     )
     scan.set_defaults(handler=command_scan)
+    retry = subparsers.add_parser("retry-failed", help="retry only failed/stale tickers and merge into the existing full set")
+    retry.add_argument("--repo-root", type=Path, default=ROOT)
+    retry.add_argument("--ticker")
+    retry.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "data" / "investment-dashboard" / "opportunity_scans.json",
+    )
+    retry.set_defaults(handler=command_retry_failed)
     deep = subparsers.add_parser("deep", help="run V4 Pro + GPT-5.6 Luna for one ticker")
     deep.add_argument("--repo-root", type=Path, default=ROOT)
     deep.add_argument("--ticker", required=True)

@@ -317,7 +317,7 @@ Checklist 是 `PRE_BUY` 生命周期的资金投入前检查，不负责创建 `
 
 看板结构化状态至少同步保存：`status`（PASS / CONDITIONAL_PASS / FAIL / UNKNOWN）、`hard_veto`、`checked_at`、`summary`、`report_path`。无法抽取时写 `UNKNOWN` 和 `needs_review`，不得用缺失数据推断失败。
 
-将完整报告写入 `~/巴菲特Checklist-[公司名或"多公司对比"].md`
+单公司报告先通过 `python3 tools/report_routing.py resolve --company <公司名> --ticker <代码> --market <市场> --report-type company --filename <文件名> --create --json` 解析路径，再写入 `reports/<公司名>/<公司名>-investment-checklist-<YYYYMMDD>.md`。多公司报告使用 `--report-type comparison` 路由；不得写入用户主目录或 `reports/` 根目录。写入后使用 `python3 tools/investment_workflow.py checklist <报告路径> --write` 完成结构校验、看板构建和状态校验。
 
 ## 输出格式要求
 

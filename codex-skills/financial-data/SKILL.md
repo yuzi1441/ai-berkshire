@@ -17,6 +17,12 @@ This skill is generated from `skills/financial-data.md` so Claude Code and Codex
 
 本规范适用于所有涉及企业财务数据的研究。**每个关键数据必须来自两个独立来源，误差>1%须标记。**
 
+## 与决策看板的边界
+
+本 Skill 负责取得并交叉核验事实值、报告期、单位、口径、来源日期和稳定证据身份。它不负责猜测投资规则中的指标、运算符或阈值，也不直接修改 Decision Rule、生命周期、Checklist 或买卖状态。
+
+用于自动条件求值时，必须把结果交给项目的结构化事实入口，至少包含：`ticker`、`metric`、`actual_value`、`unit`、`period`、`evidence_source`、`evidence_date`、`content_sha256` 和 `checked_at`。规则侧仍须独立保存 `metric`、`operator` 与 `threshold`；“明显改善”等没有明确阈值的文字继续标为待定义。
+
 ---
 
 ## 数据源优先级

@@ -5,7 +5,7 @@ argument-hint: $ARGUMENTS
 
 Use the installed AI Berkshire Codex skill `thesis-drift` for this request.
 
-If the skill is not already loaded, read and follow `~/ai-berkshire/codex-skills/thesis-drift/SKILL.md`.
+If the skill is not already loaded, locate the actual repository checkout and read `codex-skills/thesis-drift/SKILL.md`; do not assume a fixed home-directory path.
 
 User arguments:
 $ARGUMENTS

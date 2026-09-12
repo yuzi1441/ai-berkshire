@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import re
 import sys
+import os
 from pathlib import Path
 
 
@@ -91,12 +92,20 @@ def codex_body(name: str, source_name: str, source_text: str) -> str:
 
 def main() -> None:
     check = "--check" in sys.argv[1:]
-    unknown_args = [arg for arg in sys.argv[1:] if arg != "--check"]
+    check_installed = "--check-installed" in sys.argv[1:]
+    install_root_arg = next(
+        (arg.split("=", 1)[1] for arg in sys.argv[1:] if arg.startswith("--install-root=")),
+        None,
+    )
+    unknown_args = [
+        arg for arg in sys.argv[1:]
+        if arg not in {"--check", "--check-installed"} and not arg.startswith("--install-root=")
+    ]
     if unknown_args:
         joined = ", ".join(unknown_args)
         raise SystemExit(f"Unknown argument(s): {joined}")
 
-    if not check:
+    if not check and not check_installed:
         CODEX_SKILLS.mkdir(exist_ok=True)
 
     count = 0
@@ -109,21 +118,34 @@ def main() -> None:
         content = metadata_for(name, source.name, source_text) + codex_body(
             name, source.name, source_text
         )
-        if check:
-            if not target.exists() or target.read_text(encoding="utf-8") != content:
-                stale.append(str(target.relative_to(ROOT)))
+        comparison_target = target
+        if check_installed:
+            codex_home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
+            install_root = Path(install_root_arg) if install_root_arg else codex_home / "skills"
+            comparison_target = install_root / name / "SKILL.md"
+        if check or check_installed:
+            if not comparison_target.exists() or comparison_target.read_text(encoding="utf-8") != content:
+                try:
+                    display = str(comparison_target.relative_to(ROOT))
+                except ValueError:
+                    display = str(comparison_target)
+                stale.append(display)
         else:
             target_dir.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
         count += 1
 
-    if check:
+    if check or check_installed:
         if stale:
-            print("Codex skills are out of date:")
+            label = "Installed Codex skills" if check_installed else "Codex skills"
+            print(f"{label} are out of date:")
             for path in stale:
                 print(f"  {path}")
             raise SystemExit(1)
-        print(f"Checked {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")
+        if check_installed:
+            print(f"Checked {count} installed Codex skills")
+        else:
+            print(f"Checked {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")
         return
 
     print(f"Generated {count} Codex skills in {CODEX_SKILLS.relative_to(ROOT)}")

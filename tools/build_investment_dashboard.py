@@ -5700,6 +5700,7 @@ def build_dashboard(
     *,
     legacy_mode: bool = False,
     investment_dispositions_path: Path | None = None,
+    as_of: date | None = None,
 ) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     # Validate the optional runtime authority before the builder can write any
@@ -5712,7 +5713,7 @@ def build_dashboard(
     data_directory = repo_root / "data" / "investment-dashboard"
     site_directory = repo_root / "site"
     generated_at = dashboard_projection_generated_at(repo_root)
-    projection_date = datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date()
+    projection_date = as_of or datetime.fromisoformat(generated_at).astimezone(SHANGHAI_TIMEZONE).date()
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(
         data_directory, strict=not legacy_mode
     )
@@ -5842,6 +5843,7 @@ def build_dashboard(
     catalog = {
         "schema_version": 1,
         "generated_at": generated_at,
+        "as_of": projection_date.isoformat(),
         "record_count": len(records),
         "checklist_count": len(checklist_records),
         "records": records,
@@ -5853,6 +5855,7 @@ def build_dashboard(
             if key in {"status", "generated_at", "last_attempt_at", "last_success_at", "freshness", "source_outcomes"}
         }},
         "generated_at": generated_at,
+        "as_of": projection_date.isoformat(),
         "generation_id": generation_id,
         "scope": "individual-stocks-only",
         "state_layer": {
@@ -6007,6 +6010,12 @@ def main() -> int:
             "are read and clean builds remain deterministic."
         ),
     )
+    parser.add_argument(
+        "--as-of",
+        type=date.fromisoformat,
+        default=None,
+        help="Evaluate calendar deadlines as of YYYY-MM-DD without treating that date as evidence.",
+    )
     arguments = parser.parse_args()
     if arguments.split_only and arguments.state_only:
         parser.error("--split-only and --state-only are mutually exclusive")
@@ -6023,6 +6032,7 @@ def main() -> int:
                 arguments.repo_root.resolve(),
                 legacy_mode=arguments.legacy_mode,
                 investment_dispositions_path=arguments.investment_dispositions,
+                as_of=arguments.as_of,
             )
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:

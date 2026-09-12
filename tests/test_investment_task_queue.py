@@ -1,6 +1,8 @@
 import unittest
 import sys
+from datetime import datetime
 from pathlib import Path
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -120,6 +122,35 @@ class InvestmentTaskQueueTests(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertFalse(first["investment_authority"])
         self.assertEqual(first["artifact_role"], "derived_audit_only")
+
+    def test_market_filter_never_mixes_non_a_share_tasks(self):
+        payload = {"companies": [
+            self.company("600001.SH", "reviewed_thesis_weakened"),
+            {**self.company("0700.HK", "reviewed_thesis_weakened"), "market": "港股"},
+        ]}
+        result = queue.build_task_queue(payload, market="A股")
+        self.assertEqual(result["market"], "A股")
+        self.assertEqual([item["ticker"] for item in result["tasks"]], ["600001.SH"])
+
+    def test_source_metadata_distinguishes_missing_local_snapshots(self):
+        with patch.object(queue, "datetime") as current_time:
+            current_time.now.return_value = datetime.fromisoformat("2026-09-12T12:00:00+08:00")
+            metadata = queue.source_metadata(
+                {"generated_at": "2026-09-11T12:00:00+08:00", "companies": []},
+                source="local",
+                source_location="/repo",
+                source_sha="a" * 40,
+                quote_payload=None,
+                alerts_payload=None,
+            )
+        self.assertEqual(metadata["source"], "local")
+        self.assertEqual(metadata["data_completeness"]["quotes"], "local_snapshot_missing")
+        self.assertNotEqual(metadata["data_completeness"]["quotes"], "production_snapshot_missing")
+
+    def test_production_fetch_failure_is_explicit(self):
+        with patch.object(queue.urllib.request, "urlopen", side_effect=OSError("offline")):
+            with self.assertRaisesRegex(ValueError, "production data unavailable"):
+                queue.fetch_json("https://example.invalid/company_state.json")
 
 
 if __name__ == "__main__":

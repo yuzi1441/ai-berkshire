@@ -504,6 +504,28 @@ class DecisionStateTests(unittest.TestCase):
         self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
         self.assertTrue(guidance["requires_user_action"])
 
+    def test_holding_review_due_is_derived_without_alert_cache(self):
+        guidance = decision_state.derive_action_guidance(
+            "HOLDING", [], {"status": "CONDITIONAL_PASS"},
+            {"direction": "unknown", "severity": "none"},
+            {"state": "normal", "thesis_relevant": False},
+            {"alerts": [], "next_review_date": "2026-09-11"}, None, "review_holding",
+            evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual(guidance["blocker_code"], "holding_review_due")
+        self.assertEqual(guidance["recommended_skill"], ["thesis-tracker"])
+
+    def test_holding_price_move_routes_to_news_pulse_only(self):
+        guidance = decision_state.derive_action_guidance(
+            "HOLDING", [], {"status": "CONDITIONAL_PASS"},
+            {"direction": "unknown", "severity": "none"},
+            {"state": "normal", "thesis_relevant": False},
+            {"alerts": [{"kind": "price_move", "detail": "单日下跌 8%"}]},
+            None, "review_holding", evaluated_at="2026-09-12T09:00:00+08:00",
+        )
+        self.assertEqual(guidance["blocker_code"], "holding_price_move_unexplained")
+        self.assertEqual(guidance["recommended_skill"], ["news-pulse"])
+
     def test_unstructured_price_and_operating_condition_fails_closed(self):
         evaluation = decision_state.evaluate_rule_result(
             {
