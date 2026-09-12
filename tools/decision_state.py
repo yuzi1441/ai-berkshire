@@ -2021,6 +2021,13 @@ def build_state_layers(
     for decision in decisions:
         ticker = compact(decision.get("ticker")).upper()
         cid = company_id(decision)
+        attached_tracking = decision.get("post_buy_tracking")
+        tracking_record = (
+            attached_tracking
+            if isinstance(attached_tracking, dict)
+            and compact(attached_tracking.get("status")) != "not_tracked"
+            else tracking.get(ticker)
+        )
         persisted_company = persisted_rules.get(ticker)
         if persisted_company is not None:
             # Decision Rules are produced by the extraction/migration stage.
@@ -2092,7 +2099,7 @@ def build_state_layers(
         checklist = _checklist_state(decision)
         drift_raw = drift_values.get(ticker) or drift_values.get(cid) or {}
         drift = {
-            "mode": "holding" if compact((tracking.get(ticker) or {}).get("status")).lower() in {"holding", "paused", "closed"} else "watch",
+            "mode": "holding" if compact((tracking_record or {}).get("status")).lower() in {"holding", "paused", "closed"} else "watch",
             "direction": _drift_value(drift_raw.get("direction"), "unknown"),
             "severity": _drift_value(drift_raw.get("severity"), "none"),
             "last_checked": drift_raw.get("last_checked"),
@@ -2100,7 +2107,7 @@ def build_state_layers(
             "summary": drift_raw.get("summary"),
             "source": drift_raw.get("source"),
         }
-        lifecycle, warning = _lifecycle((overrides.get(ticker) or {}).get("lifecycle"), tracking.get(ticker), rules, checklist)
+        lifecycle, warning = _lifecycle((overrides.get(ticker) or {}).get("lifecycle"), tracking_record, rules, checklist)
         light_thesis = light_thesis_signals.project_record(
             light_thesis_records.get(ticker),
             lifecycle=lifecycle,
@@ -2153,7 +2160,7 @@ def build_state_layers(
             current_trigger_fingerprint=current_trigger_fingerprint,
         )
         next_action = _next_action(
-            lifecycle, rules, checklist, drift, event, tracking.get(ticker), drift_scan
+            lifecycle, rules, checklist, drift, event, tracking_record, drift_scan
         )
         review_coverage = derive_review_coverage(
             decision,
@@ -2170,7 +2177,7 @@ def build_state_layers(
             checklist,
             drift,
             event,
-            tracking.get(ticker),
+            tracking_record,
             drift_scan,
             next_action,
             review_coverage,
@@ -2226,7 +2233,7 @@ def build_state_layers(
             "action_guidance": action_guidance,
             "needs_attention": next_action not in {"keep_watch", "hold", "none"} or lifecycle == "PRE_BUY",
             "warning": warning,
-            "post_buy_tracking": tracking.get(ticker) if tracking.get(ticker) else {"status": "not_tracked"},
+            "post_buy_tracking": tracking_record if tracking_record else {"status": "not_tracked"},
             "generated_at": generated_at,
         }
         state = investment_dispositions.project_company(

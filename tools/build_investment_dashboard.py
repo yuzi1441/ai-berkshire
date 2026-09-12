@@ -30,6 +30,7 @@ import main_report_review
 import decision_state
 import event_radar
 import investment_dispositions
+import holding_research_reviews
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -5546,6 +5547,11 @@ def attach_post_buy_tracking(
     decisions: list[dict[str, Any]],
     tracking: dict[str, Any],
     alerts: dict[str, Any],
+    *,
+    research_reviews: dict[str, Any] | None = None,
+    original_buy_theses: dict[str, Any] | None = None,
+    repo_root: Path | None = None,
+    allow_legacy_research: bool = False,
 ) -> dict[str, int]:
     """Attach only explicitly registered post-buy positions to board records."""
     positions = tracking.get("positions") or {}
@@ -5572,8 +5578,9 @@ def attach_post_buy_tracking(
             continue
         current_alerts = alerts_by_ticker.get(ticker, [])
         status = registered.get("status") or "holding"
-        decision["post_buy_tracking"] = {
+        projection = {
             "status": status,
+            "position_id": registered.get("position_id"),
             "buy_date": registered.get("buy_date"),
             "cost_basis": registered.get("cost_basis"),
             "position_weight": registered.get("position_weight"),
@@ -5587,7 +5594,55 @@ def attach_post_buy_tracking(
             "latest_event": registered.get("latest_event"),
             "alerts": current_alerts,
         }
+        if repo_root is not None:
+            position_record = {**registered, "ticker": ticker}
+            review = ((research_reviews or {}).get("reviews") or {}).get(
+                str(registered.get("position_id") or "")
+            )
+            projection = holding_research_reviews.apply_review(
+                projection,
+                review=review,
+                position=position_record,
+                original_buy_theses=original_buy_theses or {},
+                repo_root=repo_root,
+                allow_legacy=allow_legacy_research,
+            )
+        decision["post_buy_tracking"] = projection
     return {"registered_count": len(positions), "active_count": active_count, "alert_count": alert_count}
+
+
+def public_post_buy_tracking(
+    tracking: dict[str, Any], decisions: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Project the same bound research layer used by the decision board.
+
+    The runtime source is never mutated.  Execution fields remain intact, but
+    stale runtime research fields cannot disagree with the public board.
+    """
+    payload = json.loads(json.dumps(tracking, ensure_ascii=False))
+    positions = payload.get("positions") or {}
+    by_ticker = {
+        str(item.get("ticker") or "").upper(): item.get("post_buy_tracking")
+        for item in decisions
+        if isinstance(item, dict) and isinstance(item.get("post_buy_tracking"), dict)
+    }
+    research_fields = (
+        "thesis_report_path", "thesis_status", "health_score", "last_review_date",
+        "next_review_date", "review_action", "metrics", "research_evidence",
+        "research_provenance", "research_binding_status", "research_binding_reasons",
+    )
+    for ticker, position in positions.items():
+        projection = by_ticker.get(str(ticker).upper())
+        if not isinstance(position, dict) or not isinstance(projection, dict):
+            continue
+        for field in research_fields:
+            if field in projection:
+                position[field] = projection[field]
+    payload["authority"] = {
+        "execution_facts": "runtime",
+        "research_results": "git_bound_holding_research_reviews",
+    }
+    return payload
 
 
 def build_main_report_review_snapshot(
@@ -5717,6 +5772,14 @@ def build_dashboard(
     post_buy_tracking, post_buy_alerts = load_post_buy_layer(
         data_directory, strict=not legacy_mode
     )
+    holding_reviews = holding_research_reviews.load(
+        data_directory / holding_research_reviews.RELATIVE_PATH.name,
+        strict=not legacy_mode,
+    )
+    original_buy_theses = load_json(
+        data_directory / "original_buy_theses.json",
+        {"schema_version": 2, "cycles": {}, "active_position_ids": {}},
+    )
     intraday_technical = load_intraday_technical(data_directory)
     decision_reviews = load_decision_reviews(data_directory)
     manual_execution_reviews = load_manual_execution_reviews(data_directory)
@@ -5778,7 +5841,15 @@ def build_dashboard(
         current_daily = daily_runtime.get(str(decision.get("ticker") or "").upper())
         if current_daily is not None:
             decision["technical_analysis"] = dict(current_daily)
-    post_buy_summary = attach_post_buy_tracking(decisions, post_buy_tracking, post_buy_alerts)
+    post_buy_summary = attach_post_buy_tracking(
+        decisions,
+        post_buy_tracking,
+        post_buy_alerts,
+        research_reviews=holding_reviews,
+        original_buy_theses=original_buy_theses,
+        repo_root=repo_root,
+        allow_legacy_research=legacy_mode,
+    )
     # Structured state is the new source consumed by the dashboard.  The
     # legacy fields above remain in the board for compatibility with existing
     # consumers and historical reports.
@@ -5961,7 +6032,10 @@ def build_dashboard(
         site_directory / "data" / "light_thesis_signals.json",
         state_layers["light_thesis"],
     )
-    write_json(site_directory / "data" / "post_buy_tracking.json", post_buy_tracking)
+    write_json(
+        site_directory / "data" / "post_buy_tracking.json",
+        public_post_buy_tracking(post_buy_tracking, decisions),
+    )
     write_json(site_directory / "data" / "post_buy_alerts.json", post_buy_alerts)
     original_theses_path = data_directory / "original_buy_theses.json"
     if original_theses_path.is_file():

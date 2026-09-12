@@ -15,6 +15,8 @@ SOURCE_BRANCH="${SOURCE_BRANCH:-main}"
 PYTHON="${PYTHON:-/opt/ai-berkshire-venv/bin/python}"
 VENV_DIR="${VENV_DIR:-/opt/ai-berkshire-venv}"
 REFRESH_SERVICES="${REFRESH_SERVICES:-/usr/local/sbin/ai-berkshire-refresh-services}"
+GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-yuzi1441/ai-berkshire}"
+REQUIRE_GITHUB_CI="${REQUIRE_GITHUB_CI:-1}"
 
 mkdir -p "${RELEASE_ROOT}" "${RUNTIME_DIR}"
 if [[ ! -d "${SOURCE_DIR}/.git" ]]; then
@@ -30,9 +32,17 @@ fi
 git -C "${SOURCE_DIR}" diff --check
 
 SOURCE_SHA="$(git -C "${SOURCE_DIR}" rev-parse HEAD)"
+SOURCE_TREE="$(git -C "${SOURCE_DIR}" rev-parse HEAD^{tree})"
 if [[ -f "${CURRENT_LINK}/.source-sha" ]] && [[ "$(<"${CURRENT_LINK}/.source-sha")" == "${SOURCE_SHA}" ]]; then
     echo "release ${SOURCE_SHA} is already current"
     exit 0
+fi
+
+# A scheduled publisher can race GitHub Actions.  Pending, missing or failed
+# validation keeps the prior release active; the next timer run retries.
+if [[ "${REQUIRE_GITHUB_CI}" == "1" ]]; then
+    "${PYTHON}" "${SOURCE_DIR}/tools/verify_github_ci.py" \
+        --repository "${GITHUB_REPOSITORY}" --sha "${SOURCE_SHA}"
 fi
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -145,14 +155,23 @@ fi
 "${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
     --repo-root "${STAGING_RELEASE}" \
     --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
+"${PYTHON}" "${STAGING_RELEASE}/tools/holding_research_reviews.py" \
+    --repo-root "${STAGING_RELEASE}" validate
+"${PYTHON}" "${STAGING_RELEASE}/tools/validate_decision_state.py" \
+    --repo-root "${STAGING_RELEASE}" --require-tracked-assets --tracked-root "${SOURCE_DIR}"
 "${PYTHON}" -m compileall -q "${STAGING_RELEASE}/tools"
 (
     cd "${STAGING_RELEASE}"
     "${PYTHON}" -m unittest -q \
         tests.test_dashboard_action_classifier \
+        tests.test_decision_state \
+        tests.test_holding_research_reviews \
         tests.test_investment_dashboard \
-        tests.test_market_snapshot
+        tests.test_market_snapshot \
+        tests.test_reconcile_release_state
 )
+"${PYTHON}" "${STAGING_RELEASE}/tools/release_validation_record.py" \
+    --repo-root "${STAGING_RELEASE}" --source-sha "${SOURCE_SHA}" --source-tree "${SOURCE_TREE}"
 
 mv "${STAGING_RELEASE}" "${FINAL_RELEASE}"
 OLD_RELEASE=""

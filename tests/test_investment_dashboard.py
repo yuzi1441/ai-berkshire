@@ -937,6 +937,19 @@ class InvestmentDashboardTests(unittest.TestCase):
             self.assertEqual(len(selected["post_buy_tracking"]["alerts"]), 1)
             self.assertTrue((root / "site" / "data" / "post_buy_tracking.json").is_file())
 
+    def test_public_holding_projection_does_not_mutate_runtime_execution_facts(self):
+        runtime = {"schema_version": 1, "positions": {"600000.SH": {
+            "ticker": "600000.SH", "cost_basis": 10.0, "position_weight": 5.0,
+            "thesis_status": "damaged",
+        }}}
+        decisions = [{"ticker": "600000.SH", "post_buy_tracking": {
+            "thesis_status": "healthy", "research_binding_status": "matched",
+        }}]
+        projected = dashboard.public_post_buy_tracking(runtime, decisions)
+        self.assertEqual(projected["positions"]["600000.SH"]["thesis_status"], "healthy")
+        self.assertEqual(projected["positions"]["600000.SH"]["cost_basis"], 10.0)
+        self.assertEqual(runtime["positions"]["600000.SH"]["thesis_status"], "damaged")
+
     def test_extracts_full_price_plan_and_three_scenario_targets(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
