@@ -223,42 +223,263 @@ def registry_company(
     return None
 
 
+CUTOFF_PRIMARY_LABELS = (
+    "数据截止",
+    "数据截至",
+    "截止日期",
+    "data cutoff",
+    "as of",
+    "股价截至",
+    "行情基准",
+)
+CUTOFF_SECONDARY_LABELS = ("报告日期", "研究日期", "撰写日期", "分析日期")
+MARKET_CUTOFF_LABELS = ("股价截至", "行情基准")
+MARKET_CUTOFF_MARKERS = ("行情", "股价", "收盘", "快照", "休市", "交易日")
+
+
+def labelled_date_segments(line: str, labels: tuple[str, ...]) -> list[tuple[str, str, str]]:
+    """Return (label, context-before-label, text-after-label) for each label.
+
+    Each segment ends at the next label occurrence, so a date attached to
+    another field on the same line (for example the later report date) can
+    never be attributed to the first label.
+    """
+    folded = line.casefold()
+    occurrences: list[tuple[int, int, str]] = []
+    for label in labels:
+        needle = label.casefold()
+        start = 0
+        while True:
+            index = folded.find(needle, start)
+            if index < 0:
+                break
+            occurrences.append((index, index + len(needle), label))
+            start = index + len(needle)
+    occurrences.sort(key=lambda item: (-(item[1] - item[0]), item[0]))
+    retained: list[tuple[int, int, str]] = []
+    for occurrence in occurrences:
+        if any(
+            occurrence[0] < kept[1] and occurrence[1] > kept[0]
+            for kept in retained
+        ):
+            continue
+        retained.append(occurrence)
+    retained.sort(key=lambda item: item[0])
+    segments: list[tuple[str, str, str]] = []
+    for index, (start, end, label) in enumerate(retained):
+        next_start = retained[index + 1][0] if index + 1 < len(retained) else len(line)
+        segments.append((label, line[max(0, start - 12) : start], line[end:next_start]))
+    return segments
+
+
+def first_date_in_text(text: str) -> str | None:
+    """Return the first supported date in a text fragment, if any."""
+    match = DATE_PATTERN.search(text)
+    if not match:
+        return None
+    return parse_date(match.group(0))
+
+
 def extract_data_cutoff(lines: list[str]) -> str | None:
     """Extract the latest explicitly labelled data cutoff from a report.
 
-    Only labelled lines are considered. A filename date and filesystem timestamp
-    are intentionally ignored because neither is a report data cutoff.
+    Only labelled lines are considered, and each date is read from the text
+    following its own label. Report-date labels are a secondary fallback used
+    only when no explicit cutoff exists. A filename date and filesystem
+    timestamp are intentionally ignored because neither is a report data cutoff.
     """
-    primary_labels = (
-        "数据截止",
-        "数据截至",
-        "截止日期",
-        "data cutoff",
-        "as of",
-        "股价截至",
-        "行情基准",
-    )
-    secondary_labels = ("报告日期", "研究日期", "撰写日期")
     primary: list[str] = []
     secondary: list[str] = []
-    for index, line in enumerate(lines[:120]):
-        folded = line.casefold()
-        labels = primary_labels if any(label in folded for label in primary_labels) else (
-            secondary_labels if any(label in folded for label in secondary_labels) else ()
-        )
-        if not labels:
-            continue
-        bucket = primary if labels is primary_labels else secondary
-        # A labelled cutoff line may also state the later report completion date.
-        # The first date is the one attached to the cutoff / market-benchmark label.
-        match = DATE_PATTERN.search(line)
-        if match:
-            parsed = parse_date(match.group(0))
-            if parsed:
-                bucket.append(parsed)
+    for line in lines[:120]:
+        for label, _before, segment in labelled_date_segments(
+            line, CUTOFF_PRIMARY_LABELS + CUTOFF_SECONDARY_LABELS
+        ):
+            parsed = first_date_in_text(segment)
+            if not parsed:
+                continue
+            if label in CUTOFF_PRIMARY_LABELS:
+                primary.append(parsed)
+            else:
+                secondary.append(parsed)
     if primary:
         return max(primary)
     return max(secondary) if secondary else None
+
+
+def extract_market_data_cutoff(lines: list[str]) -> str | None:
+    """Return the latest explicitly labelled market/quote cutoff.
+
+    Only labels or sub-clauses that clearly refer to prices or the trading
+    session qualify; financial-period cutoffs such as "财务数据至 2026-03-31"
+    are ignored even when they sit under a generic 数据截止 label.
+    """
+    candidates: list[str] = []
+    for line in lines[:120]:
+        for label, _before, segment in labelled_date_segments(line, CUTOFF_PRIMARY_LABELS):
+            if label in MARKET_CUTOFF_LABELS:
+                parsed = first_date_in_text(segment)
+                if parsed:
+                    candidates.append(parsed)
+                continue
+            for clause in re.split(r"[；;，,。]", segment):
+                if not any(marker in clause for marker in MARKET_CUTOFF_MARKERS):
+                    continue
+                parsed = first_date_in_text(clause)
+                if parsed:
+                    candidates.append(parsed)
+    return max(candidates) if candidates else None
+
+
+def resolve_data_cutoff(lines: list[str], contract: dict[str, Any] | None) -> str | None:
+    """Resolve the effective data cutoff for one report.
+
+    A decision contract is authoritative unless it merely repeats the report's
+    own completion date while the body states a different market cutoff; in
+    that case the explicitly labelled market cutoff wins.
+    """
+    contract = contract if isinstance(contract, dict) else {}
+    contract_cutoff = contract.get("data_cutoff")
+    market_cutoff = extract_market_data_cutoff(lines)
+    if contract_cutoff:
+        completion = contract.get("report_completed_at") or extract_report_completed_date(lines)
+        if market_cutoff and market_cutoff != contract_cutoff and completion == contract_cutoff:
+            return market_cutoff
+        return contract_cutoff
+    return extract_data_cutoff(lines)
+
+
+REFERENCE_PRICE_LABELS = (
+    "当前股价",
+    "当前A股股价",
+    "当前价格",
+    "A 股收盘价",
+    "A股收盘价",
+    "A股股价",
+    "最新收盘价",
+    "最新股价",
+    "当前价",
+    "收盘价",
+    "参考股价",
+    "股价基准日",
+    "股价基准",
+    "价格锚",
+    "行情基准",
+    "数据基准",
+    "股价",
+)
+REFERENCE_FIELD_DATE_PREFIX = re.compile(
+    r"^[（(]?\s*20\d{2}[-./年]\d{1,2}[-./月]\d{1,2}日?"
+    r"(?:\s*(?:收盘|收盘价|行情|交易日))?\s*[）)]?\s*",
+    re.I,
+)
+REFERENCE_ANNOTATION_PREFIX = re.compile(
+    r"^(?:"
+    r"[（(]\s*\d{4,6}(?:\.(?:SH|SZ|HK|BJ))?\s*[）)]"
+    r"|A股|A 股|H股|H 股"
+    r"|腾讯|新浪|东方财富|东财|同花顺|富途|雪球|moomoo|老虎证券"
+    r"|investing(?:\.com)?|yahoo|hstong|wind"
+    r"|收于|收报|现报|为|是|报|约|见|~|口径|基准|快照"
+    r")\s*[:：]?\s*",
+    re.I,
+)
+REFERENCE_PRICE_PATTERN = re.compile(
+    r"(?P<prefix>HK\$|US\$|USD|HKD|RMB|CNY|¥|￥|\$)?\s*"
+    r"(?P<value>\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)\s*"
+    r"(?P<unit>港元|港币|美元|人民币|元|CNY|HKD|USD)?",
+    re.I,
+)
+REFERENCE_FIELD_ENDINGS = "|｜，,。；;（(【「、"
+REFERENCE_LABEL_CONTEXT_REJECT = re.compile(
+    r"(?:PB|PE|PS|倍|目标|合理|对应|回调|回落|加仓|止损|跌至|涨至|触发"
+    r"|历史|高估|低估|安全边际|招股|竞品|市值)",
+    re.I,
+)
+REFERENCE_FIELD_REJECT = re.compile(
+    r"(?:目标价|目标股价|合理价|安全边际|高估|低估|招股|回调|回落|跌至|涨至"
+    r"|触发|过期|历史|腰斩|回撤)",
+)
+
+
+def _cut_reference_field(field: str) -> str:
+    """Cut a labelled field at its first separator, keeping thousands commas."""
+    for index, character in enumerate(field):
+        if character not in REFERENCE_FIELD_ENDINGS:
+            continue
+        if (
+            character in {",", "，"}
+            and index > 0
+            and index + 1 < len(field)
+            and field[index - 1].isdigit()
+            and field[index + 1].isdigit()
+        ):
+            continue
+        return field[:index]
+    return field
+
+
+def _reference_field_text(raw_line: str) -> str:
+    """Strip Markdown emphasis while keeping the field separators."""
+    text = re.sub(r"!?(?:\[[^\]]*\]\([^)]*\))", "", raw_line)
+    text = re.sub(r"[`*_#]", "", text)
+    return re.sub(r"[ \t\u3000]+", " ", text).strip()
+
+
+def _reference_currency(prefix: str, unit: str) -> str | None:
+    prefix = (prefix or "").upper()
+    unit = (unit or "").upper()
+    if prefix in {"HK$", "HKD"} or unit in {"港元", "港币", "HKD"}:
+        return "HKD"
+    if prefix in {"US$", "USD", "$"} or unit in {"美元", "USD"}:
+        return "USD"
+    if prefix in {"CNY", "RMB", "¥", "￥"} or unit in {"元", "人民币", "CNY"}:
+        return "CNY"
+    return None
+
+
+def _reference_price_field(field: str) -> tuple[float, str] | None:
+    """Read one labelled price field without borrowing another field's number."""
+    text = field.strip().lstrip("|｜").strip()
+    if not text:
+        return None
+    if text[:1] in "（(【":
+        closing = min(
+            (index for index in (text.find(character) for character in "）)】") if index > 0),
+            default=-1,
+        )
+        if closing > 0:
+            inner = text[1:closing].strip()
+            if not re.fullmatch(r"\d{4,6}(?:\.(?:SH|SZ|HK|BJ))?", inner, re.I):
+                text = inner
+    if "|" in text or "｜" in text:
+        head, tail = re.split(r"[|｜]", text, maxsplit=1)
+        if not re.search(r"元|港元|港币|美元|CNY|RMB|USD|HKD|¥|￥|\$", head, re.I):
+            text = tail
+    text = _cut_reference_field(text)
+    if not text or REFERENCE_FIELD_REJECT.search(text):
+        return None
+    text = re.sub(r"^[:：]\s*", "", text)
+    text = REFERENCE_FIELD_DATE_PREFIX.sub("", text, count=1)
+    for _ in range(4):
+        stripped = REFERENCE_ANNOTATION_PREFIX.sub("", text, count=1)
+        if stripped == text:
+            break
+        text = stripped.lstrip()
+    text = text.strip()
+    match = REFERENCE_PRICE_PATTERN.match(text)
+    if not match:
+        return None
+    currency = _reference_currency(match.group("prefix") or "", match.group("unit") or "")
+    if not currency:
+        return None
+    value = float(match.group("value").replace(",", ""))
+    if not 0 < value < 1_000_000:
+        return None
+    following = text[match.end() :].lstrip()
+    if following[:1] in set("年月日%％亿万倍xX:：-、"):
+        return None
+    if following.startswith("/") and len(following) > 1 and following[1].isdigit():
+        return None
+    return value, currency
 
 
 def extract_report_reference_price(
@@ -268,64 +489,37 @@ def extract_report_reference_price(
 
     This is not a buy threshold. It is used only to prevent a report saying
     "current price can buy" from remaining actionable after the quote has risen
-    above the price that the author actually assessed.
+    above the price that the author actually assessed. A candidate must sit in
+    the field directly behind its own current-price label, must carry its own
+    currency marker, and must not sit in a target, trigger, or valuation
+    context. When no such price can be tied to a label, the function returns
+    None so the execution layer falls back to review.
     """
     if market not in {"A股", "港股", "美股"}:
         return None
-    currency = {"A股": "CNY", "港股": "HKD", "美股": "USD"}[market]
-    labels = (
-        "当前股价",
-        "当前A股股价",
-        "A股股价",
-        "A 股收盘价",
-        "A股收盘价",
-        "最新收盘价",
-        "最新股价",
-        "当前价",
-        "收盘价",
-        "参考股价",
-        "行情基准",
-        "数据基准",
-        "股价",
-    )
-    number_pattern = re.compile(
-        r"(?P<prefix>CNY|RMB|HKD|USD|HK\$|US\$|¥|￥|\$)?\s*"
-        r"(?P<value>\d+(?:\.\d+)?)\s*(?P<unit>港元|美元|人民币|元|CNY|HKD|USD)?",
-        re.I,
-    )
-    for line_number, raw_line in enumerate(lines[:140], start=1):
-        text = clean_markdown(raw_line)
-        if not text or not any(label.casefold() in text.casefold() for label in labels):
+    expected_currency = {"A股": "CNY", "港股": "HKD", "美股": "USD"}[market]
+    # Reports sometimes state the assessed price below the header block, so the
+    # scan is wider than the cutoff window; every candidate still has to sit
+    # directly behind its own current-price label.
+    for line_number, raw_line in enumerate(lines[:240], start=1):
+        text = _reference_field_text(raw_line)
+        if not text or not any(label.casefold() in text.casefold() for label in REFERENCE_PRICE_LABELS):
             continue
-        if re.search(r"目标价|合理股价|股价区间|52\s*周|历史高位|历史低位|跌至|涨至", text):
-            continue
-        # Start at the matched label so earlier dates/table row numbers cannot
-        # become the report reference price.
-        positions = [text.casefold().find(label.casefold()) for label in labels]
-        positions = [position for position in positions if position >= 0]
-        if not positions:
-            continue
-        tail = text[min(positions) :]
-        for match in number_pattern.finditer(tail):
-            prefix = (match.group("prefix") or "").upper()
-            unit = (match.group("unit") or "").upper()
-            if not prefix and not unit:
+        for _label, context, segment in labelled_date_segments(text, REFERENCE_PRICE_LABELS):
+            if REFERENCE_LABEL_CONTEXT_REJECT.search(context) or context.rstrip().endswith("招"):
                 continue
-            value = float(match.group("value"))
-            before = tail[max(0, match.start() - 8) : match.start()].upper()
-            if market == "A股" and (unit in {"港元", "HKD", "美元", "USD"} or "HK$" in before or "US$" in before):
+            parsed = _reference_price_field(segment)
+            if not parsed:
                 continue
-            if market == "港股" and not (unit in {"港元", "HKD"} or "HK$" in before):
+            value, currency = parsed
+            if currency != expected_currency:
                 continue
-            if market == "美股" and not (unit in {"美元", "USD"} or "US$" in before or "$" in before):
-                continue
-            if 0 < value < 1_000_000:
-                return {
-                    "price": value,
-                    "currency": currency,
-                    "line": line_number,
-                    "source": "主报告明确标注的分析基准价",
-                }
+            return {
+                "price": value,
+                "currency": currency,
+                "line": line_number,
+                "source": "主报告明确标注的分析基准价",
+            }
     return None
 
 
@@ -856,18 +1050,22 @@ def extract_report_completed_date(lines: list[str]) -> str | None:
     two reports cover the same data date, so newer completed research can
     supersede an earlier tracking note without relying on file timestamps.
     """
-    labels = ("报告完成日", "报告完成日期", "研究完成日", "完成日期", "建立日期", "撰写日期")
+    labels = (
+        "报告完成日期",
+        "报告完成日",
+        "报告生成日期",
+        "研究完成日",
+        "研究日期",
+        "报告日期",
+        "分析日期",
+        "撰写日期",
+        "建立日期",
+        "完成日期",
+    )
     dates: list[str] = []
     for line in lines[:120]:
-        folded = line.casefold()
-        for label in labels:
-            start = folded.find(label)
-            if start < 0:
-                continue
-            match = DATE_PATTERN.search(line[start + len(label) :])
-            if not match:
-                continue
-            parsed = parse_date(match.group(0))
+        for _label, _before, segment in labelled_date_segments(line, labels):
+            parsed = first_date_in_text(segment)
             if parsed:
                 dates.append(parsed)
     return max(dates) if dates else None
@@ -1429,14 +1627,17 @@ def extract_checklist_status(
         status = "待复核"
 
     ratio_matches = [
-        match
+        (int(match.group(1)), int(match.group(2)))
         for line in lines
         if re.search(r"Checklist|判定|结论|通过率", line, flags=re.IGNORECASE)
-        for match in re.finditer(r"(?<!\d)(\d+)\s*/\s*(6|10)(?!\d)", line)
+        for match in re.finditer(r"(?<!\d)(\d+)\s*/\s*(\d{1,3})(?!\d)", line)
     ]
-    passed_match = ratio_matches[-1] if ratio_matches else None
-    passed_count = int(passed_match.group(1)) if passed_match else None
-    total_gates = int(passed_match.group(2)) if passed_match else (len(gates) or 6)
+    ratio_matches = [
+        item for item in ratio_matches if 0 <= item[0] <= item[1] and 2 <= item[1] <= 100
+    ]
+    passed_count, total_gates = ratio_matches[-1] if ratio_matches else (None, None)
+    if total_gates is None:
+        total_gates = len(gates) or None
     if passed_count is None:
         passed_count = sum(
             1
@@ -1506,7 +1707,7 @@ def checklist_record(
     if registry_entry:
         company = str(registry_entry["canonical_name"])
     market = (contract or {}).get("market") or market_for_ticker(ticker, path_market)
-    data_cutoff = (contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
+    data_cutoff = resolve_data_cutoff(lines, contract)
     report_date = (contract or {}).get("report_completed_at") or extract_report_completed_date(lines)
     checklist_contract = metadata_contract or {
         "report_type": "legacy-checklist",
@@ -2139,6 +2340,22 @@ def attach_main_report_resolutions(
         decision["primary_judgment"] = judgment
 
 
+def reviewed_main_report_paths(
+    resolutions: list[dict[str, Any]], repo_root: Path
+) -> set[str]:
+    """Return report paths whose human resolution still matches the current file."""
+    paths: set[str] = set()
+    for resolution in resolutions:
+        report_path = str(resolution.get("report_path") or "")
+        expected_hash = str(resolution.get("report_sha256") or "")
+        source_path = repo_root / report_path
+        if not report_path or not expected_hash or not source_path.is_file():
+            continue
+        if canonical_file_sha256(source_path) == expected_hash:
+            paths.add(report_path)
+    return paths
+
+
 def is_markdown_table_separator(line: str) -> bool:
     """Return True only for a Markdown table's header separator row."""
     stripped = line.strip()
@@ -2643,17 +2860,46 @@ def looks_like_action(value: str) -> bool:
     )
 
 
+SCENARIO_TARGET_HEADERS = (
+    "目标股价",
+    "目标价格",
+    "目标价",
+    "每股价值",
+    "每股价格",
+    "合理价值",
+    "合理股价",
+    "隐含股价",
+    "当前价值",
+)
+SCENARIO_NON_PRICE_TOKENS = (
+    "市值",
+    "收入",
+    "营收",
+    "利润",
+    "净利",
+    "GMV",
+    "EPS",
+    "PE",
+    "增速",
+    "CAGR",
+)
+
+
 def extract_scenario_valuation(lines: list[str]) -> list[dict[str, str]]:
     """Extract a report's three-scenario target prices when explicitly tabulated."""
     tables = find_tables_near_terms(
         lines,
         heading_options=(("三情景",), ("情景估值",), ("三情景估值",)),
-        header_matchers=(("情景",), ("目标股价", "目标价", "当前价值", "目标价格")),
+        header_matchers=(("情景",), SCENARIO_TARGET_HEADERS),
     )
     if not tables:
         for index, line in enumerate(lines):
             headers = markdown_cells(line)
             if not headers or not any("情景" in header for header in headers):
+                continue
+            if first_header_index(headers, SCENARIO_TARGET_HEADERS) is None:
+                # A scenario table without an explicit per-share price column
+                # (for example a profit forecast) is not a valuation target.
                 continue
             rows: list[list[str]] = []
             for row_index in range(index + 1, min(len(lines), index + 24)):
@@ -2669,11 +2915,12 @@ def extract_scenario_valuation(lines: list[str]) -> list[dict[str, str]]:
 
     for headers, rows in tables:
         scenario_index = first_header_index(headers, ("情景",))
-        target_price_index = first_header_index(headers, ("目标股价", "目标价", "当前价值", "目标价格"))
-        if scenario_index is None:
+        target_price_index = first_header_index(headers, SCENARIO_TARGET_HEADERS)
+        if scenario_index is None or target_price_index is None:
             continue
-        if target_price_index is None:
-            target_price_index = len(headers) - 1
+        target_header = headers[target_price_index]
+        if any(token in target_header for token in SCENARIO_NON_PRICE_TOKENS):
+            continue
         fields = {
             "eps_growth": first_header_index(headers, ("EPS 年增速", "年增速", "EPS/股息增速", "增速")),
             "target_pe": first_header_index(headers, ("目标 PE", "目标PE", "目标倍数")),
@@ -2695,10 +2942,11 @@ def extract_scenario_valuation(lines: list[str]) -> list[dict[str, str]]:
             target = clean_markdown(row[target_price_index])
             if not target or not re.search(r"\d", target):
                 continue
+            if re.search(r"亿|万亿|万|%|％|倍|GMV|CAGR", target):
+                continue
             if not re.search(r"(元|港元|美元|HK\$|US\$|\$)", target, re.I):
                 # Allow bare numbers only when the column header is clearly a price column.
-                header = headers[target_price_index]
-                if not any(token in header for token in ("目标股价", "目标价", "当前价值", "目标价格")):
+                if not any(token in target_header for token in SCENARIO_TARGET_HEADERS):
                     continue
             entry = {"scenario": scenario, "target_price": target}
             for key, field_index in fields.items():
@@ -4218,11 +4466,19 @@ def _evidence_numbers(judgment: dict[str, Any]) -> list[float]:
 def trigger_price_execution_rules(
     judgment: dict[str, Any], market: str | None
 ) -> list[dict[str, Any]]:
-    """Extract model-interpreted price triggers only when report evidence contains the numbers."""
+    """Extract model-interpreted price triggers only with consistent report evidence.
+
+    Model-interpreted triggers are labelled ``validated_judgment_trigger``, so
+    the numbers must be confirmed by the judgment's own evidence quotes. A
+    judgment without evidence produces no rule at all, and a price whose number
+    is missing from the evidence is dropped instead of being marked validated.
+    """
     trigger = clean_markdown(str(judgment.get("trigger_condition") or ""))
     if not trigger:
         return []
     evidence_values = _evidence_numbers(judgment)
+    if not evidence_values:
+        return []
     empty_action = clean_markdown(str(judgment.get("empty_position_action") or ""))
     default_kind = execution_action_kind(empty_action)
     if default_kind not in EXECUTION_ACTIONABLE_KINDS:
@@ -4244,7 +4500,7 @@ def trigger_price_execution_rules(
             numbers = [float(match.group("first"))]
             if match.group("second"):
                 numbers.append(float(match.group("second")))
-            if evidence_values and any(
+            if any(
                 not any(abs(number - evidence) <= 0.011 for evidence in evidence_values)
                 for number in numbers
             ):
@@ -4705,14 +4961,15 @@ def is_company_equity(record: dict[str, Any]) -> bool:
 def is_post_buy_tracking_report(record: dict[str, Any]) -> bool:
     """Return whether a report belongs exclusively to the post-buy workflow.
 
-    Thesis and news-pulse reports are valuable library artifacts, but they must
-    never supersede a pre-buy fundamental conclusion or expand the decision
-    board. Their results reach the board through the explicit post-buy layer.
+    Thesis, drift, and news-pulse reports are valuable library artifacts, but
+    they must never supersede a pre-buy fundamental conclusion or expand the
+    decision board. Their results reach the board through the explicit post-buy
+    layer and the structured drift state.
     """
     filename = Path(str(record.get("report_path") or "")).name
     return bool(
         re.search(
-            r"(?:^|[-_])(thesis(?:[-_]?tracker)?|news(?:[-_]?pulse)?)(?:[-_.]|$)",
+            r"(?:^|[-_])(thesis(?:[-_]?tracker)?|drift|news(?:[-_]?pulse)?)(?:[-_.]|$)",
             filename,
             re.I,
         )
@@ -4824,9 +5081,9 @@ def candidate_record(
         "entity_directory": entity_directory,
         "ticker": effective_ticker,
         "market": effective_market,
-        "data_cutoff": report_override.get(
-            "data_cutoff", (decision_contract or {}).get("data_cutoff") or extract_data_cutoff(lines)
-        ),
+        "data_cutoff": report_override["data_cutoff"]
+        if "data_cutoff" in report_override
+        else resolve_data_cutoff(lines, decision_contract),
         "report_reference_price": report_override.get(
             "report_reference_price", extract_report_reference_price(lines, effective_market)
         ),
@@ -4860,33 +5117,38 @@ def candidate_record(
 
 
 def record_rank(record: dict[str, Any]) -> tuple[int, str, str, int, int, int, str]:
-    """Rank candidates by cutoff, explicit completion date, then report quality.
+    """Rank candidates by cutoff, completion date, report kind, then content.
 
     No filesystem timestamp or filename date participates in this ranking. A
     completion date is considered only when reports share the same explicit
-    data cutoff; report content remains the final fallback for equal dates.
+    data cutoff. Report kind outranks content and action completeness so that a
+    full research report always supersedes a role sub-report or tracking note
+    when both describe the same data date.
     """
     action_rank = {"买入": 5, "分批买入": 4, "持有": 3, "观察": 2, "减仓/卖出": 1}.get(
         record["action"], 0
     )
-    price_rank = 0
+    content_rank = 0
+    if record.get("decision_contract"):
+        content_rank += 2
     if record.get("price_plan"):
-        price_rank += 2
+        content_rank += 2
     if record.get("scenario_valuation"):
-        price_rank += 1
+        content_rank += 1
     if record.get("buy_price"):
-        price_rank += 1
+        content_rank += 1
     if record.get("valuation_section"):
-        price_rank += 2
+        content_rank += 2
     if record.get("investor_stances"):
-        price_rank += min(len(record.get("investor_stances") or []), 3)
-    # Prefer full research over checklist/news notes when date evidence is equal.
+        content_rank += min(len(record.get("investor_stances") or []), 3)
+    # Prefer full research over role sub-reports, checklist/news notes, and
+    # tracking artifacts when date evidence is equal.
     kind_rank = 0
     path = str(record.get("report_path") or "")
     name = Path(path).name
-    if re.search(r"investment-team|研究报告|最终报告", name, re.I):
+    if re.search(r"investment-team|投研团队|研究报告|最终报告", name, re.I):
         kind_rank += 4
-    elif re.search(r"research|最终报告", path, re.I):
+    elif re.search(r"research", path, re.I):
         kind_rank += 2
     if re.search(r"0[1-4]-|财务估值分析|巴菲特视角|芒格视角|李录视角|段永平视角", path):
         kind_rank -= 4
@@ -4896,9 +5158,9 @@ def record_rank(record: dict[str, Any]) -> tuple[int, str, str, int, int, int, s
         1 if record["data_cutoff"] else 0,
         record["data_cutoff"] or "0000-00-00",
         record.get("report_completed_at") or "0000-00-00",
-        price_rank,
-        action_rank,
         kind_rank,
+        content_rank,
+        action_rank,
         record["report_path"],
     )
 
@@ -5074,8 +5336,26 @@ def normalize_primary_judgment(value: Any, company: str) -> dict[str, Any] | Non
     return normalized
 
 
-def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -> list[dict[str, Any]]:
-    """Select one conclusion per tradable market+ticker and merge alias histories."""
+def select_decisions(
+    records: list[dict[str, Any]],
+    overrides: dict[str, Any],
+    *,
+    priority_report_paths: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Select one conclusion per tradable market+ticker and merge alias histories.
+
+    ``priority_report_paths`` carries source-hashed human-reviewed main reports.
+    At the same data cutoff a reviewed report is not displaced by an unreviewed
+    candidate; a strictly newer data cutoff still wins so corrected data always
+    reaches the board.
+    """
+    priority = {str(path) for path in (priority_report_paths or set()) if path}
+
+    def selection_rank(record: dict[str, Any]) -> tuple[Any, ...]:
+        has_cutoff, cutoff, completed, kind_rank, content_rank, action_rank, path = record_rank(record)
+        reviewed = 1 if str(record.get("report_path") or "") in priority else 0
+        return (has_cutoff, cutoff, reviewed, completed, kind_rank, content_rank, action_rank, path)
+
     groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in records:
         ticker = str(record.get("ticker") or "").upper()
@@ -5090,7 +5370,7 @@ def select_decisions(records: list[dict[str, Any]], overrides: dict[str, Any]) -
 
     selections: list[dict[str, Any]] = []
     for candidates in groups.values():
-        ordered = sorted(candidates, key=record_rank, reverse=True)
+        ordered = sorted(candidates, key=selection_rank, reverse=True)
         selected = ordered[0].copy()
         company = str(selected["company"])
         company_override = overrides.get("companies", {}).get(company, {})
@@ -5196,8 +5476,12 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
             checklist_label = "未生成"
         else:
             checklist_label = checklist.get("status", "待复核")
-            if checklist.get("passed_count") is not None:
-                checklist_label += f"（{checklist['passed_count']}/6）"
+            passed = checklist.get("passed_count")
+            total = checklist.get("total_gates")
+            if passed is not None and total:
+                checklist_label += f"（{passed}/{total}）"
+            elif passed is not None:
+                checklist_label += f"（{passed} 项通过）"
         layered = item.get("conclusion_summary") or investor_stances_summary(item.get("investor_stances") or []) or item.get("action")
         lines.append(
             "| {company} | {market_ticker} | {cutoff} | {layered} | {action} | {technical} | {checklist} | {history} | [[{link}|{title}]] |".format(
@@ -5256,7 +5540,13 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
             lines.append("未生成 Checklist 报告。")
             continue
         passed = checklist.get("passed_count")
-        passed_text = f"{passed}/6" if passed is not None else "待复核"
+        total = checklist.get("total_gates")
+        if passed is not None and total:
+            passed_text = f"{passed}/{total}"
+        elif passed is not None:
+            passed_text = f"{passed} 项通过"
+        else:
+            passed_text = "待复核"
         lines.append(
             f"结论：**{checklist.get('status', '待复核')}**（{passed_text}）；"
             f"硬性否决：{checklist.get('hard_veto_label', '待复核')}；"
@@ -5304,8 +5594,8 @@ def write_decision_table(path: Path, decisions: list[dict[str, Any]], generated_
                 )
             )
     path.parent.mkdir(parents=True, exist_ok=True)
-    content = "\n".join(lines)
-    path.write_text("\n".join(line.rstrip() for line in content.splitlines()) + "\n", encoding="utf-8")
+    content = "\n".join(line.rstrip() for line in "\n".join(lines).splitlines()) + "\n"
+    write_text_atomic(path, content)
 
 
 def write_library_moc(path: Path, reports_directory: Path, decisions: list[dict[str, Any]], generated_at: str) -> None:
@@ -5336,7 +5626,22 @@ def write_library_moc(path: Path, reports_directory: Path, decisions: list[dict[
     lines.extend(["", "## 主题、比较与候选池", ""])
     lines.extend(f"- [{name}](../{name}/)" for name in topic_directories)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_text_atomic(path, "\n".join(lines) + "\n")
+
+
+def write_text_atomic(path: Path, content: str) -> None:
+    """Write UTF-8 text through a same-directory temporary file and os.replace."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.tmp")
+    try:
+        with temporary.open("w", encoding="utf-8") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    except OSError:
+        temporary.unlink(missing_ok=True)
+        raise
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -5854,12 +6159,16 @@ def build_dashboard(
         for report_path in report_paths
         if (record := checklist_record(report_path, repo_root, registry)) is not None
     ]
-    decisions = select_decisions(records, overrides)
-    report_judgments = load_report_judgments(data_directory / "report_judgments")
-    attach_report_judgments(decisions, report_judgments, repo_root)
     main_report_resolutions = load_main_report_resolutions(
         data_directory / "main_report_resolutions.json"
     )
+    decisions = select_decisions(
+        records,
+        overrides,
+        priority_report_paths=reviewed_main_report_paths(main_report_resolutions, repo_root),
+    )
+    report_judgments = load_report_judgments(data_directory / "report_judgments")
+    attach_report_judgments(decisions, report_judgments, repo_root)
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
     human_review_calendar = load_human_review_calendar(
         data_directory / "annual_report_dates.json",
