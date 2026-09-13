@@ -63,6 +63,11 @@ class CanonicalPromotionTests(unittest.TestCase):
         self.git("config", "user.email", "test@example.com")
         self.git("config", "user.name", "Promotion Test")
         self.commit()
+        current_reports.write_bootstrap_manifest(
+            self.root, self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        )
+        self.git("add", current_reports.TRACKED_MANIFEST_FILENAME)
+        self.git("commit", "-m", "manifest fixture")
 
     def git(self, *args: str) -> None:
         completed = subprocess.run(
@@ -150,6 +155,28 @@ class CanonicalPromotionTests(unittest.TestCase):
         history = [item["report_path"] for item in decisions[0]["report_history"]]
         self.assertIn(self.old_report.relative_to(self.root).as_posix(), history)
 
+    def test_staged_rename_updates_canonical_and_manifest(self):
+        renamed = self.root / "reports" / "东方电缆" / "东方电缆-research-20260724-renamed.md"
+        self.git(
+            "mv",
+            self.old_report.relative_to(self.root).as_posix(),
+            renamed.relative_to(self.root).as_posix(),
+        )
+        with mock.patch.object(
+            workflow.dashboard, "build_dashboard", return_value={"decision_count": 1}
+        ), mock.patch.object(workflow, "_validate_state"):
+            result = self.run_report(renamed, write=True)
+        self.assertEqual(result["canonical_update"]["status"], "same_cutoff_replacement")
+        self.assertEqual(
+            self.canonical_entry()["current_main_report"],
+            renamed.relative_to(self.root).as_posix(),
+        )
+        manifest = json.loads(
+            (self.root / current_reports.TRACKED_MANIFEST_FILENAME).read_text(encoding="utf-8")
+        )
+        self.assertIn(renamed.relative_to(self.root).as_posix(), manifest["tracked_paths"])
+        self.assertNotIn(self.old_report.relative_to(self.root).as_posix(), manifest["tracked_paths"])
+
     def test_older_report_is_rejected_and_canonical_stays(self):
         older = self.write_report("东方电缆-research-20260601.md", "2026-06-01")
         self.commit()
@@ -177,12 +204,15 @@ class CanonicalPromotionTests(unittest.TestCase):
 
     def test_already_current_report_is_a_noop(self):
         before = self.canonical_path.read_bytes()
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        before_manifest = manifest.read_bytes()
         with mock.patch.object(
             workflow.dashboard, "build_dashboard", return_value={"decision_count": 1}
         ), mock.patch.object(workflow, "_validate_state"):
             result = self.run_report(self.old_report, write=True)
         self.assertEqual(result["canonical_update"]["status"], "already_current")
         self.assertEqual(self.canonical_path.read_bytes(), before)
+        self.assertEqual(manifest.read_bytes(), before_manifest)
 
     def test_same_path_changed_content_fails_closed(self):
         before_board = self.root / "data" / "investment-dashboard" / "decision_board.json"
@@ -260,6 +290,8 @@ class CanonicalPromotionTests(unittest.TestCase):
         derived = self.root / "data" / "investment-dashboard" / "decision_board.json"
         derived.write_text("old derived", encoding="utf-8")
         before_canonical = self.canonical_path.read_bytes()
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        before_manifest = manifest.read_bytes()
 
         def failing_build(root: Path, **kwargs):
             (root / "data" / "investment-dashboard" / "decision_board.json").write_text(
@@ -272,6 +304,7 @@ class CanonicalPromotionTests(unittest.TestCase):
                 self.run_report(new_report, write=True)
         self.assertEqual(self.canonical_path.read_bytes(), before_canonical)
         self.assertEqual(derived.read_text(encoding="utf-8"), "old derived")
+        self.assertEqual(manifest.read_bytes(), before_manifest)
 
     def test_validation_failure_rolls_back_canonical_and_outputs(self):
         new_report = self.write_report("东方电缆-research-20261030.md", "2026-10-30")
@@ -279,6 +312,8 @@ class CanonicalPromotionTests(unittest.TestCase):
         derived = self.root / "data" / "investment-dashboard" / "decision_board.json"
         derived.write_text("old derived", encoding="utf-8")
         before_canonical = self.canonical_path.read_bytes()
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        before_manifest = manifest.read_bytes()
 
         def promoted_build(root: Path, **kwargs):
             (root / "data" / "investment-dashboard" / "decision_board.json").write_text(
@@ -294,6 +329,35 @@ class CanonicalPromotionTests(unittest.TestCase):
                     self.run_report(new_report, write=True)
         self.assertEqual(self.canonical_path.read_bytes(), before_canonical)
         self.assertEqual(derived.read_text(encoding="utf-8"), "old derived")
+        self.assertEqual(manifest.read_bytes(), before_manifest)
+
+    def test_manifest_refresh_failure_rolls_back_activation_and_manifest(self):
+        new_report = self.write_report("东方电缆-research-20261030.md", "2026-10-30")
+        self.commit()
+        derived = self.root / "data" / "investment-dashboard" / "decision_board.json"
+        derived.write_text("old derived", encoding="utf-8")
+        before_canonical = self.canonical_path.read_bytes()
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        before_manifest = manifest.read_bytes()
+
+        def promoted_build(root: Path, **kwargs):
+            (root / "data" / "investment-dashboard" / "decision_board.json").write_text(
+                "new derived", encoding="utf-8"
+            )
+            return {"decision_count": 1}
+
+        with mock.patch.object(workflow.dashboard, "build_dashboard", side_effect=promoted_build), \
+                mock.patch.object(workflow, "_validate_state"), \
+                mock.patch.object(
+                    workflow.current_reports,
+                    "write_bootstrap_manifest",
+                    side_effect=OSError("manifest write failed"),
+                ):
+            with self.assertRaisesRegex(OSError, "manifest write failed"):
+                self.run_report(new_report, write=True)
+        self.assertEqual(self.canonical_path.read_bytes(), before_canonical)
+        self.assertEqual(derived.read_text(encoding="utf-8"), "old derived")
+        self.assertEqual(manifest.read_bytes(), before_manifest)
 
     def test_dry_run_writes_nothing(self):
         new_report = self.write_report("东方电缆-research-20261030.md", "2026-10-30")
@@ -301,6 +365,8 @@ class CanonicalPromotionTests(unittest.TestCase):
         derived = self.root / "data" / "investment-dashboard" / "decision_board.json"
         derived.write_text("old derived", encoding="utf-8")
         before_canonical = self.canonical_path.read_bytes()
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        before_manifest = manifest.read_bytes()
         with mock.patch.object(workflow.dashboard, "build_dashboard") as build:
             result = self.run_report(new_report, write=False)
         build.assert_not_called()
@@ -309,6 +375,7 @@ class CanonicalPromotionTests(unittest.TestCase):
         self.assertEqual(result["status"], "dry_run")
         self.assertEqual(result["canonical_update"]["status"], "would_promote")
         self.assertTrue(result["canonical_update"]["would_promote"])
+        self.assertEqual(manifest.read_bytes(), before_manifest)
 
     def test_untracked_dry_run_previews_but_write_requires_staging(self):
         new_report = self.write_report("东方电缆-research-20261030.md", "2026-10-30")
@@ -332,18 +399,30 @@ class CanonicalPromotionTests(unittest.TestCase):
             self.canonical_entry()["content_sha256"],
             current_reports.file_sha256(new_report),
         )
+        manifest = json.loads(
+            (self.root / current_reports.TRACKED_MANIFEST_FILENAME).read_text(encoding="utf-8")
+        )
+        self.assertIn(new_report.relative_to(self.root).as_posix(), manifest["tracked_paths"])
+        self.assertIn("tracked_manifest_refresh", result["completed"])
+        self.git("add", self.canonical_path.relative_to(self.root).as_posix())
+        current_reports.verify_bootstrap_manifest(
+            self.root, self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        )
 
     def test_cas_mismatch_fails_closed(self):
         new_report = self.write_report("东方电缆-research-20261030.md", "2026-10-30")
         self.git("add", new_report.relative_to(self.root).as_posix())
         original_activate = workflow._activate_staging
 
-        def competing_change(root, staging, *, expected_registry_sha):
+        def competing_change(root, staging, *, expected_registry_sha, after_activate=None):
             payload = json.loads(self.canonical_path.read_text(encoding="utf-8"))
             payload["external_generation"] = "changed"
             current_reports.write_atomic(self.canonical_path, payload)
             return original_activate(
-                root, staging, expected_registry_sha=expected_registry_sha
+                root,
+                staging,
+                expected_registry_sha=expected_registry_sha,
+                after_activate=after_activate,
             )
 
         with mock.patch.object(

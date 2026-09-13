@@ -24,7 +24,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -153,7 +153,8 @@ def _activate_staging(
     staging: Path,
     *,
     expected_registry_sha: str,
-) -> None:
+    after_activate: Callable[[list[str]], None] | None = None,
+) -> list[str]:
     """Activate validated files with a canonical CAS and per-file atomic writes.
 
     Build and validation happen entirely in staging. Activation is serialized
@@ -187,13 +188,29 @@ def _activate_staging(
     # all-in-one generation boundary.
     ordered = [relative for relative in changed if relative != canonical_relative]
     ordered.append(canonical_relative)
-    for relative in ordered:
-        candidate = staged_files.get(relative)
-        target = root / relative
-        if candidate is None:
-            target.unlink(missing_ok=True)
-        else:
-            current_reports.write_bytes_atomic(target, candidate.read_bytes())
+    originals = {
+        relative: (root / relative).read_bytes() if (root / relative).is_file() else None
+        for relative in ordered
+    }
+    try:
+        for relative in ordered:
+            candidate = staged_files.get(relative)
+            target = root / relative
+            if candidate is None:
+                target.unlink(missing_ok=True)
+            else:
+                current_reports.write_bytes_atomic(target, candidate.read_bytes())
+        if after_activate is not None:
+            after_activate(changed)
+    except BaseException:
+        for relative, original in originals.items():
+            target = root / relative
+            if original is None:
+                target.unlink(missing_ok=True)
+            else:
+                current_reports.write_bytes_atomic(target, original)
+        raise
+    return changed
 
 
 def _build_staged_generation(
@@ -295,7 +312,13 @@ def plan_canonical_promotion(
     previous_sha = canonical_file_sha256(previous_path) if previous_path.is_file() else None
     new_sha = canonical_file_sha256(path)
     approved_sha = str(entry.get("content_sha256") or "").lower()
-    if previous_relative and previous_sha != approved_sha:
+    staged_rename = bool(
+        previous_relative
+        and not previous_path.exists()
+        and new_relative != previous_relative
+        and new_sha == approved_sha
+    )
+    if previous_relative and previous_sha != approved_sha and not staged_rename:
         raise ValueError(
             "CANONICAL_CONTENT_CHANGED_IN_PLACE: "
             f"{previous_relative} expected {approved_sha or 'missing SHA'} got {previous_sha}"
@@ -305,6 +328,9 @@ def plan_canonical_promotion(
         previous_record = dashboard.candidate_record(previous_path, root, _registry(root), _overrides(root))
         if previous_record:
             previous_cutoff = previous_record.get("data_cutoff")
+    elif staged_rename:
+        previous_sha = approved_sha
+        previous_cutoff = record.get("data_cutoff")
     plan: dict[str, Any] = {
         "ticker": ticker,
         "company": entry.get("company") or record.get("company"),
@@ -319,7 +345,7 @@ def plan_canonical_promotion(
         plan["action"] = "already_current"
         plan["new_payload"] = payload
         return plan
-    if previous_sha and new_sha == previous_sha:
+    if previous_sha and new_sha == previous_sha and not staged_rename:
         plan["action"] = "already_current"
         plan["new_payload"] = payload
         return plan
@@ -450,16 +476,45 @@ def run_document(args: argparse.Namespace) -> dict[str, Any]:
             expected_registry_sha = current_reports.file_sha256(canonical_path)
             temporary, staging, built = _build_staged_generation(root, plan["new_payload"])
             try:
+                manifest = root / current_reports.TRACKED_MANIFEST_FILENAME
+                manifest_before = manifest.read_bytes() if manifest.is_file() else None
+
+                def refresh_manifest(changed: list[str]) -> None:
+                    changed_set = set(changed)
+                    try:
+                        current_reports.write_bootstrap_manifest(
+                            root,
+                            manifest,
+                            worktree_overrides=changed_set,
+                        )
+                        current_reports.verify_bootstrap_manifest(
+                            root,
+                            manifest,
+                            worktree_overrides=changed_set,
+                        )
+                    except BaseException:
+                        if manifest_before is None:
+                            manifest.unlink(missing_ok=True)
+                        else:
+                            current_reports.write_bytes_atomic(manifest, manifest_before)
+                        raise
+
                 _activate_staging(
                     root,
                     staging,
                     expected_registry_sha=expected_registry_sha,
+                    after_activate=refresh_manifest,
                 )
             finally:
                 temporary.cleanup()
         result["canonical_update"] = _public_canonical_update(plan, write=True)
         result["completed"].extend(
-            ["canonical_promotion", "dashboard_build", "decision_state_validation"]
+            [
+                "canonical_promotion",
+                "dashboard_build",
+                "decision_state_validation",
+                "tracked_manifest_refresh",
+            ]
         )
         result["dashboard_effect"] = (
             f"Rebuilt {built.get('decision_count')} company decisions; "

@@ -8,6 +8,7 @@ covered without touching real data.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -222,6 +223,70 @@ class CanonicalValidationTests(unittest.TestCase):
         self.assertEqual(tracked, {"reports/current.md"})
         self.assertEqual(self.validate(self.base_payload(), tracked=tracked), [])
 
+    def test_no_git_root_auto_discovers_digest_verified_bootstrap_manifest(self):
+        paths = [current_reports.TRACKED_MANIFEST_FILENAME, "reports/current.md"]
+        current_reports.write_atomic(
+            self.root / current_reports.TRACKED_MANIFEST_FILENAME,
+            {
+                "schema_version": current_reports.TRACKED_MANIFEST_SCHEMA_VERSION,
+                "manifest_kind": current_reports.BOOTSTRAP_MANIFEST_KIND,
+                "tracked_paths": paths,
+                "tracked_paths_sha256": current_reports._tracked_paths_digest(paths),
+                "source_binding": {"kind": "git_index_without_manifest", "sha256": "a" * 64},
+            },
+        )
+        self.assertEqual(current_reports.tracked_paths(self.root), set(paths))
+
+    def test_no_git_root_without_manifest_fails_closed(self):
+        with self.assertRaisesRegex(ValueError, "TRACKED_ASSET_PROOF_UNAVAILABLE"):
+            current_reports.tracked_paths(self.root)
+
+    def test_auto_discovered_bootstrap_manifest_rejects_tampered_paths(self):
+        paths = [current_reports.TRACKED_MANIFEST_FILENAME, "reports/current.md"]
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        current_reports.write_atomic(
+            manifest,
+            {
+                "schema_version": current_reports.TRACKED_MANIFEST_SCHEMA_VERSION,
+                "manifest_kind": current_reports.BOOTSTRAP_MANIFEST_KIND,
+                "tracked_paths": paths,
+                "tracked_paths_sha256": current_reports._tracked_paths_digest(paths),
+                "source_binding": {"kind": "git_index_without_manifest", "sha256": "a" * 64},
+            },
+        )
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+        payload["tracked_paths"].append("reports/injected.md")
+        manifest.write_text(json.dumps(payload), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "digest mismatch"):
+            current_reports.tracked_paths(self.root)
+
+    def test_auto_discovered_manifest_rejects_malformed_and_wrong_schema(self):
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        manifest.write_text("{broken", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "invalid"):
+            current_reports.tracked_paths(self.root)
+        manifest.write_text(json.dumps({"schema_version": 999, "tracked_paths": []}))
+        with self.assertRaisesRegex(ValueError, "unsupported"):
+            current_reports.tracked_paths(self.root)
+
+    def test_auto_discovered_manifest_rejects_duplicate_and_unsafe_paths(self):
+        manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        for paths, message in (
+            (["same", "same"], "unique and sorted"),
+            (["/absolute"], "unsafe path"),
+            (["../escape"], "unsafe path"),
+        ):
+            with self.subTest(paths=paths):
+                current_reports.write_atomic(manifest, {
+                    "schema_version": current_reports.TRACKED_MANIFEST_SCHEMA_VERSION,
+                    "manifest_kind": current_reports.BOOTSTRAP_MANIFEST_KIND,
+                    "tracked_paths": paths,
+                    "tracked_paths_sha256": current_reports._tracked_paths_digest(paths),
+                    "source_binding": {"kind": "git_index_without_manifest", "sha256": "a" * 64},
+                })
+                with self.assertRaisesRegex(ValueError, message):
+                    current_reports.tracked_paths(self.root)
+
     def test_explicitly_blocked_company_ticker_fails_identity_gate(self):
         registry = [
             {
@@ -247,6 +312,73 @@ class CanonicalValidationTests(unittest.TestCase):
         self.assertTrue(any("source is not quarantined" in error for error in errors), errors)
         payload["quarantined_rule_tickers"] = ["09922.HK"]
         self.assertEqual(self.validate(payload), [])
+
+
+class BootstrapManifestGenerationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        subprocess.run(["git", "init", "-b", "main"], cwd=self.root, check=True, capture_output=True)
+        subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=self.root, check=True)
+        subprocess.run(["git", "config", "user.name", "Manifest Test"], cwd=self.root, check=True)
+        report = self.root / "reports" / "Test" / "old.md"
+        report.parent.mkdir(parents=True)
+        report.write_text("old\n", encoding="utf-8")
+        subprocess.run(["git", "add", "--", "reports/Test/old.md"], cwd=self.root, check=True)
+        self.manifest = self.root / current_reports.TRACKED_MANIFEST_FILENAME
+        current_reports.write_bootstrap_manifest(self.root, self.manifest)
+        subprocess.run(
+            ["git", "add", "--", current_reports.TRACKED_MANIFEST_FILENAME],
+            cwd=self.root,
+            check=True,
+        )
+        # Regenerate once the manifest itself is in the index. Self-content is
+        # deliberately excluded from source_binding, so this is stable.
+        current_reports.write_bootstrap_manifest(self.root, self.manifest)
+        subprocess.run(
+            ["git", "add", "--", current_reports.TRACKED_MANIFEST_FILENAME],
+            cwd=self.root,
+            check=True,
+        )
+        subprocess.run(["git", "commit", "-m", "fixture"], cwd=self.root, check=True, capture_output=True)
+
+    def test_generation_is_byte_deterministic(self):
+        before = self.manifest.read_bytes()
+        current_reports.write_bootstrap_manifest(self.root, self.manifest)
+        self.assertEqual(self.manifest.read_bytes(), before)
+        self.assertEqual(current_reports.verify_bootstrap_manifest(self.root, self.manifest), 2)
+
+    def assert_manifest_is_stale(self):
+        with self.assertRaisesRegex(ValueError, "does not match Git index"):
+            current_reports.verify_bootstrap_manifest(self.root, self.manifest)
+
+    def test_added_tracked_file_makes_manifest_stale(self):
+        new = self.root / "reports" / "Test" / "new.md"
+        new.write_text("new\n", encoding="utf-8")
+        subprocess.run(["git", "add", "--", "reports/Test/new.md"], cwd=self.root, check=True)
+        self.assert_manifest_is_stale()
+
+    def test_deleted_tracked_file_makes_manifest_stale(self):
+        subprocess.run(
+            ["git", "rm", "--", "reports/Test/old.md"], cwd=self.root, check=True, capture_output=True
+        )
+        self.assert_manifest_is_stale()
+
+    def test_renamed_tracked_file_makes_manifest_stale(self):
+        subprocess.run(
+            ["git", "mv", "--", "reports/Test/old.md", "reports/Test/new.md"],
+            cwd=self.root,
+            check=True,
+        )
+        self.assert_manifest_is_stale()
+
+    def test_staged_content_change_makes_source_binding_stale(self):
+        report = self.root / "reports" / "Test" / "old.md"
+        report.write_text("changed\n", encoding="utf-8")
+        subprocess.run(["git", "add", "--", "reports/Test/old.md"], cwd=self.root, check=True)
+        with self.assertRaisesRegex(ValueError, "deterministic regeneration"):
+            current_reports.verify_bootstrap_manifest(self.root, self.manifest)
 
 
 class LegacyFallbackTests(unittest.TestCase):

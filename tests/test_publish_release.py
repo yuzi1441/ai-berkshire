@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLISHER = ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh"
 sys.path.insert(0, str(ROOT / "tools"))
 from source_hash import canonical_file_sha256, markdown_sections  # noqa: E402
+import current_reports  # noqa: E402
 
 
 PRESERVED_RUNTIME_FILES = (
@@ -72,6 +73,145 @@ class PublishReleaseTests(unittest.TestCase):
             ROOT / "scripts" / "validate-dashboard-release.sh",
             scripts / "validate-dashboard-release.sh",
         )
+
+    def test_old_publisher_invocation_bootstraps_new_no_git_release(self):
+        """Old publisher flags can build, validate and activate new source safely."""
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            staging = root / "release.next"
+            report = staging / "reports" / "示例公司" / "main.md"
+            report.parent.mkdir(parents=True)
+            report.write_text(
+                "# 示例公司（600000.SH）研究报告\n\n"
+                "数据截止：2026-09-01\n股票代码：600000.SH\n\n"
+                "## 最终建议\n\n继续观察。\n",
+                encoding="utf-8",
+            )
+            routing = staging / "data" / "report-routing"
+            routing.mkdir(parents=True)
+            (routing / "company_registry.json").write_text(
+                json.dumps({"schema_version": 1, "companies": []}), encoding="utf-8"
+            )
+            data = staging / "data" / "investment-dashboard"
+            data.mkdir(parents=True)
+            (data / "overrides.json").write_text(
+                json.dumps({"schema_version": 1, "reports": {}, "companies": {}}),
+                encoding="utf-8",
+            )
+            report_sha = canonical_file_sha256(report)
+            (data / "current_reports.json").write_text(
+                json.dumps({
+                    "schema_version": 2,
+                    "companies": {
+                        "600000.SH": {
+                            "company": "示例公司",
+                            "current_main_report": "reports/示例公司/main.md",
+                            "content_sha256": report_sha,
+                        }
+                    },
+                    "legacy_tickers": [],
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            (data / "post_buy_tracking.json").write_text(
+                json.dumps({"schema_version": 1, "positions": {}, "position_history": []}),
+                encoding="utf-8",
+            )
+            (data / "decision_rules.json").write_text(
+                json.dumps({
+                    "schema_version": 1,
+                    "rule_types": ["PRICE", "PRICE_RANGE", "METRIC", "EVENT", "ALL_OF", "ANY_OF"],
+                    "automation_levels": ["AUTO", "REVIEW", "MANUAL"],
+                    "companies": [{
+                        "company": "示例公司",
+                        "ticker": "600000.SH",
+                        "market": "A股",
+                        "canonical_report": "reports/示例公司/main.md",
+                        "rules": [],
+                    }],
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            (staging / ".source-sha").write_text("new-source-sha\n", encoding="utf-8")
+            tracked = sorted({
+                current_reports.TRACKED_MANIFEST_FILENAME,
+                "data/investment-dashboard/current_reports.json",
+                "reports/示例公司/main.md",
+            })
+            current_reports.write_atomic(
+                staging / current_reports.TRACKED_MANIFEST_FILENAME,
+                {
+                    "schema_version": current_reports.TRACKED_MANIFEST_SCHEMA_VERSION,
+                    "manifest_kind": current_reports.BOOTSTRAP_MANIFEST_KIND,
+                    "tracked_paths": tracked,
+                    "tracked_paths_sha256": current_reports._tracked_paths_digest(tracked),
+                    "source_binding": {"kind": "git_index_without_manifest", "sha256": "a" * 64},
+                },
+            )
+
+            # Reproduce the installed old publisher's copy boundary exactly:
+            # dotfiles are copied, while .git and .venv are excluded.
+            source = root / "source"
+            staging.rename(source)
+            (source / ".git").mkdir()
+            (source / ".venv").mkdir()
+            staging.mkdir()
+            copied = self._run(
+                ["rsync", "-a", "--exclude=.git", "--exclude=.venv", f"{source}/", f"{staging}/"],
+                cwd=root,
+            )
+            self.assertEqual(copied.returncode, 0, copied.stdout + copied.stderr)
+            self.assertFalse((staging / ".git").exists())
+            self.assertFalse((staging / ".venv").exists())
+            self.assertTrue((staging / current_reports.TRACKED_MANIFEST_FILENAME).is_file())
+            data = staging / "data" / "investment-dashboard"
+
+            # This is the exact builder shape used by the installed old publisher:
+            # no --tracked-assets-manifest and no --require-canonical-reports.
+            built = self._run(
+                [sys.executable, str(ROOT / "tools" / "build_investment_dashboard.py"),
+                 "--repo-root", str(staging)],
+                cwd=root,
+            )
+            self.assertEqual(built.returncode, 0, built.stdout + built.stderr)
+            board = json.loads((data / "decision_board.json").read_text(encoding="utf-8"))
+            self.assertEqual(board["decision_count"], 1)
+            self.assertEqual(board["decisions"][0]["current_report_source"], "canonical")
+
+            validated = self._run(
+                [sys.executable, str(ROOT / "tools" / "validate_decision_state.py"),
+                 "--repo-root", str(staging), "--require-tracked-assets"],
+                cwd=root,
+            )
+            self.assertEqual(validated.returncode, 0, validated.stdout + validated.stderr)
+            final = root / "release"
+            staging.rename(final)
+            current = root / "current"
+            current.symlink_to(final)
+            self.assertEqual(self._resolved(current), self._resolved(final))
+            self.assertEqual((current / ".source-sha").read_text().strip(), "new-source-sha")
+
+            manifest_path = current / current_reports.TRACKED_MANIFEST_FILENAME
+            original_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            for missing, expected_error in (
+                ("data/investment-dashboard/current_reports.json", "current_reports.json is not a formal tracked asset"),
+                ("reports/示例公司/main.md", "report is not Git tracked"),
+            ):
+                with self.subTest(missing=missing):
+                    damaged = json.loads(json.dumps(original_manifest))
+                    damaged["tracked_paths"].remove(missing)
+                    damaged["tracked_paths_sha256"] = current_reports._tracked_paths_digest(
+                        damaged["tracked_paths"]
+                    )
+                    current_reports.write_atomic(manifest_path, damaged)
+                    rejected = self._run(
+                        [sys.executable, str(ROOT / "tools" / "build_investment_dashboard.py"),
+                         "--repo-root", str(current)],
+                        cwd=root,
+                    )
+                    self.assertNotEqual(rejected.returncode, 0)
+                    self.assertIn(expected_error, rejected.stderr)
+            current_reports.write_atomic(manifest_path, original_manifest)
 
     def test_runtime_truth_is_seeded_then_preserved_and_activation_rolls_back(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -418,6 +558,11 @@ class PublishReleaseTests(unittest.TestCase):
             self.assertFalse((release_a / ".git").exists())
             manifest = json.loads(
                 (release_a / ".tracked-assets.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(manifest["manifest_kind"], current_reports.RELEASE_MANIFEST_KIND)
+            self.assertEqual(
+                manifest["tracked_paths_sha256"],
+                current_reports._tracked_paths_digest(manifest["tracked_paths"]),
             )
             self.assertIn(
                 "data/investment-dashboard/current_reports.json",

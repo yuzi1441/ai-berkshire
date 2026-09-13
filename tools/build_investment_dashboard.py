@@ -6376,6 +6376,17 @@ def build_dashboard(
     tracked_assets_manifest: Path | None = None,
 ) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
+    repo_root = repo_root.resolve()
+    bootstrap_release = (
+        (repo_root / ".source-sha").is_file()
+        and not (repo_root / ".git").exists()
+        and (repo_root / current_reports.TRACKED_MANIFEST_FILENAME).is_file()
+    )
+    if bootstrap_release and not legacy_mode:
+        # An old installed publisher cannot pass the new canonical flags.  The
+        # release markers supplied by the new source make that invocation
+        # canonical-required without weakening the tracked-asset gate.
+        require_canonical_reports = True
     # Validate the optional runtime authority before the builder can write any
     # report index or dashboard projection. Missing is a valid empty layer;
     # malformed input fails closed.
@@ -6430,9 +6441,7 @@ def build_dashboard(
     canonical_map: dict[str, str] = {}
     legacy_allowlist: set[str] = set()
     if canonical_payload:
-        tracked_assets = current_reports.tracked_paths(
-            repo_root, tracked_assets_manifest
-        )
+        tracked_assets = current_reports.tracked_paths(repo_root, tracked_assets_manifest)
         canonical_relative = (
             data_directory / current_reports.FILENAME
         ).relative_to(repo_root).as_posix()
@@ -6806,8 +6815,8 @@ def main() -> int:
         type=Path,
         default=None,
         help=(
-            "Tracked-asset manifest generated from the source checkout. Required "
-            "for canonical validation in release directories without .git."
+            "Tracked-asset manifest generated from the source checkout. An old-publisher "
+            "no-Git release can auto-discover the verified root .tracked-assets.json."
         ),
     )
     arguments = parser.parse_args()

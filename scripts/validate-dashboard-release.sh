@@ -14,10 +14,11 @@ if [[ -n "${INVESTMENT_DISPOSITIONS_PATH:-}" ]]; then
     set -- "$@" --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 fi
 "${PYTHON_BIN}" "${REPO_ROOT}/tools/build_investment_dashboard.py" "$@"
-"${PYTHON_BIN}" "${REPO_ROOT}/tools/validate_decision_state.py" \
-    --repo-root "${REPO_ROOT}" \
-    --require-tracked-assets \
-    --tracked-root "${TRACKED_ROOT}"
+set -- --repo-root "${REPO_ROOT}" --require-tracked-assets --tracked-root "${TRACKED_ROOT}"
+if [[ -n "${TRACKED_ASSETS_MANIFEST}" ]]; then
+    set -- "$@" --tracked-assets-manifest "${TRACKED_ASSETS_MANIFEST}"
+fi
+"${PYTHON_BIN}" "${REPO_ROOT}/tools/validate_decision_state.py" "$@"
 set -- --repo-root "${REPO_ROOT}" --require-canonical
 if [[ -n "${TRACKED_ASSETS_MANIFEST}" ]]; then
     set -- "$@" --tracked-assets-manifest "${TRACKED_ASSETS_MANIFEST}"

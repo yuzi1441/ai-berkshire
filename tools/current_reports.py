@@ -23,6 +23,144 @@ MIGRATION_FILENAME = "current_reports.migration.json"
 CONTRACT_REVIEW_FILENAME = "contract_review_required.json"
 SCHEMA_VERSION = 2
 TRACKED_MANIFEST_SCHEMA_VERSION = 1
+TRACKED_MANIFEST_FILENAME = ".tracked-assets.json"
+BOOTSTRAP_MANIFEST_KIND = "repository_bootstrap"
+RELEASE_MANIFEST_KIND = "release_snapshot"
+
+
+def _require_exact_git_root(repo_root: Path) -> None:
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise ValueError(
+            f"TRACKED_ASSET_PROOF_UNAVAILABLE: Git metadata is unavailable under {repo_root}"
+        ) from error
+    if Path(completed.stdout.strip()).resolve() != repo_root.resolve():
+        raise ValueError(
+            f"TRACKED_ASSET_PROOF_UNAVAILABLE: Git metadata does not belong to {repo_root}"
+        )
+
+
+def _tracked_paths_digest(paths: list[str]) -> str:
+    """Return the deterministic digest used to make path-list tampering visible."""
+    return hashlib.sha256("\0".join(paths).encode("utf-8")).hexdigest()
+
+
+def _git_index_identity(
+    repo_root: Path,
+    manifest_relative: str,
+    *,
+    worktree_overrides: set[str] | None = None,
+) -> str:
+    """Hash staged entries, optionally projecting verified tracked worktree writes."""
+    _require_exact_git_root(repo_root)
+    try:
+        completed = subprocess.run(
+            ["git", "ls-files", "--stage", "-z"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise ValueError(f"Git index identity is unavailable under {repo_root}") from error
+    entries: dict[str, tuple[bytes, bytes]] = {}
+    for entry in completed.stdout.split(b"\0"):
+        if not entry:
+            continue
+        try:
+            metadata, raw_path = entry.split(b"\t", 1)
+            _mode, _object_id, stage = metadata.split(b" ", 2)
+        except ValueError as error:
+            raise ValueError("Git index contains an unreadable entry") from error
+        path = raw_path.decode("utf-8")
+        if stage != b"0":
+            raise ValueError(f"Git index contains an unresolved entry: {path}")
+        if path != manifest_relative:
+            entries[path] = (_mode, _object_id)
+    for path in sorted(worktree_overrides or set()):
+        if path == manifest_relative or path not in entries:
+            continue
+        candidate = repo_root / path
+        if not candidate.is_file():
+            entries.pop(path, None)
+            continue
+        completed = subprocess.run(
+            ["git", "hash-object", "--", path],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        entries[path] = (entries[path][0], completed.stdout.strip().encode("ascii"))
+    encoded = [
+        mode + b" " + object_id + b" 0\t" + path.encode("utf-8")
+        for path, (mode, object_id) in entries.items()
+    ]
+    return hashlib.sha256(b"\0".join(sorted(encoded))).hexdigest()
+
+
+def _load_tracked_manifest(path: Path, *, require_bootstrap: bool = False) -> set[str]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"tracked asset manifest is invalid: {path}: {error}") from error
+    raw_paths = payload.get("tracked_paths") if isinstance(payload, dict) else None
+    if (
+        not isinstance(payload, dict)
+        or payload.get("schema_version") != TRACKED_MANIFEST_SCHEMA_VERSION
+        or not isinstance(raw_paths, list)
+    ):
+        raise ValueError(f"unsupported tracked asset manifest: {path}")
+    if require_bootstrap and payload.get("manifest_kind") != BOOTSTRAP_MANIFEST_KIND:
+        raise ValueError(f"auto-discovered tracked asset manifest is not a bootstrap manifest: {path}")
+    paths: list[str] = []
+    for item in raw_paths:
+        if not isinstance(item, str) or not item.strip():
+            raise ValueError(f"tracked asset manifest contains an invalid path: {path}")
+        normalized = Path(item)
+        if normalized.is_absolute() or ".." in normalized.parts or normalized.as_posix() != item:
+            raise ValueError(f"tracked asset manifest contains an unsafe path: {item}")
+        paths.append(item)
+    if len(paths) != len(set(paths)) or paths != sorted(paths):
+        raise ValueError(f"tracked asset manifest paths must be unique and sorted: {path}")
+    expected_digest = payload.get("tracked_paths_sha256")
+    if expected_digest is not None and expected_digest != _tracked_paths_digest(paths):
+        raise ValueError(f"tracked asset manifest digest mismatch: {path}")
+    if require_bootstrap and not expected_digest:
+        raise ValueError(f"bootstrap tracked asset manifest has no digest: {path}")
+    if require_bootstrap:
+        binding = payload.get("source_binding")
+        if (
+            not isinstance(binding, dict)
+            or binding.get("kind") != "git_index_without_manifest"
+            or not isinstance(binding.get("sha256"), str)
+            or len(binding["sha256"]) != 64
+            or any(character not in "0123456789abcdef" for character in binding["sha256"])
+        ):
+            raise ValueError(f"bootstrap tracked asset manifest has invalid source binding: {path}")
+    return set(paths)
+
+
+def _git_tracked_paths(repo_root: Path) -> set[str]:
+    _require_exact_git_root(repo_root)
+    try:
+        completed = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=repo_root,
+            check=True,
+            capture_output=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise ValueError(
+            f"tracked asset proof is unavailable: no valid manifest or Git index under {repo_root}"
+        ) from error
+    return {item.decode("utf-8") for item in completed.stdout.split(b"\0") if item}
 
 
 def tracked_paths(repo_root: Path, manifest: Path | None = None) -> set[str]:
@@ -33,29 +171,20 @@ def tracked_paths(repo_root: Path, manifest: Path | None = None) -> set[str]:
     substitute there; missing or malformed manifests fail closed.
     """
     if manifest is not None:
-        try:
-            payload = json.loads(manifest.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as error:
-            raise ValueError(f"tracked asset manifest is invalid: {manifest}: {error}") from error
-        if (
-            not isinstance(payload, dict)
-            or payload.get("schema_version") != TRACKED_MANIFEST_SCHEMA_VERSION
-            or not isinstance(payload.get("tracked_paths"), list)
-        ):
-            raise ValueError(f"unsupported tracked asset manifest: {manifest}")
-        return {str(item) for item in payload["tracked_paths"] if str(item).strip()}
-    completed = subprocess.run(
-        ["git", "ls-files", "-z"],
-        cwd=repo_root,
-        check=True,
-        capture_output=True,
-    )
-    return {item.decode("utf-8") for item in completed.stdout.split(b"\0") if item}
+        return _load_tracked_manifest(manifest)
+    # A real checkout always uses its live Git index. Auto-discovery is only
+    # for the no-Git staging tree created by an installed release publisher.
+    if (repo_root / ".git").exists():
+        return _git_tracked_paths(repo_root)
+    bootstrap = repo_root / TRACKED_MANIFEST_FILENAME
+    if bootstrap.is_file():
+        return _load_tracked_manifest(bootstrap, require_bootstrap=True)
+    return _git_tracked_paths(repo_root)
 
 
 def write_tracked_manifest(repo_root: Path, output: Path) -> dict[str, Any]:
     """Write a deterministic tracked-asset manifest from a real checkout."""
-    paths = sorted(tracked_paths(repo_root))
+    paths = sorted(_git_tracked_paths(repo_root))
     completed = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=repo_root,
@@ -65,11 +194,86 @@ def write_tracked_manifest(repo_root: Path, output: Path) -> dict[str, Any]:
     )
     payload = {
         "schema_version": TRACKED_MANIFEST_SCHEMA_VERSION,
+        "manifest_kind": RELEASE_MANIFEST_KIND,
         "source_sha": completed.stdout.strip(),
         "tracked_paths": paths,
+        "tracked_paths_sha256": _tracked_paths_digest(paths),
     }
     write_atomic(output, payload)
     return payload
+
+
+def bootstrap_manifest_payload(
+    repo_root: Path,
+    output: Path,
+    *,
+    worktree_overrides: set[str] | None = None,
+) -> dict[str, Any]:
+    """Generate the deterministic bootstrap payload from the live Git index."""
+    paths = _git_tracked_paths(repo_root)
+    try:
+        output_relative = output.relative_to(repo_root).as_posix()
+    except ValueError as error:
+        raise ValueError("bootstrap manifest must be inside the repository root") from error
+    paths.add(output_relative)
+    ordered = sorted(paths)
+    return {
+        "schema_version": TRACKED_MANIFEST_SCHEMA_VERSION,
+        "manifest_kind": BOOTSTRAP_MANIFEST_KIND,
+        "tracked_paths": ordered,
+        "tracked_paths_sha256": _tracked_paths_digest(ordered),
+        "source_binding": {
+            "kind": "git_index_without_manifest",
+            "sha256": _git_index_identity(
+                repo_root,
+                output_relative,
+                worktree_overrides=worktree_overrides,
+            ),
+        },
+    }
+
+
+def write_bootstrap_manifest(
+    repo_root: Path,
+    output: Path,
+    *,
+    worktree_overrides: set[str] | None = None,
+) -> dict[str, Any]:
+    """Write the source-controlled proof consumed by an old release publisher."""
+    payload = bootstrap_manifest_payload(
+        repo_root, output, worktree_overrides=worktree_overrides
+    )
+    write_atomic(output, payload)
+    return payload
+
+
+def verify_bootstrap_manifest(
+    repo_root: Path,
+    manifest: Path,
+    *,
+    worktree_overrides: set[str] | None = None,
+) -> int:
+    """Regenerate in memory and fail unless the committed proof is current."""
+    manifest_paths = _load_tracked_manifest(manifest, require_bootstrap=True)
+    expected_payload = bootstrap_manifest_payload(
+        repo_root, manifest, worktree_overrides=worktree_overrides
+    )
+    expected = set(expected_payload["tracked_paths"])
+    if manifest_paths != expected:
+        missing = sorted(expected - manifest_paths)
+        extra = sorted(manifest_paths - expected)
+        raise ValueError(
+            "bootstrap tracked asset manifest does not match Git index"
+            f"; missing={missing[:10]}; extra={extra[:10]}; regenerate with: "
+            "python3 tools/current_reports.py write-bootstrap-manifest --repo-root ."
+        )
+    payload = json.loads(manifest.read_text(encoding="utf-8"))
+    if payload != expected_payload:
+        raise ValueError(
+            "bootstrap tracked asset manifest differs from deterministic regeneration; regenerate with: "
+            "python3 tools/current_reports.py write-bootstrap-manifest --repo-root ."
+        )
+    return len(manifest_paths)
 
 
 def file_sha256(path: Path) -> str:
@@ -299,10 +503,34 @@ def main() -> int:
     )
     manifest.add_argument("--repo-root", type=Path, default=ROOT)
     manifest.add_argument("--output", type=Path, required=True)
+    bootstrap = subparsers.add_parser(
+        "write-bootstrap-manifest",
+        help="write the source-controlled manifest used by old release publishers",
+    )
+    bootstrap.add_argument("--repo-root", type=Path, default=ROOT)
+    bootstrap.add_argument("--output", type=Path, default=Path(TRACKED_MANIFEST_FILENAME))
+    verify = subparsers.add_parser(
+        "verify-bootstrap-manifest",
+        help="verify that the bootstrap manifest exactly matches the Git index",
+    )
+    verify.add_argument("--repo-root", type=Path, default=ROOT)
+    verify.add_argument("--manifest", type=Path, default=Path(TRACKED_MANIFEST_FILENAME))
     arguments = parser.parse_args()
     if arguments.command == "write-tracked-manifest":
         payload = write_tracked_manifest(arguments.repo_root.resolve(), arguments.output.resolve())
         print(json.dumps({"status": "ok", "tracked_count": len(payload["tracked_paths"])}, ensure_ascii=False))
+        return 0
+    if arguments.command == "write-bootstrap-manifest":
+        root = arguments.repo_root.resolve()
+        output = arguments.output if arguments.output.is_absolute() else root / arguments.output
+        payload = write_bootstrap_manifest(root, output.resolve())
+        print(json.dumps({"status": "ok", "tracked_count": len(payload["tracked_paths"])}, ensure_ascii=False))
+        return 0
+    if arguments.command == "verify-bootstrap-manifest":
+        root = arguments.repo_root.resolve()
+        manifest_path = arguments.manifest if arguments.manifest.is_absolute() else root / arguments.manifest
+        count = verify_bootstrap_manifest(root, manifest_path.resolve())
+        print(json.dumps({"status": "ok", "tracked_count": count}, ensure_ascii=False))
         return 0
     return 2
 

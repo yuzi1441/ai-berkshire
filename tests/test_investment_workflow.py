@@ -57,6 +57,9 @@ class InvestmentWorkflowTests(unittest.TestCase):
             report.write_text("# 示例", encoding="utf-8")
             args = argparse.Namespace(repo_root=root, path=str(report), command="report", write=True)
             record = {"ticker": "600000.SH", "company": "示例", "data_cutoff": "2026-09-01"}
+            def activate_fixture(*_args, after_activate, **_kwargs):
+                after_activate([])
+                return []
             with mock.patch.object(workflow, "inspect_report", return_value=record), mock.patch.object(
                 workflow, "plan_canonical_promotion", return_value=self._plan()
             ), mock.patch.object(
@@ -72,13 +75,21 @@ class InvestmentWorkflowTests(unittest.TestCase):
                 workflow,
                 "_build_staged_generation",
                 return_value=(mock.Mock(), root / "staging", {"decision_count": 1}),
-            ) as build, mock.patch.object(workflow, "_activate_staging") as activate:
+            ) as build, mock.patch.object(
+                workflow, "_activate_staging", side_effect=activate_fixture
+            ) as activate, mock.patch.object(
+                workflow.current_reports, "write_bootstrap_manifest"
+            ) as write_manifest, mock.patch.object(
+                workflow.current_reports, "verify_bootstrap_manifest"
+            ) as verify_manifest:
                 canonical_path = root / "data" / "investment-dashboard" / "current_reports.json"
                 canonical_path.parent.mkdir(parents=True, exist_ok=True)
                 canonical_path.write_bytes(b"{}")
                 result = workflow.run_document(args)
             build.assert_called_once()
             activate.assert_called_once()
+            write_manifest.assert_called_once()
+            verify_manifest.assert_called_once()
             self.assertEqual(result["status"], "written")
             self.assertEqual(result["canonical_update"]["status"], "promoted")
 

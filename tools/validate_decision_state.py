@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import subprocess
 import sys
 from pathlib import Path
 
@@ -25,17 +24,6 @@ def load(path: Path) -> dict:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
         raise ValueError(f"{path}: {error}") from error
-
-
-def git_tracked(root: Path, relative_path: str) -> bool:
-    completed = subprocess.run(
-        ["git", "ls-files", "--error-unmatch", "--", relative_path],
-        cwd=root,
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    return completed.returncode == 0
 
 
 def formal_asset_paths(data: Path) -> set[str]:
@@ -76,6 +64,7 @@ def main() -> int:
         "--tracked-root", type=Path, default=None,
         help="Git checkout used for tracked-asset checks when validating an assembled release.",
     )
+    parser.add_argument("--tracked-assets-manifest", type=Path, default=None)
     args = parser.parse_args()
     data = args.repo_root.resolve() / "data" / "investment-dashboard"
     try:
@@ -143,11 +132,16 @@ def main() -> int:
             errors.append(str(error))
     if args.require_tracked_assets:
         tracked_root = (args.tracked_root or args.repo_root).resolve()
+        try:
+            tracked = current_reports.tracked_paths(tracked_root, args.tracked_assets_manifest)
+        except ValueError as error:
+            errors.append(str(error))
+            tracked = set()
         for relative_path in sorted(formal_asset_paths(data)):
             candidate = args.repo_root.resolve() / relative_path
             if not candidate.is_file():
                 errors.append(f"formal asset missing: {relative_path}")
-            elif not git_tracked(tracked_root, relative_path):
+            elif relative_path not in tracked:
                 errors.append(f"formal asset is not Git tracked: {relative_path}")
     state_tickers = {item.get("ticker") for item in state.get("companies", [])}
     rule_tickers = {item.get("ticker") for item in rules.get("companies", [])}
