@@ -148,9 +148,12 @@ class AutomationStatusTests(unittest.TestCase):
 
     def test_all_production_dashboard_builds_receive_runtime_disposition_path(self):
         publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")
+        release_validation = (ROOT / "scripts" / "validate-dashboard-release.sh").read_text(encoding="utf-8")
         scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
         after_close = (ROOT / "scripts" / "run_after_close_ai_review.py").read_text(encoding="utf-8")
-        self.assertEqual(publisher.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 2)
+        self.assertEqual(publisher.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 1)
+        self.assertIn('INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH}"', publisher)
+        self.assertIn('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"', release_validation)
         self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 3)
         self.assertIn('parser.add_argument(\n        "--investment-dispositions"', after_close)
         self.assertEqual(after_close.count('"tools/build_investment_dashboard.py"'), 1)

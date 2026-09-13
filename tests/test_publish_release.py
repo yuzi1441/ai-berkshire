@@ -65,11 +65,20 @@ class PublishReleaseTests(unittest.TestCase):
         mv.chmod(0o755)
         return bin_dir, f"{bin_dir}:{os.environ['PATH']}"
 
+    def _install_release_validation_script(self, seed: Path) -> None:
+        scripts = seed / "scripts"
+        scripts.mkdir(exist_ok=True)
+        shutil.copy2(
+            ROOT / "scripts" / "validate-dashboard-release.sh",
+            scripts / "validate-dashboard-release.sh",
+        )
+
     def test_runtime_truth_is_seeded_then_preserved_and_activation_rolls_back(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             seed = root / "seed"
             seed.mkdir()
+            self._install_release_validation_script(seed)
             self._run(["git", "init", "-b", "bigchange"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.email", "test@example.com"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=seed).check_returncode()
@@ -88,6 +97,7 @@ class PublishReleaseTests(unittest.TestCase):
             shutil.copy2(ROOT / "tools" / "reconcile_release_state.py", seed / "tools" / "reconcile_release_state.py")
             self._run(["git", "add", "README.md", "data/investment-dashboard/decision_rules.json", "data/investment-dashboard/drift_scan_state.json"], cwd=seed).check_returncode()
             self._run(["git", "add", "tools/reconcile_release_state.py"], cwd=seed).check_returncode()
+            self._run(["git", "add", "scripts/validate-dashboard-release.sh"], cwd=seed).check_returncode()
             self._run(["git", "commit", "-m", "seed"], cwd=seed).check_returncode()
             origin = root / "origin.git"
             self._run(["git", "clone", "--bare", str(seed), str(origin)], cwd=root).check_returncode()
@@ -246,12 +256,14 @@ class PublishReleaseTests(unittest.TestCase):
             root = Path(temporary_directory)
             seed = root / "seed"
             seed.mkdir()
+            self._install_release_validation_script(seed)
             self._run(["git", "init", "-b", "bigchange"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.email", "test@example.com"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=seed).check_returncode()
             for name in (
                 "automation_status.py",
                 "build_investment_dashboard.py",
+                "current_reports.py",
                 "dashboard_snapshot.py",
                 "quote_quality.py",
                 "decision_consistency_review.py",
@@ -324,9 +336,26 @@ class PublishReleaseTests(unittest.TestCase):
                 json.dumps({"schema_version": 2, "updated_at": None, "schedules": [], "jobs": {}}),
                 encoding="utf-8",
             )
+            (data / "current_reports.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 2,
+                        "companies": {
+                            "600000.SH": {
+                                "company": "示例公司",
+                                "current_main_report": "reports/示例公司/main.md",
+                                "content_sha256": report_hash_a,
+                            }
+                        },
+                        "legacy_tickers": [],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
             decision_board_relative = "data/investment-dashboard/decision_board.json"
             self.assertFalse((seed / decision_board_relative).exists())
-            self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard", "tools"], cwd=seed).check_returncode()
+            self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard", "tools", "scripts"], cwd=seed).check_returncode()
             self._run(["git", "commit", "-m", "release-a"], cwd=seed).check_returncode()
             tree_a = self._run(["git", "ls-tree", "-r", "--name-only", "HEAD"], cwd=seed).stdout.splitlines()
             self.assertNotIn(decision_board_relative, tree_a)
@@ -349,7 +378,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "#!/usr/bin/env bash\n"
                 "printf '%s\\n' \"${1:-}\" >> \"${CALL_LOG}\"\n"
                 "case \"${1:-}\" in\n"
-                "  */build_investment_dashboard.py|*/rule_lifecycle.py|*/migrate_manual_execution_reviews.py|*/reconcile_release_state.py)\n"
+                "  */build_investment_dashboard.py|*/current_reports.py|*/rule_lifecycle.py|*/migrate_manual_execution_reviews.py|*/reconcile_release_state.py)\n"
                 "    exec \"${REAL_PYTHON}\" \"$@\"\n"
                 "    ;;\n"
                 "esac\n"
@@ -386,6 +415,15 @@ class PublishReleaseTests(unittest.TestCase):
             decision_board_relative = "data/investment-dashboard/decision_board.json"
             self.assertFalse((root / "source" / decision_board_relative).exists())
             self.assertTrue((release_a / decision_board_relative).is_file())
+            self.assertFalse((release_a / ".git").exists())
+            manifest = json.loads(
+                (release_a / ".tracked-assets.json").read_text(encoding="utf-8")
+            )
+            self.assertIn(
+                "data/investment-dashboard/current_reports.json",
+                manifest["tracked_paths"],
+            )
+            self.assertIn("reports/示例公司/main.md", manifest["tracked_paths"])
             calls = (root / "python-calls.log").read_text(encoding="utf-8").splitlines()
             build_calls = [index for index, call in enumerate(calls) if call.endswith("/build_investment_dashboard.py")]
             lifecycle_calls = [index for index, call in enumerate(calls) if call.endswith("/rule_lifecycle.py")]
@@ -401,14 +439,32 @@ class PublishReleaseTests(unittest.TestCase):
             self._run(["git", "config", "user.email", "test@example.com"], cwd=source).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=source).check_returncode()
             report_b = "# 示例公司\n\n数据截止：2026-09-01\n股票代码：600000.SH\n\n## 最终决策\n\n股价低于 12 元时进入买入复核。\n"
-            (source / "reports" / "示例公司" / "main.md").write_text(report_b, encoding="utf-8")
+            report_b_path = source / "reports" / "示例公司" / "main-20260901.md"
+            report_b_path.write_text(report_b, encoding="utf-8")
+            current = json.loads(
+                (source / "data" / "investment-dashboard" / "current_reports.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            current["companies"]["600000.SH"].update({
+                "current_main_report": "reports/示例公司/main-20260901.md",
+                "content_sha256": canonical_file_sha256(report_b_path),
+            })
+            (source / "data" / "investment-dashboard" / "current_reports.json").write_text(
+                json.dumps(current, ensure_ascii=False), encoding="utf-8"
+            )
             rule_b = dict(rule_a)
             rule_b.update({"rule_id": "600000.SH:entry:price-b", "condition": "股价低于 12 元", "max": 12})
             (source / "data" / "investment-dashboard" / "decision_rules.json").write_text(
-                json.dumps({**rules, "companies": [{**rules["companies"][0], "rules": [rule_b]}]}, ensure_ascii=False), encoding="utf-8"
+                json.dumps({**rules, "companies": [{**rules["companies"][0], "canonical_report": "reports/示例公司/main-20260901.md", "rules": [rule_b]}]}, ensure_ascii=False), encoding="utf-8"
             )
             self.assertFalse((source / decision_board_relative).exists())
-            self._run(["git", "add", "reports/示例公司/main.md", "data/investment-dashboard/decision_rules.json"], cwd=source).check_returncode()
+            self._run([
+                "git", "add",
+                "reports/示例公司/main-20260901.md",
+                "data/investment-dashboard/current_reports.json",
+                "data/investment-dashboard/decision_rules.json",
+            ], cwd=source).check_returncode()
             self._run(["git", "commit", "-m", "release-b"], cwd=source).check_returncode()
             tree_b = self._run(["git", "ls-tree", "-r", "--name-only", "HEAD"], cwd=source).stdout.splitlines()
             self.assertNotIn(decision_board_relative, tree_b)
@@ -431,7 +487,7 @@ class PublishReleaseTests(unittest.TestCase):
             self.assertLess(build_calls[1], build_calls[2])
             self.assertLess(build_calls[2], lifecycle_calls[1])
             self.assertLess(lifecycle_calls[1], build_calls[3])
-            self.assertEqual((release_b / "reports" / "示例公司" / "main.md").read_text(encoding="utf-8"), report_b)
+            self.assertEqual((release_b / "reports" / "示例公司" / "main-20260901.md").read_text(encoding="utf-8"), report_b)
             source_sha_b = self._run(["git", "rev-parse", "HEAD"], cwd=source).stdout.strip()
             self.assertEqual((release_b / ".source-sha").read_text(encoding="utf-8").strip(), source_sha_b)
             current_rules = json.loads((release_b / "data" / "investment-dashboard" / "decision_rules.json").read_text(encoding="utf-8"))
@@ -439,7 +495,7 @@ class PublishReleaseTests(unittest.TestCase):
             self.assertTrue(active_rules)
             self.assertTrue(any("12" in str(rule.get("condition")) for rule in active_rules))
             current_lifecycle = json.loads((release_b / "data" / "investment-dashboard" / "rule_lifecycle.json").read_text(encoding="utf-8"))
-            self.assertEqual(current_lifecycle["companies"]["600000.SH"]["canonical_report_hash"], canonical_file_sha256(source / "reports" / "示例公司" / "main.md"))
+            self.assertEqual(current_lifecycle["companies"]["600000.SH"]["canonical_report_hash"], canonical_file_sha256(report_b_path))
             current_log = json.loads((release_b / "data" / "investment-dashboard" / "rule_change_log.json").read_text(encoding="utf-8"))
             self.assertEqual(current_log["changes"][0]["marker"], "old-history")
             self.assertGreaterEqual(len(current_log["sync_runs"]), 2)
@@ -450,6 +506,7 @@ class PublishReleaseTests(unittest.TestCase):
             root = Path(temporary_directory)
             seed = root / "seed"
             seed.mkdir()
+            self._install_release_validation_script(seed)
             self._run(["git", "init", "-b", "bigchange"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.email", "test@example.com"], cwd=seed).check_returncode()
             self._run(["git", "config", "user.name", "Release Test"], cwd=seed).check_returncode()
@@ -474,7 +531,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "decision_rules.json": source_rules,
             }.items():
                 (data / name).write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-            self._run(["git", "add", "data", "tools"], cwd=seed).check_returncode()
+            self._run(["git", "add", "data", "tools", "scripts"], cwd=seed).check_returncode()
             self._run(["git", "commit", "-m", "seed"], cwd=seed).check_returncode()
             origin = root / "origin.git"
             self._run(["git", "clone", "--bare", str(seed), str(origin)], cwd=root).check_returncode()

@@ -35,9 +35,15 @@ class ReleaseGateCloseoutTests(unittest.TestCase):
         self.source = self.root / "source"
         (self.source / ".git").mkdir(parents=True)
         (self.source / "tools").mkdir()
+        (self.source / "scripts").mkdir()
         (self.source / "reports").mkdir()
         for name in ("verify_github_ci.py", "release_validation_record.py"):
             shutil.copyfile(ROOT / "tools" / name, self.source / "tools" / name)
+        shutil.copyfile(
+            ROOT / "scripts" / "validate-dashboard-release.sh",
+            self.source / "scripts" / "validate-dashboard-release.sh",
+        )
+        (self.source / "scripts" / "validate-dashboard-release.sh").chmod(0o755)
         for relative in record.AUTHORITY_INPUTS:
             path = self.source / relative
             path.parent.mkdir(parents=True, exist_ok=True)

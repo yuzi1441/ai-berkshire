@@ -27,6 +27,7 @@ from typing import Any
 
 from source_hash import canonical_file_sha256, canonical_sha256_text
 import main_report_review
+import current_reports
 import decision_state
 import event_radar
 import investment_dispositions
@@ -124,9 +125,22 @@ INDUSTRY_PATH_MARKERS = (
     "行业",
     "产业链",
 )
-DATE_PATTERN = re.compile(r"(?<!\d)(20\d{2})[-./年](\d{1,2})[-./月](\d{1,2})(?:日)?")
+DATE_PATTERN = re.compile(r"(?<!\d)(20\d{2})\s*[-./年]\s*(\d{1,2})\s*[-./月]\s*(\d{1,2})\s*日?")
 TICKER_PATTERN = re.compile(r"(?i)(?<!\d)(\d{6}\.(?:SH|SZ|BJ)|\d{4,5}\.HK)(?!\d)")
 SIX_DIGIT_TICKER_PATTERN = re.compile(r"(?:股票|证券)代码[^\n|]{0,24}?(?<!\d)(\d{6})(?!\d)")
+US_EXCHANGE_TOKEN = r"(?:NASDAQ|NYSE(?:\s+American)?|AMEX|NYSEArca)"
+US_EXCHANGE_PATTERN = re.compile(
+    rf"{US_EXCHANGE_TOKEN}\s*[:：]\s*([A-Z][A-Z0-9.\-]{{0,9}})"
+)
+US_PAREN_TICKER_PATTERN = re.compile(r"[（(]\s*([A-Z][A-Z0-9.\-]{0,9})\s*[）)]")
+US_TICKER_TOKEN_PATTERN = re.compile(r"^[A-Z][A-Z0-9.\-]{0,9}$")
+US_TICKER_BLOCKLIST = {
+    "ADR", "ADS", "USD", "HKD", "CNY", "RMB", "EUR", "JPY", "GBP",
+    "PE", "PB", "PS", "ROE", "ROIC", "FCF", "TTM", "GAAP", "EPS",
+    "AI", "ESG", "IPO", "ETF", "NAV", "CEO", "CFO", "CTO", "COO",
+    "US", "HK", "CN", "EU", "UK", "Q1", "Q2", "Q3", "Q4", "H1", "H2",
+    "YOY", "QOQ", "CAGR", "DCF", "WACC", "EBIT", "EBITDA", "ARPU", "SBC",
+}
 DECISION_MARKERS = ("最终决策", "最终建议", "最终投资建议", "明确结论", "投资建议", "综合结论", "行动建议", "行动清单", "操作建议", "分层操作建议", "分层价格区间", "一句话投资判断", "买入前 Checklist", "买入前Checklist")
 DECISION_CONTRACT_HEADING = "看板决策契约"
 DECISION_CONTRACT_VERSION = "1"
@@ -157,8 +171,8 @@ DECISION_CONTRACT_NULL_VALUES = {"", "-", "--", "无", "不适用", "未给出",
 PRICE_PATTERN = re.compile(
     r"(?P<operator>≤|<=|<|低于|以下|跌至|回落至|约)?\s*"
     r"(?P<currency>HK\$|HKD|RMB|CNY|US\$|USD|\$)?\s*"
-    r"(?P<first>\d+(?:\.\d+)?)\s*"
-    r"(?:[—–-]\s*(?P<second>\d+(?:\.\d+)?))?\s*"
+    r"(?P<first>\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)\s*"
+    r"(?:[—–-]\s*(?P<second>\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?))?\s*"
     r"(?P<unit>元|港元|美元)?",
     flags=re.IGNORECASE,
 )
@@ -1084,27 +1098,66 @@ def extract_ticker(text: str) -> str | None:
     return None
 
 
-def extract_subject_ticker(lines: list[str], company: str) -> str | None:
+def us_ticker_token(value: str | None) -> str | None:
+    """Return a validated US-style ticker token, or None for known non-tickers."""
+    token = str(value or "").strip().upper()
+    if not token or not US_TICKER_TOKEN_PATTERN.fullmatch(token):
+        return None
+    if token in US_TICKER_BLOCKLIST:
+        return None
+    # Fiscal/period labels such as FY2025 or H1 are never tickers.
+    if re.fullmatch(r"(?:FY|CY|Q|H|E|G)\d{2,4}", token):
+        return None
+    return token
+
+
+def extract_us_ticker(text: str) -> str | None:
+    """Extract an exchange-qualified US ticker such as ``NASDAQ: QCOM``."""
+    match = US_EXCHANGE_PATTERN.search(text or "")
+    return us_ticker_token(match.group(1)) if match else None
+
+
+def extract_subject_ticker(
+    lines: list[str],
+    company: str,
+    registry: list[dict[str, Any]] | None = None,
+) -> str | None:
     """Extract only a ticker explicitly bound to the report subject.
 
     Arbitrary six-digit values in valuation tables and competitor sections are
     not stock identity. A ticker is accepted only from frontmatter, a labelled
-    code field, or a heading that also names the subject company.
+    code field, a heading that also names the subject company, or a registry
+    entry. US listings are accepted from exchange-qualified fields and, on the
+    H1 ``Company (TICKER)`` line, only when the registry already knows the
+    token so private-company abbreviations cannot invent listings.
     """
     frontmatter_ticker = str(parse_frontmatter(lines).get("ticker") or "").strip()
     if frontmatter_ticker:
-        return extract_ticker(frontmatter_ticker)
+        return extract_ticker(frontmatter_ticker) or us_ticker_token(frontmatter_ticker)
+    registered_tickers: set[str] = set()
+    for entry in registry or []:
+        registered_tickers.update(us_ticker_token(item) or "" for item in entry.get("tickers", []))
+    registered_tickers.discard("")
     normalized_company = normalize_company_name(company)
+    # Explicit code fields win over any heading convention.
+    for line in lines[:120]:
+        if not re.search(r"(?:股票代码|证券代码|股份代码|公司代码|Ticker)\s*[:：|｜]", line, re.I):
+            continue
+        cleaned = clean_markdown(line)
+        ticker = extract_ticker(cleaned) or extract_us_ticker(cleaned)
+        if ticker:
+            return ticker
     for line in lines[:120]:
         cleaned = clean_markdown(line)
-        if re.search(r"(?:股票代码|证券代码|股份代码|公司代码|Ticker)\s*[:：]", cleaned, re.I):
-            ticker = extract_ticker(cleaned)
+        if line.lstrip().startswith("#") and normalized_company.casefold() in normalize_company_name(cleaned).casefold():
+            ticker = extract_ticker(cleaned) or extract_us_ticker(cleaned)
             if ticker:
                 return ticker
-        if line.lstrip().startswith("#") and normalized_company in normalize_company_name(cleaned):
-            ticker = extract_ticker(cleaned)
-            if ticker:
-                return ticker
+            paren = US_PAREN_TICKER_PATTERN.search(cleaned)
+            if paren:
+                token = us_ticker_token(paren.group(1))
+                if token and (not registry or token in registered_tickers):
+                    return token
     return None
 
 
@@ -1114,6 +1167,10 @@ def market_for_ticker(ticker: str | None, market_hint: str | None = None) -> str
         return "港股"
     if ticker and ticker.endswith((".SH", ".SZ", ".BJ")):
         return "A股"
+    if ticker and US_TICKER_TOKEN_PATTERN.fullmatch(ticker) and ticker.upper() not in US_TICKER_BLOCKLIST:
+        # Bare uppercase tokens only reach this path from exchange-qualified
+        # fields, H1 ``Company (TICKER)`` headings, or the company registry.
+        return "美股"
     return market_hint or "未识别"
 
 
@@ -1190,7 +1247,7 @@ def _action_from_blob(blob: str) -> str | None:
     if re.search(r"强烈买入|积极买入|重点买入", text) and not re.search(r"观望|等待|回避|不追", text):
         return "买入"
     if re.search(
-        r"小额分批买入|分批买入|分批建仓|可开始.{0,8}买入|开始建仓|可建仓|适度建仓|"
+        r"小额分批买入|分批买入|分批建仓|逐步建仓|逢低建仓|可开始.{0,8}买入|开始建仓|可建仓|适度建仓|"
         r"建议.{0,6}买入|可以买入|可配置|可研究分批",
         text,
     ) and not re.search(r"观望为主|等待更好|回避|不追|等待.{0,8}买点", text):
@@ -1281,11 +1338,14 @@ def format_price_match(match: re.Match[str]) -> str | None:
     return f"{operator}{prefix}{value}{'' if prefix else ' 元'}"
 
 
-def extract_buy_price(section: list[str]) -> str | None:
+def extract_buy_price(section: list[str], market: str | None = None) -> str | None:
     """Extract the best-supported buy or add position price from a conclusion.
 
     Price candidates must contain an explicit unit or currency. This prevents a
     report year, P/E ratio, or other bare number from becoming a false price.
+    When the listing market is known, a candidate quoted for another market is
+    skipped so dual-listed reports cannot leak HKD/USD bands into an A-share
+    conclusion.
     """
     candidates: list[tuple[int, str]] = []
     action_line = re.compile(
@@ -1293,6 +1353,35 @@ def extract_buy_price(section: list[str]) -> str | None:
     )
     for line in section:
         if not action_line.search(line):
+            continue
+        buy_context = re.search(
+            r"买入|建仓|加仓|分批|首批|配置|逢低|等待|回落至|跌至|低于|以下|不高于",
+            line,
+        )
+        target_context = re.search(
+            r"目标价|目标市值|分析师|券商|一致预期|平均目标|内在价值|估值修复|合理价格区间|合理估值区间",
+            line,
+        )
+        current_context = re.search(
+            r"当前股价|现价|股价为|当前价|当前\s*[$HKUS]?\s*\d|股价约|当前约|股价\s*[:：]\s*(?:约)?\s*[$HKUS]?\s*\d",
+            line,
+        )
+        historical_context = re.search(r"回购平均|历史平均|过去.{0,6}平均|平均成本", line)
+        if not buy_context:
+            continue
+        if target_context and not re.search(r"买入|建仓", line):
+            continue
+        if historical_context and not re.search(r"买入|建仓", line):
+            continue
+        if current_context and not re.search(r"买入|建仓|加仓|分批|等待|低于|以下|回落|跌至", line):
+            continue
+        if re.search(r"如果|若|假设", line) and not re.search(r"买入|建仓|加仓|分批", line):
+            continue
+        if re.search(r"以.{0,14}(?:买入|建仓).{0,14}(?:\d+\s*年|年后)", line):
+            continue
+        if re.search(r"\d+\s*年后", line) and not re.search(r"等待|回调|跌至|建仓|买入|低于", line):
+            continue
+        if re.search(r"从\s*[^。；]{0,20}(?:跌到|跌至|涨到|涨至)", line):
             continue
         # Parenthetical PE-linked bands: PE 12-13x（约20-23元）
         for pe_match in re.finditer(
@@ -1306,14 +1395,30 @@ def extract_buy_price(section: list[str]) -> str | None:
                 score += 20
             candidates.append((score, display))
         for match in PRICE_PATTERN.finditer(line):
-            # Do not truncate commodity quotes such as "$13,595/吨" into a
-            # synthetic "$13" stock-price anchor.
-            if re.match(r",\d{3}", line[match.end() :]):
+            # Commodity/financial metrics are not share prices even when they
+            # carry a currency symbol.
+            following = line[match.end() :]
+            if re.match(r"\s*/\s*(?:吨|桶|股|盎司|公斤|千克)", following):
+                continue
+            if re.match(r"\s*(?:亿|万|千)", following):
+                continue
+            before = line[max(0, match.start() - 10) : match.start()]
+            if re.search(r"铜价|铝价|金价|油价|白银|钼|多晶硅|碳酸锂|股息|分红|每股收益|EPS|每ADS", before):
+                continue
+            if re.search(r"内在价值|DCF|公允价值|目标价|目标市值|合理价", before):
                 continue
             display = format_price_match(match)
             if not display:
                 continue
+            if market and not _price_plan_matches_market(
+                {"price_range": display, "action": "买入"}, market
+            ):
+                continue
             score = 0
+            if current_context:
+                before = line[max(0, match.start() - 12) : match.start()]
+                if not re.search(r"低于|以下|不高于|跌至|回落至|以内|约", before):
+                    score -= 100
             if re.search(r"买入|建仓", line):
                 score += 50
             if re.search(r"等待|观察名单|轻仓观察", line):
@@ -1517,6 +1622,23 @@ def extract_checklist_summary(lines: list[str]) -> str:
 def extract_checklist_gates(lines: list[str]) -> list[dict[str, str]]:
     """Extract standard six-gate rows and legacy numbered Checklist rows."""
     gates: list[dict[str, str]] = []
+    result_vocab = re.compile(
+        r"^(?:通过|不通过|未通过|部分|部分通过|灰色(?:地带)?|条件通过|待验证|待复核|否决|未满足|满足)$"
+    )
+
+    def gate_name(label: str) -> str | None:
+        matched = checklist_gate_name(label)
+        if matched:
+            return matched
+        if re.match(r"^\s*(?:第[一二三四五六七八九十\d]+关[：:]?|\d+[.、)]|\d+\s+)", label):
+            fallback = re.sub(
+                r"^\s*(?:第[一二三四五六七八九十\d]+关[：:]?|\d+[.、)]|\d+\s+)\s*",
+                "",
+                label,
+            ).strip()
+            return fallback or None
+        return None
+
     for line in lines:
         cells = markdown_cells(line)
         if not cells or len(cells) < 2:
@@ -1533,23 +1655,42 @@ def extract_checklist_gates(lines: list[str]) -> list[dict[str, str]]:
             continue
         score = cells[score_index].replace(" ", "")
         label = " ".join(cells[:score_index]).strip()
-        matched_name = checklist_gate_name(label)
+        after = [clean_markdown(cell) for cell in cells[score_index + 1 :]]
+        before_cell = clean_markdown(cells[score_index - 1]) if score_index >= 1 else ""
+        result_first = (
+            score_index >= 2
+            and bool(result_vocab.match(before_cell))
+            and not (after and result_vocab.match(after[0]))
+        )
+        if result_first:
+            result = before_cell
+            reason = after[0] if after else ""
+        else:
+            result = after[0] if after else "待复核"
+            reason = after[1] if len(after) > 1 else ""
+        matched_name = gate_name(label)
         if not matched_name or any(item["name"] == matched_name for item in gates):
             continue
-        result = clean_markdown(cells[score_index + 1]) if len(cells) > score_index + 1 else "待复核"
-        reason = clean_markdown(cells[score_index + 2]) if len(cells) > score_index + 2 else ""
         gates.append({"name": matched_name, "score": score, "result": result, "reason": reason})
 
     # Some older reports put the score in prose below a gate heading instead of
-    # in the summary table. Keep this conservative and only use the nearest
-    # preceding gate heading, so unrelated stars in valuation text are ignored.
+    # in the summary table. Prefer the nearest preceding gate heading, then fall
+    # back to a nearby text window so unrelated stars are still ignored.
     if len(gates) < len(CHECKLIST_GATE_NAMES):
         for index, line in enumerate(lines):
             score_match = re.search(r"评分[：:]?\s*([★☆]{1,5})", line)
             if not score_match:
                 continue
-            nearby = " ".join(lines[max(0, index - 12) : index + 1])
-            matched_name = checklist_gate_name(nearby)
+            matched_name: str | None = None
+            for back in range(index, max(-1, index - 40), -1):
+                candidate = lines[back]
+                if candidate.lstrip().startswith("#"):
+                    matched_name = checklist_gate_name(candidate)
+                    if matched_name:
+                        break
+            if matched_name is None:
+                nearby = " ".join(lines[max(0, index - 12) : index + 1])
+                matched_name = checklist_gate_name(nearby)
             if not matched_name or any(item["name"] == matched_name for item in gates):
                 continue
             result = "待复核"
@@ -1603,9 +1744,9 @@ def extract_checklist_status(
             ):
                 explicit_states.append("clear")
             elif re.search(
-                r"(?:触发硬性否决|硬性否决)\s*[：:]\s*(?:已触发|是|[1-9]\d*\s*项)",
+                r"(?:触发硬性否决|硬性否决)\s*[：:]\s*(?!0\s*项|未触发|没有触发|未发现|无|否)\S",
                 cleaned,
-            ):
+            ) or re.search(r"(?<!不)是[，,]?\s*(?:已)?触发硬性否决", cleaned):
                 explicit_states.append("triggered")
         if explicit_states:
             hard_veto_state = explicit_states[-1]
@@ -1626,15 +1767,24 @@ def extract_checklist_status(
     else:
         status = "待复核"
 
-    ratio_matches = [
-        (int(match.group(1)), int(match.group(2)))
-        for line in lines
-        if re.search(r"Checklist|判定|结论|通过率", line, flags=re.IGNORECASE)
-        for match in re.finditer(r"(?<!\d)(\d+)\s*/\s*(\d{1,3})(?!\d)", line)
-    ]
-    ratio_matches = [
-        item for item in ratio_matches if 0 <= item[0] <= item[1] and 2 <= item[1] <= 100
-    ]
+    ratio_pattern = r"(?<!\d)(\d+)\s*/\s*(\d{1,3})(?!\d)"
+    strong_matches: list[tuple[int, int]] = []
+    weak_matches: list[tuple[int, int]] = []
+    for line in lines:
+        if not re.search(r"Checklist|判定|结论|通过率", line, flags=re.IGNORECASE):
+            continue
+        if re.search(r"抽检|数据点|警告|准出|report_audit|失败", line):
+            continue
+        for match in re.finditer(ratio_pattern, line):
+            item = (int(match.group(1)), int(match.group(2)))
+            if not (0 <= item[0] <= item[1] and 2 <= item[1] <= 100):
+                continue
+            after = line[match.end() :]
+            if "通过率" in line or re.match(r"\s*(?:关|项)", after):
+                strong_matches.append(item)
+            else:
+                weak_matches.append(item)
+    ratio_matches = strong_matches or weak_matches
     passed_count, total_gates = ratio_matches[-1] if ratio_matches else (None, None)
     if total_gates is None:
         total_gates = len(gates) or None
@@ -2854,7 +3004,7 @@ def looks_like_action(value: str) -> bool:
     """Return True when a cell describes a buy/hold/sell style action."""
     return bool(
         re.search(
-            r"买入|买点|建仓|加仓|持有|观望|观察|等待|回避|减仓|卖出|配置|追高|重仓|重注|分批|积累|介入|不追|降低|暂停|小仓|重点研究|轻仓|试错|验证",
+            r"买入|买点|建仓|加仓|持有|观望|观察|等待|回避|减仓|卖出|配置|追高|重仓|重注|分批|积累|介入|不追|降低|暂停|小仓|重点研究|轻仓|试错|验证|不建议|新增仓位|获利了结|谨慎",
             clean_markdown(value),
         )
     )
@@ -2959,24 +3109,24 @@ def extract_scenario_valuation(lines: list[str]) -> list[dict[str, str]]:
     # Inline prose formats: 乐观40.0元 / 中性31.6元 / 悲观21.9元
     joined = "\n".join(lines)
     inline = re.search(
-        r"乐观\s*[：:]?\s*(?P<bull>[HK$US$]?\s*\d+(?:\.\d+)?)\s*元?"
+        r"乐观\s*[：:]?\s*(?P<bull>[HK$US$]?\s*\d+(?:\.\d+)?)\s*(?P<bull_unit>美元|港元|元)?"
         r"[^\n]{0,40}?"
-        r"中性\s*[：:]?\s*(?P<base>[HK$US$]?\s*\d+(?:\.\d+)?)\s*元?"
+        r"中性\s*[：:]?\s*(?P<base>[HK$US$]?\s*\d+(?:\.\d+)?)\s*(?P<base_unit>美元|港元|元)?"
         r"[^\n]{0,40}?"
-        r"悲观\s*[：:]?\s*(?P<bear>[HK$US$]?\s*\d+(?:\.\d+)?)\s*元?",
+        r"悲观\s*[：:]?\s*(?P<bear>[HK$US$]?\s*\d+(?:\.\d+)?)\s*(?P<bear_unit>美元|港元|元)?",
         joined,
     )
     if inline:
-        def _price(raw: str) -> str:
+        def _price(raw: str, unit: str | None) -> str:
             raw = re.sub(r"\s+", "", raw)
             if raw.upper().startswith(("HK$", "US$")):
-                return raw if raw[-1].isdigit() else raw
-            return f"{raw} 元" if not raw.endswith("元") else raw
+                return f"{raw}{unit}" if unit and not raw.endswith(unit) else raw
+            return f"{raw}{unit or ' 元'}"
 
         return [
-            {"scenario": "乐观", "target_price": _price(inline.group("bull"))},
-            {"scenario": "中性", "target_price": _price(inline.group("base"))},
-            {"scenario": "悲观", "target_price": _price(inline.group("bear"))},
+            {"scenario": "乐观", "target_price": _price(inline.group("bull"), inline.group("bull_unit"))},
+            {"scenario": "中性", "target_price": _price(inline.group("base"), inline.group("base_unit"))},
+            {"scenario": "悲观", "target_price": _price(inline.group("bear"), inline.group("bear_unit"))},
         ]
 
     slash = re.search(
@@ -3220,8 +3370,8 @@ def extract_price_plan(
             # size, market-cap, or signal numbers that may appear earlier.
             explicit_suffix = re.search(
                 r"((?:不高于|不低于|不超过|低于|高于|≤|≥|<|>|约)?\s*"
-                r"\d+(?:\.\d+)?"
-                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)"
+                r"(?:\s*[-—–~至到]\s*(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?))?\s*"
                 r"(?:港元|美元|(?<![亿万千百])元)\s*(?:以下|以上|以内|附近|起)?)",
                 price_range,
                 re.I,
@@ -3229,16 +3379,16 @@ def extract_price_plan(
             explicit_prefix = re.search(
                 r"((?:不高于|不低于|不超过|低于|高于|≤|≥|<|>|约)?\s*"
                 r"(?:CNY|RMB|HKD|USD|HK\$|US\$|\$)\s*"
-                r"\d+(?:\.\d+)?"
-                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)"
+                r"(?:\s*[-—–~至到]\s*(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?))?\s*"
                 r"(?:以下|以上|以内|附近|起)?)",
                 price_range,
                 re.I,
             )
             compact = explicit_suffix or explicit_prefix or re.search(
                 r"((?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
-                r"(?:(?:HK|US)?\$)?\s*\d+(?:\.\d+)?"
-                r"(?:\s*[-—–~至到]\s*\d+(?:\.\d+)?)?\s*"
+                r"(?:(?:HK|US)?\$)?\s*(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)"
+                r"(?:\s*[-—–~至到]\s*(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?))?\s*"
                 r"(?:元|港元|美元)?\s*(?:以下|以上|以内|附近)?)",
                 price_range,
             )
@@ -3344,7 +3494,7 @@ def _price_from_cells(
     best: tuple[int, str] | None = None
     price_token = re.compile(
         r"(?:不高于|不低于|低于|高于|≤|≥|<|>|约)?\s*"
-        r"(?:HK\$|US\$|₩)?\s*"
+        r"(?:HK\$|US\$|₩|\$)?\s*"
         r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
         r"(?:\s*[-—–~至到]\s*(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)?\s*"
         r"(?:元|港元|美元|韩元)?",
@@ -4976,6 +5126,34 @@ def is_post_buy_tracking_report(record: dict[str, Any]) -> bool:
     )
 
 
+def is_role_subreport_path(relative_path: str | None) -> bool:
+    """Return whether a path is a role/topic sub-report rather than a main report."""
+    path = str(relative_path or "")
+    return bool(
+        re.search(
+            r"(?:^|/)(?:0[1-9]-|开篇|终章|商业模式分析|财务估值分析|行业竞争分析|"
+            r"风险管理层评估|巴菲特视角|芒格视角|李录视角|段永平视角)",
+            path,
+        )
+    )
+
+
+def candidate_group_records(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    """Group dashboard-eligible report candidates by ``market:ticker``."""
+    groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        ticker = str(record.get("ticker") or "").upper()
+        market = str(record.get("market") or "")
+        if (
+            is_company_equity(record)
+            and not is_post_buy_tracking_report(record)
+            and ticker
+            and market in {"A股", "港股", "美股"}
+        ):
+            groups[f"{market}:{ticker}"].append(record)
+    return dict(groups)
+
+
 def candidate_record(
     report_path: Path,
     repo_root: Path,
@@ -5018,7 +5196,7 @@ def candidate_record(
 
     entity, entity_kind, market_hint, entity_directory = entity_from_path(relative)
     entity = normalize_company_name(decision_contract["company"] if decision_contract else entity)
-    ticker = (decision_contract or {}).get("ticker") or extract_subject_ticker(lines, entity)
+    ticker = (decision_contract or {}).get("ticker") or extract_subject_ticker(lines, entity, registry)
     registry_entry = registry_company(registry, entity, ticker)
     if registry_entry:
         entity = str(registry_entry["canonical_name"])
@@ -5056,8 +5234,13 @@ def candidate_record(
     )
     if not isinstance(price_plan, list) or not isinstance(scenarios, list):
         raise ValueError(f"Price plan and scenario overrides must be lists: {report_relative}")
-    fallback_buy_price = extract_buy_price(valuation_lines) or extract_buy_price(section)
-    buy_price = report_override.get("buy_price", preferred_buy_price(price_plan) or fallback_buy_price)
+    fallback_buy_price = extract_buy_price(
+        valuation_lines, market=effective_market
+    ) or extract_buy_price(section, market=effective_market)
+    buy_price = report_override.get(
+        "buy_price",
+        preferred_buy_price(usable_price_plan_rows(price_plan, effective_market)) or fallback_buy_price,
+    )
     investor_stances = report_override.get(
         "investor_stances",
         contract_stances
@@ -5119,11 +5302,15 @@ def candidate_record(
 def record_rank(record: dict[str, Any]) -> tuple[int, str, str, int, int, int, str]:
     """Rank candidates by cutoff, completion date, report kind, then content.
 
-    No filesystem timestamp or filename date participates in this ranking. A
-    completion date is considered only when reports share the same explicit
-    data cutoff. Report kind outranks content and action completeness so that a
-    full research report always supersedes a role sub-report or tracking note
-    when both describe the same data date.
+    ``record_rank`` is not the production source of truth for current main
+    reports. Canonical ownership lives in
+    ``data/investment-dashboard/current_reports.json``; this ranking only orders
+    the historical archive, legacy fallback during migration, and migration
+    recommendations. No filesystem timestamp or filename date participates in
+    this ranking. A completion date is considered only when reports share the
+    same explicit data cutoff. Report kind outranks content and action
+    completeness so that a full research report always supersedes a role
+    sub-report or tracking note when both describe the same data date.
     """
     action_rank = {"买入": 5, "分批买入": 4, "持有": 3, "观察": 2, "减仓/卖出": 1}.get(
         record["action"], 0
@@ -5341,37 +5528,57 @@ def select_decisions(
     overrides: dict[str, Any],
     *,
     priority_report_paths: set[str] | None = None,
+    canonical_reports: dict[str, str] | None = None,
+    legacy_tickers: set[str] | None = None,
+    exclude_unregistered: bool = False,
 ) -> list[dict[str, Any]]:
     """Select one conclusion per tradable market+ticker and merge alias histories.
 
-    ``priority_report_paths`` carries source-hashed human-reviewed main reports.
-    At the same data cutoff a reviewed report is not displaced by an unreviewed
+    ``canonical_reports`` is the production source of truth (ticker -> report
+    path). When a ticker is registered there, that exact report is the current
+    main report and ``record_rank`` no longer has current-report authority.
+    ``record_rank`` still orders the historical archive, legacy fallback, and
+    migration recommendations. ``priority_report_paths`` carries source-hashed
+    human-reviewed main reports for companies that have not migrated yet. At the
+    same data cutoff a reviewed report is not displaced by an unreviewed
     candidate; a strictly newer data cutoff still wins so corrected data always
-    reaches the board.
+    reaches the board. Unregistered companies are excluded when
+    ``exclude_unregistered`` is set so catalog-only reports cannot expand the
+    production universe.
     """
     priority = {str(path) for path in (priority_report_paths or set()) if path}
+    canonical = {
+        str(ticker).upper(): str(path)
+        for ticker, path in (canonical_reports or {}).items()
+        if ticker and path
+    }
+    legacy = {str(ticker).upper() for ticker in (legacy_tickers or set()) if ticker}
 
     def selection_rank(record: dict[str, Any]) -> tuple[Any, ...]:
         has_cutoff, cutoff, completed, kind_rank, content_rank, action_rank, path = record_rank(record)
         reviewed = 1 if str(record.get("report_path") or "") in priority else 0
         return (has_cutoff, cutoff, reviewed, completed, kind_rank, content_rank, action_rank, path)
 
-    groups: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
-    for record in records:
-        ticker = str(record.get("ticker") or "").upper()
-        market = str(record.get("market") or "")
-        if (
-            is_company_equity(record)
-            and not is_post_buy_tracking_report(record)
-            and ticker
-            and market in {"A股", "港股", "美股"}
-        ):
-            groups[f"{market}:{ticker}"].append(record)
+    groups = candidate_group_records(records)
 
     selections: list[dict[str, Any]] = []
-    for candidates in groups.values():
+    for key, candidates in groups.items():
+        ticker = key.split(":", 1)[1]
+        if canonical and ticker not in canonical and ticker not in legacy and exclude_unregistered:
+            continue
         ordered = sorted(candidates, key=selection_rank, reverse=True)
-        selected = ordered[0].copy()
+        if ticker in canonical:
+            by_path = {str(item.get("report_path") or ""): item for item in candidates}
+            registered = by_path.get(canonical[ticker])
+            if registered is None:
+                raise ValueError(
+                    f"canonical current report is not a candidate for {key}: {canonical[ticker]}"
+                )
+            selected = registered.copy()
+            selected["current_report_source"] = "canonical"
+        else:
+            selected = ordered[0].copy()
+            selected["current_report_source"] = "legacy_ranked"
         company = str(selected["company"])
         company_override = overrides.get("companies", {}).get(company, {})
         if not isinstance(company_override, dict):
@@ -5742,6 +5949,51 @@ def split_existing_dashboard(repo_root: Path = ROOT) -> dict[str, Any]:
     return split_dashboard_files(board, site_directory, data_directory)
 
 
+def quarantine_stale_rule_identities(
+    decisions: list[dict[str, Any]],
+    payload: dict[str, Any],
+    quarantined: set[str],
+) -> dict[str, Any]:
+    """Project rules without a known-wrong legacy security identity.
+
+    The Git-authoritative rule file is not rewritten. A corrected canonical
+    ticker receives an explicit zero-rule projection until its rules are
+    separately reviewed and migrated; stale rules are never silently rebound.
+    """
+    if not quarantined:
+        return payload
+    result = json.loads(json.dumps(payload, ensure_ascii=False))
+    companies = [
+        item
+        for item in result.get("companies", [])
+        if isinstance(item, dict)
+        and str(item.get("ticker") or "").upper() not in quarantined
+    ]
+    existing = {str(item.get("ticker") or "").upper() for item in companies}
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        if not ticker or ticker in existing:
+            continue
+        companies.append(
+            {
+                "company_id": ticker,
+                "company": decision.get("company"),
+                "ticker": ticker,
+                "market": decision.get("market"),
+                "realtime_scope": decision.get("realtime_scope", "unsupported"),
+                "canonical_report": decision.get("report_path"),
+                "rules": [],
+                "zero_rule_reason": "identity_migration_requires_rule_review",
+            }
+        )
+        existing.add(ticker)
+    companies.sort(key=lambda item: str(item.get("ticker") or ""))
+    result["companies"] = companies
+    result["rule_count"] = sum(len(item.get("rules") or []) for item in companies)
+    result["identity_quarantine"] = sorted(quarantined)
+    return result
+
+
 def refresh_runtime_state(
     repo_root: Path = ROOT,
     *,
@@ -5789,6 +6041,14 @@ def refresh_runtime_state(
     rule_payload = decision_state.load_rule_definitions(
         data_directory / decision_state.RULES_RELATIVE.name,
         strict=True,
+    )
+    canonical_payload = current_reports.load(
+        data_directory / current_reports.FILENAME, strict=False
+    )
+    rule_payload = quarantine_stale_rule_identities(
+        decisions,
+        rule_payload,
+        current_reports.quarantined_rule_tickers(canonical_payload),
     )
     decision_tickers = {
         str(item.get("ticker") or "").upper()
@@ -6112,6 +6372,8 @@ def build_dashboard(
     legacy_mode: bool = False,
     investment_dispositions_path: Path | None = None,
     as_of: date | None = None,
+    require_canonical_reports: bool = False,
+    tracked_assets_manifest: Path | None = None,
 ) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     # Validate the optional runtime authority before the builder can write any
@@ -6162,11 +6424,78 @@ def build_dashboard(
     main_report_resolutions = load_main_report_resolutions(
         data_directory / "main_report_resolutions.json"
     )
+    canonical_payload = None if legacy_mode else current_reports.load(
+        data_directory / current_reports.FILENAME, strict=False
+    )
+    canonical_map: dict[str, str] = {}
+    legacy_allowlist: set[str] = set()
+    if canonical_payload:
+        tracked_assets = current_reports.tracked_paths(
+            repo_root, tracked_assets_manifest
+        )
+        canonical_relative = (
+            data_directory / current_reports.FILENAME
+        ).relative_to(repo_root).as_posix()
+        if require_canonical_reports and canonical_relative not in tracked_assets:
+            raise ValueError(
+                "--require-canonical-reports: current_reports.json is not a formal tracked asset"
+            )
+        validation_errors = current_reports.validate(
+            canonical_payload,
+            repo_root=repo_root,
+            registry=registry,
+            records_by_path={str(record["report_path"]): record for record in records},
+            tracked=tracked_assets,
+        )
+        if validation_errors:
+            raise ValueError(
+                "invalid canonical current reports registry: " + "; ".join(validation_errors)
+            )
+        canonical_map = current_reports.mappings(canonical_payload)
+        legacy_allowlist = current_reports.legacy_allowlist(canonical_payload)
+    groups = candidate_group_records(records)
+    unregistered = sorted(
+        key
+        for key in groups
+        if key.split(":", 1)[1] not in canonical_map
+        and key.split(":", 1)[1] not in legacy_allowlist
+    )
+    if canonical_map and unregistered:
+        print(
+            "EXCLUDED_UNREGISTERED_REPORT_GROUP: " + ", ".join(unregistered),
+            file=sys.stderr,
+        )
     decisions = select_decisions(
         records,
         overrides,
         priority_report_paths=reviewed_main_report_paths(main_report_resolutions, repo_root),
+        canonical_reports=canonical_map,
+        legacy_tickers=legacy_allowlist,
+        exclude_unregistered=bool(canonical_map),
     )
+    legacy_selected = sorted(
+        str(decision.get("ticker") or "")
+        for decision in decisions
+        if decision.get("current_report_source") != "canonical"
+    )
+    if legacy_selected:
+        print(
+            "LEGACY_CURRENT_REPORT_SELECTION: " + ", ".join(legacy_selected),
+            file=sys.stderr,
+        )
+    if require_canonical_reports:
+        if not canonical_map:
+            raise ValueError("--require-canonical-reports: canonical registry is missing or empty")
+        if legacy_selected:
+            raise ValueError(
+                "--require-canonical-reports: companies still selected by legacy ranking: "
+                + ", ".join(legacy_selected)
+            )
+    for decision in decisions:
+        selected_path = repo_root / str(decision.get("report_path") or "")
+        decision["current_report_sha256"] = (
+            canonical_file_sha256(selected_path) if selected_path.is_file() else None
+        )
     report_judgments = load_report_judgments(data_directory / "report_judgments")
     attach_report_judgments(decisions, report_judgments, repo_root)
     attach_main_report_resolutions(decisions, main_report_resolutions, repo_root)
@@ -6221,6 +6550,11 @@ def build_dashboard(
     persisted_rule_payload = decision_state.load_rule_definitions(
         data_directory / decision_state.RULES_RELATIVE.name,
         strict=not legacy_mode,
+    )
+    persisted_rule_payload = quarantine_stale_rule_identities(
+        decisions,
+        persisted_rule_payload,
+        current_reports.quarantined_rule_tickers(canonical_payload),
     )
     decision_tickers = {
         str(item.get("ticker") or "").upper()
@@ -6459,6 +6793,23 @@ def main() -> int:
         default=None,
         help="Evaluate calendar deadlines as of YYYY-MM-DD without treating that date as evidence.",
     )
+    parser.add_argument(
+        "--require-canonical-reports",
+        action="store_true",
+        help=(
+            "Fail the build unless every production company has a validated "
+            "canonical current report in current_reports.json."
+        ),
+    )
+    parser.add_argument(
+        "--tracked-assets-manifest",
+        type=Path,
+        default=None,
+        help=(
+            "Tracked-asset manifest generated from the source checkout. Required "
+            "for canonical validation in release directories without .git."
+        ),
+    )
     arguments = parser.parse_args()
     if arguments.split_only and arguments.state_only:
         parser.error("--split-only and --state-only are mutually exclusive")
@@ -6477,6 +6828,8 @@ def main() -> int:
                 legacy_mode=arguments.legacy_mode,
                 investment_dispositions_path=arguments.investment_dispositions,
                 as_of=arguments.as_of,
+                require_canonical_reports=arguments.require_canonical_reports,
+                tracked_assets_manifest=arguments.tracked_assets_manifest,
             )
         )
     except (OSError, ValueError, json.JSONDecodeError) as error:

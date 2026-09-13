@@ -76,6 +76,9 @@ mkdir -p "${STAGING_RELEASE}"
 rsync -a --exclude='.git' --exclude='.venv' "${SOURCE_DIR}/" "${STAGING_RELEASE}/"
 ln -s "${VENV_DIR}" "${STAGING_RELEASE}/.venv"
 printf '%s\n' "${SOURCE_SHA}" > "${STAGING_RELEASE}/.source-sha"
+TRACKED_ASSETS_MANIFEST="${STAGING_RELEASE}/.tracked-assets.json"
+"${PYTHON}" "${SOURCE_DIR}/tools/current_reports.py" write-tracked-manifest \
+    --repo-root "${SOURCE_DIR}" --output "${TRACKED_ASSETS_MANIFEST}"
 
 PREVIOUS=""
 if [[ -e "${CURRENT_LINK}" ]]; then
@@ -163,19 +166,21 @@ fi
 # then evaluates the reconciled Rules into Company State and site output.
 "${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
     --repo-root "${STAGING_RELEASE}" \
+    --require-canonical-reports \
+    --tracked-assets-manifest "${TRACKED_ASSETS_MANIFEST}" \
     --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/rule_lifecycle.py" \
     --repo-root "${STAGING_RELEASE}" --write
 
 "${PYTHON}" "${STAGING_RELEASE}/tools/migrate_manual_execution_reviews.py" \
     --repo-root "${STAGING_RELEASE}"
-"${PYTHON}" "${STAGING_RELEASE}/tools/build_investment_dashboard.py" \
-    --repo-root "${STAGING_RELEASE}" \
-    --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 "${PYTHON}" "${STAGING_RELEASE}/tools/holding_research_reviews.py" \
     --repo-root "${STAGING_RELEASE}" validate
-"${PYTHON}" "${STAGING_RELEASE}/tools/validate_decision_state.py" \
-    --repo-root "${STAGING_RELEASE}" --require-tracked-assets --tracked-root "${SOURCE_DIR}"
+PYTHON_BIN="${PYTHON}" \
+TRACKED_ROOT="${SOURCE_DIR}" \
+TRACKED_ASSETS_MANIFEST="${TRACKED_ASSETS_MANIFEST}" \
+INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH}" \
+    "${SOURCE_DIR}/scripts/validate-dashboard-release.sh" "${STAGING_RELEASE}"
 "${PYTHON}" -m compileall -q "${STAGING_RELEASE}/tools"
 (
     cd "${STAGING_RELEASE}"

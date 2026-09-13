@@ -239,6 +239,44 @@ class ChecklistDenominatorGoldenTests(unittest.TestCase):
         self.assertEqual(record["passed_count"], 3)
         self.assertEqual(record["total_gates"], 10)
 
+    def test_meituan_result_before_score_rows_keep_all_gates(self):
+        registry = load_registry()
+        record = dashboard.checklist_record(
+            ROOT / "reports/美团/美团-checklist-20260411.md", ROOT, registry
+        )
+        assert record is not None
+        gates = record["gates"]
+        self.assertEqual(len(gates), 10)
+        margin = next(item for item in gates if "安全边际" in item["name"])
+        self.assertIn("不通过", margin["result"])
+        self.assertIn("亏损期估值无锚", margin["reason"])
+
+    def test_nanrui_ratio_comes_from_gate_statement_not_audit_line(self):
+        registry = load_registry()
+        record = dashboard.checklist_record(
+            ROOT / "reports/国电南瑞/国电南瑞-巴菲特Checklist-20260713.md", ROOT, registry
+        )
+        assert record is not None
+        self.assertEqual(record["passed_count"], 3)
+        self.assertEqual(record["total_gates"], 6)
+
+    def test_prose_checklist_recovers_all_six_gates(self):
+        registry = load_registry()
+        expected = {
+            "reports/东方电子/巴菲特Checklist-东方电子.md": (4, 6),
+            "reports/许继电气/巴菲特Checklist-许继电气.md": (4, 6),
+            "reports/思源电气/巴菲特Checklist-思源电气.md": (5, 6),
+            "reports/沪电股份/巴菲特Checklist-沪电股份-20260706.md": (4, 6),
+            "reports/平高电气/平高电气-investment-checklist-20260811.md": (4, 6),
+        }
+        for relative, (passed, total) in expected.items():
+            with self.subTest(report=relative):
+                record = dashboard.checklist_record(ROOT / relative, ROOT, registry)
+                assert record is not None
+                self.assertEqual(record["passed_count"], passed)
+                self.assertEqual(record["total_gates"], total)
+                self.assertEqual(len(record["gates"]), total)
+
     def test_decision_table_renders_real_denominator(self):
         decision = {
             "company": "美团",
@@ -288,6 +326,111 @@ class ScenarioValuationGoldenTests(unittest.TestCase):
         self.assertEqual(targets.get("乐观"), "71.34 元")
         self.assertEqual(targets.get("中性"), "46.40 元")
         self.assertEqual(targets.get("悲观"), "24.77 元")
+
+
+class ActionClassificationGoldenTests(unittest.TestCase):
+    def test_haier_action_comes_from_operation_advice(self):
+        lines = report_lines("reports/港股召回池/海尔智家/最终报告.md")
+        self.assertEqual(dashboard.classify_action(dashboard.decision_section(lines)), "分批买入")
+
+    def test_tongcheng_and_icbc_final_reports_stay_unclassified(self):
+        for relative in (
+            "reports/港股召回池/同程旅行/最终报告.md",
+            "reports/港股召回池/工商银行/最终报告.md",
+        ):
+            with self.subTest(report=relative):
+                lines = report_lines(relative)
+                section = dashboard.decision_section(lines) or lines[-160:]
+                self.assertEqual(dashboard.classify_action(section), "未提取")
+
+
+class ParsedFieldRegressionTests(unittest.TestCase):
+    def test_ge_vernova_price_plan_keeps_thousand_separators(self):
+        record = candidate_for("reports/GE Vernova/GEV-research-20260623.md")
+        ranges = [row.get("price_range") for row in record["price_plan"]]
+        self.assertNotIn("$1", ranges)
+        self.assertIn("$900-1,100", ranges)
+        self.assertIn("$1,100以上", ranges)
+
+    def test_dual_listed_report_buy_price_is_market_filtered(self):
+        record = candidate_for("reports/中国广核/中国广核-investment-research-20260724.md")
+        self.assertEqual(record["market"], "A股")
+        self.assertIn("元", record["buy_price"])
+        self.assertNotIn("港元", record["buy_price"])
+
+    def test_foreign_currency_fallback_buy_price_is_rejected_for_a_share(self):
+        record = candidate_for("reports/百济神州/百济神州研究报告-20260706.md")
+        if record["buy_price"]:
+            self.assertIn("元", record["buy_price"])
+            self.assertNotIn("US$", record["buy_price"])
+            self.assertNotIn("美元", record["buy_price"])
+
+    def test_usd_quoted_hk_decision_does_not_fabricate_hkd_stances(self):
+        record = candidate_for("reports/腾讯音乐/最终报告.md")
+        self.assertEqual(record["market"], "港股")
+        for stance in record["investor_stances"]:
+            self.assertNotIn("港元", str(stance.get("price_range") or ""))
+
+    def test_pdd_inline_scenario_keeps_usd_unit(self):
+        record = candidate_for("reports/拼多多/拼多多投资研究报告_20260704.md")
+        targets = [entry.get("target_price") for entry in record["scenario_valuation"]]
+        self.assertTrue(targets)
+        for target in targets:
+            self.assertTrue("美元" in target or "$" in target, target)
+
+    def test_checklist_hard_veto_variants_are_detected(self):
+        registry = load_registry()
+        cases = {
+            "reports/东方电缆/东方电缆-investment-checklist-20260820.md": True,
+            "reports/分众传媒/巴菲特Checklist-分众传媒.md": True,
+        }
+        for relative, expected in cases.items():
+            with self.subTest(report=relative):
+                record = dashboard.checklist_record(ROOT / relative, ROOT, registry)
+                assert record is not None
+                self.assertEqual(record["hard_veto"], expected)
+
+    def test_spaced_chinese_dates_are_parsed(self):
+        lines = report_lines("reports/ADP/最终报告.md")
+        self.assertEqual(dashboard.extract_data_cutoff(lines), "2026-05-16")
+
+    def test_wrong_buy_price_sources_are_rejected(self):
+        cases = {
+            "reports/Meta/《看懂Meta》/05-估值判断-一道关于信任的数学题.md": "US$826.69",
+            "reports/ADP/《看懂ADP》/04-风险与估值-打了七折的收费公路.md": "US$272",
+            "reports/Booking/《看懂Booking》/04-风险与估值-好公司也需要好价格.md": "US$100-150",
+            "reports/lululemon/lululemon-research-20260516.md": "US$265",
+            "reports/Qualcomm/02-财务估值分析-巴菲特视角.md": "US$201",
+            "reports/港股召回池/老铺黄金/最终报告.md": "HK$592",
+            "reports/快手/快手-industry-20260707.md": "HK$92",
+        }
+        for relative, wrong in cases.items():
+            with self.subTest(report=relative):
+                record = candidate_for(relative)
+                self.assertNotEqual(record.get("buy_price"), wrong)
+
+
+class USFinalReportCandidateTests(unittest.TestCase):
+    CASES = {
+        "reports/ADP/最终报告.md": "ADP",
+        "reports/Qualcomm/最终报告.md": "QCOM",
+        "reports/Booking/最终报告.md": "BKNG",
+        "reports/Meta/最终报告.md": "META",
+        "reports/lululemon/最终报告.md": "LULU",
+        "reports/搜狐/最终报告.md": "SOHU",
+    }
+
+    def test_us_final_reports_resolve_ticker_and_market(self):
+        for relative, expected_ticker in self.CASES.items():
+            with self.subTest(report=relative):
+                record = candidate_for(relative)
+                self.assertEqual(record["ticker"], expected_ticker)
+                self.assertEqual(record["market"], "美股")
+
+    def test_us_ticker_market_inference(self):
+        self.assertEqual(dashboard.market_for_ticker("QCOM", None), "美股")
+        self.assertEqual(dashboard.market_for_ticker("00700.HK", None), "港股")
+        self.assertEqual(dashboard.market_for_ticker("600406.SH", None), "A股")
 
 
 class ExecutionEvidenceGoldenTests(unittest.TestCase):

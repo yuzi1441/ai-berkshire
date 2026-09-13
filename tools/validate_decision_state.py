@@ -17,6 +17,7 @@ import drift_provenance  # noqa: E402
 import holding_research_reviews  # noqa: E402
 import financial_facts  # noqa: E402
 import dashboard_snapshot  # noqa: E402
+import current_reports  # noqa: E402
 
 
 def load(path: Path) -> dict:
@@ -150,6 +151,15 @@ def main() -> int:
                 errors.append(f"formal asset is not Git tracked: {relative_path}")
     state_tickers = {item.get("ticker") for item in state.get("companies", [])}
     rule_tickers = {item.get("ticker") for item in rules.get("companies", [])}
+    canonical_payload = current_reports.load(
+        data / current_reports.FILENAME, strict=False
+    )
+    for old_ticker, new_ticker in current_reports.identity_rule_replacements(
+        canonical_payload
+    ).items():
+        if old_ticker in rule_tickers:
+            rule_tickers.remove(old_ticker)
+            rule_tickers.add(new_ticker)
     if state_tickers != rule_tickers:
         errors.append("company/rule ticker sets differ")
     if errors:
