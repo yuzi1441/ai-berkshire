@@ -6,8 +6,8 @@ the dashboard's current company universe, but it never rewrites dashboard data,
 reports, recommendations, or site assets.
 
 The implementation is suitable for a small VPS: data collection and fallback
-scoring use only Python's standard library.  An OpenAI-compatible remote model
-can be enabled through environment variables for higher-quality headline
+scoring use only Python's standard library. DeepSeek Official can be enabled
+through environment variables for higher-quality headline
 classification; when it is unavailable, deterministic keyword scoring remains
 available and is labelled as lower confidence.
 """
@@ -25,7 +25,7 @@ import signal
 import statistics
 import sys
 import time
-import uuid
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date, datetime, time as clock_time, timedelta
@@ -38,6 +38,8 @@ from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 from zoneinfo import ZoneInfo
+
+from deepseek_provider import DeepSeekConfigurationError, load_config as load_deepseek_config
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,7 +55,7 @@ NEWS_CACHE_SCHEMA_VERSION = 2
 NEWS_ACQUISITION_POLICY_VERSION = 1
 NEWS_CATALOG_SCHEMA_VERSION = 1
 NEWS_CATALOG_FILENAME = "news-catalog.json"
-NEWS_SCORING_POLICY_VERSION = 1
+NEWS_SCORING_POLICY_VERSION = 2
 DEFAULT_PRIMARY_LOOKBACK_DAYS = 7
 DEFAULT_FALLBACK_LOOKBACK_DAYS = 30
 DEFAULT_LLM_TIMEOUT_SECONDS = 600
@@ -63,6 +65,8 @@ DEFAULT_LLM_MISSING_RESULT_RETRIES = 3
 DEFAULT_CONTEXT_ANALYSIS_LIMIT = 12
 DEFAULT_NEWS_CACHE_TTL_MINUTES = 30
 TRANSIENT_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
+MODEL_USAGE_LOCK = threading.Lock()
+MODEL_USAGE: dict[str, dict[str, int]] = {}
 
 SHANGHAI_TIMEZONE = ZoneInfo("Asia/Shanghai")
 SUPPORTED_MARKETS = {"A股", "港股"}
@@ -249,7 +253,7 @@ class SentimentError(RuntimeError):
 
 @dataclass(frozen=True)
 class LLMConfig:
-    """Configuration for an optional OpenAI-compatible chat endpoint."""
+    """Configuration for one DeepSeek Official classification role."""
 
     endpoint: str
     api_key: str
@@ -267,18 +271,20 @@ class LLMConfig:
 
     @classmethod
     def from_environment(cls, prefix: str = "SENTIMENT_LLM_") -> LLMConfig | None:
-        api_key = os.environ.get(f"{prefix}API_KEY", "").strip()
-        if not api_key:
-            # OpenCode Go uses one workspace key for both model roles. Keep
-            # role-specific keys as an override so existing deployments remain
-            # compatible while a single OPENCODE_GO_API_KEY is sufficient.
-            api_key = os.environ.get("OPENCODE_GO_API_KEY", "").strip()
-        model = os.environ.get(f"{prefix}MODEL", "").strip()
-        if not api_key or not model:
+        default_effort = "high" if prefix == "SENTIMENT_REVIEW_" else "low"
+        try:
+            shared = load_deepseek_config(
+                "sentiment_verification" if prefix == "SENTIMENT_REVIEW_" else "sentiment_primary",
+                prefix=prefix,
+                default_effort=default_effort,
+                default_max_tokens=1800,
+                default_timeout=DEFAULT_LLM_TIMEOUT_SECONDS,
+                require_key=False,
+            )
+        except DeepSeekConfigurationError as error:
+            raise SentimentError(str(error)) from error
+        if shared is None:
             return None
-        endpoint = os.environ.get(
-            f"{prefix}ENDPOINT", "https://api.openai.com/v1/chat/completions"
-        ).strip()
         default_batch_size = "5" if prefix == "SENTIMENT_REVIEW_" else "20"
         batch_size_text = os.environ.get(f"{prefix}BATCH_SIZE", default_batch_size).strip()
         try:
@@ -290,12 +296,10 @@ class LLMConfig:
             workers = min(12, max(1, int(workers_text)))
         except ValueError:
             workers = 4
-        thinking_mode = os.environ.get(f"{prefix}THINKING", "disabled").strip().lower()
+        thinking_mode = os.environ.get(f"{prefix}THINKING", "enabled").strip().lower()
         if thinking_mode not in {"enabled", "disabled"}:
             thinking_mode = None
-        reasoning_effort = os.environ.get(f"{prefix}REASONING_EFFORT", "").strip().lower()
-        if reasoning_effort not in {"low", "medium", "high", "max"}:
-            reasoning_effort = None
+        reasoning_effort = shared.reasoning_effort
         json_mode = os.environ.get(f"{prefix}JSON_MODE", "true").strip().lower() in {
             "1",
             "true",
@@ -335,9 +339,9 @@ class LLMConfig:
         except ValueError:
             missing_result_retries = DEFAULT_LLM_MISSING_RESULT_RETRIES
         return cls(
-            endpoint=endpoint,
-            api_key=api_key,
-            model=model,
+            endpoint=shared.endpoint,
+            api_key=shared.api_key,
+            model=shared.model,
             batch_size=batch_size,
             workers=workers,
             thinking_mode=thinking_mode,
@@ -447,22 +451,10 @@ def mark_auxiliary_article(article: dict[str, Any]) -> dict[str, Any]:
 
 
 def model_route_for_article(article: dict[str, Any]) -> str:
-    """Choose the minimum model route allowed by the source quality.
-
-    A/B evidence is formal enough to require an independent double check.
-    C/D evidence is contextual only, so it is classified by the MiMo review
-    model without also spending a primary-model request. Articles created by
-    older snapshots without ``source_tier`` retain the previous market-based
-    fallback: A-share/industry items are dual-scored and other formal items
-    use the primary model once.
-    """
+    """Classify every article once and selectively verify material cases."""
     source_tier = clean_text(article.get("source_tier")).upper()
-    if source_tier in {"A", "B"}:
-        return "dual"
-    if source_tier in {"C", "D"} or not article.get("score_eligible", True):
-        return "review_only"
-    if article.get("market") == "A股" or article.get("scope") == "industry":
-        return "dual"
+    if source_tier in {"A", "B"} or (not source_tier and article.get("score_eligible", True)):
+        return "verify"
     return "primary_only"
 
 
@@ -482,24 +474,6 @@ def safe_float(value: Any, default: float = 0.0) -> float:
 def chunks(items: list[Any], size: int) -> Iterable[list[Any]]:
     for start in range(0, len(items), size):
         yield items[start : start + size]
-
-
-def is_opencode_go_endpoint(endpoint: str) -> bool:
-    """Return whether an endpoint uses the OpenCode Go HTTP compatibility API."""
-    parsed = urlsplit(endpoint)
-    path = parsed.path.rstrip("/")
-    return (
-        parsed.hostname == "opencode.ai"
-        and (path == "/zen/go/v1" or path.startswith("/zen/go/v1/"))
-    )
-
-
-def sentiment_run_headers() -> dict[str, str]:
-    """Create non-sensitive headers shared by one Sentiment scoring invocation."""
-    return {
-        "User-Agent": USER_AGENT,
-        "x-opencode-session": f"ai-berkshire-sentiment-{uuid.uuid4()}",
-    }
 
 
 def http_text(
@@ -2090,11 +2064,22 @@ def score_with_llm(
             "ticker": item["ticker"],
             "title": item["title"],
             "summary": item.get("summary", "")[:240],
+            **(
+                {"primary_classification": item.get("primary_classification")}
+                if isinstance(item.get("primary_classification"), dict)
+                else {}
+            ),
         }
         for item in batch
     ]
+    role_instruction = (
+        "你是verification pass。逐条主动检查首轮分类的公司关联、标题党、二手失真、方向/影响/相关性夸大、重复事件、旧闻包装和传闻冒充事实。"
+        "只能确认、降级或拒绝首轮判断；不得无依据扩大正面方向、影响、相关性或置信度。"
+        if provider_label in {"review", "verification"}
+        else "你是LOW首轮证券新闻分类器。"
+    )
     system_prompt = (
-        "你是证券新闻分类器，只评估新闻对指定公司或行业未来基本面和风险的增量影响。"
+        role_instruction + "只评估新闻对指定公司或行业未来基本面和风险的增量影响。"
         "返回严格 JSON 对象，格式必须为{\"items\":[...]}; 每项必须含 id、direction(-1到1)、"
         "impact(1到3)、relevance(0到1)、confidence(0到1)、event_type。不要输出投资建议。"
     )
@@ -2118,15 +2103,7 @@ def score_with_llm(
         "Authorization": f"Bearer {config.api_key}",
         "Content-Type": "application/json",
     }
-    if is_opencode_go_endpoint(config.endpoint) and run_headers:
-        # Only copy the provider contract fields.  Callers cannot replace auth.
-        request_headers.update(
-            {
-                key: run_headers[key]
-                for key in ("User-Agent", "x-opencode-session")
-                if run_headers.get(key)
-            }
-        )
+    request_headers["User-Agent"] = USER_AGENT
     response = http_json(
         config.endpoint,
         headers=request_headers,
@@ -2135,6 +2112,16 @@ def score_with_llm(
         attempts=config.max_retries + 1,
         retry_backoff_seconds=config.retry_backoff_seconds,
     )
+    usage = response.get("usage") if isinstance(response.get("usage"), dict) else {}
+    with MODEL_USAGE_LOCK:
+        totals = MODEL_USAGE.setdefault(
+            provider_label,
+            {"requests": 0, "input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+        )
+        totals["requests"] += 1
+        totals["input_tokens"] += int(usage.get("prompt_tokens") or 0)
+        totals["output_tokens"] += int(usage.get("completion_tokens") or 0)
+        totals["total_tokens"] += int(usage.get("total_tokens") or 0)
     choices = response.get("choices") or []
     if not choices:
         raise SentimentError("LLM response has no choices")
@@ -2196,12 +2183,7 @@ def score_articles(
     ]
     | None = None,
 ) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
-    """Score formal news and a bounded contextual subset of auxiliary news.
-
-    A/B articles use the primary model plus the independent MiMo review. C/D
-    articles use only the MiMo review model and remain contextual evidence;
-    they are never silently promoted to formal source quality.
-    """
+    """Classify all bounded news once, then selectively verify material items."""
     if not articles:
         return [], [], []
     if primary_config is None:
@@ -2251,37 +2233,15 @@ def score_articles(
     if not model_articles:
         return untouched_auxiliary_articles, [], []
     routes = {article["id"]: model_route_for_article(article) for article in model_articles}
-    primary_articles = [
-        article
-        for article in model_articles
-        if routes[article["id"]] in {"dual", "primary_only"}
-    ]
-    review_only_articles = [
-        article for article in model_articles if routes[article["id"]] == "review_only"
-    ]
-    requires_review = any(route in {"dual", "review_only"} for route in routes.values())
+    primary_articles = list(model_articles)
+    review_only_articles: list[dict[str, Any]] = []
+    requires_review = any(route == "verify" for route in routes.values())
     if requires_review and review_config is None:
-        raise SentimentError("A/B 双复核或 C/D MiMo 分析需要复核模型配置")
-
-    opencode_go_run_headers = (
-        sentiment_run_headers()
-        if any(
-            config is not None and is_opencode_go_endpoint(config.endpoint)
-            for config in (primary_config, review_config)
-        )
-        else None
-    )
+        raise SentimentError("A/B 正式情绪需要 DeepSeek HIGH verification 配置")
 
     def invoke_score(
         batch: list[dict[str, Any]], config: LLMConfig, provider_label: str
     ) -> dict[str, dict[str, Any]]:
-        if is_opencode_go_endpoint(config.endpoint):
-            return score_with_llm(
-                batch,
-                config,
-                provider_label,
-                run_headers=opencode_go_run_headers,
-            )
         return score_with_llm(batch, config, provider_label)
 
     def collect_scores(
@@ -2492,11 +2452,20 @@ def score_articles(
     primary_success_articles = [
         article for article in primary_articles if article["id"] in primary_scores
     ]
-    review_articles = [
-        article
-        for article in primary_success_articles
-        if routes[article["id"]] == "dual"
-    ] + review_only_articles
+    review_articles = []
+    for article in primary_success_articles:
+        score = primary_scores[article["id"]]
+        material = (
+            routes[article["id"]] == "verify"
+            or int(score.get("impact") or 1) >= 3
+            or float(score.get("confidence") or 0) < 0.55
+            or abs(float(score.get("direction") or 0)) >= 0.75
+        )
+        if material:
+            review_articles.append(
+                {**article, "primary_classification": dict(score)}
+            )
+    review_ids = {article["id"] for article in review_articles}
     preloaded_review_map = {
         article["id"]: dict(preloaded_review_scores[article["id"]])
         for article in review_articles
@@ -2506,14 +2475,12 @@ def score_articles(
         article for article in review_articles if article["id"] not in preloaded_review_map
     ]
     if review_config is None and review_articles:
-        # A/B dual-scored evidence cannot be called formal when the
-        # independent review model is absent. Keep the primary result as
-        # contextual evidence and expose the missing review explicitly.
+        # Formal A/B evidence fails closed without its verification pass.
         degraded: list[dict[str, Any]] = []
         for article in primary_success_articles:
             route = routes[article["id"]]
             primary = dict(primary_scores[article["id"]])
-            if route == "primary_only":
+            if route == "primary_only" and article["id"] not in review_ids:
                 degraded.append({**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"})
                 continue
             item = {
@@ -2523,14 +2490,14 @@ def score_articles(
                 "context_score_eligible": True,
                 "llm_status": "needs_review",
                 "scoring_method": f"llm:primary_only:needs_review:{primary_config.model}",
-                "score_exclusion_reason": "独立复核模型未配置；仅作上下文，未计入正式情绪分",
+                "score_exclusion_reason": "DeepSeek HIGH verification 未配置；仅作上下文，未计入正式情绪分",
                 "model_review": {"review_missing": True},
             }
             apply_company_relevance_guard(item, item)
             degraded.append(item)
         degraded.extend(mark_auxiliary_article(article) for article in review_only_articles)
         degraded.extend(mark_auxiliary_article(article) for article in untouched_auxiliary_articles)
-        return degraded, ["复核模型未配置；A/B 仅保留主模型上下文结果，正式情绪分标记 needs_review"], []
+        return degraded, ["verification 未配置；需复核新闻仅保留 LOW 分类，正式情绪分标记 needs_review"], []
 
     def review_checkpoint_callback(
         collected_scores: dict[str, dict[str, Any]],
@@ -2593,8 +2560,16 @@ def score_articles(
             continue
         primary = dict(primary_scores[article["id"]])
         route = routes[article["id"]]
-        if route == "primary_only":
+        if article["id"] not in review_ids:
             combined = {**article, **primary, "scoring_method": f"llm:single:{primary_config.model}"}
+            if not article.get("score_eligible", True):
+                combined.update(
+                    {
+                        "score_eligible": False,
+                        "context_score_eligible": True,
+                        "score_exclusion_reason": f"来源等级{article.get('source_tier', 'C')}：仅进入辅助情绪",
+                    }
+                )
             apply_company_relevance_guard(combined, combined)
             scored.append(combined)
             continue
@@ -2608,15 +2583,18 @@ def score_articles(
             or (float(primary["direction"]) > 0) == (float(review["direction"]) > 0)
         )
         event_type = primary["event_type"] if primary["event_type"] == review["event_type"] else "模型分歧"
+        combined_direction = (float(primary["direction"]) + float(review["direction"])) / 2
+        combined_direction = min(float(primary["direction"]), combined_direction)
         combined = {
             **article,
-            "direction": round((float(primary["direction"]) + float(review["direction"])) / 2, 4),
-            "impact": int(round((int(primary["impact"]) + int(review["impact"])) / 2)),
+            "direction": round(combined_direction, 4),
+            "impact": min(int(primary["impact"]), int(review["impact"])),
             "relevance": round(min(float(primary["relevance"]), float(review["relevance"])), 4),
             "confidence": round(min(float(primary["confidence"]), float(review["confidence"])), 4),
             "event_type": event_type,
-            "scoring_method": f"llm:dual:{primary_config.model}+{review_config.model}",
+            "scoring_method": f"llm:primary_verified:{primary_config.model}",
             "model_review": {
+                "semantics": "verification_not_independent_consensus",
                 "primary_direction": primary["direction"],
                 "review_direction": review["direction"],
                 "direction_gap": round(direction_gap, 4),
@@ -2645,7 +2623,7 @@ def score_articles(
             "context_score_eligible": True,
             "scoring_method": f"llm:context:{review_config.model}",
             "score_exclusion_reason": (
-                f"来源等级{article.get('source_tier', 'C')}：仅由 MiMo 分析，作为辅助情绪"
+                f"来源等级{article.get('source_tier', 'C')}：由 DeepSeek LOW 分析，仅作为辅助情绪"
             ),
             "model_review": {
                 "review_only": True,
@@ -2714,8 +2692,12 @@ def aggregate_news(
     context_articles = [
         article
         for article in articles
-        if article.get("score_eligible", True)
-        or (include_context and article.get("context_score_eligible", False))
+        if (
+            not article.get("score_eligible", True)
+            and include_context
+            and article.get("context_score_eligible", False)
+        )
+        or (not include_context and article.get("score_eligible", True))
     ]
     relevant_articles = [
         article
@@ -2746,6 +2728,7 @@ def aggregate_news(
         )
         decay = time_decay(article, cutoff) if is_scoreable or is_contextual else None
         return {
+            "source_id": article.get("id"),
             "title": article["title"],
             "summary": article.get("summary", ""),
             "publisher": article["publisher"],
@@ -2826,7 +2809,7 @@ def aggregate_news(
             "news_recency": "none" if not articles else "no_relevant_news",
             "recency_state": recency_state,
             "confidence": "无数据",
-            "article_count": len(articles),
+            "article_count": len(context_articles) if include_context else len(scoreable_articles),
             "score_article_count": len(scoreable_articles),
             "auxiliary_article_count": len(auxiliary_articles),
             "context_article_count": len(context_articles) if include_context else len(scoreable_articles),
@@ -2835,7 +2818,7 @@ def aggregate_news(
             )
             if include_context
             else 0,
-            "score_scope": "formal_and_context" if include_context else "formal",
+            "score_scope": "context" if include_context else "formal",
             "relevant_article_count": len(relevant_articles),
             "classified_count": 0,
             "high_impact_negative_count": 0,
@@ -2873,7 +2856,7 @@ def aggregate_news(
         "recency_state": recency_state,
         "freshness_factor": freshness_factor,
         "confidence": confidence,
-        "article_count": len(articles),
+        "article_count": len(context_articles) if include_context else len(scoreable_articles),
         "score_article_count": len(scoreable_articles),
         "auxiliary_article_count": len(auxiliary_articles),
         "context_article_count": len(context_articles) if include_context else len(scoreable_articles),
@@ -2882,7 +2865,7 @@ def aggregate_news(
         )
         if include_context
         else 0,
-        "score_scope": "formal_and_context" if include_context else "formal",
+        "score_scope": "context" if include_context else "formal",
         "relevant_article_count": len(relevant_articles),
         "classified_count": classified_count,
         "high_impact_negative_count": high_impact_negative,
@@ -2897,6 +2880,14 @@ def merge_sentiment_views(
 ) -> dict[str, Any]:
     """Expose formal and contextual views without hiding source quality."""
     result = dict(formal)
+    result["formal_sentiment"] = {
+        key: formal.get(key)
+        for key in ("status", "score_0_100", "state", "confidence", "article_count", "relevant_article_count")
+    }
+    result["context_sentiment"] = {
+        key: contextual.get(key)
+        for key in ("status", "score_0_100", "state", "confidence", "article_count", "relevant_article_count")
+    }
     result["formal_score_0_100"] = formal.get("score_0_100")
     result["formal_status"] = formal.get("status")
     result["context_score_0_100"] = contextual.get("score_0_100")
@@ -2905,16 +2896,11 @@ def merge_sentiment_views(
     result["context_article_count"] = contextual.get("context_article_count", 0)
     result["context_only_article_count"] = contextual.get("context_only_article_count", 0)
     result["context_scoring_methods"] = contextual.get("scoring_methods", [])
-    if contextual.get("score_0_100") is not None:
-        result["score_0_100"] = contextual["score_0_100"]
-        result["state"] = contextual.get("state")
-        result["confidence"] = contextual.get("confidence")
-        result["score_scope"] = "正式+辅助AI分析"
-        if formal.get("score_0_100") is None:
-            result["status"] = "context_only"
-            result["score_scope"] = "仅辅助AI分析"
-    else:
-        result["score_scope"] = "正式来源"
+    result["score_scope"] = "formal"
+    if formal.get("score_0_100") is None:
+        result["score_0_100"] = None
+        result["status"] = "context_only" if contextual.get("score_0_100") is not None else "unavailable"
+        result["score_scope"] = "context_only" if contextual.get("score_0_100") is not None else "unavailable"
     return result
 
 
@@ -3615,6 +3601,8 @@ def build_snapshot(
     news_cache_ttl_minutes: int = DEFAULT_NEWS_CACHE_TTL_MINUTES,
     checkpoint_callback: Callable[[dict[str, Any]], None] | None = None,
 ) -> dict[str, Any]:
+    with MODEL_USAGE_LOCK:
+        MODEL_USAGE.clear()
     selected_markets = markets or SUPPORTED_MARKETS
     universe = load_universe(board_path, selected_markets)
     if company_limit is not None:
@@ -3660,7 +3648,7 @@ def build_snapshot(
         warnings.append(f"A-share market context failed: {exc}")
 
     scoring_mode = (
-        f"remote-mixed-llm:{llm_config.model}+A股/行业复核:{review_llm_config.model}"
+        f"deepseek-official:{llm_config.model}:LOW+selective-HIGH-verification"
         if llm_config and review_llm_config
         else f"remote-primary-llm:{llm_config.model}"
         if llm_config
@@ -4383,6 +4371,9 @@ def build_snapshot(
         "industry_news_available_count": successful_industry_news,
         "industry_formal_news_available_count": formal_industry_news,
         "scoring_mode": scoring_mode,
+        "provider": "deepseek_official" if llm_config else None,
+        "model": llm_config.model if llm_config else None,
+        "model_usage": {key: dict(value) for key, value in MODEL_USAGE.items()},
         "news_policy": {
             "primary_lookback_days": lookback_days,
             "fallback_lookback_days": fallback_lookback_days,
@@ -4425,10 +4416,10 @@ def build_snapshot(
         },
         "method_notes": [
             "新闻分包含方向、影响强度、相关性、置信度和事件半衰期。",
-            "A股和行业新闻在模型配置完整时由主模型与复核模型共同评分；模型缺失时仍完成抓取并保留保守临时分类，但正式情绪分标记 needs_review。C/D辅助新闻按上限进入AI分析，但仍保留来源降权，不会升级为正式A/B证据。官方公告优先直连巨潮资讯；任一模型失败、超时或返回缺失时，先进行单条重试，仍失败的新闻跳过并记录，其余成功结果继续写入。",
+            "所有新闻先由 DeepSeek Flash LOW 分类；A/B、高影响、低置信和极端结果再由同模型 HIGH verification 主动找错。verification 不是独立双模型共识，只能确认、降级或拒绝。模型缺失时正式情绪分标记 needs_review。C/D只进入辅助舆情。",
             f"新闻抓取优先近{lookback_days}日；若窗口内没有抓到新闻，则回溯近{fallback_lookback_days}日，并标注为参考旧闻。",
             "跨运行新闻目录按股票/行业、市场和规范化标题去重；相同模型配置已有评分直接复用，模型或规则变化时才重新评分。",
-            "个股情绪保留正式来源分，同时展示含辅助AI分析的上下文分；A/B进入正式分，C/D只按降权上下文进入。",
+            "个股情绪严格拆分 Formal 与 Context；A/B进入正式分，C/D只进入辅助舆情，不能覆盖主分数。",
             "行业权威来源可标为行业A级，但行业范围和对个股的传导系数仍单独记录。",
             "A股市场温度使用涨跌家数、涨跌停、极端涨跌、炸板率和情绪指数动量的滚动标准化。",
             "同花顺热度只表示关注/拥挤，不作为方向性利好。",

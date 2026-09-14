@@ -883,6 +883,9 @@ function aiScanState(value) {
 }
 
 function aiScanAssessments(scan) {
+  if (scan?.final?.status === "ready" && scan.final.assessment && typeof scan.final.assessment === "object") {
+    return [{ model: scan.final.model || "deepseek-flash", assessment: scan.final.assessment }];
+  }
   const assessments = [];
   if (scan?.assessment && !["stale", "error"].includes(scan.status) && typeof scan.assessment === "object") {
     assessments.push({ model: scan.model, assessment: scan.assessment });
@@ -1022,7 +1025,11 @@ function renderAiOpportunitySection(record) {
   const historicalNote = opportunityScanDisplayMode(state.opportunityScanMeta) === "current"
     ? ""
     : `<div class="source-line">当前展示最近一次成功 AI 机会结果 · ${escapeHtml(formatDateTime(opportunityScanDisplayTimestamp(state.opportunityScanMeta)))}</div>`;
-  return `<div class="detail-section ai-opportunity-detail"><div class="detail-section-head"><h3>AI 每日研究机会</h3><span class="data-badge" data-status="${escapeHtml(scan.status || "unknown")}">${escapeHtml(classification)}</span></div><p class="detail-copy">这是独立的研究发现，不改变当前生命周期、决策规则或买入候选。</p>${whyNow ? `<div class="detail-field"><div class="detail-field-label">为什么现在</div><div class="detail-field-value">${escapeHtml(whyNow)}</div></div>` : ""}${summary ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">机会摘要</div><div class="detail-field-value">${escapeHtml(summary)}</div></div>` : ""}${satisfied.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">已满足条件</div><div class="detail-field-value">${escapeHtml(satisfied.join("；"))}</div></div>` : ""}${unmet.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">仍待确认</div><div class="detail-field-value">${escapeHtml(unmet.join("；"))}</div></div>` : ""}${historicalNote}</div>`;
+  const stageState = (stage) => aiScanState(stage?.assessment?.opportunity_state || "待复核");
+  const refs = Array.isArray(scan?.final?.assessment?.evidence_refs) ? scan.final.assessment.evidence_refs : [];
+  const stages = `<div class="source-line">Initial：${escapeHtml(stageState(scan.initial))}<br />Verification：${escapeHtml(scan.verification_required ? stageState(scan.verification) : "无需复核")}<br />Final：${escapeHtml(stageState(scan.final))}</div>`;
+  const refsHtml = refs.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">证据引用</div><div class="detail-field-value">${escapeHtml(refs.map((ref) => ref.source_id || ref.rule_id || ref.gate || ref.report_path).filter(Boolean).join("；"))}</div></div>` : "";
+  return `<div class="detail-section ai-opportunity-detail"><div class="detail-section-head"><h3>AI 每日研究机会</h3><span class="data-badge" data-status="${escapeHtml(scan.status || "unknown")}">${escapeHtml(classification)}</span></div><p class="detail-copy">这是独立的研究发现，不改变当前生命周期、决策规则或买入候选；执行仍受 Checklist、红线和报告规则约束。</p>${stages}${whyNow ? `<div class="detail-field"><div class="detail-field-label">为什么现在</div><div class="detail-field-value">${escapeHtml(whyNow)}</div></div>` : ""}${summary ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">机会摘要</div><div class="detail-field-value">${escapeHtml(summary)}</div></div>` : ""}${satisfied.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">已满足条件</div><div class="detail-field-value">${escapeHtml(satisfied.join("；"))}</div></div>` : ""}${unmet.length ? `<div class="detail-field" style="margin-top:12px"><div class="detail-field-label">仍待确认</div><div class="detail-field-value">${escapeHtml(unmet.join("；"))}</div></div>` : ""}${refsHtml}${historicalNote}</div>`;
 }
 
 function holdingReturn(record, tracking) {
@@ -1380,8 +1387,16 @@ function sentimentLabel(record) {
 }
 
 function renderSentimentSection(record) {
-  const sentiment = sentimentLabel(record);
-  return `<div class="detail-section"><div class="detail-section-head"><h3>市场情绪</h3><span class="data-badge" data-status="${escapeHtml((record.sentiment || {}).status || "partial")}">${escapeHtml(sentiment.stateText)}</span></div><div class="detail-grid"><div class="detail-field"><div class="detail-field-label">综合倾向</div><div class="detail-field-value large">${escapeHtml(sentiment.stateText)}</div></div><div class="detail-field"><div class="detail-field-label">辅助分数</div><div class="detail-field-value large">${sentiment.score == null ? "—" : escapeHtml(formatNumber(sentiment.score, 1))}</div></div><div class="detail-field"><div class="detail-field-label">数据可信度</div><div class="detail-field-value">${escapeHtml(sentiment.confidence)}</div></div><div class="detail-field"><div class="detail-field-label">数据说明</div><div class="detail-field-value">${escapeHtml(sentiment.note)}</div></div></div></div>`;
+  const summary = sentimentLabel(record);
+  const payload = record.sentiment || state.sentiment.get(record.ticker) || {};
+  const news = payload.news_sentiment || payload.news || payload;
+  const formal = news.formal_sentiment || {};
+  const context = news.context_sentiment || {};
+  const industry = payload.industry_sentiment || {};
+  const market = payload.market_sentiment || state.sentimentMeta?.market_sentiment || {};
+  const crowding = payload.crowding || {};
+  const metric = (labelText, value) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(labelText)}</div><div class="detail-field-value">${value == null ? "—" : escapeHtml(typeof value === "number" ? formatNumber(value, 1) : value)}</div></div>`;
+  return `<div class="detail-section"><div class="detail-section-head"><h3>市场情绪</h3><span class="data-badge" data-status="${escapeHtml(payload.status || "partial")}">${escapeHtml(summary.stateText)}</span></div><p class="detail-copy">正式证据与辅助舆情分开；关注度不代表利好。</p><div class="detail-grid">${metric("正式情绪", formal.score_0_100)}${metric("辅助舆情", context.score_0_100)}${metric("行业情绪", industry.score_0_100)}${metric("市场情绪", market.score_0_100)}${metric("拥挤度 / 关注度", crowding.attention_score_0_100)}${metric("正式可信度", formal.confidence || summary.confidence)}</div></div>`;
 }
 
 function renderThesisSection(record) {

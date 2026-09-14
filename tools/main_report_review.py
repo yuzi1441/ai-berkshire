@@ -1166,7 +1166,7 @@ def review_rules_with_model(
         }
         for document in documents
     }
-    config = opportunity_review.model_config("scan_flash") if responder is None else None
+    config = opportunity_review.model_config("opportunity_initial") if responder is None else None
     system = (
         "你是主报告锁定规则的证据核验员。规则由人工锁定，你无权新增、删除、修改、放宽、"
         "重解释任何条件或阈值。main_report_reference 只能证明规则来源，不能证明当前状态。"
@@ -1930,7 +1930,7 @@ def compact_legacy_daily_review(payload: dict[str, Any]) -> dict[str, Any] | Non
             }
         )
     return {
-        "model": model_review.get("model") or "deepseek-v4-flash",
+        "model": model_review.get("model") or "deepseek-flash",
         "generated_at": payload.get("generated_at"),
         "scope": payload.get("scope") or "历史全量日常复核",
         "tasks": tasks,

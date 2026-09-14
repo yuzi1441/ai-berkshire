@@ -27,7 +27,6 @@ for path in \
     /etc/systemd/system/ai-berkshire-dashboard.service \
     /etc/systemd/system/ai-berkshire-a-share-scheduler@.service \
     /usr/local/sbin/ai-berkshire-a-share-scheduler \
-    /usr/local/sbin/ai-berkshire-opencode-review \
     /usr/local/sbin/ai-berkshire-publish-release \
     /usr/local/sbin/ai-berkshire-refresh-services; do
     backup_file "${path}"
@@ -62,9 +61,7 @@ else
     # refresh script must not replace the hardened, separately installed pair.
     echo "legacy release: retaining the installed release guard and refresh script"
 fi
-bash "${REPO_ROOT}/deploy/vps/install-opencode-review-agent.sh"
-install -D -m 0755 "${REPO_ROOT}/deploy/vps/ai-berkshire-opencode-review.sh" \
-    /usr/local/sbin/ai-berkshire-opencode-review
+# DeepSeek Official is called directly; no external model runner is installed.
 install -D -m 0644 "${REPO_ROOT}/deploy/systemd/ai-berkshire-dashboard.service" \
     /etc/systemd/system/ai-berkshire-dashboard.service
 install -D -m 0644 "${REPO_ROOT}/deploy/vps/ai-berkshire-a-share-scheduler.service" \
@@ -81,7 +78,6 @@ rollback() {
     restore_file /etc/systemd/system/ai-berkshire-dashboard.service
     restore_file /etc/systemd/system/ai-berkshire-a-share-scheduler@.service
     restore_file /usr/local/sbin/ai-berkshire-a-share-scheduler
-    restore_file /usr/local/sbin/ai-berkshire-opencode-review
     restore_file /usr/local/sbin/ai-berkshire-publish-release
     restore_file /usr/local/sbin/ai-berkshire-refresh-services
     for timer in deploy annual morning market intraday close daily heavy reconcile; do

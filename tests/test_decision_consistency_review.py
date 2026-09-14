@@ -106,7 +106,7 @@ class DecisionConsistencyReviewTests(unittest.TestCase):
                 "technical_analysis": {"status": "missing"},
                 "checklist": {"status": "missing"},
             }
-            config = LLMConfig(endpoint="https://example.test", api_key="test", model="deepseek-v4-flash")
+            config = LLMConfig(endpoint="https://example.test", api_key="test", model="deepseek-flash")
             with patch.object(
                 review,
                 "call_review_model",

@@ -51,8 +51,8 @@ def load_env_file(path: Path) -> None:
 
 
 def load_model_environment() -> None:
-    """Prefer the shared OpenCode Go file, then retain legacy env fallbacks."""
-    load_env_file(ROOT / "local" / "opencodego-sentiment.env")
+    """Load ignored local DeepSeek settings without creating a fallback provider."""
+    load_env_file(ROOT / "local" / "deepseek-sentiment.env")
     load_env_file(ROOT / ".env.sentiment")
     load_env_file(ROOT / ".env.sentiment-review")
 

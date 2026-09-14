@@ -38,7 +38,7 @@ import quote_quality
 
 ROOT = Path(__file__).resolve().parents[1]
 REALTIME_MARKETS = {"A股", "港股"}
-SUPPORTED_OPPORTUNITY_SCAN_SCHEMA_VERSIONS = frozenset({1, 2})
+SUPPORTED_OPPORTUNITY_SCAN_SCHEMA_VERSIONS = frozenset({1, 2, 3})
 SHANGHAI_TIMEZONE = timezone(timedelta(hours=8))
 REPORTS_DIRECTORY = ROOT / "reports"
 DATA_DIRECTORY = ROOT / "data" / "investment-dashboard"

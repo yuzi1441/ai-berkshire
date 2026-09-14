@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Manual OpenCode runner for daily and deep main-report evidence reviews.
+"""Manual DeepSeek Official runner for main-report evidence reviews.
 
 This command never changes human-locked rules.  It invokes the read-only
-OpenCode agent, validates the returned JSON with ``main_report_review``, and
+DeepSeek model, validates the returned JSON with ``main_report_review``, and
 atomically replaces one stock/layer result at a time.
 """
 
@@ -12,9 +12,11 @@ import argparse
 from datetime import datetime
 import json
 from pathlib import Path
-import subprocess
 import sys
 from typing import Any
+
+from deepseek_provider import load_config
+from sentiment_snapshot import http_json, parse_json_block
 
 from main_report_review import (
     DAILY_REVIEW_DUE_DAYS,
@@ -37,7 +39,7 @@ from main_report_review import (
 )
 
 
-DAILY_MODEL = "opencode-go/deepseek-v4-flash"
+DAILY_MODEL = "deepseek-flash"
 
 
 def parse_iso(value: Any) -> datetime | None:
@@ -73,20 +75,7 @@ def json_candidates(value: Any) -> list[dict[str, Any]]:
     return found
 
 
-def parse_opencode_json(stdout: str) -> dict[str, Any]:
-    candidates: list[dict[str, Any]] = []
-    for line in stdout.splitlines():
-        try:
-            candidates.extend(json_candidates(json.loads(line)))
-        except json.JSONDecodeError:
-            continue
-    for candidate in reversed(candidates):
-        if any(key in candidate for key in ("rule_results", "task_results", "results", "rules")):
-            return candidate
-    raise RuntimeError("OpenCode did not emit a review JSON object")
-
-
-def invoke_opencode(
+def invoke_deepseek(
     *,
     repo_root: Path,
     agent: str,
@@ -95,27 +84,39 @@ def invoke_opencode(
     system: str,
     user: str,
     timeout_seconds: int,
-    opencode_bin: str,
 ) -> tuple[dict[str, Any], dict[str, str]]:
-    prompt = f"{system}\n\n任务输入：{user}\n\n只输出符合任务 schema 的 JSON 对象。"
-    command = [
-        opencode_bin,
-        "run",
-        "--pure",
-        "--agent", agent,
-        "--model", model,
-        "--variant", variant,
-        "--format", "json",
-        "--dir", str(repo_root),
-        prompt,
-    ]
-    completed = subprocess.run(command, capture_output=True, text=True, timeout=timeout_seconds, check=False)
-    if completed.returncode:
-        detail = (completed.stderr or completed.stdout or "OpenCode failed").strip()
-        raise RuntimeError(detail[-1200:])
-    return parse_opencode_json(completed.stdout), {
-        "requested": f"OpenCode --model {model} --variant {variant}",
-        "effective": f"OpenCode --model {model} --variant {variant}",
+    config = load_config(
+        agent,
+        prefix="FUNDAMENTAL_REVIEW_",
+        default_effort="high" if variant != "max" else "max",
+        default_max_tokens=6144,
+        default_timeout=timeout_seconds,
+    )
+    payload = {
+        "model": config.model,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "thinking": {"type": "enabled"},
+        "reasoning_effort": config.reasoning_effort,
+        "response_format": {"type": "json_object"},
+        "max_tokens": config.max_tokens,
+    }
+    response = http_json(
+        config.endpoint,
+        headers={"Authorization": f"Bearer {config.api_key}", "Content-Type": "application/json"},
+        body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        timeout=config.timeout_seconds,
+        attempts=config.max_retries + 1,
+    )
+    choices = response.get("choices") or []
+    if not choices:
+        raise RuntimeError("DeepSeek response has no choices")
+    content = ((choices[0].get("message") or {}).get("content") or "")
+    parsed = parse_json_block(str(content))
+    if not isinstance(parsed, dict):
+        raise RuntimeError("DeepSeek did not emit a review JSON object")
+    return parsed, {
+        "requested": f"DeepSeek Official {config.model} reasoning={config.reasoning_effort}",
+        "effective": f"DeepSeek Official {config.model} reasoning={config.reasoning_effort}",
     }
 
 
@@ -151,7 +152,7 @@ def layer_payload(
         "tasks": review.get("rules") or [],
         "summary": summary,
         "evidence_documents": result.get("evidence_documents") or [],
-        "source": "本地资料优先；不足时由 OpenCode 搜索并核对官方披露。",
+        "source": "本地资料优先；不足时由宿主收集官方披露后交给 DeepSeek 核对。",
         "due_at": review_due_at(generated_at, DAILY_REVIEW_DUE_DAYS if layer == "daily" else DEEP_REVIEW_DUE_DAYS),
     }
 
@@ -231,7 +232,6 @@ def main() -> int:
     parser.add_argument("--model")
     parser.add_argument("--variant", default="max")
     parser.add_argument("--timeout", type=int, default=600)
-    parser.add_argument("--opencode-bin", default="opencode")
     parser.add_argument("--seed-legacy", action="store_true")
     parser.add_argument("--queue", action="store_true")
     parser.add_argument("--publish", action="store_true")
@@ -280,10 +280,10 @@ def main() -> int:
                 package,
                 documents,
                 price_context=price_context,
-                responder=lambda system, user: invoke_opencode(
+                responder=lambda system, user: invoke_deepseek(
                     repo_root=root, agent="fundamental-review-daily" if args.layer == "daily" else "fundamental-review-deep",
                     model=model, variant=args.variant, system=system, user=user,
-                    timeout_seconds=args.timeout, opencode_bin=args.opencode_bin,
+                    timeout_seconds=args.timeout,
                 ),
                 reviewer_model=model,
             )

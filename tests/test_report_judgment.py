@@ -16,7 +16,7 @@ class ReportJudgmentTests(unittest.TestCase):
         config = report_judgment.LLMConfig(
             endpoint="https://example.com",
             api_key="test",
-            model="mimo-v2.5-pro",
+            model="deepseek-flash",
         )
         response = {
             "choices": [

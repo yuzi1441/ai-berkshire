@@ -472,7 +472,7 @@ def review_locked_tasks_with_local_model(
     documents: list[dict[str, Any]],
 ) -> dict[str, Any]:
     """Review all fixed tasks from local evidence using a closed JSON protocol."""
-    config = opportunity_review.model_config("scan_flash")
+    config = opportunity_review.model_config("opportunity_initial")
     judgment = resolution.get("judgment") or {}
     tasks = judgment.get("review_tasks") or []
     task_catalog = {
@@ -922,7 +922,7 @@ def comparison_rows(records: list[dict[str, Any]], quote: dict[str, Any]) -> lis
 
 
 def semantic_review(segment_rows: list[dict[str, Any]], rule: dict[str, Any]) -> dict[str, Any]:
-    config = opportunity_review.model_config("scan_flash")
+    config = opportunity_review.model_config("opportunity_initial")
     evidence_catalog = {
         f"segment_{index + 1}": row
         for index, row in enumerate(segment_rows)
@@ -984,7 +984,7 @@ def review_fixed_rule_evidence(
     evidence_layer: str,
 ) -> dict[str, Any]:
     """Let the model read evidence without granting it main-report rule authority."""
-    config = opportunity_review.model_config("scan_flash")
+    config = opportunity_review.model_config("opportunity_initial")
     document_catalog = {
         document["document_id"]: {
             "path": document.get("path"),
@@ -1221,7 +1221,7 @@ def main() -> None:
     parser.add_argument("--ticker", default="000682.SZ")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--markdown-output", type=Path, help="写入可读的本地对比结果")
-    parser.add_argument("--skip-model", action="store_true", help="只验证可计算规则，不调用 OpenCode")
+    parser.add_argument("--skip-model", action="store_true", help="只验证可计算规则，不调用 DeepSeek Official")
     parser.add_argument("--all-a-shares", action="store_true", help="按主报告裁决逐只运行 93 只 A 股本地复核")
     parser.add_argument(
         "--output-dir",
@@ -1230,7 +1230,7 @@ def main() -> None:
         help="全量模式的逐股票原子结果目录",
     )
     parser.add_argument("--resume", action="store_true", help="全量模式跳过已有逐股票结果")
-    parser.add_argument("--workers", type=int, default=4, help="全量模式最大并发 OpenCode 请求数，默认 4")
+    parser.add_argument("--workers", type=int, default=4, help="全量模式最大并发 DeepSeek Official 请求数，默认 4")
     parser.add_argument(
         "--local-only",
         action="store_true",
@@ -1240,7 +1240,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.all_a_shares:
         if args.skip_model:
-            raise SystemExit("全量本地复核必须调用 OpenCode 模型；不能与 --skip-model 同时使用。")
+            raise SystemExit("全量本地复核必须调用 DeepSeek Official 模型；不能与 --skip-model 同时使用。")
         counts = run_full_local(
             args.repo_root.resolve(),
             args.output_dir,

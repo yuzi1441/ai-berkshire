@@ -71,7 +71,7 @@ def finite_number(value: Any) -> float | None:
 
 
 def load_model_config(model_override: str | None) -> LLMConfig:
-    """Reuse the configured OpenCode Go key/endpoint without exposing secrets."""
+    """Use the shared DeepSeek Official secret with HIGH reasoning."""
     report_judgment.load_model_environment()
     dedicated = LLMConfig.from_environment("DECISION_REVIEW_")
     if dedicated:
@@ -79,9 +79,7 @@ def load_model_config(model_override: str | None) -> LLMConfig:
     else:
         config = LLMConfig.from_environment("SENTIMENT_LLM_")
         if config is None:
-            raise ConsistencyReviewError(
-                "missing model configuration; configure the shared OpenCode Go key and SENTIMENT_LLM_* settings"
-            )
+            raise ConsistencyReviewError("DEEPSEEK_API_KEY is not configured")
 
     max_tokens_text = os.environ.get("DECISION_REVIEW_MAX_TOKENS", "").strip()
     if max_tokens_text:
@@ -93,7 +91,8 @@ def load_model_config(model_override: str | None) -> LLMConfig:
         max_tokens = config.max_tokens
     return replace(
         config,
-        model=model_override or os.environ.get("DECISION_REVIEW_MODEL") or config.model or "deepseek-v4-flash",
+        model="deepseek-flash",
+        reasoning_effort="high",
         max_tokens=max_tokens,
     )
 
@@ -227,6 +226,7 @@ def compact_sentiment(record: dict[str, Any] | None) -> dict[str, Any]:
     items = news.get("items") if isinstance(news.get("items"), list) else []
     scored = [
         {
+            "source_id": item.get("source_id") or item.get("id"),
             "title": clean_text(item.get("title"), 100),
             "published_at": item.get("published_at"),
             "event_type": item.get("event_type"),
@@ -248,9 +248,14 @@ def compact_sentiment(record: dict[str, Any] | None) -> dict[str, Any]:
             "score_0_100": news.get("score_0_100"),
             "state": news.get("state"),
             "confidence": news.get("confidence"),
+            "formal_sentiment": news.get("formal_sentiment"),
+            "context_sentiment": news.get("context_sentiment"),
             "score_article_count": news.get("score_article_count"),
             "auxiliary_article_count": news.get("auxiliary_article_count"),
         },
+        "industry_sentiment": record.get("industry_sentiment"),
+        "market_sentiment": record.get("market_sentiment"),
+        "crowding": record.get("crowding"),
         "scored_news_examples": scored,
     }
 

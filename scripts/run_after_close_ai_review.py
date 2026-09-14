@@ -2,8 +2,8 @@
 """Refresh close quotes and the model-led A-share opportunity scan.
 
 This job is intended for the VPS after the A-share close. It refreshes the
-latest quote, rebuilds the board, then asks DeepSeek V4 Flash to independently
-identify research opportunities. The scheduled path is incremental-first; a
+latest quote, rebuilds the board, then asks DeepSeek V4.1 Flash for a HIGH
+initial assessment and selective MAX verification. The scheduled path is incremental-first; a
 manual ``opportunity_review.py scan`` remains a full reconciliation.
 """
 

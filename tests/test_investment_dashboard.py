@@ -306,7 +306,7 @@ class InvestmentDashboardTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary_directory:
             data = Path(temporary_directory)
             (data / "opportunity_scans.json").write_text(
-                json.dumps({"schema_version": 3, "scans": []}),
+                json.dumps({"schema_version": 999, "scans": []}),
                 encoding="utf-8",
             )
 

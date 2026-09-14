@@ -4,7 +4,7 @@
 The tool is deliberately model-free and authority-free.  It reuses existing
 local review, CNINFO, news, Event Radar, and rule-evaluation capabilities,
 filters them against the current main-report baseline, and emits one transient
-package for the current Codex client session to review with Luna.  It never
+package for the current Codex client session to review with the configured client model.  It never
 writes light thesis signals or any decision state.
 """
 

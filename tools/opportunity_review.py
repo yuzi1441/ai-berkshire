@@ -24,13 +24,13 @@ import sys
 import tempfile
 import time
 import urllib.error
-import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
 from source_hash import canonical_file_sha256
+from deepseek_provider import DeepSeekConfigurationError, load_config as load_deepseek_config, usage_summary
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,16 +42,15 @@ from sentiment_snapshot import SentimentError, http_json, parse_json_block  # no
 
 
 MARKET = "A股"
-SCAN_SCHEMA_VERSION = 2
+SCAN_SCHEMA_VERSION = 3
 DEEP_SCHEMA_VERSION = 1
-OPPORTUNITY_PROMPT_CONTRACT_VERSION = 2
-MATERIAL_TRIGGER_VERSION = 2
-INCREMENTAL_CONTRACT_VERSION = 2
+OPPORTUNITY_PROMPT_CONTRACT_VERSION = 3
+MATERIAL_TRIGGER_VERSION = 3
+INCREMENTAL_CONTRACT_VERSION = 3
+VERIFICATION_CONTRACT_VERSION = 1
 MAX_REUSE_AGE_DAYS = 7
 
-OPENCODE_GO_BASE = "https://opencode.ai/zen/go/v1"
 OPPORTUNITY_SCAN_USER_AGENT = "ai-berkshire-opportunity-review/1"
-OPENCODE_SESSION_HEADER = "x-opencode-session"
 TRANSPORT_OPENAI_CHAT = "openai_chat"
 TRANSPORT_ANTHROPIC_MESSAGES = "anthropic_messages"
 TRANSPORT_OPENAI_RESPONSES = "openai_responses"
@@ -107,26 +106,26 @@ class ModelConfig:
 
 
 MODEL_DEFAULTS = {
-    "scan_flash": ModelDefaults(
-        role="scan_flash",
-        model="deepseek-v4-flash",
+    "opportunity_initial": ModelDefaults(
+        role="opportunity_initial",
+        model="deepseek-flash",
         transport=TRANSPORT_OPENAI_CHAT,
-        endpoint=f"{OPENCODE_GO_BASE}/chat/completions",
-        prefix="OPPORTUNITY_SCAN_FLASH_",
+        endpoint="https://api.deepseek.com/chat/completions",
+        prefix="OPPORTUNITY_SCAN_",
     ),
-    "deep_v4pro": ModelDefaults(
-        role="deep_v4pro",
-        model="deepseek-v4-pro",
+    "opportunity_verify": ModelDefaults(
+        role="opportunity_verify",
+        model="deepseek-flash",
         transport=TRANSPORT_OPENAI_CHAT,
-        endpoint=f"{OPENCODE_GO_BASE}/chat/completions",
-        prefix="OPPORTUNITY_DEEP_V4PRO_",
+        endpoint="https://api.deepseek.com/chat/completions",
+        prefix="OPPORTUNITY_VERIFY_",
     ),
-    "deep_luna": ModelDefaults(
-        role="deep_luna",
-        model="gpt-5.6-luna",
-        transport=TRANSPORT_OPENAI_RESPONSES,
-        endpoint=f"{OPENCODE_GO_BASE}/responses",
-        prefix="OPPORTUNITY_DEEP_LUNA_",
+    "opportunity_deep": ModelDefaults(
+        role="opportunity_deep",
+        model="deepseek-flash",
+        transport=TRANSPORT_OPENAI_CHAT,
+        endpoint="https://api.deepseek.com/chat/completions",
+        prefix="OPPORTUNITY_DEEP_",
     ),
 }
 
@@ -157,46 +156,34 @@ def parse_integer(value: str | None, default: int, minimum: int, maximum: int) -
 
 
 def model_config(role: str) -> ModelConfig:
-    """Read one selected Go model without leaking its token to artifacts."""
+    """Read one DeepSeek Official role without leaking its token to artifacts."""
     defaults = MODEL_DEFAULTS[role]
     report_judgment.load_model_environment()
     prefix = defaults.prefix
-    api_key = (
-        os.environ.get(f"{prefix}API_KEY", "").strip()
-        or os.environ.get("OPENCODE_GO_API_KEY", "").strip()
-    )
-    if not api_key:
-        raise OpportunityReviewError(
-            f"missing API key for {role}; configure {prefix}API_KEY or OPENCODE_GO_API_KEY"
+    timeout_default = 240 if role == "opportunity_initial" else 360
+    default_effort = "high" if role == "opportunity_initial" else "max"
+    default_max_tokens = 8192 if role == "opportunity_initial" else 12288
+    try:
+        shared = load_deepseek_config(
+            role,
+            prefix=prefix,
+            default_effort=default_effort,
+            default_max_tokens=default_max_tokens,
+            default_timeout=timeout_default,
         )
-    model = os.environ.get(f"{prefix}MODEL", defaults.model).strip() or defaults.model
-    endpoint = os.environ.get(f"{prefix}ENDPOINT", defaults.endpoint).strip() or defaults.endpoint
-    timeout_default = 240 if role.startswith("scan_") else 360
+    except DeepSeekConfigurationError as error:
+        raise OpportunityReviewError(str(error)) from error
+    assert shared is not None
     return ModelConfig(
         role=role,
-        model=model,
+        model=shared.model,
         transport=defaults.transport,
-        endpoint=endpoint,
-        api_key=api_key,
-        max_tokens=parse_integer(
-            os.environ.get(f"{prefix}MAX_TOKENS"),
-            36000 if defaults.transport == TRANSPORT_ANTHROPIC_MESSAGES else 3200,
-            800,
-            50000,
-        ),
-        timeout_seconds=parse_integer(
-            os.environ.get(f"{prefix}TIMEOUT"), timeout_default, 30, 600
-        ),
-        max_retries=parse_integer(os.environ.get(f"{prefix}RETRIES"), 1, 0, 3),
-        reasoning_effort=(
-            os.environ.get(
-                f"{prefix}REASONING_EFFORT",
-                # Luna's live Responses endpoint accepts high as its strongest
-                # currently supported effort. Other selected models accept max.
-                "high" if role == "deep_luna" else "max",
-            ).strip().lower()
-            or ("high" if role == "deep_luna" else "max")
-        ),
+        endpoint=shared.endpoint,
+        api_key=shared.api_key,
+        max_tokens=shared.max_tokens,
+        timeout_seconds=shared.timeout_seconds,
+        max_retries=shared.max_retries,
+        reasoning_effort=shared.reasoning_effort,
         thinking_budget_tokens=parse_integer(
             os.environ.get(f"{prefix}THINKING_BUDGET_TOKENS"), 32000, 1024, 48000
         ),
@@ -204,11 +191,8 @@ def model_config(role: str) -> ModelConfig:
 
 
 def opportunity_scan_headers() -> dict[str, str]:
-    """Create the non-sensitive headers shared by one full scan attempt."""
-    return {
-        "User-Agent": OPPORTUNITY_SCAN_USER_AGENT,
-        OPENCODE_SESSION_HEADER: f"ai-berkshire-opportunity-{uuid.uuid4()}",
-    }
+    """Return only generic, non-sensitive official-provider headers."""
+    return {"User-Agent": OPPORTUNITY_SCAN_USER_AGENT}
 
 
 def report_sha256(repo_root: Path, decision: dict[str, Any]) -> str:
@@ -272,8 +256,13 @@ def snapshot_maps(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any], dict
         for item in rows
         if isinstance(item, dict) and item.get("ticker")
     }
+    sentiment_rows = by_ticker(sentiment.get("companies", []))
+    market_layers = sentiment.get("market_sentiment") if isinstance(sentiment.get("market_sentiment"), dict) else {}
+    for row in sentiment_rows.values():
+        market = str(row.get("market") or "")
+        row.setdefault("market_sentiment", market_layers.get(market))
     return (
-        by_ticker(sentiment.get("companies", [])),
+        sentiment_rows,
         by_ticker(intraday.get("companies", [])),
         by_ticker(quotes.get("quotes", [])),
     )
@@ -307,9 +296,48 @@ def build_opportunity_input(
         "mechanical_gate_warning": "本地价格匹配、Checklist、技术面和情绪均是输入事实，不得机械地充当机会否决器",
         "risk_authority_boundary": "必须明确讨论当前已确认红线、投资逻辑复核要求与未解决条件。机会只是研究线索，不得覆盖确定性风险状态、授予Checklist资格或推导可以买入。缺失或冲突的当前状态不能当作风险已解除。",
     }
+    facts["evidence_reference_catalog"] = evidence_reference_catalog(facts)
     encoded = json.dumps(facts, ensure_ascii=False, sort_keys=True).encode("utf-8")
     facts["input_sha256"] = hashlib.sha256(encoded).hexdigest()
     return facts
+
+
+def evidence_reference_catalog(facts: dict[str, Any]) -> dict[str, list[str]]:
+    """Expose exact, typed locators that a model may cite without inventing IDs."""
+    source_ids: set[str] = set()
+    rule_ids: set[str] = set()
+    report_paths: set[str] = set()
+
+    def walk(value: Any) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if isinstance(item, str) and item.strip():
+                    if key == "source_id":
+                        source_ids.add(item.strip())
+                    elif key == "rule_id":
+                        rule_ids.add(item.strip())
+                    elif key in {"report_path", "canonical_report", "source_report"}:
+                        report_paths.add(item.strip())
+                    elif key == "path" and item.strip().startswith("reports/"):
+                        report_paths.add(item.strip())
+                walk(item)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+
+    walk(facts)
+    checklist = facts.get("checklist") if isinstance(facts.get("checklist"), dict) else {}
+    gates = {
+        clean_text(item.get("name"), 120)
+        for item in checklist.get("gates", [])
+        if isinstance(item, dict) and clean_text(item.get("name"), 120)
+    }
+    return {
+        "source_ids": sorted(source_ids),
+        "rule_ids": sorted(rule_ids),
+        "checklist_gates": sorted(gates),
+        "report_paths": sorted(report_paths),
+    }
 
 
 def stable_sha256(payload: Any) -> str:
@@ -456,6 +484,7 @@ def sentiment_material_signature(value: Any) -> dict[str, Any]:
     value = value if isinstance(value, dict) else {}
     combined = value.get("combined") if isinstance(value.get("combined"), dict) else {}
     news = value.get("news") if isinstance(value.get("news"), dict) else {}
+    formal = news.get("formal_sentiment") if isinstance(news.get("formal_sentiment"), dict) else news
     examples = [
         {
             "title": clean_text(item.get("title"), 100),
@@ -472,8 +501,8 @@ def sentiment_material_signature(value: Any) -> dict[str, Any]:
     return {
         "status": value.get("status", "missing"),
         "combined_state": combined.get("state"),
-        "news_state": news.get("state"),
-        "news_confidence": news.get("confidence"),
+        "formal_news_state": formal.get("state"),
+        "formal_news_confidence": formal.get("confidence"),
         "material_evidence_digest": stable_sha256(examples),
     }
 
@@ -536,7 +565,6 @@ def material_trigger_snapshot(facts: dict[str, Any], report_hash: str) -> dict[s
             ),
         },
         "daily_technical": discrete_technical(facts.get("daily_technical")),
-        "intraday_30m": discrete_technical(facts.get("intraday_30m"), intraday=True),
         "sentiment": sentiment_material_signature(facts.get("sentiment")),
     }
 
@@ -547,10 +575,12 @@ def assessment_contract(config: ModelConfig) -> dict[str, Any]:
         "incremental_contract_version": INCREMENTAL_CONTRACT_VERSION,
         "opportunity_prompt_contract_version": OPPORTUNITY_PROMPT_CONTRACT_VERSION,
         "trigger_fingerprint_version": MATERIAL_TRIGGER_VERSION,
-        "model": config.model,
+        "provider": "deepseek_official",
+        "model": "deepseek-flash",
         "transport": config.transport,
-        "reasoning_policy": "highest supported only",
-        "reasoning_effort": config.reasoning_effort,
+        "initial_reasoning_effort": "high",
+        "verification_reasoning_effort": "max",
+        "verification_contract_version": VERIFICATION_CONTRACT_VERSION,
     }
 
 
@@ -563,6 +593,7 @@ def review_schema(deep: bool) -> dict[str, Any]:
         "unmet_conditions": ["仍未满足的关键条件，最多4条"],
         "constraint_override_reason": "若判为当前机会但现价不在主报告价格规则内，必须说明为何新证据足以突破旧约束；否则留空",
         "supporting_evidence": ["直接来自输入的关键依据，最多4条"],
+        "evidence_refs": [{"type": "formal_sentiment/price_rule/checklist/report/technical", "source_id": "只能从evidence_reference_catalog.source_ids逐字选择；不适用时省略", "rule_id": "只能从evidence_reference_catalog.rule_ids逐字选择；不适用时省略", "gate": "只能从evidence_reference_catalog.checklist_gates逐字选择；不适用时省略", "report_path": "只能从evidence_reference_catalog.report_paths逐字选择；不适用时省略", "date": "证据日期", "reason": "引用原因"}],
         "risks_or_counterevidence": ["直接来自输入的反面证据或不确定性，最多4条"],
         "human_questions": ["投资者最终决策前应自己核实的问题，最多4条"],
         "confidence": "仅可取：high/medium/low",
@@ -577,8 +608,13 @@ def review_schema(deep: bool) -> dict[str, Any]:
     return schema
 
 
-def review_prompts(facts: dict[str, Any], *, deep: bool) -> tuple[str, str]:
+def review_prompts(facts: dict[str, Any], *, deep: bool, verification: bool = False) -> tuple[str, str]:
     mode = "深度复核" if deep else "全量机会扫描"
+    verification_instruction = (
+        "这是对Initial结果的反证复核。主动回答为什么它不是当前机会，检查Checklist hard veto、过期或冲突证据、"
+        "仅C/D舆论、投资逻辑漂移，以及把执行信号误当研究机会。只能确认或降级Initial，不能升级。"
+        if verification else ""
+    )
     system = (
         f"你是个股研究机会识别员，正在做{mode}。你的职责是理解主报告、当前行情、技术辅助、情绪和Checklist的语义关系，"
         "判断这只股票现在是否已经出现值得投资者优先决策的正向机会。你不是投顾，不得下买入、卖出、持有、仓位或目标价指令。"
@@ -593,7 +629,9 @@ def review_prompts(facts: dict[str, Any], *, deep: bool) -> tuple[str, str]:
         "解释为什么该事实足以突破原约束；不能只写情绪、技术形态、好公司或值得研究。"
         "这是机会识别而非交易建议：输出中不得出现或复述买入、卖出、持有、建仓、加仓、减仓、仓位、止损、目标价、等待某价再买等动作语言，"
         "即使主报告包含这些词也不要转述。只写为何值得研究、反证是什么、以及投资者应核实哪些事实。"
-        "必须只依据输入事实，不得编造外部新闻、财务数据或价格。输出严格JSON，不要Markdown。"
+        "必须只依据输入事实，不得编造外部新闻、财务数据、价格或证据ID。evidence_refs必须按字段类型逐字选自evidence_reference_catalog；"
+        "报告路径只能填report_path，新闻ID只能填source_id，规则只能填rule_id，Checklist关卡只能填gate。若没有适用locator，可让非候选结论的evidence_refs为空。"
+        "输出严格JSON，不要Markdown。" + verification_instruction
     )
     user = (
         f"请按以下结构输出：{json.dumps(review_schema(deep), ensure_ascii=False)}\n\n"
@@ -726,6 +764,7 @@ def request_json(
                     "requested": f"thinking=enabled; reasoning_effort={requested}",
                     "effective": f"thinking=enabled; reasoning_effort={effective}",
                     "provider_finish_reason": ((response.get("choices") or [{}])[0] or {}).get("finish_reason"),
+                    "usage": usage_summary(response),
                 }
                 return _parse_provider_json(extract_openai_chat_text(response), reasoning), reasoning
             except Exception as error:  # noqa: BLE001 - try the documented high fallback only
@@ -807,6 +846,52 @@ def normalize_opportunity_state(value: Any) -> str:
     return LEGACY_STATE_ALIASES.get(state, state)
 
 
+def _fact_contains_reference(value: Any, field: str, expected: str) -> bool:
+    if isinstance(value, dict):
+        if str(value.get(field) or "") == expected:
+            return True
+        return any(_fact_contains_reference(item, field, expected) for item in value.values())
+    if isinstance(value, list):
+        return any(_fact_contains_reference(item, field, expected) for item in value)
+    return False
+
+
+def validate_evidence_refs(value: Any, facts: dict[str, Any]) -> list[dict[str, str]]:
+    if not isinstance(value, list):
+        raise OpportunityReviewError("evidence_refs must be an array")
+    validated: list[dict[str, str]] = []
+    for raw in value[:8]:
+        if not isinstance(raw, dict):
+            raise OpportunityReviewError("each evidence_ref must be an object")
+        ref_type = clean_text(raw.get("type"), 40)
+        reason = clean_text(raw.get("reason"), 220)
+        if not ref_type or not reason:
+            raise OpportunityReviewError("each evidence_ref must include type and reason")
+        locator_found = False
+        cleaned = {"type": ref_type, "reason": reason}
+        for field in ("source_id", "rule_id", "gate", "report_path"):
+            expected = clean_text(raw.get(field), 300)
+            if not expected:
+                continue
+            lookup_fields = {
+                "gate": ("name",),
+                "report_path": ("path", "report_path", "canonical_report", "source_report"),
+            }.get(field, (field,))
+            if not any(_fact_contains_reference(facts, lookup_field, expected) for lookup_field in lookup_fields):
+                raise OpportunityReviewError(
+                    f"evidence_ref {field} does not exist in input facts: {expected}"
+                )
+            cleaned[field] = expected
+            locator_found = True
+        if not locator_found:
+            raise OpportunityReviewError("each evidence_ref needs an input-backed locator")
+        evidence_date = clean_text(raw.get("date"), 40)
+        if evidence_date:
+            cleaned["date"] = evidence_date
+        validated.append(cleaned)
+    return validated
+
+
 def validate_assessment(
     result: dict[str, Any],
     *,
@@ -828,6 +913,7 @@ def validate_assessment(
         "supporting_evidence",
         "risks_or_counterevidence",
         "human_questions",
+        "evidence_refs",
     )
     for key in list_fields:
         if not isinstance(result.get(key, []), list):
@@ -850,6 +936,9 @@ def validate_assessment(
         raise OpportunityReviewError("当前机会 must include at least one satisfied condition")
     if state == "临近机会" and not unmet:
         raise OpportunityReviewError("临近机会 must include at least one unmet condition")
+    evidence_refs = validate_evidence_refs(result.get("evidence_refs", []), facts or {})
+    if state in {"当前机会", "临近机会"} and not evidence_refs:
+        raise OpportunityReviewError(f"{state} must include input-backed evidence_refs")
     price_status = str(((facts or {}).get("local_price_context") or {}).get("status") or "")
     if state == "当前机会" and price_status and price_status != "inside_price_rule" and not override_reason:
         raise OpportunityReviewError(
@@ -867,6 +956,7 @@ def validate_assessment(
             for item in (result.get("supporting_evidence") or [])[:4]
             if clean_text(item, 220)
         ],
+        "evidence_refs": evidence_refs,
         "risks_or_counterevidence": [
             clean_text(item, 220)
             for item in (result.get("risks_or_counterevidence") or [])[:4]
@@ -894,10 +984,11 @@ def run_model(
     facts: dict[str, Any],
     *,
     deep: bool,
+    verification: bool = False,
     extra_headers: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     started = time.perf_counter()
-    system, user = review_prompts(facts, deep=deep)
+    system, user = review_prompts(facts, deep=deep, verification=verification)
     repair_attempts = 0
     validation_error_text = ""
     failure_category = ""
@@ -1087,6 +1178,18 @@ def build_scan_payload(
         else 0.0
     )
     model_request_count = sum(int(item.get("model_request_count") or 0) for item in completed_scans)
+    initial_request_count = sum(1 for item in completed_scans if item.get("evaluation_mode") != "reused_unchanged")
+    verification_request_count = sum(
+        1 for item in completed_scans
+        if item.get("evaluation_mode") != "reused_unchanged" and item.get("verification_required")
+    )
+    usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+    for item in completed_scans:
+        for stage in (item.get("initial"), item.get("verification")):
+            stage_usage = ((stage or {}).get("reasoning") or {}).get("usage") if isinstance(stage, dict) else None
+            if isinstance(stage_usage, dict):
+                for key in usage:
+                    usage[key] += int(stage_usage.get(key) or 0)
     reused_count = sum(1 for item in completed_scans if item.get("evaluation_mode") == "reused_unchanged")
     filter_counts = {
         name: sum(1 for item in completed_scans if item.get("filter_class") == name)
@@ -1117,6 +1220,9 @@ def build_scan_payload(
         "company_concurrency": workers,
         "model_result_count": len(model_results),
         "model_request_count": model_request_count,
+        "initial_request_count": initial_request_count,
+        "verification_request_count": verification_request_count,
+        "token_usage": usage,
         "reused_count": reused_count,
         "filter_counts": filter_counts,
         "ready_count": ready,
@@ -1289,6 +1395,10 @@ def scan_one(
             "generated_at": prior_record.get("generated_at"),
             "models": preserved_models,
             "union": union_result(preserved_models),
+            "initial": prior_record.get("initial"),
+            "verification": prior_record.get("verification"),
+            "final": prior_record.get("final") or next(iter(preserved_models.values()), None),
+            "verification_required": bool(prior_record.get("verification_required")),
             "input_snapshot": prior_record.get("input_snapshot"),
             "evaluation_mode": "reused_unchanged",
             "model_request_count": 0,
@@ -1305,40 +1415,74 @@ def scan_one(
                 "material_trigger_snapshot": trigger_snapshot,
             },
         }
-    models: dict[str, dict[str, Any]] = {}
-    # The selected scan model sees one frozen, auditable evidence snapshot.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=len(configs)) as executor:
-        futures = {
-            executor.submit(
-                run_model,
-                config,
-                facts,
-                deep=False,
-                extra_headers=extra_headers,
-            ): config
-            for config in configs
+    initial_config = configs[0]
+    verifier_config = configs[1] if len(configs) > 1 else ModelConfig(
+        role="opportunity_verify",
+        model=initial_config.model,
+        transport=initial_config.transport,
+        endpoint=initial_config.endpoint,
+        api_key=initial_config.api_key,
+        max_tokens=initial_config.max_tokens,
+        timeout_seconds=initial_config.timeout_seconds,
+        max_retries=initial_config.max_retries,
+        reasoning_effort="max",
+        thinking_budget_tokens=initial_config.thinking_budget_tokens,
+    )
+    initial = run_model(
+        initial_config, facts, deep=False, extra_headers=extra_headers
+    )
+    request_count = 1
+    initial_state = normalize_opportunity_state(
+        ((initial.get("assessment") or {}).get("opportunity_state"))
+    ) if initial.get("status") == "ready" else ""
+    verification_required = initial_state in {"当前机会", "临近机会"}
+    verification: dict[str, Any] | None = None
+    if verification_required:
+        verification_facts = {
+            **facts,
+            "initial_opportunity_assessment": initial.get("assessment"),
+            "verification_contract": {
+                "cannot_promote": True,
+                "purpose": "challenge the initial candidate and confirm or downgrade it",
+            },
         }
-        for future in concurrent.futures.as_completed(futures):
-            config = futures[future]
-            try:
-                result = future.result()
-            except Exception as error:  # defensive; run_model normally handles this
-                result = {
-                    "status": "error",
-                    "model": config.model,
-                    "transport": config.transport,
-                    "generated_at": now_iso(),
-                    "reasoning": {"requested": "highest reasoning only", "effective": None},
-                    "error": clean_text(error, 600),
-                }
-            if result.get("status") == "error":
-                fallback = previous_model(previous, ticker, config.model, current_hash)
-                if fallback:
-                    fallback["status"] = "stale"
-                    fallback["stale_reason"] = result.get("error")
-                    fallback["last_attempt_at"] = result.get("generated_at")
-                    result = fallback
-            models[config.model] = result
+        verification = run_model(
+            verifier_config,
+            verification_facts,
+            deep=False,
+            verification=True,
+            extra_headers=extra_headers,
+        )
+        request_count += 1
+
+    final_result = dict(initial)
+    if verification_required:
+        if not verification or verification.get("status") != "ready":
+            final_result = {
+                "status": "error",
+                "model": initial_config.model,
+                "transport": initial_config.transport,
+                "generated_at": now_iso(),
+                "failure_category": "verification_failed",
+                "error": "candidate verification did not produce a valid result",
+            }
+        else:
+            verified_assessment = dict(verification.get("assessment") or {})
+            verified_state = normalize_opportunity_state(verified_assessment.get("opportunity_state"))
+            rank = {"证据不足": 0, "暂不构成当前机会": 0, "临近机会": 1, "当前机会": 2}
+            if rank.get(verified_state, 0) > rank.get(initial_state, 0):
+                verified_assessment["opportunity_state"] = initial_state
+                verified_assessment["verification_policy_note"] = "promotion rejected by policy"
+            final_result = {**verification, "assessment": verified_assessment, "model": initial_config.model}
+
+    if final_result.get("status") == "error":
+        fallback = previous_model(previous, ticker, initial_config.model, current_hash)
+        if fallback:
+            fallback["status"] = "stale"
+            fallback["stale_reason"] = final_result.get("error")
+            fallback["last_attempt_at"] = final_result.get("generated_at")
+            final_result = fallback
+    models: dict[str, dict[str, Any]] = {initial_config.model: final_result}
     refresh_failed = any(item.get("status") != "ready" for item in models.values())
     preserved_input = (
         prior_record.get("input_snapshot")
@@ -1363,9 +1507,13 @@ def scan_one(
         "generated_at": checked_at,
         "models": models,
         "union": union_result(models),
+        "initial": initial,
+        "verification": verification,
+        "final": final_result,
+        "verification_required": verification_required,
         "input_snapshot": preserved_input,
         "evaluation_mode": "refresh_failed" if refresh_failed else "model_evaluated",
-        "model_request_count": len(configs),
+        "model_request_count": request_count,
         "filter_class": filter_class,
         "trigger_reasons": trigger_reasons,
         "assessment_contract": contract,
@@ -1393,7 +1541,7 @@ def scan_all(
 ) -> dict[str, Any]:
     if mode not in {"full", "incremental"}:
         raise OpportunityReviewError(f"unsupported scan mode: {mode}")
-    configs = [model_config("scan_flash")]
+    configs = [model_config("opportunity_initial"), model_config("opportunity_verify")]
     scan_headers = opportunity_scan_headers()
     decisions = find_decisions(repo_root, ticker)
     if limit is not None:
@@ -1465,7 +1613,7 @@ def scan_all(
 
 
 def deep_review_one(repo_root: Path, ticker: str) -> dict[str, Any]:
-    configs = [model_config("deep_v4pro"), model_config("deep_luna")]
+    config = model_config("opportunity_deep")
     decision = find_decisions(repo_root, ticker)[0]
     ticker_upper = str(decision.get("ticker") or "").upper()
     sentiment, intraday, quotes = snapshot_maps(repo_root)
@@ -1476,14 +1624,12 @@ def deep_review_one(repo_root: Path, ticker: str) -> dict[str, Any]:
         intraday=intraday.get(ticker_upper),
         quote=quotes.get(ticker_upper),
     )
-    # Deep reviews are intentionally serial: a click may consume high-reasoning
-    # capacity from two flagship models, and the endpoint has an outer lock.
-    models = {config.model: run_model(config, facts, deep=True) for config in configs}
+    models = {config.model: run_model(config, facts, deep=True)}
     ready = [item for item in models.values() if item.get("status") == "ready"]
     states = [str((item.get("assessment") or {}).get("opportunity_state") or "") for item in ready]
     return {
         "schema_version": DEEP_SCHEMA_VERSION,
-        "status": "ready" if len(ready) == len(configs) else "partial" if ready else "error",
+        "status": "ready" if ready else "error",
         "company": decision.get("company"),
         "ticker": ticker_upper,
         "market": decision.get("market"),
@@ -1493,8 +1639,8 @@ def deep_review_one(repo_root: Path, ticker: str) -> dict[str, Any]:
         "generated_at": now_iso(),
         "models": models,
         "synthesis": {
-            "state_agreement": "一致" if len(set(states)) == 1 and len(states) == 2 else "存在分歧" if len(states) == 2 else "结果不完整",
-            "rule": "两份意见并列展示，不合成为买卖结论；最终决定属于投资者。",
+            "state_agreement": "单模型MAX反证复核" if ready else "结果不完整",
+            "rule": "DeepSeek Flash MAX 仅提供反证复核；最终决定属于投资者。",
         },
         "input_snapshot": facts,
     }
@@ -1570,7 +1716,7 @@ def command_retry_failed(arguments: argparse.Namespace) -> int:
             raise OpportunityReviewError(f"retry did not return exactly one scan: {ticker}")
         replacements[ticker] = retry["scans"][0]
     merged = [replacements.get(str(item.get("ticker") or "").upper(), item) for item in previous_scans]
-    configs = [model_config("scan_flash")]
+    configs = [model_config("opportunity_initial"), model_config("opportunity_verify")]
     payload = build_scan_payload(
         configs,
         merged,
@@ -1627,7 +1773,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=ROOT / "data" / "investment-dashboard" / "opportunity_scans.json",
     )
     retry.set_defaults(handler=command_retry_failed)
-    deep = subparsers.add_parser("deep", help="run V4 Pro + GPT-5.6 Luna for one ticker")
+    deep = subparsers.add_parser("deep", help="run DeepSeek Flash MAX for one ticker")
     deep.add_argument("--repo-root", type=Path, default=ROOT)
     deep.add_argument("--ticker", required=True)
     deep.add_argument(

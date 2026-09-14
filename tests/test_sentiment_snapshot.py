@@ -19,11 +19,24 @@ SHANGHAI = ZoneInfo("Asia/Shanghai")
 
 
 class SentimentSnapshotTests(unittest.TestCase):
+    def test_context_never_overwrites_formal_score(self):
+        formal = {"status": "ok", "score_0_100": 52, "state": "中性", "confidence": "中等", "article_count": 1}
+        context = {"status": "ok", "score_0_100": 75, "state": "显著正面", "confidence": "较低", "article_count": 4}
+        merged = sentiment_snapshot.merge_sentiment_views(formal, context)
+        self.assertEqual(merged["score_0_100"], 52)
+        self.assertEqual(merged["formal_sentiment"]["score_0_100"], 52)
+        self.assertEqual(merged["context_sentiment"]["score_0_100"], 75)
+
+    def test_context_only_keeps_top_level_formal_score_null(self):
+        formal = {"status": "unavailable", "score_0_100": None, "state": "无正式新闻", "confidence": "无数据", "article_count": 0}
+        context = {"status": "ok", "score_0_100": 70, "state": "显著正面", "confidence": "较低", "article_count": 3}
+        merged = sentiment_snapshot.merge_sentiment_views(formal, context)
+        self.assertIsNone(merged["score_0_100"])
+        self.assertEqual(merged["status"], "context_only")
+
     def test_llm_config_reads_bounded_parallel_json_settings(self):
         environment = {
-            "SENTIMENT_LLM_API_KEY": "test-key",
-            "SENTIMENT_LLM_MODEL": "deepseek-v4-flash",
-            "SENTIMENT_LLM_ENDPOINT": "https://api.deepseek.com/chat/completions",
+            "DEEPSEEK_API_KEY": "test-key",
             "SENTIMENT_LLM_BATCH_SIZE": "8",
             "SENTIMENT_LLM_WORKERS": "2",
             "SENTIMENT_LLM_THINKING": "disabled",
@@ -72,9 +85,7 @@ class SentimentSnapshotTests(unittest.TestCase):
 
     def test_review_model_config_uses_separate_environment_prefix(self):
         environment = {
-            "SENTIMENT_REVIEW_API_KEY": "review-key",
-            "SENTIMENT_REVIEW_MODEL": "relay-model",
-            "SENTIMENT_REVIEW_ENDPOINT": "https://relay.example.com/v1/chat/completions",
+            "DEEPSEEK_API_KEY": "review-key",
             "SENTIMENT_REVIEW_TIMEOUT": "240",
             "SENTIMENT_REVIEW_RETRIES": "3",
             "SENTIMENT_REVIEW_RETRY_BACKOFF": "2.5",
@@ -83,25 +94,23 @@ class SentimentSnapshotTests(unittest.TestCase):
         with patch.dict(os.environ, environment, clear=True):
             config = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
         self.assertIsNotNone(config)
-        self.assertEqual(config.endpoint, "https://relay.example.com/v1/chat/completions")
+        self.assertEqual(config.endpoint, "https://api.deepseek.com/chat/completions")
         self.assertEqual(config.timeout_seconds, 240)
         self.assertEqual(config.max_retries, 3)
         self.assertEqual(config.retry_backoff_seconds, 2.5)
         self.assertEqual(config.missing_result_retries, 2)
 
-    def test_both_model_roles_can_share_opencode_go_key(self):
+    def test_both_model_roles_share_deepseek_key(self):
         environment = {
-            "OPENCODE_GO_API_KEY": "shared-opencode-key",
-            "SENTIMENT_LLM_MODEL": "deepseek-v4-pro",
-            "SENTIMENT_REVIEW_MODEL": "glm-5.2",
+            "DEEPSEEK_API_KEY": "shared-key",
         }
         with patch.dict(os.environ, environment, clear=True):
             primary = sentiment_snapshot.LLMConfig.from_environment()
             review = sentiment_snapshot.LLMConfig.from_environment("SENTIMENT_REVIEW_")
         self.assertIsNotNone(primary)
         self.assertIsNotNone(review)
-        self.assertEqual(primary.api_key, "shared-opencode-key")
-        self.assertEqual(review.api_key, "shared-opencode-key")
+        self.assertEqual(primary.api_key, "shared-key")
+        self.assertEqual(review.api_key, "shared-key")
 
     def test_http_text_retries_transient_gateway_errors(self):
         class FakeResponse:
@@ -216,30 +225,14 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(request.call_args.kwargs["attempts"], 5)
         self.assertEqual(request.call_args.kwargs["retry_backoff_seconds"], 8)
 
-    def test_opencode_go_endpoint_detection_is_exact(self):
-        self.assertTrue(
-            sentiment_snapshot.is_opencode_go_endpoint(
-                "https://opencode.ai/zen/go/v1/chat/completions"
-            )
-        )
-        self.assertFalse(
-            sentiment_snapshot.is_opencode_go_endpoint(
-                "https://api.opencode.ai/zen/go/v1/chat/completions"
-            )
-        )
-        self.assertFalse(
-            sentiment_snapshot.is_opencode_go_endpoint(
-                "https://example.com/proxy/opencode.ai/zen/go/v1/chat/completions"
-            )
-        )
-        self.assertFalse(
-            sentiment_snapshot.is_opencode_go_endpoint(
-                "https://opencode.ai/zen/v1/chat/completions"
-            )
-        )
+    def test_config_is_pinned_to_official_deepseek_endpoint(self):
+        with patch.dict(os.environ, {"DEEPSEEK_API_KEY": "test"}, clear=True):
+            config = sentiment_snapshot.LLMConfig.from_environment()
+        self.assertEqual(config.endpoint, "https://api.deepseek.com/chat/completions")
+        self.assertEqual(config.model, "deepseek-flash")
 
-    def test_opencode_go_scoring_reuses_one_session_across_batches_roles_and_workers(self):
-        endpoint = "https://opencode.ai/zen/go/v1/chat/completions"
+    def test_official_scoring_uses_generic_safe_headers_across_workers(self):
+        endpoint = "https://api.deepseek.com/chat/completions"
         primary = sentiment_snapshot.LLMConfig(
             endpoint=endpoint,
             api_key="primary-key",
@@ -306,9 +299,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
         self.assertEqual(len(calls), 4)
-        sessions = {headers["x-opencode-session"] for _, headers in calls}
-        self.assertEqual(len(sessions), 1)
-        self.assertTrue(next(iter(sessions)).startswith("ai-berkshire-sentiment-"))
+        self.assertTrue(all("x-opencode-session" not in headers for _, headers in calls))
         self.assertTrue(all(headers["User-Agent"] == sentiment_snapshot.USER_AGENT for _, headers in calls))
         self.assertEqual(
             {headers["Authorization"] for _, headers in calls},
@@ -316,15 +307,14 @@ class SentimentSnapshotTests(unittest.TestCase):
         )
         self.assertTrue(all(headers["Content-Type"] == "application/json" for _, headers in calls))
 
-        first_session = next(iter(sessions))
         calls.clear()
         with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
             sentiment_snapshot.score_articles(articles[:1], primary, review)
-        self.assertNotEqual(calls[0][1]["x-opencode-session"], first_session)
+        self.assertNotIn("x-opencode-session", calls[0][1])
 
-    def test_opencode_go_single_item_recovery_reuses_invocation_session(self):
+    def test_official_single_item_recovery_uses_safe_headers(self):
         config = sentiment_snapshot.LLMConfig(
-            endpoint="https://opencode.ai/zen/go/v1/chat/completions",
+            endpoint="https://api.deepseek.com/chat/completions",
             api_key="test-key",
             model="test-model",
             batch_size=2,
@@ -344,13 +334,13 @@ class SentimentSnapshotTests(unittest.TestCase):
             }
             for item_id in ("complete", "missing")
         ]
-        sessions = []
+        headers_seen = []
         call_count = 0
 
         def fake_http_json(_url, **kwargs):
             nonlocal call_count
             call_count += 1
-            sessions.append(kwargs["headers"]["x-opencode-session"])
+            headers_seen.append(kwargs["headers"])
             payload = json.loads(kwargs["body"].decode("utf-8"))
             items = json.loads(payload["messages"][1]["content"])
             returned = items[:1] if call_count == 1 else items
@@ -380,17 +370,17 @@ class SentimentSnapshotTests(unittest.TestCase):
 
         with patch.object(sentiment_snapshot, "http_json", side_effect=fake_http_json):
             scored, warnings, skipped = sentiment_snapshot.score_articles(
-                articles, config, None
+                articles, config, config
             )
         self.assertEqual({item["id"] for item in scored}, {"complete", "missing"})
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
-        self.assertEqual(call_count, 2)
-        self.assertEqual(len(set(sessions)), 1)
+        self.assertEqual(call_count, 3)
+        self.assertTrue(all("x-opencode-session" not in headers for headers in headers_seen))
 
-    def test_only_opencode_go_role_receives_session_headers(self):
+    def test_all_roles_use_generic_official_headers(self):
         go_config = sentiment_snapshot.LLMConfig(
-            endpoint="https://opencode.ai/zen/go/v1/chat/completions",
+            endpoint="https://api.deepseek.com/chat/completions",
             api_key="go-key",
             model="go-model",
             workers=1,
@@ -447,9 +437,12 @@ class SentimentSnapshotTests(unittest.TestCase):
         direct_headers = next(
             headers for url, headers in calls if url == direct_config.endpoint
         )
-        self.assertIn("x-opencode-session", go_headers)
+        self.assertNotIn("x-opencode-session", go_headers)
         self.assertNotIn("x-opencode-session", direct_headers)
-        self.assertEqual(direct_headers["Authorization"], "Bearer direct-key")
+        self.assertEqual(
+            {headers["Authorization"] for _, headers in calls},
+            {"Bearer go-key", "Bearer direct-key"},
+        )
 
     def test_score_with_llm_accepts_json_in_reasoning_content(self):
         config = sentiment_snapshot.LLMConfig(
@@ -570,11 +563,12 @@ class SentimentSnapshotTests(unittest.TestCase):
             return score("missing-1")
 
         with patch.object(sentiment_snapshot, "score_with_llm", side_effect=fake_score):
-            scored, warnings, skipped = sentiment_snapshot.score_articles(articles, config, None)
+            scored, warnings, skipped = sentiment_snapshot.score_articles(articles, config, config)
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
         self.assertEqual({item["id"] for item in scored}, {"complete-1", "missing-1"})
-        self.assertEqual(calls, [["complete-1", "missing-1"], ["missing-1"], ["missing-1"]])
+        self.assertEqual(calls[:3], [["complete-1", "missing-1"], ["missing-1"], ["missing-1"]])
+        self.assertEqual(calls[3:], [["complete-1", "missing-1"], ["missing-1"]])
 
     def test_dual_model_scoring_skips_failed_review_item_but_keeps_successful_items(self):
         articles = [
@@ -691,7 +685,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         by_id = {item["id"]: item for item in scored}
         self.assertIn("model_review", by_id["a-1"])
         self.assertIn("model_review", by_id["hk-1"])
-        self.assertTrue(by_id["hk-1"]["scoring_method"].startswith("llm:dual:"))
+        self.assertTrue(by_id["hk-1"]["scoring_method"].startswith("llm:primary_verified:"))
 
     def test_c_d_news_use_only_review_model_as_context(self):
         article = {
@@ -729,13 +723,13 @@ class SentimentSnapshotTests(unittest.TestCase):
             scored, warnings, skipped = sentiment_snapshot.score_articles(
                 [article], config, config
             )
-        self.assertEqual(calls, [("review", ["context-1"])])
+        self.assertEqual(calls, [("primary", ["context-1"])])
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
-        self.assertEqual(scored[0]["scoring_method"], "llm:context:test-model")
+        self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
         self.assertFalse(scored[0]["score_eligible"])
         self.assertTrue(scored[0]["context_score_eligible"])
-        self.assertTrue(scored[0]["model_review"]["review_only"])
+        self.assertNotIn("model_review", scored[0])
 
     def test_primary_scores_can_be_reused_before_review(self):
         article = {
@@ -787,7 +781,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(calls, [("review", ["resume-1"])])
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
-        self.assertEqual(scored[0]["scoring_method"], "llm:dual:test-model+test-model")
+        self.assertEqual(scored[0]["scoring_method"], "llm:primary_verified:test-model")
 
     def test_primary_scores_are_checkpointed_in_fifths(self):
         articles = [
@@ -884,9 +878,9 @@ class SentimentSnapshotTests(unittest.TestCase):
                 }
             },
         ):
-            scored, _, skipped = sentiment_snapshot.score_articles([article], config, None)
+            scored, _, skipped = sentiment_snapshot.score_articles([article], config, config)
         self.assertEqual(skipped, [])
-        self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
+        self.assertEqual(scored[0]["scoring_method"], "llm:primary_verified:test-model")
 
     def test_main_publishes_needs_review_snapshot_when_model_configuration_is_missing(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -1929,7 +1923,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         score_with_llm.assert_not_called()
         self.assertEqual(warnings, [])
         self.assertEqual(skipped, [])
-        self.assertEqual(scored[0]["scoring_method"], "llm:dual:test-model+test-model")
+        self.assertEqual(scored[0]["scoring_method"], "llm:primary_verified:test-model")
 
     def test_company_news_falls_back_to_thirty_days_when_recent_window_is_empty(self):
         response = {
@@ -2133,7 +2127,7 @@ class SentimentSnapshotTests(unittest.TestCase):
         self.assertEqual(len(scored), 1)
         self.assertFalse(scored[0]["score_eligible"])
         self.assertTrue(scored[0]["context_score_eligible"])
-        self.assertEqual(scored[0]["scoring_method"], "llm:context:test-model")
+        self.assertEqual(scored[0]["scoring_method"], "llm:single:test-model")
 
     def test_lexical_score_detects_material_positive_and_negative_events(self):
         base = {
@@ -2167,7 +2161,7 @@ class SentimentSnapshotTests(unittest.TestCase):
             "confidence": 0.9,
             "direction": -0.8,
             "impact": 2,
-            "scoring_method": "llm:deepseek-v4-flash",
+            "scoring_method": "llm:deepseek-flash",
         }
         sentiment_snapshot.apply_company_relevance_guard(article, score)
         self.assertEqual(score["relevance"], 0.15)

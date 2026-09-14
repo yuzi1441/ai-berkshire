@@ -407,6 +407,7 @@ class PublishReleaseTests(unittest.TestCase):
                 "dashboard_snapshot.py",
                 "quote_quality.py",
                 "decision_consistency_review.py",
+                "deepseek_provider.py",
                 "decision_rule_extractor.py",
                 "decision_state.py",
                 "drift_scan_state.py",

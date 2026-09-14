@@ -39,9 +39,9 @@ def ready(model: str, state: str) -> dict:
     }
 
 
-def scan_config(model: str = "deepseek-v4-flash") -> opportunity.ModelConfig:
+def scan_config(model: str = "deepseek-flash") -> opportunity.ModelConfig:
     return opportunity.ModelConfig(
-        "scan_flash", model, "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        "opportunity_initial", model, "test", "https://test", "key", 1000, 30, 0, "max", 1024
     )
 
 
@@ -149,11 +149,71 @@ def prior_record(
 
 
 class OpportunityReviewTests(unittest.TestCase):
+    def test_material_trigger_ignores_intraday_only_changes(self):
+        first = opportunity_facts()
+        second = json.loads(json.dumps(first))
+        second["intraday_30m"] = {"status": "ready", "state": "强势", "signal": "breakout"}
+        self.assertEqual(
+            opportunity.material_trigger_snapshot(first, "report-a"),
+            opportunity.material_trigger_snapshot(second, "report-a"),
+        )
+
+    def test_verifier_runs_only_for_candidate_and_cannot_promote(self):
+        facts = opportunity_facts()
+        facts["report_path"] = "reports/example.md"
+        initial = ready("deepseek-flash", "临近机会")
+        verified = ready("deepseek-flash", "当前机会")
+        for result in (initial, verified):
+            result["assessment"]["evidence_refs"] = [
+                {"type": "report", "report_path": "reports/example.md", "reason": "报告条件"}
+            ]
+        initial_config = scan_config()
+        verifier_config = opportunity.ModelConfig(
+            "opportunity_verify", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+        )
+        with (
+            patch.object(opportunity, "report_sha256", return_value="report-a"),
+            patch.object(opportunity, "build_opportunity_input", return_value=facts),
+            patch.object(opportunity, "run_model", side_effect=[initial, verified]) as model,
+        ):
+            result = opportunity.scan_one(
+                {"ticker": "600000.SH", "company": "示例公司", "market": "A股", "report_path": "reports/example.md"},
+                repo_root=Path("/tmp/unused"), configs=[initial_config, verifier_config],
+                sentiment_by_ticker={}, intraday_by_ticker={}, quote_by_ticker={}, previous={},
+            )
+        self.assertEqual(model.call_count, 2)
+        self.assertTrue(result["verification_required"])
+        self.assertEqual(result["final"]["assessment"]["opportunity_state"], "临近机会")
+
+    def test_evidence_refs_reject_fabricated_identifier(self):
+        with self.assertRaisesRegex(opportunity.OpportunityReviewError, "does not exist"):
+            opportunity.validate_evidence_refs(
+                [{"type": "report", "report_path": "reports/fake.md", "reason": "不存在"}],
+                {"report_path": "reports/real.md"},
+            )
+
+    def test_evidence_reference_catalog_exposes_typed_real_locators(self):
+        facts = {
+            "report": {"path": "reports/example.md"},
+            "sentiment": {"items": [{"source_id": "news-1"}]},
+            "rules": [{"rule_id": "rule-1", "source_report": "reports/example.md"}],
+            "checklist": {"gates": [{"name": "安全边际", "result": "未通过"}]},
+        }
+        self.assertEqual(
+            opportunity.evidence_reference_catalog(facts),
+            {
+                "source_ids": ["news-1"],
+                "rule_ids": ["rule-1"],
+                "checklist_gates": ["安全边际"],
+                "report_paths": ["reports/example.md"],
+            },
+        )
+
     def test_zero_opportunity_scan_is_still_a_successful_scan(self):
         scan = {
             "ticker": "600000.SH",
             "union": {"classification": "暂不进入机会面板"},
-            "models": {"deepseek-v4-flash": ready("deepseek-v4-flash", "暂不构成当前机会")},
+            "models": {"deepseek-flash": ready("deepseek-flash", "暂不构成当前机会")},
         }
         payload = opportunity.build_scan_payload(
             [], [scan], workers=1, expected_scan_count=1, checkpoint=False
@@ -396,18 +456,18 @@ class OpportunityReviewTests(unittest.TestCase):
     def test_union_includes_a_current_opportunity(self):
         result = opportunity.union_result(
             {
-                "deepseek-v4-flash": ready("deepseek-v4-flash", "当前机会"),
+                "deepseek-flash": ready("deepseek-flash", "当前机会"),
             }
         )
         self.assertTrue(result["included"])
         self.assertFalse(result["near_included"])
         self.assertEqual(result["classification"], "当前机会")
-        self.assertEqual(result["supporting_models"], ["deepseek-v4-flash"])
+        self.assertEqual(result["supporting_models"], ["deepseek-flash"])
 
     def test_union_keeps_near_opportunity_out_of_current_panel(self):
         result = opportunity.union_result(
             {
-                "deepseek-v4-flash": ready("deepseek-v4-flash", "临近机会"),
+                "deepseek-flash": ready("deepseek-flash", "临近机会"),
             }
         )
         self.assertFalse(result["included"])
@@ -415,9 +475,9 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["classification"], "临近机会")
 
     def test_union_never_promotes_stale_opportunity(self):
-        stale = ready("deepseek-v4-flash", "当前机会")
+        stale = ready("deepseek-flash", "当前机会")
         stale["status"] = "stale"
-        result = opportunity.union_result({"deepseek-v4-flash": stale})
+        result = opportunity.union_result({"deepseek-flash": stale})
         self.assertFalse(result["included"])
         self.assertFalse(result["near_included"])
         self.assertEqual(result["classification"], "待人工复核")
@@ -425,19 +485,19 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["stale_count"], 1)
 
     def test_previous_model_does_not_chain_stale_fallback(self):
-        stale = ready("deepseek-v4-flash", "当前机会")
+        stale = ready("deepseek-flash", "当前机会")
         stale["status"] = "stale"
         previous = {
             "scans": [
                 {
                     "ticker": "600000.SH",
                     "report_sha256": "report-hash",
-                    "models": {"deepseek-v4-flash": stale},
+                    "models": {"deepseek-flash": stale},
                 }
             ]
         }
         self.assertIsNone(
-            opportunity.previous_model(previous, "600000.SH", "deepseek-v4-flash", "report-hash")
+            opportunity.previous_model(previous, "600000.SH", "deepseek-flash", "report-hash")
         )
 
     def test_scan_does_not_use_execution_or_checklist_as_a_veto(self):
@@ -469,12 +529,12 @@ class OpportunityReviewTests(unittest.TestCase):
                 "checklist": {"status": "ready", "hard_veto": True},
             }
             configs = [
-                opportunity.ModelConfig("scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024),
+                opportunity.ModelConfig("opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024),
             ]
             with patch.object(
                 opportunity,
                 "run_model",
-                return_value=ready("deepseek-v4-flash", "当前机会"),
+                return_value=ready("deepseek-flash", "当前机会"),
             ):
                 result = opportunity.scan_one(
                     decision,
@@ -513,10 +573,10 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(body["thinking"]["type"], "enabled")
         self.assertEqual(body["thinking"]["budget_tokens"], 2800)
 
-    def test_scan_flash_request_includes_required_opencode_headers(self):
+    def test_scan_request_includes_only_safe_official_headers(self):
         config = opportunity.ModelConfig(
-            "scan_flash",
-            "deepseek-v4-flash",
+            "opportunity_initial",
+            "deepseek-flash",
             opportunity.TRANSPORT_OPENAI_CHAT,
             "https://test/chat/completions",
             "secret-api-key",
@@ -543,10 +603,7 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(headers["Authorization"], "Bearer secret-api-key")
         self.assertEqual(headers["Content-Type"], "application/json")
         self.assertEqual(headers["User-Agent"], opportunity.OPPORTUNITY_SCAN_USER_AGENT)
-        self.assertEqual(
-            headers[opportunity.OPENCODE_SESSION_HEADER],
-            scan_headers[opportunity.OPENCODE_SESSION_HEADER],
-        )
+        self.assertNotIn("x-opencode-session", headers)
         public_values = " ".join(scan_headers.values())
         self.assertNotIn("secret-api-key", public_values)
         self.assertNotIn("600000.SH", public_values)
@@ -555,8 +612,8 @@ class OpportunityReviewTests(unittest.TestCase):
 
     def test_responses_transport_only_falls_back_to_high_not_low(self):
         config = opportunity.ModelConfig(
-            "deep_luna",
-            "gpt-5.6-luna",
+            "opportunity_verify",
+            "deepseek-flash",
             opportunity.TRANSPORT_OPENAI_RESPONSES,
             "https://test/responses",
             "key",
@@ -581,7 +638,7 @@ class OpportunityReviewTests(unittest.TestCase):
         bodies = [json.loads(call.kwargs["body"].decode("utf-8")) for call in request.call_args_list]
         self.assertEqual([body["reasoning"]["effort"] for body in bodies], ["max", "xhigh", "high"])
         for call in request.call_args_list:
-            self.assertNotIn(opportunity.OPENCODE_SESSION_HEADER, call.kwargs["headers"])
+            self.assertNotIn("x-opencode-session", call.kwargs["headers"])
             self.assertNotIn("User-Agent", call.kwargs["headers"])
 
     def test_prompt_separates_opportunity_identification_from_trade_actions(self):
@@ -610,7 +667,7 @@ class OpportunityReviewTests(unittest.TestCase):
 
     def test_run_model_repairs_schema_once_without_lowering_reasoning(self):
         config = opportunity.ModelConfig(
-            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+            "opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
         )
         repaired = {
             "opportunity_state": "当前机会",
@@ -620,6 +677,7 @@ class OpportunityReviewTests(unittest.TestCase):
             "unmet_conditions": [],
             "constraint_override_reason": "",
             "supporting_evidence": [],
+            "evidence_refs": [{"type": "report", "report_path": "reports/test.md", "reason": "报告条件"}],
             "risks_or_counterevidence": [],
             "human_questions": [],
             "confidence": "medium",
@@ -635,7 +693,7 @@ class OpportunityReviewTests(unittest.TestCase):
         ) as request:
             result = opportunity.run_model(
                 config,
-                {"local_price_context": {"status": "inside_price_rule"}},
+                {"local_price_context": {"status": "inside_price_rule"}, "report_path": "reports/test.md"},
                 deep=False,
                 extra_headers=scan_headers,
             )
@@ -705,7 +763,7 @@ class OpportunityReviewTests(unittest.TestCase):
 
     def test_run_model_does_not_turn_repeated_blank_state_into_an_opportunity(self):
         config = opportunity.ModelConfig(
-            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+            "opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
         )
         with patch.object(
             opportunity,
@@ -725,9 +783,9 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertIn("opportunity_state", result["validation_error"])
         self.assertEqual(request.call_count, 2)
 
-    def test_full_scan_selects_only_flash(self):
+    def test_full_scan_selects_initial_and_verifier_flash_roles(self):
         config = opportunity.ModelConfig(
-            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+            "opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
         )
         with (
             patch.object(opportunity, "model_config", return_value=config) as selected,
@@ -735,12 +793,12 @@ class OpportunityReviewTests(unittest.TestCase):
             patch.object(opportunity, "snapshot_maps", return_value=({}, {}, {})),
         ):
             result = opportunity.scan_all(Path("/tmp/unused"))
-        selected.assert_called_once_with("scan_flash")
-        self.assertEqual([item["model"] for item in result["models"]], ["deepseek-v4-flash"])
+        self.assertEqual([call.args[0] for call in selected.call_args_list], ["opportunity_initial", "opportunity_verify"])
+        self.assertEqual([item["model"] for item in result["models"]], ["deepseek-flash", "deepseek-flash"])
 
-    def test_full_scan_reuses_one_session_and_new_scan_gets_another(self):
+    def test_full_scan_uses_safe_headers_for_all_companies(self):
         config = opportunity.ModelConfig(
-            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+            "opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
         )
         decisions = [{"ticker": "600000.SH"}, {"ticker": "000001.SZ"}]
         captured_headers = []
@@ -764,20 +822,11 @@ class OpportunityReviewTests(unittest.TestCase):
             opportunity.scan_all(Path("/tmp/unused"))
             second_attempt_headers = list(captured_headers)
 
-        first_sessions = {
-            headers[opportunity.OPENCODE_SESSION_HEADER] for headers in first_attempt_headers
-        }
-        second_sessions = {
-            headers[opportunity.OPENCODE_SESSION_HEADER] for headers in second_attempt_headers
-        }
-        self.assertEqual(len(first_sessions), 1)
-        self.assertEqual(len(second_sessions), 1)
-        self.assertNotEqual(first_sessions, second_sessions)
-        self.assertTrue(next(iter(first_sessions)).startswith("ai-berkshire-opportunity-"))
+        self.assertTrue(all(headers == {"User-Agent": opportunity.OPPORTUNITY_SCAN_USER_AGENT} for headers in first_attempt_headers + second_attempt_headers))
 
     def test_full_scan_checkpoints_each_tenth_and_writes_final_payload(self):
         config = opportunity.ModelConfig(
-            "scan_flash", "deepseek-v4-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
+            "opportunity_initial", "deepseek-flash", "test", "https://test", "key", 1000, 30, 0, "max", 1024
         )
         decisions = [{"ticker": f"60000{index}.SH"} for index in range(10)]
 
@@ -810,10 +859,17 @@ class OpportunityReviewTests(unittest.TestCase):
             self.assertEqual(result["progress_percent"], 100.0)
             self.assertEqual(json.loads(checkpoint_path.read_text())["scan_count"], 10)
 
-    def test_luna_defaults_to_highest_supported_reasoning_effort(self):
-        with patch.dict("os.environ", {"OPENCODE_GO_API_KEY": "test-key"}, clear=True):
-            config = opportunity.model_config("deep_luna")
+    def test_verifier_defaults_to_max_reasoning_effort(self):
+        with patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test-key"}, clear=True):
+            config = opportunity.model_config("opportunity_verify")
+        self.assertEqual(config.reasoning_effort, "max")
+        self.assertEqual(config.max_tokens, 12288)
+
+    def test_initial_has_enough_completion_budget_for_reasoning_json(self):
+        with patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test-key"}, clear=True):
+            config = opportunity.model_config("opportunity_initial")
         self.assertEqual(config.reasoning_effort, "high")
+        self.assertEqual(config.max_tokens, 8192)
 
     def test_scan_concurrency_defaults_to_three_companies(self):
         with patch.dict("os.environ", {}, clear=True):
@@ -934,7 +990,7 @@ class OpportunityReviewTests(unittest.TestCase):
             current_input_sha256=facts["input_sha256"],
             checked_at="2026-09-08T18:10:00+08:00",
         )
-        self.assertEqual(result[:2], (True, "possibly_material"))
+        self.assertEqual(result[:2], (True, "insufficient"))
 
     def test_incremental_reuse_preserves_original_model_input_provenance(self):
         config = scan_config()
@@ -983,14 +1039,14 @@ class OpportunityReviewTests(unittest.TestCase):
         self.assertEqual(result["evaluation_mode"], "model_evaluated")
 
     def test_incremental_payload_with_zero_requests_is_complete_success(self):
-        model = ready("deepseek-v4-flash", "暂不构成当前机会")
+        model = ready("deepseek-flash", "暂不构成当前机会")
         scan = {
             "ticker": "600000.SH",
             "evaluation_mode": "reused_unchanged",
             "model_request_count": 0,
             "filter_class": "ordinary",
-            "models": {"deepseek-v4-flash": model},
-            "union": opportunity.union_result({"deepseek-v4-flash": model}),
+            "models": {"deepseek-flash": model},
+            "union": opportunity.union_result({"deepseek-flash": model}),
         }
         payload = opportunity.build_scan_payload(
             [scan_config()], [scan], workers=1, expected_scan_count=1,
@@ -1070,7 +1126,7 @@ class OpportunityReviewTests(unittest.TestCase):
                 "stale_count": 0, "error_count": 0,
                 "scans": [{"ticker": "600000.SH", "union": {"included": True, "near_included": False}}],
             }
-            stale_model = ready("deepseek-v4-flash", "当前机会")
+            stale_model = ready("deepseek-flash", "当前机会")
             stale_model["status"] = "stale"
             partial = {
                 **old,
@@ -1080,8 +1136,8 @@ class OpportunityReviewTests(unittest.TestCase):
                 "stale_count": 1,
                 "scans": [{
                     "ticker": "600000.SH", "evaluation_mode": "refresh_failed",
-                    "models": {"deepseek-v4-flash": stale_model},
-                    "union": opportunity.union_result({"deepseek-v4-flash": stale_model}),
+                    "models": {"deepseek-flash": stale_model},
+                    "union": opportunity.union_result({"deepseek-flash": stale_model}),
                 }],
             }
             after_close.write_json(root / after_close.SCAN_RELATIVE, old)

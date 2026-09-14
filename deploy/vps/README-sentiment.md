@@ -92,27 +92,24 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 
 ## 新闻来源分级与模型路由
 
-`SENTIMENT_LLM_*` 为主模型（当前使用 DeepSeek V4 Flash），只处理 A/B 级新闻；
-`SENTIMENT_REVIEW_*` 为 MiMo-V2.5 复核模型。A/B 级新闻走“主模型 + MiMo”双复核，C/D
-级新闻只交给 MiMo 做辅助语义分析，不再重复调用主模型。C/D 结果仍保留在看板的上下文情绪
-中，但不会升级为正式 A/B 证据，也不会改变来源等级。两者可以共用 `OPENCODE_GO_API_KEY`；
-请编辑 `/etc/ai-berkshire/sentiment.env`，填写统一密钥及两个模型的 endpoint。
-两组模型的单次请求超时默认均为 600 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
+`SENTIMENT_LLM_*` 配置 DeepSeek Flash LOW 首轮分类，覆盖进入模型范围的 A/B/C/D 新闻；
+`SENTIMENT_REVIEW_*` 配置同一模型的 HIGH verification，只处理 A/B 和高影响、低置信、极端或边界新闻。C/D 结果保留在看板的上下文情绪
+中，但不会升级为正式 A/B 证据，也不会改变来源等级。所有角色共用 `DEEPSEEK_API_KEY`；
+请编辑 `/etc/ai-berkshire/sentiment.env`，填写 DeepSeek Official 统一密钥；endpoint 固定为官方 API。
+两种角色的单次请求超时默认均为 600 秒，可分别用 `SENTIMENT_LLM_TIMEOUT` 和
 `SENTIMENT_REVIEW_TIMEOUT` 调整，允许范围为 30–600 秒。遇到 408、425、429、500、502、503、
-504 或连接超时等瞬时错误时，每个模型默认额外重试 4 次，采用指数退避（默认 5、10、20、40 秒）；
+504 或连接超时等瞬时错误时，每个角色按配置进行有限重试和指数退避；
 可分别用 `SENTIMENT_LLM_RETRIES`、`SENTIMENT_REVIEW_RETRIES` 和对应的
 `*_RETRY_BACKOFF` 调整。如果模型返回 JSON 但漏掉某些新闻条目，还会把缺失条目拆成单条请求，
 默认额外重试 3 轮，可用 `SENTIMENT_LLM_MISSING_RESULT_RETRIES` 和
 `SENTIMENT_REVIEW_MISSING_RESULT_RETRIES` 调整。任务整体超时上限为 90 分钟，给完整 A 股任务留下足够的重试空间。
 
-对于 A/B 新闻，任一模型超时、接口错误、JSON 格式错误或返回缺失新闻条目时，该条新闻会被跳过；
-C/D 新闻只受 MiMo 请求影响。其余成功结果仍会写入快照，看板通过
+对于必须 verification 的新闻，任一步超时、接口错误、JSON 格式错误或返回缺失时，该条新闻不会进入正式分。其余成功结果仍会写入快照，看板通过
 `site/data/sentiment_status.json` 显示部分更新和失败项目。
 密钥文件权限为 `0600`，不会写入仓库。
 
-本地运行主报告双模型判断工具时，它会优先读取仓库 `local/opencodego-sentiment.env`，因此
-主报告判断和情绪新闻会使用同一组 Flash + MiMo-V2.5 模型；旧的 `.env.sentiment*`
-文件仅作为没有新配置时的兼容回退。
+本地运行主报告判断工具时，可使用未跟踪的 `local/deepseek-sentiment.env`，因此
+主报告判断和情绪新闻会使用同一个 DeepSeek Official secret；`.env.sentiment*` 仅作为未跟踪的本地配置文件位置，不构成 provider fallback。
 
 检查统一定时器和最近日志：
 

@@ -54,17 +54,17 @@
 
 顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股由 Flash 阅读主报告、当前行情、技术辅助、情绪和 Checklist，理解“为什么是现在”。
 
-- 正式日常扫描：仅使用 `deepseek-v4-flash`，采用 incremental-first；报告、规则位置、Checklist、离散技术状态或重要新闻证据变化时才重新请求模型
+- 正式日常扫描：使用 DeepSeek Official `deepseek-flash` HIGH，采用 incremental-first；报告、规则位置、Checklist、日线技术或重要正式新闻证据变化时才重新请求模型
 - 复用安全：当前机会和临近机会不能跨下一个日常收盘批次复用；其他判断最多复用 7 个日历日，且模型、提示词或增量契约变化会强制重评
 - 价格变化：几分钱噪音不会触发重评，但价格在稳定规则边界中的低/中/高位置桶变化会触发；该桶只控制是否询问模型，不是买入或 Checklist 门禁
 - 结果溯源：复用时保留模型实际看过的原始 input snapshot，当前投影另行记录，避免伪造“模型已看过最新精确价格”
-- Provider：全量扫描通过 OpenCode Go HTTP 调用；每次完整扫描使用一个非敏感的 `x-opencode-session`，并在该批次的所有公司、传输重试和结构修复中复用
+- Provider：全部生产分析通过 DeepSeek Official API；只读取 VPS 的 `DEEPSEEK_API_KEY`，缺失时 fail closed
 - 当前机会：必须回答“为什么是现在”，并至少指出一个已经满足的关键条件
 - 临近机会：具体触发器已经接近或部分满足，但仍差一个决定性条件；单独折叠展示
 - 不算机会：好公司、热门叙事、值得研究、估值争议、未来可能到价或未来可能出现事件，不能单独进入机会面板
-- 人工深度复核：点击按钮后再使用 `deepseek-v4-pro` + `gpt-5.6-luna`
+- 候选复核：Initial 为当前/临近机会时，才运行 `deepseek-flash` MAX 反证；人工深度复核同样使用 Flash MAX
 - 最终决定：模型不输出买卖、仓位或目标价；你阅读依据、反证和报告后自行决定
-- 推理：所有调用请求供应商支持的最高推理档；产物会记录实际生效档位，若无法启用不会悄悄降为低推理
+- 推理：新闻首轮 LOW、新闻 verification HIGH、机会 Initial HIGH、候选/深度复核 MAX；产物记录请求和实际生效档位
 - 数据体积：完整模型输入保留在 `data/investment-dashboard` 供审计；公开网页只发布精简结果和行情上下文
 
 手工全量对账（CLI 默认仍是 full）：
@@ -80,7 +80,7 @@ py -3 tools\build_investment_dashboard.py
 py -3 tools\opportunity_review.py scan --mode incremental
 ```
 
-单只股票的深度复核使用 `deepseek-v4-pro` + `gpt-5.6-luna`：
+单只股票的深度复核使用 DeepSeek Official `deepseek-flash` MAX：
 
 ```powershell
 py -3 tools\opportunity_review.py deep --ticker 000682.SZ
@@ -93,14 +93,14 @@ DASHBOARD_REVIEW_TOKEN=replace-with-a-long-random-secret
 DASHBOARD_DEEP_REVIEW_DAILY_LIMIT=12
 ```
 
-未配置令牌时，网页仍可正常浏览，但深度复核接口保持关闭，避免公网消耗模型额度。收盘任务使用的 `/etc/ai-berkshire/sentiment.env` 需要保留 `OPENCODE_GO_API_KEY`；如需覆盖默认模型参数，可使用：
+未配置令牌时，网页仍可正常浏览，但所有模型任务明确失败关闭。收盘任务只从 `/etc/ai-berkshire/sentiment.env` 读取 `DEEPSEEK_API_KEY`；角色只覆盖 reasoning、并发和 token 参数：
 
 首次点击深度复核会在详情内要求输入令牌；令牌只保存到该浏览器会话，输入后才会向服务器发起模型请求。
 
 ```ini
-OPPORTUNITY_SCAN_FLASH_REASONING_EFFORT=max
-OPPORTUNITY_DEEP_V4PRO_REASONING_EFFORT=max
-OPPORTUNITY_DEEP_LUNA_REASONING_EFFORT=high
+OPPORTUNITY_SCAN_REASONING_EFFORT=high
+OPPORTUNITY_VERIFY_REASONING_EFFORT=max
+OPPORTUNITY_DEEP_REASONING_EFFORT=max
 ```
 
 
