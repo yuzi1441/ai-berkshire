@@ -38,6 +38,9 @@ jobs:
         run: |
           python scripts/sync-codex-skills.py --check
           python scripts/sync-codex-prompts.py --check
+          python scripts/validate_local_review_skill.py
+          python scripts/package_skill.py codex-skills/daily-investment-review --output dist/daily-investment-review/skill.zip
+          python -m zipfile -t dist/daily-investment-review/skill.zip
       - name: Check Python syntax
         run: python -m compileall -q tools
       - name: Check Node syntax

@@ -17,8 +17,9 @@
 - A 股个股：新闻方向分、事件强度、时间衰减、同花顺关注度和来源核验等级
 - 行业层：按东方财富主行业分类，同一行业只抓取一次行业新闻，作为辅助信息
 
-个股综合情绪分只使用个股新闻 100%。行业新闻、A 股市场温度和同花顺关注度会在看板
-中展示，但不计入个股综合分，避免把宏观或行业噪音混入个股判断。
+迁移完成后的本地审阅事务会分别保存个股 Formal/Context 情绪，并把同一行业新闻只分类
+一次后投影给行业内公司。A 股市场温度和同花顺关注度仍由代码确定性计算，模型不得制造。
+行业、市场和拥挤度只提供上下文，不得单独把股票升级成当前机会。
 
 关注度只表示拥挤/过热，不会被当作方向性利好。
 
@@ -31,9 +32,9 @@
 
 看板会展示全部抓取结果，并标注“已纳入评分”“相关性不足”或“仅辅助”。A 股公司新闻
 会同时经过东方财富广泛发现和巨潮资讯官方公告查询；相同标题优先保留巨潮原始 PDF 链接。
-C/D 级新闻
-不会发送给模型，也不会改变情绪分；A 股可评分新闻仍要求主模型和复核模型均成功，任一
-模型失败则本次快照不发布，保留上一份成功结果。
+C/D 级新闻只进入 Context，不改变 Formal 分。新本地流程会让当前 Codex/ChatGPT 模型
+对 Context 做有界分类；A/B 中的重要、极端、低置信或低相关事件必须再做 verification。
+任何验证失败都不会发布半成品，并保留上一份成功结果。
 
 个股新闻有本地相关性保护：标题和摘要均没有公司名或股票代码的搜索结果会被降权，
 避免把同一行业的其他公司新闻误归因给当前公司。
@@ -64,7 +65,23 @@ token；Google/Bing RSS 及雪球公开索引每个渠道默认最多抓取 20 �
 暂时不可用时只记录 source warning，不阻断模型评分和上一份快照保留逻辑。
 辅助池按来源渠道轮换保留，避免股吧等高频来源挤占其他渠道的可见位置。
 
-## 安装
+## Local Daily Review 迁移边界
+
+本 feature 的目标流程为：VPS 只抓取 A 股行情、技术面、新闻和公告，使用
+`sentiment_snapshot.py --no-llm` 生成带 SHA 的确定性 input transaction，并只将该事务
+推送到 `vps-generated`。本地 `daily-investment-review` Skill 用当前 Codex/ChatGPT 会话
+完成语义分类、机会 Initial 和候选 Challenge；默认仅验证，只有用户明确要求 publish 才
+精确提交已验证结果到 Git。Skill 与其脚本不读取模型密钥，也不调用外部 LLM HTTP API。
+
+迁移期内，现有 production DeepSeek 路径、secrets 和 timer 保持不变。只有真实 A 股
+端到端 dry-run、feature CI 和发布回滚验证全部通过后，才允许制定 cutover；不得直接部署
+本 feature 或先关闭旧路径。
+
+`vps-generated` 的新职责仅是确定性 input transaction 数据面。Local Skill 使用
+`git fetch` + `git archive` 精确读取目标目录，不 merge 该分支。旧的“VPS 在 generated
+分支 merge main 并推回全部生成文件”说明仅适用于切换前的 legacy production。
+
+## 安装（legacy production，cutover 前仍有效）
 
 在 `/opt/ai-berkshire` 已有仓库和 `.venv` 的前提下，以 root 执行：
 
@@ -90,7 +107,7 @@ journalctl -u 'ai-berkshire-a-share-scheduler@heavy.service' -n 100 --no-pager
 `main`，不需要再手工登录 VPS 执行 reconcile。调度器会先保存已知的 VPS 生成文件；
 如果仍存在不属于生成清单的修改，则安全失败并打印文件清单，不会覆盖未知改动。
 
-## 新闻来源分级与模型路由
+## 新闻来源分级与模型路由（legacy production）
 
 `SENTIMENT_LLM_*` 配置 DeepSeek Flash LOW 首轮分类，覆盖进入模型范围的 A/B/C/D 新闻；
 `SENTIMENT_REVIEW_*` 配置同一模型的 HIGH verification，只处理 A/B 和高影响、低置信、极端或边界新闻。C/D 结果保留在看板的上下文情绪

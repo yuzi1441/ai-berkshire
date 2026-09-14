@@ -9,7 +9,6 @@ INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH:-${RUNTIME_DIR}/man
 LOCK_PATH="${LOCK_PATH:-/run/lock/ai-berkshire-runtime.lock}"
 LOCK_RETRY_EXIT=75
 LOCK_RETRY_COUNTER="${LOCK_RETRY_COUNTER:-/run/ai-berkshire-${1:-unknown}-lock-retries}"
-LOCK_RETRY_REASON="${LOCK_RETRY_REASON:-/run/ai-berkshire-${1:-unknown}-lock-retry-reason}"
 export TZ="Asia/Shanghai"
 
 if [[ $# -ne 1 || ! "$1" =~ ^(deploy|annual|morning|market|intraday|close|daily|heavy|reconcile)$ ]]; then
@@ -22,8 +21,6 @@ AS_OF="$(date +%F)"
 STARTED_AT="$(date +%s)"
 STATUS_STARTED=0
 STATUS_FINISHED=0
-JOB_PARTIAL=0
-JOB_DEFERRED=0
 CURRENT_PHASE="queued"
 RUN_ID="${JOB}-$(date +%Y%m%dT%H%M%S)-$$"
 SOURCE_SHA=""
@@ -111,28 +108,7 @@ schedule_lock_retry() {
 }
 
 clear_lock_retry_state() {
-    # A retry budget is only reset after this invocation reaches a terminal
-    # result.  Acquiring the outer lock is not enough: the close-review job
-    # can still defer on its own repository lock.
     unlink "${LOCK_RETRY_COUNTER}" 2>/dev/null || true
-    unlink "${LOCK_RETRY_REASON}" 2>/dev/null || true
-}
-
-mark_internal_scan_retry() {
-    local sentiment_status="${1:-0}"
-    printf 'internal_scan_lock:%s\n' "${sentiment_status}" > "${LOCK_RETRY_REASON}"
-}
-
-internal_scan_retry_status() {
-    local reason=""
-    if [[ -f "${LOCK_RETRY_REASON}" ]]; then
-        read -r reason < "${LOCK_RETRY_REASON}" || reason=""
-    fi
-    if [[ "${reason}" == internal_scan_lock:* ]]; then
-        printf '%s\n' "${reason#internal_scan_lock:}"
-    else
-        printf '%s\n' ""
-    fi
 }
 
 trap 'handle_signal SIGTERM' TERM
@@ -262,55 +238,44 @@ run_daily() {
 }
 
 run_heavy() {
-    # The close-after opportunity scan is intentionally separate from the
-    # deterministic current-execution gate. It may populate the research
-    # opportunity panel, but never changes a stock's executable status.
-    local sentiment_rc=0
-    local scan_rc=0
-    local retry_sentiment_status="$(internal_scan_retry_status)"
-    if [[ -n "${retry_sentiment_status}" ]]; then
-        # The previous attempt already completed the sentiment phase before
-        # the repository-update lock deferred the expensive scan.  Do not
-        # repeat that phase on the bounded retry; preserve whether it was
-        # partial so the final status remains truthful.
-        status_phase sentiment "机会扫描延后重试；不重复抓取情绪"
-        sentiment_rc="${retry_sentiment_status}"
-    else
-        status_phase sentiment "刷新 A 股情绪辅助"
-        "${PYTHON}" tools/sentiment_snapshot.py \
-            --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
-            --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
-            --output "${RUNTIME_DIR}/sentiment-last-success.json" \
-            --working-output "${RUNTIME_DIR}/sentiment-work-in-progress.json" \
-            --cache-dir "${RUNTIME_DIR}/sentiment-cache" \
-            --archive-dir "${RUNTIME_DIR}/sentiment-snapshots" \
-            --site-output "${REPO_ROOT}/site/data/sentiment.json" \
-            --status-output "${RUNTIME_DIR}/sentiment-status.json" \
-            --lookback-days 7 \
-            --fallback-lookback-days 30 \
-            --news-limit 8 \
-            --workers 3 \
-            --markets A股 || sentiment_rc=$?
-        publish_sentiment_runtime
-    fi
-    status_phase opportunity_scan "执行收盘后机会扫描"
-    "${PYTHON}" scripts/run_after_close_ai_review.py \
-        --repo-root "${REPO_ROOT}" \
-        --skip-git-sync \
+    # Data-plane only: collect deterministic A-share evidence and publish
+    # compact packets for a local Codex/ChatGPT review.  Keeping --no-llm
+    # explicit guarantees zero external model requests even while migration
+    # secrets remain installed for rollback.
+    local review_root="${RUNTIME_DIR}/local-review/${AS_OF}/input"
+    local raw_sentiment="${RUNTIME_DIR}/local-review/${AS_OF}/raw-sentiment.json"
+    status_phase sentiment_raw "抓取 A 股新闻与来源等级（不调用模型）"
+    "${PYTHON}" tools/sentiment_snapshot.py \
+        --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
+        --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
+        --output "${raw_sentiment}" \
+        --working-output "${RUNTIME_DIR}/local-review/${AS_OF}/raw-working.json" \
+        --cache-dir "${RUNTIME_DIR}/sentiment-cache" \
+        --archive-dir "${RUNTIME_DIR}/local-review/${AS_OF}/raw-archive" \
+        --site-output "${RUNTIME_DIR}/local-review/${AS_OF}/raw-site.json" \
+        --status-output "${RUNTIME_DIR}/local-review/${AS_OF}/raw-status.json" \
+        --lookback-days 7 \
+        --fallback-lookback-days 30 \
+        --news-limit 8 \
+        --workers 3 \
         --markets A股 \
-        --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}" || scan_rc=$?
-    if (( scan_rc == LOCK_RETRY_EXIT )); then
-        mark_internal_scan_retry "${sentiment_rc}"
-        JOB_DEFERRED=1
-        return 0
-    fi
-    if (( scan_rc != 0 )); then
-        return "${scan_rc}"
-    fi
-    if (( sentiment_rc != 0 )); then
-        JOB_PARTIAL=1
-    fi
-    status_phase publish "发布机会扫描结果"
+        --no-llm
+    status_phase build "重建 deterministic 当前状态"
+    build_dashboard
+    status_phase local_review_prepare "生成本地每日复核 packets"
+    rm -rf -- "${review_root}"
+    "${PYTHON}" tools/local_daily_review.py prepare \
+        --repo-root "${REPO_ROOT}" \
+        --output-root "${review_root}" \
+        --raw-sentiment "${raw_sentiment}" \
+        --date "${AS_OF}"
+    install -D -m 0644 "${review_root}/manifest.json" \
+        "${REPO_ROOT}/data/investment-dashboard/daily_review_status.json"
+    install -D -m 0644 "${review_root}/manifest.json" \
+        "${REPO_ROOT}/site/data/daily_review_status.json"
+    status_phase local_review_publish "同步 deterministic packets 到 generated branch"
+    "${PYTHON}" scripts/publish_local_review_inputs.py --input-root "${review_root}"
+    status_phase awaiting_local_review "等待本地 daily-investment-review"
     return 0
 }
 
@@ -333,24 +298,15 @@ case "${JOB}" in
 esac
 JOB_RC=$?
 
-if (( JOB_RC == 0 && JOB_DEFERRED == 1 )); then
-    if schedule_lock_retry; then
-        status_finish deferred "机会扫描等待运行锁，未重复调用模型；已安排 systemd 在 5 分钟后重试"
-    else
-        status_finish deferred "机会扫描等待运行锁，未重复调用模型；未安排新的 systemd 重试"
-    fi
-    exit "${LOCK_RETRY_EXIT}"
-fi
-if (( JOB_RC == 0 && JOB_PARTIAL == 1 )); then
-    status_finish partial "机会扫描完成；情绪快照失败，详见情绪状态"
-    clear_lock_retry_state
-    exit 0
-fi
 if (( JOB_RC == 0 )); then
-    status_finish ok "任务完成；运行数据未提交到 Git"
+    if [[ "${JOB}" == "heavy" ]]; then
+        status_finish ok "A 股 deterministic 数据已准备并同步；等待本地投资复核"
+    else
+        status_finish ok "任务完成；运行数据未提交到 Git"
+    fi
     clear_lock_retry_state
     exit 0
 fi
-status_finish error "任务失败；线上保留上一份成功数据，昂贵模型调用不自动重试"
+status_finish error "任务失败；线上保留上一份成功数据"
 clear_lock_retry_state
 exit 1

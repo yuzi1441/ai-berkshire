@@ -118,6 +118,7 @@ for relative in \
     data/investment-dashboard/main_report_review.json \
     data/investment-dashboard/opportunity_scans.json \
     data/investment-dashboard/opportunity_scan_status.json \
+    data/investment-dashboard/daily_review_status.json \
     data/investment-dashboard/post_buy_alerts.json \
     data/investment-dashboard/post_buy_tracking.json \
     data/investment-dashboard/original_buy_theses.json \

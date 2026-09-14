@@ -4487,8 +4487,23 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="markets to include in the sentiment snapshot",
     )
     parser.add_argument("--company-limit", type=int, help="bounded smoke-test universe")
+    parser.add_argument(
+        "--no-llm",
+        action="store_true",
+        help="collect and classify source tiers only; never load or call an external LLM",
+    )
     parser.add_argument("--no-archive", action="store_true")
     return parser.parse_args(argv)
+
+
+def resolve_llm_configs(no_llm: bool) -> tuple[LLMConfig | None, LLMConfig | None]:
+    """Keep the deterministic data plane independent of installed secrets."""
+    if no_llm:
+        return None, None
+    return (
+        LLMConfig.from_environment("SENTIMENT_LLM_"),
+        LLMConfig.from_environment("SENTIMENT_REVIEW_"),
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -4584,8 +4599,7 @@ def main(argv: list[str] | None = None) -> int:
             raise SentimentError("fallback-lookback-days must be >= lookback-days")
         if args.auxiliary_news_limit < args.news_limit:
             raise SentimentError("auxiliary-news-limit must be >= news-limit")
-        primary_config = LLMConfig.from_environment("SENTIMENT_LLM_")
-        review_config = LLMConfig.from_environment("SENTIMENT_REVIEW_")
+        primary_config, review_config = resolve_llm_configs(args.no_llm)
         if primary_config is None:
             # Do not strand official A/H retrieval just because optional
             # classification credentials are absent. build_snapshot marks

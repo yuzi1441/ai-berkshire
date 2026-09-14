@@ -7,6 +7,8 @@ import argparse
 import hashlib
 import re
 import os
+import shutil
+from datetime import datetime
 from pathlib import Path
 
 
@@ -134,15 +136,59 @@ def check_installed_packages(install_root: Path) -> tuple[int, int, list[str]]:
     return len(packages), file_count, stale
 
 
+def install_packages(install_root: Path) -> tuple[int, Path | None]:
+    """Install repository packages atomically and preserve changed packages."""
+    install_root.mkdir(parents=True, exist_ok=True)
+    backup_root: Path | None = None
+    installed = 0
+    for package in sorted(path for path in CODEX_SKILLS.iterdir() if path.is_dir()):
+        package_manifest(package)
+        destination = install_root / package.name
+        if destination.exists():
+            try:
+                unchanged = package_manifest(destination) == package_manifest(package)
+            except ValueError:
+                unchanged = False
+            if unchanged:
+                installed += 1
+                continue
+            if backup_root is None:
+                codex_home = install_root.parent
+                backup_root = codex_home / "skill-backups" / datetime.now().strftime("%Y%m%d-%H%M%S")
+                backup_root.mkdir(parents=True, exist_ok=False)
+            shutil.copytree(destination, backup_root / package.name, symlinks=True)
+        temporary = install_root / f".{package.name}.installing"
+        if temporary.exists():
+            shutil.rmtree(temporary)
+        shutil.copytree(package, temporary)
+        if destination.exists():
+            shutil.rmtree(destination)
+        temporary.replace(destination)
+        installed += 1
+    return installed, backup_root
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="check canonical generation without writing")
     parser.add_argument("--check-installed", action="store_true", help="compare complete installed package manifests")
+    parser.add_argument("--install", action="store_true", help="install complete repository-owned packages")
     parser.add_argument("--install-root", type=Path)
     args = parser.parse_args()
-    if args.install_root is not None and not args.check_installed:
-        parser.error("--install-root requires --check-installed")
+    if args.install_root is not None and not (args.check_installed or args.install):
+        parser.error("--install-root requires --check-installed or --install")
+    if args.install and (args.check or args.check_installed):
+        parser.error("--install cannot be combined with check modes")
     check, check_installed = args.check, args.check_installed
+
+    if args.install:
+        codex_home = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex")))
+        install_root = args.install_root if args.install_root is not None else codex_home / "skills"
+        count, backup = install_packages(install_root)
+        print(f"Installed {count} Codex packages in {install_root}")
+        if backup:
+            print(f"Preserved changed packages in {backup}")
+        return
 
     installed_stale = []
     if check_installed:

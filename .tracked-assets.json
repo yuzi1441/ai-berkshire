@@ -85,6 +85,15 @@
     "codex-prompts/thesis-tracker.md",
     "codex-prompts/wechat-article.md",
     "codex-skills/bottleneck-hunter/SKILL.md",
+    "codex-skills/daily-investment-review/SKILL.md",
+    "codex-skills/daily-investment-review/agents/openai.yaml",
+    "codex-skills/daily-investment-review/references/opportunity-contract.md",
+    "codex-skills/daily-investment-review/references/publishing.md",
+    "codex-skills/daily-investment-review/references/safety-boundaries.md",
+    "codex-skills/daily-investment-review/references/sentiment-contract.md",
+    "codex-skills/daily-investment-review/scripts/prepare_daily_review.py",
+    "codex-skills/daily-investment-review/scripts/publish_daily_review.py",
+    "codex-skills/daily-investment-review/scripts/validate_local_review.py",
     "codex-skills/deep-company-series/SKILL.md",
     "codex-skills/dyp-ask/SKILL.md",
     "codex-skills/earnings-review/SKILL.md",
@@ -10510,6 +10519,8 @@
     "scripts/install-codex-skills.bat",
     "scripts/install-codex-skills.sh",
     "scripts/mindray_financials_extract.py",
+    "scripts/package_skill.py",
+    "scripts/publish_local_review_inputs.py",
     "scripts/quality_screen_ashare_excluding_financial_cyclical.py",
     "scripts/quality_screen_ashare_market.py",
     "scripts/render_quality_screen_report.py",
@@ -10517,6 +10528,7 @@
     "scripts/sync-codex-prompts.py",
     "scripts/sync-codex-skills.py",
     "scripts/validate-dashboard-release.sh",
+    "scripts/validate_local_review_skill.py",
     "site/assets/action-classifier.mjs",
     "site/assets/app.js",
     "site/assets/favicon.svg",
@@ -10596,6 +10608,7 @@
     "tests/test_light_thesis_run_manifest.py",
     "tests/test_light_thesis_signals.py",
     "tests/test_light_thesis_workflow.py",
+    "tests/test_local_daily_review.py",
     "tests/test_main_report_review.py",
     "tests/test_market_snapshot.py",
     "tests/test_opportunity_current_facts.py",
@@ -10656,6 +10669,7 @@
     "tools/light_thesis_run_manifest.py",
     "tools/light_thesis_signals.py",
     "tools/light_thesis_workflow.py",
+    "tools/local_daily_review.py",
     "tools/log-command.sh",
     "tools/main_report_review.py",
     "tools/market_snapshot.py",
@@ -10718,9 +10732,9 @@
     "筛选公司/科创板股召回池/科创板100-去劣筛选-20260517.md",
     "筛选公司/科创板股召回池/通过公司-投资价值排序.md"
   ],
-  "tracked_paths_sha256": "525f107e96c6aed60290d0bd6cd182eead582c0f61e410d83a3e6ba16aaae0c2",
+  "tracked_paths_sha256": "eb1c4fed073fa59fc6cf42e4d1aa9b608c0f2a5b0ebe1f45477e229ed3dc7e68",
   "source_binding": {
     "kind": "git_index_without_manifest",
-    "sha256": "c174c47ba47c3dfb32e28ebb76591e20415d2bb75abe700cbb1fabd291312d4d"
+    "sha256": "e5a43d7675a2d67c0824d26f4182b529d6674b3cf3c26778ce227f691b1d37b6"
   }
 }

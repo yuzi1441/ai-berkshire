@@ -8,7 +8,7 @@
 - `data/investment-dashboard/report_history.json`：每家公司的历史研报结论
 - `data/investment-dashboard/post_buy_tracking.json`：用户确认买入后才登记的持仓、论文与复核状态
 - `data/investment-dashboard/post_buy_alerts.json`：由行情与复核日期生成的预警
-- `data/investment-dashboard/opportunity_scans.json`：Flash 的全量机会扫描、当前机会与临近机会分层
+- `data/investment-dashboard/opportunity_scans.json`：当前机会与临近机会分层；迁移后由已验证的本地日审事务生成
 - `data/investment-dashboard/company_state.json`：由行情、事件和其他运行事实生成的 Company State read model；属于运行时产物，不是 Rule Definition Source of Truth
 - `data/investment-dashboard/decision_rules.json`：从主报告迁移出的可审计 Decision Rule Definition；仅由 Extractor / Lifecycle 同步更新，当前触发状态进入 Company State 和站点输出
 - `data/investment-dashboard/checklist_states.json`：PRE_BUY 阶段的结构化 Checklist 状态
@@ -51,6 +51,10 @@
 后端仍会解析价格表与分层建议用于排序与看板字段，但不改写报告正文。
 
 ## 当前机会筛选：AI 找机会，你决定买不买
+
+> 迁移说明：下面的 DeepSeek/VPS 描述是 cutover 前仍在线运行的 legacy production。
+> `feature/local-daily-investment-review` 正在把语义判断迁移到本地
+> `daily-investment-review` Skill；完成真实端到端验收前不会修改线上 timer、secrets 或旧模型路径。
 
 顶部「当前机会筛选」不是自动交易或机械买入筛选：每个 A 股由 Flash 阅读主报告、当前行情、技术辅助、情绪和 Checklist，理解“为什么是现在”。
 
@@ -133,7 +137,9 @@ py -3 tools\market_snapshot.py
 3. 由 VPS 静态站点服务提供生产网页
 
 因此：新公司研报只要按路由保存到 `reports/<公司>/` 并推送到 `main`，VPS 会拉取你的代码和研报。
-VPS 自动生成的行情、情绪、机会和看板文件则只推送到 `vps-generated`，不会和你的 `main` 抢提交。
+迁移后的 `vps-generated` 只承载带 SHA 的确定性 A 股 input transaction，不再作为可 merge
+的源码分支。本地 Skill 用 `git archive` 读取输入；已验证的情绪和机会结果经用户明确批准后
+进入 `main`，Dashboard 优先物化完整的本地发布事务，缺失或损坏的部分事务会 fail closed。
 
 ## 买入后跟踪与预警
 

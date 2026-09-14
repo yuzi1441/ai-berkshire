@@ -129,24 +129,20 @@ class AutomationStatusTests(unittest.TestCase):
             self.assertEqual([item["job_id"] for item in payload["schedules"]], ["heavy"])
             self.assertEqual(payload["jobs"], {"heavy": {"status": "ok", "last_success_at": "keep"}})
 
-    def test_scheduler_runs_close_opportunity_scan(self):
+    def test_scheduler_prepares_local_review_without_model_scan(self):
         scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
-        self.assertIn("scripts/run_after_close_ai_review.py", scheduler)
         heavy = scheduler[scheduler.index("run_heavy() {"):scheduler.index("run_reconcile() {")]
         self.assertIn("--markets A股", heavy)
         self.assertNotIn("港股", heavy)
-        self.assertIn('status_finish partial "机会扫描完成；情绪快照失败，详见情绪状态"', scheduler)
-        self.assertIn('JOB_DEFERRED=0', scheduler)
-        self.assertIn("schedule_lock_retry()", scheduler)
-        self.assertIn("--on-active=5min", scheduler)
-        self.assertIn('status_finish deferred "机会扫描等待运行锁，未重复调用模型；已安排 systemd 在 5 分钟后重试"', scheduler)
-        self.assertIn('status_finish deferred "机会扫描等待运行锁，未重复调用模型；未安排新的 systemd 重试"', scheduler)
-        self.assertIn('status_phase opportunity_scan', scheduler)
-        self.assertIn('--skip-git-sync', scheduler)
+        self.assertIn("--no-llm", heavy)
+        self.assertIn("tools/local_daily_review.py prepare", heavy)
+        self.assertIn("scripts/publish_local_review_inputs.py", heavy)
+        self.assertIn("awaiting_local_review", heavy)
+        self.assertNotIn("scripts/run_after_close_ai_review.py", heavy)
+        self.assertNotIn("tools/opportunity_review.py", heavy)
         self.assertIn('tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only', scheduler)
         self.assertIn('INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH:-${RUNTIME_DIR}/manual_investment_dispositions.json}"', scheduler)
-        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 3)
-        self.assertLess(scheduler.index("JOB_DEFERRED == 1"), scheduler.index("JOB_PARTIAL == 1"))
+        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 2)
 
     def test_all_production_dashboard_builds_receive_runtime_disposition_path(self):
         publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")
@@ -156,74 +152,17 @@ class AutomationStatusTests(unittest.TestCase):
         self.assertEqual(publisher.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 1)
         self.assertIn('INVESTMENT_DISPOSITIONS_PATH="${INVESTMENT_DISPOSITIONS_PATH}"', publisher)
         self.assertIn('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"', release_validation)
-        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 3)
+        self.assertEqual(scheduler.count('--investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"'), 2)
         self.assertIn('parser.add_argument(\n        "--investment-dispositions"', after_close)
         self.assertEqual(after_close.count('"tools/build_investment_dashboard.py"'), 1)
 
-    def test_scheduler_defers_internal_lock_without_false_success_or_resetting_budget(self):
-        scheduler = ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh"
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            fake_python = root / "fake-python"
-            calls = root / "calls.log"
-            fake_bin = root / "bin"
-            fake_bin.mkdir()
-            (fake_bin / "flock").write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-            (fake_bin / "systemd-run").write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
-            (fake_bin / "flock").chmod(0o755)
-            (fake_bin / "systemd-run").chmod(0o755)
-            fake_python.write_text(
-                "#!/usr/bin/env bash\n"
-                "printf '%s\\n' \"$*\" >> \"${FAKE_CALLS}\"\n"
-                "case \" $* \" in\n"
-                "  *'scripts/run_after_close_ai_review.py'*) exit 75 ;;\n"
-                "  *) exit 0 ;;\n"
-                "esac\n",
-                encoding="utf-8",
-            )
-            fake_python.chmod(0o755)
-            environment = {
-                **os.environ,
-                "REPO_ROOT": str(root),
-                "PYTHON": str(fake_python),
-                "RUNTIME_DIR": str(root / "runtime"),
-                "LOCK_PATH": str(root / "runtime.lock"),
-                "LOCK_RETRY_COUNTER": str(root / "retry-counter"),
-                "LOCK_RETRY_REASON": str(root / "retry-reason"),
-                "FAKE_CALLS": str(calls),
-                "PATH": f"{fake_bin}:{os.environ.get('PATH', '')}",
-            }
-            (root / "tools").mkdir()
-            first = subprocess.run(
-                ["bash", str(scheduler), "heavy"],
-                cwd=ROOT,
-                env=environment,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            second = subprocess.run(
-                ["bash", str(scheduler), "heavy"],
-                cwd=ROOT,
-                env=environment,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            self.assertEqual(first.returncode, 75, first.stdout + first.stderr)
-            self.assertEqual(second.returncode, 75, second.stdout + second.stderr)
-            self.assertEqual((root / "retry-counter").read_text(encoding="utf-8").strip(), "2")
-            self.assertTrue((root / "retry-reason").exists(), first.stdout + first.stderr + second.stdout + second.stderr)
-            self.assertEqual(
-                (root / "retry-reason").read_text(encoding="utf-8").strip(),
-                "internal_scan_lock:0",
-                first.stdout + first.stderr + second.stdout + second.stderr,
-            )
-            invocation_lines = calls.read_text(encoding="utf-8").splitlines()
-            sentiment_calls = [line for line in invocation_lines if "sentiment_snapshot.py" in line]
-            scan_calls = [line for line in invocation_lines if "scripts/run_after_close_ai_review.py" in line]
-            self.assertEqual(len(sentiment_calls), 1)
-            self.assertEqual(len(scan_calls), 2)
+    def test_scheduler_data_plane_does_not_retain_old_model_retry_path(self):
+        scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
+        heavy = scheduler[scheduler.index("run_heavy() {"):scheduler.index("run_reconcile() {")]
+        self.assertNotIn("internal_scan_retry_status", scheduler)
+        self.assertNotIn("mark_internal_scan_retry", scheduler)
+        self.assertNotIn("昂贵模型调用", scheduler)
+        self.assertIn("external", (ROOT / "tools" / "local_daily_review.py").read_text(encoding="utf-8"))
 
     def test_release_persists_opportunity_scan_runtime_files(self):
         publisher = (ROOT / "deploy" / "vps" / "ai-berkshire-publish-release.sh").read_text(encoding="utf-8")

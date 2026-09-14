@@ -115,6 +115,18 @@ class SkillInstallManifestTests(unittest.TestCase):
         self.assertEqual(self.run_check(f"--install-root={self.installed}")[0], 2)
         self.assertEqual((self.packages / "example/SKILL.md").read_bytes(), before)
 
+    def test_install_preserves_changed_package_then_installs_complete_copy(self):
+        old = self.installed / "example/SKILL.md"
+        old.write_text("local customization")
+        count, backup = sync.install_packages(self.installed)
+        self.assertEqual(count, 2)
+        self.assertIsNotNone(backup)
+        self.assertEqual((backup / "example/SKILL.md").read_text(), "local customization")
+        self.assertEqual(sync.package_manifest(self.installed / "example"),
+                         sync.package_manifest(self.packages / "example"))
+        self.assertEqual(sync.package_manifest(self.installed / "craft"),
+                         sync.package_manifest(self.packages / "craft"))
+
 
 if __name__ == "__main__":
     unittest.main()

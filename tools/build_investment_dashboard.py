@@ -34,6 +34,7 @@ import investment_dispositions
 import holding_research_reviews
 import dashboard_snapshot
 import quote_quality
+import local_daily_review
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -6377,6 +6378,10 @@ def build_dashboard(
 ) -> dict[str, Any]:
     """Generate dashboard data and Obsidian indexes from the current report library."""
     repo_root = repo_root.resolve()
+    # A validated Git-published local review supersedes runtime/API artifacts.
+    # Missing means the migration has not cut over yet and preserves the
+    # existing production path; malformed or partial publication fails closed.
+    local_daily_review.materialize_published(repo_root)
     bootstrap_release = (
         (repo_root / ".source-sha").is_file()
         and not (repo_root / ".git").exists()
@@ -6716,6 +6721,12 @@ def build_dashboard(
         write_json(
             site_directory / "data" / "opportunity_scan_status.json",
             load_json(opportunity_status_path, {}),
+        )
+    daily_review_status_path = data_directory / "daily_review_status.json"
+    if daily_review_status_path.is_file():
+        write_json(
+            site_directory / "data" / "daily_review_status.json",
+            load_json(daily_review_status_path, {}),
         )
     quote_path = data_directory / "quotes" / "latest.json"
     if quote_path.is_file():
