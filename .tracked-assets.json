@@ -1667,9 +1667,6 @@
     "data/长江电力/长江电力关于董事会换届选举的公告_1225354351.pdf",
     "data/长江电力/长江电力第七届董事会第一次会议决议公告_1225384928.pdf",
     "data/长江电力/长江电力第七届董事会第二次会议决议公告_1225411183.pdf",
-    "deploy/opencode/agent/fundamental-review-daily.md",
-    "deploy/opencode/agent/fundamental-review-deep.md",
-    "deploy/opencode/opencode.json",
     "deploy/systemd/ai-berkshire-after-close-review.service",
     "deploy/systemd/ai-berkshire-after-close-review.timer",
     "deploy/systemd/ai-berkshire-dashboard.service",
@@ -1687,7 +1684,6 @@
     "deploy/vps/ai-berkshire-a-share-reconcile.timer",
     "deploy/vps/ai-berkshire-a-share-scheduler.service",
     "deploy/vps/ai-berkshire-a-share-scheduler.sh",
-    "deploy/vps/ai-berkshire-opencode-review.sh",
     "deploy/vps/ai-berkshire-publish-release.sh",
     "deploy/vps/ai-berkshire-refresh-services.sh",
     "deploy/vps/ai-berkshire-sentiment-update.service",
@@ -1700,7 +1696,6 @@
     "deploy/vps/caddy-systemd-override.conf",
     "deploy/vps/dashboard-caddy.env.example",
     "deploy/vps/install-dashboard-stack.sh",
-    "deploy/vps/install-opencode-review-agent.sh",
     "deploy/vps/install-release-guard.sh",
     "deploy/vps/install-sentiment-job.sh",
     "deploy/vps/rotate-dashboard-password.sh",
@@ -10581,6 +10576,7 @@
     "tests/test_decision_consistency_review.py",
     "tests/test_decision_rule_extractor.py",
     "tests/test_decision_state.py",
+    "tests/test_deepseek_provider.py",
     "tests/test_disposition_effective_routes.py",
     "tests/test_drift_provenance.py",
     "tests/test_drift_scan_state.py",
@@ -10639,6 +10635,8 @@
     "tools/decision_consistency_review.py",
     "tools/decision_rule_extractor.py",
     "tools/decision_state.py",
+    "tools/deepseek_api_smoke.py",
+    "tools/deepseek_provider.py",
     "tools/drift_provenance.py",
     "tools/drift_scan_state.py",
     "tools/event_radar.py",
@@ -10718,9 +10716,9 @@
     "筛选公司/科创板股召回池/科创板100-去劣筛选-20260517.md",
     "筛选公司/科创板股召回池/通过公司-投资价值排序.md"
   ],
-  "tracked_paths_sha256": "e3fdf420cf9254413561af42fff527d5f017cb53632ef0539b87d08e38d114d5",
+  "tracked_paths_sha256": "0098c498ecc6331e9db294983d507f1fa125e0f2df209f6ea2f5fbaa89ff4111",
   "source_binding": {
     "kind": "git_index_without_manifest",
-    "sha256": "5154f3b3f709f601e7d9ca2839501df37c6302ecc252005c6b1e9a110798dcd1"
+    "sha256": "3f5e4df2816edbcff19aae9bd0de1c0be62aaa02700a8ee461e7e87a67d2eed7"
   }
 }
