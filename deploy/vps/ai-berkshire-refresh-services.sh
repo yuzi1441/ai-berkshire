@@ -102,5 +102,11 @@ curl --fail --silent --show-error http://127.0.0.1:8080/ >/dev/null
 systemctl is-active --quiet ai-berkshire-dashboard.service
 systemctl is-active --quiet caddy.service
 
+# The first refresh after the provider migration may have been executed by an
+# older, pinned refresh script.  That script copies a fail-closed compatibility
+# tombstone at this path.  Once the new stack is healthy, remove the obsolete
+# command entry; no production task depends on it.
+rm -f -- /usr/local/sbin/ai-berkshire-opencode-review
+
 trap - ERR
 echo "dashboard services refreshed from ${REPO_ROOT}"

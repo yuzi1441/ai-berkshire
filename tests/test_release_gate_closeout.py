@@ -304,6 +304,35 @@ sys.exit(int(os.environ.get('REFRESH_STATUS', '0')))
         self.assertIn('if [[ -f "${REPO_ROOT}/deploy/vps/install-release-guard.sh" ]]; then', refresh)
         self.assertIn("retaining the installed release guard", refresh)
 
+    def test_legacy_model_runner_refresh_contract_is_fail_closed(self):
+        """An installed old refresh can cross the provider-removal boundary."""
+        installer = ROOT / "deploy/vps/install-opencode-review-agent.sh"
+        tombstone = ROOT / "deploy/vps/ai-berkshire-opencode-review.sh"
+
+        bridged = subprocess.run(
+            ["bash", str(installer)], text=True, capture_output=True, timeout=30
+        )
+        self.assertEqual(bridged.returncode, 0, bridged.stdout + bridged.stderr)
+        self.assertIn("installer bypassed", bridged.stdout)
+
+        retired = subprocess.run(
+            ["bash", str(tombstone)], text=True, capture_output=True, timeout=30
+        )
+        self.assertEqual(retired.returncode, 64)
+        self.assertIn("command is retired", retired.stderr)
+
+        for script in (installer, tombstone):
+            text = script.read_text(encoding="utf-8")
+            self.assertNotIn("OPENCODE_GO_API_KEY", text)
+            self.assertNotIn("api.opencode.ai", text)
+            self.assertNotIn("/usr/local/bin/opencode", text)
+
+        refresh = (ROOT / "deploy/vps/ai-berkshire-refresh-services.sh").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn('bash "${REPO_ROOT}/deploy/vps/install-opencode-review-agent.sh"', refresh)
+        self.assertIn("rm -f -- /usr/local/sbin/ai-berkshire-opencode-review", refresh)
+
 
 if __name__ == "__main__":
     unittest.main()
