@@ -276,7 +276,7 @@ run_heavy() {
         status_phase sentiment "机会扫描延后重试；不重复抓取情绪"
         sentiment_rc="${retry_sentiment_status}"
     else
-        status_phase sentiment "刷新 A/H 情绪辅助"
+        status_phase sentiment "刷新 A 股情绪辅助"
         "${PYTHON}" tools/sentiment_snapshot.py \
             --board "${REPO_ROOT}/data/investment-dashboard/decision_board.json" \
             --registry "${REPO_ROOT}/data/report-routing/company_registry.json" \
@@ -290,14 +290,14 @@ run_heavy() {
             --fallback-lookback-days 30 \
             --news-limit 8 \
             --workers 3 \
-            --markets A股 港股 || sentiment_rc=$?
+            --markets A股 || sentiment_rc=$?
         publish_sentiment_runtime
     fi
     status_phase opportunity_scan "执行收盘后机会扫描"
     "${PYTHON}" scripts/run_after_close_ai_review.py \
         --repo-root "${REPO_ROOT}" \
         --skip-git-sync \
-        --markets A股,港股 \
+        --markets A股 \
         --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}" || scan_rc=$?
     if (( scan_rc == LOCK_RETRY_EXIT )); then
         mark_internal_scan_retry "${sentiment_rc}"

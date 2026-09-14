@@ -132,7 +132,9 @@ class AutomationStatusTests(unittest.TestCase):
     def test_scheduler_runs_close_opportunity_scan(self):
         scheduler = (ROOT / "deploy" / "vps" / "ai-berkshire-a-share-scheduler.sh").read_text(encoding="utf-8")
         self.assertIn("scripts/run_after_close_ai_review.py", scheduler)
-        self.assertIn("--markets A股,港股", scheduler)
+        heavy = scheduler[scheduler.index("run_heavy() {"):scheduler.index("run_reconcile() {")]
+        self.assertIn("--markets A股", heavy)
+        self.assertNotIn("港股", heavy)
         self.assertIn('status_finish partial "机会扫描完成；情绪快照失败，详见情绪状态"', scheduler)
         self.assertIn('JOB_DEFERRED=0', scheduler)
         self.assertIn("schedule_lock_retry()", scheduler)
