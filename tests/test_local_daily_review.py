@@ -69,6 +69,9 @@ class LocalDailyReviewTests(unittest.TestCase):
                       "published_at": f"{cutoff}T12:00:00+08:00", "source_tier": "A",
                       "publisher": "交易所", "url": "https://example.test/1"}]
         payload = {"data_cutoff": cutoff, "retrieval_complete": True,
+                   "deterministic_collection_ready": True,
+                   "semantic_review_status": "awaiting_local_review",
+                   "external_llm_required": False,
                    "companies": [{"company": "Test", "ticker": self.ticker, "market": "A股",
                                   "industry": "测试行业", "news_sentiment": {"captured_items": items}}]}
         if industry_items is not None:
@@ -123,6 +126,57 @@ class LocalDailyReviewTests(unittest.TestCase):
     def test_not_ready_fails_closed(self):
         with self.assertRaises(review.LocalReviewError):
             review.validate_input(self.root / "missing")
+
+    def test_stale_technical_rejects_prepare(self):
+        path = self.root / "data/investment-dashboard/technical_daily_snapshot.json"
+        payload = review.read_json(path)
+        payload["companies"][0]["freshness"] = "stale"
+        self.write(path, payload)
+        with self.assertRaisesRegex(review.LocalReviewError, "freshness=stale"):
+            self.prepare()
+
+    def test_stale_or_ineligible_quote_rejects_prepare(self):
+        path = self.root / "data/investment-dashboard/quotes/latest.json"
+        payload = review.read_json(path)
+        payload["quotes"][0]["snapshot_status"] = "preserved_previous"
+        payload["quotes"][0]["quality"] = {"eligible": False, "reason": "quote_stale"}
+        self.write(path, payload)
+        with self.assertRaisesRegex(review.LocalReviewError, "quotes"):
+            self.prepare()
+
+    def test_unverified_raw_collection_rejects_prepare(self):
+        payload = review.read_json(self.raw_path)
+        payload["deterministic_collection_ready"] = False
+        self.write(self.raw_path, payload)
+        with self.assertRaisesRegex(review.LocalReviewError, "no-LLM local-review handoff"):
+            self.prepare()
+
+    def test_wrong_technical_request_date_rejects_prepare(self):
+        path = self.root / "data/investment-dashboard/technical_daily_snapshot.json"
+        payload = review.read_json(path)
+        payload["companies"][0]["requested_cutoff"] = "2026-09-14"
+        self.write(path, payload)
+        with self.assertRaisesRegex(review.LocalReviewError, "requested_cutoff=2026-09-14"):
+            self.prepare()
+
+    def test_ready_manifest_is_derived_from_all_inputs(self):
+        _, manifest = self.prepare()
+        self.assertTrue(all(manifest[key] for key in (
+            "quotes_ready", "news_ready", "technical_ready", "canonical_ready",
+        )))
+        self.assertFalse(manifest["external_llm_required"])
+
+    def test_manifest_cannot_claim_review_ready_with_failed_input_category(self):
+        input_root, _ = self.prepare()
+        manifest_path = input_root / "manifest.json"
+        manifest = review.read_json(manifest_path)
+        manifest["technical_ready"] = False
+        manifest["manifest_sha256"] = review.value_sha256({
+            key: value for key, value in manifest.items() if key != "manifest_sha256"
+        })
+        self.write(manifest_path, manifest)
+        with self.assertRaisesRegex(review.LocalReviewError, "readiness proof"):
+            review.validate_input(input_root)
 
     def test_clean_input_review_succeeds_and_formal_uses_ab(self):
         input_root, _ = self.prepare()
@@ -202,6 +256,9 @@ class LocalDailyReviewTests(unittest.TestCase):
         review.apply_validated(self.root, validated)
         intraday = self.root / "data/investment-dashboard/intraday_technical.json"
         self.write(intraday, {"companies": [{"ticker": self.ticker, "trend": "DOWN", "data_cutoff": "2026-09-16"}]})
+        daily = review.read_json(self.root / "data/investment-dashboard/technical_daily_snapshot.json")
+        daily["companies"][0]["data_cutoff"] = "2026-09-16"
+        self.write(self.root / "data/investment-dashboard/technical_daily_snapshot.json", daily)
         quotes = review.read_json(self.root / "data/investment-dashboard/quotes/latest.json")
         quotes["data_cutoff"] = "2026-09-16"; quotes["quotes"][0]["data_cutoff"] = "2026-09-16"
         self.write(self.root / "data/investment-dashboard/quotes/latest.json", quotes)
@@ -300,6 +357,30 @@ class SchedulerBoundaryTests(unittest.TestCase):
                           side_effect=AssertionError("environment must not be read")):
             self.assertEqual(sentiment_snapshot.resolve_llm_configs(True), (None, None))
 
+    def test_no_llm_snapshot_emits_explicit_local_handoff(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "raw.json"
+            status = root / "status.json"
+            snapshot = {
+                "schema_version": 1, "data_cutoff": "2026-09-15", "retrieval_complete": True,
+                "companies": [{"ticker": "600000.SH", "combined_sentiment": {"status": "context_only"}}],
+                "company_count": 1, "skipped_count": 0, "warnings": [],
+            }
+            with unittest.mock.patch.object(sentiment_snapshot, "build_snapshot", return_value=snapshot), \
+                    unittest.mock.patch.object(sentiment_snapshot, "resolve_llm_configs", return_value=(None, None)):
+                result = sentiment_snapshot.main([
+                    "--as-of", "2026-09-15", "--no-llm", "--no-archive",
+                    "--output", str(output), "--site-output", str(root / "site.json"),
+                    "--working-output", str(root / "working.json"),
+                    "--status-output", str(status), "--cache-dir", str(root / "cache"),
+                ])
+            self.assertEqual(result, 0)
+            payload = review.read_json(output)
+            self.assertTrue(payload["deterministic_collection_ready"])
+            self.assertEqual(payload["semantic_review_status"], "awaiting_local_review")
+            self.assertFalse(payload["external_llm_required"])
+
 
 class InputPublisherTests(unittest.TestCase):
     def git(self, *args, cwd):
@@ -329,6 +410,8 @@ class InputPublisherTests(unittest.TestCase):
             manifest = {
                 "schema_version": 1, "status": "awaiting_local_review", "date": "2026-09-15",
                 "source_sha": "a" * 40, "market": "A股", "external_llm_required": False,
+                "quotes_ready": True, "news_ready": True,
+                "technical_ready": True, "canonical_ready": True,
                 "company_count": 1,
                 "shared": {"path": "shared.json", "sha256": review.file_sha256(input_root / "shared.json"),
                            "input_sha256": "shared-proof", "industry_event_count": 0},

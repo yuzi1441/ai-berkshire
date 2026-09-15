@@ -4605,6 +4605,8 @@ def main(argv: list[str] | None = None) -> int:
             # classification credentials are absent. build_snapshot marks
             # the result partial/needs_review and keeps formal scores empty.
             print(
+                "info: no-LLM 模式；仅抓取确定性新闻证据，等待本地语义复核"
+                if args.no_llm else
                 "warning: SENTIMENT_LLM_* 未配置；继续抓取 A/H 新闻并发布 needs_review 快照",
                 file=sys.stderr,
             )
@@ -4630,7 +4632,17 @@ def main(argv: list[str] | None = None) -> int:
                 snapshot, "情绪任务进行中；页面显示最近一次阶段性结果。"
             ),
         )
-        snapshot = {**snapshot, "run_id": run_id, "run_state": "complete"}
+        snapshot = {
+            **snapshot,
+            "run_id": run_id,
+            "run_state": "complete",
+            # This is the deterministic handoff contract for local review.
+            # In no-LLM mode no provider configuration is read and no semantic
+            # result is implied by successful source collection.
+            "deterministic_collection_ready": bool(args.no_llm and snapshot.get("retrieval_complete") is True),
+            "semantic_review_status": "awaiting_local_review" if args.no_llm else "completed_by_api",
+            "external_llm_required": not args.no_llm,
+        }
         usable_count = sum(
             1
             for company in snapshot.get("companies", [])

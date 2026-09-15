@@ -299,6 +299,73 @@ def review_plan(packet: dict[str, Any], prior: dict[str, Any] | None, as_of: dat
     return {"opportunity_action": "reuse", "reasons": ["materiality_unchanged"]}
 
 
+def deterministic_readiness(
+    decisions: list[dict[str, Any]],
+    state_by: dict[str, dict[str, Any]],
+    quote_by: dict[str, dict[str, Any]],
+    raw_by: dict[str, dict[str, Any]],
+    daily_by: dict[str, dict[str, Any]],
+    as_of: date,
+) -> tuple[dict[str, bool], list[str]]:
+    """Verify every selected company before claiming an input is ready.
+
+    Counts are not proof: a stale row for another ticker can otherwise hide a
+    missing or unusable selected row.  Keep this boundary deliberately strict
+    because the resulting manifest is published as the local model handoff.
+    """
+    expected_cutoff = as_of.isoformat()
+    failures: list[str] = []
+    category_failures = {"quotes": False, "news": False, "technical": False, "canonical": False}
+
+    def reject(category: str, ticker: str, reason: str) -> None:
+        category_failures[category] = True
+        failures.append(f"{ticker}:{category}:{reason}")
+
+    for decision in decisions:
+        ticker = str(decision.get("ticker") or "").upper()
+        state = state_by.get(ticker)
+        if state is None:
+            reject("canonical", ticker, "company_state_missing")
+        else:
+            if not (decision.get("report_path") and
+                    (decision.get("current_report_sha256") or state.get("canonical_report_sha256"))):
+                reject("canonical", ticker, "canonical_report_proof_missing")
+
+        quote = quote_by.get(ticker)
+        if quote is None:
+            reject("quotes", ticker, "quote_missing")
+        else:
+            quote_cutoff = str(quote.get("data_cutoff") or "")[:10]
+            if quote_cutoff != expected_cutoff:
+                reject("quotes", ticker, f"cutoff={quote_cutoff or 'missing'}")
+            if str(quote.get("snapshot_status") or "").casefold() not in {"current", "ready"}:
+                reject("quotes", ticker, f"snapshot_status={quote.get('snapshot_status') or 'missing'}")
+            quality = quote.get("quality") if isinstance(quote.get("quality"), dict) else {}
+            if quality.get("eligible") is False:
+                reject("quotes", ticker, f"ineligible={quality.get('reason') or 'unspecified'}")
+
+        if ticker not in raw_by:
+            reject("news", ticker, "company_raw_evidence_missing")
+
+        technical = daily_by.get(ticker)
+        if technical is None:
+            reject("technical", ticker, "daily_snapshot_missing")
+        else:
+            if str(technical.get("status") or "").casefold() != "ready":
+                reject("technical", ticker, f"status={technical.get('status') or 'missing'}")
+            if str(technical.get("freshness") or "").casefold() == "stale":
+                reject("technical", ticker, "freshness=stale")
+            technical_cutoff = str(technical.get("data_cutoff") or "")[:10]
+            if not technical_cutoff:
+                reject("technical", ticker, "cutoff=missing")
+            requested_cutoff = str(technical.get("requested_cutoff") or "")[:10]
+            if requested_cutoff and requested_cutoff != expected_cutoff:
+                reject("technical", ticker, f"requested_cutoff={requested_cutoff}")
+
+    ready = {f"{category}_ready": not failed for category, failed in category_failures.items()}
+    return ready, sorted(set(failures))
+
+
 def prepare(repo_root: Path, output_root: Path, as_of: date, raw_sentiment_path: Path, *, force: bool = False,
             tickers: set[str] | None = None) -> dict[str, Any]:
     board = read_json(repo_root / "data/investment-dashboard/decision_board.json")
@@ -322,6 +389,10 @@ def prepare(repo_root: Path, output_root: Path, as_of: date, raw_sentiment_path:
         raise LocalReviewError("no A-share decisions")
     if raw.get("data_cutoff") != as_of.isoformat() or raw.get("retrieval_complete") is not True:
         raise LocalReviewError("raw sentiment is not complete for requested date")
+    if (raw.get("deterministic_collection_ready") is not True or
+            raw.get("semantic_review_status") != "awaiting_local_review" or
+            raw.get("external_llm_required") is not False):
+        raise LocalReviewError("raw sentiment is not a verified no-LLM local-review handoff")
     quote_cutoff = str(quotes.get("data_cutoff") or "")[:10]
     if quote_cutoff != as_of.isoformat():
         raise LocalReviewError(f"quote cutoff mismatch: {quote_cutoff} != {as_of.isoformat()}")
@@ -333,6 +404,11 @@ def prepare(repo_root: Path, output_root: Path, as_of: date, raw_sentiment_path:
     intraday_by = indexed(intraday_payload.get("companies"))
     prior_by = prior_scan_map(repo_root)
     prior_sentiment = prior_sentiment_map(repo_root)
+    readiness, readiness_failures = deterministic_readiness(
+        decisions, state_by, quote_by, raw_by, daily_by, as_of,
+    )
+    if readiness_failures:
+        raise LocalReviewError("deterministic input not ready: " + "; ".join(readiness_failures))
     packets_dir = output_root / "packets"
     packet_entries = []
     plans = []
@@ -394,10 +470,7 @@ def prepare(repo_root: Path, output_root: Path, as_of: date, raw_sentiment_path:
         "date": as_of.isoformat(),
         "source_sha": source_sha(repo_root),
         "market": MARKET,
-        "quotes_ready": True,
-        "news_ready": True,
-        "technical_ready": len(daily_by) >= len(decisions),
-        "canonical_ready": len(state_by) >= len(decisions),
+        **readiness,
         "company_count": len(packet_entries),
         "review_scope": "partial_dry_run" if selected_tickers is not None else "full_a_share",
         "publication_eligible": selected_tickers is None,
@@ -408,8 +481,6 @@ def prepare(repo_root: Path, output_root: Path, as_of: date, raw_sentiment_path:
                    "input_sha256": shared["input_sha256"], "industry_event_count": len(industry_events)},
         "packets": packet_entries,
     }
-    if not manifest["technical_ready"]:
-        raise LocalReviewError("daily technical input incomplete")
     manifest["manifest_sha256"] = value_sha256(manifest)
     write_json(output_root / "manifest.json", manifest)
     return manifest
@@ -423,6 +494,9 @@ def validate_input(input_root: Path) -> tuple[dict[str, Any], dict[str, dict[str
         raise LocalReviewError("input manifest invalid")
     if manifest.get("market") != MARKET or manifest.get("external_llm_required") is not False:
         raise LocalReviewError("input scope/provider boundary invalid")
+    readiness_fields = ("quotes_ready", "news_ready", "technical_ready", "canonical_ready")
+    if any(manifest.get(field) is not True for field in readiness_fields):
+        raise LocalReviewError("input readiness proof is incomplete")
     shared_entry = manifest.get("shared")
     if not isinstance(shared_entry, dict):
         raise LocalReviewError("shared industry packet proof missing")

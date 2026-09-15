@@ -7,6 +7,8 @@ description: Run the local AI Berkshire daily A-share sentiment and opportunity 
 
 Use the current Codex/ChatGPT model as the semantic reasoning plane. Never call
 an HTTP LLM API or read DeepSeek, OpenCode, MiMo, OpenAI, or Anthropic API keys.
+The legacy API workflow is a separate, explicitly invoked cold backup. Never
+fall back to it automatically when local input or review validation fails.
 
 ## Modes
 
@@ -25,7 +27,10 @@ an HTTP LLM API or read DeepSeek, OpenCode, MiMo, OpenAI, or Anthropic API keys.
 1. Locate the real Git root and inspect `git status`. Preserve all pre-existing
    changes. Never reset, clean, restore broadly, or use `git add .`/`git add -A`.
 2. Run `scripts/prepare_daily_review.py`. It fetches `vps-generated` without
-   merging and verifies the ready marker and packet hashes.
+   merging and verifies the ready marker and packet hashes. The ready marker
+   must prove every selected A-share has a current eligible quote, verified raw
+   collection, ready non-stale daily technical data, and canonical state. Any
+   missing or stale ticker fails closed and must be reported by ticker/reason.
 3. For `review`, read [sentiment-contract.md](references/sentiment-contract.md)
    and [opportunity-contract.md](references/opportunity-contract.md). Write one
    review JSON per ticker and one `_shared.json` for shared industry events under
