@@ -1,0 +1,91 @@
+[
+  {
+    "id": 2,
+    "label": "旧基线 · 论文状态与证据边界",
+    "reported_value": 2025.0,
+    "unit": "",
+    "fetched_value": 2025.0,
+    "fetched_source": "国电南瑞主报告基线说明",
+    "fetched_value2": 2025.0,
+    "fetched_source2": "国电南瑞2025年年度报告",
+    "result": "pass"
+  },
+  {
+    "id": 7,
+    "label": "估值锚点 · 触发证据",
+    "reported_value": 6.79,
+    "unit": "%",
+    "fetched_value": 6.7854113656,
+    "fetched_source": "腾讯13:59:45价格21.98元与financial_rigor",
+    "fetched_value2": 6.62,
+    "fetched_source2": "新浪14:04:00价格22.02元与financial_rigor",
+    "result": "warn",
+    "review_note": "两接口抽取时点相差4分15秒、价格相差0.04元；报告已分别列示6.79%和6.62%，不影响方向。"
+  },
+  {
+    "id": 8,
+    "label": "核心假设清单 · 新判断",
+    "reported_value": 14.54,
+    "unit": "%",
+    "fetched_value": 14.54,
+    "fetched_source": "SSE 2026年半年度报告P9",
+    "fetched_value2": 14.54,
+    "fetched_source2": "AkShare/Eastmoney财务摘要",
+    "result": "pass"
+  },
+  {
+    "id": 9,
+    "label": "红线清单 · 旧判断",
+    "reported_value": 8.0,
+    "unit": "",
+    "fetched_value": 8.0,
+    "fetched_source": "主报告L1058卖出信号八项",
+    "fetched_value2": 8.0,
+    "fetched_source2": "main-report-review-rules pending_redline_candidate_count",
+    "result": "pass"
+  },
+  {
+    "id": 15,
+    "label": "电网智能 · 毛利率同比",
+    "reported_value": -0.44,
+    "unit": "pct",
+    "fetched_value": -0.44,
+    "fetched_source": "SSE 2026年半年度报告P23",
+    "fetched_value2": -0.44,
+    "fetched_source2": "CNINFO 2026年半年度报告同表",
+    "result": "pass"
+  },
+  {
+    "id": 18,
+    "label": "能源低碳 · 毛利率同比",
+    "reported_value": -2.95,
+    "unit": "pct",
+    "fetched_value": -2.95,
+    "fetched_source": "SSE 2026年半年度报告P23",
+    "fetched_value2": -2.95,
+    "fetched_source2": "CNINFO 2026年半年度报告同表",
+    "result": "pass"
+  },
+  {
+    "id": 16,
+    "label": "能源低碳 · 收入",
+    "reported_value": 96.14,
+    "unit": "亿元",
+    "fetched_value": 96.1436619288,
+    "fetched_source": "SSE 2026年半年度报告P23",
+    "fetched_value2": 96.1437,
+    "fetched_source2": "CNINFO 2026年半年度报告同表",
+    "result": "pass"
+  },
+  {
+    "id": 41,
+    "label": "H1 营业收入 · SSE 半年度报告",
+    "reported_value": 277.6719,
+    "unit": "亿元",
+    "fetched_value": 277.6719052975,
+    "fetched_source": "SSE 2026年半年度报告P9",
+    "fetched_value2": 277.6719052975,
+    "fetched_source2": "AkShare/Eastmoney财务摘要",
+    "result": "pass"
+  }
+]

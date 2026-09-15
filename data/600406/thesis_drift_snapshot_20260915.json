@@ -1,0 +1,143 @@
+{
+  "company": "国电南瑞科技股份有限公司",
+  "ticker": "600406.SH",
+  "mode": "watch",
+  "research_date": "2026-09-15",
+  "evidence_cutoff": "2026-09-15 14:04 Asia/Shanghai",
+  "financial_cutoff": "2026-06-30",
+  "comparison": {
+    "baseline_report": "reports/国电南瑞/国电南瑞-research-20260726.md",
+    "baseline_report_date": "2026-07-26",
+    "new_financial_report_date": "2026-08-27",
+    "latest_company_announcement_date": "2026-09-03"
+  },
+  "quote": {
+    "tencent_price_cny": 21.98,
+    "tencent_timestamp": "2026-09-15 13:59:45 Asia/Shanghai",
+    "sina_price_cny": 22.02,
+    "sina_timestamp": "2026-09-15 14:04:00 Asia/Shanghai",
+    "cross_source_consensus_cny": 22.00,
+    "baseline_price_cny": 23.58,
+    "price_change_from_baseline_pct_using_tencent": -6.785411365564031,
+    "total_shares": 8031756156,
+    "market_cap_cny_using_tencent": 176538000000,
+    "source_urls": [
+      "https://qt.gtimg.cn/q=sh600406",
+      "https://hq.sinajs.cn/list=sh600406"
+    ]
+  },
+  "h1_2026": {
+    "revenue_cny": 27767190529.75,
+    "revenue_yoy_pct": 14.54,
+    "net_profit_parent_cny": 3072688826.28,
+    "net_profit_parent_yoy_pct": 4.08,
+    "net_profit_parent_q2_yoy_pct": 3.4946101168581656,
+    "ocf_cny": 591109591.80,
+    "ocf_yoy_pct": -78.95302186041701,
+    "main_business_gross_margin_pct": 25.27,
+    "main_business_gross_margin_yoy_pp": -1.11,
+    "q2_gross_margin_pct": 25.467484941211254,
+    "q2_gross_margin_yoy_pp": -2.286635433179712,
+    "new_contracts_100m_cny": 456.33,
+    "new_contracts_yoy_pct": 28.79,
+    "inventory_cny": 15160218092.78,
+    "inventory_change_from_year_end_pct": 16.097135386335417,
+    "contract_liabilities_cny": 7009928031.23,
+    "contract_liabilities_change_from_year_end_pct": -10.209345022105165,
+    "credit_impairment_loss_cny": 281541527.50,
+    "credit_impairment_loss_yoy_pct": 60.3657695198051
+  },
+  "segments": {
+    "grid_intelligence": {
+      "revenue_cny": 13306218193.62,
+      "revenue_yoy_pct": 8.85,
+      "gross_margin_pct": 29.90,
+      "gross_margin_yoy_pp": -0.44
+    },
+    "energy_low_carbon": {
+      "revenue_cny": 9614366192.88,
+      "revenue_yoy_pct": 46.98,
+      "gross_margin_pct": 18.64,
+      "gross_margin_yoy_pp": -2.95
+    },
+    "grid_industry": {
+      "revenue_cny": 13883021244.59,
+      "revenue_yoy_pct": 6.42
+    },
+    "overseas": {
+      "revenue_cny": 5894321631.93,
+      "revenue_yoy_pct": 196.61,
+      "gross_margin_pct": 12.680858403297885
+    },
+    "domestic": {
+      "revenue_cny": 21805020628.21,
+      "revenue_yoy_pct": -1.89
+    }
+  },
+  "redline_checks": {
+    "overall_gross_margin_below_24_pct": false,
+    "grid_intelligence_gross_margin_below_28_pct": false,
+    "non_grid_receivables_share_above_55_pct": false,
+    "non_grid_receivables_share_pct": 53.91122414876403,
+    "non_grid_receivables_provision_rate_above_20_pct": false,
+    "non_grid_receivables_provision_rate_pct": 16.27,
+    "major_litigation": false,
+    "regulatory_or_integrity_penalty": false,
+    "irregular_guarantee": false,
+    "annual_revenue_below_700_100m_cny": null
+  },
+  "capital_allocation": {
+    "h1_dividend_per_share_cny": 0.153,
+    "h1_cash_dividend_cny": 1221949631.85,
+    "h1_cash_dividend_and_buyback_pct_of_parent_profit": 41.03,
+    "h1_cash_dividend_and_cancelled_buyback_pct_of_parent_profit": 39.77,
+    "new_buyback_plan_100m_cny": [5, 10],
+    "new_buyback_use": "employee_share_ownership_or_equity_incentive",
+    "new_buyback_cancelled_capital": false,
+    "shares_repurchased_as_of_2026_08_31": 3869768,
+    "repurchase_amount_cny_as_of_2026_08_31": 88984979.40
+  },
+  "valuation": {
+    "ttm_parent_profit_cny": 8399469274.37,
+    "ttm_eps_cny": 1.0457824056442881,
+    "h1_bvps_cny": 6.48350834390919,
+    "ttm_pe_using_tencent": 21.02,
+    "pb_using_tencent": 3.39,
+    "base_present_value_cny_unchanged": 21.84,
+    "price_premium_to_base_value_pct": 0.6410256410256387,
+    "strict_20pct_margin_candidate_cny": 17.48,
+    "price_premium_to_strict_candidate_pct": 25.7437070938215
+  },
+  "cross_validation": {
+    "financial_source_1": "SSE issuer H1 report",
+    "financial_source_2": "AkShare 1.18.88 / Eastmoney financial abstract",
+    "revenue_deviation_pct": 0.0,
+    "net_profit_parent_deviation_pct": 0.0,
+    "ocf_deviation_pct": 0.0,
+    "quote_sources": ["Tencent", "Sina"],
+    "quote_deviation_pct": 0.09
+  },
+  "drift": {
+    "overall": "weakened",
+    "severity": "minor",
+    "valuation_anchor": "Improved",
+    "core_assumptions": "Weakened",
+    "redlines": "Unchanged",
+    "management_quality": "Unchanged",
+    "competitive_moat": "Unchanged"
+  },
+  "action": {
+    "dashboard_mode": "WATCH",
+    "previous": "KEEP WATCH",
+    "current": "KEEP WATCH",
+    "run_checklist": false,
+    "drop": false,
+    "rationale": "价格已接近中性现值，但主报告要求的中报正向证据未出现，且利润率、利润增速与现金流边际弱化。"
+  },
+  "official_sources": {
+    "h1_report_url": "https://www.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-08-27/600406_20260827_8WAK.pdf",
+    "h1_report_sha256": "21eb6468cc5e969eb848ae8d17b8fb3e555108185529540106086a69954da8df",
+    "buyback_progress_url": "https://www.sse.com.cn/disclosure/listedinfo/announcement/c/new/2026-09-03/600406_20260903_LKWH.pdf",
+    "buyback_progress_sha256": "1abe81015b2ada6a9f308378f5279b3955315f95ef2cf2764fa28e0026c9f07d"
+  }
+}
