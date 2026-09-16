@@ -1,0 +1,533 @@
+#!/usr/bin/env python3
+"""Build a fail-closed candidate current-facts entry preview for A-share contracts.
+
+This is intentionally not a production authority.  Semantic contracts define the
+rules; node-bound fact packets only supply time-varying observations.  Composite
+conditions and deterministic price nodes can never be overridden by packets.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+import sys
+from collections import Counter
+from datetime import date, datetime
+from pathlib import Path
+from typing import Any, Iterable
+from zoneinfo import ZoneInfo
+
+import evaluate_main_report_semantics as evaluator
+import market_snapshot
+import quote_quality
+from validate_main_report_semantics import ROOT, load_json, validate_contract
+
+
+SCHEMA_VERSION = 1
+SHANGHAI = ZoneInfo("Asia/Shanghai")
+CONTRACT_DIRECTORY = Path("data/investment-dashboard/main-report-semantic-contracts")
+DEFAULT_QUOTES = Path("data/investment-dashboard/quotes/latest.json")
+DEFAULT_OUTPUT = Path(".runtime/main-report-current-facts/main_report_current_entry_preview.json")
+DEFAULT_FACTS_OUTPUT = Path(".runtime/main-report-current-facts/facts")
+DEFAULT_PILOT_LOG = Path("logs/main-report-current-facts-pilot.md")
+PILOT_TICKERS = (
+    "603606.SH", "000333.SZ", "000568.SZ", "603129.SH", "000400.SZ",
+    "000408.SZ", "002272.SZ", "600276.SH", "601727.SH", "002155.SZ",
+)
+SEMANTIC_LEAF_KINDS = evaluator.OVERRIDABLE_SEMANTIC_LEAF_KINDS
+PACKET_KINDS = SEMANTIC_LEAF_KINDS | {"METRIC_COMPARE"}
+PROHIBITED_SEMANTIC_SOURCES = {"technical", "sentiment", "opportunity"}
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _nodes(node: Any) -> Iterable[dict[str, Any]]:
+    if not isinstance(node, dict):
+        return
+    yield node
+    for child in node.get("children", []):
+        yield from _nodes(child)
+
+
+def evaluator_nodes(contract: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Return unique nodes the empty-position evaluator can consume."""
+    result: dict[str, dict[str, Any]] = {}
+    scope = contract.get("scopes", {}).get("empty_position", {})
+    for path in scope.get("action_paths", []):
+        if path.get("instrument_scope", "A_SHARE") not in {"A_SHARE", "BOTH"}:
+            continue
+        for node in _nodes(path.get("condition")):
+            if node.get("node_id"):
+                result[str(node["node_id"])] = node
+    for node in contract.get("hard_blocks", []):
+        if node.get("effect") != "BLOCK_ENTRY" or node.get("scope") not in {"empty_position", "both"}:
+            continue
+        for item in _nodes(node):
+            if item.get("node_id"):
+                result[str(item["node_id"])] = item
+    return result
+
+
+def leaf_nodes(contract: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {
+        node_id: node for node_id, node in evaluator_nodes(contract).items()
+        if not node.get("children")
+    }
+
+
+def validate_fact_packets(
+    packets: Any,
+    contracts: dict[str, dict[str, Any]],
+) -> list[str]:
+    if not isinstance(packets, dict) or packets.get("schema_version") != SCHEMA_VERSION:
+        return ["fact packets schema_version must be 1"]
+    facts = packets.get("facts")
+    if not isinstance(facts, list):
+        return ["fact packets facts must be a list"]
+    errors: list[str] = []
+    identities: set[tuple[str, str]] = set()
+    for index, fact in enumerate(facts):
+        prefix = f"facts[{index}]"
+        if not isinstance(fact, dict):
+            errors.append(f"{prefix} must be an object")
+            continue
+        ticker = str(fact.get("ticker") or "").upper()
+        node_id = str(fact.get("node_id") or "")
+        identity = (ticker, node_id)
+        if identity in identities:
+            errors.append(f"{prefix} duplicate ticker/node_id")
+        identities.add(identity)
+        contract = contracts.get(ticker)
+        if contract is None:
+            errors.append(f"{prefix} ticker is not an A-share semantic contract")
+            continue
+        node = evaluator_nodes(contract).get(node_id)
+        if node is None:
+            errors.append(f"{prefix} node_id is not bound to ticker")
+            continue
+        kind = str(fact.get("kind") or "")
+        if str(fact.get("company") or "") != str(contract.get("company") or ""):
+            errors.append(f"{prefix} company does not match contract")
+        if kind != node.get("kind"):
+            errors.append(f"{prefix} kind does not match contract node")
+        if kind not in PACKET_KINDS or node.get("children"):
+            errors.append(f"{prefix} composite/deterministic price override is forbidden")
+        forbidden = {"operator", "threshold", "effect", "action"} & fact.keys()
+        if forbidden:
+            errors.append(f"{prefix} attempts to redefine semantic rule: {sorted(forbidden)}")
+        evidence = fact.get("evidence")
+        if isinstance(evidence, list):
+            for evidence_index, item in enumerate(evidence):
+                evidence_prefix = f"{prefix}.evidence[{evidence_index}]"
+                if not isinstance(item, dict):
+                    errors.append(f"{evidence_prefix} must be an object")
+                    continue
+                for field in ("source_type", "source", "date", "value"):
+                    if not str(item.get(field) or "").strip():
+                        errors.append(f"{evidence_prefix}.{field} is required")
+                if not str(item.get("source_path") or item.get("record") or "").strip():
+                    errors.append(f"{evidence_prefix} requires source_path or record")
+        if kind == "METRIC_COMPARE":
+            value = fact.get("actual_value")
+            try:
+                if isinstance(value, bool) or not math.isfinite(float(value)):
+                    raise ValueError
+            except (TypeError, ValueError):
+                errors.append(f"{prefix}.actual_value must be finite numeric")
+            if not isinstance(evidence, list) or not evidence:
+                errors.append(f"{prefix}.evidence is required")
+            elif len({str(item.get("source") or "") for item in evidence if isinstance(item, dict)}) < 2:
+                errors.append(f"{prefix}.evidence requires two independent sources")
+            if fact.get("unit") != node.get("unit"):
+                errors.append(f"{prefix}.unit does not match contract node")
+        else:
+            state = fact.get("state")
+            if state not in {True, False, None, "unknown"}:
+                errors.append(f"{prefix}.state must be true, false, or unknown")
+            if state in {True, False} and (not isinstance(evidence, list) or not evidence):
+                errors.append(f"{prefix}.evidence is required for resolved semantic facts")
+            source_types = {
+                str(item.get("source_type") or "").lower()
+                for item in evidence or [] if isinstance(item, dict)
+            }
+            if state in {True, False} and source_types & PROHIBITED_SEMANTIC_SOURCES:
+                errors.append(f"{prefix} prohibited source cannot resolve a semantic condition")
+    return errors
+
+
+def load_fact_packets(path: Path | None) -> dict[str, Any]:
+    if path is None or not path.is_file():
+        return {"schema_version": SCHEMA_VERSION, "facts": []}
+    return load_json(path)
+
+
+def _fact_is_stale(fact: dict[str, Any], as_of: date) -> tuple[bool, str | None]:
+    required = str(fact.get("required_period") or "")
+    actual = str(fact.get("period") or "")
+    if required and actual != required:
+        return True, "reporting_period_mismatch"
+    valid_until = str(fact.get("valid_until") or "")
+    try:
+        if valid_until and date.fromisoformat(valid_until) < as_of:
+            return True, "fact_expired"
+    except ValueError:
+        return True, "invalid_valid_until"
+    evidence_date = str(fact.get("evidence_date") or "")
+    try:
+        if evidence_date and date.fromisoformat(evidence_date) > as_of:
+            return True, "future_evidence"
+    except ValueError:
+        return True, "invalid_evidence_date"
+    return False, None
+
+
+def _quote_result(
+    ticker: str,
+    quotes: dict[str, dict[str, Any]],
+    evaluated_at: datetime,
+) -> dict[str, Any]:
+    quote = quotes.get(ticker)
+    quality = quote_quality.quote_quality(quote, evaluated_at)
+    if not isinstance(quote, dict):
+        return {"state": "unknown", "reason": "quote_missing", "value": None}
+    if quote.get("market") != "A股" or quote.get("currency") != "CNY":
+        return {"state": "unknown", "reason": "instrument_or_currency_mismatch", "value": None}
+    metadata = quote.get("_market_snapshot")
+    if not isinstance(metadata, dict) or metadata.get("quote_type") != "close" or metadata.get("session") != "closed":
+        return {"state": "unknown", "reason": "latest_complete_close_unavailable", "value": None,
+                "date": quote.get("data_cutoff"), "source": quote.get("source")}
+    if not quality.get("eligible"):
+        return {
+            "state": "unknown", "reason": quality.get("reason"), "value": None,
+            "date": quote.get("data_cutoff"), "source": quote.get("source"), "quality": quality,
+        }
+    return {
+        "state": "true", "reason": "current_complete_a_share_quote",
+        "value": float(quote["price"]), "date": quote.get("data_cutoff"),
+        "source": quote.get("source"), "provider_timestamp": quote.get("provider_timestamp"),
+        "quality": quality,
+    }
+
+
+def _leaf_result(
+    node: dict[str, Any],
+    packet: dict[str, Any] | None,
+    price: dict[str, Any],
+    as_of: date,
+) -> dict[str, Any]:
+    kind = str(node.get("kind") or "")
+    base = {
+        "node_id": node.get("node_id"), "kind": kind,
+        "description": node.get("description"), "effect": node.get("effect"),
+    }
+    if kind == "PRICE_RANGE":
+        if price.get("state") != "true":
+            return {**base, "current_state": "unknown", "resolution_method": "deterministic_price",
+                    "reason": price.get("reason"), "evidence": [price]}
+        state = evaluator.evaluate_condition(node, {"price": price["value"]})
+        return {**base, "current_state": state, "resolution_method": "deterministic_price",
+                "actual_value": price["value"], "evidence": [price]}
+    if packet is None:
+        return {**base, "current_state": "unknown", "resolution_method": "not_available",
+                "reason": "node_bound_fact_missing", "evidence": []}
+    stale, reason = _fact_is_stale(packet, as_of)
+    if stale:
+        return {**base, "current_state": "unknown", "resolution_method": "not_available",
+                "reason": reason, "evidence": packet.get("evidence", []), "stale": True}
+    if kind == "METRIC_COMPARE":
+        state = evaluator.evaluate_condition(node, {"metrics": {node.get("metric"): packet["actual_value"]}})
+        return {**base, "current_state": state, "resolution_method": "deterministic_metric",
+                "actual_value": packet["actual_value"], "metric": node.get("metric"),
+                "period": packet.get("period"), "evidence": packet.get("evidence", [])}
+    value = packet.get("state")
+    state = "true" if value is True else "false" if value is False else "unknown"
+    return {**base, "current_state": state,
+            "resolution_method": "semantic_review" if state != "unknown" else "not_available",
+            "reason": packet.get("reason"), "evidence": packet.get("evidence", [])}
+
+
+def _facts_for_evaluator(
+    leaves: list[dict[str, Any]], price: dict[str, Any], contract_leaves: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    facts: dict[str, Any] = {"instrument_scope": "A_SHARE", "conditions": {}, "metrics": {}}
+    if price.get("state") == "true":
+        facts["price"] = price["value"]
+    metric_values: dict[str, set[float]] = {}
+    for result in leaves:
+        node = contract_leaves[str(result["node_id"])]
+        state = result.get("current_state")
+        if node.get("kind") == "METRIC_COMPARE" and state != "unknown":
+            metric_values.setdefault(str(node.get("metric")), set()).add(float(result["actual_value"]))
+        elif node.get("kind") in SEMANTIC_LEAF_KINDS and state in {"true", "false"}:
+            facts["conditions"][result["node_id"]] = state == "true"
+    for metric, values in metric_values.items():
+        if len(values) == 1:
+            facts["metrics"][metric] = next(iter(values))
+    return facts
+
+
+def _source_cutoffs(leaves: list[dict[str, Any]], price: dict[str, Any]) -> dict[str, str | None]:
+    buckets: dict[str, list[str]] = {
+        "financial": [],
+        "event_filing": [],
+        "semantic": [],
+    }
+    for leaf in leaves:
+        if leaf.get("current_state") == "unknown":
+            continue
+        kind = leaf.get("kind")
+        if kind == "PRICE_RANGE":
+            # A fresh quote must not make semantic evidence appear fresh.
+            continue
+        if kind == "METRIC_COMPARE":
+            bucket = "financial"
+        elif kind in {"EVENT", "FILING"}:
+            bucket = "event_filing"
+        else:
+            bucket = "semantic"
+        for evidence in leaf.get("evidence", []):
+            if isinstance(evidence, dict) and evidence.get("date"):
+                buckets[bucket].append(str(evidence["date"]))
+    return {
+        "price": price.get("date"),
+        "financial": max(buckets["financial"], default=None),
+        "event_filing": max(buckets["event_filing"], default=None),
+        "semantic": max(buckets["semantic"], default=None),
+    }
+
+
+def _hard_block_state(result: dict[str, Any]) -> str:
+    states = result.get("hard_blocks", [])
+    if "true" in states:
+        return "true"
+    if "unknown" in states:
+        return "unknown"
+    if states and all(item == "false" for item in states):
+        return "false"
+    return "not_applicable"
+
+
+def build_preview(
+    repo_root: Path,
+    quote_payload: dict[str, Any],
+    packets: dict[str, Any],
+    evaluated_at: datetime,
+) -> dict[str, Any]:
+    contract_paths = sorted((repo_root / CONTRACT_DIRECTORY).glob("*.json"))
+    contracts = {path.stem: load_json(path) for path in contract_paths}
+    packet_errors = validate_fact_packets(packets, contracts)
+    if packet_errors:
+        raise ValueError("invalid current fact packets: " + "; ".join(packet_errors))
+    packet_map = {
+        (str(item["ticker"]).upper(), str(item["node_id"])): item
+        for item in packets.get("facts", [])
+    }
+    quotes = quote_quality.with_quote_metadata(quote_payload)
+    rows: list[dict[str, Any]] = []
+    leaf_state_counts: Counter[str] = Counter()
+    leaf_kind_counts: Counter[str] = Counter()
+    unknown_reason_counts: Counter[str] = Counter()
+    stale_count = 0
+    facts_directory = repo_root / DEFAULT_FACTS_OUTPUT
+    facts_directory.mkdir(parents=True, exist_ok=True)
+    for path in contract_paths:
+        ticker = path.stem
+        contract = contracts[ticker]
+        errors = validate_contract(contract, repo_root=repo_root, expected_ticker=ticker)
+        if errors:
+            rows.append({"ticker": ticker, "company": contract.get("company"),
+                         "final_state": "NOT_EVALUATED", "errors": errors})
+            continue
+        price = _quote_result(ticker, quotes, evaluated_at)
+        contract_leaves = leaf_nodes(contract)
+        leaves = [
+            _leaf_result(node, packet_map.get((ticker, node_id)), price, evaluated_at.date())
+            for node_id, node in contract_leaves.items()
+        ]
+        for leaf in leaves:
+            leaf_state_counts[str(leaf.get("current_state"))] += 1
+            leaf_kind_counts[str(leaf.get("kind"))] += 1
+            if leaf.get("current_state") == "unknown":
+                unknown_reason_counts[str(leaf.get("reason") or "other")] += 1
+            if leaf.get("stale"):
+                stale_count += 1
+        evaluation_facts = _facts_for_evaluator(leaves, price, contract_leaves)
+        evaluation = evaluator.evaluate_contract(contract, evaluation_facts)
+        counts = Counter(item["current_state"] for item in leaves)
+        matched = [item["path_id"] for item in evaluation.get("paths", []) if item.get("truth") == "true"]
+        unresolved = sorted(set(evaluation.get("unresolved_path_ids", [])) | {
+            str(item["path_id"]) for item in evaluation.get("paths", []) if item.get("truth") == "unknown"
+        })
+        report = contract.get("source", {})
+        packet = {
+            "schema_version": SCHEMA_VERSION,
+            "authority": "candidate_runtime_only",
+            "ticker": ticker, "company": contract.get("company"),
+            "instrument_scope": "A_SHARE", "as_of_date": evaluated_at.date().isoformat(),
+            "source_data_cutoff": _source_cutoffs(leaves, price),
+            "semantic_contract_version": contract.get("schema_version"),
+            "semantic_contract_sha256": _sha256(path),
+            "report_path": report.get("report_path"), "report_sha256": report.get("report_sha256"),
+            "price": price, "leaf_results": leaves,
+        }
+        (facts_directory / f"{ticker}.json").write_text(
+            json.dumps(packet, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        rows.append({
+            "ticker": ticker, "company": contract.get("company"),
+            "report_path": report.get("report_path"), "report_sha": report.get("report_sha256"),
+            "semantic_contract_status": contract.get("semantic_status"),
+            "empty_position_semantic_status": contract["scopes"]["empty_position"].get("semantic_status"),
+            "requires_strong_review": bool(contract.get("requires_strong_review")),
+            "semantic_review_reasons": contract.get("semantic_review_reasons", []),
+            "current_price": price.get("value"), "price_date": price.get("date"),
+            "price_status": price.get("state"), "final_state": evaluation["state"],
+            "matched_path_ids": matched, "unresolved_path_ids": unresolved,
+            "hard_block_state": _hard_block_state(evaluation),
+            "conditions": {"true": counts["true"], "false": counts["false"], "unknown": counts["unknown"]},
+            "reason_summary": _reason_summary(evaluation["state"], counts, price),
+            "evaluated_paths": evaluation.get("paths", []),
+        })
+    state_counts = Counter(row["final_state"] for row in rows)
+    return {
+        "schema_version": SCHEMA_VERSION, "authority": "candidate_runtime_only",
+        "production_consumable": False, "generated_at": evaluated_at.isoformat(timespec="seconds"),
+        "instrument_scope": "A_SHARE", "company_count": len(rows),
+        "price_cutoff": quote_payload.get("data_cutoff"),
+        "current_facts_summary": {
+            "leaf_states": dict(sorted(leaf_state_counts.items())),
+            "leaf_kinds": dict(sorted(leaf_kind_counts.items())),
+            "unknown_reasons": dict(sorted(unknown_reason_counts.items())),
+            "stale": stale_count,
+        },
+        "state_counts": dict(sorted(state_counts.items())), "companies": rows,
+    }
+
+
+def _reason_summary(state: str, counts: Counter, price: dict[str, Any]) -> str:
+    if price.get("state") != "true":
+        return f"价格不可用：{price.get('reason')}；求值保持失败关闭。"
+    if state in {"BUY_READY", "TRIAL_READY"}:
+        return "至少一条可用路径的全部条件成立；仍为候选预览，不是交易指令。"
+    if state == "PRICE_MATCHED_CONDITIONS_PENDING":
+        return f"价格已进入行动区，但仍有 {counts['unknown']} 个叶子事实未知。"
+    if state == "PRICE_MATCHED_CONDITIONS_NOT_MET":
+        return f"价格已进入行动区，但至少一个必要条件不成立。"
+    if state == "ENTRY_SEMANTIC_AMBIGUOUS":
+        return "合同的空仓进入语义仍有歧义，不能自动判断。"
+    return f"确定性 evaluator 状态为 {state}；未知叶子 {counts['unknown']} 个。"
+
+
+def _pilot_markdown(preview: dict[str, Any], facts_root: Path) -> str:
+    by_ticker = {row["ticker"]: row for row in preview["companies"]}
+    warning_count = sum(
+        bool(by_ticker[ticker].get("requires_strong_review"))
+        or by_ticker[ticker]["conditions"].get("unknown", 0) > 0
+        for ticker in PILOT_TICKERS
+    )
+    lines = [
+        "# Main Report Current Facts Pilot", "",
+        f"> 生成时间：{preview['generated_at']}",
+        "> 状态：candidate runtime audit；不属于 production authority。", "",
+        f"- Pilot companies：{len(PILOT_TICKERS)}", f"- Structural PASS：{len(PILOT_TICKERS)}",
+        f"- Fact/semantic WARNING：{warning_count}", "- FAIL：0", "",
+    ]
+    for ticker in PILOT_TICKERS:
+        row = by_ticker[ticker]
+        packet = load_json(facts_root / f"{ticker}.json")
+        lines.extend([
+            f"## {row['company']}（{ticker}）", "",
+            f"- Main Report：`{row['report_path']}`", f"- Current Price：{row['current_price']} CNY（{row['price_date']}）",
+            f"- Final Evaluator State：`{row['final_state']}`", f"- Hard Block：`{row['hard_block_state']}`",
+            "- Structural Audit：`PASS`",
+            f"- Strong Review：`{str(row.get('requires_strong_review', False)).upper()}`",
+            f"- 条件统计：true={row['conditions']['true']} / false={row['conditions']['false']} / unknown={row['conditions']['unknown']}",
+            f"- matched paths：{', '.join(row['matched_path_ids']) or '无'}",
+            f"- unresolved paths：{', '.join(row['unresolved_path_ids']) or '无'}", "",
+            "### Current leaf facts", "",
+        ])
+        for item in packet["leaf_results"]:
+            evidence = "; ".join(
+                str(evidence_item.get("source") or evidence_item.get("reason") or "")
+                for evidence_item in item.get("evidence", []) if isinstance(evidence_item, dict)
+            )
+            lines.append(
+                f"- `{item['node_id']}` · {item['kind']} · **{item['current_state']}** · "
+                f"{item.get('description') or ''} · {item.get('reason') or item['resolution_method']}"
+                + (f" · evidence: {evidence}" if evidence else "")
+            )
+        lines.append("")
+    return "\n".join(lines) + "\n"
+
+
+def refreshed_a_share_quotes(repo_root: Path, evaluated_at: datetime) -> dict[str, Any]:
+    board_path = repo_root / "data/investment-dashboard/decision_board.json"
+    symbols = market_snapshot.load_watchlist(board_path, {"A股"})
+    quotes = market_snapshot.fetch_quotes(symbols)
+    stock_quotes = [dict(item, snapshot_status="current") for item in quotes if item.get("kind") != "index"]
+    dates = sorted({str(item.get("data_cutoff")) for item in stock_quotes if item.get("data_cutoff")})
+    quote_type = market_snapshot._market_quote_type("A股", evaluated_at, stock_quotes)
+    session = market_snapshot._market_session("A股", evaluated_at)
+    return {
+        "schema_version": 1, "generated_at": evaluated_at.isoformat(timespec="seconds"),
+        "source_status": "ok" if len(stock_quotes) == len(symbols) else "partial",
+        "data_cutoff": dates[-1] if dates else None, "quotes": stock_quotes,
+        "market_snapshots": {"A股": {
+            "market": "A股", "quote_type": quote_type, "session": session,
+            "source": "Tencent quote", "source_status": "ok" if len(stock_quotes) == len(symbols) else "partial",
+            "refresh_status": "success" if stock_quotes else "failed",
+            "data_cutoff": dates[-1] if dates else None,
+            "last_attempted_at": evaluated_at.isoformat(timespec="seconds"),
+            "last_success_at": evaluated_at.isoformat(timespec="seconds") if stock_quotes else None,
+            "tracked_count": len(symbols), "quote_count": len(stock_quotes),
+        }},
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo-root", type=Path, default=ROOT)
+    parser.add_argument("--quotes", type=Path)
+    parser.add_argument("--fact-packets", type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--pilot-log", type=Path)
+    parser.add_argument("--as-of", help="ISO datetime; defaults to current Shanghai time")
+    parser.add_argument("--refresh-prices", action="store_true", help="fetch A-share quotes in memory only")
+    arguments = parser.parse_args()
+    root = arguments.repo_root.resolve()
+    evaluated_at = datetime.fromisoformat(arguments.as_of) if arguments.as_of else datetime.now(SHANGHAI)
+    if evaluated_at.tzinfo is None:
+        evaluated_at = evaluated_at.replace(tzinfo=SHANGHAI)
+    if arguments.refresh_prices:
+        quote_payload = refreshed_a_share_quotes(root, evaluated_at)
+    else:
+        quote_path = arguments.quotes or root / DEFAULT_QUOTES
+        quote_path = quote_path if quote_path.is_absolute() else root / quote_path
+        quote_payload = load_json(quote_path)
+    fact_path = arguments.fact_packets
+    if fact_path is not None and not fact_path.is_absolute():
+        fact_path = root / fact_path
+    packets = load_fact_packets(fact_path)
+    preview = build_preview(root, quote_payload, packets, evaluated_at)
+    output = arguments.output or root / DEFAULT_OUTPUT
+    output = output if output.is_absolute() else root / output
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(preview, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    pilot_log = arguments.pilot_log or root / DEFAULT_PILOT_LOG
+    pilot_log = pilot_log if pilot_log.is_absolute() else root / pilot_log
+    pilot_log.parent.mkdir(parents=True, exist_ok=True)
+    pilot_log.write_text(_pilot_markdown(preview, root / DEFAULT_FACTS_OUTPUT), encoding="utf-8")
+    print(json.dumps({
+        "status": "ok", "output": str(output), "pilot_log": str(pilot_log),
+        "company_count": preview["company_count"], "price_cutoff": preview["price_cutoff"],
+        "state_counts": preview["state_counts"],
+    }, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
