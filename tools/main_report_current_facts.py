@@ -20,6 +20,7 @@ from typing import Any, Iterable
 from zoneinfo import ZoneInfo
 
 import evaluate_main_report_semantics as evaluator
+import main_report_candidate_store as candidate_store
 import market_snapshot
 import quote_quality
 from validate_main_report_semantics import ROOT, load_json, validate_contract
@@ -34,6 +35,9 @@ DEFAULT_FACTS_OUTPUT = Path(".runtime/main-report-current-facts/facts")
 DEFAULT_PILOT_LOG = Path("logs/main-report-current-facts-pilot.md")
 DEFAULT_PRIORITY_LEAVES = Path(".runtime/main-report-current-facts/priority-unresolved-leaves.json")
 DEFAULT_PRIORITY_AUDIT = Path(".runtime/main-report-current-facts/priority-resolution-audit.md")
+DEFAULT_PERSISTENT_RESOLUTIONS = Path("data/investment-dashboard/main-report-current-fact-resolutions.json")
+DEFAULT_SEMANTIC_REVIEWS = Path("data/investment-dashboard/main-report-semantic-review-approvals.json")
+DEFAULT_PERSISTENT_AUDIT = Path(".runtime/main-report-current-facts/persistent-resolution-audit.md")
 PILOT_TICKERS = (
     "603606.SH", "000333.SZ", "000568.SZ", "603129.SH", "000400.SZ",
     "000408.SZ", "002272.SZ", "600276.SH", "601727.SH", "002155.SZ",
@@ -338,14 +342,40 @@ def _hard_block_state(result: dict[str, Any]) -> str:
     return "not_applicable"
 
 
-def _publication_status(contract: dict[str, Any], evaluation: dict[str, Any]) -> str:
+def _publication_status(
+    contract: dict[str, Any], evaluation: dict[str, Any], review_status: str | None = None,
+) -> str:
     if evaluation.get("state") == "ENTRY_SEMANTIC_AMBIGUOUS":
         return "SEMANTIC_AMBIGUOUS"
     if evaluation.get("state") in {"PRICE_MATCHED_CONDITIONS_PENDING", "HARD_BLOCK_PENDING"}:
         return "FACTS_PENDING"
     if contract.get("requires_strong_review"):
+        if review_status == "PASS":
+            return "STRONG_REVIEW_PASSED"
+        if review_status == "FAIL":
+            return "SEMANTIC_REVIEW_FAILED"
+        if review_status == "NEEDS_CLARIFICATION":
+            return "SEMANTIC_AMBIGUOUS"
         return "STRONG_REVIEW_REQUIRED"
     return "CANDIDATE_READY"
+
+
+def _persistent_audit_markdown(items: list[dict[str, Any]], generated_at: str) -> str:
+    counts = Counter(str(item.get("effective_status")) for item in items)
+    lines = [
+        "# Persistent Current Fact Resolution Audit", "",
+        f"> Evaluated at: {generated_at}",
+        "> Candidate cache only; production_consumable=false.", "",
+        f"- Records: {len(items)}",
+        f"- VALID: {counts['VALID']}", f"- UNKNOWN: {counts['UNKNOWN']}",
+        f"- STALE: {counts['STALE']}", f"- REVIEW_REQUIRED: {counts['REVIEW_REQUIRED']}", "",
+    ]
+    for item in items:
+        lines.append(
+            f"- `{item['ticker']}` / `{item['node_id']}`: "
+            f"**{item['effective_status']}** ({item['reason']})"
+        )
+    return "\n".join(lines) + "\n"
 
 
 def build_preview(
@@ -353,9 +383,19 @@ def build_preview(
     quote_payload: dict[str, Any],
     packets: dict[str, Any],
     evaluated_at: datetime,
+    review_store: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     contract_paths = sorted((repo_root / CONTRACT_DIRECTORY).glob("*.json"))
     contracts = {path.stem: load_json(path) for path in contract_paths}
+    contract_path_map = {path.stem: path for path in contract_paths}
+    review_store = review_store or {
+        "schema_version": 1, "authority": "candidate",
+        "production_consumable": False, "approvals": [],
+    }
+    review_errors = candidate_store.validate_review_store(review_store, contracts, contract_path_map)
+    if review_errors:
+        raise ValueError("invalid semantic review approvals: " + "; ".join(review_errors))
+    approvals = {str(item["ticker"]): item for item in review_store.get("approvals", [])}
     packet_errors = validate_fact_packets(packets, contracts)
     if packet_errors:
         raise ValueError("invalid current fact packets: " + "; ".join(packet_errors))
@@ -400,6 +440,7 @@ def build_preview(
             str(item["path_id"]) for item in evaluation.get("paths", []) if item.get("truth") == "unknown"
         })
         report = contract.get("source", {})
+        review_status = candidate_store.approval_status(ticker, approvals, contract, path)
         packet = {
             "schema_version": SCHEMA_VERSION,
             "authority": "candidate_runtime_only",
@@ -425,7 +466,8 @@ def build_preview(
             "price_status": price.get("state"), "final_state": evaluation["state"],
             "matched_path_ids": matched, "unresolved_path_ids": unresolved,
             "hard_block_state": _hard_block_state(evaluation),
-            "publication_status": _publication_status(contract, evaluation),
+            "semantic_review_approval": review_status,
+            "publication_status": _publication_status(contract, evaluation, review_status),
             "conditions": {"true": counts["true"], "false": counts["false"], "unknown": counts["unknown"]},
             "reason_summary": _reason_summary(evaluation["state"], counts, price),
             "evaluated_paths": evaluation.get("paths", []),
@@ -716,6 +758,9 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=ROOT)
     parser.add_argument("--quotes", type=Path)
     parser.add_argument("--fact-packets", type=Path)
+    parser.add_argument("--persistent-resolutions", type=Path)
+    parser.add_argument("--semantic-reviews", type=Path)
+    parser.add_argument("--persistent-audit", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--pilot-log", type=Path)
     parser.add_argument("--priority-leaves", type=Path)
@@ -737,13 +782,52 @@ def main() -> int:
     if fact_path is not None and not fact_path.is_absolute():
         fact_path = root / fact_path
     packets = load_fact_packets(fact_path)
+    explicit_packets = list(packets.get("facts", []))
+    contract_paths = sorted((root / CONTRACT_DIRECTORY).glob("*.json"))
+    contracts = {path.stem: load_json(path) for path in contract_paths}
+    contract_path_map = {path.stem: path for path in contract_paths}
+    nodes_by_ticker = {ticker: leaf_nodes(contract) for ticker, contract in contracts.items()}
+    persistent_path = arguments.persistent_resolutions or root / DEFAULT_PERSISTENT_RESOLUTIONS
+    persistent_path = persistent_path if persistent_path.is_absolute() else root / persistent_path
+    persistent_audit: list[dict[str, Any]] = []
+    if persistent_path.is_file():
+        persistent = load_json(persistent_path)
+        resolution_errors = candidate_store.validate_resolution_store(
+            persistent, contracts, contract_path_map, nodes_by_ticker, root
+        )
+        if resolution_errors:
+            raise ValueError("invalid persistent current facts: " + "; ".join(resolution_errors))
+        cached_packets, persistent_audit = candidate_store.reusable_fact_packets(
+            persistent, contracts, contract_path_map, nodes_by_ticker, root, evaluated_at.date()
+        )
+        # Fresh explicit runtime packets win over reusable candidate records.
+        packet_map = {
+            (str(item["ticker"]).upper(), str(item["node_id"])): item
+            for item in cached_packets
+        }
+        packet_map.update({
+            (str(item["ticker"]).upper(), str(item["node_id"])): item
+            for item in explicit_packets
+        })
+        packets["facts"] = list(packet_map.values())
+    review_path = arguments.semantic_reviews or root / DEFAULT_SEMANTIC_REVIEWS
+    review_path = review_path if review_path.is_absolute() else root / review_path
+    review_store = load_json(review_path) if review_path.is_file() else None
     output = arguments.output or root / DEFAULT_OUTPUT
     output = output if output.is_absolute() else root / output
     baseline_preview = load_json(output) if output.is_file() else None
     priority_output = arguments.priority_leaves or root / DEFAULT_PRIORITY_LEAVES
     priority_output = priority_output if priority_output.is_absolute() else root / priority_output
     baseline_priority = load_json(priority_output) if priority_output.is_file() else None
-    preview = build_preview(root, quote_payload, packets, evaluated_at)
+    preview = build_preview(root, quote_payload, packets, evaluated_at, review_store)
+    preview["persistent_resolution_audit"] = persistent_audit
+    persistent_audit_path = arguments.persistent_audit or root / DEFAULT_PERSISTENT_AUDIT
+    persistent_audit_path = persistent_audit_path if persistent_audit_path.is_absolute() else root / persistent_audit_path
+    persistent_audit_path.parent.mkdir(parents=True, exist_ok=True)
+    persistent_audit_path.write_text(
+        _persistent_audit_markdown(persistent_audit, evaluated_at.isoformat(timespec="seconds")),
+        encoding="utf-8",
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(preview, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     priority = build_priority_leaf_audit(root, preview)

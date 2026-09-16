@@ -954,6 +954,7 @@
     "data/investment-dashboard/holding_research_reviews.json",
     "data/investment-dashboard/human_review_calendar_seed.json",
     "data/investment-dashboard/light_thesis_signals.json",
+    "data/investment-dashboard/main-report-current-fact-resolutions.json",
     "data/investment-dashboard/main-report-review-rules/000333.SZ.json",
     "data/investment-dashboard/main-report-review-rules/000400.SZ.json",
     "data/investment-dashboard/main-report-review-rules/000408.SZ.json",
@@ -1140,6 +1141,7 @@
     "data/investment-dashboard/main-report-semantic-contracts/688361.SH.json",
     "data/investment-dashboard/main-report-semantic-contracts/688676.SH.json",
     "data/investment-dashboard/main-report-semantic-contracts/688825.SH.json",
+    "data/investment-dashboard/main-report-semantic-review-approvals.json",
     "data/investment-dashboard/main_report_entry_semantics.json",
     "data/investment-dashboard/main_report_resolutions.json",
     "data/investment-dashboard/main_report_semantic_index.json",
@@ -2175,6 +2177,7 @@
     "logs/main-report-semantic-diff-audit.md",
     "logs/main-report-semantic-evaluator-audit.md",
     "logs/main-report-semantic-golden-audit.md",
+    "logs/main-report-semantic-strong-review-audit.md",
     "logs/migration_from_old_workspace_20260708_171850.json",
     "logs/migration_from_old_workspace_20260708_171850.md",
     "logs/opportunity-scan-20260820.log",
@@ -10709,6 +10712,7 @@
     "tests/test_light_thesis_run_manifest.py",
     "tests/test_light_thesis_signals.py",
     "tests/test_light_thesis_workflow.py",
+    "tests/test_main_report_candidate_store.py",
     "tests/test_main_report_current_facts.py",
     "tests/test_main_report_review.py",
     "tests/test_main_report_semantics.py",
@@ -10773,6 +10777,7 @@
     "tools/light_thesis_signals.py",
     "tools/light_thesis_workflow.py",
     "tools/log-command.sh",
+    "tools/main_report_candidate_store.py",
     "tools/main_report_current_facts.py",
     "tools/main_report_review.py",
     "tools/main_report_semantic_codex_output_schema.json",
@@ -10841,9 +10846,9 @@
     "筛选公司/科创板股召回池/科创板100-去劣筛选-20260517.md",
     "筛选公司/科创板股召回池/通过公司-投资价值排序.md"
   ],
-  "tracked_paths_sha256": "aa0af3c4a27295ce3c343ea230b46ad3f08bb96a010df9f3e87b182dfb959e34",
+  "tracked_paths_sha256": "2723302a5b18ba9f20f2209f71809f4a0e8b1de647effc73fa3d4c1446ffaeb3",
   "source_binding": {
     "kind": "git_index_without_manifest",
-    "sha256": "cef08c971d45622f0faa60f1f6a68f361154abd2609efeca9dbc1d3a2009ded1"
+    "sha256": "0018bcd6e3e7c8adef16f8d62b2f927e7b0d20518b399f3ccee2fcb568943298"
   }
 }
