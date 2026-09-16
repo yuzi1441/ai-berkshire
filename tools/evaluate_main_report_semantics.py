@@ -16,6 +16,9 @@ from validate_main_report_semantics import ROOT, load_json, validate_contract
 TRUE = "true"
 FALSE = "false"
 UNKNOWN = "unknown"
+OVERRIDABLE_SEMANTIC_LEAF_KINDS = {
+    "QUALITATIVE", "EVENT", "FILING", "DATE", "MANUAL_REVIEW", "UNKNOWN",
+}
 
 
 def _fact_override(node: dict[str, Any], facts: dict[str, Any]) -> Any:
@@ -32,10 +35,14 @@ def _truth(value: Any) -> str:
 
 
 def evaluate_condition(node: dict[str, Any], facts: dict[str, Any]) -> str:
-    override = _fact_override(node, facts)
-    if override is not None:
-        return _truth(override)
     kind = node.get("kind")
+    # Only semantic leaves that have no deterministic fact representation may
+    # be supplied through facts.conditions.  Composite, price and metric nodes
+    # are always computed below, so a caller cannot bypass the contract AST.
+    if kind in OVERRIDABLE_SEMANTIC_LEAF_KINDS:
+        override = _fact_override(node, facts)
+        if override is not None:
+            return _truth(override)
     children = node.get("children", [])
     states = [evaluate_condition(child, facts) for child in children]
     if kind == "ALL":
@@ -187,7 +194,12 @@ def evaluate_contract(contract: dict[str, Any], facts: dict[str, Any]) -> dict[s
         if item.get("semantic_status") == "ready" and _is_review_path(item)
     ]
 
-    block_states = [evaluate_condition(node, facts) for node in contract.get("hard_blocks", [])]
+    entry_blocks = [
+        node for node in contract.get("hard_blocks", [])
+        if node.get("effect") == "BLOCK_ENTRY"
+        and node.get("scope") in {"empty_position", "both"}
+    ]
+    block_states = [evaluate_condition(node, facts) for node in entry_blocks]
     if TRUE in block_states:
         return {"state": "HARD_BLOCKED", "paths": [], "hard_blocks": block_states}
 

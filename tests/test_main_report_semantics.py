@@ -342,6 +342,67 @@ class SemanticContractTests(unittest.TestCase):
             with self.subTest(expected=expected):
                 self.assertEqual(evaluator.evaluate_contract(contract, facts)["state"], expected)
 
+    def test_composite_overrides_cannot_bypass_ast(self):
+        contract = self.entry_with_price_and_condition()
+        all_node = contract["scopes"]["empty_position"]["action_paths"][0]["condition"]
+        result = evaluator.evaluate_contract(contract, {
+            "price": 40,
+            "conditions": {"combined": True, "operating": True},
+        })
+        self.assertNotIn(result["state"], {"BUY_READY", "TRIAL_READY"})
+
+        price, qualitative = all_node["children"]
+        any_node = copy.deepcopy(all_node)
+        any_node.update({"node_id": "any-root", "kind": "ANY", "children": [price, qualitative]})
+        contract["scopes"]["empty_position"]["action_paths"][0]["condition"] = any_node
+        result = evaluator.evaluate_contract(contract, {
+            "price": 40,
+            "conditions": {"any-root": True, "operating": False},
+        })
+        self.assertNotIn(result["state"], {"BUY_READY", "TRIAL_READY"})
+
+        third = copy.deepcopy(qualitative)
+        third["node_id"] = "third"
+        at_least = copy.deepcopy(all_node)
+        at_least.update({
+            "node_id": "at-least-root", "kind": "AT_LEAST", "minimum": 2,
+            "children": [price, qualitative, third],
+        })
+        contract["scopes"]["empty_position"]["action_paths"][0]["condition"] = at_least
+        result = evaluator.evaluate_contract(contract, {
+            "price": 40,
+            "conditions": {"at-least-root": True, "operating": False, "third": False},
+        })
+        self.assertNotIn(result["state"], {"BUY_READY", "TRIAL_READY"})
+
+    def test_price_and_metric_overrides_cannot_bypass_deterministic_facts(self):
+        contract = self.base_contract()
+        result = evaluator.evaluate_contract(
+            contract, {"price": 40, "conditions": {"price-1": True}}
+        )
+        self.assertEqual(result["state"], "PRICE_NOT_REACHED")
+
+        price = contract["scopes"]["empty_position"]["action_paths"][0]["condition"]
+        metric = self.leaf(
+            "ocf", "METRIC_COMPARE", "ENTRY_GATE", 3,
+            "经营现金流转正且价格 30-36 元时可建仓。",
+            metric="ocf", operator="GT", value=0, unit="CNY",
+        )
+        combined = copy.deepcopy(metric)
+        combined.update({"node_id": "metric-all", "kind": "ALL", "children": [price, metric]})
+        contract["scopes"]["empty_position"]["action_paths"][0]["condition"] = combined
+        result = evaluator.evaluate_contract(contract, {
+            "price": 35, "metrics": {"ocf": -1}, "conditions": {"ocf": True},
+        })
+        self.assertEqual(result["state"], "PRICE_MATCHED_CONDITIONS_NOT_MET")
+
+    def test_qualitative_leaf_override_remains_supported(self):
+        contract = self.entry_with_price_and_condition()
+        result = evaluator.evaluate_contract(
+            contract, {"price": 35, "conditions": {"operating": True}}
+        )
+        self.assertEqual(result["state"], "BUY_READY")
+
     def test_trial_path_fully_true_is_trial_ready(self):
         contract = self.entry_with_price_and_condition(action="TRIAL_POSITION")
         result = evaluator.evaluate_contract(
@@ -362,6 +423,46 @@ class SemanticContractTests(unittest.TestCase):
             "HARD_BLOCKED",
         )
         self.assertEqual(evaluator.evaluate_contract(contract, facts)["state"], "HARD_BLOCK_PENDING")
+
+    def test_empty_position_consumes_only_entry_hard_blocks(self):
+        contract = self.base_contract()
+        holder_add = self.leaf(
+            "holder-add-block", "QUALITATIVE", "BLOCK_ADD", 7,
+            "治理问题未解除前不买。",
+        )
+        holder_add["scope"] = "holder"
+        contract["hard_blocks"] = [holder_add]
+        result = evaluator.evaluate_contract(
+            contract, {"price": 33, "conditions": {"holder-add-block": True}}
+        )
+        self.assertEqual(result["state"], "BUY_READY")
+
+        entry_block = copy.deepcopy(holder_add)
+        entry_block.update({"node_id": "entry-block", "effect": "BLOCK_ENTRY", "scope": "empty_position"})
+        contract["hard_blocks"] = [entry_block]
+        self.assertEqual(
+            evaluator.evaluate_contract(
+                contract, {"price": 33, "conditions": {"entry-block": True}}
+            )["state"],
+            "HARD_BLOCKED",
+        )
+        entry_block["scope"] = "both"
+        self.assertEqual(
+            evaluator.evaluate_contract(
+                contract, {"price": 33, "conditions": {"entry-block": True}}
+            )["state"],
+            "HARD_BLOCKED",
+        )
+
+    def test_validator_rejects_holder_scoped_block_entry(self):
+        contract = self.base_contract()
+        block = self.leaf(
+            "bad-entry-block", "QUALITATIVE", "BLOCK_ENTRY", 7,
+            "治理问题未解除前不买。",
+        )
+        block["scope"] = "holder"
+        contract["hard_blocks"] = [block]
+        self.assertTrue(any("BLOCK_ENTRY must target" in item for item in self.validate(contract)))
 
     def test_review_zone_is_not_entry(self):
         contract = self.base_contract()
@@ -433,6 +534,19 @@ class SemanticContractTests(unittest.TestCase):
 
         assert_strict_object(output_schema)
 
+    def test_v2_compiler_schema_supports_partial_scope_and_path_ambiguity(self):
+        schema = json.loads(
+            (ROOT / "tools/main_report_semantic_codex_output_schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertIn("partial", schema["properties"]["semantic_status"]["enum"])
+        self.assertIn("partial", schema["$defs"]["scopeContract"]["properties"]["semantic_status"]["enum"])
+        self.assertIn("ambiguous", schema["$defs"]["actionPath"]["properties"]["semantic_status"]["enum"])
+        ambiguity = schema["$defs"]["ambiguity"]
+        for field in ("classification", "affected_scopes", "affected_path_ids", "affects_entry"):
+            self.assertIn(field, ambiguity["required"])
+
     def test_review_reason_codes_route_high_risk_contracts_without_promoting_them(self):
         contract = self.base_contract()
         contract["semantic_status"] = "partial"
@@ -470,6 +584,20 @@ class CompilerUniverseTests(unittest.TestCase):
             "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
         )
         self.assertEqual(len(compiler.GOLDEN_TICKERS), 12)
+
+    def test_v2_prompts_require_minimal_ambiguity_localization(self):
+        record = next(item for item in compiler.universe(ROOT) if item["ticker"] == "603606.SH")
+        report_text = (ROOT / record["report_path"]).read_text(encoding="utf-8")
+        compile_text = compiler.compile_prompt(record, report_text)
+        audit_text = compiler.audit_prompt(record, report_text, {"schema_version": 2})
+        self.assertNotIn("mark the full contract\n  ambiguous", compile_text)
+        for phrase in (
+            "Holder-only uncertainty", "One uncertain action path",
+            "affected_scopes", "affected_path_ids", "affects_entry",
+        ):
+            self.assertIn(phrase, compile_text)
+        self.assertIn("genuinely global", audit_text)
+        self.assertIn("holder-only ambiguity leaves", audit_text)
 
     def test_compact_review_materializer_does_not_invent_source_binding(self):
         # Materializer is exercised against the real authority with a minimal ambiguous
@@ -537,12 +665,13 @@ class RealContractRegressionTests(unittest.TestCase):
             evaluator.evaluate_contract(contract, facts)["state"],
             "PRICE_MATCHED_CONDITIONS_PENDING",
         )
-        facts["conditions"].update({
-            "h1-ocf-nonnegative": True,
-            "h1-subsea-margin-at-least-30": True,
-            "h1-subsea-growth-above-company": True,
-            "h1-orders-positive": True,
-        })
+        facts["conditions"]["h1-subsea-growth-above-company"] = True
+        facts["metrics"] = {
+            "H1经营现金流": 0,
+            "海缆分部毛利率": 30,
+            "在手订单总额": 180,
+            "海缆在手订单": 100,
+        }
         self.assertEqual(evaluator.evaluate_contract(contract, facts)["state"], "BUY_READY")
 
     def test_luzhou_holder_ambiguity_does_not_block_entry(self):

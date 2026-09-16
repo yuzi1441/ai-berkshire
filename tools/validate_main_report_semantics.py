@@ -471,6 +471,16 @@ def validate_contract(
         for index, node in enumerate(contract.get(field, [])):
             if node.get("effect") not in allowed_effects:
                 errors.append(f"{field}[{index}]: effect {node.get('effect')} is incompatible")
+            if field == "hard_blocks":
+                effect, scope = node.get("effect"), node.get("scope")
+                if effect == "BLOCK_ENTRY" and scope not in {"empty_position", "both"}:
+                    errors.append(
+                        f"{field}[{index}]: BLOCK_ENTRY must target empty_position or both"
+                    )
+                if effect == "BLOCK_ADD" and scope not in {"holder", "both"}:
+                    errors.append(
+                        f"{field}[{index}]: BLOCK_ADD must target holder or both"
+                    )
 
     for index, reference in enumerate(contract.get("valuation_references", [])):
         _check_numeric_traceability(

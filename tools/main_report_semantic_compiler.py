@@ -135,9 +135,10 @@ def _normalize_compact_condition(
 def _normalize_compact_review(
     review: dict[str, Any], *, repo_root: Path, ticker: str
 ) -> dict[str, Any]:
-    """Convert a human-review checkpoint to the compiler's pass-2 input shape.
+    """Convert a legacy/current-page checkpoint to the v1 compatibility shape.
 
-    The checkpoint is intentionally compact for current-page editing: it records
+    This is a compatibility adapter, not the model compile path. The checkpoint
+    is intentionally compact for current-page editing: it records
     line numbers and short descriptions.  This adapter replaces every line
     reference with the complete source line before the normal materializer and
     validator run.  It therefore cannot turn a paraphrase into report evidence.
@@ -300,7 +301,11 @@ def _expand_condition(node: dict[str, Any], report_path: str) -> dict[str, Any]:
 def materialize_review(
     review: dict[str, Any], *, repo_root: Path, ticker: str
 ) -> dict[str, Any]:
-    """Expand a current-page human/model review without adding semantic content."""
+    """Expand a legacy/current-page review, then migrate it deterministically.
+
+    Fresh model compilation bypasses this compatibility adapter and must emit a
+    complete v2 contract directly.
+    """
     review = _normalize_compact_review(review, repo_root=repo_root, ticker=ticker)
     record = next((row for row in universe(repo_root) if row["ticker"] == ticker), None)
     if record is None:
@@ -445,8 +450,18 @@ Hard boundaries:
 - A review zone is not an entry zone. A holder add price is not an empty-position entry.
 - Preserve ALL, ANY, NOT, nested logic, and AT_LEAST N exactly. Never flatten logic.
 - Preserve each condition effect: gate, block, monitor, redline, reduce, exit, review.
-- If the report does not determine a semantic point reliably, mark the full contract
-  ambiguous and explain the required human clarification. Accuracy beats READY count.
+- Localize every unresolved semantic point to the smallest affected scope/path.
+  Accuracy beats READY count, but unrelated ready semantics must remain usable.
+- Holder-only uncertainty: contract semantic_status=partial, empty_position remains
+  ready, and holder semantic_status=ambiguous.
+- One uncertain action path: contract=partial, its scope=partial, only that path is
+  ambiguous; independent paths remain ready.
+- If empty-position entry meaning itself cannot be determined, set empty_position
+  semantic_status=ambiguous and entry_semantic=AMBIGUOUS.
+- Use contract-level semantic_status=ambiguous only for a genuinely unlocalizable
+  conflict that affects the report's key semantics globally.
+- Every ambiguity must directly set classification, affected_scopes,
+  affected_path_ids, and affects_entry. Do not expect a later migration to infer them.
 - Every material stance, action, action path, condition, block, redline, and valuation
   number needs exact report evidence. Evidence quote must be verbatim report content,
   excluding the XML line wrapper, and its line_start/line_end must contain that quote.
@@ -490,7 +505,11 @@ prerequisites; AND/OR inversion; lost AT_LEAST N; monitor/gate confusion; redlin
 confusion; missed hard blocks; conflict between body and bottom contract; invented
 investment views; unsupported or incorrectly ranged evidence. Correct every issue.
 If a conflict remains genuinely undecidable, output semantic_status=ambiguous rather
-than guessing. Set compiler.pass=2 and list concise adversarial findings, including
+than guessing only when it is genuinely global. Otherwise preserve contract=partial
+and localize it to the affected scope/path with classification, affected_scopes,
+affected_path_ids, and affects_entry. Verify that holder-only ambiguity leaves
+empty_position ready and path-local ambiguity leaves unrelated paths ready. Set
+compiler.pass=2 and list concise adversarial findings, including
 "no material issue" only if none were found.
 
 <pass_1_candidate>
