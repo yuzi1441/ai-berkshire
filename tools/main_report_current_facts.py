@@ -32,13 +32,27 @@ DEFAULT_QUOTES = Path("data/investment-dashboard/quotes/latest.json")
 DEFAULT_OUTPUT = Path(".runtime/main-report-current-facts/main_report_current_entry_preview.json")
 DEFAULT_FACTS_OUTPUT = Path(".runtime/main-report-current-facts/facts")
 DEFAULT_PILOT_LOG = Path("logs/main-report-current-facts-pilot.md")
+DEFAULT_PRIORITY_LEAVES = Path(".runtime/main-report-current-facts/priority-unresolved-leaves.json")
+DEFAULT_PRIORITY_AUDIT = Path(".runtime/main-report-current-facts/priority-resolution-audit.md")
 PILOT_TICKERS = (
     "603606.SH", "000333.SZ", "000568.SZ", "603129.SH", "000400.SZ",
     "000408.SZ", "002272.SZ", "600276.SH", "601727.SH", "002155.SZ",
 )
+PRIORITY_TICKERS = (
+    "002027.SZ", "600519.SH", "601127.SH", "603129.SH",
+    "000400.SZ", "002028.SZ", "002352.SZ", "300274.SZ",
+    "600309.SH", "601179.SH", "603288.SH", "688676.SH",
+    "000568.SZ", "002415.SZ", "600276.SH", "600426.SH",
+    "601126.SH", "603606.SH", "603659.SH", "605117.SH",
+)
 SEMANTIC_LEAF_KINDS = evaluator.OVERRIDABLE_SEMANTIC_LEAF_KINDS
 PACKET_KINDS = SEMANTIC_LEAF_KINDS | {"METRIC_COMPARE"}
 PROHIBITED_SEMANTIC_SOURCES = {"technical", "sentiment", "opportunity"}
+UNKNOWN_REASON_CODES = {
+    "SOURCE_MISSING", "PERIOD_MISMATCH", "DISCLOSURE_NOT_FOUND",
+    "QUALITATIVE_EVIDENCE_INSUFFICIENT", "METRIC_NOT_REPORTED",
+    "TWO_SOURCE_MISMATCH", "EVENT_UNCONFIRMED", "FUTURE_DISCLOSURE",
+}
 
 
 def _sha256(path: Path) -> str:
@@ -132,6 +146,13 @@ def validate_fact_packets(
                 if not str(item.get("source_path") or item.get("record") or "").strip():
                     errors.append(f"{evidence_prefix} requires source_path or record")
         if kind == "METRIC_COMPARE":
+            explicit_unknown = "state" in fact and fact.get("state") in {None, "unknown"}
+            if "state" in fact and not explicit_unknown:
+                errors.append(f"{prefix}.state may only mark a metric fact unknown")
+            if explicit_unknown:
+                if fact.get("reason_code") not in UNKNOWN_REASON_CODES:
+                    errors.append(f"{prefix}.reason_code is required for an unknown metric fact")
+                continue
             value = fact.get("actual_value")
             try:
                 if isinstance(value, bool) or not math.isfinite(float(value)):
@@ -156,6 +177,8 @@ def validate_fact_packets(
             }
             if state in {True, False} and source_types & PROHIBITED_SEMANTIC_SOURCES:
                 errors.append(f"{prefix} prohibited source cannot resolve a semantic condition")
+            if state in {None, "unknown"} and fact.get("reason_code") not in UNKNOWN_REASON_CODES:
+                errors.append(f"{prefix}.reason_code is required for an unknown semantic fact")
     return errors
 
 
@@ -234,6 +257,10 @@ def _leaf_result(
     if packet is None:
         return {**base, "current_state": "unknown", "resolution_method": "not_available",
                 "reason": "node_bound_fact_missing", "evidence": []}
+    if "state" in packet and packet.get("state") in {None, "unknown"}:
+        return {**base, "current_state": "unknown", "resolution_method": "not_available",
+                "reason": packet.get("reason_code"), "detail": packet.get("reason"),
+                "evidence": packet.get("evidence", [])}
     stale, reason = _fact_is_stale(packet, as_of)
     if stale:
         return {**base, "current_state": "unknown", "resolution_method": "not_available",
@@ -309,6 +336,16 @@ def _hard_block_state(result: dict[str, Any]) -> str:
     if states and all(item == "false" for item in states):
         return "false"
     return "not_applicable"
+
+
+def _publication_status(contract: dict[str, Any], evaluation: dict[str, Any]) -> str:
+    if evaluation.get("state") == "ENTRY_SEMANTIC_AMBIGUOUS":
+        return "SEMANTIC_AMBIGUOUS"
+    if evaluation.get("state") in {"PRICE_MATCHED_CONDITIONS_PENDING", "HARD_BLOCK_PENDING"}:
+        return "FACTS_PENDING"
+    if contract.get("requires_strong_review"):
+        return "STRONG_REVIEW_REQUIRED"
+    return "CANDIDATE_READY"
 
 
 def build_preview(
@@ -388,6 +425,7 @@ def build_preview(
             "price_status": price.get("state"), "final_state": evaluation["state"],
             "matched_path_ids": matched, "unresolved_path_ids": unresolved,
             "hard_block_state": _hard_block_state(evaluation),
+            "publication_status": _publication_status(contract, evaluation),
             "conditions": {"true": counts["true"], "false": counts["false"], "unknown": counts["unknown"]},
             "reason_summary": _reason_summary(evaluation["state"], counts, price),
             "evaluated_paths": evaluation.get("paths", []),
@@ -406,6 +444,191 @@ def build_preview(
         },
         "state_counts": dict(sorted(state_counts.items())), "companies": rows,
     }
+
+
+def _path_ids_by_node(contract: dict[str, Any]) -> dict[str, list[str]]:
+    result: dict[str, list[str]] = {}
+    scope = contract.get("scopes", {}).get("empty_position", {})
+    for path in scope.get("action_paths", []):
+        if path.get("instrument_scope", "A_SHARE") not in {"A_SHARE", "BOTH"}:
+            continue
+        for node in _nodes(path.get("condition")):
+            if node.get("node_id"):
+                result.setdefault(str(node["node_id"]), []).append(str(path.get("path_id") or ""))
+    for block in contract.get("hard_blocks", []):
+        if block.get("effect") != "BLOCK_ENTRY" or block.get("scope") not in {"empty_position", "both"}:
+            continue
+        for node in _nodes(block):
+            if node.get("node_id"):
+                result.setdefault(str(node["node_id"]), []).append("HARD_BLOCK")
+    return result
+
+
+def _priority_path_audit(contract: dict[str, Any], row: dict[str, Any]) -> list[dict[str, Any]]:
+    """Explain why each currently matched path remains actionable.
+
+    Unknown leaves in an unused ANY branch are not mandatory gates.  A matched
+    path has already evaluated true deterministically, so any unknown leaf it
+    still contains is necessarily non-mandatory for that current evaluation.
+    """
+    evaluated = {
+        str(item.get("path_id") or ""): item
+        for item in row.get("evaluated_paths", []) if isinstance(item, dict)
+    }
+    scope = contract.get("scopes", {}).get("empty_position", {})
+    result = []
+    for path in scope.get("action_paths", []):
+        path_id = str(path.get("path_id") or "")
+        if path_id not in row.get("matched_path_ids", []):
+            continue
+        leaves = [node for node in _nodes(path.get("condition")) if not node.get("children")]
+        non_price = [node for node in leaves if node.get("kind") != "PRICE_RANGE"]
+        leaf_states = {
+            str(item.get("node_id")): item.get("current_state")
+            for item in row.get("leaf_results", []) if isinstance(item, dict)
+        }
+        unknown = [str(node.get("node_id")) for node in non_price
+                   if leaf_states.get(str(node.get("node_id"))) == "unknown"]
+        condition_state = evaluated.get(path_id, {}).get("truth")
+        if path.get("condition") is None:
+            path_type = "unconditional"
+        elif not non_price:
+            path_type = "pure_price"
+        elif unknown and condition_state in {"true", True}:
+            path_type = "alternate_branch_satisfied"
+        else:
+            path_type = "all_required_conditions_satisfied"
+        result.append({
+            "path_id": path_id, "action": path.get("action"),
+            "instrument_scope": path.get("instrument_scope", "A_SHARE"),
+            "semantic_status": path.get("semantic_status"),
+            "condition_state": condition_state, "path_type": path_type,
+            "non_price_leaf_ids": [str(node.get("node_id")) for node in non_price],
+            "unknown_non_price_leaf_ids": unknown,
+            "unknown_mandatory_gate_ids": [] if condition_state in {"true", True} else unknown,
+        })
+    return result
+
+
+def _required_evidence(node: dict[str, Any]) -> str:
+    kind = node.get("kind")
+    if kind == "METRIC_COMPARE":
+        return "同一报告期、单位和口径的结构化数值，并由两个独立可信来源交叉确认。"
+    if kind == "FILING":
+        return "指定正式披露已发布，且内容直接确认节点要求，而非只确认文件存在。"
+    if kind == "EVENT":
+        return "交易所、公司公告或其他正式材料对指定事件的明确确认。"
+    if kind == "MANUAL_REVIEW":
+        return "逐节点人工复核最新正式证据，并给出可追溯的 TRUE/FALSE/UNKNOWN 理由。"
+    return "与节点原始语境直接对应的最新正式证据；部分支持不足以判定 TRUE。"
+
+
+def build_priority_leaf_audit(repo_root: Path, preview: dict[str, Any]) -> dict[str, Any]:
+    rows = {row["ticker"]: row for row in preview["companies"]}
+    companies: list[dict[str, Any]] = []
+    for ticker in PRIORITY_TICKERS:
+        contract_path = repo_root / CONTRACT_DIRECTORY / f"{ticker}.json"
+        facts_path = repo_root / DEFAULT_FACTS_OUTPUT / f"{ticker}.json"
+        contract = load_json(contract_path)
+        packet = load_json(facts_path)
+        nodes = leaf_nodes(contract)
+        path_ids = _path_ids_by_node(contract)
+        leaves = []
+        for result in packet["leaf_results"]:
+            if result.get("kind") == "PRICE_RANGE":
+                continue
+            node_id = str(result["node_id"])
+            node = nodes[node_id]
+            leaves.append({
+                "ticker": ticker, "company": contract.get("company"),
+                "node_id": node_id, "kind": result.get("kind"),
+                "effect": result.get("effect"), "description": result.get("description"),
+                "path_ids": path_ids.get(node_id, []),
+                "current_state": result.get("current_state"),
+                "reason": result.get("reason"), "detail": result.get("detail"),
+                "contract_evidence": node.get("evidence", []),
+                "current_evidence": result.get("evidence", []),
+                "required_reality_evidence": _required_evidence(node),
+            })
+        companies.append({
+            "ticker": ticker, "company": contract.get("company"),
+            "final_state": rows[ticker]["final_state"],
+            "publication_status": rows[ticker]["publication_status"],
+            "matched_path_audit": _priority_path_audit(
+                contract, {**rows[ticker], "leaf_results": packet.get("leaf_results", [])}
+            ),
+            "leaves": leaves,
+        })
+    return {
+        "schema_version": 1, "authority": "candidate_runtime_only",
+        "generated_at": preview["generated_at"], "priority_count": len(companies),
+        "companies": companies,
+    }
+
+
+def _priority_audit_markdown(
+    preview: dict[str, Any], priority: dict[str, Any],
+    baseline_preview: dict[str, Any] | None, baseline_priority: dict[str, Any] | None,
+) -> str:
+    current_rows = {row["ticker"]: row for row in preview["companies"]}
+    before_rows = {
+        row["ticker"]: row for row in (baseline_preview or {}).get("companies", [])
+    }
+    before_leaves = {
+        (company["ticker"], leaf["node_id"]): leaf
+        for company in (baseline_priority or {}).get("companies", [])
+        for leaf in company.get("leaves", [])
+    }
+    lines = [
+        "# Priority Current Facts Resolution Audit", "",
+        f"> 生成时间：{preview['generated_at']}",
+        "> Candidate runtime only；不属于 production authority。", "",
+    ]
+    for company in priority["companies"]:
+        ticker = company["ticker"]
+        row = current_rows[ticker]
+        before = before_rows.get(ticker, {})
+        lines.extend([
+            f"## {row['company']}（{ticker}）", "",
+            f"- Current price：{row.get('current_price')} CNY（{row.get('price_date')}）",
+            f"- Final state before：`{before.get('final_state', row['final_state'])}`",
+            f"- Final state after：`{row['final_state']}`",
+            f"- Matched path：{', '.join(row.get('matched_path_ids', [])) or '无'}",
+            f"- Hard block：`{row['hard_block_state']}`",
+            f"- Strong review：`{str(row.get('requires_strong_review', False)).upper()}`",
+            f"- Publication status：`{row['publication_status']}`", "",
+            "### Matched path proof", "",
+        ])
+        if not company.get("matched_path_audit"):
+            lines.append("- 当前没有匹配成功的行动路径。")
+        for path in company.get("matched_path_audit", []):
+            lines.append(
+                f"- `{path['path_id']}` · action=`{path.get('action')}` · "
+                f"type=`{path['path_type']}` · instrument=`{path['instrument_scope']}` · "
+                f"condition=`{path.get('condition_state')}` · "
+                f"non-price leaves={path['non_price_leaf_ids'] or '无'} · "
+                f"unknown mandatory gates={path['unknown_mandatory_gate_ids'] or '无'}"
+            )
+        lines.extend([
+            f"- Unresolved path warning：{', '.join(row.get('unresolved_path_ids', [])) or '无'}", "",
+            "### Non-price entry leaves", "",
+        ])
+        if not company["leaves"]:
+            lines.append("- 无非价格 evaluator leaf。")
+        for leaf in company["leaves"]:
+            old = before_leaves.get((ticker, leaf["node_id"]), {})
+            evidence = "; ".join(
+                str(item.get("source") or item.get("source_path") or "")
+                for item in leaf.get("current_evidence", []) if isinstance(item, dict)
+            )
+            lines.append(
+                f"- `{leaf['node_id']}` · {leaf['kind']} · before=`{old.get('current_state', leaf['current_state'])}` "
+                f"→ after=`{leaf['current_state']}` · {leaf.get('description') or ''} · "
+                f"reason={leaf.get('reason') or leaf.get('detail') or 'resolved'}"
+                + (f" · evidence={evidence}" if evidence else "")
+            )
+        lines.append("")
+    return "\n".join(lines) + "\n"
 
 
 def _reason_summary(state: str, counts: Counter, price: dict[str, Any]) -> str:
@@ -495,6 +718,8 @@ def main() -> int:
     parser.add_argument("--fact-packets", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--pilot-log", type=Path)
+    parser.add_argument("--priority-leaves", type=Path)
+    parser.add_argument("--priority-audit", type=Path)
     parser.add_argument("--as-of", help="ISO datetime; defaults to current Shanghai time")
     parser.add_argument("--refresh-prices", action="store_true", help="fetch A-share quotes in memory only")
     arguments = parser.parse_args()
@@ -512,11 +737,25 @@ def main() -> int:
     if fact_path is not None and not fact_path.is_absolute():
         fact_path = root / fact_path
     packets = load_fact_packets(fact_path)
-    preview = build_preview(root, quote_payload, packets, evaluated_at)
     output = arguments.output or root / DEFAULT_OUTPUT
     output = output if output.is_absolute() else root / output
+    baseline_preview = load_json(output) if output.is_file() else None
+    priority_output = arguments.priority_leaves or root / DEFAULT_PRIORITY_LEAVES
+    priority_output = priority_output if priority_output.is_absolute() else root / priority_output
+    baseline_priority = load_json(priority_output) if priority_output.is_file() else None
+    preview = build_preview(root, quote_payload, packets, evaluated_at)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(preview, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    priority = build_priority_leaf_audit(root, preview)
+    priority_output.parent.mkdir(parents=True, exist_ok=True)
+    priority_output.write_text(json.dumps(priority, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    priority_audit = arguments.priority_audit or root / DEFAULT_PRIORITY_AUDIT
+    priority_audit = priority_audit if priority_audit.is_absolute() else root / priority_audit
+    priority_audit.parent.mkdir(parents=True, exist_ok=True)
+    priority_audit.write_text(
+        _priority_audit_markdown(preview, priority, baseline_preview, baseline_priority),
+        encoding="utf-8",
+    )
     pilot_log = arguments.pilot_log or root / DEFAULT_PILOT_LOG
     pilot_log = pilot_log if pilot_log.is_absolute() else root / pilot_log
     pilot_log.parent.mkdir(parents=True, exist_ok=True)

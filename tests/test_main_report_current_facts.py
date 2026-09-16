@@ -185,6 +185,82 @@ class CurrentFactsTests(unittest.TestCase):
             },
         )
 
+    def test_explicit_unknown_metric_requires_reason_and_no_value(self):
+        unknown = self.packet(
+            node_id="metric", kind="METRIC_COMPARE", state="unknown",
+            reason_code="METRIC_NOT_REPORTED", evidence=[],
+        )
+        unknown.pop("evidence_date")
+        self.assertEqual(self.validate([unknown]), [])
+        unknown.pop("reason_code")
+        self.assertTrue(self.validate([unknown]))
+
+    def test_explicit_unknown_does_not_become_false_or_true(self):
+        node = current_facts.leaf_nodes(self.contract)["quality"]
+        packet = self.packet(
+            state="unknown", reason_code="QUALITATIVE_EVIDENCE_INSUFFICIENT",
+            evidence=[], reason="Only partial evidence was available.",
+        )
+        result = current_facts._leaf_result(
+            node, packet, {"state": "true", "value": 15}, date(2026, 9, 16)
+        )
+        self.assertEqual(result["current_state"], "unknown")
+        self.assertEqual(result["reason"], "QUALITATIVE_EVIDENCE_INSUFFICIENT")
+
+    def test_publication_status_does_not_modify_final_state(self):
+        evaluation = {"state": "BUY_READY"}
+        contract = copy.deepcopy(self.contract)
+        contract["requires_strong_review"] = True
+        self.assertEqual(
+            current_facts._publication_status(contract, evaluation),
+            "STRONG_REVIEW_REQUIRED",
+        )
+        self.assertEqual(evaluation["state"], "BUY_READY")
+        contract["scopes"]["empty_position"]["semantic_status"] = "partial"
+        self.assertEqual(
+            current_facts._publication_status(contract, {"state": "TRIAL_READY"}),
+            "STRONG_REVIEW_REQUIRED",
+        )
+        self.assertEqual(
+            current_facts._publication_status(contract, {"state": "ENTRY_SEMANTIC_AMBIGUOUS"}),
+            "SEMANTIC_AMBIGUOUS",
+        )
+
+    def test_unknown_alternative_any_branch_is_not_a_mandatory_gate(self):
+        contract = copy.deepcopy(self.contract)
+        contract["hard_blocks"] = []
+        contract["scopes"]["empty_position"]["action_paths"][0]["condition"] = {
+            "node_id": "root", "kind": "ANY", "children": [
+                {"node_id": "price", "kind": "PRICE_RANGE", "children": [],
+                 "price_min": 10, "price_max": 20, "effect": "ENTRY_GATE"},
+                {"node_id": "quality", "kind": "QUALITATIVE", "children": [],
+                 "effect": "ENTRY_GATE"},
+            ],
+        }
+        evaluation = current_facts.evaluator.evaluate_contract(
+            contract, {"price": 15, "conditions": {}}
+        )
+        self.assertEqual(evaluation["state"], "BUY_READY")
+        row = {
+            "matched_path_ids": ["entry"], "evaluated_paths": evaluation["paths"],
+            "leaf_results": [
+                {"node_id": "price", "current_state": "true"},
+                {"node_id": "quality", "current_state": "unknown"},
+            ],
+        }
+        audit = current_facts._priority_path_audit(contract, row)[0]
+        self.assertEqual(audit["path_type"], "alternate_branch_satisfied")
+        self.assertEqual(audit["unknown_non_price_leaf_ids"], ["quality"])
+        self.assertEqual(audit["unknown_mandatory_gate_ids"], [])
+
+    def test_unknown_all_gate_prevents_ready(self):
+        contract = copy.deepcopy(self.contract)
+        contract["hard_blocks"] = []
+        evaluation = current_facts.evaluator.evaluate_contract(
+            contract, {"price": 15, "metrics": {"metric": 1}, "conditions": {}}
+        )
+        self.assertEqual(evaluation["state"], "PRICE_MATCHED_CONDITIONS_PENDING")
+
 
 if __name__ == "__main__":
     unittest.main()
