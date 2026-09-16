@@ -371,6 +371,26 @@
       ]
     },
     {
+      "ticker": "601179.SH",
+      "company": "中国西电",
+      "semantic_contract_sha256": "5f1d242129cd22b4556bc1697c0e516ab52150c925d1be17d70b33035af94ba4",
+      "report_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
+      "review_status": "PASS",
+      "reviewed_at": "2026-09-16T19:45:00+08:00",
+      "reviewed_by": "current_page_codex_semantic_review",
+      "review_findings": [
+        "报告明确允许空仓激进型在当前价做需设置退出的主题交易小仓；该路径是试探仓，不是正式价值建仓。"
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
+        }
+      ]
+    },
+    {
       "ticker": "603129.SH",
       "company": "chunfeng-dongli",
       "semantic_contract_sha256": "0cc4eb6ad978f46f3405bad17efb2b76999aa6ba740580e6b19d8969b0717761",

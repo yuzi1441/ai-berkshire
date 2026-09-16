@@ -29,6 +29,7 @@
 | 600426.SH | 华鲁恒升 | PASS | 18-21元 trial correctly requires H1 confirmation; 15-17元 is the stable staged-buy band. |
 | 600519.SH | 贵州茅台 | PASS (control) | 1100-1300元 directly permits empty-position staged entry; the 5% profit recovery condition applies to holder add-on. |
 | 601127.SH | 赛力斯 | PASS | The report says “one of”; the 45-50元 price branch independently satisfies the ANY path. |
+| 601179.SH | 中国西电 | PASS (TRIAL_READY control) | The report explicitly permits a current theme-driven small position with an exit; it remains a trial, not a formal value entry. |
 | 603129.SH | 春风动力 | PASS | The report explicitly permits a current half-position staged entry; tariff and ZEEHO items are monitoring items, not stated entry gates. |
 | 603288.SH | 海天味业 | PASS | 32-35元 is a tracking/small position; ≤28元 “focus” was not converted into automatic buying. |
 | 603606.SH | 东方电缆 | PASS | 36-45元 + at least four of six, and 30-36元 + H1 not negative, are preserved independently of current facts. |
@@ -42,7 +43,7 @@ Before correction, the contract could return `TRIAL_READY` from a conditionless 
 
 ## Safety conclusion
 
-- Final approvals: PASS 15, NEEDS_CLARIFICATION 1, unresolved FAIL 0.
+- Final approvals: PASS 16, NEEDS_CLARIFICATION 1, unresolved FAIL 0.
 - Initial failures retained in review history: 1 (`688676.SH`).
 - Contracts regenerated: NO.
 - Production Dashboard, Decision Board authority, Action Guidance, main, and VPS: unchanged.
