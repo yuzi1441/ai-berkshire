@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603129.SH",
   "company": "chunfeng-dongli",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告明确允许空仓者当前分批建仓并配置半仓，这是 Golden 样本中的真实当前买入语义",
@@ -53,7 +53,8 @@
               "line_end": 437,
               "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "deep-value-below-200",
@@ -93,7 +94,8 @@
               "line_end": 446,
               "quote": "| 深度价值区 | <200元 | Forward PE<13x，悲观情景已充分定价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -103,7 +105,8 @@
           "line_end": 437,
           "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -124,7 +127,8 @@
               "line_end": 438,
               "quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "add-on-any-signal",
@@ -265,7 +269,8 @@
               "line_end": 440,
               "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -275,7 +280,8 @@
           "line_end": 438,
           "quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -529,9 +535,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -540,5 +543,11 @@
       "line_end": 449,
       "quote": "## 第八步：综合决策备忘录"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
   ]
 }

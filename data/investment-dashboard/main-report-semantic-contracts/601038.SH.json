@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601038.SH",
   "company": "一拖股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告同时包含 A 股和 H 股，但本合同只保留 A 股价格与动作路径。",
@@ -18,7 +18,7 @@
       "加仓和减仓/论文重审各列五项，未定义组合逻辑，保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -76,7 +76,8 @@
               "line_end": 281,
               "quote": "| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-9.5-10.5-with-validation",
@@ -167,7 +168,8 @@
               "line_end": 280,
               "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-9.0-9.5",
@@ -207,7 +209,8 @@
               "line_end": 279,
               "quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-below-9.0",
@@ -247,7 +250,8 @@
               "line_end": 278,
               "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -257,7 +261,8 @@
           "line_end": 281,
           "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |\n| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |\n| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |\n| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -278,7 +283,8 @@
               "line_end": 323,
               "quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-heavy-review-opportunity-cost",
@@ -294,7 +300,8 @@
               "line_end": 324,
               "quote": "| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-above-16.5",
@@ -334,7 +341,8 @@
               "line_end": 283,
               "quote": "| **不低于 16.5 元** | 若基本面未上修，考虑减仓 | 接近 22x TTM PE，需高端和出口利润兑现支撑 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -374,7 +382,8 @@
               "line_end": 335,
               "quote": "**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -414,7 +423,8 @@
               "line_end": 343,
               "quote": "**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -424,7 +434,8 @@
           "line_end": 324,
           "quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |\n| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -525,12 +536,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-    "MULTIPLE_PRICE_BANDS"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -543,7 +548,18 @@
           "line_end": 343,
           "quote": "**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。\n\n**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-heavy-review-opportunity-cost",
+        "holder-reduce-above-16.5",
+        "holder-add-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -559,5 +575,12 @@
       "line_end": 343,
       "quote": "### 8.4 加仓与减仓信号\n\n**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。\n\n**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600809.SH",
   "company": "汾酒",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文最终结论为‘买入（分批、控节奏）’，但底部看板契约的基本面建议动作为‘观察’；两者属于当前动作冲突。",
       "价格和持仓路径本身可以抽取，但在冲突未解决前不发布为ready。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "OPEN_POSITION",
     "scope": "both",
@@ -74,7 +74,8 @@
               "line_end": 235,
               "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -84,7 +85,8 @@
           "line_end": 235,
           "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -105,7 +107,8 @@
               "quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -115,7 +118,8 @@
           "line_end": 236,
           "quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -193,10 +197,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "BODY_SAYS_BUY_BOTTOM_CONTRACT_SAYS_WATCH"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_CONFLICT",
@@ -209,7 +209,14 @@
           "line_end": 300,
           "quote": "| 基本面建议动作 | 观察 |"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -219,5 +226,12 @@
       "line_end": 250,
       "quote": "**最终结论：买入（分批、控节奏）**。116 元起可建观察仓，110 元以下积极分批，90-100 元重注；预期回报以\"5.6% 股息 + 中个位数利润复利 + 估值均值回归期权\"构成，持有期 3 年起，接受期间账面浮亏 20-30% 的可能。"
     }
+  ],
+  "business_risk_reasons": [
+    "BODY_SAYS_BUY_BOTTOM_CONTRACT_SAYS_WATCH"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

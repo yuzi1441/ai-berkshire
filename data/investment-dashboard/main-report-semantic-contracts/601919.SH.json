@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601919.SH",
   "company": "中远海控",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "中远海控对A股空仓路径只有观察不追高；报告提出的H股试探性底仓未转写成A股买入路径。",
@@ -50,7 +50,8 @@
               "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -60,7 +61,8 @@
           "line_end": 273,
           "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -81,7 +83,8 @@
               "quote": "| **持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -91,7 +94,8 @@
           "line_end": 274,
           "quote": "| **持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -155,11 +159,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_A_H",
-    "SHIPPING_CYCLE_AND_RED_SEA"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -168,5 +168,9 @@
       "line_end": 273,
       "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "SHIPPING_CYCLE_AND_RED_SEA"
+  ],
+  "semantic_review_reasons": []
 }

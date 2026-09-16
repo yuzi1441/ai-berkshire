@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002353.SZ",
   "company": "Jereh",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "159.30 元和 57.7x PE 是当前参考与估值状态，不是买入价；63.9-271.6 元三情景目标价只是估值参考。",
@@ -19,7 +19,7 @@
       "底部契约写观察，未同步正文的回避和持仓部分止盈结论。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -53,7 +53,8 @@
               "line_end": 401,
               "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-80-100-reassess",
@@ -93,7 +94,8 @@
               "line_end": 401,
               "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -103,7 +105,8 @@
           "line_end": 401,
           "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -124,7 +127,8 @@
               "line_end": 402,
               "quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -164,7 +168,8 @@
               "line_end": 403,
               "quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -204,7 +209,8 @@
               "line_end": 404,
               "quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -214,7 +220,8 @@
           "line_end": 402,
           "quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -303,12 +310,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "EXTREME_VALUATION",
-    "SECOND_CURVE_SUPPLY_CHAIN_DEPENDENCY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -327,7 +328,17 @@
           "line_end": 404,
           "quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-partial-profit-taking",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -337,5 +348,15 @@
       "line_end": 404,
       "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |\n| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |\n| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |\n| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
     }
+  ],
+  "business_risk_reasons": [
+    "EXTREME_VALUATION",
+    "SECOND_CURVE_SUPPLY_CHAIN_DEPENDENCY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

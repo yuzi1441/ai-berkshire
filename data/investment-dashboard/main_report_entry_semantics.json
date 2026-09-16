@@ -1,16 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "authority": "main_report_semantic_index.json",
   "market": "A股",
   "total": 93,
   "counts": {
-    "EXPLICIT_NO_BUY": 5,
     "AMBIGUOUS": 5,
+    "TRIAL_ENTRY_DEFINED": 14,
+    "CONDITIONAL_ENTRY_DEFINED": 56,
+    "EXPLICIT_NO_BUY": 5,
     "UNCONDITIONAL_ENTRY_DEFINED": 4,
     "NO_ENTRY_DEFINED": 1,
-    "CONDITIONAL_ENTRY_DEFINED": 56,
-    "REVIEW_ONLY": 8,
-    "TRIAL_ENTRY_DEFINED": 14
+    "REVIEW_ONLY": 8
   },
   "companies": [
     {
@@ -57,7 +57,8 @@
               "line_end": 462,
               "quote": "| 空仓、激进型 | 75.27 元以下小仓分批 | 接受约 10% 中性情景回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-entry-68-71-with-quality",
@@ -148,7 +149,8 @@
               "line_end": 463,
               "quote": "| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-entry-below-65.87",
@@ -188,10 +190,12 @@
               "line_end": 464,
               "quote": "| 空仓、保守型 | 65.87 元以下再行动 | 取得约 15% 中性情景要求回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000400.SZ",
@@ -237,7 +241,8 @@
               "quote": "| 激进型 | 小仓观察，不追高 | 约20-22元仅可观察仓；若确认直流/配网订单和利润率修复再加 | 行业景气可跟踪，但Q1利润下滑未消化完 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-entry-16-18-and-h1-repair",
@@ -328,7 +333,8 @@
               "quote": "| 稳健型 | 等待安全边际 | 约16-18元或PE(TTM)回到15-17x，同时半年报修复 | 给项目制波动和估值回撤留余地 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-entry-low-price-or-irrational-decline",
@@ -470,10 +476,12 @@
               "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000408.SZ",
@@ -481,7 +489,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000568.SZ",
@@ -527,7 +536,8 @@
               "line_end": 131,
               "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-entry-after-confirmations",
@@ -643,10 +653,12 @@
               "line_end": 132,
               "quote": "| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000651.SZ",
@@ -692,7 +704,8 @@
               "line_end": 121,
               "quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-32-35",
@@ -732,7 +745,8 @@
               "line_end": 122,
               "quote": "| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-below-30-with-dividend",
@@ -823,10 +837,12 @@
               "line_end": 202,
               "quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000657.SZ",
@@ -834,7 +850,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000682.SZ",
@@ -880,10 +897,12 @@
               "line_end": 365,
               "quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000858.SZ",
@@ -929,10 +948,12 @@
               "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ambiguous"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ambiguous"
     },
     {
       "ticker": "000933.SZ",
@@ -1054,7 +1075,8 @@
               "line_end": 227,
               "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-below-18-not-permanent-deterioration",
@@ -1151,10 +1173,12 @@
               "line_end": 228,
               "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "000988.SZ",
@@ -1200,10 +1224,12 @@
               "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002027.SZ",
@@ -1249,7 +1275,8 @@
               "line_end": 251,
               "quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-4.3-4.8",
@@ -1289,7 +1316,8 @@
               "line_end": 252,
               "quote": "| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-3.8-4.2",
@@ -1329,10 +1357,12 @@
               "line_end": 253,
               "quote": "| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002028.SZ",
@@ -1378,10 +1408,12 @@
               "line_end": 344,
               "quote": "| **125-145 元** | 29.2x-33.9x | 激进型 | 仅小仓分批，接受估值压缩 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002049.SZ",
@@ -1427,7 +1459,8 @@
               "line_end": 209,
               "quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-48-55",
@@ -1467,7 +1500,8 @@
               "line_end": 210,
               "quote": "| 稳健型 | 48-55 元 | 分批买入 | 对约 54 元的折现中性参考值提供更多缓冲 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-38-48",
@@ -1507,10 +1541,12 @@
               "line_end": 211,
               "quote": "| 保守型 | 38-48 元 | 重点研究后买入 | 接近悲观终值与历史低估区，仍要排除基本面恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002050.SZ",
@@ -1556,7 +1592,8 @@
               "line_end": 262,
               "quote": "| A 股激进型 | 28-32 元 | 小额分批 | 接近基准现值，仍需承受新业务兑现波动 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-conditional-23-28",
@@ -1596,7 +1633,8 @@
               "line_end": 263,
               "quote": "| A 股稳健型 | 23-28 元 | 分批买入 | 对基准价值有一定折价，接近 H 股当前估值 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-conditional-16-23",
@@ -1636,10 +1674,12 @@
               "line_end": 264,
               "quote": "| A 股保守型 | 16-23 元 | 重点研究与分批 | 接近悲观至基准区间，前提是论文未受损 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002142.SZ",
@@ -1736,7 +1776,8 @@
               "line_end": 240,
               "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-26-5-29-with-risk-stability",
@@ -1827,10 +1868,12 @@
               "line_end": 241,
               "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002155.SZ",
@@ -1927,7 +1970,8 @@
               "line_end": 287,
               "quote": "| 20-24 元 | 接近中性情景价值带 | 只适合对锑和资产注入有强判断的人小仓验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-17-20",
@@ -2018,7 +2062,8 @@
               "line_end": 288,
               "quote": "| 17-20 元 | TTM PE 约 15-18x，开始有研究价值 | 若基本面未恶化，可进入重点观察/分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-below-17",
@@ -2109,10 +2154,12 @@
               "line_end": 289,
               "quote": "| 17 元以下 | TTM PE 接近 15x 以下，风险收益改善 | 仍需确认金锑钨价格和安全生产未系统恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002179.SZ",
@@ -2285,7 +2332,8 @@
               "line_end": 296,
               "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-24-28-with-financial-recovery",
@@ -2426,7 +2474,8 @@
               "line_end": 297,
               "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-19-22-with-buffer",
@@ -2466,10 +2515,12 @@
               "line_end": 298,
               "quote": "| 保守型 | ¥19–22 | 才考虑建立安全边际仓位 | 即便盈利修复延迟，18–22x 低谷 EPS 仍有缓冲 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002202.SZ",
@@ -2515,10 +2566,12 @@
               "line_end": 322,
               "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002226.SZ",
@@ -2615,7 +2668,8 @@
               "line_end": 187,
               "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-3-0-3-3",
@@ -2655,10 +2709,12 @@
               "line_end": 188,
               "quote": "| 保守型 | 只在深度折价时考虑 | 3.0-3.3元或更低 | 接近保守所有者盈余估值，才有较明确安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002246.SZ",
@@ -2704,7 +2760,8 @@
               "line_end": 248,
               "quote": "| 激进型 | 16.5-20元 | 只能小仓位主题/景气跟踪 | 当前安全边际一般，不能把重组预期当现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-13-16-5-with-validation",
@@ -2795,7 +2852,8 @@
               "line_end": 247,
               "quote": "| 稳健型空仓 | 13-16.5元，且 2026H1/H2 继续验证利润 | 分批观察 | 需要硝化棉毛利和现金流继续确认 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-below-13-no-governance-deterioration",
@@ -2886,10 +2944,12 @@
               "line_end": 246,
               "quote": "| 保守型空仓 | ≤13元且无治理恶化 | 才进入深度研究/小仓试错 | 对应 TTM PE 约 23x，给周期和不透明度留出折价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002270.SZ",
@@ -2986,7 +3046,8 @@
               "line_end": 321,
               "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-13-90-14-67",
@@ -3026,7 +3087,8 @@
               "line_end": 322,
               "quote": "| **13.90—14.67 元** | 较有吸引力，分批建仓 | 中性情景约可满足 10%—12% 年化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-14-67-16",
@@ -3066,10 +3128,12 @@
               "line_end": 323,
               "quote": "| **14.67—16.00 元** | 小仓分批，等待季报验证 | 出现一定安全边际，但悲观情景仍有显著下行 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002272.SZ",
@@ -3077,7 +3141,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "EXPLICIT_NO_BUY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002352.SZ",
@@ -3123,7 +3188,8 @@
               "line_end": 209,
               "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-entry-27-30",
@@ -3163,7 +3229,8 @@
               "line_end": 209,
               "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-entry-31.4-34.9-after-h1",
@@ -3254,10 +3321,12 @@
               "line_end": 237,
               "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002353.SZ",
@@ -3265,7 +3334,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "EXPLICIT_NO_BUY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002415.SZ",
@@ -3362,10 +3432,12 @@
               "line_end": 243,
               "quote": "适合建立观察仓，要求经营现金流不再连续弱于利润"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "002463.SZ",
@@ -3411,10 +3483,12 @@
               "line_end": 836,
               "quote": "70–87元"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002594.SZ",
@@ -3536,10 +3610,12 @@
               "line_end": 395,
               "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002597.SZ",
@@ -3585,7 +3661,8 @@
               "line_end": 180,
               "quote": "小仓位观察，不追涨"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-13-5-16-5-with-confirmation",
@@ -3676,10 +3753,12 @@
               "line_end": 181,
               "quote": "等待确认后分批买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002600.SZ",
@@ -3687,7 +3766,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "002683.SZ",
@@ -3733,10 +3813,12 @@
               "line_end": 216,
               "quote": "| 空仓激进型 | 小仓位跟踪 | 现价附近只适合以“行业整合 + 防务期权”小仓试错，必须设定基本面止损条件 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002837.SZ",
@@ -3744,7 +3826,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "002916.SZ",
@@ -3752,7 +3835,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "003816.SZ",
@@ -3798,10 +3882,12 @@
               "line_end": 217,
               "quote": "| A 股 | **不高于 3.20 元** | 可开始分批研究建仓 | 约 16.6x 2025 PE，安全边际开始出现 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "300124.SZ",
@@ -3898,7 +3984,8 @@
               "line_end": 230,
               "quote": "56-62 元可小仓分批，前提是基本面未进一步恶化"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-48-55",
@@ -3938,10 +4025,12 @@
               "line_end": 231,
               "quote": "48-55 元分批买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "300274.SZ",
@@ -3987,7 +4076,8 @@
               "line_end": 599,
               "quote": "103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-below-92.04-with-fundamentals",
@@ -4078,7 +4168,8 @@
               "line_end": 599,
               "quote": "**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-deep-value-below-80.54",
@@ -4118,10 +4209,12 @@
               "line_end": 599,
               "quote": "80.54 元（14x）以下为深度价值区"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "300760.SZ",
@@ -4268,10 +4361,12 @@
               "line_end": 367,
               "quote": "115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "301308.SZ",
@@ -4279,7 +4374,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "EXPLICIT_NO_BUY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "301666.SZ",
@@ -4287,7 +4383,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "EXPLICIT_NO_BUY",
       "entry_paths": [],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600000.SH",
@@ -4333,10 +4430,12 @@
               "line_end": 249,
               "quote": "把买点设在 **8.4 元以下**"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600031.SH",
@@ -4439,7 +4538,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "steady-entry-14-5-16-with-facts",
@@ -4536,7 +4636,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-entry-12-13-5-with-facts",
@@ -4633,10 +4734,12 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600036.SH",
@@ -4644,7 +4747,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600089.SH",
@@ -4652,7 +4756,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "AMBIGUOUS",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ambiguous"
     },
     {
       "ticker": "600141.SH",
@@ -4660,7 +4765,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600161.SH",
@@ -4782,7 +4888,8 @@
               "line_end": 393,
               "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-7-8-with-cash-recovery",
@@ -4898,7 +5005,8 @@
               "line_end": 394,
               "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-below-6-3-with-no-break",
@@ -4989,10 +5097,12 @@
               "line_end": 395,
               "quote": "| 保守型 | 6.3 元以下，且没有质量事故、浆站制度恶化或控股股东利益侵占 | 相对 Base 折现现值才具备约 25%安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600167.SH",
@@ -5038,7 +5148,8 @@
               "line_end": 343,
               "quote": "| 4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-4-2-4-8",
@@ -5078,7 +5189,8 @@
               "line_end": 344,
               "quote": "| 4.20-4.80 元 | 对盈利停滞已有较充分折价 | 稳健型分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-below-4-2-with-premise",
@@ -5169,10 +5281,12 @@
               "line_end": 345,
               "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600176.SH",
@@ -5294,7 +5408,8 @@
               "line_end": 332,
               "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-steady-24-28-with-recovery",
@@ -5385,7 +5500,8 @@
               "line_end": 333,
               "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-conservative-below-24-with-balance-sheet",
@@ -5476,10 +5592,12 @@
               "line_end": 334,
               "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600183.SH",
@@ -5576,10 +5694,12 @@
               "line_end": 276,
               "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ambiguous"
     },
     {
       "ticker": "600276.SH",
@@ -5676,7 +5796,8 @@
               "line_end": 345,
               "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-steady-43-46",
@@ -5779,7 +5900,8 @@
               "line_end": 346,
               "quote": "| 稳健型 | 分批建仓 | 43-46 元 | 对应中性情景约 10%-12%要求回报，分三次执行 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-conservative-37-40",
@@ -5870,10 +5992,12 @@
               "line_end": 347,
               "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600309.SH",
@@ -5919,7 +6043,8 @@
               "line_end": 188,
               "quote": "| 进取型 | 70—75 元 | 13.3—14.2 倍 | 只适合小仓试买，承受周期波动 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-63-69",
@@ -5959,7 +6084,8 @@
               "line_end": 189,
               "quote": "| 稳健型 | 63—69 元 | 12.0—13.1 倍 | 分批买入的主要观察区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-55-60",
@@ -5999,10 +6125,12 @@
               "line_end": 190,
               "quote": "| 保守型 | 55—60 元 | 10.4—11.4 倍 | 才具备较充分周期安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600312.SH",
@@ -6048,7 +6176,8 @@
               "line_end": 263,
               "quote": "| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-below-12-with-profit-check",
@@ -6139,10 +6268,12 @@
               "line_end": 262,
               "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600372.SH",
@@ -6239,10 +6370,12 @@
               "line_end": 283,
               "quote": "| 稳健型 | 8.0-10.0 元 | 可进入观察/小仓试错区，但必须跟踪现金流和 ROE |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600406.SH",
@@ -6288,7 +6421,8 @@
               "line_end": 1018,
               "quote": "| 17.48–21.84 元 | 15.1–18.8x | **分批建仓** | 进入中性现值下方，接近 20% 安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-below-17-48-redlines-clear",
@@ -6379,7 +6513,8 @@
               "line_end": 1019,
               "quote": "| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-below-15-29-high-margin",
@@ -6419,10 +6554,12 @@
               "line_end": 1020,
               "quote": "| ≤ 15.29 元 | < 13.2x | **30% 安全边际，重仓候选** | 21.84 × 0.7；接近悲观现值 13.59 元 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600420.SH",
@@ -6519,10 +6656,12 @@
               "line_end": 255,
               "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600426.SH",
@@ -6619,7 +6758,8 @@
               "line_end": 330,
               "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -6659,7 +6799,8 @@
               "line_end": 331,
               "quote": "| 稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -6699,10 +6840,12 @@
               "line_end": 332,
               "quote": "| 保守型 | 11-14元 | 分批买入 | 接近悲观目标区，对低回报项目留出保护 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600519.SH",
@@ -6748,7 +6891,8 @@
               "line_end": 315,
               "quote": "| 1100-1300 元 | 分批建仓 | 持有，不追高加仓 | 合理偏低，可分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -6788,10 +6932,12 @@
               "line_end": 314,
               "quote": "| 900-1100 元 | 分批建仓 | 条件加仓：2026Q2/Q3 利润恢复至 +5% 以上 | 有吸引力；报告将 1000-1100 元列为舒服的加仓区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600549.SH",
@@ -7015,10 +7161,12 @@
               "line_end": 714,
               "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600795.SH",
@@ -7064,7 +7212,8 @@
               "line_end": 326,
               "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-current-high-dividend",
@@ -7104,10 +7253,12 @@
               "line_end": 326,
               "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600809.SH",
@@ -7153,10 +7304,12 @@
               "line_end": 235,
               "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600887.SH",
@@ -7253,10 +7406,12 @@
               "line_end": 190,
               "quote": "- **≤21 元：** 接近悲观情景下的安全边际，若现金流没有恶化，可分批研究性建仓；"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "600900.SH",
@@ -7302,7 +7457,8 @@
               "line_end": 277,
               "quote": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -7393,10 +7549,12 @@
               "line_end": 278,
               "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "600941.SH",
@@ -7442,7 +7600,8 @@
               "line_end": 328,
               "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -7482,10 +7641,12 @@
               "line_end": 328,
               "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601020.SH",
@@ -7658,10 +7819,12 @@
               "line_end": 277,
               "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "601038.SH",
@@ -7758,7 +7921,8 @@
               "line_end": 280,
               "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-9.0-9.5",
@@ -7798,7 +7962,8 @@
               "line_end": 279,
               "quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-below-9.0",
@@ -7838,10 +8003,12 @@
               "line_end": 278,
               "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601088.SH",
@@ -7887,7 +8054,8 @@
               "line_end": 358,
               "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "aggressive-h-below-39",
@@ -7927,7 +8095,8 @@
               "line_end": 358,
               "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-a-below-33-after-h1",
@@ -8018,7 +8187,8 @@
               "line_end": 359,
               "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-h-below-36-after-h1",
@@ -8109,10 +8279,12 @@
               "line_end": 359,
               "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601126.SH",
@@ -8209,10 +8381,12 @@
               "line_end": 21,
               "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601127.SH",
@@ -8334,10 +8508,12 @@
               "line_end": 414,
               "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601138.SH",
@@ -8434,10 +8610,12 @@
               "line_end": 836,
               "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601156.SH",
@@ -8483,7 +8661,8 @@
               "line_end": 302,
               "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -8523,7 +8702,8 @@
               "line_end": 302,
               "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -8614,10 +8794,12 @@
               "line_end": 276,
               "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601179.SH",
@@ -8639,7 +8821,8 @@
               "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "TRIAL_POSITION",
@@ -8730,10 +8913,12 @@
               "line_end": 340,
               "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601318.SH",
@@ -8830,10 +9015,12 @@
               "line_end": 324,
               "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601398.SH",
@@ -8879,10 +9066,12 @@
               "line_end": 357,
               "quote": "| 6.0-6.5 元 | 6.0-6.5x PE；0.55-0.60x PB | 稳健型可考虑小仓或分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ambiguous"
     },
     {
       "ticker": "601717.SH",
@@ -8928,10 +9117,12 @@
               "line_end": 276,
               "quote": "| **空仓者** | **观望偏积极，可小仓位介入**。当前价位下有 8.3% 股息保护、中性情景 +84% 赔率诱人；但因 2026Q1 拐点未确认，**不建议重仓 all-in**，宜等 2026 中报验证煤机订单与盈利趋势后再决定加不加。适合\"高股息+期权\"思路的价值型资金，不适合追求确定成长的资金。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "601727.SH",
@@ -9028,7 +9219,8 @@
               "line_end": 393,
               "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-entry-below-1.55-after-validation",
@@ -9119,10 +9311,12 @@
               "line_end": 396,
               "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601899.SH",
@@ -9168,7 +9362,8 @@
               "line_end": 290,
               "quote": "| 26-30 元 | 约 30.2-34.9 港元 | 可小仓分批 | 论文未受损时才考虑加仓；H 股当前 32.92 港元在此区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -9208,10 +9403,12 @@
               "line_end": 291,
               "quote": "| 不高于 25 元 | 不高于约 29.0 港元 | 安全边际明显改善，仍需分批 | 结合商品价格和项目状态评估增持 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601919.SH",
@@ -9219,7 +9416,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "NO_ENTRY_DEFINED",
       "entry_paths": [],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "601975.SH",
@@ -9265,7 +9463,8 @@
               "line_end": 267,
               "quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -9305,7 +9504,8 @@
               "line_end": 268,
               "quote": "| 稳健型 | 2.7-3.2 元 | 分批买入 | 给 Base 目标价约 14%-27% 折价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -9396,10 +9596,12 @@
               "line_end": 269,
               "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603005.SH",
@@ -9407,7 +9609,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "AMBIGUOUS",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ambiguous"
     },
     {
       "ticker": "603129.SH",
@@ -9429,7 +9632,8 @@
               "line_end": 437,
               "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "deep-value-below-200",
@@ -9469,10 +9673,12 @@
               "line_end": 446,
               "quote": "| 深度价值区 | <200元 | Forward PE<13x，悲观情景已充分定价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603228.SH",
@@ -9569,10 +9775,12 @@
               "line_end": 234,
               "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603288.SH",
@@ -9618,7 +9826,8 @@
               "line_end": 159,
               "quote": "| 激进型 | 32-35 元 | 小额分批 | 接近 Base 价值上沿，可承受估值波动者开始跟踪仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -9658,10 +9867,12 @@
               "line_end": 160,
               "quote": "| 稳健型 | 28-32 元 | 分批买入 | 接近 H 股人民币等值与 Base 折现值，安全边际改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603298.SH",
@@ -9669,7 +9880,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603606.SH",
@@ -10018,7 +10230,8 @@
               "line_end": 818,
               "quote": "| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-30-36-if-h1-not-negative",
@@ -10108,10 +10321,12 @@
               "line_end": 820,
               "quote": "| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "603659.SH",
@@ -10208,10 +10423,12 @@
               "line_end": 427,
               "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "603993.SH",
@@ -10257,10 +10474,12 @@
               "line_end": 427,
               "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "605117.SH",
@@ -10306,7 +10525,8 @@
               "line_end": 358,
               "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-85-95-with-growth-and-policy",
@@ -10422,10 +10642,12 @@
               "line_end": 358,
               "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "605499.SH",
@@ -10471,7 +10693,8 @@
               "line_end": 300,
               "quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -10511,10 +10734,12 @@
               "line_end": 301,
               "quote": "| 稳健型 | 114-127元 | 17-19倍 | 分批增加，赔率较均衡 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "688008.SH",
@@ -10560,10 +10785,12 @@
               "line_end": 314,
               "quote": "| **空仓者** | **等待回调。当前258元不具备投资价值。** 目标买入区间：CNY 120-150（对应2026E PE 44-55x），此时安全边际较充足。如果在DDR6切换期（~2028-2029年）出现类似2023年的周期性暴跌，将是极佳的长期买入机会 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "688017.SH",
@@ -10571,7 +10798,8 @@
       "empty_position_current_action": "AVOID",
       "entry_semantic": "EXPLICIT_NO_BUY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "688235.SH",
@@ -10693,10 +10921,12 @@
               "line_end": 359,
               "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "688271.SH",
@@ -10704,7 +10934,8 @@
       "empty_position_current_action": "WATCH",
       "entry_semantic": "REVIEW_ONLY",
       "entry_paths": [],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "688361.SH",
@@ -10750,10 +10981,12 @@
               "line_end": 265,
               "quote": "这只股票的唯一合理买入窗口是：**市值降至200-300亿（对应股价~57-86元），即PS降至10-15倍**。在那个水位上，增长预期仍然丰富，但价格不再透支5-7年的未来。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "ready"
     },
     {
       "ticker": "688676.SH",
@@ -10775,10 +11008,12 @@
               "quote": "| 空仓激进型 | 只能事件驱动小仓 | 需要明确承认估值风险，不能当作安全边际投资 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ambiguous"
+      "semantic_status": "partial",
+      "empty_position_semantic_status": "partial"
     },
     {
       "ticker": "688825.SH",
@@ -10926,7 +11161,8 @@
               "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         },
         {
           "path_id": "systematic-entry-below-15-with-intact-thesis",
@@ -11042,10 +11278,12 @@
               "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
-      "semantic_status": "ready"
+      "semantic_status": "ready",
+      "empty_position_semantic_status": "ready"
     }
   ]
 }

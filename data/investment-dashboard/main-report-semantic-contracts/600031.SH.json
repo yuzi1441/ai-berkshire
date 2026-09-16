@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600031.SH",
   "company": "三一重工",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告明确当前 19.58 元只适合观察或持有，三档价格带均不是无条件买入；价格必须与中报事实一起复核。",
@@ -17,7 +17,7 @@
       "海外收入、国际毛利率和经营现金流的失效条件含有或/且组合，需保留为失效复核而不是自动交易指令。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -132,7 +132,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "steady-entry-14-5-16-with-facts",
@@ -229,7 +230,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-entry-12-13-5-with-facts",
@@ -326,7 +328,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -336,7 +339,8 @@
           "line_end": 243,
           "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -363,7 +367,8 @@
               "line_end": 225,
               "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -373,7 +378,8 @@
           "line_end": 243,
           "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -583,11 +589,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-    "CONDITIONAL_PRICE_AND_FACTS",
-    "INVALIDATION_LOGIC_REQUIRES_REVIEW"
-  ],
   "ambiguities": [
     {
       "code": "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
@@ -600,7 +601,14 @@
           "line_end": 5,
           "quote": "> **A / H 股价格：** 19.58 元 / 20.34 港元"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "CONDITIONAL_PRICE_AND_FACTS",
@@ -613,7 +621,14 @@
           "line_end": 225,
           "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
     },
     {
       "code": "INVALIDATION_LOGIC_REQUIRES_REVIEW",
@@ -626,7 +641,13 @@
           "line_end": 247,
           "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -642,5 +663,13 @@
       "line_end": 300,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "ENTRY_AMBIGUOUS"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002155.SZ",
   "company": "湖南黄金",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "外购非标金占收入很高但毛利极薄，未把收入规模误当成高质量资源利润。",
@@ -19,7 +19,7 @@
       "底部看板契约未给出价格带、正式动作和失效条件，不能作为完整语义权威。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 286,
               "quote": "| 24-28 元 | 当前区间：预期较满，弹性来自趋势而非安全边际 | 空仓以跟踪为主；持仓者不宜忽视周期风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-20-24-with-strong-view",
@@ -168,7 +169,8 @@
               "line_end": 287,
               "quote": "| 20-24 元 | 接近中性情景价值带 | 只适合对锑和资产注入有强判断的人小仓验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-17-20",
@@ -259,7 +261,8 @@
               "line_end": 288,
               "quote": "| 17-20 元 | TTM PE 约 15-18x，开始有研究价值 | 若基本面未恶化，可进入重点观察/分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-below-17",
@@ -350,7 +353,8 @@
               "line_end": 289,
               "quote": "| 17 元以下 | TTM PE 接近 15x 以下，风险收益改善 | 仍需确认金锑钨价格和安全生产未系统恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -360,7 +364,8 @@
           "line_end": 291,
           "quote": "**估值结论**：湖南黄金在 24.26 元不是“明显低估”。空仓投资者若坚持价值投资，应等待更厚安全边际，或等待资产注入草案、问询回复、业绩承诺与 2026 中报验证后再决策。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -381,7 +386,8 @@
               "line_end": 328,
               "quote": "| 已持有、成本较低 | 可继续持有但分批管理仓位 | 若金/锑价格继续上行、资产注入获批且条款优于预期，可保留核心仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-buy-signals-manual-review",
@@ -421,7 +427,8 @@
               "line_end": 334,
               "quote": "1. 股价回到 17-20 元，同时金锑钨价格未系统性反转；"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -461,7 +468,8 @@
               "line_end": 342,
               "quote": "1. 金价回撤 15% 以上、锑价回撤 25%-30%，公司毛利率同步下行；"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -471,7 +479,8 @@
           "line_end": 328,
           "quote": "| 已持有、成本较低 | 可继续持有但分批管理仓位 | 若金/锑价格继续上行、资产注入获批且条款优于预期，可保留核心仓 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -635,12 +644,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "BUY_SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "COMMODITY_CYCLE",
-    "ASSET_INJECTION_UNCERTAINTY"
-  ],
   "ambiguities": [
     {
       "code": "BUY_SIGNAL_COMBINATION_UNSPECIFIED",
@@ -653,7 +656,16 @@
           "line_end": 334,
           "quote": "1. 股价回到 17-20 元，同时金锑钨价格未系统性反转；"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-buy-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -663,5 +675,15 @@
       "line_end": 350,
       "quote": "**湖南黄金值得研究，但当前更像“金锑钨高景气 + 资产注入预期”的弹性股，而不是已经具备厚安全边际的长期复利股。24.26 元附近，价值投资者宜观察，不宜追高；真正的买点要么来自价格回落，要么来自资产注入和自产资源利润被更硬的数据验证。**"
     }
+  ],
+  "business_risk_reasons": [
+    "ASSET_INJECTION_UNCERTAINTY",
+    "COMMODITY_CYCLE"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

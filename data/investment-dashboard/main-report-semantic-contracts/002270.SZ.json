@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002270.SZ",
   "company": "华明装备",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "17.81 元是当前参考价，不是买入价；三年目标价 9.4-28.6 元是估值参考，不能覆盖行动阈值。",
@@ -18,7 +18,7 @@
       "报告底部契约只写观察，未完整表达正文的价格分层和持仓动作，因此标记冲突。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -127,7 +127,8 @@
               "line_end": 321,
               "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-13-90-14-67",
@@ -167,7 +168,8 @@
               "line_end": 322,
               "quote": "| **13.90—14.67 元** | 较有吸引力，分批建仓 | 中性情景约可满足 10%—12% 年化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-14-67-16",
@@ -207,7 +209,8 @@
               "line_end": 323,
               "quote": "| **14.67—16.00 元** | 小仓分批，等待季报验证 | 出现一定安全边际，但悲观情景仍有显著下行 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "watch-16-20",
@@ -247,7 +250,8 @@
               "line_end": 324,
               "quote": "| **16.00—20.00 元** | 观察或持有，不主动加仓 | 中性回报偏低，依赖乐观兑现 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-20-24",
@@ -287,7 +291,8 @@
               "line_end": 325,
               "quote": "| **20.00—24.00 元** | 不新增；大仓位复核 | 需要更高 EPS 增长或更高退出估值 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "reduce-above-24-without-upgrade",
@@ -378,7 +383,8 @@
               "line_end": 326,
               "quote": "| **>24.00 元** | 基本面未上修时考虑减仓 | 风险回报明显倾向乐观情景 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -388,7 +394,8 @@
           "line_end": 385,
           "quote": "| 空仓者 | 17.81 元不追；优先等 14—16 元 | 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -409,7 +416,8 @@
               "line_end": 386,
               "quote": "| 小仓持有者 | 持有观察，不加仓 | 海外毛利企稳、复购增加、特高压后续项目验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -449,7 +457,8 @@
               "line_end": 396,
               "quote": "1. 电力设备收入恢复双位数增长，扣非利润增速不低于收入。\n2. 海外收入继续增长且国际毛利率止跌，回款和销售费用效率改善。\n3. 500kV/±800kV 产品进入第二、第三个独立批量项目。\n4. 运维和在线监测收入、毛利率、渗透率开始单独披露。\n5. H 股发行条款合理，项目预期 ROIC 明显高于股权成本。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -489,7 +498,8 @@
               "line_end": 404,
               "quote": "1. 重大质量事故、召回、索赔或供应商资格暂停。\n2. 连续两季核心收入、毛利、扣非和现金流同时弱化。\n3. 海外收入增长依赖更长账期，普通应收与坏账持续上升。\n4. H 股低价摊薄、跨能力圈并购或商誉/负债快速增加。\n5. 员工持股轻松解锁，但每股利润与 FCF 没有相应增长。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -499,7 +509,8 @@
           "line_end": 386,
           "quote": "| 小仓持有者 | 持有观察，不加仓 | 海外毛利企稳、复购增加、特高压后续项目验证 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -588,12 +599,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "GLOBALIZATION_EVIDENCE_INCOMPLETE",
-    "VALUATION_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -612,7 +617,16 @@
           "line_end": 404,
           "quote": "1. 重大质量事故、召回、索赔或供应商资格暂停。\n2. 连续两季核心收入、毛利、扣非和现金流同时弱化。\n3. 海外收入增长依赖更长账期，普通应收与坏账持续上升。\n4. H 股低价摊薄、跨能力圈并购或商誉/负债快速增加。\n5. 员工持股轻松解锁，但每股利润与 FCF 没有相应增长。"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -622,5 +636,12 @@
       "line_end": 13,
       "quote": "> **短结论**：华明装备是分接开关这一“小部件、大责任”赛道中的优质细分冠军，国内护城河真实，海外与特高压提供增长期权；但 17.81 元仍隐含接近乐观情景的盈利要求。空仓者不追，优先等待 14—16 元或等待业绩先证明；持有者可观察持有。"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

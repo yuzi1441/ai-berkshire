@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603993.SH",
   "company": "CMOC",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "19.49 元是 A 股当前参考价，6.5-37.6 元三情景目标价和 6-38 元合理价格区间是估值参考，不是单独买入价。",
@@ -18,7 +18,7 @@
       "报告同时讨论 H 股和美元铜价，本合同只保留 A 股股票动作，外部商品与政策变量作为人工门槛。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "OPEN_POSITION",
     "scope": "both",
@@ -76,7 +76,8 @@
               "line_end": 427,
               "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-a-share-15-17",
@@ -116,7 +117,8 @@
               "line_end": 427,
               "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -126,7 +128,8 @@
           "line_end": 427,
           "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -147,7 +150,8 @@
               "line_end": 428,
               "quote": "| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-high-cost",
@@ -187,7 +191,8 @@
               "line_end": 428,
               "quote": "| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -227,7 +232,8 @@
               "line_end": 429,
               "quote": "| **卖出信号** | 铜价跌破$10,000/吨并持续3个月以上；刚果金出台重大不利政策（如将矿业税提高至50%以上或强制国有化）；Q2-Q3利润增速放缓至个位数；管理层出现诚信问题或重大战略失误 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -267,7 +273,8 @@
               "line_end": 430,
               "quote": "| **加仓信号** | 铜价回调至$10,000-11,000但长期需求逻辑未变（提供更好的安全边际）；KFM二期提前投产或产量超预期；刚果金政治环境改善（如税收政策明确化）；股价跌至13-15元区间（PE <16x） |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -277,7 +284,8 @@
           "line_end": 428,
           "quote": "| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -377,12 +385,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-    "COMMODITY_CYCLE_RISK",
-    "GEOPOLITICAL_TAIL_RISK"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -401,7 +403,18 @@
           "line_end": 430,
           "quote": "| **加仓信号** | 铜价回调至$10,000-11,000但长期需求逻辑未变（提供更好的安全边际）；KFM二期提前投产或产量超预期；刚果金政治环境改善（如税收政策明确化）；股价跌至13-15元区间（PE <16x） |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-hold-with-stop-review",
+        "holder-reduce-high-cost",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -411,5 +424,14 @@
       "line_end": 430,
       "quote": "| **空仓者** | **可适度建仓（3-5%仓位），但分批买入**。当前铜价$13,595/吨处于高位，等待回调至$11,000-12,000再加仓更安全。股价若回调至15-17元（PE 16-18x基于2025年EPS），安全边际更充分。不建议在当前位置一次性重仓 |\n| **持仓者** | **继续持有**，但设置跟踪止损。铜的长期结构性需求增长支持持有，KFM二期投产将带来新增量。若持仓成本低于15元，安全边际充足；若成本高于25元，考虑部分减仓 |\n| **卖出信号** | 铜价跌破$10,000/吨并持续3个月以上；刚果金出台重大不利政策（如将矿业税提高至50%以上或强制国有化）；Q2-Q3利润增速放缓至个位数；管理层出现诚信问题或重大战略失误 |\n| **加仓信号** | 铜价回调至$10,000-11,000但长期需求逻辑未变（提供更好的安全边际）；KFM二期提前投产或产量超预期；刚果金政治环境改善（如税收政策明确化）；股价跌至13-15元区间（PE <16x） |"
     }
+  ],
+  "business_risk_reasons": [
+    "COMMODITY_CYCLE_RISK",
+    "GEOPOLITICAL_TAIL_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

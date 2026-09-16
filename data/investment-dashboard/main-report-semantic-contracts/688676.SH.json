@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "688676.SH",
   "company": "金盘科技",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "金盘科技当前82.04元观望/持有跟踪；保守型要等约30倍可持续EPS或45—55元再评估，激进型只有事件驱动小仓。",
       "报告没有给出激进型明确价格和完整空仓建仓门槛，不能把事件驱动小仓自动视为正式entry。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -74,7 +74,8 @@
               "line_end": 333,
               "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "action": "TRIAL_POSITION",
@@ -90,7 +91,8 @@
               "quote": "| 空仓激进型 | 只能事件驱动小仓 | 需要明确承认估值风险，不能当作安全边际投资 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -100,7 +102,8 @@
           "line_end": 333,
           "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -121,7 +124,8 @@
               "quote": "| 已持有且成本低 | 可继续持有但设预警线 | 盯现金流、AIDC毛利、海外订单、储能毛利率 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -161,7 +165,8 @@
               "line_end": 341,
               "quote": "1. 经营现金流连续两个半年度覆盖净利润；"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -171,7 +176,8 @@
           "line_end": 336,
           "quote": "| 已持有且成本低 | 可继续持有但设预警线 | 盯现金流、AIDC毛利、海外订单、储能毛利率 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -236,11 +242,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "NO_EXPLICIT_ACTION_PRICE",
-    "HIGH_VALUATION",
-    "AIDC_AND_OVERSEAS_EXECUTION"
-  ],
   "ambiguities": [
     {
       "code": "NO_EXPLICIT_ACTION_PRICE",
@@ -253,7 +254,15 @@
           "line_end": 335,
           "quote": "| 空仓激进型 | 只能事件驱动小仓 | 需要明确承认估值风险，不能当作安全边际投资 |"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-review-45-55"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -263,5 +272,16 @@
       "line_end": 45,
       "quote": "**综合建议：观望 / 持有者谨慎持有；空仓者等待更好价格或更强现金流验证。**"
     }
+  ],
+  "business_risk_reasons": [
+    "AIDC_AND_OVERSEAS_EXECUTION",
+    "HIGH_VALUATION"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

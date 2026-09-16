@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "301666.SZ",
   "company": "DapuStor",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "705 元和 383x PB 是当前估值状态，不是买入价；30-150 元情景范围是估值参考。",
@@ -53,7 +53,8 @@
               "line_end": 313,
               "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-after-2027-unlock",
@@ -93,7 +94,8 @@
               "line_end": 313,
               "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -103,7 +105,8 @@
           "line_end": 313,
           "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -124,7 +127,8 @@
               "line_end": 314,
               "quote": "| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-exit-current-valuation",
@@ -140,7 +144,8 @@
               "line_end": 315,
               "quote": "| **卖出信号** | 任何时候都是卖出信号——当前估值已经远超任何合理范围 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-after-four-quarters",
@@ -231,7 +236,8 @@
               "line_end": 316,
               "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -241,7 +247,8 @@
           "line_end": 314,
           "quote": "| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -324,12 +331,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "EXTREME_VALUATION",
-    "IPO_LOCKUP_AND_LIQUIDITY_RISK",
-    "NAND_CYCLE_RISK",
-    "REPORT_CONTRACT_CONFLICT"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -338,5 +339,13 @@
       "line_end": 316,
       "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |\n| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |\n| **卖出信号** | 任何时候都是卖出信号——当前估值已经远超任何合理范围 |\n| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
     }
+  ],
+  "business_risk_reasons": [
+    "EXTREME_VALUATION",
+    "IPO_LOCKUP_AND_LIQUIDITY_RISK",
+    "NAND_CYCLE_RISK"
+  ],
+  "semantic_review_reasons": [
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000568.SZ",
   "company": "泸州老窖",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "80-85 元是激进型小仓路径，不能概括成无条件买入；稳健路径还要求两个确认信号",
@@ -19,7 +19,7 @@
       "报告正文没有独立写出持仓者策略，不能从激进/稳健/保守分层建议推断 holder action"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 131,
               "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-entry-after-confirmations",
@@ -193,7 +194,8 @@
               "line_end": 132,
               "quote": "| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -203,7 +205,8 @@
           "line_end": 132,
           "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -217,7 +220,8 @@
           "line_end": 153,
           "quote": "泸州老窖当下的投资问题不是\"这是不是好公司\"（毛利86%、净利率42%、净现金263亿的公司质地毋庸置疑），而是\"生意质量的缺陷与价格的便宜哪个占上风\"。四个维度的研究共同指向一个结论：它的\"高端定价权\"和\"窖池稀缺\"叙事经不起反面检验，竞争位置在结构性恶化，但12倍市盈率、7%股息率、接近清算价值的定价已经补偿了大部分缺陷。这是一笔\"赔率不错、胜率待确认\"的左侧交易：激进者可用底仓+股息换时间，稳健者应等合同负债和批价给出确认信号——在白酒这个九年缩量的行业里，晚买的风险远小于买错的风险。"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     }
   },
   "hard_blocks": [],
@@ -452,11 +456,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "MISSING_HOLDER_ACTION",
-    "REPORT_CONTRACT_CONFLICT",
-    "MULTIPLE_PRICE_ROLES"
-  ],
   "ambiguities": [
     {
       "code": "MISSING_HOLDER_ACTION",
@@ -469,7 +468,13 @@
           "line_end": 133,
           "quote": "| 类型 | 建议 | 价格区间 |\n|------|------|----------|\n| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |\n| 保守型 | 回避或仅以\"类债券\"心态小仓位吃息；白酒行业结构性逆风未消，同样的钱茅台确定性更高（19.7倍PE的茅台 vs 12.2倍的老窖，价差已反映质地差距） | 悲观情景锚54-70元区间才具备\"错到极致\"的赔率 |"
         }
-      ]
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -479,5 +484,14 @@
       "line_end": 149,
       "quote": "## 7. 最终投资建议\n\n### 定性判断\n\n| 项目 | 判断 |\n|------|------|\n| 生意质量 | 一流生意的底子、二流的品牌位阶（\"用一流组织能力经营二流品牌位阶\"） |\n| 管理层 | 良好（4星），本轮周期应对成熟，诚信记录近十年干净 |\n| 估值 | 极端便宜（十年5%分位），错杀概率大于合理定价概率，但需确认信号 |\n| 时机 | 左侧。报表最坏时点大概率已过，但先行指标（合同负债/批价）尚未转正 |\n\n### 分层操作建议\n\n| 类型 | 建议 | 价格区间 |\n|------|------|----------|\n| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |\n| 保守型 | 回避或仅以\"类债券\"心态小仓位吃息；白酒行业结构性逆风未消，同样的钱茅台确定性更高（19.7倍PE的茅台 vs 12.2倍的老窖，价差已反映质地差距） | 悲观情景锚54-70元区间才具备\"错到极致\"的赔率 |"
     }
+  ],
+  "business_risk_reasons": [
+    "MISSING_HOLDER_ACTION"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002272.SZ",
   "company": "chuanrun",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "18.50 元附近的正文结论是回避，7-11 元是合理估值/重新考虑区，不是当前买入价。",
@@ -18,7 +18,7 @@
       "底部契约把正文的回避/减仓结论写成观察，构成报告契约冲突。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 316,
               "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-7-11-reassess",
@@ -92,7 +93,8 @@
               "line_end": 316,
               "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -102,7 +104,8 @@
           "line_end": 316,
           "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -123,7 +126,8 @@
               "line_end": 317,
               "quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -163,7 +167,8 @@
               "line_end": 318,
               "quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -203,7 +208,8 @@
               "line_end": 319,
               "quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -213,7 +219,8 @@
           "line_end": 317,
           "quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -320,12 +327,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "EXPLICIT_NO_BUY",
-    "CONTINUED_LOSSES_AND_GOVERNANCE_RISK"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -344,7 +345,17 @@
           "line_end": 319,
           "quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-to-exit",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -354,5 +365,15 @@
       "line_end": 317,
       "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。 |\n| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。 |"
     }
+  ],
+  "business_risk_reasons": [
+    "CONTINUED_LOSSES_AND_GOVERNANCE_RISK",
+    "EXPLICIT_NO_BUY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

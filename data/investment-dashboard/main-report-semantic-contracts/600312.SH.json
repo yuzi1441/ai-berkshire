@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600312.SH",
   "company": "平高电气",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文结论是观望偏持有、空仓不追；12—14 元是合理买入区，12 元以下才是强安全边际，价格角色不能与目标价混淆。",
@@ -18,7 +18,7 @@
       "底部看板契约只给出观察和结论摘要，分层动作、失效条件和复核日期均未给出；本候选以正文为准但不静默升级为 ready。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 295,
               "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-review-14-17",
@@ -92,7 +93,8 @@
               "line_end": 264,
               "quote": "| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-12-14",
@@ -132,7 +134,8 @@
               "line_end": 263,
               "quote": "| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-entry-below-12-with-profit-check",
@@ -223,7 +226,8 @@
               "line_end": 262,
               "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-watch-17-22",
@@ -263,7 +267,8 @@
               "line_end": 265,
               "quote": "| **17-22 元** | 接近当前区间，赔率一般；需公司继续超预期。 | 持仓者可持有，空仓者不宜追高。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -273,7 +278,8 @@
           "line_end": 295,
           "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -294,7 +300,8 @@
               "line_end": 296,
               "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-overweight-22-25",
@@ -385,7 +392,8 @@
               "line_end": 296,
               "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-review-add-signal-combination",
@@ -401,7 +409,8 @@
               "line_end": 297,
               "quote": "| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -411,7 +420,8 @@
           "line_end": 296,
           "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -538,11 +548,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_INCOMPLETE",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "PRICE_AND_FUNDAMENTAL_PRECONDITION"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_INCOMPLETE",
@@ -561,7 +566,13 @@
           "line_end": 367,
           "quote": "| 买入失效条件 | 未给出 |"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -580,7 +591,16 @@
           "line_end": 298,
           "quote": "| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-overweight-22-25",
+        "holder-review-add-signal-combination"
+      ],
+      "affects_entry": false
     },
     {
       "code": "PRICE_AND_FUNDAMENTAL_PRECONDITION",
@@ -599,7 +619,14 @@
           "line_end": 264,
           "quote": "| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -621,5 +648,14 @@
       "line_end": 320,
       "quote": "| 下一步最好验证 | 跟踪 2026 半年报；拆解应收账款/合同资产；跟踪国网/南网高压设备招标份额；比较平高与思源/西电/许继在核心产品中的中标价格与份额。 |"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600183.SH",
   "company": "生益科技",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文结论是观察/持有纪律跟踪、空仓不追高；157.40 元不是买入信号。",
@@ -17,7 +17,7 @@
       "底部看板契约的结论摘要误填为表头，稳健/保守动作、价格和失效条件均未给出，不能覆盖正文。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -51,7 +51,8 @@
               "line_end": 270,
               "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "empty-trial-q2q3-growth-margin",
@@ -142,7 +143,8 @@
               "line_end": 276,
               "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "empty-revalue-pe-40-50-or-price-90-110",
@@ -335,7 +337,8 @@
               "line_end": 277,
               "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "empty-conservative-wait",
@@ -351,7 +354,8 @@
               "line_end": 278,
               "quote": "| 空仓保守型 | 暂不买 | 需要看到至少两个季度现金流/利润匹配，且估值明显下修 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -379,7 +383,8 @@
           "line_end": 278,
           "quote": "| 空仓保守型 | 暂不买 | 需要看到至少两个季度现金流/利润匹配，且估值明显下修 |"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -400,7 +405,8 @@
               "line_end": 279,
               "quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-high-pe-slow-growth",
@@ -491,7 +497,8 @@
               "line_end": 280,
               "quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -501,7 +508,8 @@
           "line_end": 279,
           "quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -666,11 +674,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "PRICE_ROLE_AND_REVIEW_SEMANTICS",
-    "CYCLICAL_VALUATION_AND_CONDITION_COMBINATION"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_CONFLICT",
@@ -683,7 +686,18 @@
           "line_end": 351,
           "quote": "| 结论摘要 | 投资者类型 建议 价格/条件区间 |"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
     },
     {
       "code": "REVIEW_NOT_ENTRY",
@@ -696,7 +710,18 @@
           "line_end": 277,
           "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
     },
     {
       "code": "REDUCE_SIGNAL_COMBINATION_UNSPECIFIED",
@@ -709,7 +734,18 @@
           "line_end": 297,
           "quote": "### 4. 减仓或论文重审信号"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -731,5 +767,15 @@
       "line_end": 359,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

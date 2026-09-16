@@ -92,56 +92,146 @@ def _leaf_states(node: dict[str, Any], facts: dict[str, Any]) -> list[tuple[str,
     return [(str(node.get("kind")), evaluate_condition(node, facts))]
 
 
+def _path_state(path: dict[str, Any], facts: dict[str, Any]) -> dict[str, Any]:
+    condition = path.get("condition")
+    truth = TRUE if condition is None else evaluate_condition(condition, facts)
+    leaves = [] if condition is None else _leaf_states(condition, facts)
+    price_states = [state for kind, state in leaves if kind == "PRICE_RANGE"]
+    nonprice_states = [state for kind, state in leaves if kind != "PRICE_RANGE"]
+    action = path.get("action")
+
+    state = "NOT_EVALUATED"
+    if truth == TRUE:
+        state = "TRIAL_READY" if action == "TRIAL_POSITION" else "BUY_READY"
+    elif price_states:
+        price_true = TRUE in price_states
+        price_unknown = UNKNOWN in price_states
+        nonprice_all_true = all(item == TRUE for item in nonprice_states)
+        if price_true and truth == UNKNOWN:
+            state = "PRICE_MATCHED_CONDITIONS_PENDING"
+        elif price_true and truth == FALSE:
+            state = "PRICE_MATCHED_CONDITIONS_NOT_MET"
+        elif nonprice_all_true and price_unknown:
+            state = "CONDITIONS_MET_PRICE_PENDING"
+        elif nonprice_all_true and not price_unknown:
+            state = "PRICE_NOT_REACHED"
+    return {
+        "path_id": path.get("path_id"),
+        "truth": truth,
+        "state": state,
+        "price_states": price_states,
+        "nonprice_states": nonprice_states,
+    }
+
+
+def _is_review_path(path: dict[str, Any]) -> bool:
+    if path.get("action") not in {"REVIEW", "WATCH"}:
+        return False
+    condition = path.get("condition")
+    return any(
+        kind == "PRICE_RANGE"
+        and node.get("price_role") in {"REVIEW_ZONE", "WATCH_ZONE"}
+        for node in _condition_nodes(condition)
+        for kind in [node.get("kind")]
+    )
+
+
+def _condition_nodes(node: Any) -> list[dict[str, Any]]:
+    if not isinstance(node, dict):
+        return []
+    return [node] + [item for child in node.get("children", []) for item in _condition_nodes(child)]
+
+
 def evaluate_contract(contract: dict[str, Any], facts: dict[str, Any]) -> dict[str, Any]:
     """Evaluate empty-position entry paths without inventing unavailable facts."""
+    if contract.get("schema_version") != 2:
+        return {"state": "NOT_EVALUATED", "paths": [], "errors": ["schema v2 required"]}
     status = contract.get("semantic_status")
-    if status == "ambiguous":
-        return {"state": "AMBIGUOUS", "paths": []}
-    if status != "ready":
+    if status not in {"ready", "partial"}:
         return {"state": "NOT_EVALUATED", "paths": []}
     scope = contract["scopes"]["empty_position"]
     entry_semantic = scope.get("entry_semantic")
+    ambiguities = [
+        item for item in contract.get("ambiguities", [])
+        if "empty_position" in item.get("affected_scopes", []) and item.get("affects_entry")
+    ]
+    unresolved_path_ids = {
+        str(path_id) for item in ambiguities for path_id in item.get("affected_path_ids", [])
+    }
+    global_entry_ambiguity = any(not item.get("affected_path_ids") for item in ambiguities)
+    if (
+        scope.get("semantic_status") == "ambiguous"
+        or entry_semantic == "AMBIGUOUS"
+        or global_entry_ambiguity
+    ):
+        return {
+            "state": "ENTRY_SEMANTIC_AMBIGUOUS",
+            "paths": [],
+            "unresolved_path_ids": sorted(unresolved_path_ids),
+            "warnings": [item.get("code") for item in ambiguities],
+        }
     if entry_semantic == "EXPLICIT_NO_BUY":
         return {"state": "EXPLICIT_NO_BUY", "paths": []}
     instrument_scope = str(facts.get("instrument_scope", "A_SHARE"))
-    paths = [
+    all_paths = [
         item for item in scope.get("action_paths", [])
-        if item.get("action") in {"OPEN_POSITION", "TRIAL_POSITION"}
-        and item.get("instrument_scope", "A_SHARE") in {instrument_scope, "BOTH"}
+        if item.get("instrument_scope", "A_SHARE") in {instrument_scope, "BOTH"}
     ]
-    if not paths:
-        return {"state": "NO_ENTRY_PATH", "paths": []}
+    paths = [
+        item for item in all_paths
+        if item.get("action") in {"OPEN_POSITION", "TRIAL_POSITION"}
+        and item.get("semantic_status") == "ready"
+    ]
+    review_paths = [
+        item for item in all_paths
+        if item.get("semantic_status") == "ready" and _is_review_path(item)
+    ]
 
     block_states = [evaluate_condition(node, facts) for node in contract.get("hard_blocks", [])]
     if TRUE in block_states:
-        return {"state": "BLOCKED", "paths": [], "hard_blocks": block_states}
+        return {"state": "HARD_BLOCKED", "paths": [], "hard_blocks": block_states}
 
-    evaluated = []
-    final_state = "NOT_EVALUATED"
-    for path in paths:
-        condition = path.get("condition")
-        state = TRUE if condition is None else evaluate_condition(condition, facts)
-        leaves = [] if condition is None else _leaf_states(condition, facts)
-        price_states = [item[1] for item in leaves if item[0] == "PRICE_RANGE"]
-        nonprice_states = [item[1] for item in leaves if item[0] != "PRICE_RANGE"]
-        path_state = "NOT_EVALUATED"
-        if state == TRUE and UNKNOWN not in block_states:
-            path_state = "TRIAL_READY" if path.get("action") == "TRIAL_POSITION" else "BUY_READY"
-        elif TRUE in price_states and (UNKNOWN in nonprice_states or UNKNOWN in block_states):
-            path_state = "PRICE_MATCHED_CONDITIONS_PENDING"
-        elif all(item == TRUE for item in nonprice_states) and UNKNOWN in price_states:
-            path_state = "CONDITIONS_MET_PRICE_PENDING"
-        elif any(item == TRUE for item in price_states) and state == FALSE:
-            path_state = "BLOCKED"
-        evaluated.append({"path_id": path.get("path_id"), "truth": state, "state": path_state})
-        priority = [
-            "BUY_READY", "TRIAL_READY", "PRICE_MATCHED_CONDITIONS_PENDING",
-            "CONDITIONS_MET_PRICE_PENDING", "BLOCKED", "NOT_EVALUATED",
-        ]
-        if priority.index(path_state) < priority.index(final_state):
-            final_state = path_state
+    evaluated = [_path_state(path, facts) for path in paths]
+    review_evaluated = [
+        {
+            "path_id": path.get("path_id"),
+            "truth": TRUE if path.get("condition") is None else evaluate_condition(path["condition"], facts),
+            "state": "REVIEW_ZONE",
+        }
+        for path in review_paths
+    ]
+    review_matched = any(item["truth"] == TRUE for item in review_evaluated)
+
+    priority = [
+        "BUY_READY", "TRIAL_READY", "PRICE_MATCHED_CONDITIONS_PENDING",
+        "PRICE_MATCHED_CONDITIONS_NOT_MET", "CONDITIONS_MET_PRICE_PENDING",
+        "PRICE_NOT_REACHED", "NOT_EVALUATED",
+    ]
+    final_state = min(
+        (item["state"] for item in evaluated),
+        key=priority.index,
+        default="NOT_EVALUATED",
+    )
+    if final_state in {"CONDITIONS_MET_PRICE_PENDING", "PRICE_NOT_REACHED", "NOT_EVALUATED"} and review_matched:
+        final_state = "REVIEW_ZONE"
+    if not paths and review_matched:
+        final_state = "REVIEW_ZONE"
+    elif not paths and not review_paths:
+        final_state = "NO_ENTRY_PATH"
+    elif not paths and not review_matched:
+        final_state = "NO_ENTRY_PATH"
+
+    if UNKNOWN in block_states and final_state in {"BUY_READY", "TRIAL_READY"}:
+        final_state = "HARD_BLOCK_PENDING"
     assert final_state in EVALUATION_STATES
-    return {"state": final_state, "paths": evaluated, "hard_blocks": block_states}
+    return {
+        "state": final_state,
+        "paths": evaluated,
+        "review_paths": review_evaluated,
+        "hard_blocks": block_states,
+        "unresolved_path_ids": sorted(unresolved_path_ids),
+        "warnings": [item.get("code") for item in ambiguities],
+    }
 
 
 def main() -> int:

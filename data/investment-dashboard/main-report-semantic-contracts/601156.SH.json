@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601156.SH",
   "company": "东方航空物流股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "东航物流当前观察；14.5—16元开始小额分批，12.5—14.5元稳健分批，10—12.5元重点买入但仍需盈利未崩塌。",
@@ -74,7 +74,8 @@
               "line_end": 302,
               "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 302,
               "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -205,7 +207,8 @@
               "line_end": 276,
               "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 302,
           "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -236,7 +240,8 @@
               "quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -352,7 +357,8 @@
               "line_end": 304,
               "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -362,7 +368,8 @@
           "line_end": 303,
           "quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -426,11 +433,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "LEASE_ADJUSTED_FCF_GATE",
-    "AIR_CARGO_CYCLE"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -439,5 +442,10 @@
       "line_end": 298,
       "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "AIR_CARGO_CYCLE",
+    "LEASE_ADJUSTED_FCF_GATE"
+  ],
+  "semantic_review_reasons": []
 }

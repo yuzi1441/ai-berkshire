@@ -1,16 +1,23 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "authority": "current_reports.json",
   "market": "A股",
-  "total": 93,
+  "total_contracts": 93,
+  "strong_semantic_review_required": 81,
+  "business_risks_gate_strong_review": false,
+  "total": 81,
   "category_counts": {
-    "HIGH_RISK_REVIEW_REQUIRED": 93,
     "UNCONDITIONAL_ENTRY": 4,
-    "COMPLEX_LOGIC": 51,
+    "NESTED_LOGIC": 32,
+    "ANY_LOGIC": 44,
     "REPORT_CONTRACT_CONFLICT": 46,
-    "MULTI_MARKET": 25,
-    "SCOPE_COMPLEXITY": 29,
-    "AMBIGUOUS": 53,
+    "MULTI_MARKET": 7,
+    "NOT_LOGIC": 4,
+    "SCOPE_AMBIGUITY": 53,
+    "UNRESOLVED_ACTION_MEANING": 44,
+    "ENTRY_AMBIGUOUS": 24,
+    "PATH_LOCAL_AMBIGUITY": 47,
+    "PRICE_ROLE_AMBIGUITY": 23,
     "AT_LEAST_N": 3
   },
   "reviews": [
@@ -20,17 +27,24 @@
       "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
       "report_sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
         "UNCONDITIONAL_ENTRY",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET"
+        "MULTI_MARKET",
+        "NOT_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "UNCONDITIONAL_ENTRY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "MULTI_MARKET",
+        "NOT_LOGIC"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "000400.SZ",
@@ -38,15 +52,16 @@
       "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
       "report_sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "SCOPE_COMPLEXITY"
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "COMPLEX_LOGIC_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "000408.SZ",
@@ -54,15 +69,18 @@
       "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
       "report_sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTIPLE_PRICE_ROLES",
-        "REPORT_CONTRACT_CONFLICT",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_VALUATION"
       ]
     },
@@ -72,18 +90,21 @@
       "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
       "report_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MISSING_HOLDER_ACTION",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTIPLE_PRICE_ROLES"
+        "UNRESOLVED_ACTION_MEANING"
+      ],
+      "business_risk_reasons": [
+        "MISSING_HOLDER_ACTION"
       ]
     },
     {
@@ -92,18 +113,23 @@
       "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
       "report_sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MISSING_HOLDER_ACTION",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "PRICE_ROLE_DISAMBIGUATION"
+        "UNRESOLVED_ACTION_MEANING"
+      ],
+      "business_risk_reasons": [
+        "MISSING_HOLDER_ACTION"
       ]
     },
     {
@@ -112,16 +138,19 @@
       "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
       "report_sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "CYCLICAL_VALUATION",
-        "MULTIPLE_PRICE_ROLES",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "CYCLICAL_VALUATION"
       ]
     },
     {
@@ -130,16 +159,20 @@
       "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
       "report_sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "TRIAL_PRICE_AROUND_NO_FIXED_BOUNDARY",
-        "MULTIPLE_ACTION_GATES"
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "MULTIPLE_ACTION_GATES",
+        "TRIAL_PRICE_AROUND_NO_FIXED_BOUNDARY"
       ]
     },
     {
@@ -148,17 +181,22 @@
       "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
       "report_sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "000933.SZ",
@@ -166,16 +204,17 @@
       "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
       "report_sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "CYCLICAL_NORMALIZATION",
-        "MULTIPLE_PRICE_BANDS"
+      "semantic_review_reasons": [
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "CYCLICAL_NORMALIZATION"
       ]
     },
     {
@@ -184,15 +223,16 @@
       "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
       "report_sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "002027.SZ",
@@ -200,16 +240,19 @@
       "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
       "report_sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "MERGER_UNCERTAINTY",
-        "MULTIPLE_PRICE_BANDS"
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "MERGER_UNCERTAINTY"
       ]
     },
     {
@@ -218,17 +261,18 @@
       "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
       "report_sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET"
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET_AND_H_SHARE",
-        "MULTIPLE_PRICE_BANDS",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "CASH_CONVERSION_RISK"
       ]
     },
@@ -238,17 +282,20 @@
       "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
       "report_sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "MERGER_UNCERTAINTY",
-        "MULTIPLE_PRICE_BANDS",
-        "CASH_FLOW_RISK"
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "CASH_FLOW_RISK",
+        "MERGER_UNCERTAINTY"
       ]
     },
     {
@@ -257,17 +304,16 @@
       "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
       "report_sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET"
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET_AND_H_SHARE",
-        "MULTIPLE_PRICE_BANDS",
+      "semantic_review_reasons": [
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "NEW_BUSINESS_UNVERIFIED"
       ]
     },
@@ -277,16 +323,19 @@
       "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
       "report_sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "BANK_CREDIT_BLACK_BOX",
-        "MULTIPLE_PRICE_BANDS",
         "CAPITAL_AND_NIM_RISK"
       ]
     },
@@ -296,18 +345,22 @@
       "report_path": "reports/湖南黄金/湖南黄金研究报告-20260709.md",
       "report_sha256": "f1eac52b099f5b1d726e06d8ac24e968e187667107c03311d3ed5c04984890e1",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "BUY_SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "COMMODITY_CYCLE",
-        "ASSET_INJECTION_UNCERTAINTY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "ASSET_INJECTION_UNCERTAINTY",
+        "COMMODITY_CYCLE"
       ]
     },
     {
@@ -316,17 +369,20 @@
       "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
       "report_sha256": "9afce21252d49e59c2cc384012bad9f27ae24d964547d1b807f850e60e914b67",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "PROFIT_RECOVERY_UNVERIFIED",
-        "MULTIPLE_PRICE_BANDS",
-        "DEFENSE_AND_CIVIL_MIX"
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "DEFENSE_AND_CIVIL_MIX",
+        "PROFIT_RECOVERY_UNVERIFIED"
       ]
     },
     {
@@ -335,17 +391,16 @@
       "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
       "report_sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET"
+        "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET_AND_H_SHARE",
-        "RECEIVABLES_RISK",
-        "CYCLICAL_MANUFACTURING"
+      "semantic_review_reasons": [
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
+        "CYCLICAL_MANUFACTURING",
+        "RECEIVABLES_RISK"
       ]
     },
     {
@@ -354,16 +409,20 @@
       "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
       "report_sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "GOVERNANCE_AND_SAFETY_RISK",
         "LOW_ROE_LEVERAGE"
       ]
@@ -374,16 +433,20 @@
       "report_path": "reports/北化股份/北化股份研究报告-20260709.md",
       "report_sha256": "6c0937f82c3e5d7a9e9f393d95078bce77578d89ff83004f36b0993b616e133c",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "ORDERS_AND_RELATED_PARTY_OPACITY",
         "SAFETY_TAIL_RISK"
       ]
@@ -394,18 +457,20 @@
       "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
       "report_sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
-      ],
-      "semantic_status": "ambiguous",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "GLOBALIZATION_EVIDENCE_INCOMPLETE",
-        "VALUATION_ACTION_BOUNDARY"
-      ]
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "semantic_status": "partial",
+      "requires_strong_review": true,
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "002272.SZ",
@@ -413,17 +478,22 @@
       "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
       "report_sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
-      ],
-      "semantic_status": "ambiguous",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "EXPLICIT_NO_BUY",
-        "CONTINUED_LOSSES_AND_GOVERNANCE_RISK"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "semantic_status": "partial",
+      "requires_strong_review": true,
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "CONTINUED_LOSSES_AND_GOVERNANCE_RISK",
+        "EXPLICIT_NO_BUY"
       ]
     },
     {
@@ -432,16 +502,20 @@
       "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
       "report_sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
         "UNCONDITIONAL_ENTRY",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "MULTI_MARKET"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "UNCONDITIONAL_ENTRY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "MULTI_MARKET"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "002353.SZ",
@@ -449,15 +523,20 @@
       "report_path": "reports/Jereh/Jereh-research-20260624.md",
       "report_sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
-      ],
-      "semantic_status": "ambiguous",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "semantic_status": "partial",
+      "requires_strong_review": true,
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "EXTREME_VALUATION",
         "SECOND_CURVE_SUPPLY_CHAIN_DEPENDENCY"
       ]
@@ -468,18 +547,31 @@
       "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
       "report_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "REPORT_CONTRACT_CONFLICT"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "ENTRY_ACTION_BOUNDARY",
-        "REDUCE_EXIT_ACTION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "CASHFLOW_INVENTORY_QUALITY",
-        "MULTI_PRICE_BANDS"
+        "MULTI_PRICE_BANDS",
+        "REDUCE_EXIT_ACTION_UNSPECIFIED"
       ]
     },
     {
@@ -488,14 +580,22 @@
       "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
       "report_sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_MARGIN_PEAK",
         "FCF_AND_CAPEX_PRESSURE",
         "MULTI_PRICE_BANDS"
@@ -507,17 +607,20 @@
       "report_path": "reports/BYD/BYD-research-20260624.md",
       "report_sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "FCF_AND_MARGIN_PRESSURE",
         "SUCCESSION_RISK"
       ]
@@ -528,17 +631,25 @@
       "report_path": "reports/金禾实业/金禾实业-investment-research-20260810.md",
       "report_sha256": "d1a1bcf665604bcacfbe5f9cd2feaabe9bc00bef2a0541757a74ce610e5bd990",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "REDUCE_EXIT_ACTION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "CYCLICAL_CHEMICALS",
         "FCF_AND_MARGIN_PRESSURE",
-        "CYCLICAL_CHEMICALS"
+        "REDUCE_EXIT_ACTION_UNSPECIFIED"
       ]
     },
     {
@@ -547,21 +658,20 @@
       "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
       "report_sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "FCF_AND_LIABILITY_DATA_CONFLICT",
-        "VALUATION_ACTION_BOUNDARY"
-      ]
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "002683.SZ",
@@ -569,17 +679,24 @@
       "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
       "report_sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "CASHFLOW_AND_GOODWILL_RISK",
-        "DEFENSE_ORDER_UNVERIFIED",
-        "VALUATION_ACTION_BOUNDARY"
+        "DEFENSE_ORDER_UNVERIFIED"
       ]
     },
     {
@@ -588,17 +705,24 @@
       "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
       "report_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "UNVERIFIED_OVERSEAS_ORDER",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "FCF_AND_RECEIVABLES_PRESSURE",
-        "VALUATION_ACTION_BOUNDARY"
+        "UNVERIFIED_OVERSEAS_ORDER"
       ]
     },
     {
@@ -607,17 +731,28 @@
       "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
       "report_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "VALUATION_ACTION_BOUNDARY",
-        "FC_BGA_EXECUTION_UNCERTAINTY",
-        "FCF_AND_CAPEX_PRESSURE"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "FCF_AND_CAPEX_PRESSURE",
+        "FC_BGA_EXECUTION_UNCERTAINTY"
       ]
     },
     {
@@ -626,21 +761,28 @@
       "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
       "report_sha256": "19959c035e90135a56505c16c12ffb62b23fe1351a42cfb4c4b97e8df247add4",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
         "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "ENTRY_ACTION_BOUNDARY",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "REPORT_CONTRACT_INCOMPLETE"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "MULTI_MARKET",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "300124.SZ",
@@ -648,20 +790,24 @@
       "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
       "report_sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "CONSERVATIVE_ACTION_BOUNDARY",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "BUY_INVALIDATION_SCOPE",
-        "MULTIPLE_PRICE_BANDS",
-        "REPORT_CONTRACT_INCOMPLETE"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "300274.SZ",
@@ -669,18 +815,27 @@
       "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
       "report_sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "REPORT_CONTRACT_CONFLICT"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "POLICY_OR_PRICE_REVIEW_BOUNDARY",
-        "MULTIPLE_PRICE_BANDS",
-        "REPORT_CONTRACT_INCOMPLETE"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "POLICY_OR_PRICE_REVIEW_BOUNDARY"
       ]
     },
     {
@@ -689,19 +844,25 @@
       "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
       "report_sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "ENTRY_PRICE_AND_FILING_SCOPE",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "QUALITATIVE_PREREQUISITE",
-        "REPORT_CONTRACT_INCOMPLETE"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "QUALITATIVE_PREREQUISITE"
       ]
     },
     {
@@ -710,17 +871,22 @@
       "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
       "report_sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "CYCLE_PEAK_UNCERTAINTY",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "EXPLICIT_NO_BUY_WITH_FUTURE_REVIEW",
-        "REPORT_CONTRACT_INCOMPLETE"
+        "EXPLICIT_NO_BUY_WITH_FUTURE_REVIEW"
       ]
     },
     {
@@ -729,16 +895,17 @@
       "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
       "report_sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "EXTREME_VALUATION",
         "IPO_LOCKUP_AND_LIQUIDITY_RISK",
-        "NAND_CYCLE_RISK",
-        "REPORT_CONTRACT_CONFLICT"
+        "NAND_CYCLE_RISK"
       ]
     },
     {
@@ -747,17 +914,18 @@
       "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
       "report_sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "HOLDER_COST_SCOPE",
-        "DISTRESSED_VALUE_ACTION_BOUNDARY"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600031.SH",
@@ -765,19 +933,22 @@
       "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
       "report_sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "CONDITIONAL_PRICE_AND_FACTS",
-        "INVALIDATION_LOGIC_REQUIRES_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600036.SH",
@@ -785,19 +956,22 @@
       "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
       "report_sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REVIEW_NOT_BUY_SEMANTICS",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "REDUCTION_TRIGGER_COMBINATION_UNSPECIFIED"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600089.SH",
@@ -805,18 +979,25 @@
       "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
       "report_sha256": "93282d9268561c7bdfabc8471605530bcce155730f7182bbd36307a48215c294",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "PRICE_BAND_ENTRY_STATUS_UNCLEAR",
-        "SIGNAL_COMBINATION_UNSPECIFIED"
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "PRICE_BAND_ENTRY_STATUS_UNCLEAR"
       ]
     },
     {
@@ -825,16 +1006,24 @@
       "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
       "report_sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REVIEW_NOT_BUY_SEMANTICS",
-        "CURRENT_PRICE_TIME_SENSITIVITY",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "CONCEPT_DRIVEN_VALUATION"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "CONCEPT_DRIVEN_VALUATION",
+        "CURRENT_PRICE_TIME_SENSITIVITY"
       ]
     },
     {
@@ -843,18 +1032,23 @@
       "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
       "report_sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "CONDITIONAL_PRICE_AND_FACTS",
-        "UNREPORTED_H1_DATA",
-        "HOLDER_RULE_COMPLEXITY",
-        "SIGNAL_COMBINATION_UNSPECIFIED"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "UNREPORTED_H1_DATA"
       ]
     },
     {
@@ -863,14 +1057,22 @@
       "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
       "report_sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "PRICE_AND_CAPITAL_ALLOCATION_PRECONDITION",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "MAINTENANCE_CAPEX_UNCERTAINTY"
       ]
     },
@@ -880,15 +1082,22 @@
       "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
       "report_sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "PRICE_AND_FUNDAMENTAL_PRECONDITION",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_EARNINGS_AND_CAPEX"
       ]
     },
@@ -898,19 +1107,26 @@
       "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
       "report_sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "PRICE_ROLE_AND_REVIEW_SEMANTICS",
-        "CYCLICAL_VALUATION_AND_CONDITION_COMBINATION"
-      ]
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600276.SH",
@@ -918,20 +1134,26 @@
       "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
       "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
         "AT_LEAST_N",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "AT_LEAST_N",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET_REPORT_A_SHARE_ONLY_COMPILATION",
-        "AT_LEAST_TWO_OF_THREE_AND_FUNDAMENTAL_PRECONDITION"
-      ]
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600309.SH",
@@ -939,16 +1161,22 @@
       "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
       "report_sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "NOT_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "NOT_LOGIC"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_MANUFACTURING",
         "LEVERAGE_AND_CAPEX_RISK",
-        "UNAUDITED_H1_EARNINGS",
-        "TRADE_BARRIER_RISK"
+        "TRADE_BARRIER_RISK",
+        "UNAUDITED_H1_EARNINGS"
       ]
     },
     {
@@ -957,17 +1185,24 @@
       "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
       "report_sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "PRICE_AND_FUNDAMENTAL_PRECONDITION"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600372.SH",
@@ -975,15 +1210,22 @@
       "report_path": "reports/中航机载/中航机载研究报告-20260709.md",
       "report_sha256": "cb054cdecb0cd4ff276743f1cc8312c89f9a4241d2fc061b4224f7ec6f036193",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "VALUATION_REVIEW_NOT_ENTRY",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "MILITARY_FINANCIAL_QUALITY_UNCERTAINTY"
       ]
     },
@@ -993,15 +1235,18 @@
       "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
       "report_sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "MULTIPLE_PRICE_BANDS",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": [
         "COMPOUND_ADD_AND_REVIEW_LOGIC"
       ]
     },
@@ -1011,16 +1256,18 @@
       "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
       "report_sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "PRICE_AND_FUNDAMENTAL_PRECONDITION"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "600426.SH",
@@ -1028,28 +1275,17 @@
       "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
       "report_sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "COMPLEX_PRICE_TIERS",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_CAPEX_AND_ROIC"
-      ]
-    },
-    {
-      "ticker": "600519.SH",
-      "company": "茅台",
-      "report_path": "reports/茅台/贵州茅台-investment-research-20260627.md",
-      "report_sha256": "4f4f4e5a2ab87760e9d1d7a4305debc503344b7e0b450821c7130cdbcff16071",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
       ]
     },
     {
@@ -1058,13 +1294,16 @@
       "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
       "report_sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "COMPLEX_ANY_OF_ENTRY",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
+      ],
+      "business_risk_reasons": [
         "CYCLICAL_COMMODITY_AND_BALANCE_SHEET"
       ]
     },
@@ -1074,16 +1313,20 @@
       "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
       "report_sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "HIGH_LEVERAGE_AND_POWER_PRICE_RISK",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "DIVIDEND_DEPENDENCY",
-        "VALUATION_ACTION_BOUNDARY"
+        "HIGH_LEVERAGE_AND_POWER_PRICE_RISK"
       ]
     },
     {
@@ -1092,29 +1335,17 @@
       "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
       "report_sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "BODY_SAYS_BUY_BOTTOM_CONTRACT_SAYS_WATCH"
-      ]
-    },
-    {
-      "ticker": "600887.SH",
-      "company": "伊利股份",
-      "report_path": "reports/伊利股份/伊利股份-investment-research-20260803.md",
-      "report_sha256": "259a2cfd325dd08b522483ac629e01840860f404728f08c4bd598b8e3220bcc9",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT"
       ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "CONDITIONAL_PRICE_AND_FINANCIAL_CONFIRMATION"
+      "business_risk_reasons": [
+        "BODY_SAYS_BUY_BOTTOM_CONTRACT_SAYS_WATCH"
       ]
     },
     {
@@ -1123,32 +1354,16 @@
       "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
       "report_sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_CONFLICT",
-        "PRICE_TIER_AND_PROJECT_RETURN_COMPLEXITY"
-      ]
-    },
-    {
-      "ticker": "600941.SH",
-      "company": "中国移动有限公司",
-      "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
-      "report_sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT"
       ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_A_H",
-        "DIVIDEND_CASH_COVERAGE"
-      ]
+      "business_risk_reasons": []
     },
     {
       "ticker": "601020.SH",
@@ -1156,16 +1371,27 @@
       "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
       "report_sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "GOVERNANCE_AND_CONTROL_TRANSFER",
-        "AT_LEAST_ONE_IMPROVEMENT",
         "RESOURCE_OPTION"
       ]
     },
@@ -1175,20 +1401,20 @@
       "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
       "report_sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "MULTIPLE_PRICE_BANDS"
-      ]
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "601088.SH",
@@ -1196,31 +1422,20 @@
       "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
       "report_sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
         "UNCONDITIONAL_ENTRY",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "MULTI_MARKET"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-      ]
-    },
-    {
-      "ticker": "601126.SH",
-      "company": "四方股份",
-      "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
-      "report_sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED"
+      "semantic_review_reasons": [
+        "UNCONDITIONAL_ENTRY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "MULTI_MARKET"
       ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "HIGH_VALUATION",
-        "ENTRY_REQUIRES_FUNDAMENTAL_CONFIRMATION"
-      ]
+      "business_risk_reasons": []
     },
     {
       "ticker": "601127.SH",
@@ -1228,14 +1443,16 @@
       "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
       "report_sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "ANY_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_CATALYST_ANY_OF",
-        "HUAWEI_DEPENDENCY"
+      "semantic_review_reasons": [
+        "ANY_LOGIC"
+      ],
+      "business_risk_reasons": [
+        "HUAWEI_DEPENDENCY",
+        "MULTI_CATALYST_ANY_OF"
       ]
     },
     {
@@ -1244,62 +1461,17 @@
       "report_path": "reports/工业富联/工业富联-research-20260726.md",
       "report_sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "ANY_LOGIC",
         "AT_LEAST_N"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "AT_LEAST_THREE_ADD_GATE",
+      "semantic_review_reasons": [
+        "ANY_LOGIC",
+        "AT_LEAST_N"
+      ],
+      "business_risk_reasons": [
         "CUSTOMER_CONCENTRATION_AND_CONSIGN"
-      ]
-    },
-    {
-      "ticker": "601156.SH",
-      "company": "东方航空物流股份有限公司",
-      "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
-      "report_sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "LEASE_ADJUSTED_FCF_GATE",
-        "AIR_CARGO_CYCLE"
-      ]
-    },
-    {
-      "ticker": "601179.SH",
-      "company": "中国西电",
-      "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
-      "report_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "LOW_ROE_HIGH_PE",
-        "THEME_PRICE_RISK"
-      ]
-    },
-    {
-      "ticker": "601318.SH",
-      "company": "中国平安",
-      "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
-      "report_sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_A_H",
-        "INSURANCE_ASSET_SIDE_AND_NBV"
       ]
     },
     {
@@ -1308,18 +1480,30 @@
       "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
       "report_sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
         "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "NOT_LOGIC",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "MULTI_MARKET",
+        "ENTRY_AMBIGUOUS",
+        "NOT_LOGIC",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "601717.SH",
@@ -1327,17 +1511,24 @@
       "report_path": "reports/中创智领/中创智领投资研究报告-20260707.md",
       "report_sha256": "88d1ef897e13a565877782a43ea9cb05598707ec37e526fa7a101a61fa855044",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "CURRENT_SMALL_POSITION_VS_WAIT",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "COAL_CYCLE_TURNING_POINT",
-        "A_H_MULTI_MARKET"
+        "CURRENT_SMALL_POSITION_VS_WAIT"
       ]
     },
     {
@@ -1346,64 +1537,20 @@
       "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
       "report_sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
         "MULTI_MARKET"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_REQUIRES_STRONG_REVIEW"
-      ]
-    },
-    {
-      "ticker": "601899.SH",
-      "company": "紫金矿业",
-      "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
-      "report_sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
         "MULTI_MARKET"
       ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_A_H",
-        "COMMODITY_PRICE_AND_PROJECT_RISK"
-      ]
-    },
-    {
-      "ticker": "601919.SH",
-      "company": "中远海控",
-      "report_path": "reports/中远海控/中远海控-research-20260707.md",
-      "report_sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_A_H",
-        "SHIPPING_CYCLE_AND_RED_SEA"
-      ]
-    },
-    {
-      "ticker": "601975.SH",
-      "company": "招商局南京油运股份有限公司",
-      "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
-      "report_sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "SHIPPING_CYCLE",
-        "NEWBUILD_ROIC_AND_TCE_GATE"
-      ]
+      "business_risk_reasons": []
     },
     {
       "ticker": "603005.SH",
@@ -1411,19 +1558,26 @@
       "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
       "report_sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "CONFLICTING_ACTION_PRICE_BANDS",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "EXTREME_VALUATION",
-        "CYCLICAL_EARNINGS_RISK"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "ENTRY_AMBIGUOUS",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "CYCLICAL_EARNINGS_RISK",
+        "EXTREME_VALUATION"
       ]
     },
     {
@@ -1432,30 +1586,18 @@
       "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
       "report_sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
         "UNCONDITIONAL_ENTRY",
-        "COMPLEX_LOGIC"
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-      ]
-    },
-    {
-      "ticker": "603228.SH",
-      "company": "景旺电子",
-      "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
-      "report_sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED"
+      "semantic_review_reasons": [
+        "UNCONDITIONAL_ENTRY",
+        "NESTED_LOGIC",
+        "ANY_LOGIC"
       ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "HIGH_VALUATION",
-        "FCF_AND_MARGIN_CONFIRMATION"
-      ]
+      "business_risk_reasons": []
     },
     {
       "ticker": "603288.SH",
@@ -1463,17 +1605,18 @@
       "report_path": "reports/海天味业/海天味业-investment-research-20260810.md",
       "report_sha256": "8f3be410782be033f64345d1f1d2250d3de6182ac03f3e4e90abc5bf10740e9b",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "HOLDER_SCOPE_NOT_EXPLICIT",
-        "MULTI_MARKET_A_H"
-      ]
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "603298.SH",
@@ -1481,15 +1624,18 @@
       "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
       "report_sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "HOLDER_SCOPE_NOT_EXPLICIT",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "GOVERNANCE_RISK"
       ]
     },
@@ -1499,16 +1645,20 @@
       "report_path": "reports/东方电缆/东方电缆-research-20260726.md",
       "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "AT_LEAST_N",
         "REPORT_CONTRACT_CONFLICT"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "AT_LEAST_N_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "AT_LEAST_N",
+        "REPORT_CONTRACT_CONFLICT"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "603659.SH",
@@ -1516,15 +1666,16 @@
       "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
       "report_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "REPORT_CONTRACT_INCOMPLETE",
-        "MULTI_BUSINESS_FUTURE_GATES",
-        "BATTERY_TECHNOLOGY_RISK"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "BATTERY_TECHNOLOGY_RISK",
+        "MULTI_BUSINESS_FUTURE_GATES"
       ]
     },
     {
@@ -1533,16 +1684,18 @@
       "report_path": "reports/CMOC/CMOC-research-20260623.md",
       "report_sha256": "4c30c1976dd9932b1151c3f44b432b6e81be09e2974295c6ac1949f9959069ea",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "COMMODITY_CYCLE_RISK",
         "GEOPOLITICAL_TAIL_RISK"
       ]
@@ -1553,33 +1706,20 @@
       "report_path": "reports/deye/deye-investment-research-20260623.md",
       "report_sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "EUROPE_POLICY_RISK",
-        "RECEIVABLES_QUALITY_RISK",
-        "VALUATION_ACTION_BOUNDARY"
-      ]
-    },
-    {
-      "ticker": "605499.SH",
-      "company": "东鹏饮料（集团）股份有限公司",
-      "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
-      "report_sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c",
-      "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET"
-      ],
-      "semantic_status": "ready",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_A_H",
-        "CORE_PRODUCT_GROWTH_SLOWDOWN"
+        "RECEIVABLES_QUALITY_RISK"
       ]
     },
     {
@@ -1588,18 +1728,20 @@
       "report_path": "reports/montage-tech/montage-tech-investment-research-20260623.md",
       "report_sha256": "cb6ffb4dda577efbf8607b711165d8dff0dfc1f5cf60a936d699eefa275ffaa9",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "MULTI_MARKET",
-        "SCOPE_COMPLEXITY"
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "EXTREME_VALUATION",
-        "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-        "DDR_CYCLE_RISK"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "DDR_CYCLE_RISK",
+        "EXTREME_VALUATION"
       ]
     },
     {
@@ -1608,16 +1750,21 @@
       "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
       "report_sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
-      ],
-      "semantic_status": "ambiguous",
-      "requires_strong_review": true,
-      "risk_reasons": [
-        "SIGNAL_COMBINATION_UNSPECIFIED",
-        "EXTREME_VALUATION",
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "semantic_status": "partial",
+      "requires_strong_review": true,
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "EXTREME_VALUATION",
         "ROE_AND_COMMERCIAL_MODEL_RISK"
       ]
     },
@@ -1627,16 +1774,20 @@
       "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
       "report_sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
         "MULTI_MARKET"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "MULTI_MARKET_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "MULTI_MARKET"
+      ],
+      "business_risk_reasons": []
     },
     {
       "ticker": "688271.SH",
@@ -1644,15 +1795,24 @@
       "report_path": "reports/联影医疗/联影医疗投资研究报告_team-20260706.md",
       "report_sha256": "23a8363df391bd0e5e505e3b9ccb746db3bae673b78191dd280ae77f7f4e3abf",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "ACTIONABLE_REVIEW_ZONE_BOUNDARY",
-        "OVERSEAS_AND_SERVICE_MARGIN",
-        "REPORT_CONTRACT_INCOMPLETE"
+        "OVERSEAS_AND_SERVICE_MARGIN"
       ]
     },
     {
@@ -1661,15 +1821,20 @@
       "report_path": "reports/skyverse-tech/skyverse-tech-investment-research-20260624.md",
       "report_sha256": "d666efeb4c8df8a78415565427f27511da552d3e5507f6489b14baf92543dadc",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "REPORT_CONTRACT_CONFLICT"
-      ],
-      "semantic_status": "ambiguous",
-      "requires_strong_review": true,
-      "risk_reasons": [
+        "SCOPE_AMBIGUITY",
         "REPORT_CONTRACT_CONFLICT",
-        "SIGNAL_COMBINATION_UNSPECIFIED",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "semantic_status": "partial",
+      "requires_strong_review": true,
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "REPORT_CONTRACT_CONFLICT",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
         "EXTREME_VALUATION",
         "NEGATIVE_OPERATING_CASH_FLOW"
       ]
@@ -1680,15 +1845,24 @@
       "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
       "report_sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02",
       "reason_codes": [
-        "AMBIGUOUS",
-        "HIGH_RISK_REVIEW_REQUIRED"
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
       ],
-      "semantic_status": "ambiguous",
+      "semantic_status": "partial",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "NO_EXPLICIT_ACTION_PRICE",
-        "HIGH_VALUATION",
-        "AIDC_AND_OVERSEAS_EXECUTION"
+      "semantic_review_reasons": [
+        "SCOPE_AMBIGUITY",
+        "PRICE_ROLE_AMBIGUITY",
+        "ENTRY_AMBIGUOUS",
+        "UNRESOLVED_ACTION_MEANING",
+        "PATH_LOCAL_AMBIGUITY"
+      ],
+      "business_risk_reasons": [
+        "AIDC_AND_OVERSEAS_EXECUTION",
+        "HIGH_VALUATION"
       ]
     },
     {
@@ -1697,16 +1871,20 @@
       "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
       "report_sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d",
       "reason_codes": [
-        "HIGH_RISK_REVIEW_REQUIRED",
-        "COMPLEX_LOGIC",
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
         "REPORT_CONTRACT_CONFLICT",
-        "SCOPE_COMPLEXITY"
+        "NOT_LOGIC"
       ],
       "semantic_status": "ready",
       "requires_strong_review": true,
-      "risk_reasons": [
-        "COMPLEX_LOGIC_REQUIRES_STRONG_REVIEW"
-      ]
+      "semantic_review_reasons": [
+        "NESTED_LOGIC",
+        "ANY_LOGIC",
+        "REPORT_CONTRACT_CONFLICT",
+        "NOT_LOGIC"
+      ],
+      "business_risk_reasons": []
     }
   ]
 }

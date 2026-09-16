@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000400.SZ",
   "company": "许继电气",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "20-22 元仅被保留为小仓观察/试仓，而不是普通买入区间",
@@ -77,7 +77,8 @@
               "quote": "| 激进型 | 小仓观察，不追高 | 约20-22元仅可观察仓；若确认直流/配网订单和利润率修复再加 | 行业景气可跟踪，但Q1利润下滑未消化完 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-entry-16-18-and-h1-repair",
@@ -168,7 +169,8 @@
               "quote": "| 稳健型 | 等待安全边际 | 约16-18元或PE(TTM)回到15-17x，同时半年报修复 | 给项目制波动和估值回撤留余地 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-entry-low-price-or-irrational-decline",
@@ -310,7 +312,8 @@
               "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -320,7 +323,8 @@
           "line_end": 234,
           "quote": "许继电气最吸引人的地方，是它站在新型电力系统的长期主线上：特高压、柔直、配网智能化、智能计量、新能源并网都是真需求；它最容易被高估的地方，也正是“行业很确定”这件事。对股东而言，真正的问题不是有没有电网投资，而是订单利润能否留在许继、价格会不会被招标压下去、回款能否持续、集团治理是否真正保护中小股东。以2026-07-06的21.11元看，当前更适合跟踪和等待验证，而不是用行业景气替代安全边际。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -334,7 +338,8 @@
           "line_end": 157,
           "quote": "### 7.2 分层操作建议（非投资建议，仅框架演练）"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -562,9 +567,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "COMPLEX_LOGIC_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -573,5 +575,10 @@
       "line_end": 173,
       "quote": "## 7. 最终投资建议"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
   ]
 }

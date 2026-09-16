@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002049.SZ",
   "company": "紫光国微",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "55-60 元是小额分批试仓区，48-55 元和 38-48 元是条件买入区，当前 68 元明确不在买入带。",
@@ -77,7 +77,8 @@
               "line_end": 212,
               "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-55-60",
@@ -117,7 +118,8 @@
               "line_end": 209,
               "quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-48-55",
@@ -157,7 +159,8 @@
               "line_end": 210,
               "quote": "| 稳健型 | 48-55 元 | 分批买入 | 对约 54 元的折现中性参考值提供更多缓冲 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-38-48",
@@ -197,7 +200,8 @@
               "line_end": 211,
               "quote": "| 保守型 | 38-48 元 | 重点研究后买入 | 接近悲观终值与历史低估区，仍要排除基本面恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -207,7 +211,8 @@
           "line_end": 212,
           "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -228,7 +233,8 @@
               "line_end": 238,
               "quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-under-55-with-confirmation",
@@ -344,7 +350,8 @@
               "line_end": 239,
               "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-85-without-improvement",
@@ -435,7 +442,8 @@
               "line_end": 240,
               "quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -445,7 +453,8 @@
           "line_end": 238,
           "quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -732,12 +741,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MERGER_UNCERTAINTY",
-    "MULTIPLE_PRICE_BANDS",
-    "CASH_FLOW_RISK"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -746,5 +749,14 @@
       "line_end": 212,
       "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
     }
+  ],
+  "business_risk_reasons": [
+    "CASH_FLOW_RISK",
+    "MERGER_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

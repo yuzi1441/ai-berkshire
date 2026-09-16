@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002600.SZ",
   "company": "领益智造",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "16.23 元是 A 股当前参考价；19.4、10.4、4.1 元三情景目标价是估值参考，不是买入价。",
@@ -18,7 +18,7 @@
       "正文最终决策写‘回避’，底部基本面建议动作写‘观察’，属于需要人工确认的正式动作边界；卖出和加仓信号也未定义组合逻辑。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 227,
               "quote": "不因\"跌停/破发/创新低\"而抄底"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-after-profit-and-valuation-recovery",
@@ -143,7 +144,8 @@
               "line_end": 227,
               "quote": "再评估"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-add-signal-bundle",
@@ -183,7 +185,8 @@
               "line_end": 230,
               "quote": "加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -193,7 +196,8 @@
           "line_end": 227,
           "quote": "空仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -214,7 +218,8 @@
               "line_end": 228,
               "quote": "逢反弹减仓"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -254,7 +259,8 @@
               "line_end": 229,
               "quote": "卖出信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -294,7 +300,8 @@
               "line_end": 230,
               "quote": "加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -304,7 +311,8 @@
           "line_end": 228,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -399,13 +407,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-    "FCF_AND_LIABILITY_DATA_CONFLICT",
-    "VALUATION_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_CONFLICT",
@@ -424,7 +425,14 @@
           "line_end": 275,
           "quote": "基本面建议动作 | 观察"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -437,7 +445,17 @@
           "line_end": 230,
           "quote": "卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-on-rebound",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -453,5 +471,12 @@
       "line_end": 285,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

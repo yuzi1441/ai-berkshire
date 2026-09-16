@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002202.SZ",
   "company": "Goldwind",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "本合同只编译 A 股；报告含 H 股，但 H 股目标价和路径不进入 A 股动作。",
@@ -77,7 +77,8 @@
               "line_end": 322,
               "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-15-17",
@@ -117,7 +118,8 @@
               "line_end": 322,
               "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -127,7 +129,8 @@
           "line_end": 322,
           "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -148,7 +151,8 @@
               "line_end": 323,
               "quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -188,7 +192,8 @@
               "line_end": 325,
               "quote": "| **加仓信号** | 股价跌至15-17元区间且基本面未恶化；海外收入占比突破30%；风机毛利率恢复至15%+；宣布大幅提高分红比例 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -228,7 +233,8 @@
               "line_end": 324,
               "quote": "| **卖出信号** | 风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元；欧盟正式限制金风在欧洲投标；海外毛利率跌破15% |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -238,7 +244,8 @@
           "line_end": 323,
           "quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -352,12 +359,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MULTI_MARKET_AND_H_SHARE",
-    "RECEIVABLES_RISK",
-    "CYCLICAL_MANUFACTURING"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -366,5 +367,12 @@
       "line_end": 322,
       "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_MANUFACTURING",
+    "RECEIVABLES_RISK"
+  ],
+  "semantic_review_reasons": [
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

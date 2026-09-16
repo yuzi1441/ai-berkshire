@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002142.SZ",
   "company": "宁波银行",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "32 元是观察价，不把 7.26 倍 PE 自动解释为买入。",
@@ -77,7 +77,8 @@
               "line_end": 263,
               "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-29-31-with-h1-confirmation",
@@ -168,7 +169,8 @@
               "line_end": 240,
               "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-26-5-29-with-risk-stability",
@@ -259,7 +261,8 @@
               "line_end": 241,
               "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-23-26-5",
@@ -299,7 +302,8 @@
               "line_end": 242,
               "quote": "| 保守型 | 23.0-26.5 元 | 约 0.65-0.75 倍 | 安全边际较充分，优先研究和配置区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -309,7 +313,8 @@
           "line_end": 263,
           "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -330,7 +335,8 @@
               "line_end": 264,
               "quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-all-quality-capital",
@@ -522,7 +528,8 @@
               "line_end": 265,
               "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-or-exit-risk-any",
@@ -739,7 +746,8 @@
               "line_end": 266,
               "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -749,7 +757,8 @@
           "line_end": 264,
           "quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -915,12 +924,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "BANK_CREDIT_BLACK_BOX",
-    "MULTIPLE_PRICE_BANDS",
-    "CAPITAL_AND_NIM_RISK"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -929,5 +932,14 @@
       "line_end": 263,
       "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
     }
+  ],
+  "business_risk_reasons": [
+    "BANK_CREDIT_BLACK_BOX",
+    "CAPITAL_AND_NIM_RISK"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

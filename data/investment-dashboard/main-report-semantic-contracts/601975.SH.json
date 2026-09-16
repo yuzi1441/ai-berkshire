@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601975.SH",
   "company": "招商局南京油运股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "招商南油3.71元不在买入带，3.2—3.5元小额试仓、2.7—3.2元稳健分批、2.1—2.7元重点买入均等待运价和新船回报验证。",
@@ -74,7 +74,8 @@
               "line_end": 267,
               "quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 268,
               "quote": "| 稳健型 | 2.7-3.2 元 | 分批买入 | 给 Base 目标价约 14%-27% 折价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -205,7 +207,8 @@
               "line_end": 269,
               "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 270,
           "quote": "| 现价 3.71 元 | 不在买入带 | **观察** | 等待半年报、运价和新船回报证据 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -236,7 +240,8 @@
               "quote": "**对持仓者：** 若仓位本来就有，可持有并等待 2026H1；不要因 Q1 归母净利 +51.73% 追涨，也不要把本报告当作个性化仓位建议。本报告不知道用户的成本、仓位和风险承受力。"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -352,7 +357,8 @@
               "line_end": 295,
               "quote": "**加仓触发：** 价格进入相应价格带，同时亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善，新船交付后单船收入/载重吨与 ROIC 不下滑。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -362,7 +368,8 @@
           "line_end": 293,
           "quote": "**对持仓者：** 若仓位本来就有，可持有并等待 2026H1；不要因 Q1 归母净利 +51.73% 追涨，也不要把本报告当作个性化仓位建议。本报告不知道用户的成本、仓位和风险承受力。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -426,11 +433,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "SHIPPING_CYCLE",
-    "NEWBUILD_ROIC_AND_TCE_GATE"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -439,5 +442,10 @@
       "line_end": 289,
       "quote": "### 明确结论：观察"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "NEWBUILD_ROIC_AND_TCE_GATE",
+    "SHIPPING_CYCLE"
+  ],
+  "semantic_review_reasons": []
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600141.SH",
   "company": "兴发集团",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告把兴发集团定义为优质但强周期的公司，当前约 48 元是概念异动高位，空仓者应回避追高而不是买入。",
@@ -17,7 +17,7 @@
       "加仓/关注和减仓/回避信号均为并列清单，未规定组合关系与处置幅度。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -75,7 +75,8 @@
               "line_end": 135,
               "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-normalized-26-32",
@@ -115,7 +116,8 @@
               "line_end": 136,
               "quote": "| 稳健型 | **回避追高**，列入观察名单，等磷化工周期与概念热度回落 | 正常化 PE 12–14x → **26–32 元** 起研究 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "review-cycle-bottom-22-26",
@@ -155,7 +157,8 @@
               "line_end": 137,
               "quote": "| 保守型 | **等待周期底部/市场恐慌**，正常化 PE 10–12x 才具吸引力 | **22–26 元** |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -165,7 +168,8 @@
           "line_end": 13,
           "quote": "> 兴发集团是一门 **\"有好资产的周期生意\"**——坐拥不可复制的磷矿资源租金（12.5% 营收贡献 47.67% 毛利）和一颗真护城河种子兴福电子（电子级磷酸 70% 份额），管理层诚信专注、股东回报罕见慷慨。但**它不是\"成长股\"**：约 80% 收入无定价权、常态 ROE 仅 7%、利润峰谷相差 10 倍。**当下最大问题是价格**——晚 6 月被\"AI 算力磷化铟 + 固态电池 + 磷化工涨价\"三重概念催化暴涨 70%，现价约 48 元对应静态 PE 35.6x、正常化 PE 约 24x，**安全边际为负、下行风险不对称**。**结论：优质公司，但当前是投机高位，价值投资者应回避追高，列入观察名单，等周期回落至正常化 PE 10–12x（约 22–26 元）再研究介入。**"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -210,7 +214,8 @@
               "line_end": 135,
               "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-and-attention-signals-review",
@@ -250,7 +255,8 @@
               "line_end": 145,
               "quote": "**🔺 加仓/关注信号**\n1. 股价回落至正常化 PE 10–12x（22–26 元）区间\n2. 磷矿价格中枢因\"能源化\"需求确认性上台阶\n3. 兴福电子业绩超预期或估值显性化（分拆价值重估）\n4. 固态电池五硫化二磷放量、拿到头部电池厂正式订单\n5. 磷石膏\"零排放\"取得实质突破"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -260,7 +266,8 @@
           "line_end": 135,
           "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -468,12 +475,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REVIEW_NOT_BUY_SEMANTICS",
-    "CURRENT_PRICE_TIME_SENSITIVITY",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "CONCEPT_DRIVEN_VALUATION"
-  ],
   "ambiguities": [
     {
       "code": "REVIEW_NOT_BUY_SEMANTICS",
@@ -486,7 +487,16 @@
           "line_end": 162,
           "quote": "**最终建议：这是一家值得放进观察名单长期跟踪的好公司，但当前处于投机情绪推动的高位，价值投资者应严守纪律、回避追高，耐心等待周期回落或概念退潮带来的更好价格（正常化 PE 10–12x，约 22–26 元）再重点研究介入。**"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-normalized-26-32",
+        "review-cycle-bottom-22-26"
+      ],
+      "affects_entry": true
     },
     {
       "code": "CURRENT_PRICE_TIME_SENSITIVITY",
@@ -499,7 +509,13 @@
           "line_end": 168,
           "quote": "**数据时点性风险**：本报告已修正股价（34.58 元过期 → 约 48 元），但 48 元系近期约 6/29 收盘参考，且该股正处异常波动期，**交易前必须以实时行情二次复核**。"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -512,7 +528,16 @@
           "line_end": 152,
           "quote": "**🔺 加仓/关注信号**\n1. 股价回落至正常化 PE 10–12x（22–26 元）区间\n2. 磷矿价格中枢因\"能源化\"需求确认性上台阶\n3. 兴福电子业绩超预期或估值显性化（分拆价值重估）\n4. 固态电池五硫化二磷放量、拿到头部电池厂正式订单\n5. 磷石膏\"零排放\"取得实质突破\n\n**🔻 减仓/回避信号**\n1. 磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）\n2. 磷矿 2025–2026 新产能集中投放压垮价格\n3. 有机硅反内卷失败、需求端无硬支撑\n4. 新能源材料持续亏损、资本开支失控侵蚀主业现金流\n5. 概念热度退潮、股价从异动高位快速回落"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-partial-profit-high",
+        "holder-add-and-attention-signals-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -528,5 +553,16 @@
       "line_end": 194,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "CONCEPT_DRIVEN_VALUATION",
+    "CURRENT_PRICE_TIME_SENSITIVITY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

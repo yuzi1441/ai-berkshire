@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002050.SZ",
   "company": "浙江三花智能控制股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "本合同只编译 A 股语义；报告同时有 H 股价格和路径，H 股不进入 A 股动作结果，但作为多市场强复核原因保留。",
@@ -77,7 +77,8 @@
               "line_end": 268,
               "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-trial-28-32",
@@ -117,7 +118,8 @@
               "line_end": 262,
               "quote": "| A 股激进型 | 28-32 元 | 小额分批 | 接近基准现值，仍需承受新业务兑现波动 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-conditional-23-28",
@@ -157,7 +159,8 @@
               "line_end": 263,
               "quote": "| A 股稳健型 | 23-28 元 | 分批买入 | 对基准价值有一定折价，接近 H 股当前估值 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-conditional-16-23",
@@ -197,7 +200,8 @@
               "line_end": 264,
               "quote": "| A 股保守型 | 16-23 元 | 重点研究与分批 | 接近悲观至基准区间，前提是论文未受损 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -207,7 +211,8 @@
           "line_end": 268,
           "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -228,7 +233,8 @@
               "line_end": 298,
               "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-holder-add-with-quality",
@@ -344,7 +350,8 @@
               "line_end": 300,
               "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-share-holder-reduce-above-50",
@@ -435,7 +442,8 @@
               "line_end": 298,
               "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -445,7 +453,8 @@
           "line_end": 298,
           "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -710,12 +719,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MULTI_MARKET_AND_H_SHARE",
-    "MULTIPLE_PRICE_BANDS",
-    "NEW_BUSINESS_UNVERIFIED"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -724,5 +727,12 @@
       "line_end": 268,
       "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
     }
+  ],
+  "business_risk_reasons": [
+    "NEW_BUSINESS_UNVERIFIED"
+  ],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

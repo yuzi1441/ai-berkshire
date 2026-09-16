@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "688271.SH",
   "company": "联影医疗",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "联影医疗当前106.75元观察；95—110元是有跟踪优势者的小仓观察，80—95元是重点研究/分批区，70—80元需重新估值。",
       "报告没有把‘观察/分批’与正式空仓买入资格完全区分，底部契约也未补全，因此保留ambiguous。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -74,7 +74,8 @@
               "line_end": 210,
               "quote": "| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "action": "REVIEW",
@@ -165,7 +166,8 @@
               "line_end": 211,
               "quote": "| 稳健型 | 等待更好价格或证据 | 80-95 元进入重点研究/分批区；同时要求经营现金流连续改善。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "action": "REVIEW",
@@ -205,7 +207,8 @@
               "line_end": 212,
               "quote": "| 保守型 | 暂不买入 | 70-80 元附近或出现“服务收入占比提升 + FCF 连续为正 + ROE回升”再重估。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 25,
           "quote": "> **联影医疗是值得尊重、值得长期跟踪的高端医疗装备平台型公司，但不是“任何价格都能买”的轻松复利机器。** 以 2026-07-06 收盘价 106.75 元计，当前估值要求未来三年海外、服务、利润率和现金流持续兑现；若没有更强跟踪优势，空仓者宜等待 80-95 元或现金流连续改善后的再评估机会，持仓者可持有但不宜因国产替代叙事无脑加仓。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -236,7 +240,8 @@
               "quote": "| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -276,7 +281,8 @@
               "line_end": 219,
               "quote": "1. 经营现金流连续 2-3 年显著高于净利润，FCF 稳定转正。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -286,7 +292,8 @@
           "line_end": 213,
           "quote": "| 已持仓者 | 可持有但不宜无脑加仓 | 若价格高于 120 元且现金流未同步改善，考虑降低估值风险暴露。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -351,11 +358,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "ACTIONABLE_REVIEW_ZONE_BOUNDARY",
-    "OVERSEAS_AND_SERVICE_MARGIN",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "REVIEW_ZONE_ACTION_BOUNDARY",
@@ -368,7 +370,17 @@
           "line_end": 210,
           "quote": "| 激进型 | 小仓位观察，不做重仓 | 95-110 元仅适合有跟踪优势者；必须设置现金流和毛利率验证条件。 |"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-review-95-110",
+        "empty-review-80-95",
+        "empty-review-70-80"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -378,5 +390,16 @@
       "line_end": 25,
       "quote": "> **联影医疗是值得尊重、值得长期跟踪的高端医疗装备平台型公司，但不是“任何价格都能买”的轻松复利机器。** 以 2026-07-06 收盘价 106.75 元计，当前估值要求未来三年海外、服务、利润率和现金流持续兑现；若没有更强跟踪优势，空仓者宜等待 80-95 元或现金流连续改善后的再评估机会，持仓者可持有但不宜因国产替代叙事无脑加仓。"
     }
+  ],
+  "business_risk_reasons": [
+    "ACTIONABLE_REVIEW_ZONE_BOUNDARY",
+    "OVERSEAS_AND_SERVICE_MARGIN"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

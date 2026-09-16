@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601088.SH",
   "company": "中国神华",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "A 股与 H 股价格路径通过 instrument_scope 分离，港元阈值不会成为 A 股买入价",
@@ -83,7 +83,8 @@
               "line_end": 358,
               "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "aggressive-h-below-39",
@@ -123,7 +124,8 @@
               "line_end": 358,
               "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-a-below-33-after-h1",
@@ -214,7 +216,8 @@
               "line_end": 359,
               "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-h-below-36-after-h1",
@@ -305,7 +308,8 @@
               "line_end": 359,
               "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-no-chase-40-46",
@@ -345,7 +349,8 @@
               "line_end": 294,
               "quote": "| 40-46 元 | 充分定价 | 当前区间，空仓者不追 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-watch-39-44",
@@ -385,7 +390,8 @@
               "line_end": 301,
               "quote": "| 39-44 港元 | 合理价附近 | 当前区间，持有优先 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -395,7 +401,8 @@
           "line_end": 360,
           "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |\n| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |\n| 保守型空仓者 | 等短借去化和并购后完整年度数据；只有明显折价才参与 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -416,7 +423,8 @@
               "line_end": 361,
               "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-hold",
@@ -432,7 +440,8 @@
               "line_end": 362,
               "quote": "| H 股现有持有人 | 可持有，折价改善了赔率；同时核算股息税、汇率和流动性 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-reduce-above-46-no-upgrade",
@@ -523,7 +532,8 @@
               "line_end": 361,
               "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -533,7 +543,8 @@
           "line_end": 362,
           "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |\n| H 股现有持有人 | 可持有，折价改善了赔率；同时核算股息税、汇率和流动性 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -848,9 +859,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -865,5 +873,12 @@
       "line_end": 383,
       "quote": "### 8.4 分投资者行动"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "MULTI_MARKET"
   ]
 }

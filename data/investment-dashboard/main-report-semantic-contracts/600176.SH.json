@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600176.SH",
   "company": "中国巨石股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "44.38 元的正文结论是观察、不追价；30—34 元只是附带高端认证或批量订单及盈利兑现条件的小仓试投路径。",
@@ -17,7 +17,7 @@
       "卖出/论文失效信号是并列清单，报告没有规定各信号的组合关系或对应减仓幅度，因此不能自动化为单一交易触发。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -51,7 +51,8 @@
               "line_end": 361,
               "quote": "| 空仓者 | 不追涨；优先等待 30—34 元试投区间，稳健投资者等待 24—28 元 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-trial-30-34-with-proof",
@@ -167,7 +168,8 @@
               "line_end": 332,
               "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-steady-24-28-with-recovery",
@@ -258,7 +260,8 @@
               "line_end": 333,
               "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-conservative-below-24-with-balance-sheet",
@@ -349,7 +352,8 @@
               "line_end": 334,
               "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-watch-28-30",
@@ -389,7 +393,8 @@
               "line_end": 336,
               "quote": "价格在 28—30 元之间时，赔率开始改善但仍不满足稳健型安全边际；价格下降不是充分条件，基本面前提必须同时成立。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -399,7 +404,8 @@
           "line_end": 361,
           "quote": "| 空仓者 | 不追涨；优先等待 30—34 元试投区间，稳健投资者等待 24—28 元 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -420,7 +426,8 @@
               "line_end": 362,
               "quote": "| 已持有、仓位正常 | 可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-overweight-above-55",
@@ -511,7 +518,8 @@
               "line_end": 363,
               "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -527,7 +535,8 @@
           "line_end": 363,
           "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -697,11 +706,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "PRICE_AND_FUNDAMENTAL_PRECONDITION",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "CYCLICAL_EARNINGS_AND_CAPEX"
-  ],
   "ambiguities": [
     {
       "code": "PRICE_AND_FUNDAMENTAL_PRECONDITION",
@@ -714,7 +718,14 @@
           "line_end": 336,
           "quote": "| 投资者类型 | 基本面行动价位 | 前提 |\n|---|---:|---|\n| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |\n| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |\n| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |\n\n价格在 28—30 元之间时，赔率开始改善但仍不满足稳健型安全边际；价格下降不是充分条件，基本面前提必须同时成立。"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -727,7 +738,15 @@
           "line_end": 365,
           "quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-overweight-above-55"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -737,5 +756,15 @@
       "line_end": 355,
       "quote": "## 第八步：最终决策与行动清单\n\n### 8.1 综合判断\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 全球成本领先、客户复购稳定，但普通品周期性强、资本密集 | 高 |\n| 护城河（巴菲特） | 规模/成本强，高端认证中等偏强；没有网络效应 | 中高 |\n| 管理层（段永平+巴菲特） | 制造系统成熟，分红和激励改善；扩产纪律与同业竞争待验证 | 中 |\n| 最大风险（芒格） | 把普通电子布涨价误判为特种布永久定价权，并在高估值下遭遇 2027 供给释放 | 中高 |\n| 文明趋势（李录） | 复材渗透是长期顺风，但价值不一定由玻纤上游独占 | 中高 |\n| 估值（巴菲特+段永平） | PE/PB 近五年约 98% 分位，乐观情景回报仍不宽裕 | 高 |\n\n**基本面建议：观察。** 中国巨石是好公司、行业复苏也是真的，但 44.38 元不是一个能容忍普通布价格回落、特种布认证延迟或扩产超支的价格。当前最合理的选择是等待价格进入安全边际，或等待高端产品订单把盈利质量的不确定性变成事实。"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_EARNINGS_AND_CAPEX"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

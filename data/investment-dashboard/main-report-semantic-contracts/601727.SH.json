@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601727.SH",
   "company": "上海电气",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "A 股当前明确回避，H 股只是观望，不能用未分市场的‘观察’覆盖",
@@ -77,7 +77,8 @@
               "line_end": 391,
               "quote": "| A 股观察 | 3.0—3.5 元 | 等待，不追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-review-2.5-3",
@@ -117,7 +118,8 @@
               "line_end": 392,
               "quote": "| A 股条件性研究 | 2.5—3.0 元 | 只研究，暂不建仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-entry-below-2.1-after-validation",
@@ -208,7 +210,8 @@
               "line_end": 393,
               "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-watch-2.2-2.5",
@@ -248,7 +251,8 @@
               "line_end": 394,
               "quote": "| H 股观察 | 2.2—2.5 港元 | 等待，不追价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-review-1.8-2.2",
@@ -288,7 +292,8 @@
               "line_end": 395,
               "quote": "| H 股条件性研究 | 1.8—2.2 港元 | 只研究，暂不建仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-entry-below-1.55-after-validation",
@@ -379,7 +384,8 @@
               "line_end": 396,
               "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -389,7 +395,8 @@
           "line_end": 423,
           "quote": "- **空仓者：** A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REVIEW",
@@ -434,7 +441,8 @@
               "line_end": 424,
               "quote": "- **A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-holder-no-chase",
@@ -450,7 +458,8 @@
               "line_end": 425,
               "quote": "- **H 股持有者：** 折价提供一定缓冲，但 3.25 港元不具备本报告要求的 15% 年化安全边际；不追涨、不用 PB 低于 1 倍作为唯一持有理由。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -460,7 +469,8 @@
           "line_end": 425,
           "quote": "- **A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。\n- **H 股持有者：** 折价提供一定缓冲，但 3.25 港元不具备本报告要求的 15% 年化安全边际；不追涨、不用 PB 低于 1 倍作为唯一持有理由。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -933,9 +943,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -950,5 +957,12 @@
       "line_end": 443,
       "quote": "### 8.2 对不同持有者的建议"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET"
   ]
 }

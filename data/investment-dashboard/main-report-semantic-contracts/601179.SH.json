@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601179.SH",
   "company": "中国西电",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "中国西电明确好行业但价格不便宜；8—9元是安全边际复核区，9—10.5元需ROE、毛利率和订单质量改善，当前12.93元仅主题小仓。",
@@ -50,7 +50,8 @@
               "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "TRIAL_POSITION",
@@ -141,7 +142,8 @@
               "line_end": 340,
               "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -181,7 +183,8 @@
               "line_end": 339,
               "quote": "| 空仓、保守型 | 等待 | 若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -191,7 +194,8 @@
           "line_end": 341,
           "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -212,7 +216,8 @@
               "quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -252,7 +257,8 @@
               "line_end": 347,
               "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。  "
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -262,7 +268,8 @@
           "line_end": 342,
           "quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -326,11 +333,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "LOW_ROE_HIGH_PE",
-    "THEME_PRICE_RISK"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -339,5 +342,10 @@
       "line_end": 333,
       "quote": "| 综合建议 | 观望 / 小仓跟踪；不建议主题热度下追高。 |"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "LOW_ROE_HIGH_PE",
+    "THEME_PRICE_RISK"
+  ],
+  "semantic_review_reasons": []
 }

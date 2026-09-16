@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000933.SZ",
   "company": "神火股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "25.37 元不追高；21-25 元是小仓位分批评估/观察区，不是无条件买入",
@@ -83,7 +83,8 @@
               "line_end": 226,
               "quote": "| 21-25 元 | 小仓位分批评估 | H2 利润不塌、流动性缺口收窄 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-18-21-with-conditions",
@@ -199,7 +200,8 @@
               "line_end": 227,
               "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-below-18-not-permanent-deterioration",
@@ -296,7 +298,8 @@
               "line_end": 228,
               "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -306,7 +309,8 @@
           "line_end": 251,
           "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -327,7 +331,8 @@
               "line_end": 252,
               "quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -337,7 +342,8 @@
           "line_end": 252,
           "quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -578,11 +584,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "CYCLICAL_NORMALIZATION",
-    "MULTIPLE_PRICE_BANDS"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -591,5 +592,12 @@
       "line_end": 254,
       "quote": "### 8.2 投资者行动\n\n| 投资者 | 建议 |\n|---|---|\n| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |\n| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |\n| 加仓信号 | 股价跌入 18-21 元；H2 铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖 |\n| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_NORMALIZATION"
+  ],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

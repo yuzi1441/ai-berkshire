@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600549.SH",
   "company": "厦门钨业",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告明确当前48.39元回避/观察；空仓者只有价格跌至33.5元以下，或半年报同时证明现金流、库存/短债和钨价条件后才考虑建仓。",
@@ -50,7 +50,8 @@
               "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -268,7 +269,8 @@
               "line_end": 714,
               "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -278,7 +280,8 @@
           "line_end": 714,
           "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -299,7 +302,8 @@
               "quote": "| **持仓者** | **持有但不加仓，并主动降低仓位至可承受水平。** 悲观情景下行至 15.8 元（−67%），需确认自己能承受。若仓位超过组合 10%，建议在半年报前减至 5% 以内。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -390,7 +394,8 @@
               "line_end": 717,
               "quote": "| **加仓信号** | ① 价格 ≤ 33.5 元且论文未受损；② 存货降至 150 亿以下且钨价企稳 45 万以上；③ 连续两个季度 OCF 覆盖归母净利；④ 母体隐含 PE（剔除厦钨新能）降至 20x 以下；⑤ 钨钼分部毛利率在价格下跌中保持稳定（证明是加工利润而非库存收益）。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -400,7 +405,8 @@
           "line_end": 715,
           "quote": "| **持仓者** | **持有但不加仓，并主动降低仓位至可承受水平。** 悲观情景下行至 15.8 元（−67%），需确认自己能承受。若仓位超过组合 10%，建议在半年报前减至 5% 以内。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -465,10 +471,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "COMPLEX_ANY_OF_ENTRY",
-    "CYCLICAL_COMMODITY_AND_BALANCE_SHEET"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -477,5 +479,12 @@
       "line_end": 6,
       "quote": "> **一句话结论**：**回避 / 继续观察。** 钨价已自 2026 年 3 月峰值回落约 60% 并跌破年初水平，公司创纪录的半年报利润建立在已经消失的价格之上；197 亿元高价存货 + 106 亿元短期借款构成的资产负债表尚未经历这轮价格下跌的检验。当前 48.39 元仍高于三种独立估值方法的中枢（32–42 元）。"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_COMMODITY_AND_BALANCE_SHEET"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
   ]
 }

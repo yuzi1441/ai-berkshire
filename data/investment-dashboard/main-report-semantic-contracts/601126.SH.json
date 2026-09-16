@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601126.SH",
   "company": "四方股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "四方股份明确空仓观望，35—45元才接近研究买点；持仓者可跟踪但需仓位和卖出纪律。",
@@ -50,7 +50,8 @@
               "quote": "| 空仓者 | **观望**。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -141,7 +142,8 @@
               "line_end": 21,
               "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -151,7 +153,8 @@
           "line_end": 21,
           "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -172,7 +175,8 @@
               "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -212,7 +216,8 @@
               "line_end": 291,
               "quote": "| 加仓信号 | 股价回落到 35-45 元；2026/2027 利润维持 15%+ 增长；毛利率企稳；经营现金流/净利润恢复到 1x 以上。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -222,7 +227,8 @@
           "line_end": 21,
           "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -286,11 +292,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "HIGH_VALUATION",
-    "ENTRY_REQUIRES_FUNDAMENTAL_CONFIRMATION"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -299,5 +301,10 @@
       "line_end": 21,
       "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "ENTRY_REQUIRES_FUNDAMENTAL_CONFIRMATION",
+    "HIGH_VALUATION"
+  ],
+  "semantic_review_reasons": []
 }

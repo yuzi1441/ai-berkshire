@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601398.SH",
   "company": "工商银行",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前 7.12 元仅是可研究区，不能因低 PE/PB 或股息率直接判为买入",
@@ -19,7 +19,7 @@
       "报告没有给出现有持仓者的独立动作"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 356,
               "quote": "| ≤ 6.0 元 | ≤6x PE；≤0.55x PB | 较有安全边际，可重点研究/分批配置 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "stable-trial-6-6.5",
@@ -117,7 +118,8 @@
               "line_end": 357,
               "quote": "| 6.0-6.5 元 | 6.0-6.5x PE；0.55-0.60x PB | 稳健型可考虑小仓或分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "current-watch-or-trial-6.5-7.5",
@@ -157,7 +159,8 @@
               "line_end": 358,
               "quote": "| 6.5-7.5 元 | 6.5-7.5x PE；0.60-0.69x PB | 当前附近，观望或小仓配置，重在股息而非弹性 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "avoid-above-8.5-unless-reversal",
@@ -274,7 +277,8 @@
               "line_end": 360,
               "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -284,7 +288,8 @@
           "line_end": 360,
           "quote": "### 9.2 价格区间建议（A股，基于2025 EPS 1.00 元、BVPS 10.83 元）"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -298,7 +303,8 @@
           "line_end": 26,
           "quote": "### 最终建议"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -551,9 +557,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [
     {
       "code": "CURRENT_ZONE_ACTION_UNRESOLVED",
@@ -566,7 +569,18 @@
           "line_end": 358,
           "quote": "| 6.5-7.5 元 | 6.5-7.5x PE；0.60-0.69x PB | 当前附近，观望或小仓配置，重在股息而非弹性 |"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "focus-or-batch-below-6",
+        "stable-trial-6-6.5",
+        "current-watch-or-trial-6.5-7.5",
+        "avoid-above-8.5-unless-reversal"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -582,5 +596,17 @@
       "line_end": 376,
       "quote": "## 9. 分层操作建议"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET",
+    "ENTRY_AMBIGUOUS",
+    "NOT_LOGIC",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

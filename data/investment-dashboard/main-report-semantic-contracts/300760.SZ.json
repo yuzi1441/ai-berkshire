@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "300760.SZ",
   "company": "迈瑞医疗",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "139.68 元是当前参考价，处于 130-160 元合理观察区；当前不是重仓追买价。",
@@ -19,7 +19,7 @@
       "三情景目标价 81.80-260.20 元仅作为估值参考，不作为行动价格。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 320,
               "quote": "当前所在区间；等待 2026H1/H2 证实国内与利润修复"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-aggressive-125-or-h1-repair",
@@ -117,7 +118,8 @@
               "line_end": 366,
               "quote": "只设观察仓，不追涨"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "entry-115-120-with-repair",
@@ -258,7 +260,8 @@
               "line_end": 367,
               "quote": "115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-conservative-100-or-repair",
@@ -298,7 +301,8 @@
               "line_end": 368,
               "quote": "继续观察"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -308,7 +312,8 @@
           "line_end": 360,
           "quote": "空仓等待"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -329,7 +334,8 @@
               "line_end": 369,
               "quote": "已有持仓 | 有条件持有"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -339,7 +345,8 @@
           "line_end": 369,
           "quote": "已有持仓"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -454,12 +461,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "ENTRY_PRICE_AND_FILING_SCOPE",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "QUALITATIVE_PREREQUISITE",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "ENTRY_PRICE_AND_FILING_SCOPE",
@@ -472,7 +473,16 @@
           "line_end": 366,
           "quote": "125 元附近"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-aggressive-125-or-h1-repair",
+        "review-conservative-100-or-repair"
+      ],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -485,7 +495,13 @@
           "line_end": 371,
           "quote": "加仓或重新评级信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -495,5 +511,16 @@
       "line_end": 386,
       "quote": "综合动作"
     }
+  ],
+  "business_risk_reasons": [
+    "QUALITATIVE_PREREQUISITE"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

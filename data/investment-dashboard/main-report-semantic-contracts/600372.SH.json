@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600372.SH",
   "company": "中航机载",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前结论是观察/等待安全边际或财务质量兑现；11.19 元附近不建议空仓者按安全边际追买。",
@@ -18,7 +18,7 @@
       "底部看板契约缺少保守型动作、买入失效条件、复核日期和置信度；正文可恢复观察语义，但不应静默升级为正式买入结论。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 285,
               "quote": "| 当前价附近 | 11.19 元 | 观察 / 持有者跟踪，不建议空仓者按安全边际逻辑追买 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-trial-8-10-with-financial-tracking",
@@ -143,7 +144,8 @@
               "line_end": 283,
               "quote": "| 稳健型 | 8.0-10.0 元 | 可进入观察/小仓试错区，但必须跟踪现金流和 ROE |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-review-below-8",
@@ -183,7 +185,8 @@
               "line_end": 282,
               "quote": "| 保守型 | ≤ 7.5-8.0 元 | 才开始出现较清晰安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "empty-review-10-11-5-profit-recovery-bet",
@@ -223,7 +226,8 @@
               "line_end": 284,
               "quote": "| 进取型 | 10.0-11.5 元 | 只能押注利润修复和军工估值弹性，不适合重仓价值买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -233,7 +237,8 @@
           "line_end": 343,
           "quote": "| 空仓者 | 不急于买入 | 等 8 元附近，或等 ROE/现金流连续两个季度改善后重新估值 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -254,7 +259,8 @@
               "line_end": 344,
               "quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-review-above-13-without-profit-upgrade",
@@ -345,7 +351,8 @@
               "line_end": 286,
               "quote": "| 高估警戒 | > 13 元且利润无同步上修 | 风险收益比转差 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-review-add-signal-combination",
@@ -361,7 +368,8 @@
               "line_end": 350,
               "quote": "加仓信号："
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -371,7 +379,8 @@
           "line_end": 344,
           "quote": "| 已持有者 | 可持有观察，避免盲目加仓 | 盯住 2026H1/2026Q3 经营现金流、应收账款、存货、毛利率 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -515,12 +524,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_INCOMPLETE",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "VALUATION_REVIEW_NOT_ENTRY",
-    "MILITARY_FINANCIAL_QUALITY_UNCERTAINTY"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_INCOMPLETE",
@@ -539,7 +542,13 @@
           "line_end": 438,
           "quote": "| 买入失效条件 | 未给出 |"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -558,7 +567,16 @@
           "line_end": 358,
           "quote": "减仓/回避信号："
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-review-above-13-without-profit-upgrade",
+        "holder-review-add-signal-combination"
+      ],
+      "affects_entry": false
     },
     {
       "code": "VALUATION_REVIEW_NOT_ENTRY",
@@ -577,7 +595,16 @@
           "line_end": 283,
           "quote": "| 稳健型 | 8.0-10.0 元 | 可进入观察/小仓试错区，但必须跟踪现金流和 ROE |"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-review-below-8",
+        "empty-review-10-11-5-profit-recovery-bet"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -605,5 +632,15 @@
       "line_end": 364,
       "quote": "加仓信号：\n\n- 连续两个季度经营现金流同比改善，全年 OCF/净利润接近或超过 1。\n- 应收账款 / 收入明显下降，存货周转改善。\n- ROE 年化向 5%-7% 修复，而股价没有提前大幅上涨。\n- 民机 MRO、PMA、国际业务或低空业务出现可量化订单和毛利率。\n- 航空产品毛利率稳定在 28%-30% 且研发效率提升。\n\n减仓/回避信号：\n\n- 收入继续低增长，ROE 仍低于 3%，但 PE TTM 维持 45x 以上。\n- 经营现金流再次连续为负，分红回购依赖融资或存量现金。\n- 应收账款和存货继续高于收入增速。\n- 年报继续只讲战略叙事，缺乏可量化经营兑现。\n- 低空经济或大飞机题材推动股价上涨，但公司利润没有同步上修。"
     }
+  ],
+  "business_risk_reasons": [
+    "MILITARY_FINANCIAL_QUALITY_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

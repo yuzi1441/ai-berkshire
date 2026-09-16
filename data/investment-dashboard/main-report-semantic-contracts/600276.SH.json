@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600276.SH",
   "company": "恒瑞医疗",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "本轮只编译 A 股路径；报告同时包含 H 股价格和跨市场估值，不能把 H 股价格或换算值带入 A 股行动路径。",
@@ -18,7 +18,7 @@
       "底部看板契约把基本面建议写成分批买入且没有失效条件，和正文的等待/不追结论存在冲突。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 337,
               "quote": "| 当前时机 | 等待/持有 | 空仓不追，持仓看半年报与 CRL 整改 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-trial-47-50",
@@ -143,7 +144,8 @@
               "line_end": 345,
               "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-steady-43-46",
@@ -246,7 +248,8 @@
               "line_end": 346,
               "quote": "| 稳健型 | 分批建仓 | 43-46 元 | 对应中性情景约 10%-12%要求回报，分三次执行 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-conservative-37-40",
@@ -337,7 +340,8 @@
               "line_end": 347,
               "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "empty-review-two-of-three",
@@ -453,7 +457,8 @@
               "line_end": 355,
               "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -463,7 +468,8 @@
           "line_end": 337,
           "quote": "| 当前时机 | 等待/持有 | 空仓不追，持仓看半年报与 CRL 整改 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -484,7 +490,8 @@
               "line_end": 356,
               "quote": "- **低成本持仓者**：可持有，重点核对创新药销售是否向全年 +30%目标加速、OCF 转化、GSK 等收入确认及 FDA 整改。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-review-add-signals",
@@ -524,7 +531,8 @@
               "line_end": 364,
               "quote": "| 半年报创新药收入增速接近或超过 +30% | 创新药增速明显低于 +20%，仿制药继续下滑 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-61-no-upgrade",
@@ -615,7 +623,8 @@
               "line_end": 349,
               "quote": "| 偏热区 | 降低仓位 | >61 元且盈利预期未上修 | >67 元约对应 55x TTM PE，减仓纪律更明确 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -625,7 +634,8 @@
           "line_end": 356,
           "quote": "- **低成本持仓者**：可持有，重点核对创新药销售是否向全年 +30%目标加速、OCF 转化、GSK 等收入确认及 FDA 整改。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -934,11 +944,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MULTI_MARKET_REPORT_A_SHARE_ONLY_COMPILATION",
-    "AT_LEAST_TWO_OF_THREE_AND_FUNDAMENTAL_PRECONDITION"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_CONFLICT",
@@ -957,7 +962,14 @@
           "line_end": 441,
           "quote": "| 基本面建议动作 | 分批买入 |"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "AT_LEAST_TWO_OF_THREE_RELATION_UNCLEAR",
@@ -970,7 +982,15 @@
           "line_end": 355,
           "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-review-two-of-three"
+      ],
+      "affects_entry": true
     },
     {
       "code": "MULTI_MARKET_A_SHARE_SCOPE",
@@ -983,7 +1003,14 @@
           "line_end": 5,
           "quote": "> **研究日期 / 数据截止**：2026-07-13（Asia/Shanghai；A/H 股均为当日收盘数据）  \n> **A 股收盘价**：55.75 元；**H 股收盘价**：59.05 港元  \n> **A+H 分市场合并市值**：约 3,688.04 亿元人民币（含库存股；H 股按 2026-07-10 ECB 参考汇率换算）"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -993,5 +1020,15 @@
       "line_end": 329,
       "quote": "### 定性判断"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "AT_LEAST_N",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

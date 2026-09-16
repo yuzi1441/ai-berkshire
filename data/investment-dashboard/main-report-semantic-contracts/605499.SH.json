@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "605499.SH",
   "company": "东鹏饮料（集团）股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "东鹏饮料报告明确当前130.83元已可小额首批，114—127元稳健分批、100—114元重点关注；行动价格均针对A股。",
@@ -74,7 +74,8 @@
               "line_end": 300,
               "quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 301,
               "quote": "| 稳健型 | 114-127元 | 17-19倍 | 分批增加，赔率较均衡 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -154,7 +156,8 @@
               "line_end": 302,
               "quote": "| 保守型 | 100-114元 | 15-17倍 | 重点关注，前提是基本面未恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -164,7 +167,8 @@
           "line_end": 332,
           "quote": "| 空仓者 | 130.83元可小额首批；114-127元进入稳健分批区；100-114元在基本面不恶化时重点关注 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -185,7 +189,8 @@
               "quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -225,7 +230,8 @@
               "line_end": 334,
               "quote": "| 加仓信号 | 东鹏特饮恢复10%以上增长；茶饮料高增同时销售费用率不升；海外或新基地披露明确回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -235,7 +241,8 @@
           "line_end": 333,
           "quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -299,11 +306,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_A_H",
-    "CORE_PRODUCT_GROWTH_SLOWDOWN"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -312,5 +315,9 @@
       "line_end": 13,
       "quote": "| 一句话研究结论 | 渠道与高质价比护城河仍在扩大，当前价格已可小额分批买入，但核心特饮放缓和新品营销效率仍需验证。 |"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "CORE_PRODUCT_GROWTH_SLOWDOWN"
+  ],
+  "semantic_review_reasons": []
 }

@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["schema_version", "ticker", "company", "source", "compiler", "semantic_status", "overall_stance", "scopes", "hard_blocks", "redlines", "monitoring_conditions", "valuation_references", "report_contract_conflict", "requires_strong_review", "risk_reasons", "ambiguities", "evidence_index"],
+  "required": ["schema_version", "ticker", "company", "source", "compiler", "semantic_status", "overall_stance", "scopes", "hard_blocks", "redlines", "monitoring_conditions", "valuation_references", "report_contract_conflict", "requires_strong_review", "semantic_review_reasons", "business_risk_reasons", "ambiguities", "evidence_index"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"type": "integer", "const": 1},
+    "schema_version": {"type": "integer", "const": 2},
     "ticker": {"type": "string"},
     "company": {"type": "string"},
     "source": {
@@ -23,12 +23,12 @@
       "additionalProperties": false,
       "properties": {
         "type": {"type": "string", "const": "codex_semantic_review"},
-        "contract_version": {"type": "string", "const": "main-report-semantic-v1"},
+        "contract_version": {"type": "string", "const": "main-report-semantic-v2"},
         "pass": {"type": "integer", "enum": [1, 2]},
         "adversarial_findings": {"type": "array", "items": {"type": "string"}}
       }
     },
-    "semantic_status": {"type": "string", "enum": ["ready", "ambiguous", "error"]},
+    "semantic_status": {"type": "string", "enum": ["ready", "partial", "ambiguous", "error"]},
     "overall_stance": {"$ref": "#/$defs/actionStatement"},
     "scopes": {
       "type": "object",
@@ -54,7 +54,8 @@
       }
     },
     "requires_strong_review": {"type": "boolean"},
-    "risk_reasons": {"type": "array", "items": {"type": "string"}},
+    "semantic_review_reasons": {"type": "array", "items": {"type": "string", "enum": ["UNCONDITIONAL_ENTRY", "SCOPE_AMBIGUITY", "PRICE_ROLE_AMBIGUITY", "NESTED_LOGIC", "ANY_LOGIC", "AT_LEAST_N", "REPORT_CONTRACT_CONFLICT", "MULTI_MARKET", "ENTRY_AMBIGUOUS", "CROSS_SCOPE_DEPENDENCY", "UNRESOLVED_ACTION_MEANING", "NOT_LOGIC", "PATH_LOCAL_AMBIGUITY"]}},
+    "business_risk_reasons": {"type": "array", "items": {"type": "string"}},
     "ambiguities": {"type": "array", "items": {"$ref": "#/$defs/ambiguity"}},
     "evidence_index": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
   },
@@ -83,9 +84,10 @@
     },
     "scopeContract": {
       "type": "object",
-      "required": ["current_action", "summary", "entry_semantic", "action_paths", "evidence"],
+      "required": ["semantic_status", "current_action", "summary", "entry_semantic", "action_paths", "evidence"],
       "additionalProperties": false,
       "properties": {
+        "semantic_status": {"type": "string", "enum": ["ready", "partial", "ambiguous"]},
         "current_action": {"type": "string", "enum": ["OPEN_POSITION", "TRIAL_POSITION", "ADD_POSITION", "HOLD", "HOLD_NO_ADD", "WATCH", "REVIEW", "REDUCE", "EXIT", "AVOID", "NO_ACTION", "UNKNOWN"]},
         "summary": {"type": "string"},
         "entry_semantic": {"type": "string", "enum": ["UNCONDITIONAL_ENTRY_DEFINED", "CONDITIONAL_ENTRY_DEFINED", "TRIAL_ENTRY_DEFINED", "REVIEW_ONLY", "EXPLICIT_NO_BUY", "NO_ENTRY_DEFINED", "AMBIGUOUS"]},
@@ -95,10 +97,11 @@
     },
     "actionPath": {
       "type": "object",
-      "required": ["path_id", "action", "scope", "instrument_scope", "summary", "condition", "evidence"],
+      "required": ["path_id", "semantic_status", "action", "scope", "instrument_scope", "summary", "condition", "evidence"],
       "additionalProperties": false,
       "properties": {
         "path_id": {"type": "string"},
+        "semantic_status": {"type": "string", "enum": ["ready", "ambiguous"]},
         "action": {"type": "string", "enum": ["OPEN_POSITION", "TRIAL_POSITION", "ADD_POSITION", "HOLD", "HOLD_NO_ADD", "WATCH", "REVIEW", "REDUCE", "EXIT", "AVOID", "NO_ACTION", "UNKNOWN"]},
         "scope": {"type": "string", "enum": ["empty_position", "holder", "both", "unknown"]},
         "instrument_scope": {"type": "string", "enum": ["A_SHARE", "H_SHARE", "BOTH", "UNKNOWN"]},
@@ -148,10 +151,14 @@
     },
     "ambiguity": {
       "type": "object",
-      "required": ["code", "summary", "required_clarification", "evidence"],
+      "required": ["code", "classification", "affected_scopes", "affected_path_ids", "affects_entry", "summary", "required_clarification", "evidence"],
       "additionalProperties": false,
       "properties": {
         "code": {"type": "string"},
+        "classification": {"type": "string", "enum": ["ENTRY", "HOLDER", "EXIT_REDUCE", "MONITORING", "PATH_LOCAL", "GLOBAL"]},
+        "affected_scopes": {"type": "array", "items": {"type": "string", "enum": ["empty_position", "holder"]}},
+        "affected_path_ids": {"type": "array", "items": {"type": "string"}},
+        "affects_entry": {"type": "boolean"},
         "summary": {"type": "string"},
         "required_clarification": {"type": "string"},
         "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}

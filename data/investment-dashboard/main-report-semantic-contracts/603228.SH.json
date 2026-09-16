@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603228.SH",
   "company": "景旺电子",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "景旺电子当前观察；30—40元才接近基准估值研究区，55—70元只观察/持有，70元以上不建议新买。",
@@ -74,7 +74,8 @@
               "line_end": 233,
               "quote": "| 40-55 元 | 估值开始回到可研究区 | 需结合毛利率、扣非利润和 FCF 判断。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -165,7 +166,8 @@
               "line_end": 234,
               "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -175,7 +177,8 @@
           "line_end": 298,
           "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -196,7 +199,8 @@
               "quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -236,7 +240,8 @@
               "line_end": 305,
               "quote": "- 毛利率连续两个季度回到 21%-22% 以上；  "
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -246,7 +251,8 @@
           "line_end": 299,
           "quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -310,11 +316,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "HIGH_VALUATION",
-    "FCF_AND_MARGIN_CONFIRMATION"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -323,5 +325,10 @@
       "line_end": 292,
       "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_MARGIN_CONFIRMATION",
+    "HIGH_VALUATION"
+  ],
+  "semantic_review_reasons": []
 }

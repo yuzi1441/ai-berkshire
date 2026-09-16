@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600000.SH",
   "company": "浦发银行",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "9.63 元是当前参考价，处于中性价值与悲观价值之间，报告明确观望不追。",
@@ -18,7 +18,7 @@
       "卖出与加仓信号分别列出多项条件，但未说明任一、全部或最少满足数量，保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 249,
               "quote": "观望，不追"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-below-8.4-bond-substitute",
@@ -92,7 +93,8 @@
               "line_end": 249,
               "quote": "把买点设在 **8.4 元以下**"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -102,7 +104,8 @@
           "line_end": 249,
           "quote": "空仓者"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -123,7 +126,8 @@
               "line_end": 250,
               "quote": "成本在 8 元以下的，股息逻辑仍成立，可持有收息"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-11-12",
@@ -163,7 +167,8 @@
               "line_end": 250,
               "quote": "反弹至 11-12 元（中性估值区）建议减仓"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -173,7 +178,8 @@
           "line_end": 250,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -281,11 +287,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "HOLDER_COST_SCOPE",
-    "DISTRESSED_VALUE_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -298,7 +299,15 @@
           "line_end": 252,
           "quote": "卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-11-12"
+      ],
+      "affects_entry": false
     },
     {
       "code": "HOLDER_COST_SCOPE",
@@ -311,7 +320,15 @@
           "line_end": 250,
           "quote": "成本在 8 元以下的"
         }
-      ]
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-11-12"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -321,5 +338,11 @@
       "line_end": 264,
       "quote": "最终决策"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

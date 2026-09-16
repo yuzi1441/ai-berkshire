@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600900.SH",
   "company": "长江电力",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文写明28.42元空仓等待、23—25元更接近安全边际，但底部契约把基本面建议动作写成分批买入。",
       "水文、电价、分红、治理和项目回报是价格带成立的前提，且加仓清单未给出全部/任一组合。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -74,7 +74,8 @@
               "line_end": 277,
               "quote": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -165,7 +166,8 @@
               "line_end": 278,
               "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -205,7 +207,8 @@
               "line_end": 279,
               "quote": "| 保守型 | 22.5 元以下 | 约 15.3x PE 以下；股息率约 4.44%以上 | 先排除永久性损伤，再考虑较高仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 280,
           "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -236,7 +240,8 @@
               "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -276,7 +281,8 @@
               "line_end": 286,
               "quote": "1. 进入 23-25 元区间，而六站来水、电量、综合结算价没有结构性恶化。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -286,7 +292,8 @@
           "line_end": 280,
           "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -364,10 +371,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "PRICE_TIER_AND_PROJECT_RETURN_COMPLEXITY"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_CONFLICT",
@@ -380,7 +383,14 @@
           "line_end": 365,
           "quote": "| 基本面建议动作 | 分批买入 |"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -390,5 +400,10 @@
       "line_end": 269,
       "quote": "| 当前时机 | 持仓可持有；空仓不追价 |"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002352.SZ",
   "company": "顺丰控股股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "A 股与 H 股价格路径通过 instrument_scope 分离，港元区间不会成为 A 股买入价",
@@ -77,7 +77,8 @@
               "line_end": 209,
               "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-entry-27-30",
@@ -117,7 +118,8 @@
               "line_end": 209,
               "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "a-review-23-26",
@@ -157,7 +159,8 @@
               "line_end": 209,
               "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "h-entry-31.4-34.9-after-h1",
@@ -248,7 +251,8 @@
               "line_end": 237,
               "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -258,7 +262,8 @@
           "line_end": 237,
           "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -404,7 +409,8 @@
               "line_end": 239,
               "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -414,7 +420,8 @@
           "line_end": 238,
           "quote": "| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -643,9 +650,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -654,5 +658,12 @@
       "line_end": 241,
       "quote": "### 价格带与行动阈值"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "MULTI_MARKET"
   ]
 }

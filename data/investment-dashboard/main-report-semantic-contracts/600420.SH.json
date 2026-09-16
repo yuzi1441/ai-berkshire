@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600420.SH",
   "company": "国药现代",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文明确当前是观察而非核心买入；7元以下的小仓试错还要求Q2/Q3毛利率止跌并跟踪API毛利和现金流。",
@@ -17,7 +17,7 @@
       "底部看板契约未完整表达正文的价格与条件路径，因此不静默升级为ready。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -51,7 +51,8 @@
               "quote": "| 空仓、保守型 | 8.70 元附近 | **观望为主**；除非组合需要低估值医药观察仓，否则不急于买。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "TRIAL_POSITION",
@@ -142,7 +143,8 @@
               "line_end": 255,
               "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -152,7 +154,8 @@
           "line_end": 254,
           "quote": "| 空仓、保守型 | 8.70 元附近 | **观望为主**；除非组合需要低估值医药观察仓，否则不急于买。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -173,7 +176,8 @@
               "quote": "| 已持有者 | 8-9 元区间 | 可持有观察，不建议因低 PB 机械加仓。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -213,7 +217,8 @@
               "line_end": 310,
               "quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -223,7 +228,8 @@
           "line_end": 257,
           "quote": "| 已持有者 | 8-9 元区间 | 可持有观察，不建议因低 PB 机械加仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -288,11 +294,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_INCOMPLETE",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "PRICE_AND_FUNDAMENTAL_PRECONDITION"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -305,7 +306,15 @@
           "line_end": 310,
           "quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signal-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -315,5 +324,11 @@
       "line_end": 9,
       "quote": "**一句话结论**：国药现代是“资产负债表安全、现金流不差、但定价权弱”的成熟化药平台；当前 8.70 元并不贵到离谱，但 2026Q1 利润断崖和原料药毛利下行说明周期仍未确认见底，适合作为低估值观察标的，不适合作为高确定性核心买入。"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

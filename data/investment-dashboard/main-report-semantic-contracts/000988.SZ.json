@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000988.SZ",
   "company": "hgtech",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前空仓动作是回避，不是底部契约所写的泛化观察",
@@ -77,7 +77,8 @@
               "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -87,7 +88,8 @@
           "line_end": 297,
           "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -108,7 +110,8 @@
               "quote": "| **持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -118,7 +121,8 @@
           "line_end": 298,
           "quote": "| **持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -334,9 +338,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -345,5 +346,10 @@
       "line_end": 300,
       "quote": "### 最终决策"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

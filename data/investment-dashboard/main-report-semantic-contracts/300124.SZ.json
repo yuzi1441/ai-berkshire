@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "300124.SZ",
   "company": "汇川技术",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前 64.34 元是观察参考价，不因机器人、AI 或历史估值分位自动判为买入。",
@@ -19,7 +19,7 @@
       "底部契约给出买入失效条件，已作为买入阻断条件保留；没有把它当作研究者可以自行放宽的风险提示。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -53,7 +53,8 @@
               "line_end": 229,
               "quote": "当前观察，不因机器人或 AI 叙事追高"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-56-62-with-fundamentals",
@@ -144,7 +145,8 @@
               "line_end": 230,
               "quote": "56-62 元可小仓分批，前提是基本面未进一步恶化"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-48-55",
@@ -184,7 +186,8 @@
               "line_end": 231,
               "quote": "48-55 元分批买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-below-45-boundary",
@@ -224,7 +227,8 @@
               "line_end": 232,
               "quote": "不高于 45 元才考虑，要求更充分的汽车与周期安全边际"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -234,7 +238,8 @@
           "line_end": 225,
           "quote": "不是在当前盈利压力下可以忽略价格的公司"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -255,7 +260,8 @@
               "line_end": 233,
               "quote": "持有，不追涨加仓"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-risk-signal-manual-review",
@@ -295,7 +301,8 @@
               "line_end": 234,
               "quote": "股价高于 85-90 元但盈利预期未上修，或汽车毛利、现金流继续恶化"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -305,7 +312,8 @@
           "line_end": 233,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [
@@ -445,13 +453,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "CONSERVATIVE_ACTION_BOUNDARY",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "BUY_INVALIDATION_SCOPE",
-    "MULTIPLE_PRICE_BANDS",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "CONSERVATIVE_ACTION_BOUNDARY",
@@ -464,7 +465,15 @@
           "line_end": 232,
           "quote": "不高于 45 元才考虑"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-below-45-boundary"
+      ],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -477,7 +486,15 @@
           "line_end": 235,
           "quote": "降低风险信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-risk-signal-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -487,5 +504,14 @@
       "line_end": 237,
       "quote": "基本面建议动作：观察。"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

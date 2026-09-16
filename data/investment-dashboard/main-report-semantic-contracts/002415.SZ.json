@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002415.SZ",
   "company": "海康威视",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "37.95 元是当前 A 股参考价，不是买入价；63.0、42.7、23.8 元三情景目标价是估值参考。",
@@ -18,7 +18,7 @@
       "报告把 ≤30 元同时写成‘分批研究或买入’和‘提高关注度’，并把信号称为‘减仓/卖出’但未拆分动作，因此不自动生成正式建仓、减仓或卖出。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 7,
               "quote": "空仓不追高"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-30-34-with-cashflow-validation",
@@ -143,7 +144,8 @@
               "line_end": 243,
               "quote": "适合建立观察仓，要求经营现金流不再连续弱于利润"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-below-30-without-deterioration",
@@ -259,7 +261,8 @@
               "line_end": 242,
               "quote": "空仓者可分批研究或买入"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -269,7 +272,8 @@
           "line_end": 269,
           "quote": "观望，不追 37.95 元"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -290,7 +294,8 @@
               "line_end": 270,
               "quote": "持有并跟踪"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-on-price-or-fundamentals",
@@ -457,7 +462,8 @@
               "line_end": 271,
               "quote": "加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-or-sell-signal-review",
@@ -497,7 +503,8 @@
               "line_end": 272,
               "quote": "减仓/卖出信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -507,7 +514,8 @@
           "line_end": 270,
           "quote": "持有并跟踪"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -602,12 +610,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "ENTRY_ACTION_BOUNDARY",
-    "REDUCE_EXIT_ACTION_UNSPECIFIED",
-    "CASHFLOW_INVENTORY_QUALITY",
-    "MULTI_PRICE_BANDS"
-  ],
   "ambiguities": [
     {
       "code": "ENTRY_ACTION_BOUNDARY",
@@ -626,7 +628,15 @@
           "line_end": 269,
           "quote": "可提高关注度"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-below-30-without-deterioration"
+      ],
+      "affects_entry": true
     },
     {
       "code": "REDUCE_EXIT_ACTION_UNSPECIFIED",
@@ -639,7 +649,16 @@
           "line_end": 272,
           "quote": "减仓/卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-on-price-or-fundamentals",
+        "holder-reduce-or-sell-signal-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -655,5 +674,20 @@
       "line_end": 336,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "CASHFLOW_INVENTORY_QUALITY",
+    "MULTI_PRICE_BANDS",
+    "REDUCE_EXIT_ACTION_UNSPECIFIED"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

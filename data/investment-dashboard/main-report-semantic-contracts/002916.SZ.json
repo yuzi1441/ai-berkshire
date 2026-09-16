@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002916.SZ",
   "company": "深南电路",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "414.80 元是当前 A 股参考价；216.4-727.9 元多情景目标价是估值参考，不是买入价。",
@@ -18,7 +18,7 @@
       "加仓与减仓/重审均是项目列表，未明确组合逻辑；持仓路径按成本区分继续持有与降低暴露。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 25,
               "quote": "当前更适合观察/持有纪律"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-price-or-valuation-and-fundamentals",
@@ -194,7 +195,8 @@
               "line_end": 305,
               "quote": "再重新评估"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "review-risk-tolerant-research-position",
@@ -234,7 +236,8 @@
               "line_end": 306,
               "quote": "小仓位跟踪"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -244,7 +247,8 @@
           "line_end": 25,
           "quote": "观察/持有纪律"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -265,7 +269,8 @@
               "line_end": 307,
               "quote": "可继续持有，但设置反证清单"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-near-current-cost",
@@ -281,7 +286,8 @@
               "line_end": 308,
               "quote": "谨慎持有/分批降低暴露"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -321,7 +327,8 @@
               "line_end": 310,
               "quote": "### 3. 加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-review-signals-manual",
@@ -361,7 +368,8 @@
               "line_end": 318,
               "quote": "### 4. 减仓/重审信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -371,7 +379,8 @@
           "line_end": 308,
           "quote": "可继续持有，但设置反证清单"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -453,12 +462,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "VALUATION_ACTION_BOUNDARY",
-    "FC_BGA_EXECUTION_UNCERTAINTY",
-    "FCF_AND_CAPEX_PRESSURE"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -471,7 +474,17 @@
           "line_end": 325,
           "quote": "加仓信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-near-current-cost",
+        "holder-add-signals-manual-review",
+        "holder-reduce-review-signals-manual"
+      ],
+      "affects_entry": false
     },
     {
       "code": "VALUATION_ACTION_BOUNDARY",
@@ -484,7 +497,16 @@
           "line_end": 306,
           "quote": "| 空仓保守型 | 观察，不追高"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-price-or-valuation-and-fundamentals",
+        "review-risk-tolerant-research-position"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -500,5 +522,18 @@
       "line_end": 392,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_CAPEX_PRESSURE",
+    "FC_BGA_EXECUTION_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

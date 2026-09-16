@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002463.SZ",
   "company": "沪电股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "112.22 元是当前 A 股参考价；37.8-218.2 元三情景目标价是估值参考，不是买入价。",
@@ -18,7 +18,7 @@
       "卖出信号明确写了任一触发即重新评估，但加仓信号只列出五项，没有定义 ANY、ALL 或最低满足数量，因此加仓保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -76,7 +76,8 @@
               "line_end": 836,
               "quote": "观望，不买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-87-101",
@@ -116,7 +117,8 @@
               "line_end": 836,
               "quote": "设为关注区"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-70-87",
@@ -156,7 +158,8 @@
               "line_end": 836,
               "quote": "70–87元"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -166,7 +169,8 @@
           "line_end": 836,
           "quote": "空仓者"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -187,7 +191,8 @@
               "line_end": 837,
               "quote": "可继续持有，但必须设定纪律"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-120-if-low-cost",
@@ -278,7 +283,8 @@
               "line_end": 837,
               "quote": "分批减持至舒适仓位"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-review",
@@ -621,7 +627,8 @@
               "line_end": 838,
               "quote": "触发任一即重新评估"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -661,7 +668,8 @@
               "line_end": 839,
               "quote": "加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -671,7 +679,8 @@
           "line_end": 837,
           "quote": "可继续持有"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -753,12 +762,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "CYCLICAL_MARGIN_PEAK",
-    "FCF_AND_CAPEX_PRESSURE",
-    "MULTI_PRICE_BANDS"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -771,7 +774,17 @@
           "line_end": 839,
           "quote": "加仓信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-120-if-low-cost",
+        "holder-sell-signals-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -787,5 +800,17 @@
       "line_end": 1086,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_MARGIN_PEAK",
+    "FCF_AND_CAPEX_PRESSURE",
+    "MULTI_PRICE_BANDS"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

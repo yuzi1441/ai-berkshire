@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000682.SZ",
   "company": "东方电子",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "12 元附近的观察仓被保留为试仓路径，没有把 10-11 元的更好性价比描述偷换成无条件买入",
@@ -77,7 +77,8 @@
               "line_end": 365,
               "quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-10-11-fundamentals-intact",
@@ -180,7 +181,8 @@
               "line_end": 340,
               "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |\n| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -196,7 +198,8 @@
           "line_end": 340,
           "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |\n| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -217,7 +220,8 @@
               "line_end": 366,
               "quote": "| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -227,7 +231,8 @@
           "line_end": 366,
           "quote": "| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -475,11 +480,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "TRIAL_PRICE_AROUND_NO_FIXED_BOUNDARY",
-    "MULTIPLE_ACTION_GATES"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -488,5 +488,14 @@
       "line_end": 369,
       "quote": "### 8.2 投资建议表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |\n| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |\n| 加仓信号 | 股价回落至 10-11 元；或连续 2-3 个季度扣非利润增速 >15%、经营现金流改善、毛利率稳定在 32% 以上。 |\n| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |\n| 核心跟踪指标 | 扣非归母净利润、经营现金流/净利润、毛利率、应收+合同资产周转、国网/南网中标份额、国外收入回款、虚拟电厂项目利润率。 |"
     }
+  ],
+  "business_risk_reasons": [
+    "MULTIPLE_ACTION_GATES",
+    "TRIAL_PRICE_AROUND_NO_FIXED_BOUNDARY"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

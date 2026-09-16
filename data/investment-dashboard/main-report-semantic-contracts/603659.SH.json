@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603659.SH",
   "company": "璞泰来",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "璞泰来当前29元观察；22—25元是理想买入区，但正式小仓还附带Q2/Q3业绩持续向好等条件。",
       "涂覆隔膜、负极、硅碳和固态路线的多业务条件需要强复核，底部契约未完整展开。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -74,7 +74,8 @@
               "line_end": 402,
               "quote": "> **理想买入区间**：22-25元（对应2025年盈利的20-22x PE，提供了足够的悲观情景保护）"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "TRIAL_POSITION",
@@ -165,7 +166,8 @@
               "line_end": 427,
               "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -175,7 +177,8 @@
           "line_end": 427,
           "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -196,7 +199,8 @@
               "quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -236,7 +240,8 @@
               "line_end": 430,
               "quote": "| **加仓信号** | (1) 股价回落至22-25元区间；(2) 负极材料行业产能利用率回升至80%+；(3) 硅碳负极大客户订单落地；(4) 港股成功上市且估值合理 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -246,7 +251,8 @@
           "line_end": 428,
           "quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -311,11 +317,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_INCOMPLETE",
-    "MULTI_BUSINESS_FUTURE_GATES",
-    "BATTERY_TECHNOLOGY_RISK"
-  ],
   "ambiguities": [
     {
       "code": "REPORT_CONTRACT_INCOMPLETE",
@@ -328,7 +329,13 @@
           "line_end": 522,
           "quote": "| 结论摘要 | 空仓者 观望为主，等待更好的买入时机。 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -338,5 +345,12 @@
       "line_end": 427,
       "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
     }
+  ],
+  "business_risk_reasons": [
+    "BATTERY_TECHNOLOGY_RISK",
+    "MULTI_BUSINESS_FUTURE_GATES"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY"
   ]
 }

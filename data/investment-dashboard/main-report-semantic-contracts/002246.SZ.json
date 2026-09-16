@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002246.SZ",
   "company": "北化股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "18.60 元只是敏感性估值基准，报告明确要求行情用交易终端复核，未把该数字误当成实时价格。",
@@ -19,7 +19,7 @@
       "军工防化订单、关联销售和安全环保风险均保留为强复核项。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 7,
               "quote": "> 估值基准价：18.60 元/股（用于敏感性测算；行情数据需以交易终端复核）"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-16-5-20",
@@ -117,7 +118,8 @@
               "line_end": 248,
               "quote": "| 激进型 | 16.5-20元 | 只能小仓位主题/景气跟踪 | 当前安全边际一般，不能把重组预期当现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-13-16-5-with-validation",
@@ -208,7 +210,8 @@
               "line_end": 247,
               "quote": "| 稳健型空仓 | 13-16.5元，且 2026H1/H2 继续验证利润 | 分批观察 | 需要硝化棉毛利和现金流继续确认 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-below-13-no-governance-deterioration",
@@ -299,7 +302,8 @@
               "line_end": 246,
               "quote": "| 保守型空仓 | ≤13元且无治理恶化 | 才进入深度研究/小仓试错 | 对应 TTM PE 约 23x，给周期和不透明度留出折价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -309,7 +313,8 @@
           "line_end": 308,
           "quote": "| 空仓投资者 | **观察优先，不追高** | 等 2026 中报/三季报验证硝化棉毛利、防护订单、经营现金流 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -330,7 +335,8 @@
               "line_end": 249,
               "quote": "| 已持有者 | 18-22元 | 持有但不盲目加仓 | 等 2026 中报验证；关注实控人变更方案 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -370,7 +376,8 @@
               "line_end": 317,
               "quote": "1. 2026H1/H2 硝化棉毛利率仍维持高位，国外市场毛利不明显回落。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -410,7 +417,8 @@
               "line_end": 325,
               "quote": "1. 硝化棉毛利率快速回落，库存和应收账款上升。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -420,7 +428,8 @@
           "line_end": 249,
           "quote": "| 已持有者 | 18-22元 | 持有但不盲目加仓 | 等 2026 中报验证；关注实控人变更方案 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -534,12 +543,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "ORDERS_AND_RELATED_PARTY_OPACITY",
-    "SAFETY_TAIL_RISK"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -552,7 +555,16 @@
           "line_end": 317,
           "quote": "1. 2026H1/H2 硝化棉毛利率仍维持高位，国外市场毛利不明显回落。"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -562,5 +574,15 @@
       "line_end": 345,
       "quote": "**最终总结：** 北化股份值得放入跟踪池，但当前更像“有硬门槛的制造业景气弹性股”，而不是“确定性复利型价值股”。核心买点不是便宜，而是如果 2025 年开始的利润中枢抬升被连续验证，市场可能重新定价；核心风险是市场已经提前把硝化棉高毛利、防化订单和国资重组都部分计入价格。对价值投资者，较好的姿势是等待安全边际，持续跟踪毛利率、现金流、关联交易、实控人变更和扩产回报。"
     }
+  ],
+  "business_risk_reasons": [
+    "ORDERS_AND_RELATED_PARTY_OPACITY",
+    "SAFETY_TAIL_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

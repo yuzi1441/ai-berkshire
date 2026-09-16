@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600941.SH",
   "company": "中国移动有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告明确行动价格专指A股，并将A/H估值差作为机会成本；A股当前观察，不追价。",
@@ -74,7 +74,8 @@
               "line_end": 328,
               "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 328,
               "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -124,7 +126,8 @@
           "line_end": 328,
           "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -145,7 +148,8 @@
               "quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -236,7 +240,8 @@
               "line_end": 331,
               "quote": "| 加仓信号 | 半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -246,7 +251,8 @@
           "line_end": 329,
           "quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -310,11 +316,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_A_H",
-    "DIVIDEND_CASH_COVERAGE"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -323,5 +325,9 @@
       "line_end": 16,
       "quote": "| 一句话研究结论 | 高质量、强现金创造的通信基础设施龙头，但 A 股当前价已反映温和增长，建议观察而非追价。 |"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "DIVIDEND_CASH_COVERAGE"
+  ],
+  "semantic_review_reasons": []
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "688235.SH",
   "company": "百济神州",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "240-260 是美股 ONC 美元价格，不是 A 股 240-260 元买入区",
@@ -230,7 +230,8 @@
               "line_end": 358,
               "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-trial-after-three-validations",
@@ -346,7 +347,8 @@
               "line_end": 359,
               "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -356,7 +358,8 @@
           "line_end": 359,
           "quote": "| 综合结论 | **持有/观察优先，等待回调或继续验证；空仓不急追。** |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -377,7 +380,8 @@
               "line_end": 360,
               "quote": "| 已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -387,7 +391,8 @@
           "line_end": 360,
           "quote": "| 已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -861,9 +866,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -872,5 +874,12 @@
       "line_end": 379,
       "quote": "## 第十部分：最终投资建议"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET"
   ]
 }

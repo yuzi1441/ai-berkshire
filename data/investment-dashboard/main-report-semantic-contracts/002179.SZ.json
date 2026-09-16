@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002179.SZ",
   "company": "中航光电科技股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前 35.46 元位于三档买入区间之上，未把低于 52 周高点误解为低估。",
@@ -77,7 +77,8 @@
               "line_end": 300,
               "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-29-32-with-profit-inflection",
@@ -244,7 +245,8 @@
               "line_end": 296,
               "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-24-28-with-financial-recovery",
@@ -385,7 +387,8 @@
               "line_end": 297,
               "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-19-22-with-buffer",
@@ -425,7 +428,8 @@
               "line_end": 298,
               "quote": "| 保守型 | ¥19–22 | 才考虑建立安全边际仓位 | 即便盈利修复延迟，18–22x 低谷 EPS 仍有缓冲 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -435,7 +439,8 @@
           "line_end": 300,
           "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -456,7 +461,8 @@
               "line_end": 324,
               "quote": "| 持仓者 | 若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -496,7 +502,8 @@
               "line_end": 325,
               "quote": "| 加仓信号 | 毛利率回到 31% 以上；防务订单/关联销售企稳；CFO/净利润持续改善；库存与应收增速回落 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -536,7 +543,8 @@
               "line_end": 326,
               "quote": "| 卖出/减仓信号 | 两季毛利率低于 28%；民品增长仍无法带动利润；新园区低利用率导致 ROIC 继续下降；海外准入显著恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -546,7 +554,8 @@
           "line_end": 324,
           "quote": "| 持仓者 | 若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -788,12 +797,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "PROFIT_RECOVERY_UNVERIFIED",
-    "MULTIPLE_PRICE_BANDS",
-    "DEFENSE_AND_CIVIL_MIX"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -802,5 +805,14 @@
       "line_end": 300,
       "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
     }
+  ],
+  "business_risk_reasons": [
+    "DEFENSE_AND_CIVIL_MIX",
+    "PROFIT_RECOVERY_UNVERIFIED"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

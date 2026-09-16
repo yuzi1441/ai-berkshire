@@ -23,6 +23,10 @@ from main_report_semantic_schema import (
     INSTRUMENT_SCOPES,
     PRICE_ROLES,
     SCOPES,
+    AMBIGUITY_CLASSIFICATIONS,
+    SEMANTIC_REVIEW_REASONS,
+    SEMANTIC_STATUSES,
+    SCOPE_SEMANTIC_STATUSES,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,35 +111,46 @@ def _condition_requires_strong_review(node: Any) -> bool:
 
 
 def _contract_requires_strong_review(contract: dict[str, Any]) -> bool:
-    """Fail closed on semantic outcomes that require a stronger review."""
-    if contract.get("semantic_status") == "ambiguous":
-        return True
-    if any(
-        isinstance(contract.get("scopes", {}).get(scope_name), dict)
-        and contract["scopes"][scope_name].get("entry_semantic")
-        == "UNCONDITIONAL_ENTRY_DEFINED"
-        for scope_name in ("empty_position", "holder")
-    ):
-        return True
+    """Only semantic interpretation risks gate stronger semantic review."""
+    return bool(contract.get("semantic_review_reasons"))
+
+
+def _required_semantic_review_reasons(contract: dict[str, Any]) -> set[str]:
+    """Derive mandatory review reasons from the contract's own structure."""
+    reasons: set[str] = set()
+    scopes = contract.get("scopes", {})
+    if scopes.get("empty_position", {}).get("entry_semantic") == "UNCONDITIONAL_ENTRY_DEFINED":
+        reasons.add("UNCONDITIONAL_ENTRY")
+    if any(scope.get("semantic_status") != "ready" for scope in scopes.values()):
+        reasons.add("SCOPE_AMBIGUITY")
+    if any(path.get("semantic_status") == "ambiguous" for scope in scopes.values() for path in scope.get("action_paths", [])):
+        reasons.add("PATH_LOCAL_AMBIGUITY")
+    if any(item.get("affects_entry") for item in contract.get("ambiguities", [])):
+        reasons.add("ENTRY_AMBIGUOUS")
     if contract.get("report_contract_conflict", {}).get("present"):
-        return True
-    if contract.get("risk_reasons"):
-        return True
-    for scope_name in ("empty_position", "holder"):
-        scope = contract.get("scopes", {}).get(scope_name, {})
-        for path in scope.get("action_paths", []):
-            if path.get("instrument_scope", "A_SHARE") not in {"A_SHARE", "UNKNOWN"}:
-                return True
-            if _condition_requires_strong_review(path.get("condition")):
-                return True
-    for field in ("hard_blocks", "redlines", "monitoring_conditions"):
-        if any(_condition_requires_strong_review(node) for node in contract.get(field, [])):
-            return True
-    return any(
-        isinstance(reference, dict)
-        and reference.get("instrument_scope", "A_SHARE") not in {"A_SHARE", "UNKNOWN"}
-        for reference in contract.get("valuation_references", [])
-    )
+        reasons.add("REPORT_CONTRACT_CONFLICT")
+    nodes = [node for node, _ in _walk_contract_conditions(contract)]
+    if any(node.get("kind") == "ANY" for node in nodes):
+        reasons.add("ANY_LOGIC")
+    if any(node.get("kind") == "AT_LEAST" for node in nodes):
+        reasons.add("AT_LEAST_N")
+    if any(node.get("kind") == "NOT" for node in nodes):
+        reasons.add("NOT_LOGIC")
+    if any(
+        node.get("children") and any(child.get("children") for child in node.get("children", []) if isinstance(child, dict))
+        for node in nodes
+    ):
+        reasons.add("NESTED_LOGIC")
+    instruments = {
+        str(path.get("instrument_scope", "A_SHARE"))
+        for scope in scopes.values() for path in scope.get("action_paths", [])
+    } | {
+        str(ref.get("instrument_scope", "A_SHARE"))
+        for ref in contract.get("valuation_references", []) if isinstance(ref, dict)
+    }
+    if any(item not in {"A_SHARE", "UNKNOWN"} for item in instruments):
+        reasons.add("MULTI_MARKET")
+    return reasons
 
 
 def _walk_evidence(value: Any, location: str = "contract") -> Iterable[tuple[dict[str, Any], str]]:
@@ -298,20 +313,55 @@ def validate_contract(
 
     status = contract.get("semantic_status")
     ambiguities = contract.get("ambiguities", [])
+    if status not in SEMANTIC_STATUSES:
+        errors.append(f"unsupported semantic_status: {status!r}")
     if status == "ready" and ambiguities:
         errors.append("ready contract cannot contain unresolved ambiguities")
     if status == "ambiguous" and not ambiguities:
         errors.append("ambiguous contract must explain at least one ambiguity")
-    if status in {"ready", "ambiguous"} and contract.get("compiler", {}).get("pass") != 2:
+    if status == "partial" and not ambiguities:
+        errors.append("partial contract must explain at least one ambiguity")
+    if status in {"ready", "partial", "ambiguous"} and contract.get("compiler", {}).get("pass") != 2:
         errors.append("final contract must come from adversarial pass 2")
 
     # High-risk semantic outcomes may remain valid candidates, but they must be
     # routed to stronger review before anyone can treat the interpretation as
     # finalized.
-    if _contract_requires_strong_review(contract) and contract.get("requires_strong_review") is not True:
-        errors.append(
-            "high-risk semantic outcome requires requires_strong_review=true"
-        )
+    semantic_reasons = contract.get("semantic_review_reasons", [])
+    invalid_reasons = sorted(set(semantic_reasons) - SEMANTIC_REVIEW_REASONS)
+    if invalid_reasons:
+        errors.append(f"unsupported semantic_review_reasons: {invalid_reasons}")
+    expected_review = bool(semantic_reasons)
+    if contract.get("requires_strong_review") is not expected_review:
+        errors.append("requires_strong_review must equal bool(semantic_review_reasons)")
+    if set(contract.get("business_risk_reasons", [])) & set(semantic_reasons):
+        errors.append("business and semantic review reasons must remain separate")
+    missing_review_reasons = sorted(
+        _required_semantic_review_reasons(contract) - set(semantic_reasons)
+    )
+    if missing_review_reasons:
+        errors.append(f"missing mandatory semantic_review_reasons: {missing_review_reasons}")
+
+    all_path_ids = {
+        str(path.get("path_id"))
+        for scope in contract.get("scopes", {}).values()
+        for path in scope.get("action_paths", [])
+        if isinstance(path, dict) and path.get("path_id")
+    }
+    affected_paths: set[str] = set()
+    for index, ambiguity in enumerate(ambiguities):
+        location = f"ambiguities[{index}]"
+        if ambiguity.get("classification") not in AMBIGUITY_CLASSIFICATIONS:
+            errors.append(f"{location}: invalid ambiguity classification")
+        affected_scopes = ambiguity.get("affected_scopes", [])
+        if not affected_scopes:
+            errors.append(f"{location}: affected_scopes cannot be empty")
+        unknown_paths = set(ambiguity.get("affected_path_ids", [])) - all_path_ids
+        if unknown_paths:
+            errors.append(f"{location}: unknown affected_path_ids {sorted(unknown_paths)}")
+        affected_paths.update(ambiguity.get("affected_path_ids", []))
+        if ambiguity.get("affects_entry") and "empty_position" not in affected_scopes:
+            errors.append(f"{location}: entry ambiguity must affect empty_position")
 
     seen_evidence: set[tuple[Any, ...]] = set()
     for evidence, location in _walk_evidence(contract):
@@ -353,6 +403,13 @@ def validate_contract(
 
     for scope_name in ("empty_position", "holder"):
         scope = contract.get("scopes", {}).get(scope_name, {})
+        scope_status = scope.get("semantic_status")
+        if scope_status not in SCOPE_SEMANTIC_STATUSES:
+            errors.append(f"scopes.{scope_name}: invalid semantic_status")
+        if scope_status == "ready" and any(
+            scope_name in ambiguity.get("affected_scopes", []) for ambiguity in ambiguities
+        ):
+            errors.append(f"scopes.{scope_name}: ready scope is affected by unresolved ambiguity")
         if scope.get("current_action") not in ACTIONS:
             errors.append(f"scopes.{scope_name}: invalid current_action")
         if scope.get("entry_semantic") not in ENTRY_SEMANTICS:
@@ -360,6 +417,9 @@ def validate_contract(
         path_ids: set[str] = set()
         for index, action_path in enumerate(scope.get("action_paths", [])):
             location = f"scopes.{scope_name}.action_paths[{index}]"
+            path_status = action_path.get("semantic_status")
+            if path_status not in {"ready", "ambiguous"}:
+                errors.append(f"{location}: invalid semantic_status")
             if action_path.get("scope") not in {scope_name, "both"}:
                 errors.append(f"{location}: action path leaks across position scopes")
             if action_path.get("instrument_scope", "A_SHARE") not in INSTRUMENT_SCOPES:
@@ -369,6 +429,10 @@ def validate_contract(
                 errors.append(f"{location}: duplicate path_id {path_id!r}")
             elif isinstance(path_id, str):
                 path_ids.add(path_id)
+            if path_status == "ambiguous" and path_id not in affected_paths:
+                errors.append(f"{location}: ambiguous path lacks matching ambiguity metadata")
+            if path_status == "ready" and path_id in affected_paths:
+                errors.append(f"{location}: affected path cannot be ready")
             if not action_path.get("evidence"):
                 errors.append(f"{location}: action path requires direct report evidence")
             price_nodes = [

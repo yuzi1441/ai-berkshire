@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002837.SZ",
   "company": "英维克",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "74.06 元是当前 A 股参考价；76.2、31.5、10.9 元三情景目标价是估值参考，不是买入价。",
@@ -18,7 +18,7 @@
       "卖出信号列出五项但没有定义任一、全部或最低数量，保留人工复核；海外订单是否兑现仍是报告的关键不确定性。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 266,
               "quote": "空仓者"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "watch-30-50",
@@ -92,7 +93,8 @@
               "line_end": 266,
               "quote": "30-50元区间只可观察不可重仓"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-below-30-safety-margin",
@@ -132,7 +134,8 @@
               "line_end": 266,
               "quote": "等30元以下"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -142,7 +145,8 @@
           "line_end": 266,
           "quote": "回避"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -163,7 +167,8 @@
               "line_end": 267,
               "quote": "建议减仓至可完全承受-60%回撤的比例"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-below-30-and-any-proof",
@@ -355,7 +360,8 @@
               "line_end": 269,
               "quote": "加仓信号（需先跌入安全区）"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -395,7 +401,8 @@
               "line_end": 268,
               "quote": "卖出信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -405,7 +412,8 @@
           "line_end": 267,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -505,12 +513,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "UNVERIFIED_OVERSEAS_ORDER",
-    "FCF_AND_RECEIVABLES_PRESSURE",
-    "VALUATION_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -523,7 +525,17 @@
           "line_end": 268,
           "quote": "卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-exposure",
+        "holder-add-below-30-and-any-proof",
+        "holder-sell-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -539,5 +551,16 @@
       "line_end": 343,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_RECEIVABLES_PRESSURE",
+    "UNVERIFIED_OVERSEAS_ORDER"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "003816.SZ",
   "company": "中国广核",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "A 股 4.06 元位于 3.60-4.30 元持有/不追价区间；3.20 元以下是可开始分批研究建仓，不能把当前价或目标价当作买入价。",
@@ -19,7 +19,7 @@
       "新机组投产、电价、利润、杠杆等加仓信号及减仓/卖出信号没有声明任一或全部关系，保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 219,
               "quote": "| A 股 | 3.60-4.30 元 | 持有、不追价 | 当前 4.06 元处于此区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-a-share-below-3.20",
@@ -117,7 +118,8 @@
               "line_end": 217,
               "quote": "| A 股 | **不高于 3.20 元** | 可开始分批研究建仓 | 约 16.6x 2025 PE，安全边际开始出现 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-a-share-3.20-3.60-boundary",
@@ -157,7 +159,8 @@
               "line_end": 218,
               "quote": "| A 股 | 3.20-3.60 元 | 观察或极小仓 | 约 16.6-18.7x PE |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -167,7 +170,8 @@
           "line_end": 246,
           "quote": "不在 4.06 元追买 A 股"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -188,7 +192,8 @@
               "line_end": 247,
               "quote": "只要电价、项目进度和分红未恶化可继续持有"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-4.30-without-earnings-upgrade",
@@ -279,7 +284,8 @@
               "line_end": 247,
               "quote": "4.30 元以上且盈利未上修时逐步降低机会成本"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -289,7 +295,8 @@
           "line_end": 247,
           "quote": "A 股持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -523,12 +530,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "ENTRY_ACTION_BOUNDARY",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "ENTRY_ACTION_BOUNDARY",
@@ -547,7 +548,15 @@
           "line_end": 218,
           "quote": "观察或极小仓"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-a-share-3.20-3.60-boundary"
+      ],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -560,7 +569,15 @@
           "line_end": 251,
           "quote": "加仓信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-4.30-without-earnings-upgrade"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -570,5 +587,16 @@
       "line_end": 251,
       "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

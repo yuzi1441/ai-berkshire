@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600426.SH",
   "company": "山东华鲁恒升化工股份有限公司",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "正文明确当前21.11元观察；18—21元是激进型小仓，15—17元和11—14元是更稳健的分批买入区。",
@@ -125,7 +125,8 @@
               "line_end": 330,
               "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -165,7 +166,8 @@
               "line_end": 331,
               "quote": "| 稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -205,7 +207,8 @@
               "line_end": 332,
               "quote": "| 保守型 | 11-14元 | 分批买入 | 接近悲观目标区，对低回报项目留出保护 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 360,
           "quote": "| 空仓者 | 观察；18-21元只适合激进型小仓，稳健资金等待15-17元或半年报显著上修所有者收益判断 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -236,7 +240,8 @@
               "quote": "| 持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -429,7 +434,8 @@
               "line_end": 362,
               "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -439,7 +445,8 @@
           "line_end": 361,
           "quote": "| 持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -580,10 +587,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "COMPLEX_PRICE_TIERS",
-    "CYCLICAL_CAPEX_AND_ROIC"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -592,5 +595,12 @@
       "line_end": 354,
       "quote": "### 明确结论：观察"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_CAPEX_AND_ROIC"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
   ]
 }

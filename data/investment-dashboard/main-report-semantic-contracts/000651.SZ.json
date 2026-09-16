@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000651.SZ",
   "company": "格力电器",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "37.80 元是估值基准，不直接当作买入价；真正买入路径使用 38、32-35、30 元条件区间",
@@ -19,7 +19,7 @@
       "底部契约只保留分层买入价格，遗漏加仓/减仓信号和估值基准说明"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 121,
               "quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "stable-32-35",
@@ -117,7 +118,8 @@
               "line_end": 122,
               "quote": "| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conservative-below-30-with-dividend",
@@ -208,7 +210,8 @@
               "line_end": 202,
               "quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -218,7 +221,8 @@
           "line_end": 202,
           "quote": "| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -232,7 +236,8 @@
           "line_end": 202,
           "quote": "| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     }
   },
   "hard_blocks": [],
@@ -518,11 +523,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "MISSING_HOLDER_ACTION",
-    "REPORT_CONTRACT_CONFLICT",
-    "PRICE_ROLE_DISAMBIGUATION"
-  ],
   "ambiguities": [
     {
       "code": "MISSING_HOLDER_ACTION",
@@ -535,7 +535,13 @@
           "line_end": 202,
           "quote": "操作建议：\n\n| 投资者类型 | 建议 |\n|---|---|\n| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
         }
-      ]
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -545,5 +551,15 @@
       "line_end": 218,
       "quote": "## 10. 最终投资建议\n\n定性判断：\n\n| 维度 | 判断 |\n|---|---|\n| 生意质量 | 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |\n| 财务质量 | 很强，现金流和分红是核心吸引力。 |\n| 管理层 | 执行力强，资本配置与传承需折价。 |\n| 估值 | 便宜，但便宜的原因合理：市场担心增长、竞争和治理。 |\n| 时机 | 37-38 元附近可研究分批，32-35 元更有吸引力。 |\n\n操作建议：\n\n| 投资者类型 | 建议 |\n|---|---|\n| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
     }
+  ],
+  "business_risk_reasons": [
+    "MISSING_HOLDER_ACTION"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING"
   ]
 }

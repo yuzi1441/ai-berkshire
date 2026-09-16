@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "000858.SZ",
   "company": "五粮液",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "当前结论明确为观望且不满足买入条件，未把七年低位或高股息自动转换为买入",
@@ -19,7 +19,7 @@
       "保守型明确回避；离场信号保持为风险触发而非买入前提"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
             }
           ],
-          "instrument_scope": "A_SHARE"
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -87,7 +88,8 @@
           "line_end": 149,
           "quote": "| 投资者类型 | 建议 | 价格区间参考 |\n|-----------|------|------------|\n| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |\n| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |\n| 保守型 | **回避**；同样的钱优先考虑茅台（生意质量与治理均更优，估值18.3x反而更便宜） | 不参与 |"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -101,7 +103,8 @@
           "line_end": 149,
           "quote": "### 分层操作建议"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [
@@ -398,9 +401,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
-  ],
   "ambiguities": [
     {
       "code": "REPRICING_SIGNAL_COUNT_CONFLICT",
@@ -413,7 +413,15 @@
           "line_end": 158,
           "quote": "| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "aggressive-trial-below-60"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -423,5 +431,13 @@
       "line_end": 165,
       "quote": "## 7. 最终投资建议"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

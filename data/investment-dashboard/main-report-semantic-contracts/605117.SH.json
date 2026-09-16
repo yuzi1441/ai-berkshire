@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "605117.SH",
   "company": "deye",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "101.85 元是当前参考价；130-160 元是目标价参考，70-80 元是安全边际和考虑建仓区，不能把目标价误作买入价。",
@@ -17,7 +17,7 @@
       "持仓者持有但仓位不超过 10%；卖出/加仓信号是并列清单，组合关系未定义，保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -75,7 +75,8 @@
               "line_end": 358,
               "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-85-95-with-growth-and-policy",
@@ -191,7 +192,8 @@
               "line_end": 358,
               "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -201,7 +203,8 @@
           "line_end": 358,
           "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -222,7 +225,8 @@
               "line_end": 359,
               "quote": "| **持仓者** | **持有但控制仓位在10%以内**。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -262,7 +266,8 @@
               "line_end": 360,
               "quote": "| **卖出信号** | （1）欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上；（4）张和君大幅减持（>1%持股） |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -302,7 +307,8 @@
               "line_end": 361,
               "quote": "| **加仓信号** | （1）股价回调至CNY 70-80区间；（2）马来西亚产能成功规避欧盟/美国贸易壁垒；（3）工商储季度收入突破10亿并保持>50%增速；（4）自有品牌收入占比提升至30%+ |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -312,7 +318,8 @@
           "line_end": 359,
           "quote": "| **持仓者** | **持有但控制仓位在10%以内**。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -394,12 +401,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "EUROPE_POLICY_RISK",
-    "RECEIVABLES_QUALITY_RISK",
-    "VALUATION_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -418,7 +419,16 @@
           "line_end": 361,
           "quote": "| **加仓信号** | （1）股价回调至CNY 70-80区间；（2）马来西亚产能成功规避欧盟/美国贸易壁垒；（3）工商储季度收入突破10亿并保持>50%增速；（4）自有品牌收入占比提升至30%+ |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -428,5 +438,14 @@
       "line_end": 361,
       "quote": "| **空仓者** | **等待回调至CNY 70-80区间（2026E PE 13-15x）再考虑建仓**。当前PE 41x对硬件制造商偏高，且欧盟禁令尚未充分定价。如果2026Q2-Q3继续保持高增长且禁令影响有限，可在CNY 85-95区间建5%观察仓 |\n| **持仓者** | **持有但控制仓位在10%以内**。生意质量、行业趋势、管理层三个维度均给正面信号。2026年业绩高增长（Q1+68%）是短期支撑。但需密切关注2027年欧盟禁令的实际执行和应收账款趋势 |\n| **卖出信号** | （1）欧盟禁令严格执行导致德国/欧洲收入季度环比下降>20%；（2）储能逆变器毛利率跌破40%；（3）应收账款增速持续超过营收增速2倍以上；（4）张和君大幅减持（>1%持股） |\n| **加仓信号** | （1）股价回调至CNY 70-80区间；（2）马来西亚产能成功规避欧盟/美国贸易壁垒；（3）工商储季度收入突破10亿并保持>50%增速；（4）自有品牌收入占比提升至30%+ |"
     }
+  ],
+  "business_risk_reasons": [
+    "EUROPE_POLICY_RISK",
+    "RECEIVABLES_QUALITY_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -23,6 +23,7 @@ from typing import Any
 
 import current_reports
 from main_report_semantic_schema import ENTRY_SEMANTICS
+from migrate_main_report_semantics_v2 import migrate_contract
 from validate_main_report_semantics import (
     CONTRACT_DIR,
     DATA_DIR,
@@ -34,7 +35,7 @@ from validate_main_report_semantics import (
 )
 
 MODEL = "gpt-5.6-sol"
-CONTRACT_VERSION = "main-report-semantic-v1"
+CONTRACT_VERSION = "main-report-semantic-v2"
 # Codex structured output requires every declared object property to be listed in
 # ``required``.  Keep the contract schema backward-compatible for the already
 # reviewed Golden contracts, and use this strict transport schema only at the
@@ -334,7 +335,7 @@ def materialize_review(
         },
         "compiler": {
             "type": "codex_semantic_review",
-            "contract_version": CONTRACT_VERSION,
+            "contract_version": "main-report-semantic-v1",
             "pass": 2,
             "adversarial_findings": review.get("adversarial_findings", []),
         },
@@ -372,10 +373,7 @@ def materialize_review(
             **compact,
             "evidence": _expand_evidence(compact.get("evidence", []), report_path),
         })
-    contract["requires_strong_review"] = (
-        contract["requires_strong_review"]
-        or _contract_requires_strong_review(contract)
-    )
+    contract = migrate_contract(contract)
     errors = validate_contract(contract, repo_root=repo_root, expected_ticker=ticker)
     if errors:
         raise ValueError("; ".join(errors))
@@ -678,62 +676,7 @@ def _review_reason_codes(contract: dict[str, Any]) -> list[str]:
     These categories are routing signals only.  They never promote a candidate to
     ready and do not change the semantic contract itself.
     """
-    codes: list[str] = []
-    if contract.get("semantic_status") == "ambiguous":
-        codes.append("AMBIGUOUS")
-    if contract.get("requires_strong_review"):
-        codes.append("HIGH_RISK_REVIEW_REQUIRED")
-
-    scopes = contract.get("scopes", {})
-    scope_payloads = [scopes.get(name, {}) for name in ("empty_position", "holder")]
-    all_nodes: list[dict[str, Any]] = []
-    instrument_scopes: set[str] = set()
-    for scope in scope_payloads:
-        for path in scope.get("action_paths", []):
-            if isinstance(path, dict):
-                instrument_scopes.add(str(path.get("instrument_scope", "A_SHARE")))
-                all_nodes.extend(_flatten_conditions(path.get("condition")))
-    for field in ("hard_blocks", "redlines", "monitoring_conditions"):
-        for node in contract.get(field, []):
-            all_nodes.extend(_flatten_conditions(node))
-    for reference in contract.get("valuation_references", []):
-        if isinstance(reference, dict):
-            instrument_scopes.add(str(reference.get("instrument_scope", "A_SHARE")))
-
-    if any(scope.get("entry_semantic") == "UNCONDITIONAL_ENTRY_DEFINED" for scope in scope_payloads):
-        codes.append("UNCONDITIONAL_ENTRY")
-    if any(
-        node.get("kind") in {"ANY", "NOT"}
-        or node.get("kind") == "ALL" and (
-            len(node.get("children", [])) > 2
-            or any(child.get("kind") in {"ANY", "AT_LEAST", "NOT"} for child in node.get("children", []) if isinstance(child, dict))
-        )
-        for node in all_nodes
-    ):
-        codes.append("COMPLEX_LOGIC")
-    if any(node.get("kind") == "AT_LEAST" for node in all_nodes):
-        codes.append("AT_LEAST_N")
-
-    risk_reasons = [str(item) for item in contract.get("risk_reasons", [])]
-    ambiguity_codes = [str(item.get("code", "")) for item in contract.get("ambiguities", []) if isinstance(item, dict)]
-    combined_reasons = [item.casefold() for item in risk_reasons + ambiguity_codes]
-    if contract.get("report_contract_conflict", {}).get("present") or any(
-        "conflict" in item for item in combined_reasons
-    ):
-        codes.append("REPORT_CONTRACT_CONFLICT")
-    if (
-        any(scope not in {"A_SHARE", "UNKNOWN"} for scope in instrument_scopes)
-        or any(any(marker in item for marker in ("multi_market", "multi-market", "a_h", "h_share")) for item in combined_reasons)
-    ):
-        codes.append("MULTI_MARKET")
-    if (
-        any(scope.get("current_action") == "UNKNOWN" or scope.get("entry_semantic") == "AMBIGUOUS" for scope in scope_payloads)
-        or any(any(marker in item for marker in ("scope", "holder", "position")) for item in combined_reasons)
-    ):
-        codes.append("SCOPE_COMPLEXITY")
-
-    # Preserve a stable order for reproducible diffs and human triage.
-    return list(dict.fromkeys(codes))
+    return list(contract.get("semantic_review_reasons", []))
 
 
 def generate_review_queue(repo_root: Path, index_rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -758,12 +701,16 @@ def generate_review_queue(repo_root: Path, index_rows: list[dict[str, Any]]) -> 
             "reason_codes": reason_codes,
             "semantic_status": contract["semantic_status"],
             "requires_strong_review": bool(contract.get("requires_strong_review", False)),
-            "risk_reasons": list(contract.get("risk_reasons", [])),
+            "semantic_review_reasons": list(contract.get("semantic_review_reasons", [])),
+            "business_risk_reasons": list(contract.get("business_risk_reasons", [])),
         })
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "authority": current_reports.FILENAME,
         "market": "A股",
+        "total_contracts": len(index_rows),
+        "strong_semantic_review_required": len(queue_rows),
+        "business_risks_gate_strong_review": False,
         "total": len(queue_rows),
         "category_counts": category_counts,
         "reviews": queue_rows,
@@ -776,7 +723,7 @@ def generate_indexes(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     rows = universe(repo_root)
     index_rows: list[dict[str, Any]] = []
     entry_rows: list[dict[str, Any]] = []
-    counts = {"ready": 0, "ambiguous": 0, "error": 0}
+    counts = {"ready": 0, "partial": 0, "ambiguous": 0, "error": 0}
     entry_counts = {item: 0 for item in ENTRY_SEMANTICS}
     for record in rows:
         path = repo_root / CONTRACT_DIR / f"{record['ticker']}.json"
@@ -805,6 +752,8 @@ def generate_indexes(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         index_rows.append({
             **record,
             "semantic_status": status,
+            "empty_position_semantic_status": empty.get("semantic_status", "ambiguous"),
+            "holder_semantic_status": holder.get("semantic_status", "ambiguous"),
             "empty_position_action": empty.get("current_action", "UNKNOWN"),
             "holder_action": holder.get("current_action", "UNKNOWN"),
             **flags,
@@ -827,9 +776,10 @@ def generate_indexes(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
                 if item.get("action") in {"OPEN_POSITION", "TRIAL_POSITION"}
             ],
             "semantic_status": status,
+            "empty_position_semantic_status": empty.get("semantic_status", "ambiguous"),
         })
     index = {
-        "schema_version": 1,
+        "schema_version": 2,
         "authority": current_reports.FILENAME,
         "market": "A股",
         "total": len(rows),
@@ -837,7 +787,7 @@ def generate_indexes(repo_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         "contracts": index_rows,
     }
     entries = {
-        "schema_version": 1,
+        "schema_version": 2,
         "authority": "main_report_semantic_index.json",
         "market": "A股",
         "total": len(rows),

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601138.SH",
   "company": "工业富联",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "工业富联空仓价格带明确：55元以下才可小仓，50元以下观察，43元以下保守型等待；中性情景回报不足。",
@@ -125,7 +125,8 @@
               "line_end": 835,
               "quote": "| **空仓·稳健型** | **等待，分批观察** | ≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "TRIAL_POSITION",
@@ -216,7 +217,8 @@
               "line_end": 836,
               "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -256,7 +258,8 @@
               "line_end": 834,
               "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -266,7 +269,8 @@
           "line_end": 834,
           "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -287,7 +291,8 @@
               "quote": "| **已持仓·成本低** | **持有，但不加仓** | 紧盯毛利额、CFO/净利、存货、下一代平台份额四项 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -478,7 +483,8 @@
               "line_end": 840,
               "quote": "### 9.5 加仓信号（需同时出现 3 项以上）"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -488,7 +494,8 @@
           "line_end": 837,
           "quote": "| **已持仓·成本低** | **持有，但不加仓** | 紧盯毛利额、CFO/净利、存货、下一代平台份额四项 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -629,10 +636,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "AT_LEAST_THREE_ADD_GATE",
-    "CUSTOMER_CONCENTRATION_AND_CONSIGN"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -641,5 +644,12 @@
       "line_end": 47,
       "quote": "> 工业富联是一家**\"执行力被数据证实、但价值捕获被结构限制\"**的 AI 基础设施代工平台。2026Q1 它以 +56.52% 的营收增速跑赢整个 ODM 阵营 54.42 个百分点，7.35% 的毛利率比广达的 4.78% 高出 1.54 倍——这些是真实且罕见的经营证据。但云计算分部 5.73% 的毛利率、62.01% 的客户集中度、1.24% 的研发费用率，共同说明它赚的是**工程与规模的钱，不是定价权的钱**。60.25 元对应上市以来 PE 分位 88.9%，中性情景三年回报仅 +10.6%，风险收益不对称。**结论：观望。空仓者 50 元以下才进入分批观察区，43 元以下才有制造业估值保护。**"
     }
+  ],
+  "business_risk_reasons": [
+    "CUSTOMER_CONCENTRATION_AND_CONSIGN"
+  ],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "AT_LEAST_N"
   ]
 }

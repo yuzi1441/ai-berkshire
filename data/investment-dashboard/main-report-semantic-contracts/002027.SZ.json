@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002027.SZ",
   "company": "分众传媒",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "4.8-5.3 元是现价附近的小仓试仓路径，首仓不超过目标仓位 25%-30%，不是无条件重仓",
@@ -77,7 +77,8 @@
               "line_end": 251,
               "quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-4.3-4.8",
@@ -117,7 +118,8 @@
               "line_end": 252,
               "quote": "| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-3.8-4.2",
@@ -157,7 +159,8 @@
               "line_end": 253,
               "quote": "| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -167,7 +170,8 @@
           "line_end": 255,
           "quote": "### 8.3 价格与动作\n\n| 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 |\n|---|---|---:|---:|---|\n| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |\n| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |\n| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |\n| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |\n| 所有投资者 | 考虑减持 | ≥7.5 元 | ≥19.8 倍 | 若基本面没有同步上修，股息与增长难支撑更高估值 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -188,7 +192,8 @@
               "line_end": 254,
               "quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -198,7 +203,8 @@
           "line_end": 254,
           "quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -637,11 +643,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MERGER_UNCERTAINTY",
-    "MULTIPLE_PRICE_BANDS"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -650,5 +651,13 @@
       "line_end": 257,
       "quote": "### 8.3 价格与动作\n\n| 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 |\n|---|---|---:|---:|---|\n| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |\n| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |\n| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |\n| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |\n| 所有投资者 | 考虑减持 | ≥7.5 元 | ≥19.8 倍 | 若基本面没有同步上修，股息与增长难支撑更高估值 |\n\n**大师会问：如果交易所明天关门，我愿意持有五年吗？** 在不把 6.61% 历史股息率当作保底，且接受一个完整广告周期的前提下，4.3—5.3 元区间可以；高于 7.5 元则需要新的增长证据。"
     }
+  ],
+  "business_risk_reasons": [
+    "MERGER_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

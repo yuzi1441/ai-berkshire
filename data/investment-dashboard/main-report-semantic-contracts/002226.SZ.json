@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002226.SZ",
   "company": "江南化工",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "江南化工是牌照、区域产能和爆破工程服务一体化平台，但不是轻资产高 ROE 复利机器，当前 4.47 元观察。",
@@ -19,7 +19,7 @@
       "底部看板契约未同步正文的完整价格带、治理安全门和复核逻辑。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 15,
               "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-below-4",
@@ -117,7 +118,8 @@
               "line_end": 186,
               "quote": "| 激进型 | 小仓位观察/事件驱动 | 4.0元以下更合理；4.47元附近不追 | 博弈实控人变更、整合改善、利润修复，但承受治理与安全折价 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-3-3-3-7-with-recovery",
@@ -208,7 +210,8 @@
               "line_end": 187,
               "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-3-0-3-3",
@@ -248,7 +251,8 @@
               "line_end": 188,
               "quote": "| 保守型 | 只在深度折价时考虑 | 3.0-3.3元或更低 | 接近保守所有者盈余估值，才有较明确安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -258,7 +262,8 @@
           "line_end": 180,
           "quote": "| 时机 | 等待更好价格或利润验证 | 当前更适合观察，不适合无脑追高 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -303,7 +308,8 @@
               "line_end": 193,
               "quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-signals-manual-review",
@@ -343,7 +349,8 @@
               "line_end": 200,
               "quote": "1. 发生重大安全事故、环保处罚、许可证/爆破资质异常。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -353,7 +360,8 @@
           "line_end": 204,
           "quote": "1. 发生重大安全事故、环保处罚、许可证/爆破资质异常。\n2. 实控人变更导致不利资产注入、同业竞争加剧或关联交易扩大。\n3. 连续两个季度扣非净利下滑超过30%，经营现金流持续为负。\n4. 有息债务继续快速上升，财务费用明显侵蚀利润。\n5. 大股东可交换债换股/减持带来股权结构与市场供给冲击。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -485,12 +493,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REPORT_CONTRACT_CONFLICT",
-    "GOVERNANCE_AND_SAFETY_RISK",
-    "LOW_ROE_LEVERAGE"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -503,7 +505,16 @@
           "line_end": 193,
           "quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-signals-buy-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -513,5 +524,15 @@
       "line_end": 15,
       "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
     }
+  ],
+  "business_risk_reasons": [
+    "GOVERNANCE_AND_SAFETY_RISK",
+    "LOW_ROE_LEVERAGE"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

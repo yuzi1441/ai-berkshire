@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600887.SH",
   "company": "伊利股份",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "伊利当前是观察，不因低PE追高；21—24元需等待确认，21元以下才是研究性建仓区。",
@@ -74,7 +74,8 @@
               "line_end": 191,
               "quote": "- **21-24 元：** 有吸引力区间，适合等待业绩和渠道数据确认后逐步增加；"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -165,7 +166,8 @@
               "line_end": 190,
               "quote": "- **≤21 元：** 接近悲观情景下的安全边际，若现金流没有恶化，可分批研究性建仓；"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -175,7 +177,8 @@
           "line_end": 202,
           "quote": "| 空仓者 | `观察`。27.12 元可放入研究清单，但优先等待 24 元以下或 2026H1/H2 证明液体乳跌幅收窄、经营现金流恢复。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -196,7 +199,8 @@
               "quote": "| 持仓者 | 未提供持仓和成本，不能替你决定交易；若已有仓位，重点看现金流、短债、渠道库存和分红兑现，不因单季利润增长盲目加仓。 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -287,7 +291,8 @@
               "line_end": 205,
               "quote": "| 加仓信号 | 2026H1/H2 液体乳跌幅明显收窄；奶粉/冷饮保持双位数且现金转换正常；短期借款回落或被经营现金流覆盖；价格进入 21-24 元区间。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -297,7 +302,8 @@
           "line_end": 203,
           "quote": "| 持仓者 | 未提供持仓和成本，不能替你决定交易；若已有仓位，重点看现金流、短债、渠道库存和分红兑现，不因单季利润增长盲目加仓。 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -361,10 +367,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "CONDITIONAL_PRICE_AND_FINANCIAL_CONFIRMATION"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -373,5 +376,7 @@
       "line_end": 26,
       "quote": "**明确结论：观察。** 公司质量合格，价格吸引力中等；空仓者不建议因低 PE 追高，持仓者可持有观察但不以旧价格带机械加仓。"
     }
-  ]
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": []
 }

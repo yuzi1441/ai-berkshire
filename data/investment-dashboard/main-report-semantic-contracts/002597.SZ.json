@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002597.SZ",
   "company": "金禾实业",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "20.24 元是当前 A 股参考价，不是买入价；34.5、19.5、8.6 元三情景目标价是估值参考。",
@@ -18,7 +18,7 @@
       "报告已保留价格、毛利、库存和现金流的条件路径，没有把电子化学品叙事或低 PB 自动编译成买入。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -52,7 +52,8 @@
               "line_end": 203,
               "quote": "当前价格观察，不买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-16-5-18",
@@ -92,7 +93,8 @@
               "line_end": 180,
               "quote": "小仓位观察，不追涨"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-13-5-16-5-with-confirmation",
@@ -183,7 +185,8 @@
               "line_end": 181,
               "quote": "等待确认后分批买入"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "avoid-10-5-13-5",
@@ -223,7 +226,8 @@
               "line_end": 182,
               "quote": "暂不参与"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -233,7 +237,8 @@
           "line_end": 203,
           "quote": "当前价格观察，不买入"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -254,7 +259,8 @@
               "line_end": 204,
               "quote": "不因“接近一年低点”补仓；保留小仓位观察"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -294,7 +300,8 @@
               "line_end": 205,
               "quote": "加仓信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-or-sell-signals-review",
@@ -487,7 +494,8 @@
               "line_end": 206,
               "quote": "减仓/卖出信号"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -497,7 +505,8 @@
           "line_end": 204,
           "quote": "保留小仓位观察"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -579,12 +588,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "REDUCE_EXIT_ACTION_UNSPECIFIED",
-    "FCF_AND_MARGIN_PRESSURE",
-    "CYCLICAL_CHEMICALS"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -597,7 +600,16 @@
           "line_end": 205,
           "quote": "加仓信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-manual-review",
+        "holder-reduce-or-sell-signals-review"
+      ],
+      "affects_entry": false
     },
     {
       "code": "REDUCE_EXIT_ACTION_UNSPECIFIED",
@@ -610,7 +622,16 @@
           "line_end": 206,
           "quote": "减仓/卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-manual-review",
+        "holder-reduce-or-sell-signals-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -626,5 +647,17 @@
       "line_end": 254,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_CHEMICALS",
+    "FCF_AND_MARGIN_PRESSURE",
+    "REDUCE_EXIT_ACTION_UNSPECIFIED"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

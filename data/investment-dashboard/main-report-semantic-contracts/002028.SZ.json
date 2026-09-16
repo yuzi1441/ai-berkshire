@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "002028.SZ",
   "company": "思源电气",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "145 元以上只跟踪/持有验证，125-145 元才是激进型小仓分批区，未把当前 154.27 元转成买入",
@@ -77,7 +77,8 @@
               "line_end": 343,
               "quote": "| **145 元以上** | 33.9x 以上 | 空仓者以跟踪为主；已有仓位持有验证 | 不追高，等正式中报和 H2 兑现 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-125-145",
@@ -117,7 +118,8 @@
               "line_end": 344,
               "quote": "| **125-145 元** | 29.2x-33.9x | 激进型 | 仅小仓分批，接受估值压缩 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-110-125-with-confirmation",
@@ -208,7 +210,8 @@
               "line_end": 345,
               "quote": "| **110-125 元** | 25.7x-29.2x | 稳健型 | 风险收益开始合理，需同时确认核心毛利和现金流 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-90-110-thesis-intact",
@@ -299,7 +302,8 @@
               "line_end": 346,
               "quote": "| **90-110 元** | 21.1x-25.7x | 保守型 | 安全边际较明显，前提是论文未坏 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -309,7 +313,8 @@
           "line_end": 393,
           "quote": "### 空仓投资者\n\n- 145 元以上不追高，先等待正式中报披露分产品毛利、应收、资本开支和汇兑金额；\n- 125-145 元只适合激进型小仓研究，不把小仓当成估值正确的证明；\n- 110-125 元开始具备较合理的基准回报，但必须同时确认核心业务没有恶化；\n- 90-110 元才是保守资金更值得认真研究的区间。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -330,7 +335,8 @@
               "line_end": 399,
               "quote": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据。仓位上限应由能否承受估值压缩决定，而不是由对公司的喜爱决定。\n\n持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件。任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -340,7 +346,8 @@
           "line_end": 399,
           "quote": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据。仓位上限应由能否承受估值压缩决定，而不是由对公司的喜爱决定。\n\n持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件。任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -701,12 +708,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "MULTI_MARKET_AND_H_SHARE",
-    "MULTIPLE_PRICE_BANDS",
-    "CASH_CONVERSION_RISK"
-  ],
   "ambiguities": [],
   "evidence_index": [
     {
@@ -715,5 +716,13 @@
       "line_end": 369,
       "quote": "## 第八步：最终决策与行动清单\n\n### 一句话结论\n\n> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。\n\n### 质量与价格分开看\n\n| 维度 | 结论 | 等级 |\n|---|---|---|\n| 生意质量 | 高可靠核心设备是好生意，低毛利扩张业务稀释平台质量 | A- |\n| 护城河 | 认证、履历、产品矩阵和交付形成复合壁垒，但不排他 | A- |\n| 管理层 | 执行力强且持股高；承诺管理、合规、继任和资本配置需折价 | B+ |\n| 财务质量 | 长期 ROE/ROIC 与资产负债表较好，现金转化是主要扣分 | B+ |\n| 行业位置 | 长周期需求真实，竞争与供给反应也真实 | A- |\n| 当前估值 | 中性三年情景几乎无价差，安全边际不足 | C |\n| **总体建议** | **重点跟踪；已有仓位持有并设重审线；空仓不追高** | **中性偏谨慎** |"
     }
+  ],
+  "business_risk_reasons": [
+    "CASH_CONVERSION_RISK"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600161.SH",
   "company": "天坛生物",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告当前建议观察、不追买；空仓行动必须同时满足价格与盈利/现金证据。",
@@ -17,7 +17,7 @@
       "正式中报尚未披露，H1 预告未经审计；加减仓信号是并列清单，组合关系与处置幅度需人工确认。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -151,7 +151,8 @@
               "line_end": 393,
               "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-7-8-with-cash-recovery",
@@ -267,7 +268,8 @@
               "line_end": 394,
               "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-below-6-3-with-no-break",
@@ -358,7 +360,8 @@
               "line_end": 395,
               "quote": "| 保守型 | 6.3 元以下，且没有质量事故、浆站制度恶化或控股股东利益侵占 | 相对 Base 折现现值才具备约 25%安全边际 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -368,7 +371,8 @@
           "line_end": 389,
           "quote": "当前建议为 **观察，不追买**。不要因为 25.25 倍 TTM PE 低于历史均值就买入，因为 H1 备考和年化 PE 分别约 32.17 倍和 40.23 倍。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -413,7 +417,8 @@
               "line_end": 401,
               "quote": "- 当前若只是小比例观察仓，可持有到正式中报和随后两个季度验证，不宜在应收与库存尚未修复前机械补仓。这里的“观察仓”指不超过个人计划仓位的三分之一。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-14-without-profit-revision",
@@ -504,7 +509,8 @@
               "line_end": 403,
               "quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-review",
@@ -544,7 +550,8 @@
               "line_end": 415,
               "quote": "| 加仓 / 重审信号 | 减仓 / 论文失效信号 |\n|---|---|\n| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |\n| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |\n| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |\n| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |\n| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |\n| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -554,7 +561,8 @@
           "line_end": 401,
           "quote": "- 当前若只是小比例观察仓，可持有到正式中报和随后两个季度验证，不宜在应收与库存尚未修复前机械补仓。这里的“观察仓”指不超过个人计划仓位的三分之一。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -787,12 +795,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "CONDITIONAL_PRICE_AND_FACTS",
-    "UNREPORTED_H1_DATA",
-    "HOLDER_RULE_COMPLEXITY",
-    "SIGNAL_COMBINATION_UNSPECIFIED"
-  ],
   "ambiguities": [
     {
       "code": "CONDITIONAL_PRICE_AND_FACTS",
@@ -805,7 +807,14 @@
           "line_end": 397,
           "quote": "价格到位而证据未到位，只是“更便宜的下行趋势”；证据到位而价格仍高，则可能是“好转已被市场计价”。两者需要同时满足。"
         }
-      ]
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
     },
     {
       "code": "UNREPORTED_H1_DATA",
@@ -818,7 +827,13 @@
           "line_end": 5,
           "quote": "| 研究日期 / 数据截止 | 2026-07-23；最新经营数据为 2026H1 业绩预告，尚未经审计 |"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -831,7 +846,16 @@
           "line_end": 415,
           "quote": "| 加仓 / 重审信号 | 减仓 / 论文失效信号 |\n|---|---|\n| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |\n| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |\n| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |\n| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |\n| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |\n| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-14-without-profit-revision",
+        "holder-add-signals-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -847,5 +871,15 @@
       "line_end": 485,
       "quote": "## 看板决策契约"
     }
+  ],
+  "business_risk_reasons": [
+    "UNREPORTED_H1_DATA"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

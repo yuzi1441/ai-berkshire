@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "300274.SZ",
   "company": "阳光电源",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "113.42 元是当前 A 股参考价，103.55、92.04、80.54 元是行动价格带；53.8-197.5 元三情景目标价只作估值参考，不是买入价。",
@@ -19,7 +19,7 @@
       "加仓和卖出/否决信号列出多个项目但没有声明组合逻辑，保留人工复核，不自动推进。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -77,7 +77,8 @@
               "line_end": 568,
               "quote": "观望，不追价。当前 113.42 元处此区间上沿"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-below-103.55",
@@ -117,7 +118,8 @@
               "line_end": 599,
               "quote": "103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-below-92.04-with-fundamentals",
@@ -208,7 +210,8 @@
               "line_end": 599,
               "quote": "**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "entry-deep-value-below-80.54",
@@ -248,7 +251,8 @@
               "line_end": 599,
               "quote": "80.54 元（14x）以下为深度价值区"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-price-or-policy-improvement",
@@ -339,7 +343,8 @@
               "line_end": 595,
               "quote": "二者出现其一，风险收益比就会改善"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -349,7 +354,8 @@
           "line_end": 593,
           "quote": "好公司，当前价格观望。不是回避，也不是买入——是等。"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "HOLD",
@@ -370,7 +376,8 @@
               "line_end": 600,
               "quote": "103.55–115.05 元区间可持有，重点等 8 月半年报验证三件事"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-below-92.04",
@@ -410,7 +417,8 @@
               "line_end": 566,
               "quote": "可小幅加仓"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-below-80.54",
@@ -450,7 +458,8 @@
               "line_end": 565,
               "quote": "可加仓"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-reduce-above-138.06",
@@ -490,7 +499,8 @@
               "line_end": 602,
               "quote": "138.06 元（24x）以上而盈利未上修"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -500,7 +510,8 @@
           "line_end": 600,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -640,12 +651,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "POLICY_OR_PRICE_REVIEW_BOUNDARY",
-    "MULTIPLE_PRICE_BANDS",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "POLICY_OR_PRICE_REVIEW_BOUNDARY",
@@ -658,7 +663,15 @@
           "line_end": 595,
           "quote": "等两件事中的任意一件"
         }
-      ]
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-price-or-policy-improvement"
+      ],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -671,7 +684,17 @@
           "line_end": 603,
           "quote": "加仓信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-below-92.04",
+        "holder-add-below-80.54",
+        "holder-reduce-above-138.06"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -681,5 +704,17 @@
       "line_end": 604,
       "quote": "结论：好公司，当前价格观望。不是回避，也不是买入——是等。"
     }
+  ],
+  "business_risk_reasons": [
+    "POLICY_OR_PRICE_REVIEW_BOUNDARY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

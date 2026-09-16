@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "301308.SZ",
   "company": "江波龙",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "618.02 元是当前价格，不因 2026H1 预增或低动态 PE 把周期顶部价格当成安全买点。",
@@ -19,7 +19,7 @@
       "报告底部契约只保留空仓回避，未包含持仓止盈与周期信号。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -53,7 +53,8 @@
               "line_end": 240,
               "quote": "空仓者 | **回避**"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "review-after-cycle-clears",
@@ -144,7 +145,8 @@
               "line_end": 243,
               "quote": "两者同时满足再评估"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -154,7 +156,8 @@
           "line_end": 240,
           "quote": "空仓者 | **回避**"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -199,7 +202,8 @@
               "line_end": 241,
               "quote": "分批止盈，至少减半"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -209,7 +213,8 @@
           "line_end": 241,
           "quote": "持仓者"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -342,12 +347,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "CYCLE_PEAK_UNCERTAINTY",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "EXPLICIT_NO_BUY_WITH_FUTURE_REVIEW",
-    "REPORT_CONTRACT_INCOMPLETE"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -360,7 +359,15 @@
           "line_end": 243,
           "quote": "卖出信号"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-take-profit-at-least-half"
+      ],
+      "affects_entry": false
     },
     {
       "code": "CYCLE_PEAK_UNCERTAINTY",
@@ -373,7 +380,13 @@
           "line_end": 267,
           "quote": "**本轮存储周期何时见顶**"
         }
-      ]
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -383,5 +396,15 @@
       "line_end": 243,
       "quote": "最终决策"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLE_PEAK_UNCERTAINTY",
+    "EXPLICIT_NO_BUY_WITH_FUTURE_REVIEW"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

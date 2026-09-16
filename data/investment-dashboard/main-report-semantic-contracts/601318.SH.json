@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "601318.SH",
   "company": "中国平安",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "中国平安明确A股53.32元观察、不追，47—50元需半年报确认投资收益与NBV质量后才小额分批。",
@@ -125,7 +125,8 @@
               "line_end": 324,
               "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -165,7 +166,8 @@
               "line_end": 325,
               "quote": "| 稳健型 | 43-47 元 | 约 50.03-54.69 港元 | 分批研究，要求偿付能力和分红无恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -205,7 +207,8 @@
               "line_end": 326,
               "quote": "| 保守型 | 40 元以下 | 约 46.54 港元以下 | 提供更高资产与假设折价，再评估集中风险 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -215,7 +218,8 @@
           "line_end": 353,
           "quote": "| 空仓者 | A 股 53.32 元继续观察，优先等待半年报；47-50 元且经营信号未恶化时再谈小额分批 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD_NO_ADD",
@@ -236,7 +240,8 @@
               "quote": "| 已持有 A 股 | 若成本与仓位未知，默认继续持有观察，不在 53.32 元机械加仓；半年报后复核投资收益、NBV 利润率和偿付能力 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -327,7 +332,8 @@
               "line_end": 357,
               "quote": "| 加仓信号 | 价格进入对应安全带，同时半年报确认 NBV 质量、投资收益和资本缓冲没有恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -337,7 +343,8 @@
           "line_end": 354,
           "quote": "| 已持有 A 股 | 若成本与仓位未知，默认继续持有观察，不在 53.32 元机械加仓；半年报后复核投资收益、NBV 利润率和偿付能力 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -401,11 +408,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "MULTI_MARKET_A_H",
-    "INSURANCE_ASSET_SIDE_AND_NBV"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -414,5 +417,9 @@
       "line_end": 347,
       "quote": "**明确结论：观察。** 公司质量和赔率都足以进入高优先级研究名单，但 2026Q1 投资收益率和 NBV 利润率是必须等待半年报验证的反向信号。当前 A 股不追买；H 股虽已进入激进型等值区间，也应先核对个人税费与汇率影响，并把 2026-08-21 半年报作为动作前检查点。"
     }
-  ]
+  ],
+  "business_risk_reasons": [
+    "INSURANCE_ASSET_SIDE_AND_NBV"
+  ],
+  "semantic_review_reasons": []
 }

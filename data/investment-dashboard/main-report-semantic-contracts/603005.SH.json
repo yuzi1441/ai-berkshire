@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603005.SH",
   "company": "jingfang-keji",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "49.60 元是当前参考价，34.7-134.7 元是三情景估值参考，不是当前买入价。",
@@ -18,7 +18,7 @@
       "当前 87x PE、ROE 约 8% 和历史周期波动使无条件买入不成立。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "both",
@@ -127,7 +127,8 @@
               "line_end": 403,
               "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "review-25-35-conflicting-band",
@@ -167,7 +168,8 @@
               "line_end": 416,
               "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -177,7 +179,8 @@
           "line_end": 403,
           "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -198,7 +201,8 @@
               "line_end": 404,
               "quote": "| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -238,7 +242,8 @@
               "line_end": 405,
               "quote": "| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -278,7 +283,8 @@
               "line_end": 406,
               "quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -288,7 +294,8 @@
           "line_end": 404,
           "quote": "| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -383,12 +390,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "CONFLICTING_ACTION_PRICE_BANDS",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "EXTREME_VALUATION",
-    "CYCLICAL_EARNINGS_RISK"
-  ],
   "ambiguities": [
     {
       "code": "CONFLICTING_ACTION_PRICE_BANDS",
@@ -407,7 +408,16 @@
           "line_end": 416,
           "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-23-29-or-followup-filing",
+        "review-25-35-conflicting-band"
+      ],
+      "affects_entry": true
     },
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -426,7 +436,16 @@
           "line_end": 406,
           "quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
         }
-      ]
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-23-29-or-followup-filing",
+        "review-25-35-conflicting-band"
+      ],
+      "affects_entry": true
     }
   ],
   "evidence_index": [
@@ -436,5 +455,17 @@
       "line_end": 406,
       "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |\n| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |\n| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |\n| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
     }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_EARNINGS_RISK",
+    "EXTREME_VALUATION"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

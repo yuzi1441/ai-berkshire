@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600519.SH",
   "company": "茅台",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "报告明确将茅台定位为可分批建仓而非一次打满；1100—1300元为合理偏低行动区，1000—1100元是持仓者加仓区。",
@@ -74,7 +74,8 @@
               "line_end": 315,
               "quote": "| 1100-1300 元 | 分批建仓 | 持有，不追高加仓 | 合理偏低，可分批 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 314,
               "quote": "| 900-1100 元 | 分批建仓 | 条件加仓：2026Q2/Q3 利润恢复至 +5% 以上 | 有吸引力；报告将 1000-1100 元列为舒服的加仓区间 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -124,7 +126,8 @@
           "line_end": 234,
           "quote": "| 空仓者 | 可以分批建仓，不要一次打满。1168 元已进入可接受区间 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -145,7 +148,8 @@
               "quote": "| 重仓者 | 持有即可，除非仓位过高，不必因为“便宜”继续加满 |"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ready"
         },
         {
           "action": "ADD_POSITION",
@@ -236,7 +240,8 @@
               "line_end": 238,
               "quote": "| 加仓信号 | 股价跌入 1000-1100 元，同时 2026Q2/Q3 利润恢复到 5%+ |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -246,7 +251,8 @@
           "line_end": 236,
           "quote": "| 重仓者 | 持有即可，除非仓位过高，不必因为“便宜”继续加满 |"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     }
   },
   "hard_blocks": [],
@@ -310,10 +316,7 @@
     "summary": null,
     "evidence": []
   },
-  "requires_strong_review": true,
-  "risk_reasons": [
-    "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
-  ],
+  "requires_strong_review": false,
   "ambiguities": [],
   "evidence_index": [
     {
@@ -322,5 +325,7 @@
       "line_end": 7,
       "quote": "**结论先行**：茅台仍是中国消费品里最强的现金机器之一，但已经从“高确定性成长股”变成“高质量高股息现金流资产”。当前 17.8 倍 PE、约 4.4% 股息率，价格进入合理偏低区间；空仓者可以分批建仓，重仓者不急着加满。"
     }
-  ]
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": []
 }

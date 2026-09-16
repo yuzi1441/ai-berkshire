@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "688361.SH",
   "company": "skyverse-tech",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "275.90 元是当前参考价，31-286 元三情景目标价不是买入价。",
@@ -18,7 +18,7 @@
       "底部看板契约写观察且省略正文动作，和正文存在冲突。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "AVOID",
     "scope": "both",
@@ -58,7 +58,8 @@
               "line_end": 286,
               "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "conditional-entry-57-86",
@@ -98,7 +99,8 @@
               "line_end": 265,
               "quote": "这只股票的唯一合理买入窗口是：**市值降至200-300亿（对应股价~57-86元），即PS降至10-15倍**。在那个水位上，增长预期仍然丰富，但价格不再透支5-7年的未来。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -108,7 +110,8 @@
           "line_end": 286,
           "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "REDUCE",
@@ -129,7 +132,8 @@
               "line_end": 287,
               "quote": "| **持仓者** | **强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元。即使乐观情景3年也仅+3.7%。这是一个\"叙事极好但价格极差\"的典型案例"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -169,7 +173,8 @@
               "line_end": 288,
               "quote": "| **卖出信号** | （1）2026年全年经营现金流仍为负；（2）合同负债环比下降（订单放缓信号）；（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -209,7 +214,8 @@
               "line_end": 289,
               "quote": "| **加仓信号** | （1）股价回调至CNY 57-86（PS 10-15x）；（2）单季度经营现金流转正；（3）产品成功进入14nm及以下先进制程产线；（4）连续2个季度净利率超过10% |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -219,7 +225,8 @@
           "line_end": 287,
           "quote": "| **持仓者** | **强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元。即使乐观情景3年也仅+3.7%。这是一个\"叙事极好但价格极差\"的典型案例"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -308,12 +315,6 @@
     ]
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "REPORT_CONTRACT_CONFLICT",
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "EXTREME_VALUATION",
-    "NEGATIVE_OPERATING_CASH_FLOW"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -326,7 +327,17 @@
           "line_end": 289,
           "quote": "| **卖出信号** | （1）2026年全年经营现金流仍为负；（2）合同负债环比下降（订单放缓信号）；（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象 |\n| **加仓信号** | （1）股价回调至CNY 57-86（PS 10-15x）；（2）单季度经营现金流转正；（3）产品成功进入14nm及以下先进制程产线；（4）连续2个季度净利率超过10% |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-or-exit",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -336,5 +347,15 @@
       "line_end": 289,
       "quote": "| **空仓者** | **回避。当前价格严重透支未来5-7年增长。** 如果看好半导体检测量测国产替代，等待回调至CNY 57-86（PS 10-15x）再入场——那时赔率才对称。或者考虑北方华创/中微公司等已实现规模化盈利的半导体设备公司 |\n| **持仓者** | **强烈建议减仓或清仓。** 分析师目标价211元低于当前275.9元。即使乐观情景3年也仅+3.7%。这是一个\"叙事极好但价格极差\"的典型案例 |\n| **卖出信号** | （1）2026年全年经营现金流仍为负；（2）合同负债环比下降（订单放缓信号）；（3）PS超过50x且无新催化剂；（4）美国对KLA制裁出现松绑迹象 |\n| **加仓信号** | （1）股价回调至CNY 57-86（PS 10-15x）；（2）单季度经营现金流转正；（3）产品成功进入14nm及以下先进制程产线；（4）连续2个季度净利率超过10% |"
     }
+  ],
+  "business_risk_reasons": [
+    "EXTREME_VALUATION",
+    "NEGATIVE_OPERATING_CASH_FLOW"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "603288.SH",
   "company": "海天味业",
   "source": {
@@ -9,14 +9,14 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "海天空仓价格路径清楚：32—35元小额分批、28—32元稳健分批、不高于28元重点关注；当前36.78元观察不追价。",
       "canonical正文未给出足够明确的独立持仓者当前动作，因此不把公司质量结论扩写为holder结论。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "WATCH",
     "scope": "empty_position",
@@ -74,7 +74,8 @@
               "line_end": 159,
               "quote": "| 激进型 | 32-35 元 | 小额分批 | 接近 Base 价值上沿，可承受估值波动者开始跟踪仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "OPEN_POSITION",
@@ -114,7 +115,8 @@
               "line_end": 160,
               "quote": "| 稳健型 | 28-32 元 | 分批买入 | 接近 H 股人民币等值与 Base 折现值，安全边际改善 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "action": "REVIEW",
@@ -154,7 +156,8 @@
               "line_end": 161,
               "quote": "| 保守型 | 不高于 28 元 | 重点关注 | 接近 Bear 三年目标价，但仍需确认基本面没有恶化 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -164,7 +167,8 @@
           "line_end": 19,
           "quote": "**动作不是“看空公司”，而是“尊重价格”。** 36.78 元附近，公司质量足以支撑长期跟踪，却没有提供足够的预期回报缓冲。32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "UNKNOWN",
@@ -185,7 +189,8 @@
               "quote": "**动作不是“看空公司”，而是“尊重价格”。** 36.78 元附近，公司质量足以支撑长期跟踪，却没有提供足够的预期回报缓冲。32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。"
             }
           ],
-          "condition": null
+          "condition": null,
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -195,7 +200,8 @@
           "line_end": 19,
           "quote": "**动作不是“看空公司”，而是“尊重价格”。** 36.78 元附近，公司质量足以支撑长期跟踪，却没有提供足够的预期回报缓冲。32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。"
         }
-      ]
+      ],
+      "semantic_status": "ambiguous"
     }
   },
   "hard_blocks": [],
@@ -260,10 +266,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "HOLDER_SCOPE_NOT_EXPLICIT",
-    "MULTI_MARKET_A_H"
-  ],
   "ambiguities": [
     {
       "code": "HOLDER_SCOPE_NOT_EXPLICIT",
@@ -276,7 +278,15 @@
           "line_end": 19,
           "quote": "**动作不是“看空公司”，而是“尊重价格”。** 36.78 元附近，公司质量足以支撑长期跟踪，却没有提供足够的预期回报缓冲。32-35 元才进入激进型小额分批区，28-32 元进入稳健型分批区，不高于 28 元才是保守型重点关注区。"
         }
-      ]
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-scope-unknown"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -286,5 +296,11 @@
       "line_end": 13,
       "quote": "| 当前价格 | A 股 36.78 元，**观察，不追价** |"
     }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ticker": "600795.SH",
   "company": "guodian-power",
   "source": {
@@ -9,7 +9,7 @@
   },
   "compiler": {
     "type": "codex_semantic_review",
-    "contract_version": "main-report-semantic-v1",
+    "contract_version": "main-report-semantic-v2",
     "pass": 2,
     "adversarial_findings": [
       "4.81 元是当前参考价，3.6-9.2 元三情景目标价是估值参考；4.50 元以下更适合建立小仓，不能把目标价当买入价。",
@@ -17,7 +17,7 @@
       "持仓者继续收息，价格回到 5.5 元以上可考虑部分减持；卖出与加仓清单组合关系未定义，保留人工复核。"
     ]
   },
-  "semantic_status": "ambiguous",
+  "semantic_status": "partial",
   "overall_stance": {
     "action": "OPEN_POSITION",
     "scope": "both",
@@ -75,7 +75,8 @@
               "line_end": 326,
               "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "trial-current-high-dividend",
@@ -115,7 +116,8 @@
               "line_end": 326,
               "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "watch-5-5-6-5",
@@ -155,7 +157,8 @@
               "line_end": 338,
               "quote": "| **5.5-6.5元** | 14-16x | 观望区——接近分析师目标价，停止加仓 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "reduce-above-6-5",
@@ -195,7 +198,8 @@
               "line_end": 339,
               "quote": "| **6.5元以上** | >16x | 减仓区——估值偏高 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         }
       ],
       "evidence": [
@@ -205,7 +209,8 @@
           "line_end": 326,
           "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
         }
-      ]
+      ],
+      "semantic_status": "ready"
     },
     "holder": {
       "current_action": "HOLD",
@@ -226,7 +231,8 @@
               "line_end": 327,
               "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
             }
-          ]
+          ],
+          "semantic_status": "ready"
         },
         {
           "path_id": "holder-reduce-above-5-5",
@@ -266,7 +272,8 @@
               "line_end": 327,
               "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-sell-signals-manual-review",
@@ -306,7 +313,8 @@
               "line_end": 328,
               "quote": "| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         },
         {
           "path_id": "holder-add-signals-manual-review",
@@ -346,7 +354,8 @@
               "line_end": 329,
               "quote": "| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
             }
-          ]
+          ],
+          "semantic_status": "ambiguous"
         }
       ],
       "evidence": [
@@ -356,7 +365,8 @@
           "line_end": 327,
           "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
         }
-      ]
+      ],
+      "semantic_status": "partial"
     }
   },
   "hard_blocks": [],
@@ -438,12 +448,6 @@
     "evidence": []
   },
   "requires_strong_review": true,
-  "risk_reasons": [
-    "SIGNAL_COMBINATION_UNSPECIFIED",
-    "HIGH_LEVERAGE_AND_POWER_PRICE_RISK",
-    "DIVIDEND_DEPENDENCY",
-    "VALUATION_ACTION_BOUNDARY"
-  ],
   "ambiguities": [
     {
       "code": "SIGNAL_COMBINATION_UNSPECIFIED",
@@ -462,7 +466,17 @@
           "line_end": 329,
           "quote": "| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
         }
-      ]
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-5-5",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
     }
   ],
   "evidence_index": [
@@ -472,5 +486,14 @@
       "line_end": 329,
       "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。 |\n| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |\n| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |\n| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
     }
+  ],
+  "business_risk_reasons": [
+    "DIVIDEND_DEPENDENCY",
+    "HIGH_LEVERAGE_AND_POWER_PRICE_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
   ]
 }
