@@ -1475,6 +1475,29 @@ function renderDecisionContext(record) {
   return `<div class="detail-section decision-context"><div class="detail-section-head"><h3>现在该做什么</h3><span class="mini-badge">确定性状态导航</span></div><div class="decision-context-grid">${fields.map(({ name, value, html = false }) => `<div class="decision-context-item"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${html ? value : escapeHtml(value)}</div></div>`).join("")}</div></div>`;
 }
 
+function renderCandidateShadow(record) {
+  const candidate = record?.candidate_shadow;
+  if (!candidate) return "";
+  const list = (value) => Array.isArray(value) && value.length ? value.join("、") : "0";
+  const price = candidate.current_price == null
+    ? "—"
+    : `${formatNumber(candidate.current_price, 2)} ${candidate.currency || ""}`.trim();
+  const fields = [
+    ["Candidate State", candidate.candidate_state],
+    ["Publication", candidate.publication_status],
+    ["Current Price", price],
+    ["Matched Path", list(candidate.matched_path_ids)],
+    ["Mandatory Gates", candidate.mandatory_gate_count],
+    ["Mandatory Unknown", list(candidate.unknown_mandatory_gate_ids)],
+    ["Alternative Unknown", list(candidate.alternative_unknown_gate_ids)],
+    ["Hard Block", candidate.hard_block_state],
+    ["Semantic Review", candidate.semantic_review_status],
+    ["Price Cutoff", candidate.price_cutoff || "—"],
+    ["Production Eligible", candidate.production_eligible === true ? "YES" : "NO"],
+  ];
+  return `<div class="detail-section candidate-shadow"><div class="detail-section-head"><h3>Candidate Shadow</h3><div class="candidate-shadow-badges"><span class="mini-badge">CANDIDATE</span><span class="mini-badge">SHADOW MODE</span><span class="mini-badge">NOT PRODUCTION</span></div></div><p class="detail-copy">本区仅展示语义合同与当前事实的候选求值，不是交易指令，也不会覆盖正式 Action Guidance。</p><div class="detail-grid">${fields.map(([name, value]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${escapeHtml(value ?? "—")}</div></div>`).join("")}</div></div>`;
+}
+
 function renderDetail(record) {
   const ruleCount = rulesFor(record).length;
   els.drawerKicker.textContent = `${record.market || "待识别"} · ${record.ticker}`;
@@ -1482,6 +1505,7 @@ function renderDetail(record) {
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
     renderDecisionContext(record),
+    renderCandidateShadow(record),
     renderDispositionControls(record),
     renderCurrentJudgment(record),
     renderFormalDriftResult(record),

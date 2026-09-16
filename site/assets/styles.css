@@ -419,6 +419,9 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .decision-context-grid { display: grid; gap: 11px; }
 .decision-context-item { padding-bottom: 10px; border-bottom: 1px solid var(--line-soft); }
 .decision-context-item:last-child { padding-bottom: 0; border-bottom: 0; }
+.candidate-shadow { border-color: rgba(210, 157, 70, .42); background: linear-gradient(145deg, rgba(210, 157, 70, .09), var(--panel)); }
+.candidate-shadow-badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.candidate-shadow .mini-badge { color: #d7a953; border-color: rgba(210, 157, 70, .35); }
 .rule-group + .rule-group { margin-top: 17px; padding-top: 17px; border-top: 1px solid var(--line-soft); }
 .rule-group-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; color: var(--text); font-size: 12px; font-weight: 620; }
 .rule-group-title span { color: var(--muted); font-weight: 450; }

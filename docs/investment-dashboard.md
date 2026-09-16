@@ -245,6 +245,20 @@ py -3 tools\dashboard_server.py --port 8000 --directory site
 
 打开 `http://localhost:8000`。
 
+### 本地 Candidate Shadow 验收
+
+Priority 20 的语义候选结果只能写入隔离的本地副本，不修改正式
+`decision_board`、`dashboard_core` 或 Action Guidance：
+
+```bash
+python3 tools/build_local_candidate_dashboard.py --refresh-prices
+python3 tools/dashboard_server.py --port 8001 --directory .runtime/local-candidate-dashboard/site
+```
+
+页面公司详情中的 `Candidate Shadow / NOT PRODUCTION` 区域是只读验收层，
+其 `candidate_state` 直接来自 evaluator，`publication_status` 单独展示，且
+`production_eligible` 固定为 `false`。
+
 ## 买入建议列（现价对照）
 
 网页在「现价」后增加 **买入建议** 列，用实时/快照现价对照第八步分层价格带：

@@ -384,6 +384,7 @@ def build_preview(
     packets: dict[str, Any],
     evaluated_at: datetime,
     review_store: dict[str, Any] | None = None,
+    facts_directory: Path | None = None,
 ) -> dict[str, Any]:
     contract_paths = sorted((repo_root / CONTRACT_DIRECTORY).glob("*.json"))
     contracts = {path.stem: load_json(path) for path in contract_paths}
@@ -409,7 +410,7 @@ def build_preview(
     leaf_kind_counts: Counter[str] = Counter()
     unknown_reason_counts: Counter[str] = Counter()
     stale_count = 0
-    facts_directory = repo_root / DEFAULT_FACTS_OUTPUT
+    facts_directory = facts_directory or repo_root / DEFAULT_FACTS_OUTPUT
     facts_directory.mkdir(parents=True, exist_ok=True)
     for path in contract_paths:
         ticker = path.stem
